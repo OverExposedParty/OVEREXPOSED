@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverExposed</title>
+    <link rel="stylesheet" href="homepage-styles.css">
+    <link rel="stylesheet" href="what-is-overexposed-style.css">
+    <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/blue/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/blue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/blue/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="./images/favicons/blue/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="./images/favicons/blue/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="./images/favicons/blue/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="./images/favicons/blue/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="./images/favicons/blue/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="./images/favicons/blue/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="./images/favicons/blue/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="./images/favicons/blue/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="./images/favicons/blue/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="./images/favicons/blue/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="./images/favicons/blue/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="./images/favicons/blue/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="./images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="./images/favicons/blue/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="./images/favicons/blue/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="./images/favicons/blue/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="./images/favicons/blue/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./images/favicons/blue/favicon-512x512.png">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            padding: 0 0px;
+        }
+
+        #swipe-indicator {
+            position: absolute;
+            bottom: 15vh;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            text-align: center;
+            animation: swipeGlowAnimation 0.5s linear forwards;
+        }
+
+        @keyframes swipeGlowAnimation {
+            0% {
+                transform: translateX(300%) scale(1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateX(0) scale(1);
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-300%) scale(0.8);
+                box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+                opacity: 0;
+            }
+        }
+
+        .about-us {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <a href="/">
+                <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
+            </a>
+        </div>
+    </header>
+
+    <div class="about-us-container">
+        <h1 class="about-us-text">ABOUT US</h1>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+            <img class="front" src="./images/what-is-overexposed/what-is-overexposed-front.svg" alt="Overexposed Front">
+            <img class="back" src="./images/what-is-overexposed/what-is-overexposed-back.svg" alt="Overexposed Back">
+        </div>
+    </div>
+
+    <div class="side-button-container">
+        <img src="./images/icons/blue/instagram-icon.svg" alt="Thumbs Up Icon" class="side-button">
+        <img src="./images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="./images/icons/blue/tiktok-icon.svg" alt="Thumbs Down Icon" class="side-button">
+    </div>
+    <div id="swipe-indicator"></div>
+    <script>
+        const cardTexts = [
+            { front: 'What is overexposed?', back: 'Overexposed is an online card game that will soon bring your parties to light, generating engaging cards for games like "Never Have I Ever," "Most Likely To," and more. Our website is a work in progress, and these exciting features will be coming soon. Stay tuned as we continue to develop and ensure your social gatherings are always well-lit with fun and laughter!' },
+            { front: 'Truth or Dare', back: 'A classic game where players choose between answering a question truthfully or taking on a daring challenge.' },
+            { front: 'Paranoia', back: 'A game where players ask each other questions to find out who is most likely to do something, often with humorous results.' },
+            { front: 'Never Have I Ever', back: 'A game where players reveal things they have never done, often leading to interesting revelations.' },
+            { front: 'Most Likely To', back: 'A game where players guess who is most likely to perform a certain action or behavior.' }
+        ];
+
+        const frontImages = [
+            './images/what-is-overexposed/what-is-overexposed-front.svg',
+            './images/what-is-overexposed/what-is-overexposed-party-games-front.svg',
+            './images/what-is-overexposed/what-is-overexposed-truth-or-dare-front.svg',
+            './images/what-is-overexposed/what-is-overexposed-paranoia-front.svg',
+            './images/what-is-overexposed/what-is-overexposed-never-have-i-ever-front.svg',
+            './images/what-is-overexposed/what-is-overexposed-most-likely-to-front.svg'
+        ];
+
+        const backImages = [
+            './images/what-is-overexposed/what-is-overexposed-back.svg',
+            './images/what-is-overexposed/what-is-overexposed-party-games-back.svg',
+            './images/what-is-overexposed/what-is-overexposed-truth-or-dare-back.svg',
+            './images/what-is-overexposed/what-is-overexposed-paranoia-back.svg',
+            './images/what-is-overexposed/what-is-overexposed-never-have-i-ever-back.svg',
+            './images/what-is-overexposed/what-is-overexposed-most-likely-to-back.svg'
+
+        ];
+
+        const card = document.querySelector('.card');
+        const frontImg = document.querySelector('.card .front');
+        const backImg = document.querySelector('.card .back');
+        let startX = 0;
+        let isDragging = false;
+        let currentRotationY = 0;
+        let imageIndex = 0;
+        let hasSwipedLeft = false;
+
+        function isFrontVisible() {
+            return Math.abs(currentRotationY % 360) < 90 || Math.abs(currentRotationY % 360) > 270;
+        }
+
+        function isBackVisible() {
+            return !isFrontVisible();
+        }
+
+        function startSwipe(x) {
+            startX = x;
+            isDragging = true;
+        }
+
+        function endSwipe(x) {
+            if (!isDragging) return;
+
+            const endX = x;
+            const swipeDirection = endX - startX;
+
+            if (Math.abs(swipeDirection) > 50) {
+                if (swipeDirection > 0 && imageIndex === 0 && isFrontVisible()) {
+                    isDragging = false;
+                    return;
+                } else if (swipeDirection < 0 && imageIndex === frontImages.length - 1 && isBackVisible()) {
+                    isDragging = false;
+                    return;
+                }
+
+                const rotationAmount = swipeDirection > 0 ? 180 : -180;
+                currentRotationY += rotationAmount;
+                card.style.transform = `rotateY(${currentRotationY}deg)`;
+
+                if (Math.abs(currentRotationY) % 360 === 0) {
+                    if (currentRotationY % 360 === 0 && swipeDirection < 0) {
+                        imageIndex = (imageIndex + 1) % frontImages.length;
+                    }
+                }
+
+                if (Math.abs(currentRotationY) % 180 === 0) {
+                    if (currentRotationY % 180 === 0 && swipeDirection > 0 && isBackVisible()) {
+                        imageIndex = (imageIndex - 1 + frontImages.length) % frontImages.length;
+                    }
+
+                    if (isFrontVisible()) {
+                        frontImg.src = frontImages[imageIndex];
+                    }
+
+                    if (isBackVisible()) {
+                        backImg.src = backImages[imageIndex];
+                    }
+                }
+
+                if (swipeDirection < 0 && !hasSwipedLeft) {
+                    hasSwipedLeft = true;
+                    hideSwipeIndicator();
+                }
+            }
+            isDragging = false;
+        }
+
+        function playTTS() {
+            let textToSpeak = '';
+
+            if (isFrontVisible()) {
+                textToSpeak = cardTexts[imageIndex].front;
+            } else {
+                textToSpeak = cardTexts[imageIndex].back;
+            }
+
+            if (textToSpeak) {
+                const speech = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                speech.speak(utterance);
+            }
+        }
+
+        document.addEventListener('mousedown', (e) => {
+            if (e.button === 0 || e.button === 1) {
+                startSwipe(e.clientX);
+            }
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.button === 0 || e.button === 1) {
+                endSwipe(e.clientX);
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                //
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                startSwipe(e.touches[0].clientX);
+            }
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length === 1) {
+                endSwipe(e.changedTouches[0].clientX);
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length === 1) {
+                // Potential touch trail
+            }
+        });
+
+        function hideSwipeIndicator() {
+            const swipeIndicator = document.getElementById('swipe-indicator');
+            swipeIndicator.style.animation = 'none';
+            swipeIndicator.style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.card img');
+            images.forEach(img => {
+                img.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                });
+            });
+
+            const ttsButton = document.getElementById('tts-button');
+            ttsButton.addEventListener('click', playTTS);
+
+            function startSwipeIndicator() {
+                if (!hasSwipedLeft) {
+                    const swipeIndicator = document.getElementById('swipe-indicator');
+                    swipeIndicator.style.display = 'flex';
+                    swipeIndicator.style.animation = 'swipeGlowAnimation 0.5s linear forwards';
+                    setTimeout(() => {
+                        if (!hasSwipedLeft) {
+                            swipeIndicator.style.display = 'none';
+                        }
+                    }, 500);
+                }
+            }
+            startSwipeIndicator();
+            setInterval(startSwipeIndicator, 2500);
+        });
+    </script>
+</body>
+
+</html>

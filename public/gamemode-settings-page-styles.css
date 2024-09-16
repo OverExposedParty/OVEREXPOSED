@@ -1,0 +1,328 @@
+:root {
+    --primarypagecolour: #66CCFF;
+    --secondarypagecolour: #55aaff;
+}
+
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+@font-face {
+    src: url('../../Fonts/LemonMilk/LEMONMILK-Medium.otf');
+    font-family: LemonMilk;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: LemonMilk, sans-serif;
+}
+
+.header {
+    background-color: var(--primarypagecolour);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 1000;
+}
+
+.home-button-container {
+    position: absolute;
+    top: 12.5vh;
+    left: 20px;
+}
+
+.home-button {
+    border: none;
+    cursor: pointer;
+    background-color: #202020;
+    border: 6px solid var(--primarypagecolour);
+    color: var(--primarypagecolour);
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 50px;
+    margin: 0 10px;
+    min-width: 80px;
+    max-width: 100px;
+    width: 15vw;
+    font-family: LemonMilk;
+    z-index: 901;
+    position: relative;
+}
+
+.main-container {
+    display: flex;
+    height: calc(100vh - 50px);
+    /* Full viewport height minus header height */
+    overflow: hidden;
+    /* Ensure no overflow in container */
+    margin-top: 50px;
+    /* Same height as header to avoid overlap */
+}
+
+.packs-container,
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    /* Width of packs-container */
+}
+
+.settings-container {
+    width: 35%;
+    /* Width of settings-container */
+}
+
+.separator-container {
+    background-color: var(--primarypagecolour);
+    border-radius: 50px;
+    /* Rounded corners with a 50px radius */
+    width: 10px;
+    /* Width of the separator */
+    height: 75vh;
+    /* Height of the separator, which will be 75% of the viewport height */
+    top: 50%;
+    /* Position it at the middle of the viewport */
+    transform: translateY(12.5%);
+    /* Adjust for its own height to be centered */
+}
+
+.packs-header-container,
+.settings-header-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    height: auto;
+    /* Adjust based on content */
+    padding-bottom: 5vh;
+    padding-top: 10vh;
+}
+
+.packs-header,
+.settings-header {
+    font-size: 40px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: LemonMilk;
+    color: var(--primarypagecolour);
+}
+
+.packs-content-container {
+    flex: 1;
+    /* Fill remaining space */
+    padding: 20px;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+}
+
+.game-settings-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: left;
+    /* Center align buttons horizontally */
+    width: 90%;
+}
+
+.game-settings-container .button-container {
+    justify-content: center;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    font-family: LemonMilk;
+    font-size: 1.25em;
+    color: #999999;
+    background-color: #202020;
+    border: 3px solid #999999;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    min-width: 120px;
+    white-space: nowrap;
+    display: inline-block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.button-container button.active {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+    border-color: var(--primarypagecolour);
+}
+
+.button-container button:active {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+    border-color: var(--primarypagecolour);
+}
+
+.button-container button:not(.disabled):hover {
+    background-color: var(--secondarypagecolour);
+}
+
+.button-container button.active:not(.disabled):hover {
+    background-color: var(--secondarypagecolour);
+    color: #202020;
+}
+
+button.disabled {
+    background-color: #333333;
+    color: #666666;
+    border-color: #444444;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.start-game-button {
+    margin: 45vh auto;
+    padding: 10px 20px;
+    font-family: LemonMilk;
+    font-size: 1.25em;
+    color: var(--primarypagecolour);
+    background-color: #202020;
+    border: 6px solid var(--primarypagecolour);
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    min-width: 120px;
+    white-space: nowrap;
+    display: inline-block;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.start-game-button:hover,
+.home-button:hover {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+    border-color: var(--primarypagecolour);
+}
+
+.start-game-button:active {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+    border-color: var(--primarypagecolour);
+}
+
+.start-game-button.disabled {
+    background-color: #333333;
+    color: #666666;
+    border-color: #444444;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+@media (orientation: portrait) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .separator-container {
+        height: 10px;
+        width: 75%;
+        transform: translateX(15%);
+    }
+
+    .packs-container,
+    .settings-container {
+        width: 100%;
+        margin-bottom: 10px;
+        height: auto;
+        padding: 0;
+    }
+
+    .packs-container {
+        height: 45%;
+        overflow-y: auto;
+    }
+
+    .settings-container {
+        width: 100%;
+    }
+
+    .button-container button {
+        font-size: 12px;
+        padding: 3px 3px;
+    }
+
+    .game-settings-container button {
+        font-size: 1em;
+    }
+
+    .packs-header-container,
+    .settings-header-container {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 2.5vh;
+        padding-bottom: 1vh;
+    }
+
+    .packs-header-container {
+        padding-top: 10vh;
+    }
+
+    .packs-header,
+    .settings-header {
+        font-size: 30px;
+    }
+
+    .button-container {
+        height: auto;
+        overflow-y: auto;
+        gap: 5px 5px;
+    }
+
+    .start-game-button {
+        margin: 5vh auto;
+        font-size: 12px;
+        border: 4px solid var(--primarypagecolour);
+        padding: 5px 10px;
+    }
+
+    .home-button-container {
+        position: absolute;
+        top: 10vh;
+        left: 10px;
+    }
+
+    .home-button {
+        border: none;
+        cursor: pointer;
+        background-color: #202020;
+        border: 4px solid var(--primarypagecolour);
+        color: var(--primarypagecolour);
+        font-size: 12px;
+        padding: 5px 5px;
+        margin: 0 10px;
+        min-width: 80px;
+        max-width: 100px;
+        width: 10vw;
+        font-family: LemonMilk;
+        position: relative;
+    }
+}

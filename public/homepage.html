@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverExposed</title>
+    <link rel="stylesheet" href="homepage-styles.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="settings-style.css">
+    <link rel="stylesheet" href="rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/blue/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/favicons/blue/favicon-120x120.png">
+    <meta name="msapplication-TileImage" content="./images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <style>
+        .landscape-message {
+            color: #66CCFF;
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .container-title {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
+        </div>
+        <div class="settings-icon">
+            <img src="./Images/Icons/Settings.svg" alt="Settings">
+        </div>
+        <div class="extra-menu-icon">
+            <img src="./Images/Icons/extra-menu-icon.svg" alt="Extra Menu">
+        </div>
+    </header>
+    <div class="landscape-message" id="landscape-message">
+        Please rotate your phone to continue
+        <img src="./images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="settings-box" id="settings-box">
+        <h2 id="settings-title" class="settings-title">Settings</h2>
+        <div class="settings-content">
+            <div class="settings-option">
+                <label for="settings-vibration">NSFW</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settings-vibration">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-option">
+                <label for="tts">VIBRATION</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="tts">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="tts-voice-buttons">
+            <div class="tts-voice-button" data-button="1" data-key="tts-voice-male1">M1</div>
+            <div class="tts-voice-button" data-button="2" data-key="tts-voice-male2">M2</div>
+            <div class="tts-voice-button" data-button="3" data-key="tts-voice-female1">F1</div>
+            <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
+        </div>
+    </div>
+
+    <h1 class="container-title" id="container-title">Party Games</h1>
+    <div class="container">
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/truth-or-dare.svg" alt="Image 1"></div>
+                <div class="back"><img src="./images/card-titles/back/truth-or-dare.svg" alt="Image 1 Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/paranoia.svg" alt="Image 2"></div>
+                <div class="back"><img src="./images/card-titles/back/paranoia.svg" alt="Image 2 Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/never-have-i-ever.svg" alt="Image 3"></div>
+                <div class="back"><img src="./images/card-titles/back/never-have-i-ever.svg" alt="Image 3 Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/most-likely-to.svg" alt="Image 4"></div>
+                <div class="back"><img src="./images/card-titles/back/most-likely-to.svg" alt="Image 4 Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/coming-soon.svg" alt="Image 5"></div>
+                <div class="back"><img src="./images/card-titles/back/coming-soon.svg" alt="Image 5 Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="./images/card-titles/front/coming-soon.svg" alt="Image 6"></div>
+                <div class="back"><img src="./images/card-titles/back/coming-soon.svg" alt="Image 6 Back"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsIcon = document.querySelector('.settings-icon');
+            const settingsBox = document.querySelector('#settings-box');
+            const overlay = document.querySelector('#overlay');
+            const header = document.querySelector('#header');
+
+            const settingsBoxLabels = document.querySelectorAll('#settings-box label');
+            const settingsBoxTitle = document.querySelector('#settings-title');
+            const containerTitle = document.querySelector('#container-title');
+
+            const settingsVibrationCheckbox = document.getElementById('settings-vibration');
+            const ttsCheckbox = document.getElementById('tts');
+
+            const rotateMessage = document.querySelector('#landscape-message');
+            const rotateIcon = document.querySelector('#rotate-icon');
+
+            let selectedButton;
+            let selectedColor = '#66CCFF';
+
+            if (!('vibrate' in navigator) || /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent)) {
+                settingsVibrationCheckbox.disabled = true; // Disable the slider if Vibration API is not available or if on an Apple device
+                settingsVibrationCheckbox.nextElementSibling.style.opacity = 0.5; // Optionally, dim the slider to indicate it's disabled
+            } else {
+                if (localStorage.getItem('settings-vibration') === 'true') {
+                    settingsVibrationCheckbox.checked = true;
+                }
+            }
+
+            if (localStorage.getItem('tts') === 'true') {
+                ttsCheckbox.checked = true;
+            }
+
+            settingsVibrationCheckbox.addEventListener('change', function () {
+                localStorage.setItem('settings-vibration', settingsVibrationCheckbox);
+            });
+
+            ttsCheckbox.addEventListener('change', function () {
+                localStorage.setItem('tts', ttsCheckbox.checked);
+            });
+
+            function toggleSettings() {
+                if (settingsBox.style.display === 'none' || settingsBox.style.display === '') {
+                    settingsBox.style.display = 'block';
+                    overlay.style.display = 'block';
+                } else {
+                    settingsBox.style.display = 'none';
+                    overlay.style.display = 'none';
+                }
+            }
+
+            function clickOutsideHandler(event) {
+                if (settingsBox.style.display === 'block' &&
+                    !settingsBox.contains(event.target) &&
+                    !settingsIcon.contains(event.target) &&
+                    !overlay.contains(event.target)) {
+                    settingsBox.style.display = 'none';
+                    overlay.style.display = 'none';
+                }
+            }
+
+            settingsIcon.addEventListener('click', toggleSettings);
+            overlay.addEventListener('click', toggleSettings);
+
+            document.addEventListener('click', clickOutsideHandler);
+
+            const cards = document.querySelectorAll('.grid-item .card');
+
+            cards.forEach((card, index) => {
+                card.addEventListener('click', function (event) {
+                    cards.forEach(otherCard => {
+                        if (otherCard !== card && otherCard.classList.contains('flipped')) {
+                            otherCard.classList.remove('flipped');
+                        }
+                    });
+
+                    if (!card.classList.contains('flipped')) {
+                        card.classList.add('flipped');
+                        changeHeaderColor(index);
+                        changeFavicon(index);
+
+                    } else {
+                        card.classList.remove('flipped');
+                        switch (index) {
+                            case 0:
+                                window.location.href = 'truth-or-dare-settings';
+                                break;
+                            case 1:
+                                window.location.href = 'paranoia-settings';
+                                break;
+                            case 2:
+                                window.location.href = 'never-have-i-ever-settings';
+                                break;
+                            case 3:
+                                window.location.href = 'most-likely-to-settings';
+                                break;
+                            case 4:
+                                window.location.href = 'coming-soon-settings';
+                                break;
+                            case 5:
+                                window.location.href = 'coming-soon-settings';
+                                break;
+                        }
+                    }
+                });
+            });
+
+            function changeFavicon(index) {
+                const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
+                const colorFolders = ['blue', 'purple', 'orange', 'yellow', 'grey', 'grey'];
+
+                const faviconLinks = document.querySelectorAll('link[rel="icon"]');
+
+                faviconLinks.forEach((favicon, i) => {
+                    const size = sizes[i % sizes.length];
+                    const colorFolder = colorFolders[index % colorFolders.length];
+                    favicon.href = `./images/favicons/${colorFolder}/favicon-${size}.png`;
+                    rotateIcon.src = `./images/icons/${colorFolder}/rotate-phone-icon.svg`;
+                });
+            }
+
+            function changeHeaderColor(index) {
+                const colors = ['#66CCFF', '#9D8AFF', '#FF9266', '#FFEE66', '#999999', '#999999'];
+                selectedColor = colors[index % colors.length];
+                header.style.backgroundColor = selectedColor;
+                containerTitle.style.color = selectedColor;
+                rotateMessage.style.color = selectedColor;
+                settingsBoxTitle.style.color = selectedColor;
+                settingsBoxLabels.forEach(label => {
+                    label.style.color = selectedColor;
+                });
+                selectButton(selectedButton);
+                document.querySelectorAll('.slider').forEach(slider => {
+                    slider.style.setProperty('--slider-background-checked', selectedColor);
+                });
+            }
+            const buttons = document.querySelectorAll('.tts-voice-button');
+            const defaultButtonIndex = 0;
+
+            const savedKey = localStorage.getItem('selectedTTSButton');
+            if (savedKey) {
+                buttons.forEach(button => {
+                    if (button.getAttribute('data-key') === savedKey) {
+                        selectButton(button);
+                    }
+                });
+            } else {
+                selectButton(buttons[defaultButtonIndex]);
+                localStorage.setItem('selectedTTSButton', buttons[defaultButtonIndex].getAttribute('data-key'));
+            }
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => {
+                        btn.classList.remove('selected');
+                        btn.style.borderColor = 'grey';
+                        btn.style.color = 'grey';
+                    });
+
+                    selectButton(button);
+                    localStorage.setItem('selectedTTSButton', button.getAttribute('data-key'));
+                });
+            });
+
+            function selectButton(button) {
+                button.classList.add('selected');
+
+                button.style.borderColor = selectedColor;
+                button.style.color = selectedColor;
+                selectedButton = button;
+            }
+        });
+    </script>
+</body>
+
+</html>

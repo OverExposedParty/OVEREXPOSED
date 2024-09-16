@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverExposed</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="gamemode-page-styles.css">
+    <link rel="stylesheet" href="rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/blue/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/blue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/blue/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="./images/favicons/blue/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="./images/favicons/blue/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="./images/favicons/blue/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="./images/favicons/blue/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="./images/favicons/blue/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="./images/favicons/blue/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="./images/favicons/blue/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="./images/favicons/blue/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="./images/favicons/blue/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="./images/favicons/blue/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="./images/favicons/blue/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="./images/favicons/blue/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="./images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="./images/favicons/blue/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="./images/favicons/blue/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="./images/favicons/blue/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="./images/favicons/blue/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./images/favicons/blue/favicon-512x512.png">
+
+    <style>
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .split-button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 0.1vw;
+            margin-top: 10px;
+        }
+
+        .split-question-button {
+            background-color: #202020;
+            border: 5px solid var(--primarypagecolour);
+            color: var(--primarypagecolour);
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 50px;
+            flex: 1;
+            text-align: center;
+            font-family: LemonMilk;
+        }
+
+        .or-text {
+            font-size: 24px;
+            color: #66CCFF;
+            margin: 0 5px;
+        }
+
+        .gamemode-text {
+            font-size: 35px;
+        }
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
+            .split-question-button {
+                font-size: 12px;
+                border: 4px solid #66CCFF;
+                max-width: 40%;
+            }
+
+            .or-text {
+                font-size: 14px;
+                margin: 0 2px;
+            }
+
+            .gamemode-text {
+                font-size: 25px;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .back-button-container,
+            .side-button-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <a href="homepage.html">
+                <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
+            </a>
+        </div>
+        <div class="settings-icon">
+            <img src="./images/icons/settings.svg" alt="Settings">
+        </div>
+    </header>
+    <div class="landscape-message">
+        Please rotate your phone to continue
+        <img src="../../images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+    </div>
+    <div class="back-button-container">
+        <button class="back-button">BACK</button>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="gamemode-text">Truth</div>
+            <div class="main-image-container">
+                <img src="../../images/blank-cards/truth-or-dare-blank-card.svg" alt="Truth or Dare Blank Card"
+                    class="main-image">
+                <div class="text-container">
+                    Truth Or Dare
+                </div>
+                <div class="card-type-text">card type</div>
+            </div>
+            <div class="button-container">
+                <div class="split-button-container">
+                    <button id="truth-button" class="split-question-button">TRUTH</button>
+                    <span class="or-text">or</span>
+                    <button id="dare-button" class="split-question-button">DARE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="side-button-container">
+        <img src="../../images/icons/blue/thumbs-up.svg" alt="Thumbs Up Icon" class="side-button">
+        <img src="../../images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
+        <img src="../../images/icons/blue/thumbs-down.svg" alt="Thumbs Down Icon" class="side-button">
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+            document.documentElement.style.setProperty('--secondarypagecolour', '#55aaff');
+            const questions = {
+                truth: [],
+                dare: []
+            };
+
+            const usedQuestions = {
+                truth: [],
+                dare: []
+            };
+
+            const packNameMapping = {
+                'truth-or-dare-ice-breaker': 'Ice Breaker',
+                'truth-or-dare-adult-confessions': 'Adult Confessions',
+                'truth-or-dare-troubled-teens': 'Troubled Teens',
+                'truth-or-dare-cheeky-confessions': 'Cheeky Confessions',
+                'truth-or-dare-risky-revelations': 'Risky Revelations'
+            };
+
+            let hasBeenClicked = false;
+            let voices = [];
+            let ttsButtonTimeout;
+            let currentUtterance = null;
+
+            const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
+            const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            async function fetchQuestions() {
+                const shouldFetchIceBreaker = localStorage.getItem('truth-or-dare-ice-breaker') === 'true';
+                const shouldFetchAdultConfessions = localStorage.getItem('truth-or-dare-adult-confessions') === 'true';
+                const shouldFetchTroubledTeens = localStorage.getItem('truth-or-dare-troubled-teens') === 'true';
+                const shouldFetchCheekyConfessions = localStorage.getItem('truth-or-dare-cheeky-confessions') === 'true';
+                const shouldFetchRiskyRevelations = localStorage.getItem('truth-or-dare-risky-revelations') === 'true';
+
+                const files = [];
+                if (shouldFetchIceBreaker) {
+                    files.push('./Questions/Truth-Or-Dare/icebreaker.json');
+                }
+                if (shouldFetchAdultConfessions) {
+                    files.push('./Questions/Truth-Or-Dare/adult-confessions.json');
+                }
+                if (shouldFetchTroubledTeens) {
+                    files.push('./Questions/Truth-Or-Dare/troubled-teens.json');
+                }
+                if (shouldFetchCheekyConfessions) {
+                    files.push('./Questions/Truth-Or-Dare/cheeky-confessions.json');
+                }
+                if (shouldFetchRiskyRevelations) {
+                    files.push('./Questions/Truth-Or-Dare/risky-revelations.json');
+                }
+
+                try {
+                    for (const file of files) {
+                        const response = await fetch(file);
+                        if (!response.ok) throw new Error(`Failed to fetch ${file}: ${response.statusText}`);
+                        const data = await response.json();
+
+                        for (const key of Object.keys(data)) {
+                            const displayName = packNameMapping[key] || key;
+                            data[key].forEach(item => {
+                                if (item.question_type === 'Truth') {
+                                    questions.truth.push({ ...item, packKey: displayName, punishment: item.punishment });
+                                } else if (item.question_type === 'Dare') {
+                                    questions.dare.push({ ...item, packKey: displayName, punishment: item.punishment });
+                                }
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching questions:', error);
+                }
+            }
+
+            function getRandomQuestion(type) {
+                const availableQuestions = questions[type].filter(q => !usedQuestions[type].includes(q));
+                if (availableQuestions.length === 0) {
+                    document.querySelector('.text-container').textContent = `No more ${type} questions available.`;
+                    return null;
+                }
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                const question = availableQuestions[randomIndex];
+                usedQuestions[type].push(question);
+                return question;
+            }
+
+            function updateTextContainer(text, cardType, punishment) {
+                const textContainer = document.querySelector('.text-container');
+                textContainer.innerHTML =
+                    `<span class="question-text">${text}</span>` +
+                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+
+                const displayCardType = cardType.split('-').pop().toUpperCase();
+                document.querySelector('.card-type-text').textContent = displayCardType;
+                vibrateOnClick();
+            }
+
+            function updateTruthOrDareText(type) {
+                const truthOrDareText = document.querySelector('.gamemode-text');
+                truthOrDareText.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            }
+
+            function enableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.remove('disabled');
+                }
+            }
+
+            function disableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (!ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.add('disabled');
+                    clearTimeout(ttsButtonTimeout);
+                    ttsButtonTimeout = setTimeout(() => {
+                        enableTTSButton();
+                    }, 8000);
+                }
+            }
+
+            function stopSpeech() {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                    currentUtterance = null;
+                }
+            }
+            function vibrateOnClick() {
+                if (vibrationEnabled && 'vibrate' in navigator) {
+                    navigator.vibrate(200); // Vibrate for 200 milliseconds
+                }
+            }
+
+            document.getElementById('truth-button').addEventListener('click', () => {
+                stopSpeech();
+                if (hasBeenClicked) return;
+                hasBeenClicked = true;
+                const question = getRandomQuestion('truth');
+                if (question) {
+                    updateTextContainer(question.question, question.packKey, question.punishment);
+                    updateTruthOrDareText('truth');
+                    enableTTSButton();
+                }
+                hasBeenClicked = false;
+            });
+
+            document.getElementById('dare-button').addEventListener('click', () => {
+                stopSpeech();
+                if (hasBeenClicked) return;
+                hasBeenClicked = true;
+                const question = getRandomQuestion('dare');
+                if (question) {
+                    updateTextContainer(question.question, question.packKey, question.punishment);
+                    updateTruthOrDareText('dare');
+                    enableTTSButton();
+                }
+                hasBeenClicked = false;
+            });
+
+            document.querySelector('.back-button').addEventListener('click', () => {
+                window.location.href = 'truth-or-dare-settings';
+            });
+
+            await fetchQuestions();
+
+            if ('speechSynthesis' in window) {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    voices = speechSynthesis.getVoices();
+                    console.log('Available voices:', voices);
+                });
+            }
+
+            document.getElementById('tts-button').addEventListener('click', () => {
+                stopSpeech();
+
+                const textContainerText = document.querySelector('.text-container').textContent;
+                const truthOrDareText = document.querySelector('.gamemode-text').textContent;
+                const combinedText = `${truthOrDareText}: ${textContainerText}`;
+
+                currentUtterance = new SpeechSynthesisUtterance(combinedText);
+
+                const desiredVoiceName = 'Google UK English Male';
+                const selectedVoice = voices.find(voice => voice.name === desiredVoiceName);
+                currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
+
+                speechSynthesis.speak(currentUtterance);
+
+                disableTTSButton();
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverExposed</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="gamemode-page-styles.css">
+    <link rel="stylesheet" href="rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/purple/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/purple/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/purple/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="./images/favicons/purple/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="./images/favicons/purple/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="./images/favicons/purple/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="./images/favicons/purple/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="./images/favicons/purple/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="./images/favicons/purple/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="./images/favicons/purple/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="./images/favicons/purple/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="./images/favicons/purple/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="./images/favicons/purple/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="./images/favicons/purple/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="./images/favicons/purple/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="./images/favicons/purple/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="./images/favicons/purple/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="./images/favicons/purple/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="./images/favicons/purple/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="./images/favicons/purple/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./images/favicons/purple/favicon-512x512.png">
+
+    <style>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .header {
+            background-color: var(--primarypagecolour);
+        }
+
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .back-button-container,
+            .side-button-container {
+                display: none;
+            }
+        }
+
+        .gamemode-text {
+            font-size: 50px;
+        }
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
+            .gamemode-text {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <a href="homepage.html">
+                <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
+            </a>
+        </div>
+        <div class="settings-icon">
+            <img src="../../images/icons/settings.svg" alt="Settings">
+        </div>
+    </header>
+    <div class="landscape-message">
+        Please rotate your phone to continue
+        <img src="../../images/icons/purple/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+    </div>
+    <div class="back-button-container">
+        <button class="back-button">BACK</button>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="gamemode-text">Paranoia</div>
+            <div class="main-image-container">
+                <img src="../../images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card"
+                    class="main-image">
+                <div class="text-container">
+                    Paranoia
+                </div>
+                <div class="card-type-text">card type</div>
+            </div>
+            <div class="button-container">
+                <button id="question-button" class="question-button">Next Question</button>
+            </div>
+        </div>
+    </div>
+    <div class="side-button-container">
+        <img src="../../images/icons/purple/thumbs-up-purple.svg" alt="Thumbs Up Icon" class="side-button">
+        <img src="../../images/icons/purple/tts-icon-purple.svg" alt="Button 2" class="side-button disabled"
+            id="tts-button">
+        <img src="../../images/icons/purple/thumbs-down-purple.svg" alt="Button 3" class="side-button">
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
+            document.documentElement.style.setProperty('--secondarypagecolour', '#C8A2D8');
+
+            let hasBeenClicked = false;
+            let voices = [];
+            let ttsButtonTimeout;
+            let currentUtterance = null;
+
+            const punishmentEnabled = localStorage.getItem('paranoia-settings-punishment') === 'true';
+            const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            let hiddenAgendas = [];
+            let subtleShots = [];
+            let friendlyFears = [];
+            let behindCloseDoors = [];
+            let shadyShenanigans = [];
+
+            async function loadJSONFiles() {
+                const shouldFetchHiddenAgendas = localStorage.getItem('paranoia-hidden-agendas') === 'true';
+                const shouldFetchSubtleShots = localStorage.getItem('paranoia-subtle-shots') === 'true';
+                const shouldFetchFriendlyFears = localStorage.getItem('paranoia-friendly-fears') === 'true';
+                const shouldFetchBehindCloseDoors = localStorage.getItem('paranoia-behind-close-doors') === 'true';
+                const shouldFetchShadyShenanigans = localStorage.getItem('paranoia-shady-shenanigans') === 'true';
+
+                const files = [];
+                if (shouldFetchHiddenAgendas) files.push('./Questions/paranoia/hidden-agendas.json');
+                if (shouldFetchSubtleShots) files.push('./Questions/paranoia/subtle-shots.json');
+                if (shouldFetchFriendlyFears) files.push('./Questions/paranoia/friendly-fears.json');
+                if (shouldFetchBehindCloseDoors) files.push('./Questions/paranoia/behind-close-doors.json');
+                if (shouldFetchShadyShenanigans) files.push('./Questions/paranoia/shady-shenanigans.json');
+
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
+
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
+
+                    const hiddenAgendasData = shouldFetchHiddenAgendas ? await (await fetch('./Questions/paranoia/hidden-agendas.json')).json() : { 'paranoia-hidden-agendas': [] };
+                    const subtleShotsData = shouldFetchSubtleShots ? await (await fetch('./Questions/paranoia/subtle-shots.json')).json() : { 'paranoia-subtle-shots': [] };
+                    const friendlyFearsData = shouldFetchFriendlyFears ? await (await fetch('./Questions/paranoia/friendly-fears.json')).json() : { 'paranoia-friendly-fears': [] };
+                    const behindCloseDoorsData = shouldFetchBehindCloseDoors ? await (await fetch('./Questions/paranoia/behind-close-doors.json')).json() : { 'paranoia-behind-close-doors': [] };
+                    const shadyShenanigansData = shouldFetchShadyShenanigans ? await (await fetch('./Questions/paranoia/shady-shenanigans.json')).json() : { 'paranoia-shady-shenanigans': [] };
+
+                    hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
+                    subtleShots = subtleShotsData['paranoia-subtle-shots'] || [];
+                    friendlyFears = friendlyFearsData['paranoia-friendly-fears'] || [];
+                    behindCloseDoors = behindCloseDoorsData['paranoia-behind-close-doors'] || [];
+                    shadyShenanigans = shadyShenanigansData['paranoia-shady-shenanigans'] || [];
+
+                } catch (error) {
+                    console.error('Failed to load JSON files:', error);
+                }
+            }
+
+
+            await loadJSONFiles();
+
+            function enableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.remove('disabled');
+                }
+            }
+
+            function disableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (!ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.add('disabled');
+                    clearTimeout(ttsButtonTimeout);
+                    ttsButtonTimeout = setTimeout(() => {
+                        enableTTSButton();
+                    }, 8000);
+                }
+            }
+
+            function stopSpeech() {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                    currentUtterance = null;
+                }
+            }
+
+            function vibrateOnClick() {
+                if (vibrationEnabled && 'vibrate' in navigator) {
+                    navigator.vibrate(200); // Vibrate for 200 milliseconds
+                }
+            }
+
+            document.querySelector('.back-button').addEventListener('click', () => {
+                window.location.href = 'paranoia-settings';
+            });
+
+            if ('speechSynthesis' in window) {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    voices = speechSynthesis.getVoices();
+                    console.log('Available voices:', voices);
+                });
+            }
+
+            document.getElementById('tts-button').addEventListener('click', () => {
+                stopSpeech();
+
+                const textContainerText = document.querySelector('.text-container').textContent;
+
+                currentUtterance = new SpeechSynthesisUtterance(textContainerText);
+
+                const desiredVoiceName = 'Google UK English Male';
+                const selectedVoice = voices.find(voice => voice.name === desiredVoiceName);
+                currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
+
+                speechSynthesis.speak(currentUtterance);
+
+                disableTTSButton();
+            });
+
+            function updateTextContainer(text, cardType, punishment) {
+                const textContainer = document.querySelector('.text-container');
+                textContainer.innerHTML =
+                    `<span class="question-text">${text}</span>` +
+                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+                if (!textContainer.classList.contains('text-container')) {
+                    textContainer.classList.add('text-container-small');
+                }
+                document.querySelector('.card-type-text').textContent = cardType;
+            }
+
+            function getRandomQuestion() {
+                const allQuestions = [
+                    ...hiddenAgendas,
+                    ...subtleShots,
+                    ...friendlyFears,
+                    ...behindCloseDoors,
+                    ...shadyShenanigans
+                ];
+
+                if (allQuestions.length === 0) return null;
+                const randomIndex = Math.floor(Math.random() * allQuestions.length);
+                const selectedQuestion = allQuestions[randomIndex].question;
+                const selectedPunishment = allQuestions[randomIndex]['punishment'];
+                const cardType = hiddenAgendas.includes(allQuestions[randomIndex]) ? 'Hidden Agendas' :
+                    subtleShots.includes(allQuestions[randomIndex]) ? 'Subtle Shots' :
+                        friendlyFears.includes(allQuestions[randomIndex]) ? 'Friendly Fears' :
+                            behindCloseDoors.includes(allQuestions[randomIndex]) ? 'Behind Close Doors' :
+                                'Shady Shenanigans';
+                allQuestions.splice(randomIndex, 1);
+                return { question: selectedQuestion, punishment: selectedPunishment, cardType: cardType };
+            }
+
+            document.getElementById('question-button').addEventListener('click', () => {
+                const selectedQuestionObj = getRandomQuestion() || { question: "No Questions Available", punishment: "", cardType: "" };
+
+                updateTextContainer(
+                    selectedQuestionObj.question,
+                    selectedQuestionObj.cardType,
+                    selectedQuestionObj.punishment || "No punishment"
+                );
+
+                if (!hasBeenClicked) {
+                    enableTTSButton();
+                    hasBeenClicked = true;
+                }
+                vibrateOnClick();
+            });
+        });
+    </script>
+</body>
+
+</html>

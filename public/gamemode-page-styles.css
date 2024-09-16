@@ -1,0 +1,309 @@
+@font-face {
+    src: url('../../Fonts/LemonMilk/LEMONMILK-Medium.otf');
+    font-family: LemonMilk;
+}
+
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: LemonMilk;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.content {
+    height: 90vh;
+    width: auto;
+    max-width: 60vw;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    transform: translateY(-5%);
+}
+
+.gamemode-text {
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--primarypagecolour);
+    margin-bottom: 0.25em;
+    text-align: center;
+}
+
+.main-image-container {
+    position: relative;
+    width: auto;
+    max-width: 60vw;
+    min-width: 200px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-image {
+    height: 45vh;
+    min-height: 300px;
+}
+
+.text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 60%;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: calc(1vw + 1em);
+    color: var(--primarypagecolour);
+    ;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.card-type-text {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 0.75em;
+    color: var(--primarypagecolour);
+    ;
+    font-family: LemonMilk;
+    text-align: right;
+}
+
+.question-text {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.punishment-text {
+    font-size: 13px;
+    color: #ff5f5f;
+}
+
+.side-button-container {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    z-index: 100;
+}
+
+.side-button {
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    max-width: 10.5vw;
+    min-width: 50px;
+}
+
+.side-button.disabled {
+    color: #6e6e6e;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.back-button-container {
+    position: absolute;
+    top: 12.5vh;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    background-color: #202020;
+    border: 6px solid var(--primarypagecolour);
+    color: var(--primarypagecolour);
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 50px;
+    margin: 0 10px;
+    min-width: 80px;
+    max-width: 100px;
+    width: 15vw;
+    font-family: LemonMilk;
+    z-index: 1002;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    min-width: 200px;
+    box-sizing: border-box;
+}
+
+.button-container button {
+    font-family: LemonMilk;
+    background-color: #202020;
+    color: var(--primarypagecolour);
+    flex: 1 1 auto;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 100%;
+    background-color: #202020;
+    border: 6px solid var(--primarypagecolour);
+    font-size: 14px;
+    padding: 10px 10px;
+    cursor: pointer;
+    border-radius: 50px;
+    margin: 0 10px;
+
+    max-width: 80%;
+    text-align: center;
+    font-family: LemonMilk;
+}
+
+@media (max-width: 400px),
+(max-height: 700px) {
+    .text-container {
+        max-width: 80%;
+        min-width: 70px;
+        max-height: 90%;
+        min-height: 170px;
+    }
+
+    .question-text {
+        font-size: 12px;
+    }
+
+    .punishment-text {
+        font-size: 10px;
+    }
+
+    .card-type-text {
+        bottom: 10px;
+        right: 25px;
+        font-size: 7.5px;
+    }
+
+    .back-button {
+        background-color: #202020;
+        border: 4px solid var(--primarypagecolour);
+        font-size: 10px;
+        min-width: 40px;
+        max-width: 60px;
+        max-height: 30px;
+        width: 15vw;
+        padding: 5px 5px;
+    }
+
+    .content {
+        transform: translateY(-10%);
+    }
+
+    .side-button-container {
+        top: 55%;
+        right: 20px;
+    }
+
+    .main-image {
+        height: 35vh;
+        min-height: 300px;
+    }
+
+    .button-container button {
+        border: 4px solid var(--primarypagecolour);
+        font-size: 10px;
+        padding: 10px 5px;
+    }
+
+    .button-container {
+        margin-top: 1px;
+        padding-top: 10px;
+    }
+
+    .gamemode-text {
+        padding-bottom: 10px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+(min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+
+    .content {
+        width: 80vw;
+        height: 85vh;
+        transform: translateY(-2%);
+    }
+
+
+    .gamemode-text {
+        font-size: 26px;
+    }
+
+    .main-image {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+
+    .side-button {
+        width: 70px;
+        height: 70px;
+    }
+
+    .back-button {
+        font-size: 18px;
+        padding: 8px 12px;
+        width: 18vw;
+        min-width: 100px;
+        max-width: 120px;
+    }
+
+    .button-container button {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+
+
+    .question-text {
+        font-size: 18px;
+    }
+
+    .punishment-text {
+        font-size: 15px;
+    }
+
+    .card-type-text {
+        font-size: 14px;
+    }
+}

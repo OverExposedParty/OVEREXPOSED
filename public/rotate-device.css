@@ -1,0 +1,60 @@
+@font-face {
+    src: url('./Fonts/LemonMilk/LEMONMILK-Medium.otf');
+    font-family: LemonMilk;
+}
+
+.landscape-message {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    z-index: 1000;
+    font-family: LemonMilk;
+    display: none;
+}
+
+.rotate-icon {
+    margin-top: 10vh;
+    width: 30vh;
+    height: auto;
+    animation: rotate-and-disappear 3s infinite;
+}
+
+@keyframes rotate-and-disappear {
+    0% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+
+    25% {
+        transform: rotate(90deg);
+        opacity: 1;
+    }
+
+    95% {
+        transform: rotate(90deg);
+        opacity: 0;
+    }
+
+    97.5% {
+        transform: rotate(0deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+}
+
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .landscape-message {
+        display: flex;
+    }
+}

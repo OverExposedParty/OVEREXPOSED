@@ -1,0 +1,739 @@
+{
+    "truth-or-dare-troubled-teens": [
+        {
+            "question_type": "Truth",
+            "question": "What's something you've never told your parents?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the most awkward date you've ever been on?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the biggest lie you've ever told?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the strangest rumor you’ve heard about yourself?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the wildest thing you've ever done to impress someone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever had a crush on someone in this room?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most embarrassing thing you've done to get someone's attention?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s a secret you've kept from your closest friend?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's your biggest insecurity?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you cried and why?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who was your first celebrity crush?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the most embarrassing thing you've done in front of a crush?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s one thing you wish you could change about yourself?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever had a near-death experience? What happened?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most awkward text you’ve ever sent to the wrong person?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever been rejected by someone you really liked? What did you do next?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most awkward situation you’ve been in with your crush?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever gotten revenge on someone? What did you do?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the biggest secret you’ve ever told someone that wasn’t supposed to be shared?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most uncomfortable outfit you’ve ever worn just to impress someone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s something you’ve done that you still cringe about today?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever had a dream about someone in this room? What happened?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever lied about your age to get something or somewhere you wanted?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most shocking thing you’ve discovered about a friend or family member?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s something you’ve done that made you feel instantly regretful?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most cringe-worthy thing you've done in an attempt to be funny?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most trouble you’ve ever gotten into at a party?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the silliest argument you’ve ever had with someone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the weirdest reason you’ve ever stopped talking to someone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most cringe-worthy thing you’ve done in front of someone you liked?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever been caught talking behind someone’s back? What happened?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most awkward text message conversation you’ve had with a stranger?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever made up a story about yourself to sound more interesting?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the weirdest thing you’ve ever been scared of?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most awkward time you’ve laughed when you weren’t supposed to?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most petty thing you’ve ever done in a relationship?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever eavesdropped on a conversation and heard something shocking?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever stalked someone online? Who and why?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most embarrassing moment you've had at a party?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever pretended to like someone when you didn’t? Why?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most embarrassing photo of you that’s online?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the worst prank you’ve ever pulled?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the grossest thing you’ve done but would never admit to in public?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the biggest secret you’ve accidentally let slip?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the dumbest thing you’ve ever done out of jealousy?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most embarrassing thing you’ve overheard about yourself?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most awkward encounter you’ve had with an ex?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the grossest habit you have that you wouldn’t want anyone to know about?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever done something out of spite that you regretted later?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever been rejected in front of someone you liked? How did it feel?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the silliest thing you’ve gotten emotional over?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever tried to impress someone and failed miserably? How?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the worst thing you’ve done because of peer pressure?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever had an embarrassing moment at work or school? What happened?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most ridiculous fight you’ve had with a friend?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s something you’ve done that you wouldn’t want your parents to know?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever accidentally offended someone without realizing it?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever told a lie that spiraled out of control?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever accidentally insulted someone while trying to compliment them?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most ridiculous thing you’ve ever been tricked into doing?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the most uncomfortable secret someone’s shared with you?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the weirdest thing you’ve ever done on a date?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the weirdest thing you’ve ever had to explain to someone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s the worst thing you’ve ever said to anyone?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s your biggest red flag?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever dined and dashed?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s your strangest dealbreaker?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Would you date someone shorter or taller than you? (opposite of your preference)",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "How long was your longest relationship?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What secretly scares you?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who would you want to help you bury a body?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What do you secretly worry people judge you for?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who do you dislike the most in the room?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "If you had to kiss one person in this room, who would it be?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What’s a lie you’ve told your best friend?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When and where was your first kiss? Who was it with? What was it like?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the meanest thing you've ever said to someone else?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who was your worst kiss ever?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who are you most jealous of in the group?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you apologized? What for?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's your biggest pet peeve about the person to your left?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Name one thing you'd change about every person in this room.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you made someone else cry?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "How many people have you kissed?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's your most absurd dealbreaker?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "If your best friend called you to bury a body would you do it?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who in this room would be your one phone call if you were in jail?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who's the last person you stalked on social media?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the worst advice you've ever given someone else?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "What's the worst advice someone else has ever given you?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Would you volunteer as tribute for anyone in this room in The Hunger Games?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you wanted to hit somebody?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you were really angry? Why?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "When was the last time you got rejected?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Have you ever seriously injured another person?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Truth",
+            "question": "Who in this room do you trust the least?",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone go through your phone for one minute.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Send a voice message singing a song of the group’s choice to a random contact.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Show the room the browser history on your phone.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Read the first message in your conversations with your most recent contact.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Post an old, embarrassing photo of yourself on social media.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let the group send a voice note to someone on your phone.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Call a random contact in your phone and sing Happy Birthday to them, regardless of their actual birthday.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone else draw on your face with a pen or marker for 1 minute.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Send a message to your crush or partner with an embarrassing pickup line.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let the group choose a random item for you to eat or drink from the kitchen.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone draw a mustache on your face with a marker.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone write a word on your arm, and you can’t explain it if anyone asks about it later.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone send a text message from your phone without telling you what they wrote.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Call your crush or partner and pretend to be someone else.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Text your crush or partner and ask them out on a date in the most awkward way possible.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone go through your phone and pick a random photo for you to explain.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Write a short poem about someone in the room and read it aloud.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Swap socks with someone for the next 2 rounds.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Text your crush.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let another player post any photo they want to your Instagram story.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Give a kissing demonstration with a pillow.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Text someone lyrics to a song line by line.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Flirt with another player of the groups choosing for the next 3 rounds.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Lick a bar of soap.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Tell a lie at some point during the game (if no one realizes give out a punishment).",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Try and make yourself cry in front of the group.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Insult everyone in the room.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Smell another player’s armpit.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Try to put your whole fist in your mouth.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Put your clothing on backwards for the next 5 rounds.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Do an impression of another player until someone can figure out who it is.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Pour ice down your pants.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Text your ex and say “I miss you.”",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Try to do the splits.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Act out a proposal, choosing someone in the room as your partner.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Make a prank call.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Squat the person to your right.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Send a heart-eye emoji to your crush’s Instagram story.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Call a friend and tell them you have a huge crush on them.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Wear your clothes backward for the rest of the game.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Kiss someone on the cheek in the room.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Sit on someone’s lap for the next 2 rounds.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Call your crush and say nothing for 10 seconds, then hang up.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone send a random emoji to your last text conversation.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone paint your nails with whatever they find.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Text your partner or crush and ask them what their favorite vegetable is.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Take an item out of the refrigerator and passionately kiss it.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone in the group describe your most attractive feature in detail.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Call your crush or partner and say something flirty but keep it mysterious.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Let someone give you a chinese burn.",
+            "punishment": "Take a Shot."
+        },
+        {
+            "question_type": "Dare",
+            "question": "Comment “heart eye emojis” under your crush's latest post.",
+            "punishment": "Take a Shot."
+        }
+    ]
+}

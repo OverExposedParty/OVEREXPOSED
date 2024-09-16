@@ -1,0 +1,494 @@
+{
+  "truth-or-dare-icebreaker": [
+    {
+      "question_type": "Truth",
+      "question": "Who has the best hair in the room?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "If you could switch lives with anyone for a day, who would it be and why?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's the worst haircut you've ever had?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the grossest thing you’ve ever discovered in your food?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the strangest food you’ve ever eaten?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s a talent you have that most people wouldn’t guess?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the weirdest place you’ve ever fallen asleep?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most embarrassing way you’ve hurt yourself?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most ridiculous thing you’ve done out of boredom?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Have you ever lied about liking a gift? What was it?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the worst assumption someone’s made about you?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Have you ever pretended not to see someone in public to avoid them? Why?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most embarrassing playlist you have on your phone?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the worst social media trend you’ve participated in?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most childish thing you still enjoy doing?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most awkward way you’ve said goodbye to someone?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most unusual item you’ve purchased late at night?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the weirdest thing you’ve done to avoid confrontation?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the strangest thing you’ve done while procrastinating?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the most unusual way you’ve made a friend?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the weirdest food combination you secretly enjoy?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Have you ever had an imaginary friend?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Do you believe in ghosts?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What movie is your guilty pleasure?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What objectively terrible song do you love to listen to?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s the best piece of advice you’ve been given?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What is your favorite book of all time?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s something that overwhelms you?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "If you could choose a new name, what would you pick?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Where’s one place you’re dying to visit?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What app do you spend the most time on?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "If you could only hear one song for the rest of your life, what would it be?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What word do you hate the most?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What’s your biggest fantasy?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Who annoys you most in your life?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What country do you want to run away to?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What would you change about society?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Which reality show do you secretly want to go on?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What would you buy if you won the lottery?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Do you think you’d survive as a character in a horror movie?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "If you could choose anyone in the room to be president, who would it be and why?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What television show is your go-to comfort watch?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "If you met a genie, what would your three wishes be?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What celebrity do you think is overrated?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's one job you could never do?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What would you do if you had the power to become invisible?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "After you've dropped a piece of food, what's the longest time you've left it on the floor before eating it?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's one useless skill you'd love to learn anyway?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What is that one thing you would never do for all the money in the world?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's the last YouTube video you watched?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Who's the last person who called you?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's a skill you wish you had?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's something you're embarrassed that you're good at?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What was your most humbling moment?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What's the most ridiculous thing you have an emotional attachment to?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "Who do you text the most?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What would you rate your looks on a scale of 1 to 10?",
+      "punishment": "Take 2 Shots."
+    },
+    {
+      "question_type": "Truth",
+      "question": "What do you love most about my body?",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Only talk in whispers for the next 3 rounds.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Speak in an accent for the next 3 rounds.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Let the group pick a nickname for you and use it for the rest of the game.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Sing the chorus of your favorite song at full volume.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk in the third person until it's your turn again.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Act like your favorite animal until someone guesses what it is.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Try to juggle 3 random objects in the room.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Speak in rhymes for the next 3 rounds.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Imitate a celebrity of the group’s choice for two minutes.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Do a dramatic reading of a random Wikipedia article.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Balance a random object on your head for one round.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk without using your tongue for the next 2 rounds.",
+      "punishment": "Take a Shot.."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Speak in a robot voice for the next 3 rounds.",
+      "punishment": "Take 2 Shots now or Take a Shot. everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Close your eyes and try to identify an object by touch alone.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Attempt to moonwalk across the room without falling.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Put an ice cube in your mouth and try to sing a song until it melts.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Use only charades to communicate for the next 2 rounds.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Eat a snack while holding your hands behind your back.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Narrate the game for the next round.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk in an accent for one round.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Move in slow motion for a round.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Do your best impersonation of a pirate.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Describe the plot of your favorite movie as ridiculously as you can.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Do the Macarena without music.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Show us your screen time report.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Try to drink a glass of water without using your hands or a straw.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Burp the alphabet.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Keep your eyes closed until it’s your turn again.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Sit in the corner of the room without speaking to anyone for the next 3 rounds.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk without closing your mouth.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Wear toilet paper as a scarf.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Hold your nose while talking for 3 rounds.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Balance a book on your head for a round.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk like a news reporter.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Speak in only song lyrics for a whole round.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Make a phone call and speak only in movie quotes.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Speak only in questions for the next 3 rounds.",
+      "punishment": "Take a Shot."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Tape your mouth shut for 2 rounds.",
+      "punishment": "Take 2 Shots."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Talk as if you have no teeth until its your turn again.",
+      "punishment": "Take 2 Shots now or take a shot everytime you forget."
+    },
+    {
+      "question_type": "Dare",
+      "question": "Make a tin foil hat and wear it for the rest of the night.",
+      "punishment": "Take a Shot."
+    }
+  ]
+}

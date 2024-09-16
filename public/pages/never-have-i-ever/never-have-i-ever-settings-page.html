@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverExposed</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="gamemode-settings-page-styles.css">
+    <link rel="stylesheet" href="warning-message-style.css">
+    <link rel="stylesheet" href="rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/orange/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/orange/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/orange/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="./images/favicons/orange/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="./images/favicons/orange/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="./images/favicons/orange/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="./images/favicons/orange/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="./images/favicons/orange/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="./images/favicons/orange/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="./images/favicons/orange/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="./images/favicons/orange/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="./images/favicons/orange/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="./images/favicons/orange/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="./images/favicons/orange/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="./images/favicons/orange/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="./images/favicons/orange/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="./images/favicons/orange/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="./images/favicons/orange/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="./images/favicons/orange/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="./images/favicons/orange/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./images/favicons/orange/favicon-512x512.png">
+
+    <style>
+        .header {
+            background-color: #FF9266;
+        }
+
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .main-container,
+            .header,
+            .home-button-container {
+                display: none;
+            }
+
+            .warning-box,
+            .overlay {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <a href="/">
+                <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
+            </a>
+        </div>
+        <div class="settings-icon">
+            <img src="./Images/Icons/Settings.svg" alt="Settings">
+        </div>
+    </header>
+    <div class="landscape-message">
+        Please rotate your phone to continue
+        <img src="../../images/icons/orange/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="warning-box" id="warning-box">
+        <h2 id="warning-title" class="warning-title">NSFW</h2>
+        <img src="../../images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
+        <p class="warning-text">This content is not suitable for all audiences.</p>
+        <a href="never-have-i-ever" class="start-game-warning-button">START GAME</a>
+    </div>
+    <div class="home-button-container">
+        <button class="home-button">HOME</button>
+    </div>
+    <div class="main-container">
+        <div class="packs-container">
+            <div class="packs-header-container">
+                <h2 class="packs-header">Never Have I Ever Packs</h2>
+            </div>
+            <div class="packs-content-container">
+                <div class="button-container">
+                    <button data-key="never-have-i-ever-simple-admissions" class="pack-sfw">SIMPLE ADMISSIONS !</button>
+                    <button data-key="never-have-i-ever-rising-suspicions" class="pack-sfw">RISING SUSPICIONS !!
+                    </button>
+                    <button data-key="never-have-i-ever-digging-deeper" class="pack-nsfw">DIGGING DEEPER !!!</button>
+                    <button data-key="never-have-i-ever-verbal-diarrhea" class="pack-nsfw">VERBAL DIARRHEA !!!!</button>
+                    <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw">RAW AND UNFILTERED
+                        !!!!!</button>
+                </div>
+            </div>
+        </div>
+        <div class="separator-container"></div>
+        <div class="settings-container">
+            <div class="settings-header-container">
+                <h2 class="settings-header">Game Settings</h2>
+            </div>
+            <div class="game-settings-container">
+                <div class="button-container">
+                    <button data-key="never-have-i-ever-settings-punishment">Drinking Punishment</button>
+                </div>
+                <button class="start-game-button">Start Game</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
+            document.documentElement.style.setProperty('--secondarypagecolour', '#FFB89C');
+
+            const overlay = document.getElementById('overlay');
+            const warningBox = document.getElementById('warning-box');
+            const warningStartButton = document.querySelector('.start-game-warning-button');
+            const packButtons = document.querySelectorAll('.packs-container .button-container button');
+            const drinkingPunishmentButton = document.querySelector('[data-key="never-have-i-ever-settings-punishment"]');
+            const startGameButton = document.querySelector('.start-game-button');
+            const homeButton = document.querySelector('.home-button');
+
+            function updateStartGameButton() {
+                const anyActive = Array.from(packButtons).some(button => button.classList.contains('active'));
+                startGameButton.classList.toggle('disabled', !anyActive);
+                startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
+            }
+
+            const eighteenPlusEnabled = localStorage.getItem('18plus') === 'true';
+            if (!eighteenPlusEnabled) {
+                for (let i = 1; i < packButtons.length; i++) {
+                    packButtons[i].disabled = true;
+                    packButtons[i].classList.add('disabled');
+
+                    const key = packButtons[i].getAttribute('data-key');
+                    localStorage.setItem(key, 'false');
+                }
+                drinkingPunishmentButton.disabled = true;
+                drinkingPunishmentButton.classList.add('disabled');
+                localStorage.setItem(drinkingPunishmentButton.getAttribute('data-key'), 'false');
+            }
+
+            document.querySelectorAll('button').forEach(button => {
+                const key = button.getAttribute('data-key');
+                const savedState = localStorage.getItem(key);
+
+                if (savedState === 'true') {
+                    button.classList.add('active');
+                } else if (savedState === 'false') {
+                    button.classList.remove('active');
+                }
+
+                button.addEventListener('click', () => {
+                    if (!button.disabled) {
+                        button.classList.toggle('active');
+                        const isActive = button.classList.contains('active');
+                        localStorage.setItem(key, isActive ? 'true' : 'false');
+                        updateStartGameButton();
+                    }
+                });
+            });
+
+            updateStartGameButton();
+
+            homeButton.addEventListener('click', () => {
+                window.location.href = '/';
+            });
+
+            startGameButton.addEventListener('click', () => {
+                const nsfwPacksActive = Array.from(packButtons).some(button => button.classList.contains('active') && button.classList.contains('pack-nsfw'));
+
+                if (nsfwPacksActive) {
+                    warningBox.style.display = 'block';
+                    overlay.style.display = 'block';
+                } else {
+                    window.location.href = 'never-have-i-ever';
+                }
+            });
+
+            warningStartButton.addEventListener('click', () => {
+                window.location.href = 'never-have-i-ever';
+            });
+
+            overlay.addEventListener('click', () => {
+                warningBox.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+
+            warningBox.addEventListener('click', function (event) {
+                if (event.target === this || event.target === overlay) {
+                    this.style.display = 'none';
+                    overlay.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
