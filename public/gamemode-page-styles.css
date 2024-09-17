@@ -48,8 +48,8 @@ body {
     font-size: 23px;
     font-weight: bold;
     color: var(--primarypagecolour);
-    margin-bottom: 0.25em;
     text-align: center;
+    padding-bottom: 5px;
 }
 
 .main-image-container {
@@ -159,11 +159,16 @@ body {
     z-index: 1002;
 }
 
+.back-button:hover {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+}
+
 .button-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
@@ -190,6 +195,11 @@ body {
     max-width: 80%;
     text-align: center;
     font-family: LemonMilk;
+}
+
+.button-container button:hover {
+    background-color: var(--primarypagecolour);
+    color: #202020;
 }
 
 @media (max-width: 400px),
@@ -248,11 +258,7 @@ body {
 
     .button-container {
         margin-top: 1px;
-        padding-top: 10px;
-    }
-
-    .gamemode-text {
-        padding-bottom: 10px;
+        padding-top: 5px;
     }
 }
 

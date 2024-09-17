@@ -182,6 +182,7 @@ body {
 
 .button-container button:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
+    border: 3px solid var(--secondarypagecolour);
 }
 
 .button-container button.active:not(.disabled):hover {
