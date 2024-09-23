@@ -1,8 +1,3 @@
-@font-face {
-    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
-    font-family: LemonMilk;
-}
-
 * {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -17,7 +12,10 @@
     width: 100%;
 }
 
-
+@font-face {
+    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
+    font-family: LemonMilk;
+}
 
 .toggle-switch input {
     opacity: 0;

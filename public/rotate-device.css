@@ -1,8 +1,3 @@
-@font-face {
-    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
-    font-family: LemonMilk;
-}
-
 .landscape-message {
     position: fixed;
     left: 0;

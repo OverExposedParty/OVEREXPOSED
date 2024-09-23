@@ -137,7 +137,7 @@
 
             const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
             if (!eighteenPlusEnabled) {
-                for (let i = 1; i < packButtons.length; i++) {
+                for (let i = 2; i < packButtons.length; i++) {
                     packButtons[i].disabled = true;
                     packButtons[i].classList.add('disabled');
 
