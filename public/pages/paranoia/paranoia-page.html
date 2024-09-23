@@ -139,11 +139,11 @@
                 const shouldFetchShadyShenanigans = localStorage.getItem('paranoia-shady-shenanigans') === 'true';
 
                 const files = [];
-                if (shouldFetchHiddenAgendas) files.push('./Questions/paranoia/hidden-agendas.json');
-                if (shouldFetchSubtleShots) files.push('./Questions/paranoia/subtle-shots.json');
-                if (shouldFetchFriendlyFears) files.push('./Questions/paranoia/friendly-fears.json');
-                if (shouldFetchBehindCloseDoors) files.push('./Questions/paranoia/behind-close-doors.json');
-                if (shouldFetchShadyShenanigans) files.push('./Questions/paranoia/shady-shenanigans.json');
+                if (shouldFetchHiddenAgendas) files.push('./questions/paranoia/hidden-agendas.json');
+                if (shouldFetchSubtleShots) files.push('./questions/paranoia/subtle-shots.json');
+                if (shouldFetchFriendlyFears) files.push('./questions/paranoia/friendly-fears.json');
+                if (shouldFetchBehindCloseDoors) files.push('./questions/paranoia/behind-close-doors.json');
+                if (shouldFetchShadyShenanigans) files.push('./questions/paranoia/shady-shenanigans.json');
 
                 try {
                     const responses = await Promise.all(files.map(file => fetch(file)));
@@ -154,11 +154,11 @@
                         }
                     });
 
-                    const hiddenAgendasData = shouldFetchHiddenAgendas ? await (await fetch('./Questions/paranoia/hidden-agendas.json')).json() : { 'paranoia-hidden-agendas': [] };
-                    const subtleShotsData = shouldFetchSubtleShots ? await (await fetch('./Questions/paranoia/subtle-shots.json')).json() : { 'paranoia-subtle-shots': [] };
-                    const friendlyFearsData = shouldFetchFriendlyFears ? await (await fetch('./Questions/paranoia/friendly-fears.json')).json() : { 'paranoia-friendly-fears': [] };
-                    const behindCloseDoorsData = shouldFetchBehindCloseDoors ? await (await fetch('./Questions/paranoia/behind-close-doors.json')).json() : { 'paranoia-behind-close-doors': [] };
-                    const shadyShenanigansData = shouldFetchShadyShenanigans ? await (await fetch('./Questions/paranoia/shady-shenanigans.json')).json() : { 'paranoia-shady-shenanigans': [] };
+                    const hiddenAgendasData = shouldFetchHiddenAgendas ? await (await fetch('./questions/paranoia/hidden-agendas.json')).json() : { 'paranoia-hidden-agendas': [] };
+                    const subtleShotsData = shouldFetchSubtleShots ? await (await fetch('./questions/paranoia/subtle-shots.json')).json() : { 'paranoia-subtle-shots': [] };
+                    const friendlyFearsData = shouldFetchFriendlyFears ? await (await fetch('./questions/paranoia/friendly-fears.json')).json() : { 'paranoia-friendly-fears': [] };
+                    const behindCloseDoorsData = shouldFetchBehindCloseDoors ? await (await fetch('./questions/paranoia/behind-close-doors.json')).json() : { 'paranoia-behind-close-doors': [] };
+                    const shadyShenanigansData = shouldFetchShadyShenanigans ? await (await fetch('./questions/paranoia/shady-shenanigans.json')).json() : { 'paranoia-shady-shenanigans': [] };
 
                     hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
                     subtleShots = subtleShotsData['paranoia-subtle-shots'] || [];
