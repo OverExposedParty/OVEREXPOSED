@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OverExposed</title>
+    <title>PARANOIA SETTINGS</title>
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-settings-page-styles.css">
     <link rel="stylesheet" href="warning-message-style.css">
@@ -65,7 +65,10 @@
             </a>
         </div>
         <div class="settings-icon">
-            <img src="./Images/Icons/Settings.svg" alt="Settings">
+            <img src="./images/icons/settings.svg" alt="Settings">
+        </div>
+        <div class="extra-menu-icon">
+            <img src="./Images/Icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
     </header>
     <div class="landscape-message">
@@ -116,7 +119,7 @@
             document.documentElement.style.setProperty('--secondarypagecolour', '#9D8AFF'); 
 
             const overlay = document.getElementById('overlay');
-            const eighteenPlusEnabled = localStorage.getItem('18plus') === 'true';
+            const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
             const packButtons = document.querySelectorAll('.packs-container .button-container button');
             const drinkingPunishmentButton = document.querySelector('[data-key="paranoia-settings-punishment"]');
             const startGameButton = document.querySelector('.start-game-button');
@@ -131,7 +134,7 @@
             }
 
             if (!eighteenPlusEnabled) {
-                for (let i = 1; i < packButtons.length; i++) {
+                for (let i = 2; i < packButtons.length; i++) {
                     packButtons[i].disabled = true;
                     packButtons[i].classList.add('disabled');
 

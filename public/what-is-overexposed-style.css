@@ -101,7 +101,7 @@ body {
 
 .about-us-text {
     font-family: LemonMilk;
-    line-height: 0;
+    line-height: 0.2;
     max-width: 100%;
     font-size: 70px;
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OverExposed</title>
+    <title>PARTY GAMES</title>
     <link rel="stylesheet" href="homepage-styles.css">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="settings-style.css">
@@ -51,17 +51,17 @@
         <h2 id="settings-title" class="settings-title">Settings</h2>
         <div class="settings-content">
             <div class="settings-option">
-                <label for="settings-vibration">NSFW</label>
+                <label for="settings-nsfw">NSFW</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="settings-vibration">
+                    <input type="checkbox" id="settings-nsfw">
                     <span class="slider"></span>
                 </label>
             </div>
 
             <div class="settings-option">
-                <label for="tts">VIBRATION</label>
+                <label for="settings-vibration">VIBRATION</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="tts">
+                    <input type="checkbox" id="settings-vibration">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -127,7 +127,7 @@
             const containerTitle = document.querySelector('#container-title');
 
             const settingsVibrationCheckbox = document.getElementById('settings-vibration');
-            const ttsCheckbox = document.getElementById('tts');
+            const nsfwCheckbox = document.getElementById('settings-nsfw');
 
             const rotateMessage = document.querySelector('#landscape-message');
             const rotateIcon = document.querySelector('#rotate-icon');
@@ -144,16 +144,16 @@
                 }
             }
 
-            if (localStorage.getItem('tts') === 'true') {
-                ttsCheckbox.checked = true;
+            if (localStorage.getItem('settings-nsfw') === 'true') {
+                nsfwCheckbox.checked = true;
             }
 
             settingsVibrationCheckbox.addEventListener('change', function () {
                 localStorage.setItem('settings-vibration', settingsVibrationCheckbox);
             });
 
-            ttsCheckbox.addEventListener('change', function () {
-                localStorage.setItem('tts', ttsCheckbox.checked);
+            nsfwCheckbox.addEventListener('change', function () {
+                localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
             });
 
             function toggleSettings() {
@@ -272,9 +272,11 @@
                         btn.classList.remove('selected');
                         btn.style.borderColor = 'grey';
                         btn.style.color = 'grey';
+                        localStorage.setItem(btn.getAttribute('data-key'), 'false');
                     });
 
                     selectButton(button);
+                    localStorage.setItem(button.getAttribute('data-key'), 'true');
                     localStorage.setItem('selectedTTSButton', button.getAttribute('data-key'));
                 });
             });

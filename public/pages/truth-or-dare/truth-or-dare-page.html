@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OverExposed</title>
+    <title>TRUTH OR DARE</title>
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
@@ -112,14 +112,18 @@
 <body>
     <header class="header" id="header">
         <div class="logo-container">
-            <a href="homepage.html">
+            <a href="/">
                 <img src="./Images/logo.svg" alt="OverExposed Logo" class="logo">
             </a>
         </div>
         <div class="settings-icon">
             <img src="./images/icons/settings.svg" alt="Settings">
         </div>
+        <div class="extra-menu-icon">
+            <img src="./Images/Icons/extra-menu-icon.svg" alt="Extra Menu">
+        </div>
     </header>
+    
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="../../images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -148,9 +152,9 @@
         </div>
     </div>
     <div class="side-button-container">
-        <img src="../../images/icons/blue/thumbs-up.svg" alt="Thumbs Up Icon" class="side-button">
+        <img src="../../images/icons/blue/thumbs-up-icon.svg" alt="Thumbs Up Icon" class="side-button">
         <img src="../../images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
-        <img src="../../images/icons/blue/thumbs-down.svg" alt="Thumbs Down Icon" class="side-button">
+        <img src="../../images/icons/blue/thumbs-down-icon.svg" alt="Thumbs Down Icon" class="side-button">
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -316,6 +320,28 @@
                 window.location.href = 'truth-or-dare-settings';
             });
 
+            function getSelectedVoice() {
+                const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+
+                const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+
+                switch (selectedVoiceKey) {
+                    case 'tts-voice-male1':
+                        return 'Google UK English Male'; // Example name
+                    case 'tts-voice-male2':
+                        return 'Google UK English Female'; // Example name
+                    case 'tts-voice-female1':
+                        return 'Google US English'; // Example name
+                    case 'tts-voice-female2':
+                        return 'Microsoft Zira - English (United States)'; // Example name
+                    default:
+                        return null;
+                }
+            }
+
             await fetchQuestions();
 
             if ('speechSynthesis' in window) {
@@ -334,8 +360,8 @@
 
                 currentUtterance = new SpeechSynthesisUtterance(combinedText);
 
-                const desiredVoiceName = 'Google UK English Male';
-                const selectedVoice = voices.find(voice => voice.name === desiredVoiceName);
+                const selectedVoiceName = getSelectedVoice();
+                const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
                 currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
 
                 speechSynthesis.speak(currentUtterance);
