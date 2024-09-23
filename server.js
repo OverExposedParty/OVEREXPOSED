@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'homepage.html'));
+  res.sendFile(path.join(__dirname, 'public', 'what-is-overexposed.html'));
 });
 
 app.get('/truth-or-dare-settings', (req, res) => {

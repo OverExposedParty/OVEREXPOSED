@@ -1,5 +1,5 @@
 @font-face {
-    src: url('./Fonts/LemonMilk/LEMONMILK-Medium.otf');
+    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
     font-family: LemonMilk;
 }
 
@@ -72,7 +72,7 @@ body {
     height: 100%;
     width: 100%;
     overflow-x: hidden;
-    background-image: url('./Images/Background-Tile.png');
+    background-image: url('./images/background-tile.png');
     background-size: 192px 207px;
     background-position: top left;
     background-repeat: repeat;
