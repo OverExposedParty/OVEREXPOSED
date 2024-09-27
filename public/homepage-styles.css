@@ -93,7 +93,7 @@
 @media only screen and (max-width: 600px) {
     .container {
         grid-template-columns: 1fr;
-        width: 75%;
+        width: 100%;
         height: auto;
         min-width: 0;
         margin: 1vh auto;

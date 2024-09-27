@@ -102,6 +102,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
             document.documentElement.style.setProperty('--secondarypagecolour', '#FFECA7');
+
             let hasBeenClicked = false;
             let voices = [];
             let ttsButtonTimeout;
@@ -116,47 +117,69 @@
             let unsolicitedStrays = [];
             let unfilteredAssaults = [];
 
+            let allQuestions = []; // Initialize an array to hold all questions
+            let currentQuestionIndex = 0; // Initialize the current question index
+
             async function loadJSONFiles() {
-            const shouldFetchCalmAndCasual = localStorage.getItem('most-likely-to-calm-and-casual') === 'true';
-            const shouldFetchMildMischief = localStorage.getItem('most-likely-to-mild-mischief') === 'true';
-            const shouldFetchOpenSeason = localStorage.getItem('most-likely-to-open-season') === 'true';
-            const shouldFetchUnsolicitedStrays = localStorage.getItem('most-likely-to-unsolicited-strays') === 'true';
-            const shouldFetchUnfilteredAssaults = localStorage.getItem('most-likely-to-unfiltered-assaults') === 'true';
+                const shouldFetchCalmAndCasual = localStorage.getItem('most-likely-to-calm-and-casual') === 'true';
+                const shouldFetchMildMischief = localStorage.getItem('most-likely-to-mild-mischief') === 'true';
+                const shouldFetchOpenSeason = localStorage.getItem('most-likely-to-open-season') === 'true';
+                const shouldFetchUnsolicitedStrays = localStorage.getItem('most-likely-to-unsolicited-strays') === 'true';
+                const shouldFetchUnfilteredAssaults = localStorage.getItem('most-likely-to-unfiltered-assaults') === 'true';
 
-            const files = [];
-            if (shouldFetchCalmAndCasual) files.push('./questions/most-likely-to/calm-and-casual.json');
-            if (shouldFetchMildMischief) files.push('./questions/most-likely-to/mild-mischief.json');
-            if (shouldFetchOpenSeason) files.push('./questions/most-likely-to/open-season.json');
-            if (shouldFetchUnsolicitedStrays) files.push('./questions/most-likely-to/unsolicited-strays.json');
-            if (shouldFetchUnfilteredAssaults) files.push('./questions/most-likely-to/unfiltered-assaults.json');
+                const files = [];
+                if (shouldFetchCalmAndCasual) files.push('./questions/most-likely-to/calm-and-casual.json');
+                if (shouldFetchMildMischief) files.push('./questions/most-likely-to/mild-mischief.json');
+                if (shouldFetchOpenSeason) files.push('./questions/most-likely-to/open-season.json');
+                if (shouldFetchUnsolicitedStrays) files.push('./questions/most-likely-to/unsolicited-strays.json');
+                if (shouldFetchUnfilteredAssaults) files.push('./questions/most-likely-to/unfiltered-assaults.json');
 
-            try {
-                const responses = await Promise.all(files.map(file => fetch(file)));
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
 
-                responses.forEach(response => {
-                    if (!response.ok) {
-                        console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
-                    }
-                });
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
 
-                const calmAndCasualData = shouldFetchCalmAndCasual ? await (await fetch('./questions/most-likely-to/calm-and-casual.json')).json() : { 'most-likely-to-calm-and-casual': [] };
-                const mildMischiefData = shouldFetchMildMischief ? await (await fetch('./questions/most-likely-to/mild-mischief.json')).json() : { 'most-likely-to-mild-mischief': [] };
-                const openSeasonData = shouldFetchOpenSeason ? await (await fetch('./questions/most-likely-to/open-season.json')).json() : { 'most-likely-to-open-season': [] };
-                const unsolicitedStraysData = shouldFetchUnsolicitedStrays ? await (await fetch('./questions/most-likely-to/unsolicited-strays.json')).json() : { 'most-likely-to-unsolicited-strays': [] };
-                const unfilteredAssaultsData = shouldFetchUnfilteredAssaults ? await (await fetch('./questions/most-likely-to/unfiltered-assaults.json')).json() : { 'most-likely-to-unfiltered-assaults': [] };
+                    const calmAndCasualData = shouldFetchCalmAndCasual ? await (await fetch('./questions/most-likely-to/calm-and-casual.json')).json() : { 'most-likely-to-calm-and-casual': [] };
+                    const mildMischiefData = shouldFetchMildMischief ? await (await fetch('./questions/most-likely-to/mild-mischief.json')).json() : { 'most-likely-to-mild-mischief': [] };
+                    const openSeasonData = shouldFetchOpenSeason ? await (await fetch('./questions/most-likely-to/open-season.json')).json() : { 'most-likely-to-open-season': [] };
+                    const unsolicitedStraysData = shouldFetchUnsolicitedStrays ? await (await fetch('./questions/most-likely-to/unsolicited-strays.json')).json() : { 'most-likely-to-unsolicited-strays': [] };
+                    const unfilteredAssaultsData = shouldFetchUnfilteredAssaults ? await (await fetch('./questions/most-likely-to/unfiltered-assaults.json')).json() : { 'most-likely-to-unfiltered-assaults': [] };
 
-                calmAndCasual = calmAndCasualData['most-likely-to-calm-and-casual'];
-                mildMischief = mildMischiefData['most-likely-to-mild-mischief'] || [];
-                openSeason = openSeasonData['most-likely-to-open-season'] || [];
-                unsolicitedStrays = unsolicitedStraysData['most-likely-to-unsolicited-strays'] || [];
-                unfilteredAssaults = unfilteredAssaultsData['most-likely-to-unfiltered-assaults'] || [];
+                    // Assign the fetched data to the respective variables or empty arrays if the fetch fails
+                    calmAndCasual = calmAndCasualData['most-likely-to-calm-and-casual'] || [];
+                    mildMischief = mildMischiefData['most-likely-to-mild-mischief'] || [];
+                    openSeason = openSeasonData['most-likely-to-open-season'] || [];
+                    unsolicitedStrays = unsolicitedStraysData['most-likely-to-unsolicited-strays'] || [];
+                    unfilteredAssaults = unfilteredAssaultsData['most-likely-to-unfiltered-assaults'] || [];
 
-            } catch (error) {
-                console.error('Failed to load JSON files:', error);
+                    // Combine all questions into the allQuestions array
+                    allQuestions = [...calmAndCasual, ...mildMischief, ...openSeason, ...unsolicitedStrays, ...unfilteredAssaults];
+
+
+                    // Shuffle questions after loading
+                    shuffleQuestions();
+
+                } catch (error) {
+                    console.error('Failed to load JSON files:', error);
+                }
             }
-        }
 
-            await loadJSONFiles();
+            function shuffleQuestions() {
+                for (let i = allQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+                }
+
+                calmAndCasual = allQuestions.filter(q => calmAndCasual.includes(q));
+                mildMischief = allQuestions.filter(q => mildMischief.includes(q));
+                openSeason = allQuestions.filter(q => openSeason.includes(q));
+                unsolicitedStrays = allQuestions.filter(q => unsolicitedStrays.includes(q));
+                unfilteredAssaults = allQuestions.filter(q => unfilteredAssaults.includes(q));
+            }
 
             function enableTTSButton() {
                 const ttsButton = document.getElementById('tts-button');
@@ -182,6 +205,7 @@
                     currentUtterance = null;
                 }
             }
+            
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
                     navigator.vibrate(200); // Vibrate for 200 milliseconds
@@ -194,12 +218,7 @@
 
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
-
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-
-                console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
-
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
                         return 'Google UK English Male'; // Example name
@@ -217,24 +236,17 @@
             if ('speechSynthesis' in window) {
                 speechSynthesis.addEventListener('voiceschanged', () => {
                     voices = speechSynthesis.getVoices();
-
-                    console.log('Available voices:', voices);
                 });
             }
 
             document.getElementById('tts-button').addEventListener('click', () => {
                 stopSpeech();
-
                 const textContainerText = document.querySelector('.text-container').textContent;
-
                 currentUtterance = new SpeechSynthesisUtterance(textContainerText);
-
                 const selectedVoiceName = getSelectedVoice();
                 const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
                 currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
-
                 speechSynthesis.speak(currentUtterance);
-
                 disableTTSButton();
             });
 
@@ -250,37 +262,44 @@
                 vibrateOnClick();
             }
 
-            function getRandomQuestion() {
-                const allQuestions = [...calmAndCasual, ...mildMischief, ...openSeason, ...unsolicitedStrays, ...unfilteredAssaults];
-                if (allQuestions.length === 0) return null;
-                const randomIndex = Math.floor(Math.random() * allQuestions.length);
-                const selectedQuestion = allQuestions[randomIndex].question;
-                const selectedPunishment = allQuestions[randomIndex]['punishment'];
-                const cardType = 
-                    calmAndCasual.includes(allQuestions[randomIndex]) ? 'Calm And Casual' :
-                    mildMischief.includes(allQuestions[randomIndex]) ? 'Mild Mischief' :
-                    openSeason.includes(allQuestions[randomIndex]) ? 'Open Season' :
-                    unsolicitedStrays.includes(allQuestions[randomIndex]) ? 'Unsolicited Strays' :
+            function getNextQuestion() {
+                if (currentQuestionIndex >= allQuestions.length) {
+                    shuffleQuestions(); // Shuffle again if we've reached the end
+                    currentQuestionIndex = 0; // Reset the index after shuffling
+                }
+
+                stopSpeech();
+                enableTTSButton();
+
+                const selectedQuestion = allQuestions[currentQuestionIndex];
+                const selectedPunishment = selectedQuestion['punishment'];
+                const cardType =
+                    calmAndCasual.includes(selectedQuestion) ? 'Calm And Casual' :
+                    mildMischief.includes(selectedQuestion) ? 'Mild Mischief' :
+                    openSeason.includes(selectedQuestion) ? 'Open Season' :
+                    unsolicitedStrays.includes(selectedQuestion) ? 'Unsolicited Strays' :
                     'Unfiltered Assaults';
-                allQuestions.splice(randomIndex, 1); 
-                return { question: selectedQuestion, punishment: selectedPunishment, cardType: cardType };
+
+                currentQuestionIndex++; // Move to the next question
+
+                return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
             }
 
-            document.getElementById('question-button').addEventListener('click', () => {
-                const selectedQuestionObj = getRandomQuestion() || { question: "No Questions Available", punishment: "", cardType: "" };
-
-                updateTextContainer(
-                    selectedQuestionObj.question, 
-                    selectedQuestionObj.cardType, 
-                    selectedQuestionObj.punishment || "No punishment"
-                );
+            document.querySelector('.question-button').addEventListener('click', () => {
+                const selectedQuestionObj = getNextQuestion();
+                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
 
                 if (!hasBeenClicked) {
                     enableTTSButton();
                     hasBeenClicked = true;
                 }
+                vibrateOnClick(); // Ensure vibration occurs on question button click
             });
+    
+            // Load questions on page load
+            await loadJSONFiles();
         });
     </script>
+
 </body>
 </html>
