@@ -1,3 +1,8 @@
+@font-face {
+    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
+    font-family: LemonMilk;
+}
+
 .header {
     width: 100%;
     height: 50px;

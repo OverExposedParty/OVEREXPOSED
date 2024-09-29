@@ -1,0 +1,299 @@
+:root {
+    --primarypagecolour: #6A9EF6;
+    --tag1colour: #F6C86D;
+    --tag2colour: #FC7E93;
+    --tag3colour: #40E0D0;
+
+    --bordersize: 5px;
+}
+
+.title-container {
+    position: relative;
+    width: 40vw;
+    height: auto; /* Set a fixed height for vertical centering */
+    left: 30vw;
+    margin-top: 7.5vh;
+    display: flex; /* Enable flexbox */
+    align-items: center; /* Center content vertically */
+    justify-content: space-between; /* Space elements evenly */
+}
+
+.title-text {
+    margin: 0; /* Remove margin */
+    text-align: center; /* Center text */
+    font-family: LemonMilk;
+    color: #6A9EF6;
+    font-size: 42px;
+    flex: 1; /* Allow the title to grow to fill available space */
+
+}
+
+.search-bar {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 15%; /* Set width of the search bar */
+    border: var(--bordersize) solid var(--primarypagecolour);
+    background-color: #202020;
+    color: var(--primarypagecolour);
+    border-radius: 50px;
+    padding: 0.5vh 1vw;
+    font-family: LemonMilk;
+    z-index:100;
+}
+
+.filter-button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border: var(--bordersize) solid var(--primarypagecolour);
+    background-color: #202020;
+    color: #6A9EF6;;
+    border-radius: 50px;
+    padding: 0.5vh 1vw;
+    font-family: LemonMilk;
+    width: 20%;
+    z-index: 100;
+    display: flex;
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+}
+.filter-button.hidden {
+    border-color: gray;
+    color: gray;
+}
+.dropdown-menu {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 16%; /* Set width of the dropdown menu */
+    border: 0px solid var(--primarypagecolour);
+    background-color: transparent;
+    color: var(--primarypagecolour);
+    border-radius: 50px;
+    padding: 0 1vw;
+    font-family: LemonMilk;
+    margin: 0; /* Align to the left */
+    position: relative; /* Ensure it positions correctly in the flow */
+}
+
+/* Optional: Style for the dropdown options */
+.dropdown-menu select {
+    width: 100%; /* Make the select fill the dropdown */
+    background: transparent; /* Match background color */
+    color: inherit; /* Inherit text color */
+    border: none; /* Remove default border */
+    font-family: inherit; /* Inherit font family */
+    padding: 0; /* Remove padding for better fit */
+    outline: none; /* Remove outline */
+    background-color: #202020;
+}
+
+.filter-container {
+    position: relative;
+    width: 40vw;
+    height: auto; /* Set a fixed height for vertical centering */
+    left: 30vw;
+    padding: 1vh 0;
+    margin: 2vh 0;
+    display: flex; /* Enable flexbox */
+    align-items: center; /* Center content vertically */
+    justify-content: space-between; /* Space elements evenly */
+    background-color: #202020;
+    border: #202020 solid var(--primarypagecolour);
+    border-radius: 50px;
+}
+
+.tag-container label {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 5px; /* Space between labels */
+    font-family: LemonMilk;
+    font-size: large;
+
+}
+.tag-checkbox {
+    appearance: none; /* Remove default checkbox styling */
+    width: 20px; /* Adjust the size of the checkbox */
+    height: 20px;
+    border: var(--bordersize) solid #202020; /* Set the border width and color */
+    border-radius: 8px; /* Optional: make it rounded */
+    outline: none; /* Remove any outline */
+    cursor: pointer;
+    position: relative;
+}
+.extra-details-container {
+    display: flex;
+    justify-content: space-between; /* Aligns items to the left and right */
+    padding: 10px 0; /* Add some padding */
+    font-size: 0.9em; /* Adjust font size as needed */
+    color: #555; /* Set a lighter color for details */
+}
+
+.author {
+    margin-left: 0px; /* Optional margin */
+    color: var(--tag1colour);
+    font-size: 12px; 
+    font-family: Helvetica;
+}
+
+.date {
+    margin-right: 0px; /* Optional margin */
+    color: var(--tag1colour);
+    font-size: 12px; 
+    font-family: Helvetica;
+}
+
+
+/* Individual tag colors */
+.tag-checkbox#tag1 {
+    border-color: var(--tag1colour);
+}
+.tag-checkbox#tag2 {
+    border-color: var(--tag2colour);
+}
+.tag-checkbox#tag3 {
+    border-color: var(--tag3colour);
+}
+.tag-checkbox#tag-all {
+    border-color: var(--primarypagecolour);
+}
+
+/* Change the background and border color when checked */
+.tag-checkbox:checked {
+    background-color: #202020; /* Example: background color change */
+}
+
+/* Optional: add a checkmark or symbol when checked */
+.tag-checkbox:checked::before {
+    font-size: 80%;
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -55%); /* Adjust positioning to center */
+}
+#tag1.tag-checkbox:checked {
+    background-color: var(--tag1colour);
+}
+#tag2.tag-checkbox:checked {
+    background-color: var(--tag2colour);
+}
+#tag3.tag-checkbox:checked {
+    background-color: var(--tag3colour);
+}
+#tag-all.tag-checkbox:checked {
+    background-color: var(--primarypagecolour);
+}
+    
+     
+
+#tag1 + span {
+    color: var(--tag1colour);
+}
+
+#tag2 + span {
+    color: var(--tag2colour);
+}
+#tag3 + span {
+    color: var(--tag3colour);
+}
+#tag-all + span {
+    color: var(--primarypagecolour);
+}
+.tag-container input[type="checkbox"] {
+    accent-color: var(--tag1colour); /* Set checkbox color to match the label color */
+}
+.tag-container input[type="checkbox"]#tag2 {
+    accent-color: var(--tag2colour); /* Set checkbox color to match the label color */
+}
+.tag-container input[type="checkbox"]#tag3 {
+    accent-color: var(--tag3colour); /* Set checkbox color to match the label color */
+}
+.tag-container input[type="checkbox"]#tag-all {
+    accent-color: var(--primarypagecolour);
+}
+.tag-container .tag-checkbox {
+    margin-left: 10px; /* Space between label and checkbox */
+}
+
+/* This will ensure that all checkboxes are in a single row */
+.tag-container {
+    display: flex; /* Use flexbox for the container */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    gap: 10px; /* Space between checkboxes */
+    padding-right: 2.5%;
+}
+
+
+.container
+{
+    position: relative;
+    width:40vw;
+    height:auto;
+    left:30vw;
+}
+.blog-post-container {
+    height: auto;
+    width: 100%;
+    margin: 2vh auto; /* Horizontally center the container */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    flex-direction: column; /* Stack button and image vertically */
+    clear: both; /* Ensure no overlapping */
+}
+.blog-post-button
+{
+    border: var(--bordersize) solid var(--tag1colour);
+    background-color: #202020;
+    color: var(--tag1colour);
+    border-radius: 50px;
+    padding: 1vh 1vw;
+    font-family: LemonMilk;
+    width:100%;
+}
+.blog-post-image
+{
+    width:100%;
+    height:auto;
+    object-fit: contain; /* Maintain aspect ratio */
+    
+}
+h2.blog-post-image-header
+{
+    width:100%;
+    height:auto;
+    margin: 1vh auto; /* Horizontally center the container */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--tag1colour);
+    font-size: 18px; 
+}
+h3.blog-post-image-text
+{
+    width:100%;
+    height:auto;
+    margin: 0 auto; /* Horizontally center the container */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--tag1colour);
+    font-size: 12px; 
+}
+.blog-post-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease, padding 0.2s ease;
+    padding: 0 10px;
+    opacity: 0;
+}
+
+.blog-post-content.open {
+    max-height: 500px; /* Adjust according to the expected content height */
+    padding: 10px 10px;
+    opacity: 1;
+}
