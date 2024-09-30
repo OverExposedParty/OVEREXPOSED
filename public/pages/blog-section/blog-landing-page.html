@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLOG</title>
-    <link rel="stylesheet" href="../../../header.css">
-    <link rel="stylesheet" href="../../../rotate-device.css">
+    <link rel="stylesheet" href="../../header.css">
+    <link rel="stylesheet" href="../../rotate-device.css">
     <link rel="stylesheet" href="blog-landing-page-style.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="../../images/favicons/blue/favicon-16x16.png">
@@ -243,7 +243,7 @@
 
     // Create the "Read More" hyperlink
     const readMoreLink = document.createElement('a');
-    readMoreLink.href = blog['file-name'];
+    readMoreLink.href = window.location.href + blog['file-name'];
     readMoreLink.textContent = 'Read More';
     readMoreLink.classList.add('read-more-link');
     readMoreLink.style.color = tagColor;
