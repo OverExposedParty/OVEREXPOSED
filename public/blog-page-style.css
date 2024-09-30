@@ -12,7 +12,9 @@
     object-fit: contain;
     /* Maintain aspect ratio */
 }
-
+body {
+    position: relative;
+}
 .parent-container {
     display: flex;
     /* Enable flexbox */
@@ -189,6 +191,16 @@
 .indented {
     padding-left: 20px; /* Adjust this value for more or less indentation */
 }
+.tts-button {
+    cursor: pointer;
+    width: 7.5%;
+    height: 7.5%;
+    position: fixed;
+    right: 20px; /* Adjust as needed */
+    bottom: 20px; /* Adjust as needed */
+    z-index: 900;
+}
+
 @media (orientation: portrait) and (max-width: 1024px) {
     .container,.title-container {
         width: 90vw;
@@ -201,5 +213,12 @@
     .content-table-container h2 
     {
         font-size: 120%;
+    }
+    .tts-button {
+        cursor: pointer;
+        width: 15vw;
+        height: 15vw;
+        right: 5%; /* Adjust as needed */
+        bottom: 2.5%; /* Adjust as needed */
     }
 }

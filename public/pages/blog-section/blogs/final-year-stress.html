@@ -60,6 +60,7 @@
         Please rotate your phone to continue
         <img src="../../../images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
+    <img src="../../../images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
     <div class="parent-container">
         <div class="title-container">
             <h1 class="title-text">Final Year Stress: How to Balance Uni, Jobs, and Still Have a Social Life</h1>
@@ -94,7 +95,7 @@
                 <p>7. Final Thoughts</p>
 
             </div>
-            <div class="content-container">
+            <div class="content-container" id="content-container">
                 <p> Final year at university is one of the most intense periods in a student's life. It’s a time filled
                     with deadlines, dissertation pressure, and constant thoughts about the future. The looming "what's
                     next?" question feels like it's constantly hanging over your head. As the end of your academic
@@ -227,12 +228,14 @@
                 <div class="indented">
                     <p>&#8226; Overexposed allows you to play with your friends from anywhere, meaning you can stay
                         connected even if you’re all studying in different places.</p>
-                        <br>
-                    <p>&#8226; You can use it as an excuse to check in on each other. Instead of sending a quick "how are
+                    <br>
+                    <p>&#8226; You can use it as an excuse to check in on each other. Instead of sending a quick "how
+                        are
                         you?"
                         text, why not invite your friends to a game of Overexposed and have fun while catching up?</p>
-                        <br>
-                    <p>&#8226; The variety of game modes from "Truth or Dare" to "Paranoia" keeps things interesting, and
+                    <br>
+                    <p>&#8226; The variety of game modes from "Truth or Dare" to "Paranoia" keeps things interesting,
+                        and
                         you’ll
                         never run out of ways to entertain each other.</p>
                 </div>
@@ -285,5 +288,88 @@
             contentTableContainer.style.display = 'none';
             standaloneButton.style.display = 'flex';
         });
+        let isSpeaking = false;
+    let voices = [];
+
+    // Load available voices
+    function loadVoices() {
+        voices = speechSynthesis.getVoices();
+    }
+
+    // Get selected voice based on local storage
+    function getSelectedVoice() {
+        const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+        voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+
+        const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+        console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+
+        switch (selectedVoiceKey) {
+            case 'tts-voice-male1':
+                return voices.find(voice => voice.name === 'Google UK English Male');
+            case 'tts-voice-male2':
+                return voices.find(voice => voice.name === 'Google UK English Female');
+            case 'tts-voice-female1':
+                return voices.find(voice => voice.name === 'Google US English');
+            case 'tts-voice-female2':
+                return voices.find(voice => voice.name === 'Microsoft Zira - English (United States)');
+            default:
+                return null;
+        }
+    }
+
+    function readText(text) {
+        const ttsButton = document.getElementById('tts-button');
+        if (isSpeaking) {
+            // If already speaking, stop the current speech
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            ttsButton.src = "../../../images/icons/grey/tts-icon.svg";
+        } else {
+            // If not speaking, start reading the text
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.pitch = 1;
+            speech.rate = 1;
+            speech.volume = 1;
+            speech.lang = 'en-US'; // Set language, can adjust based on user preferences
+
+            // Set the selected voice
+            const selectedVoice = getSelectedVoice();
+            if (selectedVoice) {
+                speech.voice = selectedVoice;
+            }
+
+            // Set flag to true when speaking starts
+            speech.onstart = () => {
+                isSpeaking = true;
+                ttsButton.src = "../../../images/icons/blogs/yellow/tts-icon.svg";
+            };
+
+            // Reset flag when speaking finishes or is canceled
+            speech.onend = () => {
+                isSpeaking = false;
+                ttsButton.src = "../../../images/icons/grey/tts-icon.svg";
+            };
+
+            window.speechSynthesis.speak(speech);
+        }
+    }
+
+    // Load voices when they are ready
+    speechSynthesis.onvoiceschanged = loadVoices;
+
+    // Function to handle TTS button click
+    document.getElementById('tts-button').addEventListener('click', () => {
+        const selectedText = window.getSelection().toString().trim();
+
+        if (selectedText) {
+            // If highlighted text exists, read the highlighted text
+            readText(selectedText);
+        } else {
+            // If no text is highlighted, read the entire content in the content-container
+            const contentText = document.getElementById('content-container').innerText;
+            readText(contentText);
+        }
+    });
     </script>
 </body>
