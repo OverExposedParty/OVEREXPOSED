@@ -1,0 +1,184 @@
+:root {
+    --primarypagecolour: #F6C86D;
+    --bordersize: 5px;
+}
+
+.blog-post-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    /* Maintain aspect ratio */
+}
+
+.parent-container {
+    display: flex;
+    /* Enable flexbox */
+    flex-direction: column;
+    /* Stack children vertically */
+    align-items: center;
+    /* Center children horizontally */
+    justify-content: center;
+    /* Center children vertically (if needed) */
+    width: 100%;
+    /* Ensure it takes the full width */
+    margin: 0 auto;
+    /* Center the parent container */
+
+}
+
+.title-container {
+    position: relative;
+    width: 40vw;
+    height: auto;
+    /* Set a fixed height for vertical centering */
+    margin-top: 7.5vh;
+    margin-bottom: 2.5vh;
+    display: flex;
+    /* Enable flexbox */
+    align-items: center;
+    /* Center content vertically */
+    justify-content: space-between;
+    /* Space elements evenly */
+    background-color: #202020;
+    border: var(--bordersize) solid #202020;
+    border-radius: 50px;
+}
+
+.title-text {
+    margin: 0;
+    /* Remove margin */
+    text-align: center;
+    /* Center text */
+    font-family: LemonMilk;
+    color: var(--primarypagecolour);
+    font-size: 100%;
+    flex: 1;
+    /* Allow the title to grow to fill available space */
+    padding: 1vh 0;
+
+}
+
+.container {
+    position: relative;
+    width: 40vw;
+    height: auto;
+}
+
+.content-container {
+    width: 100%;
+    height: auto;
+    padding-bottom: 10vh;
+}
+.content-container h2 {
+    width: 100%;
+    height: auto;
+    margin: 1vh auto;
+    /* Horizontally center the container */
+    justify-content: center;
+    /* Center content horizontally */
+    align-items: center;
+    /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--primarypagecolour);
+    font-size: 24px;
+}
+.content-container h3 {
+    width: 100%;
+    height: auto;
+    margin: 1vh auto;
+    /* Horizontally center the container */
+    justify-content: center;
+    /* Center content horizontally */
+    align-items: center;
+    /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--primarypagecolour);
+    font-size: 18px;
+}
+
+
+.content-container p{
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    /* Horizontally center the container */
+    justify-content: left;
+    /* Center content horizontally */
+    align-items: left;
+    /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--primarypagecolour);
+    font-size: 16px;
+}
+
+.context-button {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border: var(--bordersize) solid #999999;
+    background-color: #202020;
+    color: #999999;
+    border-radius: 10px;
+    padding: 0.5vh 1vw;
+    font-family: LemonMilk;
+    width: 20%;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    /* Center text horizontally */
+    align-items: center;
+    /* Center text vertically */
+    font-size: 70%;
+    margin-top: 1vh;
+    margin-bottom: 2.5vh;
+}
+.context-container .context-button {
+    margin-top: 1vh;
+    margin-bottom: 2.5vh;
+    margin-left: 0%;
+    border: var(--bordersize) solid var(--primarypagecolour);
+    background-color: #202020;
+    color: var(--primarypagecolour);
+}
+.context-container {
+    width: 100%;
+    height: auto;
+    margin:1vh 0;
+    padding-bottom: 5vh;
+    background-color: #202020;
+    margin-bottom: 2vh;
+}
+.context-container h2{
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    /* Horizontally center the container */
+    justify-content: center;
+    /* Center content horizontally */
+    align-items: center;
+    /* Center content vertically */
+    text-align: center;
+    font-family: LemonMilk;
+    color: var(--primarypagecolour);
+    font-size: 20px;
+}
+.context-container p{
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    /* Horizontally center the container */
+    justify-content: left;
+    /* Center content horizontally */
+    align-items: left;
+    /* Center content vertically */
+    text-align: left;
+    font-family: Helvetica;
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    padding-left: 10%;
+}
+.indented {
+    padding-left: 20px; /* Adjust this value for more or less indentation */
+}

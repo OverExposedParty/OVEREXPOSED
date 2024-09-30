@@ -72,7 +72,7 @@ body {
     width: 100%;
     overflow-x: hidden;
     background-image: url('./images/background-tile.png');
-    background-size: 192px 207px;
+    background-size: 384px 414px;
     background-position: top left;
     background-repeat: repeat;
     background-color: #0f0f0f;

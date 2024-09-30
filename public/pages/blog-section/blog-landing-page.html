@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOG</title>
+    <link rel="stylesheet" href="../../header.css">
+    <link rel="stylesheet" href="../../rotate-device.css">
+    <link rel="stylesheet" href="blog-landing-page-style.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="../../images/favicons/blue/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="../../images/favicons/blue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="../../images/favicons/blue/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="../../images/favicons/blue/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="../../images/favicons/blue/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="../../images/favicons/blue/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="../../images/favicons/blue/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="../../images/favicons/blue/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="../../images/favicons/blue/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="../../images/favicons/blue/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="../../images/favicons/blue/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="../../images/favicons/blue/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="../../images/favicons/blue/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="../../images/favicons/blue/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="../../images/favicons/blue/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="../../images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="../../images/favicons/blue/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="../../images/favicons/blue/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="../../images/favicons/blue/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="../../images/favicons/blue/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../../images/favicons/blue/favicon-512x512.png">
+
+    <style>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .header {
+            background-color: var(--primarypagecolour);
+        }
+
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <a href="/">
+                <img src="../../images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
+            </a>
+        </div>
+        <div class="settings-icon">
+            <img src="../../images/icons/settings.svg" alt="Settings">
+        </div>
+        <div class="extra-menu-icon">
+            <img src="../../images/icons/extra-menu-icon.svg" alt="Extra Menu">
+        </div>
+    </header>
+
+    <div class="landscape-message">
+        Please rotate your phone to continue
+        <img src="../../images/icons/blogs/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+    </div>
+    <div class="parent-container">
+        <div class="title-container">
+            <button class="filter-button">FILTER</button>
+            <h1 class="title-text"> OVEREXPOSURE</h1>
+            <input type="text" class="search-bar" id="search-bar" placeholder="Search...">
+        </div>
+        <div class="filter-container" style="display: flex;">
+            <div class="dropdown-menu">
+                <select>
+                    <option value="" disabled selected>Sort Date</option>
+                    <option value="option1">Newest</option>
+                    <option value="option2">Oldest </option>
+                </select>
+            </div>
+            <div class="tag-container">
+                <label><input type="checkbox" name="filter" value="tag1" class="tag-checkbox" id="tag1"
+                        checked><span>tag1</span></label>
+                <label><input type="checkbox" name="filter" value="tag2" class="tag-checkbox" id="tag2"
+                        checked><span>tag2</span></label>
+                <label><input type="checkbox" name="filter" value="tag3" class="tag-checkbox" id="tag3"
+                        checked><span>tag3</span></label>
+                <label><input type="checkbox" name="filter" value="all" class="tag-checkbox" id="tag-all"
+                        checked><span>all</span></label>
+            </div>
+        </div>
+
+        <div class="container" id="blog-container">
+            <!-- Blog posts will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        let currentlyOpenPostIndex = null; // Track the index of the currently open post
+        document.documentElement.style.setProperty('--primarypagecolour', '#6A9EF6');
+        document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
+        document.documentElement.style.setProperty('--tag2colour', '#F57C69');
+        document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
+
+        const primaryPageColour = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        const tag1Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag1colour');
+        const tag2Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag2colour');
+        const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
+
+        const filterButton = document.querySelector('.filter-button');
+        const filterContainer = document.querySelector('.filter-container');
+        const sortSelect = document.querySelector('.dropdown-menu select'); // Reference to the dropdown menu
+        const searchInput = document.getElementById('search-bar'); // Assuming you have a search input field
+
+        // Add event listener to toggle visibility when the button is clicked
+        filterButton.addEventListener('click', () => {
+            // Check if the filterContainer is currently visible
+            const isVisible = filterContainer.style.display === 'flex';
+
+            // Set the display style based on its current state
+            filterContainer.style.display = isVisible ? 'none' : 'flex';
+
+            // Toggle the 'hidden' class on the filter button
+            filterButton.classList.toggle('hidden', isVisible);
+        });
+
+
+        sortSelect.addEventListener('change', () => {
+            fetchBlogData(); // Fetch and sort data when the sort option changes
+        });
+
+        async function fetchBlogData() {
+            try {
+                const response = await fetch('../.././json-files/blogs.json');
+                const blogData = await response.json();
+                sortAndDisplayBlogs(blogData.blogs);
+            } catch (error) {
+                console.error('Error fetching the blog data:', error);
+            }
+        }
+
+        function sortAndDisplayBlogs(blogs) {
+            const sortOrder = sortSelect.value; // Get the current sort order
+            const sortedBlogs = blogs.sort((a, b) => {
+                const dateA = convertDateToTimestamp(a.date);
+                const dateB = convertDateToTimestamp(b.date);
+                return sortOrder === 'option1' ? dateB - dateA : dateA - dateB; // Newest first or oldest first
+            });
+            displayBlogs(sortedBlogs);
+        }
+
+        function convertDateToTimestamp(dateString) {
+            const [day, month, year] = dateString.split('/').map(Number);
+            return new Date(year, month - 1, day).getTime(); // Convert to timestamp
+        }
+
+        function displayBlogs(blogs) {
+            const blogContainer = document.getElementById('blog-container');
+            blogContainer.innerHTML = ''; // Clear the current content
+
+            blogs.forEach((blog, index) => createBlogPost(blog, index));
+            filterBlogPosts(); // Filter after displaying the blogs
+        }
+
+        function getTextColorForTag(tag) {
+            switch (tag) {
+                case 'tag1':
+                    return tag1Colour;
+                case 'tag2':
+                    return tag2Colour;
+                case 'tag3':
+                    return tag3Colour;
+                default:
+                    return primaryPageColour;
+            }
+        }
+
+        function createBlogPost(blog, index) {
+    const blogContainer = document.getElementById('blog-container');
+    const tagColor = getTextColorForTag(blog.tag);
+
+    // Create the blog post container
+    const postDiv = document.createElement('div');
+    postDiv.classList.add('blog-post-container');
+    postDiv.id = `post-${index}`;
+    postDiv.dataset.tag = blog.tag; // Store the tag in a data attribute
+    postDiv.dataset.searchTags = blog['search-tags'].toLowerCase(); // Store search-tags for filtering
+
+    // Create the button with the blog title
+    const button = document.createElement('button');
+    button.classList.add('blog-post-button');
+    button.textContent = blog.title;
+
+    // Create the blog post content (hidden initially)
+    const blogContentDiv = document.createElement('div');
+    blogContentDiv.classList.add('blog-post-content');
+    blogContentDiv.style.display = 'none'; // Hidden initially
+    blogContentDiv.style.maxHeight = '0'; // Set initial max height for animation
+    blogContentDiv.style.overflow = 'hidden'; // Hide overflow
+    blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease'; // Add transition styles
+
+    button.style.borderColor = tagColor;
+    button.style.color = tagColor;
+
+    const img = document.createElement('img');
+    img.classList.add('blog-post-image');
+    img.src = `../../images/blog-thumbnails/${blog.image}`;
+    img.alt = blog.title;
+
+    const header = document.createElement('h2');
+    header.classList.add('blog-post-image-header');
+    header.textContent = blog.title;
+    header.style.color = getTextColorForTag(blog.tag);
+
+    const contentText = document.createElement('h3');
+    contentText.classList.add('blog-post-image-text');
+    const lines = blog.content.split(' ').slice(0, 40).join(' ') + '...';
+    contentText.textContent = lines;
+    contentText.style.color = getTextColorForTag(blog.tag);
+
+    // Create the extra details container
+    const extraDetailsContainer = document.createElement('div');
+    extraDetailsContainer.classList.add('extra-details-container');
+
+    // Create the author element
+    const authorElement = document.createElement('span');
+    authorElement.classList.add('author');
+    authorElement.textContent = `Author: ${blog.author}`;
+    authorElement.style.color = tagColor;
+
+    // Create the date element
+    const dateElement = document.createElement('span');
+    dateElement.classList.add('date');
+    dateElement.textContent = `Date: ${blog.date}`;
+    dateElement.style.color = tagColor;
+
+    // Append author and date to the extra details container
+    extraDetailsContainer.appendChild(authorElement);
+    extraDetailsContainer.appendChild(dateElement);
+
+    // Create the "Read More" hyperlink
+    const readMoreLink = document.createElement('a');
+    readMoreLink.href = blog['file-name'];
+    readMoreLink.textContent = 'Read More';
+    readMoreLink.classList.add('read-more-link');
+    readMoreLink.style.color = tagColor;
+
+    // Append elements to the blog content div
+    blogContentDiv.appendChild(img);
+    blogContentDiv.appendChild(header);
+    blogContentDiv.appendChild(contentText);
+    blogContentDiv.appendChild(extraDetailsContainer);
+    blogContentDiv.appendChild(readMoreLink); // Append the Read More link
+
+    // Append button and blog content div to the post container
+    postDiv.appendChild(button);
+    postDiv.appendChild(blogContentDiv);
+
+    // Append the blog post container to the main container
+    blogContainer.appendChild(postDiv);
+
+    // Add click event to toggle between the button and blog content
+    button.addEventListener('click', () => openBlogPost(index));
+}
+
+
+        function openBlogPost(index) {
+            if (currentlyOpenPostIndex !== null && currentlyOpenPostIndex !== index) {
+                closeBlogPost(currentlyOpenPostIndex);
+            }
+
+            const postDiv = document.getElementById(`post-${index}`);
+            const button = postDiv.querySelector('.blog-post-button');
+            const blogContentDiv = postDiv.querySelector('.blog-post-content');
+
+            button.style.display = 'none';
+            blogContentDiv.style.display = 'block';
+            blogContentDiv.style.maxHeight = blogContentDiv.scrollHeight + 'px';
+            blogContentDiv.style.opacity = '1';
+
+            currentlyOpenPostIndex = index;
+        }
+
+        function closeBlogPost(index) {
+            const postDiv = document.getElementById(`post-${index}`);
+            const button = postDiv.querySelector('.blog-post-button');
+            const blogContentDiv = postDiv.querySelector('.blog-post-content');
+
+            blogContentDiv.style.maxHeight = '0';
+            blogContentDiv.style.opacity = '0';
+            setTimeout(() => {
+                blogContentDiv.style.display = 'none';
+                button.style.display = 'block';
+            }, 300);
+
+            currentlyOpenPostIndex = null;
+        }
+
+        function filterBlogPosts() {
+            const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
+            const selectedTags = Array.from(tagCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            const searchString = searchInput.value.toLowerCase();
+            const blogPosts = document.querySelectorAll('.blog-post-container');
+
+            blogPosts.forEach(post => {
+                const postTag = post.dataset.tag;
+                const postSearchTags = post.dataset.searchTags;
+
+                // Show post if it matches selected tags AND the search string
+                if ((selectedTags.includes(postTag) || selectedTags.includes('all')) &&
+                    postSearchTags.includes(searchString)) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+        }
+
+        const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
+        const tagAllCheckbox = document.getElementById('tag-all');
+
+        tagAllCheckbox.addEventListener('change', () => {
+            const isChecked = tagAllCheckbox.checked;
+            tagCheckboxes.forEach(checkbox => {
+                if (checkbox !== tagAllCheckbox) {
+                    checkbox.checked = isChecked;
+                }
+            });
+            filterBlogPosts(); // Update blog posts display
+        });
+
+        tagCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                // If any of the individual checkboxes are unchecked, uncheck the tag-all checkbox
+                if (!checkbox.checked) {
+                    tagAllCheckbox.checked = false;
+                } else {
+                    // If all individual checkboxes are checked, check the tag-all checkbox
+                    const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
+                    tagAllCheckbox.checked = allChecked;
+                }
+
+                // Check if all checkboxes are checked and update tagAllCheckbox accordingly
+                const allCheckedExceptTagAll = Array.from(tagCheckboxes).every(cb => cb.checked || cb === tagAllCheckbox);
+                tagAllCheckbox.checked = allCheckedExceptTagAll;
+
+                filterBlogPosts(); // Update blog posts display
+            });
+        });
+
+        // Event listener for the search bar
+        searchInput.addEventListener('input', filterBlogPosts);
+
+        // Initial fetch of blog data
+        fetchBlogData();
+
+        const mediaQuery = window.matchMedia('(max-width: 768px) and (orientation: landscape)');
+
+        // Function to handle the change in media query
+        function handleMediaChange(e) {
+            const container = document.querySelector('.container');
+            const header = document.querySelector('.header');
+            const titleContainer = document.querySelector('.title-container');
+            const filterContainer = document.querySelector('.filter-container');
+
+            if (e.matches) {
+                // If the condition is true (max-width: 768px and landscape orientation)
+                if (container) container.style.display = 'none';
+                if (header) header.style.display = 'none';
+                if (titleContainer) titleContainer.style.display = 'none';
+                if (filterContainer) filterContainer.style.display = 'none';
+            } else {
+                // If the condition is false, reset the display styles
+                if (container) container.style.display = 'block ';
+                if (header) header.style.display = 'flex';
+                if (titleContainer) titleContainer.style.display = 'flex';
+                if (filterContainer) filterContainer.style.display = 'flex';
+            }
+        }
+
+        // Check the media query on page load
+        handleMediaChange(mediaQuery);
+
+        // Listen for changes to the media query
+        mediaQuery.addEventListener('change', handleMediaChange);
+
+        function moveSearchBarBasedOnOrientation() {
+            const searchBar = document.getElementById('search-bar');
+            const filterContainer = document.querySelector('.tag-container');
+            const titleContainer = document.querySelector('.title-container');
+
+            if (window.matchMedia("(orientation: portrait)").matches) {
+                // Move search bar into the filter container
+                if (!filterContainer.contains(searchBar)) {
+                    filterContainer.appendChild(searchBar);
+                }
+            } else {
+                // Move search bar back to the title container
+                if (!titleContainer.contains(searchBar)) {
+                    titleContainer.appendChild(searchBar);
+                }
+            }
+        }
+
+        // Listen for orientation changes
+        window.addEventListener('resize', moveSearchBarBasedOnOrientation);
+
+        // Initial call on page load
+        document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
+
+    </script>
+
+
+
+</body>
+
+</html>

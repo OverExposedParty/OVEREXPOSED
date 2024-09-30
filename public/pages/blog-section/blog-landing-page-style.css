@@ -6,25 +6,41 @@
 
     --bordersize: 5px;
 }
+.title-container,.container,.filter-container{
+    min-width: 480px;
+}
+.parent-container {
+    display: flex;                  /* Enable flexbox */
+    flex-direction: column;        /* Stack children vertically */
+    align-items: center;           /* Center children horizontally */
+    justify-content: center;        /* Center children vertically (if needed) */
+    width: 100%;                   /* Ensure it takes the full width */
+    margin: 0 auto;                /* Center the parent container */
 
+}
 .title-container {
     position: relative;
     width: 40vw;
     height: auto; /* Set a fixed height for vertical centering */
-    left: 30vw;
     margin-top: 7.5vh;
     display: flex; /* Enable flexbox */
     align-items: center; /* Center content vertically */
     justify-content: space-between; /* Space elements evenly */
 }
-
+.container
+{
+    position: relative;
+    width:40vw;
+    height:auto;
+}
 .title-text {
     margin: 0; /* Remove margin */
     text-align: center; /* Center text */
     font-family: LemonMilk;
     color: #6A9EF6;
-    font-size: 42px;
+    font-size: 200%;
     flex: 1; /* Allow the title to grow to fill available space */
+    transform: translateX(2.5%); /* Adjust positioning to center */
 
 }
 
@@ -40,10 +56,10 @@
     padding: 0.5vh 1vw;
     font-family: LemonMilk;
     z-index:100;
+    font-size: 70%;
 }
 
 .filter-button {
-    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     border: var(--bordersize) solid var(--primarypagecolour);
@@ -57,6 +73,7 @@
     display: flex;
     justify-content: center; /* Center text horizontally */
     align-items: center; /* Center text vertically */
+    font-size: 70%;
 }
 .filter-button.hidden {
     border-color: gray;
@@ -73,13 +90,13 @@
     border-radius: 50px;
     padding: 0 1vw;
     font-family: LemonMilk;
-    margin: 0; /* Align to the left */
+    margin: 0;
     position: relative; /* Ensure it positions correctly in the flow */
 }
 
 /* Optional: Style for the dropdown options */
 .dropdown-menu select {
-    width: 100%; /* Make the select fill the dropdown */
+    width: 80%; /* Make the select fill the dropdown */
     background: transparent; /* Match background color */
     color: inherit; /* Inherit text color */
     border: none; /* Remove default border */
@@ -93,7 +110,6 @@
     position: relative;
     width: 40vw;
     height: auto; /* Set a fixed height for vertical centering */
-    left: 30vw;
     padding: 1vh 0;
     margin: 2vh 0;
     display: flex; /* Enable flexbox */
@@ -125,7 +141,7 @@
 }
 .extra-details-container {
     display: flex;
-    justify-content: space-between; /* Aligns items to the left and right */
+    justify-content: space-between;
     padding: 10px 0; /* Add some padding */
     font-size: 0.9em; /* Adjust font size as needed */
     color: #555; /* Set a lighter color for details */
@@ -225,14 +241,6 @@
     padding-right: 2.5%;
 }
 
-
-.container
-{
-    position: relative;
-    width:40vw;
-    height:auto;
-    left:30vw;
-}
 .blog-post-container {
     height: auto;
     width: 100%;
@@ -258,7 +266,6 @@
     width:100%;
     height:auto;
     object-fit: contain; /* Maintain aspect ratio */
-    
 }
 h2.blog-post-image-header
 {
@@ -297,3 +304,75 @@ h3.blog-post-image-text
     padding: 10px 10px;
     opacity: 1;
 }
+.read-more-link {
+    display: block; /* Make the link act like a block element */
+    text-align: center; /* Center the text horizontally */
+    justify-content: center;
+    margin: 0px auto; /* Add some margin and center the block horizontally */
+    color: inherit; /* Keep the color that was dynamically set */
+    font-family: LemonMilk;
+}
+
+@media (orientation: portrait) and (max-width: 1024px) {
+    .container,.title-container,.filter-container {
+        width: 90vw;
+    }
+    .title-container,.container,.filter-container{
+        min-width: auto;
+    }
+
+    .title-text {
+        font-size:180%;
+        transform: translateX(0%); /* Adjust positioning to center */
+    }
+    .search-bar {
+        width: 60%; /* Set width of the search bar */
+        padding: 8px;
+        border-radius: 4px;
+        border: 1vw solid var(--primarypagecolour);
+        background-color: #202020;
+        color: var(--primarypagecolour);
+        border-radius: 50px;
+        padding: 0.5vh 1vw;
+        font-family: LemonMilk;
+        z-index:100;
+        font-size: 40%;
+        margin: 0 auto; /* Center the search bar horizontally */
+        transform: translateX(-15%); /* Adjust positioning to center */
+    }
+    .filter-button{
+        border: 1vw solid var(--primarypagecolour);
+        font-size: 1%;
+        padding: 0.5vh 0.1vw;
+        display: none;
+    }
+    
+    .title-container {
+        width: auto;
+        margin-right: 10px;
+    }
+    .tag-container label{
+        font-size: 2.5vw;
+
+    }
+    .tag-container{
+        gap: auto; /* Space between checkboxes */
+        padding-right: 0%;
+        margin: 0 auto; /* Center the search bar horizontally */
+
+    }
+    .tag-checkbox {
+        width:1.5em;
+        height:1.5em;
+
+        max-width:40px;
+        max-height:40px;
+    }
+    .dropdown-menu{
+        width:auto;
+        font-size:50%;
+    }
+    .blog-post-button{
+        border-width: 1vw;
+    }
+} 
