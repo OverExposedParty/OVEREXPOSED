@@ -66,10 +66,10 @@
         </div>
         <div class="container">
             <img class="blog-post-image" src="../../../images/blog-thumbnails/thumbnail-final-year-stress.png">
-            <button class="context-button" id="context-button-standalone">Context</button>
-            <div class="context-container" id="context-container" style="display: none;">
-                <button class="context-button" id="context-button-container">Context</button>
-                <h2>Context Page</h2>
+            <button class="content-table-button" id="content-table-button-standalone">content-table</button>
+            <div class="content-table-container" id="content-table-container" style="display: none;">
+                <button class="content-table-button" id="content-table-button-container">content-table</button>
+                <h2>content-table Page</h2>
                 <br>
                 <p>1. Introduction</p>
                 <br>
@@ -164,7 +164,7 @@
                 <p>The point is spending your breaks in a way that’s not draining. Set a timer, play a few rounds,
                     then get back to work. That way, you're not only taking care of your mental health, but you're
                     also boosting your productivity.</p>
-                <h2>2. Plan Pre-Drinks That Help You Unwind</h2>
+                <h3>2. Plan Pre-Drinks That Help You Unwind</h3>
                 <p>After a long week of juggling coursework and job applications, you're going to want to blow off some
                     steam. But instead of mindlessly scrolling through TikTok or drowning in pre-drink playlists, why
                     not add a bit more fun to the mix? </p>
@@ -246,11 +246,11 @@
                     experiences you have along the way.</p>
                 <br>
                 <div class="indented">
-                    <p>&#8226;Make time for the things you enjoy, whether it’s a night out with friends, a Netflix
+                    <p>&#8226; Make time for the things you enjoy, whether it’s a night out with friends, a Netflix
                         binge, or a
                         fewrounds of your favourite game.</p>
                     <br>
-                    <p>&#8226;Taking breaks to laugh and relax can actually make you more productive in the long run.
+                    <p>&#8226; Taking breaks to laugh and relax can actually make you more productive in the long run.
                     </p>
                 </div>
                 <br>
@@ -267,22 +267,22 @@
         </div>
     </div>
     <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#ECE8C9 ');
+        document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
 
         // Get the elements
-        const standaloneButton = document.getElementById('context-button-standalone');
-        const containerButton = document.getElementById('context-button-container');
-        const contextContainer = document.getElementById('context-container');
+        const standaloneButton = document.getElementById('content-table-button-standalone');
+        const containerButton = document.getElementById('content-table-button-container');
+        const contentTableContainer = document.getElementById('content-table-container');
 
-        // Function to show the context container and hide the standalone button
+        // Function to show the content-table container and hide the standalone button
         standaloneButton.addEventListener('click', function () {
             standaloneButton.style.display = 'none';
-            contextContainer.style.display = 'block';
+            contentTableContainer.style.display = 'block';
         });
 
-        // Function to hide the context container and show the standalone button
+        // Function to hide the content-table container and show the standalone button
         containerButton.addEventListener('click', function () {
-            contextContainer.style.display = 'none';
+            contentTableContainer.style.display = 'none';
             standaloneButton.style.display = 'flex';
         });
     </script>

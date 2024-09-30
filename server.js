@@ -31,6 +31,11 @@ app.get('/truth-or-dare-settings', (req, res) => {
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
+app.get('/overexposure', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
 
 app.get('/truth-or-dare', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'truth-or-dare', 'truth-or-dare-page.html');

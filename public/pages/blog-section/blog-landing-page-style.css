@@ -143,24 +143,17 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 0; /* Add some padding */
-    font-size: 0.9em; /* Adjust font size as needed */
     color: #555; /* Set a lighter color for details */
+    font-size:100%;
+    font-family: Helvetica;
 }
 
-.author {
+.author,.date {
     margin-left: 0px; /* Optional margin */
     color: var(--tag1colour);
-    font-size: 12px; 
+    font-size: 80%; 
     font-family: Helvetica;
 }
-
-.date {
-    margin-right: 0px; /* Optional margin */
-    color: var(--tag1colour);
-    font-size: 12px; 
-    font-family: Helvetica;
-}
-
 
 /* Individual tag colors */
 .tag-checkbox#tag1 {
@@ -289,7 +282,7 @@ h3.blog-post-image-text
     text-align: left;
     font-family: Helvetica;
     color: var(--tag1colour);
-    font-size: 12px; 
+    font-size: 75%; 
 }
 .blog-post-content {
     max-height: 0;
@@ -311,6 +304,7 @@ h3.blog-post-image-text
     margin: 0px auto; /* Add some margin and center the block horizontally */
     color: inherit; /* Keep the color that was dynamically set */
     font-family: LemonMilk;
+    font-size: 80%;
 }
 
 @media (orientation: portrait) and (max-width: 1024px) {
