@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
 
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/purple/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/purple/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/purple/favicon-48x48.png">
@@ -118,9 +120,8 @@
             document.documentElement.style.setProperty('--secondarypagecolour', '#C8A2D8');
     
             let hasBeenClicked = false;
-            let voices = [];
             let ttsButtonTimeout;
-            let currentUtterance = null;
+            let currentQuestionIndex = 0;
     
             const punishmentEnabled = localStorage.getItem('paranoia-settings-punishment') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
@@ -130,66 +131,62 @@
             let friendlyFears = [];
             let behindCloseDoors = [];
             let shadyShenanigans = [];
-            
-            let allQuestions = [];
-            let currentQuestionIndex = 0;
     
+            let allQuestions = [];
     
             async function loadJSONFiles() {
-            const shouldFetchFriendlyFears = localStorage.getItem('paranoia-friendly-fears') === 'true';
-            const shouldFetchShadyShenanigans = localStorage.getItem('paranoia-shady-shenanigans') === 'true';
-            const shouldFetchSubtleShots = localStorage.getItem('paranoia-subtle-shots') === 'true';
-            const shouldFetchHiddenAgendas = localStorage.getItem('paranoia-hidden-agendas') === 'true';
-            const shouldFetchBehindClosedDoors = localStorage.getItem('paranoia-behind-close-doors') === 'true';
-
-            const files = [];
-            if (shouldFetchFriendlyFears) files.push('./questions/paranoia/friendly-fears.json');
-            if (shouldFetchShadyShenanigans) files.push('./questions/paranoia/shady-shenanigans.json');
-            if (shouldFetchSubtleShots) files.push('./questions/paranoia/subtle-shots.json');
-            if (shouldFetchHiddenAgendas) files.push('./questions/paranoia/hidden-agendas.json');
-            if (shouldFetchBehindClosedDoors) files.push('./questions/paranoia/behind-close-doors.json');
-
-            try {
-                const responses = await Promise.all(files.map(file => fetch(file)));
-
-                responses.forEach(response => {
-                    if (!response.ok) {
-                        console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
-                    }
-                });
-
-                const friendlyFearsData = shouldFetchFriendlyFears ? await responses[files.indexOf('./questions/paranoia/friendly-fears.json')].json() : { 'paranoia-friendly-fears': [] };
-                const shadyShenanigansData = shouldFetchShadyShenanigans ? await responses[files.indexOf('./questions/paranoia/shady-shenanigans.json')].json() : { 'paranoia-shady-shenanigans': [] };
-                const subtleShotsData = shouldFetchSubtleShots ? await responses[files.indexOf('./questions/paranoia/subtle-shots.json')].json() : { 'paranoia-subtle-shots': [] };
-                const hiddenAgendasData = shouldFetchHiddenAgendas ? await responses[files.indexOf('./questions/paranoia/hidden-agendas.json')].json() : { 'paranoia-hidden-agendas': [] };
-                const behindClosedDoorsData = shouldFetchBehindClosedDoors ? await responses[files.indexOf('./questions/paranoia/behind-close-doors.json')].json() : { 'paranoia-behind-close-doors': [] };
-
-                friendlyFears = friendlyFearsData['paranoia-friendly-fears'] || [];
-                shadyShenanigans = shadyShenanigansData['paranoia-shady-shenanigans'] || [];
-                subtleShots = subtleShotsData['paranoia-subtle-shots'] || [];
-                hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
-                behindClosedDoors = behindClosedDoorsData['paranoia-behind-closed-doors'] || [];
-
-                // Combine all questions
-                allQuestions = [...friendlyFears, ...shadyShenanigans, ...subtleShots, ...hiddenAgendas, ...behindClosedDoors];
-
-                // Shuffle the questions initially
-                shuffleQuestions();
-
-            } catch (error) {
-                console.error('Failed to load JSON files:', error);
-            }
-        }
-
-        function shuffleQuestions() {
-            for (let i = allQuestions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
-            }
-            currentQuestionIndex = 0; // Reset index after shuffling
-        }
+                const shouldFetchFriendlyFears = localStorage.getItem('paranoia-friendly-fears') === 'true';
+                const shouldFetchShadyShenanigans = localStorage.getItem('paranoia-shady-shenanigans') === 'true';
+                const shouldFetchSubtleShots = localStorage.getItem('paranoia-subtle-shots') === 'true';
+                const shouldFetchHiddenAgendas = localStorage.getItem('paranoia-hidden-agendas') === 'true';
+                const shouldFetchBehindClosedDoors = localStorage.getItem('paranoia-behind-close-doors') === 'true';
     
-
+                const files = [];
+                if (shouldFetchFriendlyFears) files.push('./questions/paranoia/friendly-fears.json');
+                if (shouldFetchShadyShenanigans) files.push('./questions/paranoia/shady-shenanigans.json');
+                if (shouldFetchSubtleShots) files.push('./questions/paranoia/subtle-shots.json');
+                if (shouldFetchHiddenAgendas) files.push('./questions/paranoia/hidden-agendas.json');
+                if (shouldFetchBehindClosedDoors) files.push('./questions/paranoia/behind-close-doors.json');
+    
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
+    
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
+    
+                    const friendlyFearsData = shouldFetchFriendlyFears ? await responses[files.indexOf('./questions/paranoia/friendly-fears.json')].json() : { 'paranoia-friendly-fears': [] };
+                    const shadyShenanigansData = shouldFetchShadyShenanigans ? await responses[files.indexOf('./questions/paranoia/shady-shenanigans.json')].json() : { 'paranoia-shady-shenanigans': [] };
+                    const subtleShotsData = shouldFetchSubtleShots ? await responses[files.indexOf('./questions/paranoia/subtle-shots.json')].json() : { 'paranoia-subtle-shots': [] };
+                    const hiddenAgendasData = shouldFetchHiddenAgendas ? await responses[files.indexOf('./questions/paranoia/hidden-agendas.json')].json() : { 'paranoia-hidden-agendas': [] };
+                    const behindClosedDoorsData = shouldFetchBehindClosedDoors ? await responses[files.indexOf('./questions/paranoia/behind-close-doors.json')].json() : { 'paranoia-behind-close-doors': [] };
+    
+                    friendlyFears = friendlyFearsData['paranoia-friendly-fears'] || [];
+                    shadyShenanigans = shadyShenanigansData['paranoia-shady-shenanigans'] || [];
+                    subtleShots = subtleShotsData['paranoia-subtle-shots'] || [];
+                    hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
+                    behindClosedDoors = behindClosedDoorsData['paranoia-behind-closed-doors'] || [];
+    
+                    // Combine all questions
+                    allQuestions = [...friendlyFears, ...shadyShenanigans, ...subtleShots, ...hiddenAgendas, ...behindClosedDoors];
+    
+                    // Shuffle the questions initially
+                    shuffleQuestions();
+    
+                } catch (error) {
+                    console.error('Failed to load JSON files:', error);
+                }
+            }
+    
+            function shuffleQuestions() {
+                for (let i = allQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+                }
+                currentQuestionIndex = 0; // Reset index after shuffling
+            }
     
             function enableTTSButton() {
                 const ttsButton = document.getElementById('tts-button');
@@ -208,13 +205,12 @@
                     }, 8000);
                 }
             }
-    
             function stopSpeech() {
-                if (speechSynthesis.speaking) {
-                    speechSynthesis.cancel();
-                    currentUtterance = null;
+                if (responsiveVoice.isPlaying()) {
+                    responsiveVoice.cancel();
                 }
             }
+
     
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
@@ -236,37 +232,28 @@
     
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
-                        return 'Google UK English Male'; // Example name
+                        return 'UK English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-male2':
-                        return 'Google UK English Female'; // Example name
+                        return 'UK English Female'; // Example name for ResponsiveVoice
                     case 'tts-voice-female1':
-                        return 'Google US English'; // Example name
+                        return 'US English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-female2':
-                        return 'Microsoft Zira - English (United States)'; // Example name
+                        return 'US English Female'; // Example name for ResponsiveVoice
                     default:
                         return null;
                 }
             }
     
-            if ('speechSynthesis' in window) {
-                speechSynthesis.addEventListener('voiceschanged', () => {
-                    voices = speechSynthesis.getVoices();
-                    console.log('Available voices:', voices);
-                });
-            }
-    
             document.getElementById('tts-button').addEventListener('click', () => {
-                stopSpeech();
-    
                 const textContainerText = document.querySelector('.text-container').textContent;
-    
-                currentUtterance = new SpeechSynthesisUtterance(textContainerText);
-    
                 const selectedVoiceName = getSelectedVoice();
-                const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
-                currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
     
-                speechSynthesis.speak(currentUtterance);
+                // Use ResponsiveVoice to speak the text
+                if (selectedVoiceName) {
+                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                } else {
+                    responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
+                }
     
                 disableTTSButton();
             });
@@ -286,10 +273,9 @@
                 if (currentQuestionIndex >= allQuestions.length) {
                     shuffleQuestions(); // Shuffle again if we've reached the end
                 }
-
                 stopSpeech();
                 enableTTSButton();
-
+    
                 const selectedQuestion = allQuestions[currentQuestionIndex];
                 const selectedPunishment = selectedQuestion['punishment'];
                 const cardType = friendlyFears.includes(selectedQuestion) ? 'Friendly Fears' :
@@ -297,17 +283,16 @@
                         subtleShots.includes(selectedQuestion) ? 'Subtle Shots' :
                             hiddenAgendas.includes(selectedQuestion) ? 'Hidden Agendas' :
                                 'Behind Closed Doors';
-
+    
                 currentQuestionIndex++; // Move to the next question
-
+    
                 return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
             }
-
     
             document.querySelector('.question-button').addEventListener('click', () => {
                 const selectedQuestionObj = getNextQuestion();
                 updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
-
+    
                 if (!hasBeenClicked) {
                     enableTTSButton();
                     hasBeenClicked = true;
@@ -319,7 +304,7 @@
             await loadJSONFiles();
         });
     </script>
-    
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="settings-style.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="extra-menu-style.css">
 
     <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/blue/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="120x120" href="./images/favicons/blue/favicon-120x120.png">
@@ -23,7 +24,8 @@
 
             .container,
             .header,
-            .container-title {
+            .container-title,
+            .extra-menu-container {
                 display: none;
             }
         }
@@ -43,10 +45,16 @@
         <div class="extra-menu-icon">
             <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
-    </header>     
+    </header>
     <div class="landscape-message" id="landscape-message">
         Please rotate your phone to continue
         <img src="./images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
+    <div class="extra-menu-container">
+        <h1 class="extra-menu-title">Menu</h1>
+        <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
+        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="settings-box" id="settings-box">
@@ -119,6 +127,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
             const settingsIcon = document.querySelector('.settings-icon');
             const settingsBox = document.querySelector('#settings-box');
             const overlay = document.querySelector('#overlay');
@@ -133,6 +142,8 @@
 
             const rotateMessage = document.querySelector('#landscape-message');
             const rotateIcon = document.querySelector('#rotate-icon');
+
+            const extraMenuContainer = document.querySelector('.extra-menu-container');
 
             let selectedButton;
             let selectedColor = '#66CCFF';
@@ -159,12 +170,22 @@
             });
 
             function toggleSettings() {
-                if (settingsBox.style.display === 'none' || settingsBox.style.display === '') {
-                    settingsBox.style.display = 'block';
-                    overlay.style.display = 'block';
+                if (!settingsBox.classList.contains('active')) {
+                    settingsBox.classList.add('active');
+                    overlay.classList.add('active');
                 } else {
-                    settingsBox.style.display = 'none';
-                    overlay.style.display = 'none';
+                    settingsBox.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            }
+
+            function toggleOverlay() {
+                overlay.classList.toggle('active');
+                if (extraMenuContainer.classList.contains('active')) {
+                    extraMenuContainer.classList.remove('active');
+                }
+                if (settingsBox.classList.contains('active')) {
+                    settingsBox.classList.remove('active');
                 }
             }
 
@@ -174,53 +195,53 @@
                     !settingsIcon.contains(event.target) &&
                     !overlay.contains(event.target)) {
                     settingsBox.style.display = 'none';
-                    overlay.style.display = 'none';
+                    overlay.classList.remove('active');
                 }
             }
 
             settingsIcon.addEventListener('click', toggleSettings);
-            overlay.addEventListener('click', toggleSettings);
+            overlay.addEventListener('click', toggleOverlay);
 
             document.addEventListener('click', clickOutsideHandler);
 
             const cards = document.querySelectorAll('.grid-item .card');
 
             cards.forEach((card, index) => {
-    card.addEventListener('click', function (event) {
-        if (card.classList.contains('flipped')) {
-            switch (index) {
-                case 0:
-                    window.location.href = 'truth-or-dare-settings';
-                    break;
-                case 1:
-                    window.location.href = 'paranoia-settings';
-                    break;
-                case 2:
-                    window.location.href = 'never-have-i-ever-settings';
-                    break;
-                case 3:
-                    window.location.href = 'most-likely-to-settings';
-                    break;
-                case 4:
-                    //window.location.href = 'coming-soon-settings';
-                    break;
-                case 5:
-                    //window.location.href = 'coming-soon-settings';
-                    break;
-            }
-        } else {
-            cards.forEach(otherCard => {
-                if (otherCard !== card && otherCard.classList.contains('flipped')) {
-                    otherCard.classList.remove('flipped');
-                }
-            });
+                card.addEventListener('click', function (event) {
+                    if (card.classList.contains('flipped')) {
+                        switch (index) {
+                            case 0:
+                                window.location.href = 'truth-or-dare-settings';
+                                break;
+                            case 1:
+                                window.location.href = 'paranoia-settings';
+                                break;
+                            case 2:
+                                window.location.href = 'never-have-i-ever-settings';
+                                break;
+                            case 3:
+                                window.location.href = 'most-likely-to-settings';
+                                break;
+                            case 4:
+                                //window.location.href = 'coming-soon-settings';
+                                break;
+                            case 5:
+                                //window.location.href = 'coming-soon-settings';
+                                break;
+                        }
+                    } else {
+                        cards.forEach(otherCard => {
+                            if (otherCard !== card && otherCard.classList.contains('flipped')) {
+                                otherCard.classList.remove('flipped');
+                            }
+                        });
 
-            card.classList.add('flipped');
-            changeHeaderColor(index);
-            changeFavicon(index);
-        }
-    });
-});
+                        card.classList.add('flipped');
+                        changeHeaderColor(index);
+                        changeFavicon(index);
+                    }
+                });
+            });
 
             function changeFavicon(index) {
                 const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
@@ -250,6 +271,7 @@
                 document.querySelectorAll('.slider').forEach(slider => {
                     slider.style.setProperty('--slider-background-checked', selectedColor);
                 });
+                document.documentElement.style.setProperty('--primarypagecolour', selectedColor);
             }
             const buttons = document.querySelectorAll('.tts-voice-button');
             const defaultButtonIndex = 0;
@@ -288,6 +310,16 @@
                 button.style.color = selectedColor;
                 selectedButton = button;
             }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const extraMenuIcon = document.querySelector('.extra-menu-icon');
+            const extraMenuContainer = document.querySelector('.extra-menu-container');
+            const overlay = document.querySelector('#overlay');
+
+            extraMenuIcon.addEventListener('click', function () {
+                extraMenuContainer.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
         });
     </script>
 </body>

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../../../rotate-device.css">
     <link rel="stylesheet" href="../../../blog-page-style.css">
 
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
     <link rel="icon" type="image/png" sizes="15x16" href="../../../images/favicons/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="../../../images/favicons/blue/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="45x48" href="../../../images/favicons/blue/favicon-48x48.png">
@@ -39,13 +41,23 @@
         .landscape-message {
             color: var(--primarypagecolour);
         }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .title-container,
+            .tts-button {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header class="header" id="header">
         <div class="logo-container">
-            <a href="/">
+            <a href="/overexposure">
                 <img src="../../../images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
@@ -269,6 +281,7 @@
             </div>
         </div>
     </div>
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
         document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
 
@@ -276,6 +289,7 @@
         const standaloneButton = document.getElementById('content-table-button-standalone');
         const containerButton = document.getElementById('content-table-button-container');
         const contentTableContainer = document.getElementById('content-table-container');
+        const ttsButton = document.getElementById('tts-button');
 
         // Function to show the content-table container and hide the standalone button
         standaloneButton.addEventListener('click', function () {
@@ -288,88 +302,69 @@
             contentTableContainer.style.display = 'none';
             standaloneButton.style.display = 'flex';
         });
+
         let isSpeaking = false;
-    let voices = [];
 
-    // Load available voices
-    function loadVoices() {
-        voices = speechSynthesis.getVoices();
-    }
+        function getSelectedVoice() {
+            const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
 
-    // Get selected voice based on local storage
-    function getSelectedVoice() {
-        const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-        voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+            const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
 
-        const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-        console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+            console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
 
-        switch (selectedVoiceKey) {
-            case 'tts-voice-male1':
-                return voices.find(voice => voice.name === 'Google UK English Male');
-            case 'tts-voice-male2':
-                return voices.find(voice => voice.name === 'Google UK English Female');
-            case 'tts-voice-female1':
-                return voices.find(voice => voice.name === 'Google US English');
-            case 'tts-voice-female2':
-                return voices.find(voice => voice.name === 'Microsoft Zira - English (United States)');
-            default:
-                return null;
-        }
-    }
-
-    function readText(text) {
-        const ttsButton = document.getElementById('tts-button');
-        if (isSpeaking) {
-            // If already speaking, stop the current speech
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            ttsButton.src = "../../../images/icons/grey/tts-icon.svg";
-        } else {
-            // If not speaking, start reading the text
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.pitch = 1;
-            speech.rate = 1;
-            speech.volume = 1;
-            speech.lang = 'en-US'; // Set language, can adjust based on user preferences
-
-            // Set the selected voice
-            const selectedVoice = getSelectedVoice();
-            if (selectedVoice) {
-                speech.voice = selectedVoice;
+            switch (selectedVoiceKey) {
+                case 'tts-voice-male1':
+                    return 'UK English Male'; // ResponsiveVoice name
+                case 'tts-voice-male2':
+                    return 'US English Male'; // ResponsiveVoice name
+                case 'tts-voice-female1':
+                    return 'UK English Female'; // ResponsiveVoice name
+                case 'tts-voice-female2':
+                    return 'US English Female'; // ResponsiveVoice name
+                default:
+                    return 'UK English Female'; // Default voice if none selected
             }
+        }
 
-            // Set flag to true when speaking starts
-            speech.onstart = () => {
-                isSpeaking = true;
-                ttsButton.src = "../../../images/icons/blogs/yellow/tts-icon.svg";
-            };
-
-            // Reset flag when speaking finishes or is canceled
-            speech.onend = () => {
+        function readText(text) {
+            if (isSpeaking) {
+                // If already speaking, stop the current speech
+                responsiveVoice.cancel();
                 isSpeaking = false;
                 ttsButton.src = "../../../images/icons/grey/tts-icon.svg";
-            };
+            } else {
+                // If not speaking, start reading the text
+                const selectedVoice = getSelectedVoice(); // Get the selected voice
+                responsiveVoice.speak(text, selectedVoice);
 
-            window.speechSynthesis.speak(speech);
+                // Set flag to true when speaking starts
+                isSpeaking = true;
+                ttsButton.src = "../../../images/icons/blogs/yellow/tts-icon.svg";
+
+                // Reset flag when speaking finishes
+                responsiveVoice.onend = () => {
+                    isSpeaking = false;
+                    ttsButton.src = "../../../images/icons/grey/tts-icon.svg";
+                };
+            }
         }
-    }
 
-    // Load voices when they are ready
-    speechSynthesis.onvoiceschanged = loadVoices;
+        // Function to handle TTS button click
+        ttsButton.addEventListener('click', () => {
+            const selectedText = window.getSelection().toString().trim();
 
-    // Function to handle TTS button click
-    document.getElementById('tts-button').addEventListener('click', () => {
-        const selectedText = window.getSelection().toString().trim();
-
-        if (selectedText) {
-            // If highlighted text exists, read the highlighted text
-            readText(selectedText);
-        } else {
-            // If no text is highlighted, read the entire content in the content-container
-            const contentText = document.getElementById('content-container').innerText;
-            readText(contentText);
-        }
-    });
+            if (selectedText) {
+                // If highlighted text exists, read the highlighted text
+                readText(selectedText);
+            } else {
+                // If no text is highlighted, read the entire content in the content-container
+                const contentText = document.getElementById('content-container').innerText;
+                readText(contentText);
+            }
+        });
     </script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
+
+</html>

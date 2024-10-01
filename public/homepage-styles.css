@@ -6,6 +6,11 @@
     user-select: none;
     -webkit-user-drag: none;
 }
+:root {
+    --backgroundcolour: #202020;
+    --primarypagecolour: #66CCFF;
+    --bordersize: 5px;
+}
 
 .center-label {
     text-align: center;
@@ -24,7 +29,7 @@
 }
 
 .container-title {
-    color: #66CCFF;
+    color: var(--primarypagecolour);;
     text-align: center;
     margin-top: 50px;
     font-family: LemonMilk;
@@ -76,17 +81,6 @@
 
 .flipped {
     transform: rotateY(180deg);
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1000;
 }
 
 

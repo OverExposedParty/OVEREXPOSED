@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
 
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/orange/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/orange/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/orange/favicon-48x48.png">
@@ -82,7 +84,7 @@
         <div class="extra-menu-icon">
             <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
-    </header>     
+    </header>
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="../../images/icons/orange/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -119,66 +121,66 @@
             let voices = [];
             let ttsButtonTimeout;
             let currentUtterance = null;
-    
+
             const punishmentEnabled = localStorage.getItem('never-have-i-ever-settings-punishment') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
-    
+
             let simpleAdmissions = [];
             let risingSuspicions = [];
             let diggingDeeper = [];
             let verbalDiarrhea = [];
             let rawAndUnfiltered = [];
-    
+
             // Array to hold all questions and track the current index
             let allQuestions = [];
             let currentQuestionIndex = 0;
-    
+
             async function loadJSONFiles() {
                 const shouldFetchSimpleAdmissions = localStorage.getItem('never-have-i-ever-simple-admissions') === 'true';
                 const shouldFetchRisingSuspicions = localStorage.getItem('never-have-i-ever-rising-suspicions') === 'true';
                 const shouldFetchDiggingDeeper = localStorage.getItem('never-have-i-ever-digging-deeper') === 'true';
                 const shouldFetchVerbalDiarrhea = localStorage.getItem('never-have-i-ever-verbal-diarrhea') === 'true';
                 const shouldFetchRawAndUnfiltered = localStorage.getItem('never-have-i-ever-raw-and-unfiltered') === 'true';
-    
+
                 const files = [];
                 if (shouldFetchSimpleAdmissions) files.push('./questions/never-have-i-ever/simple-admissions.json');
                 if (shouldFetchRisingSuspicions) files.push('./questions/never-have-i-ever/rising-suspicions.json');
                 if (shouldFetchDiggingDeeper) files.push('./questions/never-have-i-ever/digging-deeper.json');
                 if (shouldFetchVerbalDiarrhea) files.push('./questions/never-have-i-ever/verbal-diarrhea.json');
                 if (shouldFetchRawAndUnfiltered) files.push('./questions/never-have-i-ever/raw-and-unfiltered.json');
-    
-                            try {
-                const responses = await Promise.all(files.map(file => fetch(file)));
 
-                responses.forEach(response => {
-                    if (!response.ok) {
-                        console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
-                    }
-                });
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
 
-                const simpleAdmissionsData = shouldFetchSimpleAdmissions ? await responses[files.indexOf('./questions/never-have-i-ever/simple-admissions.json')].json() : { 'never-have-i-ever-simple-admissions': [] };
-                const risingSuspicionsData = shouldFetchRisingSuspicions ? await responses[files.indexOf('./questions/never-have-i-ever/rising-suspicions.json')].json() : { 'never-have-i-ever-rising-suspicions': [] };
-                const diggingDeeperData = shouldFetchDiggingDeeper ? await responses[files.indexOf('./questions/never-have-i-ever/digging-deeper.json')].json() : { 'never-have-i-ever-digging-deeper': [] };
-                const verbalDiarrheaData = shouldFetchVerbalDiarrhea ? await responses[files.indexOf('./questions/never-have-i-ever/verbal-diarrhea.json')].json() : { 'never-have-i-ever-verbal-diarrhea': [] };
-                const rawAndUnfilteredData = shouldFetchRawAndUnfiltered ? await responses[files.indexOf('./questions/never-have-i-ever/raw-and-unfiltered.json')].json() : { 'never-have-i-ever-raw-and-unfiltered': [] };
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
+
+                    const simpleAdmissionsData = shouldFetchSimpleAdmissions ? await responses[files.indexOf('./questions/never-have-i-ever/simple-admissions.json')].json() : { 'never-have-i-ever-simple-admissions': [] };
+                    const risingSuspicionsData = shouldFetchRisingSuspicions ? await responses[files.indexOf('./questions/never-have-i-ever/rising-suspicions.json')].json() : { 'never-have-i-ever-rising-suspicions': [] };
+                    const diggingDeeperData = shouldFetchDiggingDeeper ? await responses[files.indexOf('./questions/never-have-i-ever/digging-deeper.json')].json() : { 'never-have-i-ever-digging-deeper': [] };
+                    const verbalDiarrheaData = shouldFetchVerbalDiarrhea ? await responses[files.indexOf('./questions/never-have-i-ever/verbal-diarrhea.json')].json() : { 'never-have-i-ever-verbal-diarrhea': [] };
+                    const rawAndUnfilteredData = shouldFetchRawAndUnfiltered ? await responses[files.indexOf('./questions/never-have-i-ever/raw-and-unfiltered.json')].json() : { 'never-have-i-ever-raw-and-unfiltered': [] };
 
                     simpleAdmissions = simpleAdmissionsData['never-have-i-ever-simple-admissions'] || [];
                     risingSuspicions = risingSuspicionsData['never-have-i-ever-rising-suspicions'] || [];
                     diggingDeeper = diggingDeeperData['never-have-i-ever-digging-deeper'] || [];
                     verbalDiarrhea = verbalDiarrheaData['never-have-i-ever-verbal-diarrhea'] || [];
                     rawAndUnfiltered = rawAndUnfilteredData['never-have-i-ever-raw-and-unfiltered'] || [];
-    
+
                     // Combine all questions
                     allQuestions = [...simpleAdmissions, ...risingSuspicions, ...diggingDeeper, ...verbalDiarrhea, ...rawAndUnfiltered];
-    
+
                     // Shuffle the questions initially
                     shuffleQuestions();
-    
+
                 } catch (error) {
                     console.error('Failed to load JSON files:', error);
                 }
             }
-    
+
             function shuffleQuestions() {
                 for (let i = allQuestions.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -186,14 +188,14 @@
                 }
                 currentQuestionIndex = 0; // Reset index after shuffling
             }
-    
+
             function enableTTSButton() {
                 const ttsButton = document.getElementById('tts-button');
                 if (ttsButton.classList.contains('disabled')) {
                     ttsButton.classList.remove('disabled');
                 }
             }
-    
+
             function disableTTSButton() {
                 const ttsButton = document.getElementById('tts-button');
                 if (!ttsButton.classList.contains('disabled')) {
@@ -204,69 +206,58 @@
                     }, 8000);
                 }
             }
-    
+
             function stopSpeech() {
-                if (speechSynthesis.speaking) {
-                    speechSynthesis.cancel();
-                    currentUtterance = null;
+                if (responsiveVoice.isPlaying()) {
+                    responsiveVoice.cancel();
                 }
             }
-            
+
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
                     navigator.vibrate(200); // Vibrate for 200 milliseconds
                 }
             }
-    
+
             document.querySelector('.back-button').addEventListener('click', () => {
                 window.location.href = 'never-have-i-ever-settings';
             });
-    
+
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
                 voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
-    
+
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-    
+
                 console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
-    
+
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
-                        return 'Google UK English Male'; // Example name
+                        return 'UK English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-male2':
-                        return 'Google UK English Female'; // Example name
+                        return 'UK English Female'; // Example name for ResponsiveVoice
                     case 'tts-voice-female1':
-                        return 'Google US English'; // Example name
+                        return 'US English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-female2':
-                        return 'Microsoft Zira - English (United States)'; // Example name
+                        return 'US English Female'; // Example name for ResponsiveVoice
                     default:
                         return null;
                 }
             }
-    
-            if ('speechSynthesis' in window) {
-                speechSynthesis.addEventListener('voiceschanged', () => {
-                    voices = speechSynthesis.getVoices();
-                    console.log('Available voices:', voices);
-                });
-            }
-    
             document.getElementById('tts-button').addEventListener('click', () => {
-                stopSpeech();
-    
                 const textContainerText = document.querySelector('.text-container').textContent;
-    
-                currentUtterance = new SpeechSynthesisUtterance(textContainerText);
-    
                 const selectedVoiceName = getSelectedVoice();
-                const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
-                currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
-    
-                speechSynthesis.speak(currentUtterance);
-    
+
+                // Use ResponsiveVoice to speak the text
+                if (selectedVoiceName) {
+                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                } else {
+                    responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
+                }
+
                 disableTTSButton();
             });
-    
+
             function updateTextContainer(text, cardType, punishment) {
                 const textContainer = document.querySelector('.text-container');
                 textContainer.innerHTML =
@@ -276,16 +267,16 @@
                     textContainer.classList.add('text-container-small');
                 }
                 document.querySelector('.card-type-text').textContent = cardType;
-    
+
                 // Enable TTS button after the first click
                 if (!hasBeenClicked) {
                     hasBeenClicked = true;
                     enableTTSButton(); // Enable TTS button on the first question
                 }
-    
+
                 vibrateOnClick();
             }
-    
+
             function getNextQuestion() {
                 if (currentQuestionIndex >= allQuestions.length) {
                     shuffleQuestions(); // Shuffle again if we've reached the end
@@ -301,12 +292,12 @@
                         diggingDeeper.includes(selectedQuestion) ? 'Digging Deeper' :
                             verbalDiarrhea.includes(selectedQuestion) ? 'Verbal Diarrhea' :
                                 'Raw and Unfiltered';
-    
+
                 currentQuestionIndex++; // Move to the next question
-    
+
                 return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
             }
-    
+
             // Question button event listener
             document.querySelector('.question-button').addEventListener('click', () => {
                 const selectedQuestionObj = getNextQuestion();
@@ -318,10 +309,12 @@
                 }
                 vibrateOnClick(); // Ensure vibration occurs on question button click
             });
-    
+
             // Load questions on page load
             await loadJSONFiles();
         });
-    </script>    
+    </script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
+
 </html>

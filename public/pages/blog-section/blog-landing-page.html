@@ -76,7 +76,7 @@
         <div class="filter-container" style="display: flex;">
             <div class="dropdown-menu">
                 <select>
-                    <option value="" disabled selected>Sort Date</option>
+                    <option value="" disabled selected>Sort</option>
                     <option value="option1">Newest</option>
                     <option value="option2">Oldest </option>
                 </select>
@@ -163,6 +163,13 @@
 
             blogs.forEach((blog, index) => createBlogPost(blog, index));
             filterBlogPosts(); // Filter after displaying the blogs
+
+            openFirstBlogPostWithDelay(); // Open the first blog post with a delay
+        }
+        function openFirstBlogPostWithDelay() {
+            setTimeout(() => {
+                openBlogPost(0); // Open the first blog post (index 0)
+            }, 100);
         }
 
         function getTextColorForTag(tag) {
@@ -179,92 +186,92 @@
         }
 
         function createBlogPost(blog, index) {
-    const blogContainer = document.getElementById('blog-container');
-    const tagColor = getTextColorForTag(blog.tag);
+            const blogContainer = document.getElementById('blog-container');
+            const tagColor = getTextColorForTag(blog.tag);
 
-    // Create the blog post container
-    const postDiv = document.createElement('div');
-    postDiv.classList.add('blog-post-container');
-    postDiv.id = `post-${index}`;
-    postDiv.dataset.tag = blog.tag; // Store the tag in a data attribute
-    postDiv.dataset.searchTags = blog['search-tags'].toLowerCase(); // Store search-tags for filtering
+            // Create the blog post container
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('blog-post-container');
+            postDiv.id = `post-${index}`;
+            postDiv.dataset.tag = blog.tag; // Store the tag in a data attribute
+            postDiv.dataset.searchTags = blog['search-tags'].toLowerCase(); // Store search-tags for filtering
 
-    // Create the button with the blog title
-    const button = document.createElement('button');
-    button.classList.add('blog-post-button');
-    button.textContent = blog.title;
+            // Create the button with the blog title
+            const button = document.createElement('button');
+            button.classList.add('blog-post-button');
+            button.textContent = blog.title;
 
-    // Create the blog post content (hidden initially)
-    const blogContentDiv = document.createElement('div');
-    blogContentDiv.classList.add('blog-post-content');
-    blogContentDiv.style.display = 'none'; // Hidden initially
-    blogContentDiv.style.maxHeight = '0'; // Set initial max height for animation
-    blogContentDiv.style.overflow = 'hidden'; // Hide overflow
-    blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease'; // Add transition styles
+            // Create the blog post content (hidden initially)
+            const blogContentDiv = document.createElement('div');
+            blogContentDiv.classList.add('blog-post-content');
+            blogContentDiv.style.display = 'none'; // Hidden initially
+            blogContentDiv.style.maxHeight = '0'; // Set initial max height for animation
+            blogContentDiv.style.overflow = 'hidden'; // Hide overflow
+            blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease'; // Add transition styles
 
-    button.style.borderColor = tagColor;
-    button.style.color = tagColor;
+            button.style.borderColor = tagColor;
+            button.style.color = tagColor;
 
-    const img = document.createElement('img');
-    img.classList.add('blog-post-image');
-    img.src = `../../images/blog-thumbnails/${blog.image}`;
-    img.alt = blog.title;
+            const img = document.createElement('img');
+            img.classList.add('blog-post-image');
+            img.src = `../../images/blog-thumbnails/${blog.image}`;
+            img.alt = blog.title;
 
-    const header = document.createElement('h2');
-    header.classList.add('blog-post-image-header');
-    header.textContent = blog.title;
-    header.style.color = getTextColorForTag(blog.tag);
+            const header = document.createElement('h2');
+            header.classList.add('blog-post-image-header');
+            header.textContent = blog.title;
+            header.style.color = getTextColorForTag(blog.tag);
 
-    const contentText = document.createElement('h3');
-    contentText.classList.add('blog-post-image-text');
-    const lines = blog.content.split(' ').slice(0, 40).join(' ') + '...';
-    contentText.textContent = lines;
-    contentText.style.color = getTextColorForTag(blog.tag);
+            const contentText = document.createElement('h3');
+            contentText.classList.add('blog-post-image-text');
+            const lines = blog.content.split(' ').slice(0, 40).join(' ') + '...';
+            contentText.textContent = lines;
+            contentText.style.color = getTextColorForTag(blog.tag);
 
-    // Create the extra details container
-    const extraDetailsContainer = document.createElement('div');
-    extraDetailsContainer.classList.add('extra-details-container');
+            // Create the extra details container
+            const extraDetailsContainer = document.createElement('div');
+            extraDetailsContainer.classList.add('extra-details-container');
 
-    // Create the author element
-    const authorElement = document.createElement('span');
-    authorElement.classList.add('author');
-    authorElement.textContent = `Author: ${blog.author}`;
-    authorElement.style.color = tagColor;
+            // Create the author element
+            const authorElement = document.createElement('span');
+            authorElement.classList.add('author');
+            authorElement.textContent = `Author: ${blog.author}`;
+            authorElement.style.color = tagColor;
 
-    // Create the date element
-    const dateElement = document.createElement('span');
-    dateElement.classList.add('date');
-    dateElement.textContent = `Date: ${blog.date}`;
-    dateElement.style.color = tagColor;
+            // Create the date element
+            const dateElement = document.createElement('span');
+            dateElement.classList.add('date');
+            dateElement.textContent = `Date: ${blog.date}`;
+            dateElement.style.color = tagColor;
 
-    // Append author and date to the extra details container
-    extraDetailsContainer.appendChild(authorElement);
-    extraDetailsContainer.appendChild(dateElement);
+            // Append author and date to the extra details container
+            extraDetailsContainer.appendChild(authorElement);
+            extraDetailsContainer.appendChild(dateElement);
 
-    // Create the "Read More" hyperlink
-    const readMoreLink = document.createElement('a');
-    readMoreLink.href = window.location.href + blog['file-name'];
-    readMoreLink.textContent = 'Read More';
-    readMoreLink.classList.add('read-more-link');
-    readMoreLink.style.color = tagColor;
+            // Create the "Read More" hyperlink
+            const readMoreLink = document.createElement('a');
+            readMoreLink.href = window.location.href + blog['file-name'];
+            readMoreLink.textContent = 'Read More';
+            readMoreLink.classList.add('read-more-link');
+            readMoreLink.style.color = tagColor;
 
-    // Append elements to the blog content div
-    blogContentDiv.appendChild(img);
-    blogContentDiv.appendChild(header);
-    blogContentDiv.appendChild(contentText);
-    blogContentDiv.appendChild(extraDetailsContainer);
-    blogContentDiv.appendChild(readMoreLink); // Append the Read More link
+            // Append elements to the blog content div
+            blogContentDiv.appendChild(img);
+            blogContentDiv.appendChild(header);
+            blogContentDiv.appendChild(contentText);
+            blogContentDiv.appendChild(extraDetailsContainer);
+            blogContentDiv.appendChild(readMoreLink); // Append the Read More link
 
-    // Append button and blog content div to the post container
-    postDiv.appendChild(button);
-    postDiv.appendChild(blogContentDiv);
+            // Append button and blog content div to the post container
+            postDiv.appendChild(button);
+            postDiv.appendChild(blogContentDiv);
 
-    // Append the blog post container to the main container
-    blogContainer.appendChild(postDiv);
+            // Append the blog post container to the main container
+            blogContainer.appendChild(postDiv);
 
-    // Add click event to toggle between the button and blog content
-    button.addEventListener('click', () => openBlogPost(index));
-}
+            // Add click event to toggle between the button and blog content
+            button.addEventListener('click', () => openBlogPost(index));
+        }
 
 
         function openBlogPost(index) {

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="header.css"> 
     <link rel="stylesheet" href="gamemode-page-styles.css"> 
     <link rel="stylesheet" href="rotate-device.css"> 
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/yellow/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/yellow/favicon-32x32.png">
@@ -200,9 +202,8 @@
             }
 
             function stopSpeech() {
-                if (speechSynthesis.speaking) {
-                    speechSynthesis.cancel();
-                    currentUtterance = null;
+                if (responsiveVoice.isPlaying()) {
+                    responsiveVoice.cancel();
                 }
             }
             
@@ -218,35 +219,36 @@
 
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+    
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+    
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+    
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
-                        return 'Google UK English Male'; // Example name
+                        return 'UK English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-male2':
-                        return 'Google UK English Female'; // Example name
+                        return 'UK English Female'; // Example name for ResponsiveVoice
                     case 'tts-voice-female1':
-                        return 'Google US English'; // Example name
+                        return 'US English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-female2':
-                        return 'Microsoft Zira - English (United States)'; // Example name
+                        return 'US English Female'; // Example name for ResponsiveVoice
                     default:
                         return null;
                 }
             }
-
-            if ('speechSynthesis' in window) {
-                speechSynthesis.addEventListener('voiceschanged', () => {
-                    voices = speechSynthesis.getVoices();
-                });
-            }
-
             document.getElementById('tts-button').addEventListener('click', () => {
-                stopSpeech();
                 const textContainerText = document.querySelector('.text-container').textContent;
-                currentUtterance = new SpeechSynthesisUtterance(textContainerText);
                 const selectedVoiceName = getSelectedVoice();
-                const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
-                currentUtterance.voice = selectedVoice || voices.find(voice => voice.lang === 'en-US');
-                speechSynthesis.speak(currentUtterance);
+    
+                // Use ResponsiveVoice to speak the text
+                if (selectedVoiceName) {
+                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                } else {
+                    responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
+                }
+    
                 disableTTSButton();
             });
 
@@ -300,6 +302,6 @@
             await loadJSONFiles();
         });
     </script>
-
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
 </html>

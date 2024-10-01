@@ -23,6 +23,9 @@
     max-width: 60vw;
     max-height: 60vw;
 }
+.settings-box.active {
+    display: block;
+}
 
 .settings-box h2,
 .settings-box label {

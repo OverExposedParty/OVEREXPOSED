@@ -4,6 +4,8 @@
     --tag2colour: #FC7E93;
     --tag3colour: #40E0D0;
 
+    --backgroundcolour: #202020;
+
     --bordersize: 5px;
 }
 .title-container,.container,.filter-container{
@@ -45,12 +47,10 @@
 }
 
 .search-bar {
-    padding: 8px;
-    border: 1px solid #ccc;
     border-radius: 4px;
     width: 15%; /* Set width of the search bar */
     border: var(--bordersize) solid var(--primarypagecolour);
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
     border-radius: 50px;
     padding: 0.5vh 1vw;
@@ -63,7 +63,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     border: var(--bordersize) solid var(--primarypagecolour);
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     color: #6A9EF6;;
     border-radius: 50px;
     padding: 0.5vh 1vw;
@@ -103,7 +103,7 @@
     font-family: inherit; /* Inherit font family */
     padding: 0; /* Remove padding for better fit */
     outline: none; /* Remove outline */
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
 }
 
 .filter-container {
@@ -115,7 +115,7 @@
     display: flex; /* Enable flexbox */
     align-items: center; /* Center content vertically */
     justify-content: space-between; /* Space elements evenly */
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     border: #202020 solid var(--primarypagecolour);
     border-radius: 50px;
 }
@@ -133,7 +133,7 @@
     appearance: none; /* Remove default checkbox styling */
     width: 20px; /* Adjust the size of the checkbox */
     height: 20px;
-    border: var(--bordersize) solid #202020; /* Set the border width and color */
+    border: var(--bordersize) solid var(--backgroundcolour); /* Set the border width and color */
     border-radius: 8px; /* Optional: make it rounded */
     outline: none; /* Remove any outline */
     cursor: pointer;
@@ -171,7 +171,7 @@
 
 /* Change the background and border color when checked */
 .tag-checkbox:checked {
-    background-color: #202020; /* Example: background color change */
+    background-color: var(--backgroundcolour); /* Example: background color change */
 }
 
 /* Optional: add a checkmark or symbol when checked */
@@ -247,7 +247,7 @@
 .blog-post-button
 {
     border: var(--bordersize) solid var(--tag1colour);
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     color: var(--tag1colour);
     border-radius: 50px;
     padding: 1vh 1vw;
@@ -316,13 +316,12 @@ h3.blog-post-image-text
     }
 
     .title-text {
-        font-size:180%;
+        font-size:220%;
         transform: translateX(0%); /* Adjust positioning to center */
     }
     .search-bar {
         width: 60%; /* Set width of the search bar */
         padding: 8px;
-        border-radius: 4px;
         border: 1vw solid var(--primarypagecolour);
         background-color: #202020;
         color: var(--primarypagecolour);
@@ -332,7 +331,7 @@ h3.blog-post-image-text
         z-index:100;
         font-size: 40%;
         margin: 0 auto; /* Center the search bar horizontally */
-        transform: translateX(-15%); /* Adjust positioning to center */
+        transform: translateX(-10.5%); /* Adjust positioning to center */
     }
     .filter-button{
         border: 1vw solid var(--primarypagecolour);
@@ -346,7 +345,7 @@ h3.blog-post-image-text
         margin-right: 10px;
     }
     .tag-container label{
-        font-size: 2.5vw;
+        font-size: 2vw;
 
     }
     .tag-container{
@@ -363,7 +362,7 @@ h3.blog-post-image-text
         max-height:40px;
     }
     .dropdown-menu{
-        width:auto;
+        width:31%;
         font-size:50%;
     }
     .blog-post-button{
