@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="settings-style.css">
     <link rel="stylesheet" href="rotate-device.css">
-    <link rel="stylesheet" href="extra-menu-style.css">
-
+    
     <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/blue/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="120x120" href="./images/favicons/blue/favicon-120x120.png">
     <meta name="msapplication-TileImage" content="./images/favicons/blue/favicon-144x144.png">
@@ -173,9 +172,16 @@
                 if (!settingsBox.classList.contains('active')) {
                     settingsBox.classList.add('active');
                     overlay.classList.add('active');
+                    if (!extraMenuContainer.classList.contains('active')) {
+                        extraMenuContainer.classList.remove('active');
+                    }
                 } else {
+
                     settingsBox.classList.remove('active');
-                    overlay.classList.remove('active');
+                    if (!extraMenuContainer.classList.contains('active')) {
+                        overlay.classList.remove('active');
+                    }
+
                 }
             }
 
@@ -315,10 +321,21 @@
             const extraMenuIcon = document.querySelector('.extra-menu-icon');
             const extraMenuContainer = document.querySelector('.extra-menu-container');
             const overlay = document.querySelector('#overlay');
+            const settingsBox = document.querySelector('#settings-box');
 
             extraMenuIcon.addEventListener('click', function () {
-                extraMenuContainer.classList.toggle('active');
-                overlay.classList.toggle('active');
+                if (extraMenuContainer.classList.contains('active')) {
+                    extraMenuContainer.classList.remove('active');
+
+                    if(!settingsBox.classList.contains('active')){
+                        overlay.classList.remove('active');
+                    }
+                }
+                else
+                {
+                    extraMenuContainer.classList.add('active');
+                    overlay.classList.add('active');
+                }
             });
         });
     </script>
