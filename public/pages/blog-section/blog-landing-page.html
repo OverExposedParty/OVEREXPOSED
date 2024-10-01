@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../header.css">
     <link rel="stylesheet" href="../../rotate-device.css">
     <link rel="stylesheet" href="blog-landing-page-style.css">
+    <link rel="stylesheet" href="settings-style.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="../../images/favicons/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="../../images/favicons/blue/favicon-32x32.png">
@@ -67,10 +68,44 @@
         Please rotate your phone to continue
         <img src="../../images/icons/blogs/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
+    <div class="extra-menu-container">
+        <h1 class="extra-menu-title">Menu</h1>
+        <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
+        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="settings-box" id="settings-box">
+        <h2 id="settings-title" class="settings-title">Settings</h2>
+        <div class="settings-content">
+            <div class="settings-option">
+                <label for="settings-nsfw">NSFW</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settings-nsfw">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-option">
+                <label for="settings-vibration">VIBRATION</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settings-vibration">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="tts-voice-buttons">
+            <div class="tts-voice-button" data-button="1" data-key="tts-voice-male1">M1</div>
+            <div class="tts-voice-button" data-button="2" data-key="tts-voice-male2">M2</div>
+            <div class="tts-voice-button" data-button="3" data-key="tts-voice-female1">F1</div>
+            <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
+        </div>
+    </div>
     <div class="parent-container">
         <div class="title-container">
-            <button class="filter-button">FILTER</button>
-            <h1 class="title-text"> OVEREXPOSURE</h1>
+            <button class="filter-button" id="filter-button">FILTER</button>
+            <h1 class="title-text" id="title-text"> OVEREXPOSURE</h1>
             <input type="text" class="search-bar" id="search-bar" placeholder="Search...">
         </div>
         <div class="filter-container" style="display: flex;">
@@ -83,11 +118,11 @@
             </div>
             <div class="tag-container">
                 <label><input type="checkbox" name="filter" value="tag1" class="tag-checkbox" id="tag1"
-                        checked><span>tag1</span></label>
+                        checked><span>########</span></label>
                 <label><input type="checkbox" name="filter" value="tag2" class="tag-checkbox" id="tag2"
-                        checked><span>tag2</span></label>
+                        checked><span>########</span></label>
                 <label><input type="checkbox" name="filter" value="tag3" class="tag-checkbox" id="tag3"
-                        checked><span>tag3</span></label>
+                        checked><span>########</span></label>
                 <label><input type="checkbox" name="filter" value="all" class="tag-checkbox" id="tag-all"
                         checked><span>all</span></label>
             </div>
@@ -97,15 +132,19 @@
             <!-- Blog posts will be injected here -->
         </div>
     </div>
-
+    <script src="header.js"></script>
     <script>
+        //Header & Settings
+        selectedColor = '#6A9EF6';
+        selectButton(selectedButton);
+
+
+        //Landing Page Scripts
         let currentlyOpenPostIndex = null; // Track the index of the currently open post
-        document.documentElement.style.setProperty('--primarypagecolour', '#6A9EF6');
         document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
         document.documentElement.style.setProperty('--tag2colour', '#F57C69');
         document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
 
-        const primaryPageColour = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         const tag1Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag1colour');
         const tag2Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag2colour');
         const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
@@ -115,7 +154,6 @@
         const sortSelect = document.querySelector('.dropdown-menu select'); // Reference to the dropdown menu
         const searchInput = document.getElementById('search-bar'); // Assuming you have a search input field
 
-        // Add event listener to toggle visibility when the button is clicked
         filterButton.addEventListener('click', () => {
             // Check if the filterContainer is currently visible
             const isVisible = filterContainer.style.display === 'flex';
@@ -188,6 +226,7 @@
         function createBlogPost(blog, index) {
             const blogContainer = document.getElementById('blog-container');
             const tagColor = getTextColorForTag(blog.tag);
+            console.log(tagColor);
 
             // Create the blog post container
             const postDiv = document.createElement('div');
@@ -282,6 +321,9 @@
             const postDiv = document.getElementById(`post-${index}`);
             const button = postDiv.querySelector('.blog-post-button');
             const blogContentDiv = postDiv.querySelector('.blog-post-content');
+
+            // Get the color of the button
+            const buttonColor = button.style.borderColor || primaryPageColour; // Fallback to primary color if not set
 
             button.style.display = 'none';
             blogContentDiv.style.display = 'block';

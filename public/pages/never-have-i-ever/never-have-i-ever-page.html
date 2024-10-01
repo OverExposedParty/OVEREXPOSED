@@ -49,7 +49,8 @@
             .container,
             .header,
             .back-button-container,
-            .side-button-container {
+            .side-button-container,
+            .tts-button {
                 display: none;
             }
         }
@@ -59,7 +60,7 @@
         }
 
         .gamemode-text {
-            font-size: 25px;
+            font-size: 150%;
         }
 
         @media (max-width: 400px),
@@ -108,11 +109,7 @@
             </div>
         </div>
     </div>
-    <div class="side-button-container">
-        <img src="../../images/icons/orange/thumbs-up-icon.svg" alt="Thumbs Up Icon" class="side-button">
-        <img src="../../images/icons/orange/tts-icon.svg" alt="Button 2" class="side-button disabled" id="tts-button">
-        <img src="../../images/icons/orange/thumbs-down-icon.svg" alt="Button 3" class="side-button">
-    </div>
+    <img src="../../images/icons/orange/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');

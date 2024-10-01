@@ -31,7 +31,7 @@
 .container-title {
     color: var(--primarypagecolour);;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 10vh;
     font-family: LemonMilk;
     font-size: 50px;
 }
@@ -99,6 +99,7 @@
 
     .container-title {
         font-size: 55px;
+        margin-top: 10vh;
     }
 }
 
@@ -118,5 +119,6 @@
 
     .container-title {
         font-size: 14vw;
+        margin-top: 10vh;
     }
 }

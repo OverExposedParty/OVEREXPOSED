@@ -104,7 +104,8 @@
             .container,
             .header,
             .back-button-container,
-            .side-button-container {
+            .side-button-container,
+            .tts-button {
                 display: none;
             }
         }
@@ -153,11 +154,7 @@
             </div>
         </div>
     </div>
-    <div class="side-button-container">
-        <img src="../../images/icons/blue/thumbs-up-icon.svg" alt="Thumbs Up Icon" class="side-button">
-        <img src="../../images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
-        <img src="../../images/icons/blue/thumbs-down-icon.svg" alt="Thumbs Down Icon" class="side-button">
-    </div>
+    <img src="../../images/icons/blue/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');

@@ -2,7 +2,7 @@
     --primarypagecolour: #6A9EF6;
     --tag1colour: #F6C86D;
     --tag2colour: #FC7E93;
-    --tag3colour: #40E0D0;
+    --tag3colour: #AA88F0; 
 
     --backgroundcolour: #202020;
 
@@ -331,7 +331,7 @@ h3.blog-post-image-text
         z-index:100;
         font-size: 40%;
         margin: 0 auto; /* Center the search bar horizontally */
-        transform: translateX(-10.5%); /* Adjust positioning to center */
+        transform: translateX(0%); /* Adjust positioning to center */
     }
     .filter-button{
         border: 1vw solid var(--primarypagecolour);

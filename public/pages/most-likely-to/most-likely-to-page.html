@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOST LIKELY TO</title>
-    <link rel="stylesheet" href="header.css"> 
-    <link rel="stylesheet" href="gamemode-page-styles.css"> 
-    <link rel="stylesheet" href="rotate-device.css"> 
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="gamemode-page-styles.css">
+    <link rel="stylesheet" href="rotate-device.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-    
+
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/yellow/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/yellow/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/yellow/favicon-48x48.png">
@@ -26,7 +27,7 @@
     <link rel="apple-touch-icon" sizes="141x152" href="./images/favicons/yellow/favicon-152x152.png">
     <link rel="apple-touch-icon" sizes="167x180" href="./images/favicons/yellow/favicon-180x180.png">
     <meta name="msapplication-TileImage" content="./images/favicons/yellow/favicon-144x144.png">
-    <meta name="msapplication-TileColor" content="#202020"> 
+    <meta name="msapplication-TileColor" content="#202020">
     <meta name="msapplication-square70x70logo" content="./images/favicons/yellow/favicon-70x70.png">
     <meta name="msapplication-square150x150logo" content="./images/favicons/yellow/favicon-150x150.png">
     <meta name="msapplication-square310x310logo" content="./images/favicons/yellow/favicon-310x310.png">
@@ -38,27 +39,39 @@
             opacity: 0.5;
             pointer-events: none;
         }
+
         .header {
-            background-color: var(--primarypagecolour); 
+            background-color: var(--primarypagecolour);
         }
+
         .landscape-message {
-        color: var(--primarypagecolour);
+            color: var(--primarypagecolour);
         }
+
         @media (max-width: 768px) and (orientation: landscape) {
-            .container, .header, .back-button-container, .side-button-container {
+
+            .container,
+            .header,
+            .back-button-container,
+            .side-button-container,
+            .tts-button {
                 display: none;
             }
         }
+
         .gamemode-text {
             font-size: 28px;
         }
-        @media (max-width: 400px), (max-height: 700px) {
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
             .gamemode-text {
                 font-size: 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <header class="header" id="header">
         <div class="logo-container">
@@ -72,7 +85,7 @@
         <div class="extra-menu-icon">
             <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
-    </header>                                                                                             
+    </header>
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="../../images/icons/yellow/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -84,7 +97,8 @@
         <div class="content">
             <div class="gamemode-text">Most Likely To</div>
             <div class="main-image-container">
-                <img src="../../images/blank-cards/most-likely-to-blank-card.svg" alt="Most Likely To Blank Card" class="main-image">
+                <img src="../../images/blank-cards/most-likely-to-blank-card.svg" alt="Most Likely To Blank Card"
+                    class="main-image">
                 <div class="text-container">
                     Most Likely To
                 </div>
@@ -95,11 +109,7 @@
             </div>
         </div>
     </div>
-    <div class="side-button-container">
-        <img src="../../images/icons/yellow/thumbs-up-icon.svg" alt="Thumbs Up Icon" class="side-button">
-        <img src="../../images/icons/yellow/tts-icon.svg" alt="Button 2" class="side-button disabled" id="tts-button">
-        <img src="../../images/icons/yellow/thumbs-down-icon.svg" alt="Button 3" class="side-button">
-    </div>
+    <img src="../../images/icons/yellow/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
@@ -206,7 +216,7 @@
                     responsiveVoice.cancel();
                 }
             }
-            
+
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
                     navigator.vibrate(200); // Vibrate for 200 milliseconds
@@ -220,11 +230,11 @@
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
                 voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
-    
+
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-    
+
                 console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
-    
+
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
                         return 'UK English Male'; // Example name for ResponsiveVoice
@@ -241,20 +251,20 @@
             document.getElementById('tts-button').addEventListener('click', () => {
                 const textContainerText = document.querySelector('.text-container').textContent;
                 const selectedVoiceName = getSelectedVoice();
-    
+
                 // Use ResponsiveVoice to speak the text
                 if (selectedVoiceName) {
                     responsiveVoice.speak(textContainerText, selectedVoiceName);
                 } else {
                     responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
                 }
-    
+
                 disableTTSButton();
             });
 
             function updateTextContainer(text, cardType, punishment) {
                 const textContainer = document.querySelector('.text-container');
-                textContainer.innerHTML = 
+                textContainer.innerHTML =
                     `<span class="question-text">${text}</span>` +
                     (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
                 if (!textContainer.classList.contains('text-container')) {
@@ -277,10 +287,10 @@
                 const selectedPunishment = selectedQuestion['punishment'];
                 const cardType =
                     calmAndCasual.includes(selectedQuestion) ? 'Calm And Casual' :
-                    mildMischief.includes(selectedQuestion) ? 'Mild Mischief' :
-                    openSeason.includes(selectedQuestion) ? 'Open Season' :
-                    unsolicitedStrays.includes(selectedQuestion) ? 'Unsolicited Strays' :
-                    'Unfiltered Assaults';
+                        mildMischief.includes(selectedQuestion) ? 'Mild Mischief' :
+                            openSeason.includes(selectedQuestion) ? 'Open Season' :
+                                unsolicitedStrays.includes(selectedQuestion) ? 'Unsolicited Strays' :
+                                    'Unfiltered Assaults';
 
                 currentQuestionIndex++; // Move to the next question
 
@@ -297,11 +307,12 @@
                 }
                 vibrateOnClick(); // Ensure vibration occurs on question button click
             });
-    
+
             // Load questions on page load
             await loadJSONFiles();
         });
     </script>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
+
 </html>
