@@ -51,7 +51,7 @@ body {
     border: none;
     cursor: pointer;
     background-color: #202020;
-    border: 6px solid var(--primarypagecolour);
+    border: var(--bordersize) solid var(--primarypagecolour);
     color: var(--primarypagecolour);
     font-size: 16px;
     padding: 5px 10px;
@@ -157,7 +157,7 @@ body {
     font-size: 1.25em;
     color: #999999;
     background-color: #202020;
-    border: 6px solid #999999;
+    border: var(--bordersize) solid #999999;
     border-radius: 50px;
     cursor: pointer;
     text-align: center;
@@ -182,7 +182,7 @@ body {
 
 .button-container button:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
-    border: 6px solid var(--secondarypagecolour);
+    border: var(--bordersize) solid var(--secondarypagecolour);
 }
 
 .button-container button.active:not(.disabled):hover {
@@ -206,7 +206,7 @@ button.disabled {
     font-size: 1.25em;
     color: var(--primarypagecolour);
     background-color: #202020;
-    border: 6px solid var(--primarypagecolour);
+    border: var(--bordersize) solid var(--primarypagecolour);
     border-radius: 50px;
     cursor: pointer;
     text-align: center;

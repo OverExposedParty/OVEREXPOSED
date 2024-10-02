@@ -147,7 +147,7 @@
     <script src="header.js"></script>
     <script>
         //Header & Settings
-        selectedColor = '#66CCFF';
+        selectedColor = '#FFEE66';
         selectButton(selectedButton);
         document.addEventListener('DOMContentLoaded', async () => {
             document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
@@ -277,13 +277,13 @@
                     case 'tts-voice-male1':
                         return 'UK English Male'; // Example name for ResponsiveVoice
                     case 'tts-voice-male2':
-                        return 'UK English Female'; // Example name for ResponsiveVoice
-                    case 'tts-voice-female1':
                         return 'US English Male'; // Example name for ResponsiveVoice
+                    case 'tts-voice-female1':
+                        return 'UK English Female'; // Example name for ResponsiveVoice
                     case 'tts-voice-female2':
                         return 'US English Female'; // Example name for ResponsiveVoice
                     default:
-                        return null;
+                        return 'UK English Male';
                 }
             }
             document.getElementById('tts-button').addEventListener('click', () => {

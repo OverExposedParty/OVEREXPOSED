@@ -1,6 +1,5 @@
 :root {
     --primarypagecolour: #F6C86D;
-    --bordersize: 5px;
 }
 .container,.title-container {
     width: 40vw;
