@@ -26,6 +26,7 @@ body {
 
 body {
     font-family: LemonMilk, sans-serif;
+    overflow-y: hidden;
 }
 
 .header {
@@ -60,7 +61,7 @@ body {
     max-width: 100px;
     width: 15vw;
     font-family: LemonMilk;
-    z-index: 901;
+    z-index: 600;
     position: relative;
 }
 
@@ -68,7 +69,7 @@ body {
     display: flex;
     height: calc(100vh - 50px);
     /* Full viewport height minus header height */
-    overflow: hidden;
+    overflow-y: hidden;
     /* Ensure no overflow in container */
     margin-top: 50px;
     /* Same height as header to avoid overlap */
@@ -295,7 +296,7 @@ button.disabled {
 
     .packs-header,
     .settings-header {
-        font-size: 9vw;
+        font-size: 200%;
     }
 
     .button-container {

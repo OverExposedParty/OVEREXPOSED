@@ -76,7 +76,40 @@
         Please rotate your phone to continue
         <img src="../../images/icons/yellow/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
+    <div class="extra-menu-container">
+        <h1 class="extra-menu-title">Menu</h1>
+        <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
+        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+    </div>
     <div class="overlay" id="overlay"></div>
+    <div class="settings-box" id="settings-box">
+        <h2 id="settings-title" class="settings-title">Settings</h2>
+        <div class="settings-content">
+            <div class="settings-option">
+                <label for="settings-nsfw">NSFW</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settings-nsfw">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-option">
+                <label for="settings-vibration">VIBRATION</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="settings-vibration">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="tts-voice-buttons">
+            <div class="tts-voice-button" data-button="1" data-key="tts-voice-male1">M1</div>
+            <div class="tts-voice-button" data-button="2" data-key="tts-voice-male2">M2</div>
+            <div class="tts-voice-button" data-button="3" data-key="tts-voice-female1">F1</div>
+            <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
+        </div>
+    </div>
     <div class="warning-box" id="warning-box">
         <h2 id="warning-title" class="warning-title">NSFW</h2>
         <img src="../../images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
@@ -114,7 +147,11 @@
             </div>
         </div>
     </div>
+    <script src="header.js"></script>
     <script>
+        //Header & Settings
+        selectedColor = '#66CCFF';
+        selectButton(selectedButton);
         document.addEventListener('DOMContentLoaded', function () {
             document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
             document.documentElement.style.setProperty('--secondarypagecolour', '#FFECA7');

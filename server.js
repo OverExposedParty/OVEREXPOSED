@@ -26,18 +26,13 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'homepage.html'));
 });
 
+app.get('/what-is-overexposed', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'what-is-overexposed.html'));
+});
+
+
 app.get('/truth-or-dare-settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'truth-or-dare', 'truth-or-dare-settings-page.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-app.get('/overexposure', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-app.get('/overexposure/final-year-stress', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
@@ -80,6 +75,17 @@ app.get('/most-likely-to-settings', (req, res) => {
 
 app.get('/most-likely-to', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'most-likely-to', 'most-likely-to-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/overexposure', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+app.get('/overexposure/final-year-stress', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });

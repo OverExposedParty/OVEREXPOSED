@@ -4,8 +4,6 @@
     --tag2colour: #FC7E93;
     --tag3colour: #AA88F0; 
 
-    --backgroundcolour: #202020;
-
     --bordersize: 5px;
 }
 .title-container,.container,.filter-container{
@@ -42,7 +40,7 @@
     color: #6A9EF6;
     font-size: 200%;
     flex: 1; /* Allow the title to grow to fill available space */
-    transform: translateX(2.5%); /* Adjust positioning to center */
+    transform: translateX(1.25%); /* Adjust positioning to center */
 
 }
 
@@ -55,6 +53,9 @@
     border-radius: 50px;
     padding: 0.5vh 1vw;
     font-family: LemonMilk;
+    display: flex;
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
     z-index:100;
     font-size: 70%;
 }

@@ -1,5 +1,5 @@
 :root {
-    --backgroundcolour: #202020;
+    --backgroundcolour: #131313;
 }
 @font-face {
     src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
@@ -78,7 +78,7 @@ body {
     background-size: 384px 414px;
     background-position: top left;
     background-repeat: repeat;
-    background-color: #0f0f0f;
+    background-color: var(--backgroundcolour);
 }
 .overlay {
     position: fixed;
@@ -115,7 +115,8 @@ body {
     text-align: center;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
-    padding: 5.5vh 0;
+    padding-top:10vh;
+    padding-bottom:5vh;
     margin: 0; /* Add this line */
 }
 .extra-menu-button{
@@ -146,17 +147,18 @@ body {
     width: 42vh;
     height: 35vh;
     padding: 20px;
-    background-color: #202020;
-    border: 1px solid #202020;
+    background-color: var(--backgroundcolour);
+    border: 6px solid var(--primarypagecolour);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     display: none;
     z-index: 1001;
     text-align: center;
     font-family: LemonMilk;
-    border-radius: 25px;
+    border-radius: 40px;
 
-    max-width: 60vw;
-    max-height: 60vw;
+    max-width: 90vw;
+    max-height: auto;
+
 }
 .settings-box.active {
     display: block;
@@ -247,7 +249,7 @@ input:checked+.slider:before {
     border: 8px solid grey;
     border-radius: 50%;
     cursor: pointer;
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     transition: border-color 0.2s ease;
 
     display: flex;
@@ -258,25 +260,63 @@ input:checked+.slider:before {
 
     color: grey;
 }
+.social-media-container {
+    display: flex; /* Use flexbox for layout */
+    position: absolute; /* Position it absolutely within the relative container */
+    outline: none;
+    border: 0;
+    bottom: 0; /* Position at the bottom of the container */
+    width: 100%; /* Ensure it spans the full width */
+    height: 100px; /* Set a height for the container (adjust as necessary) */
+    justify-content: left;
 
+}
 
+.social-media-image-container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    width: 25%;
+}
+
+.social-media-image {
+    height: 7.5vh; /* Image height set to 90% of the container */
+    object-fit: contain; /* Maintains aspect ratio while fitting */
+    width: auto; /* Allow width to adjust based on height */
+    z-index:907;
+}
 .tts-voice-button.selected {
     border-color: var(--primarypagecolour);
     color: var(--primarypagecolour);
 }
 @media (orientation: portrait) {
+    .social-media-container {
+        display: flex; /* Use flexbox for layout */
+    }
     .extra-menu-container{
         width:75vw;
+        height:100%;
     }
     .extra-menu-title{
-        font-size:200%;
+        font-size:6vw;
     }
     .extra-menu-button{
-        font-size:150%;
-        height:10%;
+        font-size:4vw;
+        height:17.5%;
     }
     .extra-menu-button:hover{
-        font-size: 120%;
+        font-size: 4.5vw;
+    }
+    .social-media-image-container {
+        width: 30%;
+    }
+    .social-media-image {
+        height: auto; /* Image height set to 90% of the container */
+        width: 15vw; /* Allow width to adjust based on height */
+    }
+    .tts-voice-button {
+        height:5vw;
+        width:5vw;
     }
 }
 
@@ -284,8 +324,8 @@ input:checked+.slider:before {
 @media only screen and (max-width: 600px) {
 
     .tts-voice-button {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         font-size: 8px;
     }
 
@@ -297,6 +337,6 @@ input:checked+.slider:before {
 
     .settings-box h2,
     .settings-box #settings-title {
-        font-size: 20PX;
+        font-size: 200%;
     }
 }
