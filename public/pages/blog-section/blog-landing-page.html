@@ -140,17 +140,16 @@
         </div>
 
         <div class="container" id="blog-container">
-            <!-- Blog posts will be injected here -->
+            
         </div>
     </div>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
     <script>
-        //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         selectButton(selectedButton);
         //Landing Page Scripts
-        let currentlyOpenPostIndex = null; // Track the index of the currently open post
+        let currentlyOpenPostIndex = null; 
         document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
         document.documentElement.style.setProperty('--tag2colour', '#F57C69');
         document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
@@ -161,23 +160,18 @@
 
         const filterButton = document.querySelector('.filter-button');
         const filterContainer = document.querySelector('.filter-container');
-        const sortSelect = document.querySelector('.dropdown-menu select'); // Reference to the dropdown menu
-        const searchInput = document.getElementById('search-bar'); // Assuming you have a search input field
+        const sortSelect = document.querySelector('.dropdown-menu select');
+        const searchInput = document.getElementById('search-bar');
 
         filterButton.addEventListener('click', () => {
-            // Check if the filterContainer is currently visible
             const isVisible = filterContainer.style.display === 'flex';
-
-            // Set the display style based on its current state
             filterContainer.style.display = isVisible ? 'none' : 'flex';
-
-            // Toggle the 'hidden' class on the filter button
             filterButton.classList.toggle('hidden', isVisible);
         });
 
 
         sortSelect.addEventListener('change', () => {
-            fetchBlogData(); // Fetch and sort data when the sort option changes
+            fetchBlogData();
         });
 
         async function fetchBlogData() {
@@ -191,33 +185,33 @@
         }
 
         function sortAndDisplayBlogs(blogs) {
-            const sortOrder = sortSelect.value; // Get the current sort order
+            const sortOrder = sortSelect.value;
             const sortedBlogs = blogs.sort((a, b) => {
                 const dateA = convertDateToTimestamp(a.date);
                 const dateB = convertDateToTimestamp(b.date);
-                return sortOrder === 'option1' ? dateB - dateA : dateA - dateB; // Newest first or oldest first
+                return sortOrder === 'option1' ? dateB - dateA : dateA - dateB;
             });
             displayBlogs(sortedBlogs);
         }
 
         function convertDateToTimestamp(dateString) {
             const [day, month, year] = dateString.split('/').map(Number);
-            return new Date(year, month - 1, day).getTime(); // Convert to timestamp
+            return new Date(year, month - 1, day).getTime();
         }
 
         function displayBlogs(blogs) {
             const blogContainer = document.getElementById('blog-container');
-            blogContainer.innerHTML = ''; // Clear the current content
+            blogContainer.innerHTML = '';
 
             blogs.forEach((blog, index) => createBlogPost(blog, index));
-            filterBlogPosts(); // Filter after displaying the blogs
+            filterBlogPosts();
 
-            openFirstBlogPostWithDelay(); // Open the first blog post with a delay
+            openFirstBlogPostWithDelay();
         }
         function openFirstBlogPostWithDelay() {
             setTimeout(() => {
-                openBlogPost(0); // Open the first blog post (index 0)
-            }, 110);
+                openBlogPost(0);
+            }, 220);
         }
 
         function getTextColorForTag(tag) {
@@ -238,25 +232,22 @@
             const tagColor = getTextColorForTag(blog.tag);
             console.log(tagColor);
 
-            // Create the blog post container
             const postDiv = document.createElement('div');
             postDiv.classList.add('blog-post-container');
             postDiv.id = `post-${index}`;
-            postDiv.dataset.tag = blog.tag; // Store the tag in a data attribute
-            postDiv.dataset.searchTags = blog['search-tags'].toLowerCase(); // Store search-tags for filtering
+            postDiv.dataset.tag = blog.tag;
+            postDiv.dataset.searchTags = blog['search-tags'].toLowerCase();
 
-            // Create the button with the blog title
             const button = document.createElement('button');
             button.classList.add('blog-post-button');
             button.textContent = blog.title;
 
-            // Create the blog post content (hidden initially)
             const blogContentDiv = document.createElement('div');
             blogContentDiv.classList.add('blog-post-content');
-            blogContentDiv.style.display = 'none'; // Hidden initially
-            blogContentDiv.style.maxHeight = '0'; // Set initial max height for animation
-            blogContentDiv.style.overflow = 'hidden'; // Hide overflow
-            blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease'; // Add transition styles
+            blogContentDiv.style.display = 'none';
+            blogContentDiv.style.maxHeight = '0';
+            blogContentDiv.style.overflow = 'hidden';
+            blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
 
             button.style.borderColor = tagColor;
             button.style.color = tagColor;
@@ -277,48 +268,39 @@
             contentText.textContent = lines;
             contentText.style.color = getTextColorForTag(blog.tag);
 
-            // Create the extra details container
             const extraDetailsContainer = document.createElement('div');
             extraDetailsContainer.classList.add('extra-details-container');
 
-            // Create the author element
             const authorElement = document.createElement('span');
             authorElement.classList.add('author');
             authorElement.textContent = `Author: ${blog.author}`;
             authorElement.style.color = tagColor;
 
-            // Create the date element
             const dateElement = document.createElement('span');
             dateElement.classList.add('date');
             dateElement.textContent = `Date: ${blog.date}`;
             dateElement.style.color = tagColor;
 
-            // Append author and date to the extra details container
             extraDetailsContainer.appendChild(authorElement);
             extraDetailsContainer.appendChild(dateElement);
 
-            // Create the "Read More" hyperlink
             const readMoreLink = document.createElement('a');
             readMoreLink.href = window.location.href + blog['file-name'];
             readMoreLink.textContent = 'Read More';
             readMoreLink.classList.add('read-more-link');
             readMoreLink.style.color = tagColor;
 
-            // Append elements to the blog content div
             blogContentDiv.appendChild(img);
             blogContentDiv.appendChild(header);
             blogContentDiv.appendChild(contentText);
             blogContentDiv.appendChild(extraDetailsContainer);
-            blogContentDiv.appendChild(readMoreLink); // Append the Read More link
+            blogContentDiv.appendChild(readMoreLink);
 
-            // Append button and blog content div to the post container
             postDiv.appendChild(button);
             postDiv.appendChild(blogContentDiv);
 
-            // Append the blog post container to the main container
             blogContainer.appendChild(postDiv);
 
-            // Add click event to toggle between the button and blog content
             button.addEventListener('click', () => openBlogPost(index));
         }
 
@@ -332,8 +314,7 @@
             const button = postDiv.querySelector('.blog-post-button');
             const blogContentDiv = postDiv.querySelector('.blog-post-content');
 
-            // Get the color of the button
-            const buttonColor = button.style.borderColor || primaryPageColour; // Fallback to primary color if not set
+            const buttonColor = button.style.borderColor || primaryPageColour;
 
             button.style.display = 'none';
             blogContentDiv.style.display = 'block';
@@ -371,7 +352,6 @@
                 const postTag = post.dataset.tag;
                 const postSearchTags = post.dataset.searchTags;
 
-                // Show post if it matches selected tags AND the search string
                 if ((selectedTags.includes(postTag) || selectedTags.includes('all')) &&
                     postSearchTags.includes(searchString)) {
                     post.style.display = 'block';
@@ -391,37 +371,31 @@
                     checkbox.checked = isChecked;
                 }
             });
-            filterBlogPosts(); // Update blog posts display
+            filterBlogPosts();
         });
 
         tagCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
-                // If any of the individual checkboxes are unchecked, uncheck the tag-all checkbox
                 if (!checkbox.checked) {
                     tagAllCheckbox.checked = false;
                 } else {
-                    // If all individual checkboxes are checked, check the tag-all checkbox
                     const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
                     tagAllCheckbox.checked = allChecked;
                 }
 
-                // Check if all checkboxes are checked and update tagAllCheckbox accordingly
                 const allCheckedExceptTagAll = Array.from(tagCheckboxes).every(cb => cb.checked || cb === tagAllCheckbox);
                 tagAllCheckbox.checked = allCheckedExceptTagAll;
 
-                filterBlogPosts(); // Update blog posts display
+                filterBlogPosts();
             });
         });
 
-        // Event listener for the search bar
         searchInput.addEventListener('input', filterBlogPosts);
 
-        // Initial fetch of blog data
         fetchBlogData();
 
         const mediaQuery = window.matchMedia('(max-width: 768px) and (orientation: landscape)');
 
-        // Function to handle the change in media query
         function handleMediaChange(e) {
             const container = document.querySelector('.container');
             const header = document.querySelector('.header');
@@ -429,13 +403,11 @@
             const filterContainer = document.querySelector('.filter-container');
 
             if (e.matches) {
-                // If the condition is true (max-width: 768px and landscape orientation)
                 if (container) container.style.display = 'none';
                 if (header) header.style.display = 'none';
                 if (titleContainer) titleContainer.style.display = 'none';
                 if (filterContainer) filterContainer.style.display = 'none';
             } else {
-                // If the condition is false, reset the display styles
                 if (container) container.style.display = 'block ';
                 if (header) header.style.display = 'flex';
                 if (titleContainer) titleContainer.style.display = 'flex';
@@ -443,10 +415,8 @@
             }
         }
 
-        // Check the media query on page load
         handleMediaChange(mediaQuery);
 
-        // Listen for changes to the media query
         mediaQuery.addEventListener('change', handleMediaChange);
 
         function moveSearchBarBasedOnOrientation() {
@@ -455,28 +425,23 @@
             const titleContainer = document.querySelector('.title-container');
 
             if (window.matchMedia("(orientation: portrait)").matches) {
-                // Move search bar into the filter container
                 if (!filterContainer.contains(searchBar)) {
                     filterContainer.appendChild(searchBar);
                 }
             } else {
-                // Move search bar back to the title container
                 if (!titleContainer.contains(searchBar)) {
                     titleContainer.appendChild(searchBar);
                 }
             }
         }
 
-        // Listen for orientation changes
         window.addEventListener('resize', moveSearchBarBasedOnOrientation);
 
-        // Initial call on page load
         document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
 
-        // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'INSIGHTS';
-        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.color = selectedColor;
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';

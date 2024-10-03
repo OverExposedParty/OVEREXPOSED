@@ -10,22 +10,22 @@
     min-width: 480px;
 }
 .parent-container {
-    display: flex;                  /* Enable flexbox */
-    flex-direction: column;        /* Stack children vertically */
-    align-items: center;           /* Center children horizontally */
-    justify-content: center;        /* Center children vertically (if needed) */
-    width: 100%;                   /* Ensure it takes the full width */
-    margin: 0 auto;                /* Center the parent container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
 
 }
 .title-container {
     position: relative;
     width: 40vw;
-    height: auto; /* Set a fixed height for vertical centering */
+    height: auto;
     margin-top: 7.5vh;
-    display: flex; /* Enable flexbox */
-    align-items: center; /* Center content vertically */
-    justify-content: space-between; /* Space elements evenly */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .container
 {
@@ -34,19 +34,19 @@
     height:auto;
 }
 .title-text {
-    margin: 0; /* Remove margin */
-    text-align: center; /* Center text */
+    margin: 0;
+    text-align: center;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
     font-size: 200%;
-    flex: 1; /* Allow the title to grow to fill available space */
-    transform: translateX(1.25%); /* Adjust positioning to center */
+    flex: 1;
+    transform: translateX(1.25%);
 
 }
 
 .search-bar {
     border-radius: 4px;
-    width: 15%; /* Set width of the search bar */
+    width: 15%;
     border: var(--bordersize) solid var(--primarypagecolour);
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
@@ -54,8 +54,8 @@
     padding: 0.5vh 1vw;
     font-family: LemonMilk;
     display: flex;
-    justify-content: center; /* Center text horizontally */
-    align-items: center; /* Center text vertically */
+    justify-content: center;
+    align-items: center;
     z-index:100;
     font-size: 70%;
 }
@@ -72,8 +72,8 @@
     width: 20%;
     z-index: 100;
     display: flex;
-    justify-content: center; /* Center text horizontally */
-    align-items: center; /* Center text vertically */
+    justify-content: center;
+    align-items: center;
     font-size: 70%;
 }
 .filter-button.hidden {
@@ -84,7 +84,7 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 16%; /* Set width of the dropdown menu */
+    width: 16%;
     border: 0px solid var(--primarypagecolour);
     background-color: transparent;
     color: var(--primarypagecolour);
@@ -92,71 +92,69 @@
     padding: 0 1vw;
     font-family: LemonMilk;
     margin: 0;
-    position: relative; /* Ensure it positions correctly in the flow */
+    position: relative;
 }
 
-/* Optional: Style for the dropdown options */
 .dropdown-menu select {
-    width: 80%; /* Make the select fill the dropdown */
-    background: transparent; /* Match background color */
-    color: inherit; /* Inherit text color */
-    border: none; /* Remove default border */
-    font-family: inherit; /* Inherit font family */
-    padding: 0; /* Remove padding for better fit */
-    outline: none; /* Remove outline */
+    width: 80%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+    outline: none;
     background-color: var(--backgroundcolour);
 }
 
 .filter-container {
     position: relative;
     width: 40vw;
-    height: auto; /* Set a fixed height for vertical centering */
+    height: auto;
     padding: 1vh 0;
     margin: 2vh 0;
-    display: flex; /* Enable flexbox */
-    align-items: center; /* Center content vertically */
-    justify-content: space-between; /* Space elements evenly */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: var(--backgroundcolour);
     border: #202020 solid var(--primarypagecolour);
     border-radius: 50px;
 }
 
 .tag-container label {
-    display: flex; /* Use flexbox for layout */
-    justify-content: flex-start; /* Align items to the start */
-    align-items: center; /* Center items vertically */
-    margin-bottom: 5px; /* Space between labels */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
     font-family: LemonMilk;
     font-size: large;
 
 }
 .tag-checkbox {
-    appearance: none; /* Remove default checkbox styling */
-    width: 20px; /* Adjust the size of the checkbox */
+    appearance: none;
+    width: 20px;
     height: 20px;
-    border: var(--bordersize) solid var(--backgroundcolour); /* Set the border width and color */
-    border-radius: 8px; /* Optional: make it rounded */
-    outline: none; /* Remove any outline */
+    border: var(--bordersize) solid var(--backgroundcolour);
+    border-radius: 8px;
+    outline: none;
     cursor: pointer;
     position: relative;
 }
 .extra-details-container {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0; /* Add some padding */
-    color: #555; /* Set a lighter color for details */
+    padding: 10px 0;
+    color: #555;
     font-size:100%;
     font-family: Helvetica;
 }
 
 .author,.date {
-    margin-left: 0px; /* Optional margin */
+    margin-left: 0px;
     color: var(--tag1colour);
     font-size: 80%; 
     font-family: Helvetica;
 }
 
-/* Individual tag colors */
 .tag-checkbox#tag1 {
     border-color: var(--tag1colour);
 }
@@ -170,18 +168,16 @@
     border-color: var(--primarypagecolour);
 }
 
-/* Change the background and border color when checked */
 .tag-checkbox:checked {
-    background-color: var(--backgroundcolour); /* Example: background color change */
+    background-color: var(--backgroundcolour);
 }
 
-/* Optional: add a checkmark or symbol when checked */
 .tag-checkbox:checked::before {
     font-size: 80%;
     position: absolute;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -55%); /* Adjust positioning to center */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
 }
 #tag1.tag-checkbox:checked {
     background-color: var(--tag1colour);
@@ -212,38 +208,37 @@
     color: var(--primarypagecolour);
 }
 .tag-container input[type="checkbox"] {
-    accent-color: var(--tag1colour); /* Set checkbox color to match the label color */
+    accent-color: var(--tag1colour);
 }
 .tag-container input[type="checkbox"]#tag2 {
-    accent-color: var(--tag2colour); /* Set checkbox color to match the label color */
+    accent-color: var(--tag2colour);
 }
 .tag-container input[type="checkbox"]#tag3 {
-    accent-color: var(--tag3colour); /* Set checkbox color to match the label color */
+    accent-color: var(--tag3colour);
 }
 .tag-container input[type="checkbox"]#tag-all {
     accent-color: var(--primarypagecolour);
 }
 .tag-container .tag-checkbox {
-    margin-left: 10px; /* Space between label and checkbox */
+    margin-left: 10px;
 }
 
-/* This will ensure that all checkboxes are in a single row */
 .tag-container {
-    display: flex; /* Use flexbox for the container */
-    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
-    gap: 10px; /* Space between checkboxes */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     padding-right: 2.5%;
 }
 
 .blog-post-container {
     height: auto;
     width: 100%;
-    margin: 2vh auto; /* Horizontally center the container */
+    margin: 2vh auto;
     display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    flex-direction: column; /* Stack button and image vertically */
-    clear: both; /* Ensure no overlapping */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    clear: both;
 }
 .blog-post-button
 {
@@ -259,15 +254,15 @@
 {
     width:100%;
     height:auto;
-    object-fit: contain; /* Maintain aspect ratio */
+    object-fit: contain;
 }
 h2.blog-post-image-header
 {
     width:100%;
     height:auto;
-    margin: 1vh auto; /* Horizontally center the container */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+    margin: 1vh auto;
+    justify-content: center;
+    align-items: center;
     text-align: left;
     font-family: Helvetica;
     color: var(--tag1colour);
@@ -277,9 +272,9 @@ h3.blog-post-image-text
 {
     width:100%;
     height:auto;
-    margin: 0 auto; /* Horizontally center the container */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
     text-align: left;
     font-family: Helvetica;
     color: var(--tag1colour);
@@ -288,22 +283,22 @@ h3.blog-post-image-text
 .blog-post-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.2s ease, padding 0.2s ease;
+    transition: max-height 0.15s ease, padding 0.15s ease;
     padding: 0 10px;
     opacity: 0;
 }
 
 .blog-post-content.open {
-    max-height: 500px; /* Adjust according to the expected content height */
+    max-height: 500px;
     padding: 10px 10px;
     opacity: 1;
 }
 .read-more-link {
-    display: block; /* Make the link act like a block element */
-    text-align: center; /* Center the text horizontally */
+    display: block;
+    text-align: center;
     justify-content: center;
-    margin: 0px auto; /* Add some margin and center the block horizontally */
-    color: inherit; /* Keep the color that was dynamically set */
+    margin: 0px auto;
+    color: inherit;
     font-family: LemonMilk;
     font-size: 80%;
 }
@@ -318,10 +313,10 @@ h3.blog-post-image-text
 
     .title-text {
         font-size:220%;
-        transform: translateX(0%); /* Adjust positioning to center */
+        transform: translateX(0%);
     }
     .search-bar {
-        width: 60%; /* Set width of the search bar */
+        width: 60%;
         padding: 8px;
         border: 1vw solid var(--primarypagecolour);
         background-color: #202020;
@@ -331,8 +326,8 @@ h3.blog-post-image-text
         font-family: LemonMilk;
         z-index:100;
         font-size: 40%;
-        margin: 0 auto; /* Center the search bar horizontally */
-        transform: translateX(0%); /* Adjust positioning to center */
+        margin: 0 auto;
+        transform: translateX(0%);
     }
     .filter-button{
         border: 1vw solid var(--primarypagecolour);
@@ -350,9 +345,9 @@ h3.blog-post-image-text
 
     }
     .tag-container{
-        gap: auto; /* Space between checkboxes */
+        gap: auto;
         padding-right: 0%;
-        margin: 0 auto; /* Center the search bar horizontally */
+        margin: 0 auto;
 
     }
     .tag-checkbox {

@@ -235,7 +235,7 @@ button.disabled {
     }
 
     .packs-container {
-        height: 47.5%;
+        height: 50%;
         overflow-y: auto;
     }
     .settings-container {
@@ -275,7 +275,7 @@ button.disabled {
 
     .packs-header,
     .settings-header {
-        font-size: 200%;
+        font-size: 6vw;
     }
 
     .button-container {

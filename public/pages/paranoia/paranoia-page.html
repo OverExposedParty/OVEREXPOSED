@@ -218,10 +218,8 @@
                     hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
                     behindClosedDoors = behindClosedDoorsData['paranoia-behind-close-doors'] || [];
 
-                    // Combine all questions
                     allQuestions = [...friendlyFears, ...shadyShenanigans, ...subtleShots, ...hiddenAgendas, ...behindClosedDoors];
 
-                    // Shuffle the questions initially
                     shuffleQuestions();
 
                 } catch (error) {
@@ -234,7 +232,7 @@
                     const j = Math.floor(Math.random() * (i + 1));
                     [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
                 }
-                currentQuestionIndex = 0; // Reset index after shuffling
+                currentQuestionIndex = 0;
             }
 
             function enableTTSButton() {
@@ -263,7 +261,7 @@
 
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
-                    navigator.vibrate(200); // Vibrate for 200 milliseconds
+                    navigator.vibrate(200);
                 }
             }
 
@@ -273,21 +271,21 @@
 
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
 
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
 
-                console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`);
 
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
-                        return 'UK English Male'; // Example name for ResponsiveVoice
+                        return 'UK English Male';
                     case 'tts-voice-male2':
-                        return 'US English Male'; // Example name for ResponsiveVoice
+                        return 'US English Male';
                     case 'tts-voice-female1':
-                        return 'UK English Female'; // Example name for ResponsiveVoice
+                        return 'UK English Female';
                     case 'tts-voice-female2':
-                        return 'US English Female'; // Example name for ResponsiveVoice
+                        return 'US English Female';
                     default:
                         return 'UK English Male';
                 }
@@ -297,11 +295,10 @@
                 const textContainerText = document.querySelector('.text-container').textContent;
                 const selectedVoiceName = getSelectedVoice();
 
-                // Use ResponsiveVoice to speak the text
                 if (selectedVoiceName) {
                     responsiveVoice.speak(textContainerText, selectedVoiceName);
                 } else {
-                    responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
+                    responsiveVoice.speak(textContainerText, "US English Female");
                 }
 
                 disableTTSButton();
@@ -320,7 +317,7 @@
 
             function getNextQuestion() {
                 if (currentQuestionIndex >= allQuestions.length) {
-                    shuffleQuestions(); // Shuffle again if we've reached the end
+                    shuffleQuestions();
                 }
                 stopSpeech();
                 enableTTSButton();
@@ -333,7 +330,7 @@
                             hiddenAgendas.includes(selectedQuestion) ? 'Hidden Agendas' :
                                 'Behind Closed Doors';
 
-                currentQuestionIndex++; // Move to the next question
+                currentQuestionIndex++;
 
                 return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
             }
@@ -346,16 +343,14 @@
                     enableTTSButton();
                     hasBeenClicked = true;
                 }
-                vibrateOnClick(); // Ensure vibration occurs on question button click
+                vibrateOnClick();
             });
-
-            // Load questions on page load
             await loadJSONFiles();
         });
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'PARANOIA';
-        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.color = selectedColor;
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';

@@ -9,39 +9,27 @@
     width: 100%;
     height: auto;
     object-fit: contain;
-    /* Maintain aspect ratio */
 }
 body {
     position: relative;
 }
 .parent-container {
     display: flex;
-    /* Enable flexbox */
     flex-direction: column;
-    /* Stack children vertically */
     align-items: center;
-    /* Center children horizontally */
     justify-content: center;
-    /* Center children vertically (if needed) */
     width: 100%;
-    /* Ensure it takes the full width */
     margin: 0 auto;
-    /* Center the parent container */
-
 }
 
 .title-container {
     position: relative;
     height: auto;
-    /* Set a fixed height for vertical centering */
     margin-top: 7.5vh;
     margin-bottom: 2.5vh;
     display: flex;
-    /* Enable flexbox */
     align-items: center;
-    /* Center content vertically */
     justify-content: space-between;
-    /* Space elements evenly */
     background-color: #202020;
     border: var(--bordersize) solid #202020;
     border-radius: 50px;
@@ -50,14 +38,11 @@ body {
 
 .title-text {
     margin: 0;
-    /* Remove margin */
     text-align: center;
-    /* Center text */
     font-family: LemonMilk;
     color: var(--primarypagecolour);
     font-size: 115%;
     flex: 1;
-    /* Allow the title to grow to fill available space */
     padding: 1vh 0;
 
 }
@@ -81,11 +66,8 @@ body {
     width: 100%;
     height: auto;
     margin: 1vh auto;
-    /* Horizontally center the container */
     justify-content: center;
-    /* Center content horizontally */
     align-items: center;
-    /* Center content vertically */
     text-align: left;
     font-family: Helvetica;
     color: var(--primarypagecolour);
@@ -95,11 +77,8 @@ body {
     width: 100%;
     height: auto;
     margin: 1vh auto;
-    /* Horizontally center the container */
     justify-content: center;
-    /* Center content horizontally */
     align-items: center;
-    /* Center content vertically */
     text-align: left;
     font-family: Helvetica;
     color: var(--primarypagecolour);
@@ -111,11 +90,8 @@ body {
     width: 100%;
     height: auto;
     margin: 0 auto;
-    /* Horizontally center the container */
     justify-content: left;
-    /* Center content horizontally */
     align-items: left;
-    /* Center content vertically */
     text-align: left;
     font-family: Helvetica;
     color: var(--primarypagecolour);
@@ -135,9 +111,7 @@ body {
     z-index: 100;
     display: flex;
     justify-content: center;
-    /* Center text horizontally */
     align-items: center;
-    /* Center text vertically */
     font-size: 70%;
     margin-top: 1vh;
     margin-bottom: 2.5vh;
@@ -162,11 +136,8 @@ body {
     width: 100%;
     height: auto;
     margin: 0 auto;
-    /* Horizontally center the container */
     justify-content: center;
-    /* Center content horizontally */
     align-items: center;
-    /* Center content vertically */
     text-align: center;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
@@ -177,26 +148,23 @@ body {
     width: 100%;
     height: auto;
     margin: 0.1vh auto;
-    /* Horizontally center the container */
     justify-content: left;
-    /* Center content horizontally */
     align-items: left;
-    /* Center content vertically */
     text-align: left;
     font-family: Helvetica;
     color: var(--primarypagecolour);
     font-size: 120%;
 }
 .indented {
-    padding-left: 20px; /* Adjust this value for more or less indentation */
+    padding-left: 20px;
 }
 .tts-button {
     cursor: pointer;
     width: 7.5%;
     height: 7.5%;
     position: fixed;
-    right: 20px; /* Adjust as needed */
-    bottom: 20px; /* Adjust as needed */
+    right: 20px;
+    bottom: 20px;
     z-index: 900;
 }
 .back-button-container {
@@ -244,7 +212,7 @@ body {
         cursor: pointer;
         width: 15vw;
         height: 15vw;
-        right: 5%; /* Adjust as needed */
-        bottom: 2.5%; /* Adjust as needed */
+        right: 5%;
+        bottom: 2.5%;
     }
 }

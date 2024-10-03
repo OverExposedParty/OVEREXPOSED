@@ -11,7 +11,7 @@
 }
 .container {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -25,7 +25,7 @@
     color: #66CCFF;
     width: calc(50vh * (136.21/217.93));
     min-width: 300px;
-    margin-bottom: 2vh; /* Add some spacing between About Us and Card Container */
+    margin-bottom: 2vh;
 }
 
 .about-us-text {
@@ -71,8 +71,8 @@
     width: 7.5%;
     height: 7.5%;
     position: fixed;
-    right: 20px; /* Adjust as needed */
-    bottom: 20px; /* Adjust as needed */
+    right: 20px;
+    bottom: 20px;
     z-index: 900;
 }
 .front,
@@ -107,7 +107,7 @@
         cursor: pointer;
         width: 15vw;
         height: 15vw;
-        right: 5%; /* Adjust as needed */
-        bottom: 2.5%; /* Adjust as needed */
+        right: 5%;
+        bottom: 2.5%;
     }
 }

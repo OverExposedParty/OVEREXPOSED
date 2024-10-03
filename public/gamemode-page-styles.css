@@ -195,8 +195,8 @@ body {
     width: 7.5%;
     height: 7.5%;
     position: fixed;
-    right: 20px; /* Adjust as needed */
-    bottom: 20px; /* Adjust as needed */
+    right: 20px;
+    bottom: 20px;
     z-index: 900;
 }
 .tts-button.disabled {
@@ -272,8 +272,8 @@ body {
         cursor: pointer;
         width: 15vw;
         height: 15vw;
-        right: 5%; /* Adjust as needed */
-        bottom: 2.5%; /* Adjust as needed */
+        right: 5%;
+        bottom: 2.5%;
     }
 }
 
@@ -337,7 +337,7 @@ body {
         cursor: pointer;
         width: 15vw;
         height: 15vw;
-        right: 5%; /* Adjust as needed */
-        bottom: 2.5%; /* Adjust as needed */
+        right: 5%;
+        bottom: 2.5%;
     }
 }

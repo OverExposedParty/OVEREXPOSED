@@ -180,7 +180,6 @@
             let verbalDiarrhea = [];
             let rawAndUnfiltered = [];
 
-            // Array to hold all questions and track the current index
             let allQuestions = [];
             let currentQuestionIndex = 0;
 
@@ -219,10 +218,8 @@
                     verbalDiarrhea = verbalDiarrheaData['never-have-i-ever-verbal-diarrhea'] || [];
                     rawAndUnfiltered = rawAndUnfilteredData['never-have-i-ever-raw-and-unfiltered'] || [];
 
-                    // Combine all questions
                     allQuestions = [...simpleAdmissions, ...risingSuspicions, ...diggingDeeper, ...verbalDiarrhea, ...rawAndUnfiltered];
 
-                    // Shuffle the questions initially
                     shuffleQuestions();
 
                 } catch (error) {
@@ -235,7 +232,7 @@
                     const j = Math.floor(Math.random() * (i + 1));
                     [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
                 }
-                currentQuestionIndex = 0; // Reset index after shuffling
+                currentQuestionIndex = 0;
             }
 
             function enableTTSButton() {
@@ -264,7 +261,7 @@
 
             function vibrateOnClick() {
                 if (vibrationEnabled && 'vibrate' in navigator) {
-                    navigator.vibrate(200); // Vibrate for 200 milliseconds
+                    navigator.vibrate(200);
                 }
             }
 
@@ -274,21 +271,21 @@
 
             function getSelectedVoice() {
                 const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
 
                 const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
 
-                console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`);
 
                 switch (selectedVoiceKey) {
                     case 'tts-voice-male1':
-                        return 'UK English Male'; // Example name for ResponsiveVoice
+                        return 'UK English Male';
                     case 'tts-voice-male2':
-                        return 'US English Male'; // Example name for ResponsiveVoice
+                        return 'US English Male';
                     case 'tts-voice-female1':
-                        return 'UK English Female'; // Example name for ResponsiveVoice
+                        return 'UK English Female';
                     case 'tts-voice-female2':
-                        return 'US English Female'; // Example name for ResponsiveVoice
+                        return 'US English Female';
                     default:
                         return 'UK English Male';
                 }
@@ -297,11 +294,10 @@
                 const textContainerText = document.querySelector('.text-container').textContent;
                 const selectedVoiceName = getSelectedVoice();
 
-                // Use ResponsiveVoice to speak the text
                 if (selectedVoiceName) {
                     responsiveVoice.speak(textContainerText, selectedVoiceName);
                 } else {
-                    responsiveVoice.speak(textContainerText, "US English Female"); // Default voice
+                    responsiveVoice.speak(textContainerText, "US English Female");
                 }
 
                 disableTTSButton();
@@ -317,10 +313,9 @@
                 }
                 document.querySelector('.card-type-text').textContent = cardType;
 
-                // Enable TTS button after the first click
                 if (!hasBeenClicked) {
                     hasBeenClicked = true;
-                    enableTTSButton(); // Enable TTS button on the first question
+                    enableTTSButton();
                 }
 
                 vibrateOnClick();
@@ -328,7 +323,7 @@
 
             function getNextQuestion() {
                 if (currentQuestionIndex >= allQuestions.length) {
-                    shuffleQuestions(); // Shuffle again if we've reached the end
+                    shuffleQuestions();
                 }
 
                 stopSpeech();
@@ -342,12 +337,11 @@
                             verbalDiarrhea.includes(selectedQuestion) ? 'Verbal Diarrhea' :
                                 'Raw and Unfiltered';
 
-                currentQuestionIndex++; // Move to the next question
+                currentQuestionIndex++;
 
                 return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
             }
 
-            // Question button event listener
             document.querySelector('.question-button').addEventListener('click', () => {
                 const selectedQuestionObj = getNextQuestion();
                 updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
@@ -356,16 +350,14 @@
                     enableTTSButton();
                     hasBeenClicked = true;
                 }
-                vibrateOnClick(); // Ensure vibration occurs on question button click
+                vibrateOnClick();
             });
 
-            // Load questions on page load
             await loadJSONFiles();
         });
-        // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'NEVER HAVE I EVER';
-        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.color = selectedColor;
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';

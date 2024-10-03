@@ -47,7 +47,9 @@
             .container,
             .header,
             .title-container,
-            .tts-button {
+            .tts-button,
+            .back-button-container
+             {
                 display: none;
             }
         }
@@ -71,7 +73,7 @@
     </header>
     <div class="landscape-message">
         Please rotate your phone to continue
-        <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+        <img src="/images/icons/blogs/yellow/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
@@ -341,19 +343,16 @@
         document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
         document.documentElement.style.setProperty('--secondarypagecolour', '#B98A42');
 
-        // Get the elements
         const standaloneButton = document.getElementById('contents-table-button-standalone');
         const containerButton = document.getElementById('contents-table-button-container');
         const contentTableContainer = document.getElementById('contents-table-container');
         const ttsButton = document.getElementById('tts-button');
 
-        // Function to show the contents-table container and hide the standalone button
         standaloneButton.addEventListener('click', function () {
             standaloneButton.style.display = 'none';
             contentTableContainer.style.display = 'block';
         });
 
-        // Function to hide the contents-table container and show the standalone button
         containerButton.addEventListener('click', function () {
             contentTableContainer.style.display = 'none';
             standaloneButton.style.display = 'flex';
@@ -363,21 +362,21 @@
 
         function getSelectedVoice() {
             const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
+            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
 
             const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
 
-            console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+            console.log(`Selected Voice Key: ${selectedVoiceKey}`);
 
             switch (selectedVoiceKey) {
                 case 'tts-voice-male1':
-                    return 'UK English Male'; // Example name for ResponsiveVoice
+                    return 'UK English Male';
                 case 'tts-voice-male2':
-                    return 'US English Male'; // Example name for ResponsiveVoice
+                    return 'US English Male';
                 case 'tts-voice-female1':
-                    return 'UK English Female'; // Example name for ResponsiveVoice
+                    return 'UK English Female';
                 case 'tts-voice-female2':
-                    return 'US English Female'; // Example name for ResponsiveVoice
+                    return 'US English Female';
                 default:
                     return 'UK English Male';
             }
@@ -385,20 +384,16 @@
 
         function readText(text) {
             if (isSpeaking) {
-                // If already speaking, stop the current speech
                 responsiveVoice.cancel();
                 isSpeaking = false;
                 ttsButton.src = "/images/icons/grey/tts-icon.svg";
             } else {
-                // If not speaking, start reading the text
-                const selectedVoice = getSelectedVoice(); // Get the selected voice
+                const selectedVoice = getSelectedVoice();
                 responsiveVoice.speak(text, selectedVoice);
 
-                // Set flag to true when speaking starts
                 isSpeaking = true;
                 ttsButton.src = "/images/icons/blogs/yellow/tts-icon.svg";
 
-                // Reset flag when speaking finishes
                 responsiveVoice.onend = () => {
                     isSpeaking = false;
                     ttsButton.src = "/images/icons/grey/tts-icon.svg";
@@ -406,15 +401,12 @@
             }
         }
 
-        // Function to handle TTS button click
         ttsButton.addEventListener('click', () => {
             const selectedText = window.getSelection().toString().trim();
 
             if (selectedText) {
-                // If highlighted text exists, read the highlighted text
                 readText(selectedText);
             } else {
-                // If no text is highlighted, read the entire content in the contents-container
                 const contentText = document.getElementById('contents-container').innerText;
                 readText(contentText);
             }
@@ -441,7 +433,7 @@
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'INSIGHTS: FINAL YEAR STRESS';
-        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.color = selectedColor;
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
