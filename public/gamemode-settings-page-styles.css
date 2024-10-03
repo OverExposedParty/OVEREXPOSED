@@ -17,33 +17,9 @@
     font-family: LemonMilk;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
-
-body {
-    font-family: LemonMilk, sans-serif;
-    overflow-y: hidden;
-}
-
-.header {
-    background-color: var(--primarypagecolour);
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-}
-
 .home-button-container {
     position: absolute;
-    top: calc(50px + 5vh);
+    top: calc(var(--headerheight) + 5vh);
     left: 20px;
 }
 
@@ -67,11 +43,11 @@ body {
 
 .main-container {
     display: flex;
-    height: calc(100vh - 50px);
+    height: calc(100vh - var(--headerheight));
     /* Full viewport height minus header height */
     overflow-y: hidden;
     /* Ensure no overflow in container */
-    margin-top: 50px;
+    margin-top: var(--headerheight);
     /* Same height as header to avoid overlap */
 }
 
@@ -262,7 +238,10 @@ button.disabled {
         height: 47.5%;
         overflow-y: auto;
     }
-
+    .settings-container {
+        height: auto;
+        overflow-y: none;
+    }
     .button-container button {
         font-size: 2.7vw;
         padding: 1.75vw 1.75vw;
@@ -314,7 +293,7 @@ button.disabled {
 
     .home-button-container {
         position: absolute;
-        top: calc(50px + 2.5vh);
+        top: calc(var(--headerheight) + 2.5vh);
         left: 2.5vw;
     }
 
@@ -332,5 +311,10 @@ button.disabled {
         width: 10vw;
         font-family: LemonMilk;
         position: relative;
+    }
+    .element:hover {
+        background-color: initial;
+        color: initial;
+        border-color: initial;
     }
 }

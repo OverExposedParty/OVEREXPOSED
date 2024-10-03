@@ -59,6 +59,7 @@
 </head>
 
 <body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
         <div class="logo-container">
             <a href="/">
@@ -71,7 +72,7 @@
         <div class="extra-menu-icon">
             <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
-    </header>     
+    </header>
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="../../images/icons/orange/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -79,8 +80,18 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+        <div class="social-media-container">
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="tik-tok-icon"
+                        src="./images/icons/orange/instagram-icon.svg" alt="Instagram"></a>
+            </div>
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="instagram-icon"
+                        src="./images/icons/orange/tik-tok-icon.svg" alt="TikTok"></a>
+            </div>
+        </div>
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="settings-box" id="settings-box">
@@ -151,12 +162,14 @@
     </div>
     <script src="header.js"></script>
     <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
+
         //Header & Settings
-        selectedColor = '#66CCFF';
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         selectButton(selectedButton);
         document.addEventListener('DOMContentLoaded', function () {
-            document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
-            document.documentElement.style.setProperty('--secondarypagecolour', '#FFB89C');
+
 
             const overlay = document.getElementById('overlay');
             const warningBox = document.getElementById('warning-box');
@@ -240,6 +253,13 @@
             });
         });
 
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'NEVER HAVE I EVER SETTINGS';
+        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
     </script>
 </body>
 

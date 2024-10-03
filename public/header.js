@@ -10,6 +10,9 @@ const rotateMessage = document.querySelector('#landscape-message');
 const rotateIcon = document.querySelector('#rotate-icon');
 
 const extraMenuContainer = document.querySelector('.extra-menu-container');
+const tiktokIcon = document.getElementById('tik-tok-icon');
+const instagramIcon = document.getElementById('instagram-icon');
+
 const settingsBoxLabels = document.querySelectorAll('#settings-box label');
 const settingsBoxTitle = document.querySelector('#settings-title');
 const settingsIcon = document.querySelector('.settings-icon');
@@ -128,4 +131,38 @@ function selectButton(button) {
     button.style.color = selectedColor;
     selectedButton = button;
 }
+
+//Transition page
+window.addEventListener('load', function () {
+    // Create the container div
+    const container = document.createElement('div');
+    const staticFullPageContainer = document.getElementById("full-page-container-static");
+    container.className = 'full-page-container';
+
+
+
+    // Append the heading to the container
+    container.appendChild(heading);
+
+    // Append the container to the body
+    document.body.appendChild(container);
+
+    // Step 1: Move to the center
+    setTimeout(function () {
+        container.classList.add('center');
+    }, 50); // Give it a small delay to start the movement
+
+    // Step 2: After 2 seconds in the center, move it left
+    setTimeout(function () {
+        container.classList.remove('center'); // Remove center class first to reset
+        staticFullPageContainer.remove(); // Remove center class first to reset
+        container.classList.add('left');
+    }, 300); // Stay in the center for 2 seconds
+
+    // Step 3: Remove from the DOM after the transition finishes
+    setTimeout(function () {
+        container.remove();
+        heading.remove();
+    }, 1000); // Remove after it's completely off-screen
+});
 

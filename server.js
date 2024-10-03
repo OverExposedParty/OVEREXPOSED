@@ -79,12 +79,12 @@ app.get('/most-likely-to', (req, res) => {
   res.sendFile(filePath);
 });
 
-app.get('/overexposure', (req, res) => {
+app.get('/insights', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
-app.get('/overexposure/final-year-stress', (req, res) => {
+app.get('/insights/final-year-stress', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);

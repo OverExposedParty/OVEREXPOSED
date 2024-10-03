@@ -113,6 +113,7 @@
 </head>
 
 <body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
         <div class="logo-container">
             <a href="/">
@@ -134,8 +135,18 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+        <div class="social-media-container">
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="tik-tok-icon"
+                        src="./images/icons/blue/instagram-icon.svg" alt="Instagram"></a>
+            </div>
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="instagram-icon"
+                        src="./images/icons/blue/tik-tok-icon.svg" alt="TikTok"></a>
+            </div>
+        </div>
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="settings-box" id="settings-box">
@@ -191,13 +202,15 @@
     <img src="../../images/icons/blue/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
     <script src="header.js"></script>
     <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
         //Header & Settings
-        selectedColor = '#66CCFF';
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         selectButton(selectedButton);
         //Truth Or Dare Page
         document.addEventListener('DOMContentLoaded', async () => {
-            document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
-            document.documentElement.style.setProperty('--secondarypagecolour', '#55aaff');
+
             const questions = {
                 truth: [],
                 dare: []
@@ -396,6 +409,14 @@
                 disableTTSButton();
             });
         });
+
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'TRUTH OR DARE';
+        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
     </script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>

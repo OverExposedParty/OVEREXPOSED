@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OverExposed</title>
-    <link rel="stylesheet" href="homepage-styles.css">
     <link rel="stylesheet" href="what-is-overexposed-style.css">
-    <link rel="stylesheet" href="rotate-device.css">
     <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="rotate-device.css">
+
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/blue/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="45x48" href="./images/favicons/blue/favicon-48x48.png">
@@ -33,24 +33,6 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./images/favicons/blue/favicon-512x512.png">
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .header {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            padding: 0 0px;
-        }
-
         #swipe-indicator {
             position: absolute;
             bottom: 12vh;
@@ -92,16 +74,43 @@
 </head>
 
 <body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+    <div class="landscape-message" id="landscape-message">
+        Please rotate your phone to continue
+        <img src="./images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
     <header class="header" id="header">
         <div class="logo-container">
             <a href="/">
                 <img src="./images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
+        <div class="settings-icon">
+            <img src="./images/icons/settings.svg" alt="Settings">
+        </div>
+        <div class="extra-menu-icon">
+            <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
+        </div>
     </header>
     <div class="landscape-message" id="landscape-message">
         Please rotate your phone to continue
         <img src="./images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
+    <div class="extra-menu-container">
+        <h1 class="extra-menu-title">Menu</h1>
+        <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
+        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
+        <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+        <div class="social-media-container">
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="tik-tok-icon"
+                        src="./images/icons/blue/instagram-icon.svg" alt="Instagram"></a>
+            </div>
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="instagram-icon"
+                        src="./images/icons/blue/tik-tok-icon.svg" alt="TikTok"></a>
+            </div>
+        </div>
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="settings-box" id="settings-box">
@@ -131,28 +140,28 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
-
-    <div class="about-us-container">
-        <h1 class="about-us-text">INFO</h1>
-    </div>
-
-    <div class="card-container">
-        <div class="card">
-            <img class="front" src="./images/what-is-overexposed/front/what-is-overexposed.svg" alt="Overexposed Front">
-            <img class="back" src="./images/what-is-overexposed/back/what-is-overexposed.svg" alt="Overexposed Back">
+    <img src="../../../images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
+    <div class="container">
+        <div class="about-us-container">
+            <h1 class="about-us-text">INFO</h1>
         </div>
-    </div>
 
-    <div class="side-button-container">
-        <img src="./images/icons/blue/instagram-icon.svg" alt="Thumbs Up Icon" class="side-button">
-        <img src="./images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
-        <img src="./images/icons/blue/tiktok-icon.svg" alt="Thumbs Down Icon" class="side-button">
+        <div class="card-container">
+            <div class="card">
+                <img class="front" src="./images/what-is-overexposed/front/what-is-overexposed.svg"
+                    alt="Overexposed Front">
+                <img class="back" src="./images/what-is-overexposed/back/what-is-overexposed.svg"
+                    alt="Overexposed Back">
+            </div>
+        </div>
     </div>
     <div id="swipe-indicator"></div>
     <script src="header.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
     <script>
         //Header & Settings
-        selectedColor = '#66CCFF';
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        let isSpeaking = false;
         selectButton(selectedButton);
         const cardTexts = [
             { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
@@ -184,6 +193,9 @@
         const card = document.querySelector('.card');
         const frontImg = document.querySelector('.card .front');
         const backImg = document.querySelector('.card .back');
+        const ttsButton = document.getElementById('tts-button');
+
+
         let startX = 0;
         let isDragging = false;
         let currentRotationY = 0;
@@ -250,21 +262,62 @@
             isDragging = false;
         }
 
-        function playTTS() {
-            let textToSpeak = '';
+        function getSelectedVoice() {
+            const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`)); // Log all key values
 
-            if (isFrontVisible()) {
-                textToSpeak = cardTexts[imageIndex].front;
-            } else {
-                textToSpeak = cardTexts[imageIndex].back;
-            }
+            const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
 
-            if (textToSpeak) {
-                const speech = window.speechSynthesis;
-                const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                speech.speak(utterance);
+            console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
+
+            switch (selectedVoiceKey) {
+                case 'tts-voice-male1':
+                    return 'UK English Male'; // Example name for ResponsiveVoice
+                case 'tts-voice-male2':
+                    return 'US English Male'; // Example name for ResponsiveVoice
+                case 'tts-voice-female1':
+                    return 'UK English Female'; // Example name for ResponsiveVoice
+                case 'tts-voice-female2':
+                    return 'US English Female'; // Example name for ResponsiveVoice
+                default:
+                    return 'UK English Male';
             }
         }
+        function estimateSpeechDuration(text) {
+            const words = text.split(" ").length;
+            const averageWordDuration = 0.6; // average duration in seconds per word
+            return words * averageWordDuration * 1000; // return duration in milliseconds
+        }
+
+        function readText(text) {
+            if (isSpeaking) {
+                // If already speaking, stop the current speech
+                responsiveVoice.cancel();
+                isSpeaking = false;
+                ttsButton.src = "./images/icons/grey/tts-icon.svg";
+            } else {
+                // If not speaking, start reading the text
+                const selectedVoice = getSelectedVoice(); // Get the selected voice
+                responsiveVoice.speak(text, selectedVoice);
+
+                // Set flag to true when speaking starts
+                isSpeaking = true;
+                ttsButton.src = "./images/icons/blue/tts-icon.svg";
+
+                // Reset flag when speaking finishes
+                const duration = estimateSpeechDuration(text);
+                setTimeout(() => {
+                    isSpeaking = false;
+                    ttsButton.src = "./images/icons/grey/tts-icon.svg";
+                }, duration);
+            }
+        }
+
+        // Function to handle TTS button click
+        ttsButton.addEventListener('click', () => {
+            const currentText = isFrontVisible() ? cardTexts[imageIndex].front : cardTexts[imageIndex].back;
+            readText(currentText);
+        });
 
         document.addEventListener('mousedown', (e) => {
             if (e.button === 0 || e.button === 1) {
@@ -315,10 +368,6 @@
                     e.preventDefault();
                 });
             });
-
-            const ttsButton = document.getElementById('tts-button');
-            ttsButton.addEventListener('click', playTTS);
-
             function startSwipeIndicator() {
                 if (!hasSwipedLeft) {
                     const swipeIndicator = document.getElementById('swipe-indicator');
@@ -334,6 +383,14 @@
             startSwipeIndicator();
             setInterval(startSwipeIndicator, 2500);
         });
+
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'WHAT IS OVEREXPOSED?';
+        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
     </script>
 </body>
 

@@ -7,7 +7,6 @@
     <title>PARTY GAMES</title>
     <link rel="stylesheet" href="homepage-styles.css">
     <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="settings-style.css">
     <link rel="stylesheet" href="rotate-device.css">
 
     <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/blue/favicon-32x32.png">
@@ -32,6 +31,7 @@
 </head>
 
 <body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
         <div class="logo-container">
             <a href="/">
@@ -52,14 +52,16 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
-                <a href="/"><img class="social-media-image" src="./images/icons/blue/social-media/instagram-icon.svg" alt="Instagram"></a>
+                <a href="/"><img class="social-media-image" id="tik-tok-icon"
+                        src="./images/icons/blue/instagram-icon.svg" alt="Instagram"></a>
             </div>
             <div class="social-media-image-container">
-                <a href="/"><img class="social-media-image" src="./images/icons/blue/social-media/tik-tok-icon.svg" alt="TikTok"></a>
+                <a href="/"><img class="social-media-image" id="instagram-icon"
+                        src="./images/icons/blue/tik-tok-icon.svg" alt="TikTok"></a>
             </div>
         </div>
     </div>
@@ -185,6 +187,8 @@
                 const colorFolder = colorFolders[index % colorFolders.length];
                 favicon.href = `./images/favicons/${colorFolder}/favicon-${size}.png`;
                 rotateIcon.src = `./images/icons/${colorFolder}/rotate-phone-icon.svg`;
+                instagramIcon.src = `./images/icons/${colorFolder}/instagram-icon.svg`;
+                tiktokIcon.src = `./images/icons/${colorFolder}/tik-tok-icon.svg`;
             });
         }
 
@@ -205,6 +209,9 @@
             document.documentElement.style.setProperty('--primarypagecolour', selectedColor);
         }
 
+        // Create the h1 element and set its text content
+        const heading = document.createElement('img');
+        heading.src = './images/logo-square.svg';
     </script>
 </body>
 

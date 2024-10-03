@@ -55,9 +55,10 @@
 </head>
 
 <body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
         <div class="logo-container">
-            <a href="/overexposure">
+            <a href="/">
                 <img src="../../../images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
@@ -75,8 +76,18 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/overexposure"><button class="extra-menu-button">OVEREXPOSURE</button></a>
+        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
+        <div class="social-media-container">
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="tik-tok-icon"
+                        src="../../../images/icons/blogs/yellow/instagram-icon.svg" alt="Instagram"></a>
+            </div>
+            <div class="social-media-image-container">
+                <a href="/"><img class="social-media-image" id="instagram-icon"
+                        src="../../../images/icons/blogs/yellow/tik-tok-icon.svg" alt="TikTok"></a>
+            </div>
+        </div>
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="settings-box" id="settings-box">
@@ -106,6 +117,9 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
+    <div class="back-button-container">
+        <a href="/insights"><button class="back-button">BACK</button></a>
+    </div>
     <img src="../../../images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
     <div class="parent-container">
         <div class="title-container">
@@ -113,36 +127,37 @@
         </div>
         <div class="container">
             <img class="blog-post-image" src="../../../images/blog-thumbnails/thumbnail-final-year-stress.png">
-            <button class="content-table-button" id="content-table-button-standalone">content-table</button>
-            <div class="content-table-container" id="content-table-container" style="display: none;">
-                <button class="content-table-button" id="content-table-button-container">content-table</button>
-                <h2>content-table Page</h2>
+            <button class="contents-table-button" id="contents-table-button-standalone">Table Of Contents</button>
+            <div class="contents-table-container" id="contents-table-container" style="display: none;">
+                <button class="contents-table-button" id="contents-table-button-container">Table Of Contents</button>
+                <h2>Table Of Contents</h2>
                 <br>
-                <p>1. Introduction</p>
+                <p id="contents-page-1" class="contents-item">1. Introduction</p>
                 <br>
-                <p>2. Why Is Final Year So Stressful?</p>
+                <p id="contents-page-2" class="contents-item">2. Why Is Final Year So Stressful?</p>
                 <br>
-                <p>3. The Importance of Taking Breaks</p>
+                <p id="contents-page-3" class="contents-item">3. The Importance of Taking Breaks</p>
                 <br>
-                <p>4. How to Balance Your Uni Work and Social Life</p>
+                <p id="contents-page-4" class="contents-item">4. How to Balance Your Uni Work and Social Life</p>
                 <div class="indented">
-                    <p>a. Make Study Breaks Social</p>
-                    <p>b. Plan Pre-Drinks That Help You Unwind</p>
-                    <p>c. Stay Organised to Make Time for Fun</p>
+                    <p id="contents-page-4a" class="contents-item">a. Make Study Breaks Social</p>
+                    <p id="contents-page-4b" class="contents-item">b. Plan Pre-Drinks That Help You Unwind</p>
+                    <p id="contents-page-4c" class="contents-item">c. Stay Organised to Make Time for Fun</p>
                 </div>
                 <br>
-                <p>5. The Role of Digital Card Games in Reducing Stress</p>
+                <p id="contents-page-5" class="contents-item">5. The Role of Digital Card Games in Reducing Stress</p>
                 <div class="indented">
-                    <p>a. How Overexposed Helps You Stay Connected</p>
+                    <p id="contents-page-5a" class="contents-item">a. How Overexposed Helps You Stay Connected</p>
                 </div>
                 <br>
-                <p>6. Don’t Forget to Have Fun</p>
+                <p id="contents-page-6" class="contents-item">6. Don’t Forget to Have Fun</p>
                 <br>
-                <p>7. Final Thoughts</p>
+                <p id="contents-page-7" class="contents-item">7. Final Thoughts</p>
 
             </div>
-            <div class="content-container" id="content-container">
-                <p> Final year at university is one of the most intense periods in a student's life. It’s a time filled
+            <div class="contents-container" id="contents-container">
+                <p id="paragraph-1"> Final year at university is one of the most intense periods in a student's life.
+                    It’s a time filled
                     with deadlines, dissertation pressure, and constant thoughts about the future. The looming "what's
                     next?" question feels like it's constantly hanging over your head. As the end of your academic
                     journey approaches, you're expected to keep your grades up, apply for jobs, and somehow still make
@@ -156,7 +171,7 @@
 
                 <br>
 
-                <h2>Why Is Final Year So Stressful?</h2>
+                <h2 id="paragraph-2">Why Is Final Year So Stressful?</h2>
                 <p>Your final year is packed with important tasks, all of which seem like they could define your future.
                     Deadlines are tighter, expectations are higher, and there's a constant need to prove yourself – to
                     your lecturers, potential employers, and even your peers. On top of that, there’s the pressure to
@@ -170,7 +185,7 @@
 
                 <br>
 
-                <h2>The Importance of Taking Breaks</h2>
+                <h2 id="paragraph-3">The Importance of Taking Breaks</h2>
                 <p>Before we get into balancing uni work and social life, let's address something crucial: taking breaks
                     is not wasting time. In fact, breaks are essential to avoiding burnout, staying focused, and
                     managing stress. It’s easy to fall into the trap of working non-stop, thinking you’ll be more
@@ -184,12 +199,12 @@
 
                 <br>
 
-                <h2>How to Balance Your Uni Work and Social Life</h2>
+                <h2 id="paragraph-4">How to Balance Your Uni Work and Social Life</h2>
                 <p>So, how exactly do you keep up with your final year responsibilities without completely losing your
                     social life? It’s all about finding balance and being intentional with your time. Here are some
                     practical tips to help you manage your final year stress while still enjoying yourself.</p>
                 <br>
-                <h3>1. Make Study Breaks Social</h3>
+                <h3 id="paragraph-4a">1. Make Study Breaks Social</h3>
                 <p>One of the best ways to relieve stress is by connecting with your friends. However, with busy
                     schedules, it can be hard to find time to hang out without falling behind on work. Instead of
                     sacrificing your social life or your studies, why not combine the two?</p>
@@ -211,7 +226,7 @@
                 <p>The point is spending your breaks in a way that’s not draining. Set a timer, play a few rounds,
                     then get back to work. That way, you're not only taking care of your mental health, but you're
                     also boosting your productivity.</p>
-                <h3>2. Plan Pre-Drinks That Help You Unwind</h3>
+                <h3 id="paragraph-4b">2. Plan Pre-Drinks That Help You Unwind</h3>
                 <p>After a long week of juggling coursework and job applications, you're going to want to blow off some
                     steam. But instead of mindlessly scrolling through TikTok or drowning in pre-drink playlists, why
                     not add a bit more fun to the mix? </p>
@@ -234,7 +249,7 @@
                     yourself a chance to relax in a social setting before hitting the town. This helps keep your social
                     life intact without feeling like you're wasting time.</p>
                 <br>
-                <h3>3. Stay Organised to Make Time for Fun</h3>
+                <h3 id="paragraph-4c">3. Stay Organised to Make Time for Fun</h3>
                 <p>One of the biggest stressors in final year is feeling like there’s too much to do and not enough
                     time. The key to managing this is getting organised. By creating a solid plan for your time, you'll
                     be able to stay on top of your workload without sacrificing your social life.</p>
@@ -267,7 +282,7 @@
                     require hours of commitment. Instead, they’re designed for short bursts of fun, which makes them
                     perfect for busy final year students who only have 10 or 15 minutes to spare.</p>
                 <br>
-                <h2>How Overexposed Helps You Stay Connected</h2>
+                <h2 id="paragraph-5">How Overexposed Helps You Stay Connected</h2>
                 <p>One of the hardest parts about final year is losing touch with your friends because of busy
                     schedules. Digital games can be a great way to keep in contact, even when you're all swimming in uni
                     work.</p>
@@ -289,7 +304,7 @@
                 <p>Making time for social activities, even in a virtual setting, means you’ll feel less isolated and
                     more connected to your friends during one of the most stressful times of your life.</p>
                 <br>
-                <h2>Don’t Forget to Have Fun</h2>
+                <h2 id="paragraph-6">Don’t Forget to Have Fun</h2>
                 <p>It’s easy to get caught up in the idea that final year is all about work, but the truth is, you
                     should still be having fun. University is not just about getting a degree – it's also about the
                     experiences you have along the way.</p>
@@ -303,7 +318,7 @@
                     </p>
                 </div>
                 <br>
-                <h2>Final Thoughts</h2>
+                <h2 id="paragraph-7">Final Thoughts</h2>
                 <p>Balancing your final year of uni with job hunting and maintaining a social life is no easy task, but
                     it’s far from impossible. The key is to stay organised, make time for breaks, and keep your social
                     connections alive. </p>
@@ -319,24 +334,25 @@
     <script src="../../../header.js"></script>
     <script>
         //Header & Settings
-        selectedColor = '#F6C86D';
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         selectButton(selectedButton);
 
         document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#B98A42');
 
         // Get the elements
-        const standaloneButton = document.getElementById('content-table-button-standalone');
-        const containerButton = document.getElementById('content-table-button-container');
-        const contentTableContainer = document.getElementById('content-table-container');
+        const standaloneButton = document.getElementById('contents-table-button-standalone');
+        const containerButton = document.getElementById('contents-table-button-container');
+        const contentTableContainer = document.getElementById('contents-table-container');
         const ttsButton = document.getElementById('tts-button');
 
-        // Function to show the content-table container and hide the standalone button
+        // Function to show the contents-table container and hide the standalone button
         standaloneButton.addEventListener('click', function () {
             standaloneButton.style.display = 'none';
             contentTableContainer.style.display = 'block';
         });
 
-        // Function to hide the content-table container and show the standalone button
+        // Function to hide the contents-table container and show the standalone button
         containerButton.addEventListener('click', function () {
             contentTableContainer.style.display = 'none';
             standaloneButton.style.display = 'flex';
@@ -353,17 +369,17 @@
             console.log(`Selected Voice Key: ${selectedVoiceKey}`); // Log the selected voice key
 
             switch (selectedVoiceKey) {
-                    case 'tts-voice-male1':
-                        return 'UK English Male'; // Example name for ResponsiveVoice
-                    case 'tts-voice-male2':
-                        return 'US English Male'; // Example name for ResponsiveVoice
-                    case 'tts-voice-female1':
-                        return 'UK English Female'; // Example name for ResponsiveVoice
-                    case 'tts-voice-female2':
-                        return 'US English Female'; // Example name for ResponsiveVoice
-                    default:
-                        return 'UK English Male';
-                }
+                case 'tts-voice-male1':
+                    return 'UK English Male'; // Example name for ResponsiveVoice
+                case 'tts-voice-male2':
+                    return 'US English Male'; // Example name for ResponsiveVoice
+                case 'tts-voice-female1':
+                    return 'UK English Female'; // Example name for ResponsiveVoice
+                case 'tts-voice-female2':
+                    return 'US English Female'; // Example name for ResponsiveVoice
+                default:
+                    return 'UK English Male';
+            }
         }
 
         function readText(text) {
@@ -397,11 +413,39 @@
                 // If highlighted text exists, read the highlighted text
                 readText(selectedText);
             } else {
-                // If no text is highlighted, read the entire content in the content-container
-                const contentText = document.getElementById('content-container').innerText;
+                // If no text is highlighted, read the entire content in the contents-container
+                const contentText = document.getElementById('contents-container').innerText;
                 readText(contentText);
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+    const contentsItems = document.querySelectorAll('.contents-item');
+
+    contentsItems.forEach(item => {
+        item.addEventListener('click', function () {
+
+            const contentIndex = this.id.split('-')[2];
+            const paragraph = document.getElementById(`paragraph-${contentIndex}`);
+
+
+            if (paragraph) {
+                paragraph.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+});
+
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'INSIGHTS: FINAL YEAR STRESS';
+        heading.style.color = selectedColor; // Set the style of the heading
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
+
+
     </script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
