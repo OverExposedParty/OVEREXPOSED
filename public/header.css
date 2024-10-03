@@ -334,7 +334,7 @@ input:checked+.slider:before {
     }
     .social-media-image {
         height: auto; /* Image height set to 90% of the container */
-        width: 15vw; /* Allow width to adjust based on height */
+        width: 7.5vw; /* Allow width to adjust based on height */
     }
     .tts-voice-button {
         height:5vw;

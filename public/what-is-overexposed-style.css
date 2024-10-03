@@ -86,7 +86,6 @@
 .back {
     transform: rotateY(180deg);
 }
-
 @media (orientation: portrait) {
     .card-container {
         width: 60vw;

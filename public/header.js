@@ -1,8 +1,5 @@
-//Header & Settings
-
-
 let selectedButton;
-let selectedColor = '#66CCFF';
+let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
 
 const containerTitle = document.querySelector('#container-title');
 
@@ -22,6 +19,8 @@ const header = document.querySelector('#header');
 const settingsVibrationCheckbox = document.getElementById('settings-vibration');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
 const extraMenuIcon = document.querySelector('.extra-menu-icon');
+
+const socialMediaInstagram = 'https://www.instagram.com/oe.app/';
 
 if (!('vibrate' in navigator) || /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent)) {
     settingsVibrationCheckbox.disabled = true; // Disable the slider if Vibration API is not available or if on an Apple device
@@ -127,8 +126,8 @@ buttons.forEach(button => {
 
 function selectButton(button) {
     button.classList.add('selected');
-    button.style.borderColor = selectedColor;
-    button.style.color = selectedColor;
+    button.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    button.style.color = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
     selectedButton = button;
 }
 
