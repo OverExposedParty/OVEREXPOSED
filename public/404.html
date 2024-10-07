@@ -7,6 +7,7 @@
     <title>ERROR 404</title>
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="/subscriber-form-style.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="./images/favicons/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="./images/favicons/blue/favicon-32x32.png">
@@ -45,10 +46,25 @@
         <div class="extra-menu-icon">
             <img src="./images/icons/extra-menu-icon.svg" alt="Extra Menu">
         </div>
-    </header>     
-    
+    </header>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="./images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
+    <div class="subscriber-form-box">
+        <div class="subscriber-form-container">
+            <form id="emailForm">
+                <h2>SUBSCRIBE</h2>
+                <label for="email">ENTER YOUR EMAIL:</label><br>
+                <input class="input-field" type="email" id="email" name="email" required><br>
+                <button type="submit">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+    <script src="/subscriber-form.js"></script>
+    <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+    </script>
 </body>

@@ -23,8 +23,8 @@ const extraMenuIcon = document.querySelector('.extra-menu-icon');
 const socialMediaInstagram = 'https://www.instagram.com/oe.app/';
 
 if (!('vibrate' in navigator) || /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent)) {
-    settingsVibrationCheckbox.disabled = true; // Disable the slider if Vibration API is not available or if on an Apple device
-    settingsVibrationCheckbox.nextElementSibling.style.opacity = 0.5; // Optionally, dim the slider to indicate it's disabled
+    settingsVibrationCheckbox.disabled = true; 
+    settingsVibrationCheckbox.nextElementSibling.style.opacity = 0.5;
 } else {
     if (localStorage.getItem('settings-vibration') === 'true') {
         settingsVibrationCheckbox.checked = true;
@@ -133,35 +133,31 @@ function selectButton(button) {
 
 //Transition page
 window.addEventListener('load', function () {
-    // Create the container div
+    if (!localStorage.getItem('webpage-first-time')) {
+        localStorage.setItem('webpage-first-time', 'true');
+        toggleSettings();
+    }
     const container = document.createElement('div');
     const staticFullPageContainer = document.getElementById("full-page-container-static");
     container.className = 'full-page-container';
 
-
-
-    // Append the heading to the container
     container.appendChild(heading);
 
-    // Append the container to the body
     document.body.appendChild(container);
 
-    // Step 1: Move to the center
     setTimeout(function () {
         container.classList.add('center');
-    }, 50); // Give it a small delay to start the movement
+    }, 50); 
 
-    // Step 2: After 2 seconds in the center, move it left
     setTimeout(function () {
-        container.classList.remove('center'); // Remove center class first to reset
-        staticFullPageContainer.remove(); // Remove center class first to reset
+        container.classList.remove('center');
+        staticFullPageContainer.remove();
         container.classList.add('left');
-    }, 300); // Stay in the center for 2 seconds
+    }, 300);
 
-    // Step 3: Remove from the DOM after the transition finishes
     setTimeout(function () {
         container.remove();
         heading.remove();
-    }, 1000); // Remove after it's completely off-screen
+    }, 1000);
 });
 

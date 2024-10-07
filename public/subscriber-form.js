@@ -1,0 +1,23 @@
+document.getElementById('emailForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    var email = document.getElementById('email').value; // Get the email from the form
+
+    // Send the form data using fetch API (AJAX)
+    fetch('https://script.google.com/macros/s/AKfycbzSq2HzlVl2C--D1JK9JPitdDSd0vFzvaJRs2W_N_YfatJJML9oLh8QfrVQraWhTd-2/exec', {
+        method: 'POST',
+        body: new URLSearchParams({
+            'email': email
+        })
+    })
+        .then(response => response.text())
+        .then(data => {
+            // Handle the response data (optional)
+            alert('Thank you for subscribing!');
+            document.getElementById('email').value = ''; // Clear the input field
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error submitting your email.');
+        });
+});
