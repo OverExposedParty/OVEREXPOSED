@@ -1,5 +1,8 @@
 :root {
+    --insightprimarypagecolour: #6A9EF6;
+    --insightsecondarypagecolour: #507AC2;
     --primarypagecolour: #F6C86D;
+    --secondarypagecolour: #C29B50;
 }
 .container,.title-container {
     width: 40vw;
@@ -96,6 +99,12 @@ body {
     font-family: Helvetica;
     color: var(--primarypagecolour);
     font-size: 130%;
+}
+.contents-container p a{
+    color: var(--insightprimarypagecolour);
+}
+.contents-container p a:hover{
+    color: var(--insightsecondarypagecolour);
 }
 
 .contents-table-button {

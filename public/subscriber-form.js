@@ -1,10 +1,11 @@
+let subscriptionScript = 'https://script.google.com/macros/s/AKfycbzSq2HzlVl2C--D1JK9JPitdDSd0vFzvaJRs2W_N_YfatJJML9oLh8QfrVQraWhTd-2/exec';
 document.getElementById('emailForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent the default form submission
 
     var email = document.getElementById('email').value; // Get the email from the form
 
     // Send the form data using fetch API (AJAX)
-    fetch('https://script.google.com/macros/s/AKfycbzSq2HzlVl2C--D1JK9JPitdDSd0vFzvaJRs2W_N_YfatJJML9oLh8QfrVQraWhTd-2/exec', {
+    fetch(subscriptionScript, {
         method: 'POST',
         body: new URLSearchParams({
             'email': email
