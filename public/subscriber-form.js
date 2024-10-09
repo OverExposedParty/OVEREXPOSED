@@ -1,4 +1,4 @@
-let subscriptionScript = 'https://script.google.com/macros/s/AKfycbzSq2HzlVl2C--D1JK9JPitdDSd0vFzvaJRs2W_N_YfatJJML9oLh8QfrVQraWhTd-2/exec';
+let subscriptionScript = 'https://script.google.com/macros/s/AKfycbzafvfvjkCl9nNFQmW24-nBThwe_pW8fkfrKA_ycr2F-0V5IH-Rrmyeh_I8KegszJbm/exec'; //https://script.google.com/macros/s/AKfycbzSq2HzlVl2C--D1JK9JPitdDSd0vFzvaJRs2W_N_YfatJJML9oLh8QfrVQraWhTd-2/exec
 document.getElementById('emailForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent the default form submission
 
