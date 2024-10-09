@@ -19,11 +19,12 @@ const header = document.querySelector('#header');
 const settingsVibrationCheckbox = document.getElementById('settings-vibration');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
 const extraMenuIcon = document.querySelector('.extra-menu-icon');
+const subscriberFormBox = document.getElementById('subscriber-form-box');
 
 const socialMediaInstagram = 'https://www.instagram.com/oe.app/';
 
 if (!('vibrate' in navigator) || /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent)) {
-    settingsVibrationCheckbox.disabled = true; 
+    settingsVibrationCheckbox.disabled = true;
     settingsVibrationCheckbox.nextElementSibling.style.opacity = 0.5;
 } else {
     if (localStorage.getItem('settings-vibration') === 'true') {
@@ -52,9 +53,6 @@ function toggleSettings() {
         }
     } else {
         settingsBox.classList.remove('active');
-        if (!extraMenuContainer.classList.contains('active')) {
-            overlay.classList.remove('active');
-        }
     }
 }
 
@@ -63,6 +61,9 @@ function toggleOverlay() {
     if (!overlay.classList.contains('active')) {
         extraMenuContainer.classList.remove('active');
         settingsBox.classList.remove('active');
+        if (subscriberFormBox && subscriberFormBox.classList.contains('active')) {
+            subscriberFormBox.classList.remove('active');
+        }
     }
 }
 
@@ -73,6 +74,9 @@ function clickOutsideHandler(event) {
         !overlay.contains(event.target)) {
         settingsBox.style.display = 'none';
         overlay.classList.remove('active');
+        if (subscriberFormBox && subscriberFormBox.classList.contains('active')) {
+            subscriberFormBox.classList.remove('active');
+        }
     }
 }
 
@@ -147,7 +151,7 @@ window.addEventListener('load', function () {
 
     setTimeout(function () {
         container.classList.add('center');
-    }, 50); 
+    }, 50);
 
     setTimeout(function () {
         container.classList.remove('center');

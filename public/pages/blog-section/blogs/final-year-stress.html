@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/rotate-device.css">
     <link rel="stylesheet" href="/blog-page-style.css">
+    <link rel="stylesheet" href="/subscriber-form-style.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -123,6 +124,17 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
+    <div class="subscriber-form-box" id="subscriber-form-box">
+        <div class="subscriber-form-container">
+            <form id="emailForm">
+                <h2>SUBSCRIBE</h2>
+                <p>SIGN UP TO RECIEVE FREE FINAL YEAR STUDY & LIFE BALANCE PLANNER. HEAR ABOUT NEW UPCOMING FEATURES AND UPDATES BEFORE ANYONE ELSE</p>
+                <label for="email">ENTER YOUR EMAIL:</label><br>
+                <input class="input-field" type="email" id="email" name="email" required><br>
+                <button type="submit">SUBMIT</button>
+            </form>
+        </div>
+    </div>
     <div class="back-button-container">
         <a href="/insights"><button class="back-button">BACK</button></a>
     </div>
@@ -187,7 +199,8 @@
                     social time, and even self-care. However, burning out isn’t going to help you smash those final
                     assignments, nor is it going to land you your dream job. So, how do you balance it all? It starts
                     with prioritising, planning, and knowing when to take a break. For extra support, check out our free
-                    <b>Final Year Study & Life Balance Planner</b> packed with tools to help you stay organised, track
+                    <a href="#" id="planner-link">Final Year Study & Life Balance Planner</a> packed with tools to help
+                    you stay organised, track
                     goals,
                     and make time for self-care and socialising.
                 </p>
@@ -448,6 +461,19 @@
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
+
+        //Toggle Subscription Box
+        document.getElementById('planner-link').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default anchor behavior
+
+            // Get the subscriber-form-box and overlay elements
+            const subscriberFormBox = document.getElementById('subscriber-form-box');
+            const overlay = document.querySelector('#overlay');
+
+            // Toggle the active class for both elements
+            subscriberFormBox.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
 
 
     </script>
