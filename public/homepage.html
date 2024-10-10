@@ -4,7 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:description" content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
+    <meta property="og:description"
+        content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
+    <meta name="keywords"
+        content="OverExposed, Online Card Game, Truth or Dare, Never Have I Ever, Paranoia, Most likely to, Digital Card Game, Truth Or Dare questions, Paranoia questions, Most likely to questions, Never have I ever questions, Party games, Fun games, Social games, Interactive games, Free games, Drinking games">
+    <meta property="og:title" content="OVEREXPOSED - The Ultimate Party Game Experience">
+    <meta property="og:description"
+        content="Play party games such as Truth or Dare,Paranoia, Never Have I Ever and Most Likely To online with OverExposed. Fun and easy party games for everyone!">
+    <meta property="og:type" content="website">
     <title>PARTY GAMES</title>
     <link rel="stylesheet" href="homepage-styles.css">
     <link rel="stylesheet" href="header.css">
@@ -14,6 +21,10 @@
     <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/blue/favicon-120x120.png">
     <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
     <meta name="msapplication-TileColor" content="#202020">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
     <style>
         .landscape-message {
             color: #66CCFF;
@@ -34,16 +45,20 @@
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
+        <div class="icon-container extra-menu-icon">
+            <div class="extra-menu-icon">
+                <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+            </div>
+        </div>
         <div class="logo-container">
             <a href="/">
                 <img src="/images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
-        <div class="settings-icon">
-            <img src="/images/icons/settings.svg" alt="Settings">
-        </div>
-        <div class="extra-menu-icon">
-            <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+        <div class="icon-container settings-icon">
+            <div class="settings-icon">
+                <img src="/images/icons/settings.svg" alt="Settings">
+            </div>
         </div>
     </header>
     <div class="landscape-message" id="landscape-message">
@@ -210,7 +225,7 @@
             });
             document.documentElement.style.setProperty('--primarypagecolour', selectedColor);
         }
-        
+
         const heading = document.createElement('img');
         heading.src = '/images/logo-square.svg';
     </script>

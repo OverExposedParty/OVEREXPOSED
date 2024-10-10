@@ -19,7 +19,9 @@ const header = document.querySelector('#header');
 const settingsVibrationCheckbox = document.getElementById('settings-vibration');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
 const extraMenuIcon = document.querySelector('.extra-menu-icon');
+
 const subscriberFormBox = document.getElementById('subscriber-form-box');
+const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
 const socialMediaInstagram = 'https://www.instagram.com/oe.app/';
 
@@ -64,6 +66,9 @@ function toggleOverlay() {
         if (subscriberFormBox && subscriberFormBox.classList.contains('active')) {
             subscriberFormBox.classList.remove('active');
         }
+        if (subscriberFormBoxSuccess && subscriberFormBoxSuccess.classList.contains('active')) {
+            subscriberFormBoxSuccess.classList.remove('active');
+        }
     }
 }
 
@@ -74,8 +79,8 @@ function clickOutsideHandler(event) {
         !overlay.contains(event.target)) {
         settingsBox.style.display = 'none';
         overlay.classList.remove('active');
-        if (subscriberFormBox && subscriberFormBox.classList.contains('active')) {
-            subscriberFormBox.classList.remove('active');
+        if (subscriberFormBoxSuccess && subscriberFormBoxSuccess.classList.contains('active')) {
+            subscriberFormBoxSuccess.classList.remove('active');
         }
     }
 }

@@ -64,16 +64,20 @@
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
+        <div class="icon-container extra-menu-icon">
+            <div class="extra-menu-icon">
+                <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+            </div>
+        </div>
         <div class="logo-container">
             <a href="/">
                 <img src="/images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
-        <div class="settings-icon">
-            <img src="/images/icons/settings.svg" alt="Settings">
-        </div>
-        <div class="extra-menu-icon">
-            <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+        <div class="icon-container settings-icon">
+            <div class="settings-icon">
+                <img src="/images/icons/settings.svg" alt="Settings">
+            </div>
         </div>
     </header>
     <div class="landscape-message">
@@ -128,10 +132,21 @@
         <div class="subscriber-form-container">
             <form id="emailForm">
                 <h2>SUBSCRIBE</h2>
-                <p>SIGN UP TO RECIEVE FREE FINAL YEAR STUDY & LIFE BALANCE PLANNER. HEAR ABOUT NEW UPCOMING FEATURES AND UPDATES BEFORE ANYONE ELSE</p>
+                <p>SIGN UP TO RECIEVE FREE FINAL YEAR STUDY & LIFE BALANCE PLANNER. HEAR ABOUT NEW UPCOMING FEATURES AND
+                    UPDATES BEFORE ANYONE ELSE</p>
                 <label for="email">ENTER YOUR EMAIL:</label><br>
                 <input class="input-field" type="email" id="email" name="email" required><br>
                 <button type="submit">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+    <div class="subscriber-form-box" id="subscriber-form-box-success">
+        <div class="subscriber-form-container">
+            <form id="emailForm">
+                <h2>SUBSCRIBE</h2>
+                <p>YOUR FREE FINAL YEAR STUDY & LIFE BALANCE PLANNER HAS BEEN SENT TO YOUR EMAIL AND IS READY FOR DOWNLOAD. 
+                    <br> <br>If you don’t see it within a few minutes, please check
+                    your spam or junk mail folder just in case it ended up there.</p>
             </form>
         </div>
     </div>
@@ -359,6 +374,7 @@
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
+    <script src="/subscriber-form.js"></script>
     <script>
         //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
@@ -464,11 +480,7 @@
 
         //Toggle Subscription Box
         document.getElementById('planner-link').addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default anchor behavior
-
-            // Get the subscriber-form-box and overlay elements
-            const subscriberFormBox = document.getElementById('subscriber-form-box');
-            const overlay = document.querySelector('#overlay');
+            subscriptionScript = 'https://script.google.com/macros/s/AKfycbzafvfvjkCl9nNFQmW24-nBThwe_pW8fkfrKA_ycr2F-0V5IH-Rrmyeh_I8KegszJbm/exec';
 
             // Toggle the active class for both elements
             subscriberFormBox.classList.toggle('active');

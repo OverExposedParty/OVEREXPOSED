@@ -1,7 +1,7 @@
 :root {
     --backgroundcolour: #131313;
     --bordersize: 5px;
-    --headerheight:50px;
+    --headerheight:5vh;
 }
 /* Customize the scrollbar */
 ::-webkit-scrollbar {
@@ -34,57 +34,66 @@
     height: var(--headerheight);
     background-color: var(--primarypagecolour);
     color: #202020;
-    padding: 0 20px;
     display: flex;
     align-items: center;
     font-family: LemonMilk;
     position: fixed;
     transition: background-color 0.2s ease;
     z-index: 1000;
+    
 }
 .logo-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; /* Use flexbox layout */
+    height: var(--headerheight);
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center;
+    margin: auto;
 }
 
 .logo-container a {
     display: inline-block;
     line-height: 0;
 }
+.header .icon-container{
+    height: var(--headerheight);
+    width: calc(var(--headerheight)*1.5);
+    justify-content: center;
+    position: absolute; /* Use absolute positioning */
+}
+.header .icon-container.settings-icon{
+    right: 0; /* Align it to the far right of the screen */
 
+}
+.header .icon-container.extra-menu-icon{
+    left: 0; /* Align it to the far right of the screen */
+}
 
 .header .logo {
-    height: 30px;
+    height: calc(calc(var(--headerheight)/4)*3);
     width: auto;
     max-width: 50vw;
 }
 
 
-.settings-icon {
-    cursor: pointer;
-    position: relative;
-    margin-left: auto;
-    right: 40px;
-
-}
-
-.extra-menu-icon {
+.settings-icon,.extra-menu-icon {
     cursor: pointer;
     position: absolute;
-    left: 20px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .settings-icon img {
     height: auto;
-    width: 32px;
-
+    width: 50%;
 }
 
 .extra-menu-icon img {
     height: auto;
-    width: 32px;
+    width: 50%;
 }
 
 
@@ -340,6 +349,18 @@ input:checked+.slider:before {
         height:5vw;
         width:5vw;
     }
+    .header .icon-container{
+        width: calc(var(--headerheight));
+    }
+    .settings-icon img {
+        height: auto;
+        width: 60%;
+    }
+    
+    .extra-menu-icon img {
+        height: auto;
+        width: 60%;
+    }
 }
 
 
@@ -424,5 +445,7 @@ input:checked+.slider:before {
     }
     :root {
         --bordersize: 4px;
+        --headerheight:7vh;
     }
+    
 }

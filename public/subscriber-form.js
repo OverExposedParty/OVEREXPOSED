@@ -14,11 +14,15 @@ document.getElementById('emailForm').addEventListener('submit', function (e) {
         .then(response => response.text())
         .then(data => {
             // Handle the response data (optional)
-            alert('Thank you for subscribing!');
+            //alert('Thank you for subscribing!');
             document.getElementById('email').value = ''; // Clear the input field
+            subscriberFormBox.classList.remove('active');
+            subscriberFormBoxSuccess.classList.add('active');
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error submitting your email.');
+            subscriberFormBox.classList.remove('active');
+            subscriberFormBoxSuccess.classList.add('active');
+            //alert('There was an error submitting your email.');
         });
 });
