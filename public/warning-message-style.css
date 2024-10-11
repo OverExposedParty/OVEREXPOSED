@@ -1,3 +1,7 @@
+:root {
+    --bordersize: 5px;
+    --headerheight:5vh;
+}
 .warning-box {
     position: fixed;
     top: 50%;
@@ -31,21 +35,21 @@
 }
 
 .warning-title {
-    color: #FF3333;
+    color: var(--warningcolour);
     font-size: 300%;
     margin: 2.5% 0%;
 }
 
 .warning-text {
-    color: #FF3333;
+    color: var(--warningcolour);
     font-size: 100%;
     margin: 5% 0 7.5%;
 }
 
 .start-game-warning-button {
     background-color: #101010;
-    color: #FF3333;
-    border: 6px solid #FF3333;
+    color: var(--warningcolour);
+    border: 6px solid var(--warningcolour);
     padding: 10px 20px;
     border-radius: 50px;
     cursor: pointer;
@@ -55,14 +59,14 @@
 }
 
 .start-game-warning-button:hover {
-    background-color: #FF3333;
+    background-color: var(--warningcolour);
     color: #202020;
-    border-color: #FF3333;
+    border-color: var(--warningcolour);
 }
 
 @media (orientation: portrait) {
     .start-game-warning-button {
-        border: 1vw solid #FF3333;
+        border: 1vw solid var(--warningcolour);
     }
     .warning-image {
         width: 35%;

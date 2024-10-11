@@ -10,15 +10,24 @@ const extraMenuContainer = document.querySelector('.extra-menu-container');
 const tiktokIcon = document.getElementById('tik-tok-icon');
 const instagramIcon = document.getElementById('instagram-icon');
 
+
+const header = document.querySelector('#header');
+const settingsIcon = document.querySelector('.settings-icon');
+const helpIcon = document.querySelector('.help-icon');
+const extraMenuIcon = document.querySelector('.extra-menu-icon');
+
+
 const settingsBoxLabels = document.querySelectorAll('#settings-box label');
 const settingsBoxTitle = document.querySelector('#settings-title');
-const settingsIcon = document.querySelector('.settings-icon');
 const settingsBox = document.querySelector('#settings-box');
+
 const overlay = document.querySelector('#overlay');
-const header = document.querySelector('#header');
+
+
 const settingsVibrationCheckbox = document.getElementById('settings-vibration');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
-const extraMenuIcon = document.querySelector('.extra-menu-icon');
+
+const helpContainer = document.getElementById('help-container');
 
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
@@ -53,8 +62,71 @@ function toggleSettings() {
         if (extraMenuContainer.classList.contains('active')) {
             extraMenuContainer.classList.remove('active');
         }
-    } else {
+        if (helpContainer.classList.contains('active')) {
+            helpContainer.classList.remove('active');
+        }
+    }
+    else {
         settingsBox.classList.remove('active');
+        if ((!helpContainer.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
+            overlay.classList.remove('active');
+        }
+        if (helpContainer.classList.contains('active')) {
+            helpContainer.classList.remove('active')
+        }
+        if (extraMenuContainer.classList.contains('active')) {
+            extraMenuContainer.classList.remove('active')
+        }
+    }
+}
+function toggleHelp() {
+    if (helpIcon.style.display != 'none') {
+        if (!helpContainer.classList.contains('active')) {
+            helpContainer.classList.add('active');
+            overlay.classList.add('active');
+            if (extraMenuContainer.classList.contains('active')) {
+                extraMenuContainer.classList.remove('active');
+            }
+            if (settingsBox.classList.contains('active')) {
+                settingsBox.classList.remove('active');
+            }
+        }
+        else {
+            helpContainer.classList.remove('active');
+            if ((!settingsBox.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
+                overlay.classList.remove('active');
+            }
+            if (settingsBox.classList.contains('active')) {
+                settingsBox.classList.remove('active')
+            }
+            if (extraMenuContainer.classList.contains('active')) {
+                extraMenuContainer.classList.remove('active')
+            }
+        }
+    }
+}
+function toggleExtraMenu() {
+    if (!extraMenuContainer.classList.contains('active')) {
+        extraMenuContainer.classList.add('active');
+        overlay.classList.add('active');
+        if (helpContainer.classList.contains('active')) {
+            helpContainer.classList.remove('active');
+        }
+        if (settingsBox.classList.contains('active')) {
+            settingsBox.classList.remove('active');
+        }
+    }
+    else {
+        extraMenuContainer.classList.remove('active');
+        if ((!settingsBox.classList.contains('active') && !helpContainer.classList.contains('active'))) {
+            overlay.classList.remove('active');
+        }
+        if (settingsBox.classList.contains('active')) {
+            settingsBox.classList.remove('active')
+        }
+        if (helpContainer.classList.contains('active')) {
+            helpContainer.classList.remove('active')
+        }
     }
 }
 
@@ -68,6 +140,9 @@ function toggleOverlay() {
         }
         if (subscriberFormBoxSuccess && subscriberFormBoxSuccess.classList.contains('active')) {
             subscriberFormBoxSuccess.classList.remove('active');
+        }
+        if (helpContainer && helpContainer.classList.contains('active')) {
+            helpContainer.classList.remove('active');
         }
     }
 }
@@ -86,22 +161,11 @@ function clickOutsideHandler(event) {
 }
 
 settingsIcon.addEventListener('click', toggleSettings);
+helpIcon.addEventListener('click', toggleHelp);
 overlay.addEventListener('click', toggleOverlay);
 document.addEventListener('click', clickOutsideHandler);
 
-extraMenuIcon.addEventListener('click', function () {
-    if (extraMenuContainer.classList.contains('active')) {
-        extraMenuContainer.classList.remove('active');
-
-        if (!settingsBox.classList.contains('active')) {
-            overlay.classList.remove('active');
-        }
-    } else {
-        extraMenuContainer.classList.add('active');
-        overlay.classList.add('active');
-        settingsBox.classList.remove('active');
-    }
-});
+extraMenuIcon.addEventListener('click', toggleExtraMenu);
 
 const buttons = document.querySelectorAll('.tts-voice-button');
 const defaultButtonIndex = 0;

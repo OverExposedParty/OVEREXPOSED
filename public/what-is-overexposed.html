@@ -84,16 +84,20 @@
         <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
     </div>
     <header class="header" id="header">
+        <div class="icon-container extra-menu-icon">
+            <div class="extra-menu-icon">
+                <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+            </div>
+        </div>
         <div class="logo-container">
             <a href="/">
                 <img src="/images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
             </a>
         </div>
-        <div class="settings-icon">
-            <img src="/images/icons/settings.svg" alt="Settings">
-        </div>
-        <div class="extra-menu-icon">
-            <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
+        <div class="icon-container settings-icon">
+            <div class="settings-icon">
+                <img src="/images/icons/settings.svg" alt="Settings">
+            </div>
         </div>
     </header>
     <div class="landscape-message" id="landscape-message">
@@ -171,29 +175,19 @@
         const cardTexts = [
             { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
             { front: 'Party Games', back: 'Truth Or Dare... Paranoia... Never Have I Ever... Most Likely To...' },
-            { front: 'Truth or Dare', back: 'Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!' },
-            { front: 'Paranoia', back: 'Could they be talking about you?. A suspense-filled party game where secret questions & bold choices keep everyone on edge. Choose someone for the mystery prompt, and watch them decide if they’ll face a punishment to uncover it or stay paranoid!' },
-            { front: 'Never Have I Ever', back: 'Never Have I Ever brings classic chaos to the party. Read out a question to the group…if anyone’s guilty, they take a punishment, and you can even throw in the "put a finger down" rule for extra fun!' },
-            { front: 'Most Likely To', back: 'Most Likely To is all about calling out your mates! Read a question or let TTS do it, then the group votes on who’s most likely to fit the prompt…whoever gets picked faces the punishment!' }
+            { front: 'Truth or Dare', back: 'Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!' }
         ];
 
         const frontImages = [
             '/images/what-is-overexposed/front/what-is-overexposed.svg',
             '/images/what-is-overexposed/front/party-games.svg',
-            '/images/what-is-overexposed/front/truth-or-dare.svg',
-            '/images/what-is-overexposed/front/paranoia.svg',
-            '/images/what-is-overexposed/front/never-have-i-ever.svg',
-            '/images/what-is-overexposed/front/most-likely-to.svg'
+            '/images/what-is-overexposed/front/truth-or-dare.svg'
         ];
 
         const backImages = [
             '/images/what-is-overexposed/back/what-is-overexposed.svg',
             '/images/what-is-overexposed/back/party-games.svg',
-            '/images/what-is-overexposed/back/truth-or-dare.svg',
-            '/images/what-is-overexposed/back/paranoia.svg',
-            '/images/what-is-overexposed/back/never-have-i-ever.svg',
-            '/images/what-is-overexposed/back/most-likely-to.svg'
-
+            '/images/what-is-overexposed/back/truth-or-dare.svg'
         ];
 
         const card = document.querySelector('.card');

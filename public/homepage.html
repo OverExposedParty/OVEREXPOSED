@@ -60,6 +60,11 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon disabled" style = "display: none; cursor: not-allowed;">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
     <div class="landscape-message" id="landscape-message">
         Please rotate your phone to continue
@@ -114,38 +119,38 @@
     <div class="container">
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/truth-or-dare.svg" alt="Image 1"></div>
-                <div class="back"><img src="/images/card-titles/back/truth-or-dare.svg" alt="Image 1 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/truth-or-dare.svg" alt="Truth Or Dare Front"></div>
+                <div class="back"><img src="/images/card-titles/back/truth-or-dare.svg" alt="Truth Or Dare Back"></div>
             </div>
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/paranoia.svg" alt="Image 2"></div>
-                <div class="back"><img src="/images/card-titles/back/paranoia.svg" alt="Image 2 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
             </div>
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/never-have-i-ever.svg" alt="Image 3"></div>
-                <div class="back"><img src="/images/card-titles/back/never-have-i-ever.svg" alt="Image 3 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
             </div>
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/most-likely-to.svg" alt="Image 4"></div>
-                <div class="back"><img src="/images/card-titles/back/most-likely-to.svg" alt="Image 4 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
             </div>
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Image 5"></div>
-                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Image 5 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
             </div>
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Image 6"></div>
-                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Image 6 Back"></div>
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
             </div>
         </div>
     </div>
@@ -164,13 +169,13 @@
                             window.location.href = 'truth-or-dare-settings';
                             break;
                         case 1:
-                            window.location.href = 'paranoia-settings';
+                            //window.location.href = 'paranoia-settings';
                             break;
                         case 2:
-                            window.location.href = 'never-have-i-ever-settings';
+                            //window.location.href = 'never-have-i-ever-settings';
                             break;
                         case 3:
-                            window.location.href = 'most-likely-to-settings';
+                            //window.location.href = 'most-likely-to-settings';
                             break;
                         case 4:
                             //window.location.href = 'coming-soon-settings';
@@ -195,7 +200,7 @@
 
         function changeFavicon(index) {
             const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
-            const colorFolders = ['blue', 'purple', 'orange', 'yellow', 'grey', 'grey'];
+            const colorFolders = ['blue', 'grey', 'grey', 'grey', 'grey', 'grey'];
 
             const faviconLinks = document.querySelectorAll('link[rel="icon"]');
 
@@ -210,7 +215,7 @@
         }
 
         function changeHeaderColor(index) {
-            const colors = ['#66CCFF', '#9D8AFF', '#FF9266', '#FFEE66', '#999999', '#999999'];
+            const colors = ['#66CCFF', '#999999', '#999999', '#999999', '#999999', '#999999'];
             selectedColor = colors[index % colors.length];
             header.style.backgroundColor = selectedColor;
             containerTitle.style.color = selectedColor;

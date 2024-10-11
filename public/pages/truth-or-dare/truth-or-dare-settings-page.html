@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRUTH OR DARE SETTINGS</title>
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="gamemode-settings-page-styles.css">
-    <link rel="stylesheet" href="warning-message-style.css">
-    <link rel="stylesheet" href="settings-style.css">
-    <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/gamemode-settings-page-styles.css">
+    <link rel="stylesheet" href="/warning-message-style.css">
+    <link rel="stylesheet" href="/settings-style.css">
+    <link rel="stylesheet" href="/rotate-device.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blue/favicon-32x32.png">
@@ -42,7 +42,8 @@
 
             .main-container,
             .header,
-            .home-button-container {
+            .home-button-container,
+            .help-container {
                 display: none;
             }
 
@@ -72,7 +73,22 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">GAME SETTINGS</h2>
+        <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight><br><br>
+
+            Please note: any card packs rated <highlight>!!!</highlight> or higher will require you to 
+            enable <highlight class = "NSFW">NSFW</highlight> mode to access them (this can be found in the settings). <br><br>
+
+            Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This
+            feature also requires <highlight class = "NSFW">NSFW</highlight> mode to be enabled in your settings.</p>
+    </div>
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -258,6 +274,12 @@
                 overlay.style.display = 'none';
             });
         });
+
+        //First Time Loading Page
+        if (!localStorage.getItem('truth-or-dare-settings-first-time')) {
+        localStorage.setItem('truth-or-dare-settings-first-time', 'true');
+        toggleHelp();
+    }
 
         // Page Load Transition
         const heading = document.createElement('h1');
