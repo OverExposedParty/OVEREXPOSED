@@ -48,7 +48,10 @@
             }
 
             .warning-box,
-            .overlay {
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container {
                 display: none !important;
             }
         }
@@ -81,13 +84,15 @@
     </header>
     <div class="help-container" id="help-container">
         <h2 class="help-title">GAME SETTINGS</h2>
-        <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight><br><br>
+        <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!
+            </highlight><br><br>
 
-            Please note: any card packs rated <highlight>!!!</highlight> or higher will require you to 
-            enable <highlight class = "NSFW">NSFW</highlight> mode to access them (this can be found in the settings). <br><br>
+            Please note: any card packs rated <highlight>!!!</highlight> or higher will require you to
+            enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
+            <br><br>
 
             Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This
-            feature also requires <highlight class = "NSFW">NSFW</highlight> mode to be enabled in your settings.</p>
+            feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.</p>
     </div>
     <div class="landscape-message">
         Please rotate your phone to continue
@@ -96,7 +101,6 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
@@ -124,7 +128,7 @@
             <div class="settings-option">
                 <label for="settings-vibration">VIBRATION</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="settings-vibration">
+                    <input type="checkbox" style="opacity: 0;" id="settings-vibration">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -277,10 +281,9 @@
 
         //First Time Loading Page
         if (!localStorage.getItem('truth-or-dare-settings-first-time')) {
-        localStorage.setItem('truth-or-dare-settings-first-time', 'true');
-        toggleHelp();
-    }
-
+            localStorage.setItem('truth-or-dare-settings-first-time', 'true');
+            toggleHelp();
+        }
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'TRUTH OR DARE SETTINGS';

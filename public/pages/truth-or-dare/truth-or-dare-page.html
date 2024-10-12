@@ -57,9 +57,9 @@
 
         .split-question-button {
             background-color: #202020;
-            border: 5px solid var(--primarypagecolour);
+            border: var(--bordersize) solid var(--primarypagecolour);
             color: var(--primarypagecolour);
-            font-size: 16px;
+            font-size: 100%;
             padding: 5px 10px;
             cursor: pointer;
             border-radius: 50px;
@@ -74,30 +74,30 @@
         }
 
         .or-text {
-            font-size: 24px;
+            font-size: 125%;
             color: #66CCFF;
-            margin: 0 5px;
+            margin: 0 2%;
         }
 
         .gamemode-text {
-            font-size: 65px;
+            font-size: 450%;
         }
 
         @media (max-width: 400px),
         (max-height: 700px) {
             .split-question-button {
-                font-size: 12px;
-                border: 4px solid #66CCFF;
+                font-size: 100%;
+                border: var(--bordersize) solid #66CCFF;
                 max-width: 40%;
             }
 
             .or-text {
-                font-size: 14px;
-                margin: 0 2px;
+                font-size: 100%;
+                margin: 0 5%;
             }
 
             .gamemode-text {
-                font-size: 45px;
+                font-size: 350%;
             }
         }
 
@@ -107,9 +107,15 @@
             .header,
             .back-button-container,
             .side-button-container,
-            .tts-button,
-            .help-container{
+            .tts-button {
                 display: none;
+            }
+
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container {
+                display: none !important;
             }
         }
     </style>
@@ -141,11 +147,14 @@
     </header>
     <div class="help-container" id="help-container">
         <h2 class="help-title">HOW TO PLAY</h2>
-        <p class="help-text">You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare</highlight> <br><br>
+        <p class="help-text">You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare
+            </highlight> <br><br>
             <highlight>Truth</highlight> may reveal personal detail or secret. <br><br>
             <highlight>Dare</highlight> will require you to perform an action. <br><br>
-            toggle <highlight class = "NSFW">NSFW</highlight> mode and activate <br><highlight>Drinking Punishments</highlight> where failing results in a drinking
-            consequence</p>
+            toggle <highlight class="NSFW">NSFW</highlight> mode and activate <br>
+            <highlight>Drinking Punishments</highlight> where failing results in a drinking
+            consequence
+        </p>
     </div>
     <div class="landscape-message">
         Please rotate your phone to continue
@@ -154,7 +163,6 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
@@ -182,7 +190,7 @@
             <div class="settings-option">
                 <label for="settings-vibration">VIBRATION</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="settings-vibration">
+                    <input type="checkbox" style="opacity: 0;" id="settings-vibration">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -428,7 +436,20 @@
                 disableTTSButton();
             });
         });
+        //Make the Page size fit the page
+        function updateVh() {
+            let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
+            document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+        }
 
+        window.addEventListener('load', updateVh);
+        window.addEventListener('resize', updateVh);
+
+        //First Time Loading Page
+        if (!localStorage.getItem('truth-or-dare-first-time')) {
+            localStorage.setItem('truth-or-dare-first-time', 'true');
+            toggleHelp();
+        }
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'TRUTH OR DARE';

@@ -80,28 +80,26 @@ function toggleSettings() {
     }
 }
 function toggleHelp() {
-    if (helpIcon.style.display != 'none') {
-        if (!helpContainer.classList.contains('active')) {
-            helpContainer.classList.add('active');
-            overlay.classList.add('active');
-            if (extraMenuContainer.classList.contains('active')) {
-                extraMenuContainer.classList.remove('active');
-            }
-            if (settingsBox.classList.contains('active')) {
-                settingsBox.classList.remove('active');
-            }
+    if (!helpContainer.classList.contains('active')) {
+        helpContainer.classList.add('active');
+        overlay.classList.add('active');
+        if (extraMenuContainer.classList.contains('active')) {
+            extraMenuContainer.classList.remove('active');
         }
-        else {
-            helpContainer.classList.remove('active');
-            if ((!settingsBox.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
-                overlay.classList.remove('active');
-            }
-            if (settingsBox.classList.contains('active')) {
-                settingsBox.classList.remove('active')
-            }
-            if (extraMenuContainer.classList.contains('active')) {
-                extraMenuContainer.classList.remove('active')
-            }
+        if (settingsBox.classList.contains('active')) {
+            settingsBox.classList.remove('active');
+        }
+    }
+    else {
+        helpContainer.classList.remove('active');
+        if ((!settingsBox.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
+            overlay.classList.remove('active');
+        }
+        if (settingsBox.classList.contains('active')) {
+            settingsBox.classList.remove('active')
+        }
+        if (extraMenuContainer.classList.contains('active')) {
+            extraMenuContainer.classList.remove('active')
         }
     }
 }

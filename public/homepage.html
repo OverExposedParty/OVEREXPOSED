@@ -34,9 +34,14 @@
 
             .container,
             .header,
-            .container-title,
-            .extra-menu-container {
+            .container-title{
                 display: none;
+            }
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container {
+                display: none !important;
             }
         }
     </style>
@@ -60,12 +65,15 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
-        <div class="icon-container help-icon">
-            <div class="help-icon disabled" style = "display: none; cursor: not-allowed;">
-                <img src="/images/icons/help-icon.svg" alt="Help">
+        <div class="icon-container help-icon" style = "height:0;">
+            <div class="help-icon" style = "height:0;">
+                <img src="/images/icons/help-icon.svg" alt="Help" style = "height:0;">
             </div>
         </div>
     </header>
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">OVEREXPOSED</h2>
+    </div>
     <div class="landscape-message" id="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
@@ -73,7 +81,6 @@
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
@@ -101,7 +108,7 @@
             <div class="settings-option">
                 <label for="settings-vibration">VIBRATION</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="settings-vibration">
+                    <input type="checkbox" style="opacity: 0;" id="settings-vibration">
                     <span class="slider"></span>
                 </label>
             </div>

@@ -1,9 +1,35 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
+const permissionsPolicy = require('permissions-policy');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Add security headers using helmet
+app.use(helmet());
+
+// Customize specific headers
+app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],  // Use correct CSP directives with quotes around 'self'
+    scriptSrc: ["'self'", "'unsafe-inline'"], // Ensure CSP values are properly quoted
+    objectSrc: ["'none'"]
+  }
+}));
+app.use(helmet.frameguard({ action: 'sameorigin' }));
+app.use(helmet.noSniff());
+app.use(helmet.referrerPolicy({ policy: 'no-referrer-when-downgrade' }));
+
+// Use permissionsPolicy
+app.use(permissionsPolicy({
+  features: {
+    geolocation: ['self'],  // Correct without quotes here
+    microphone: []
+  }
+}));
 
 // Use CORS middleware
 app.use(cors({
@@ -29,7 +55,6 @@ app.get('/', (req, res) => {
 app.get('/what-is-overexposed', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'what-is-overexposed.html'));
 });
-
 
 app.get('/truth-or-dare-settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'truth-or-dare', 'truth-or-dare-settings-page.html');
@@ -84,6 +109,7 @@ app.get('/insights', (req, res) => {
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
+
 app.get('/insights/final-year-stress', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
   console.log(`Attempting to serve file from: ${filePath}`);

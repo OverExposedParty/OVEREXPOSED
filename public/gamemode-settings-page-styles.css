@@ -11,6 +11,13 @@
     user-select: none;
     -webkit-user-drag: none;
 }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: LemonMilk;
+    overflow-y: hidden;
+}
 
 @font-face {
     src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
@@ -22,6 +29,7 @@
     top: calc(var(--headerheight) + 5vh);
     left: 20px;
 }
+
 
 .home-button {
     border: none;
@@ -44,11 +52,7 @@
 .main-container {
     display: flex;
     height: calc(100vh - var(--headerheight));
-    /* Full viewport height minus header height */
-    overflow-y: hidden;
-    /* Ensure no overflow in container */
     margin-top: var(--headerheight);
-    /* Same height as header to avoid overlap */
 }
 
 .packs-container,
@@ -192,6 +196,9 @@ button.disabled {
     display: inline-block;
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s;
+
+    position:absolute;
+    bottom:-30vh;
 }
 
 .start-game-button:hover,
@@ -235,12 +242,10 @@ button.disabled {
     }
 
     .packs-container {
-        height: 50%;
-        overflow-y: auto;
+        height: auto;
     }
     .settings-container {
         height: auto;
-        overflow-y: none;
     }
     .button-container button {
         font-size: 2.7vw;
@@ -289,6 +294,7 @@ button.disabled {
         font-size: 12px;
         border: 1vw solid var(--primarypagecolour);
         padding: 0.75vw 1.75vw;
+        bottom: 0vh;
     }
 
     .home-button-container {
