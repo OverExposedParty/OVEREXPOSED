@@ -14,8 +14,8 @@ app.use(helmet());
 app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'"],  // Use correct CSP directives with quotes around 'self'
-    scriptSrc: ["'self'", "'unsafe-inline'"], // Ensure CSP values are properly quoted
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org"], // Added external script source
     objectSrc: ["'none'"]
   }
 }));

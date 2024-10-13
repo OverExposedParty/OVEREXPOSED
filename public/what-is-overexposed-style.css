@@ -69,7 +69,7 @@
 .tts-button {
     cursor: pointer;
     width: 7.5%;
-    height: 7.5%;
+    height: 0%;
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -106,7 +106,7 @@
     .tts-button {
         cursor: pointer;
         width: 15vw;
-        height: 15vw;
+        height: 0vw;
         right: 5%;
         bottom: 2.5%;
     }
