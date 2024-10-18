@@ -3,602 +3,572 @@
         {
             "question_type": "Truth",
             "question": "Have you ever pretended to like something just to fit in? What was it?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What's the most ridiculous thing you've ever convinced someone to believe?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most outrageous thing you’ve convinced someone to believe?",
+            "punishment": "Take 3 sips." 
         },
         {
             "question_type": "Truth",
-            "question": "What’s a lie you’ve told to avoid a confrontation?",
-            "punishment": "Take a Shot."
+            "question": "What’s a lie you’ve told to avoid an awkward confrontation?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What's your worst habit?",
-            "punishment": "Take a Shot."
+            "question": "What’s your most annoying habit?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most awkward thing you’ve said to a stranger?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most awkward thing you’ve ever said to a stranger?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing thing you’ve done to try to fit in?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing thing you’ve done just to fit in?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
             "question": "What’s the weirdest thing you’ve done when you were alone?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What's the most spontaneous thing you've ever done?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most spontaneous decision you’ve ever made?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Who in this room would you most like to switch lives with for a week?",
-            "punishment": "Take a Shot."
+            "question": "If you could switch lives with anyone in this room for a week, who would it be and why?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What's the worst advice you've ever received?",
-            "punishment": "Take a Shot."
+            "question": "What’s the worst piece of advice you’ve ever received?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s a habit you have that others might find strange or gross?",
-            "punishment": "Take a Shot."
+            "question": "What’s a habit of yours that others might find strange or unappealing?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever pretended to be sick to get out of something? What was it?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever pretended to be sick to get out of something? What happened?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
             "question": "What’s the most embarrassing thing you’ve ever posted on social media?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the weirdest dream you’ve ever had?",
-            "punishment": "Take a Shot."
+            "question": "What’s the strangest dream you’ve ever had?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
             "question": "What’s the weirdest compliment you’ve ever received?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing nickname you’ve ever had?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing nickname you’ve ever been given?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the weirdest thing you've ever done in front of a mirror?",
-            "punishment": "Take a Shot."
+            "question": "What’s the weirdest thing you’ve ever done in front of a mirror?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the longest you’ve gone without showering?",
-            "punishment": "Take a Shot."
+            "question": "What’s the longest you’ve ever gone without showering?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most expensive gift you’ve ever given someone?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most expensive gift you’ve ever given to someone?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever broken something and lied about it to avoid getting in trouble?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever broken something and lied about it to avoid trouble? What was it?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most ridiculous superstition you’ve ever believed in?",
-            "punishment": "Take a Shot."
+            "question": "What’s the silliest superstition you’ve ever believed in?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever snooped through someone's belongings without them knowing?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever snooped through someone’s belongings when they weren’t around?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever cried watching a movie? What movie was it?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever cried while watching a movie? What movie was it?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever cried listening to a song? What song was it?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever cried while listening to a song? What song was it?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the worst gift you’ve ever received and how did you react?",
-            "punishment": "Take a Shot."
+            "question": "What’s the worst gift you’ve ever received, and how did you react?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s something you’ve done that you thought you’d get in trouble for but didn’t?",
-            "punishment": "Take a Shot."
+            "question": "What’s something you did that you thought would get you in trouble but didn’t?",
+            "punishment": "Take 2 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most irrational fear you have?",
-            "punishment": "Take a Shot."
+            "question": "What’s your most irrational fear?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing song you know all the words to?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing song you know all the lyrics to?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
             "question": "What’s the longest you’ve gone without brushing your teeth?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the longest you’ve gone without speaking to someone you were mad at?",
-            "punishment": "Take a Shot."
+            "question": "What’s the longest you’ve gone without speaking to someone you were upset with?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever forgotten someone’s name mid-conversation? How did you handle it?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever forgotten someone’s name mid-conversation? How did you manage it?",
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing thing you’ve done when you thought no one was looking?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing thing you’ve done when you thought no one was watching?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever done something weird while half asleep?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever done something strange while half asleep?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s your biggest ick?",
-            "punishment": "Take a Shot."
+            "question": "What’s your biggest pet peeve?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
             "question": "Have you ever had an embarrassing crush on a fictional character? Who was it?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing thing you’ve done while getting ready for a date?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing thing you’ve done while preparing for a date?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever felt jealous of a friend? Why?",
-            "punishment": "Take a Shot."
+            "question": "Have you ever felt envious of a friend? What made you feel that way?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
             "question": "What’s the most awkward thing you’ve had to explain to someone?",
-            "punishment": "Take a Shot."
+            "punishment": "Take 4 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the most awkward misunderstanding you’ve had with someone?",
-            "punishment": "Take a Shot."
+            "question": "What’s the most embarrassing misunderstanding you’ve had with someone?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "What’s the weirdest thing you’ve done out of curiosity?",
-            "punishment": "Take a Shot."
+            "question": "What’s the weirdest thing you’ve done out of pure curiosity?",
+            "punishment": "Take 3 sips."
         },
         {
             "question_type": "Truth",
-            "question": "Have you ever walked into a room and instantly regretted it? Why?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever walked into a room and immediately regretted it? Why?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "What’s the most embarrassing thing you’ve done when meeting someone new?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing item you’ve had to return to a store?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most cringe-worthy item you’ve had to return to a store?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "What’s the weirdest thing you’ve done in a bathroom?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most cringe-worthy social media comment you’ve made?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most embarrassing comment you’ve made on social media?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the weirdest thing someone’s asked you and you had no idea how to answer?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the strangest question someone’s asked you, leaving you speechless?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "What’s the most ridiculous thing you’ve done just to prove a point?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most embarrassing thing you’ve said to someone you didn’t realize was standing right behind you?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most embarrassing thing you’ve said to someone without realizing they were right behind you?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most awkward way you’ve met someone you now know really well?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the strangest thing you’ve ever done with a group of friends?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the weirdest thing you’ve ever done with a group of friends?",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Truth",
-            "question": "What’s the weirdest thing you’ve done to avoid someone you knew?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the weirdest thing you’ve done to avoid running into someone you know?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "Have you ever told someone you were “fine” when you clearly weren’t? What happened next?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most ridiculous way you’ve overreacted to something?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most ridiculous overreaction you’ve ever had?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever tried to befriend someone and completely failed? How did it go wrong?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever tried to befriend someone but it completely backfired? How did it go wrong?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most uncomfortable thing someone’s ever asked you in public?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most uncomfortable question someone’s asked you in public?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "What’s the most awkward way you’ve ended a conversation?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the most cringe-worthy thing you’ve done while trying to be cool?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the most cringe-worthy thing you’ve done to impress someone?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the longest time you’ve gone without showering?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s one thing you only do when you’re by yourself?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s one thing you only do when you’re alone?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s something you would do if you knew there would be no consequences?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s something you would do if you knew there were no consequences?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever ghosted a friend? What led to it?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever ghosted a friend?",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Truth",
-            "question": "Who are you most jealous of?",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Truth",
-            "question": "Who in this group would you want to swap lives with for a week?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Who are you most envious of?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "What’s the biggest mistake you’ve ever made?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s something you pretend to like but actually hate?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s something you pretend to like but secretly despise?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s the weirdest thing you’ve been called?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the weirdest name you’ve ever been called?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever re-gifted a present?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever re-gifted a present? What was it?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "If you switched genders for a day, what would you do?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "If you could switch genders for a day, what’s the first thing you would do?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever gotten mad at a friend for posting an unflattering picture of you? What happened?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever been upset with a friend for posting an unflattering picture of you? What happened?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "When was the last time you peed your pants?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "When was the last time you had an embarrassing accident?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What's the grossest smell that you secretly enjoy?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the grossest smell you secretly enjoy?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever had a paranormal experience?",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Truth",
-            "question": "What's the worst present someone has ever given you?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever experienced something you’d consider paranormal?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
             "question": "When was the last time you shared a toothbrush with someone else?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What's the weirdest thought you've had sitting on a toilet?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the strangest thought you’ve had while sitting on the toilet?",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What's the worst decision one of the other players has ever made?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s the worst decision you’ve seen one of the other players make?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What's something you've done that you'd judge someone else for doing?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s something you’ve done that you’d normally judge someone else for?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "What’s something you’re ashamed of?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "What’s something you feel ashamed of?",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Who in the room do you think would die first in a horror film?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Who in this room do you think would be the first to die in a horror movie?",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Truth",
-            "question": "Have you ever let someone take the blame for something you did?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have you ever let someone else take the blame for something you did? What was it?",
+            "punishment": "Take 4 sips."
+          },
+          {
+            "question_type": "Truth",
+            "question": "Share a habit or trait you’re embarrassed about.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Dance to a song of the group’s choice for one minute.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Dance to a song chosen by the group for one minute.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Let the group style your hair and leave it that way for the entire game.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Let the group style your hair and keep it that way for the rest of the game.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Do your best impression of someone in the room until someone guesses who it is.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "What’s a habit or trait you have that you’re embarrassed about?",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Let someone write a funny message on your arm with a permanent marker.",
+            "punishment": "Take 5 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Let someone write a funny message on your arm using a permanent marker.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Wear socks on your hands for the next five rounds.",
+            "punishment": "Take 5 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Wear socks on your hands for the next 5 rounds.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Share the last photo you took on your phone with the group.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Share the last photo you took on your phone.",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Dare",
-            "question": "Wear a piece of clothing inside out for the next 3 rounds.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Wear a piece of clothing inside out for the next three rounds.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Let someone tickle you for 30 seconds.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Do your best runway walk across the room.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Strut your best runway walk across the room.",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Wear a blanket as a cape for the rest of the game.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Wrap yourself in a blanket and wear it as a cape for the rest of the game.",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Let someone else choose a song, and you have to lip-sync to it with enthusiasm.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Lip-sync enthusiastically to a song chosen by someone else.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Try to fit as many marshmallows in your mouth as you can.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "See how many marshmallows or grapes you can fit in your mouth at once.",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Do a freestyle dance.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Perform a freestyle rap or poem for the group.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Do a sock puppet show.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Put on a sock puppet show for everyone.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Have a deep conversation with an item of furniture.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Have a deep conversation with a piece of furniture.",
+            "punishment": ""
+          },
+          {
             "question_type": "Dare",
-            "question": "Avoid saying “like” for the rest of the game.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Avoid using the word “like” for the remainder of the game.",
+            "punishment": "Take a sip everytime you forget or take 4 sips now."
+          },
+          {
             "question_type": "Dare",
-            "question": "Sing all your responses.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Sing all your responses for the next five rounds.",
+            "punishment": "Take a sip everytime you forget or take 4 sips now."
+          },
+          {
             "question_type": "Dare",
-            "question": "Plank for 1 minute.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Hold a plank position for one minute.",
+            "punishment": "Take 2 sips if you fail or 4 sips now"
+          },
+          {
             "question_type": "Dare",
             "question": "Tell each player who you think their celebrity look-alike is.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Act like a chicken until your next turn.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take a sip everytime you forget or take 3 sips now."
+          },
+          {
             "question_type": "Dare",
             "question": "Imitate the way someone in the room walks.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Give someone a piggyback ride.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Give someone a piggyback ride around the room.",
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Pretend to be someone in the room for 5 minutes.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Pretend to be someone else in the room for two minutes.",
+            "punishment": "Take a sip everytime you forget or take 3 sips now."
+          },
+          {
             "question_type": "Dare",
-            "question": "Stand on a chair and give a dramatic speech about something random.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Stand on a chair and deliver a dramatic speech about something random.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Put whipped cream on your nose and try to lick it off.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Crack an egg on your head.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 5 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Say 3 honest things to the group.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Eat a leaf from a plant (make sure it's safe!).",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Eat a leaf.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Fill your mouth with water and try not to laugh while the group attempts to make you laugh for 30 seconds.",
+            "punishment": "Take 2 sips if you fail or 4 sips now"
+          },
+          {
             "question_type": "Dare",
-            "question": "Share the most recent thing you Googled.",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Dare",
-            "question": "Fill your mouth with water and try not to laugh. The group has 30 seconds to make you laugh.",
-            "punishment": "Take a Shot."
-        },
-        {
-            "question_type": "Dare",
-            "question": "Let the group pet you as if you are a dog for 1 minute.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Let the group treat you like a pet for one minute.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Whisper a secret to the person on your right.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 3 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Call your mom and ask for a ridiculous amount of money.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Call a parent and ask for an outrageous amount of money.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Send a random embarrassing selfie to the last person you texted.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Send an embarrassing selfie to the last person you texted.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Play footsie with the person across from you.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Play footsie with the person sitting across from you.",
+            "punishment": "Take 2 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Do and post a TikTok dance of the group’s choosing.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Record and post a TikTok dance chosen by the group.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
             "question": "Call the last person you texted and just “meow” into the phone.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Pretend to be the opposite sex for the next 10 minutes.",
-            "punishment": "Take a Shot."
-        },
-        {
+            "question": "Pretend to be the opposite sex for one round.",
+            "punishment": "Take 4 sips."
+          },
+          {
             "question_type": "Dare",
-            "question": "Read the last text message you sent out loud.",
-            "punishment": "Take a Shot."
-        }
+            "question": "Read the last text message you sent out loud for everyone to hear.",
+            "punishment": "Take 4 sips."
+          }
     ]
 }
