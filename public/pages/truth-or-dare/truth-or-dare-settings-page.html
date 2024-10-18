@@ -87,7 +87,7 @@
         <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!
             </highlight><br><br>
 
-            Please note: any card packs rated <highlight>!!!</highlight> or higher will require you to
+            Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to
             enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
             <br><br>
 
@@ -160,7 +160,7 @@
                 <div class="button-container">
                     <button data-key="truth-or-dare-ice-breaker" class="pack-sfw">ICE BREAKER !</button>
                     <button data-key="truth-or-dare-cheeky-confessions" class="pack-sfw">CHEEKY CONFESSIONS !!</button>
-                    <button data-key="truth-or-dare-troubled-teens" class="pack-nsfw">TROUBLED TEENS !!!</button>
+                    <button data-key="truth-or-dare-troubled-teens" class="pack-sfw">TROUBLED TEENS !!!</button>
                     <button data-key="truth-or-dare-adult-confessions" class="pack-nsfw">ADULT CONFESSIONS !!!!</button>
                     <button data-key="truth-or-dare-risky-revelations" class="pack-nsfw">RISKY REVELATIONS
                         !!!!!</button>
@@ -209,7 +209,7 @@
             }
 
             if (!eighteenPlusEnabled) {
-                for (let i = 2; i < packButtons.length; i++) {
+                for (let i = 3; i < packButtons.length; i++) {
                     packButtons[i].disabled = true;
                     packButtons[i].classList.add('disabled');
 
