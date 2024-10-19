@@ -263,6 +263,9 @@
             let ttsButtonTimeout;
             let currentUtterance = null;
 
+            let currentQuestion;
+            let currentPunishment;
+
             const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
 
@@ -378,6 +381,9 @@
                     updateTextContainer(question.question, question.packKey, question.punishment);
                     updateTruthOrDareText('truth');
                     enableTTSButton();
+
+                    currentQuestion = question.question;
+                    currentPunishment = question.punishment;
                 }
                 hasBeenClicked = false;
             });
@@ -391,6 +397,9 @@
                     updateTextContainer(question.question, question.packKey, question.punishment);
                     updateTruthOrDareText('dare');
                     enableTTSButton();
+
+                    currentQuestion = question.question;
+                    currentPunishment = question.punishment;
                 }
                 hasBeenClicked = false;
             });
@@ -425,13 +434,14 @@
 
 
             document.getElementById('tts-button').addEventListener('click', () => {
-                const textContainerText = document.querySelector('.gamemode-text').textContent + " . . . . . " + document.querySelector('.text-container').textContent;
+                const gamemodeText = document.querySelector('.gamemode-text').textContent;
+                const textToSpeak = `${gamemodeText} .-  ${currentQuestion} -  Punishment . -  ${currentPunishment}`;
                 const selectedVoiceName = getSelectedVoice();
 
                 if (selectedVoiceName) {
-                    responsiveVoice.speak(textContainerText, selectedVoiceName , { rate: 1});
+                    responsiveVoice.speak(textToSpeak, selectedVoiceName , { rate: 1});
                 } else {
-                    responsiveVoice.speak(textContainerText, "US English Female", { rate: 1 });
+                    responsiveVoice.speak(textToSpeak, "US English Female", { rate: 1 });
                 }
 
                 disableTTSButton();
