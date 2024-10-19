@@ -168,7 +168,7 @@ body {
 .tts-button {
     cursor: pointer;
     width: 7.5%;
-    height: 0%;
+    height: 7.5%;
     position: fixed;
     right: 1.5%;
     bottom: 1.5%;
@@ -232,7 +232,7 @@ body {
     .tts-button {
         cursor: pointer;
         width: 15vw;
-        height: 0vw;
+        height: 15vw;
         right: 5%;
         bottom: 2.5%;
     }
