@@ -425,13 +425,13 @@
 
 
             document.getElementById('tts-button').addEventListener('click', () => {
-                const textContainerText = document.querySelector('.gamemode-text').textContent + "." + document.querySelector('.text-container').textContent;
+                const textContainerText = document.querySelector('.gamemode-text').textContent + ".\n" + document.querySelector('.text-container').textContent;
                 const selectedVoiceName = getSelectedVoice();
 
                 if (selectedVoiceName) {
-                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                    responsiveVoice.speak(textContainerText, selectedVoiceName , { rate: 1});
                 } else {
-                    responsiveVoice.speak(textContainerText, "US English Female");
+                    responsiveVoice.speak(textContainerText, "US English Female", { rate: 1 });
                 }
 
                 disableTTSButton();
