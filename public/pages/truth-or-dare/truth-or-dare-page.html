@@ -383,7 +383,6 @@
                     enableTTSButton();
 
                     currentQuestion = question.question;
-                    console.log(currentQuestion);
                     currentPunishment = question.punishment;
                 }
                 hasBeenClicked = false;
@@ -438,6 +437,8 @@
                 const gamemodeText = document.querySelector('.gamemode-text').textContent;
                 const textToSpeak = `${gamemodeText} -  ${currentQuestion} -  Punishment -  ${currentPunishment}`;
                 const selectedVoiceName = getSelectedVoice();
+
+                console.log("question is " + currentQuestion);
 
                 if (selectedVoiceName) {
                     responsiveVoice.speak(textToSpeak, selectedVoiceName , { rate: 1});
