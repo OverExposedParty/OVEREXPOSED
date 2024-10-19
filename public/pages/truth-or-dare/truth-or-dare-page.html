@@ -435,15 +435,14 @@
 
             document.getElementById('tts-button').addEventListener('click', () => {
                 const gamemodeText = document.querySelector('.gamemode-text').textContent;
-                const textToSpeak = gamemodeText + " - " + currentQuestion + " - " + "Punishment" + " - " + currentPunishment;
+                const textToSpeak = `${gamemodeText} -  ${currentQuestion} -  Punishment -  ${currentPunishment}`; 
+                const cleanText = textToSpeak.replace(/[,]/g, ''); // Remove commas
                 const selectedVoiceName = getSelectedVoice();
 
-                console.log("question is " + currentQuestion);
-
                 if (selectedVoiceName) {
-                    responsiveVoice.speak(textToSpeak, selectedVoiceName , { rate: 1});
+                    responsiveVoice.speak(cleanText, selectedVoiceName , { rate: 1});
                 } else {
-                    responsiveVoice.speak(textToSpeak, "US English Female", { rate: 1 });
+                    responsiveVoice.speak(cleanText, "US English Female", { rate: 1 });
                 }
 
                 disableTTSButton();
