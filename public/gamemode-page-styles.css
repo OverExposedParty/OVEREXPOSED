@@ -98,6 +98,7 @@ body {
 .question-text {
     font-size: 40%;
     margin-bottom: 3.5%;
+    padding: 0 2.5%;
 }
 
 .punishment-text {
