@@ -34,7 +34,7 @@ body {
 .home-button {
     border: none;
     cursor: pointer;
-    background-color: #202020;
+    background-color: var(--secondarybackgroundcolour);
     border: var(--bordersize) solid var(--primarypagecolour);
     color: var(--primarypagecolour);
     font-size: 16px;
@@ -136,8 +136,8 @@ body {
     font-family: LemonMilk;
     font-size: 1.25em;
     color: #999999;
-    background-color: #202020;
-    border: var(--bordersize) solid #999999;
+    background-color: var(--secondarybackgroundcolour);
+    border: var(--bordersize) solid var(--secondarybackgroundcolour);
     border-radius: 50px;
     cursor: pointer;
     text-align: center;
@@ -150,13 +150,13 @@ body {
 
 .button-container button.active {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
 }
 
 .button-container button:active {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
 }
 
@@ -166,9 +166,8 @@ body {
 }
 
 .button-container button.active:not(.disabled):hover {
-    
     background-color: var(--secondarypagecolour);
-    color: #202020;
+    color: var(--secondarybackgroundcolour);
 }
 
 button.disabled {
@@ -185,7 +184,7 @@ button.disabled {
     font-family: LemonMilk;
     font-size: 1.25em;
     color: var(--primarypagecolour);
-    background-color: #202020;
+    background-color: var(--secondarybackgroundcolour);
     border: var(--bordersize) solid var(--primarypagecolour);
     border-radius: 50px;
     cursor: pointer;
@@ -204,13 +203,13 @@ button.disabled {
 .start-game-button:hover,
 .home-button:hover {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
 }
 
 .start-game-button:active {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
 }
 
@@ -250,17 +249,7 @@ button.disabled {
     .button-container button {
         font-size: 2.7vw;
         padding: 1.75vw 1.75vw;
-        border: 1vw solid #999999;
-    }
-    .button-container button:not(.disabled):hover {
-        color: #999999;
-        background-color: #202020;
-        border: 1vw solid var(--primarypagecolour);
-    }
-    .button-container button:not(.disabled).hover {
-        color: #999999;
-        background-color: #202020;
-        border: 1vw solid var(--primarypagecolour);
+        border-width: 1vw;
     }
     .game-settings-container button {
         font-size: 4vw;
@@ -289,6 +278,16 @@ button.disabled {
         gap: 5px 5px;
     }
 
+    .button-container button:not(.disabled):hover {
+        background-color: var(--secondarybackgroundcolour);
+        border: var(--bordersize) solid var(--secondarybackgroundcolour);
+    }
+    
+    .button-container button.active:not(.disabled):hover {
+        background-color: var(--primarypagecolour);
+        color: var(--secondarybackgroundcolour);
+    }
+
     .start-game-button {
         margin: 5vh auto;
         font-size: 12px;
@@ -306,7 +305,7 @@ button.disabled {
     .home-button {
         border: none;
         cursor: pointer;
-        background-color: #202020;
+        background-color: var(--secondarybackgroundcolour);
         border: 1vw solid var(--primarypagecolour);
         color: var(--primarypagecolour);
         font-size: 2vw;
