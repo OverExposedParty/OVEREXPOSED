@@ -173,7 +173,7 @@ body {
 button.disabled {
     background-color: #333333;
     color: #666666;
-    border-color: #444444;
+    border-color: #333333;
     cursor: not-allowed;
     pointer-events: none;
 }
@@ -280,7 +280,7 @@ button.disabled {
 
     .button-container button:not(.disabled):hover {
         background-color: var(--secondarybackgroundcolour);
-        border: var(--bordersize) solid var(--secondarybackgroundcolour);
+        border-color: var(--secondarybackgroundcolour);
     }
     
     .button-container button.active:not(.disabled):hover {
