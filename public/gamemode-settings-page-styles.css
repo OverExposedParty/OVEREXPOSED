@@ -162,7 +162,7 @@ body {
 
 .button-container button:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
-    border: var(--bordersize) solid var(--secondarypagecolour);
+    border-color: var(--secondarypagecolour);
 }
 
 .button-container button.active:not(.disabled):hover {
@@ -286,6 +286,7 @@ button.disabled {
     .button-container button.active:not(.disabled):hover {
         background-color: var(--primarypagecolour);
         color: var(--secondarybackgroundcolour);
+        border-color: var(--primarypagecolour);
     }
 
     .start-game-button {
