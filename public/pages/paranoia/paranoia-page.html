@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="spin-the-wheel.css">
+    <link rel="stylesheet" href="coin-flip.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -74,6 +76,20 @@
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
+    <div class="coin-flip-container" id="coin-flip-container">
+        <button id="coin-button">
+            <div class="coin" id="coin"><img src="/images/icons/purple/heads-icon.svg"></div>
+        </button>
+    </div>
+
     <header class="header" id="header">
         <div class="icon-container extra-menu-icon">
             <div class="extra-menu-icon">
@@ -90,11 +106,31 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">HOW TO PLAY</h2>
+        <p class="help-text">You'll be given a question. Without showing anyone in the room pick some one who fits the
+            prompt best and watch them panic.
+            <br><br>
+            If the person would like to find out the question they have the ability to flip a coin to find out
+            <br><br>
+            toggle <highlight class="NSFW">NSFW</highlight> mode and activate <br>
+            <highlight>Drinking Punishments</highlight> where the person chosen will have
+            to drink to find out the question.
+        </p>
+    </div>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/purple/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
+
     <div class="extra-menu-container">
         <h1 class="extra-menu-title">Menu</h1>
         <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
@@ -111,14 +147,16 @@
             </div>
         </div>
     </div>
+
     <div class="overlay" id="overlay"></div>
+
     <div class="settings-box" id="settings-box">
         <h2 id="settings-title" class="settings-title">Settings</h2>
         <div class="settings-content">
             <div class="settings-option">
                 <label for="settings-nsfw">NSFW</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="settings-nsfw">
+                    <input type="checkbox" style="opacity: 0;" id="settings-nsfw">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -131,7 +169,6 @@
                 </label>
             </div>
         </div>
-
         <div class="tts-voice-buttons">
             <div class="tts-voice-button" data-button="1" data-key="tts-voice-male1">M1</div>
             <div class="tts-voice-button" data-button="2" data-key="tts-voice-male2">M2</div>
@@ -139,15 +176,14 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
-    <div class="back-button-container">
-        <button class="back-button">BACK</button>
-    </div>
+
+    <button class="back-button">BACK</button>
+
     <div class="container">
         <div class="content">
             <div class="gamemode-text">Paranoia</div>
             <div class="main-image-container">
-                <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card"
-                    class="main-image">
+                <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
                 <div class="text-container">
                     Paranoia
                 </div>
@@ -159,25 +195,51 @@
         </div>
     </div>
 
-    <img src="/images/icons/purple/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+    <div class="side-buttons">
+        <img src="/images/icons/purple/heads-icon.svg" alt="Heads Icon" class="side-button" id="coin-flip-button">
+        <img src="/images/icons/purple/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
+        <img src="/images/icons/purple/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+    </div>
+
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
+    <script src="/spin-the-wheel.js"></script>
+    <script src="/coin-flip.js"></script>
     <script>
         document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
         document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
+
+
 
         //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         selectButton(selectedButton);
         document.addEventListener('DOMContentLoaded', async () => {
 
-
             let hasBeenClicked = false;
             let ttsButtonTimeout;
             let currentQuestionIndex = 0;
 
             const punishmentEnabled = localStorage.getItem('paranoia-settings-punishment') === 'true';
+            const coinFlipEnabled = localStorage.getItem('paranoia-settings-coin-flip') === 'true';
+
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            const sideButtonsContainer = document.querySelector('.side-buttons');
+            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+            if(sideButtonsContainer.querySelectorAll('.side-button').length <= 1){
+                sideButtonsContainer.classList.add('single');
+            }
+
+            if (!punishmentEnabled) {
+                document.getElementById('spin-button').style.height = '0';
+                document.getElementById('spin-button').style.width = '0';
+            }
+            if (!coinFlipEnabled) {
+                document.getElementById('coin-flip-button').style.height = '0';
+                document.getElementById('coin-flip-button').style.width = '0';
+            }
+
 
             let hiddenAgendas = [];
             let subtleShots = [];
@@ -308,11 +370,10 @@
                 disableTTSButton();
             });
 
-            function updateTextContainer(text, cardType, punishment) {
+            function updateTextContainer(text, cardType) {
                 const textContainer = document.querySelector('.text-container');
                 textContainer.innerHTML =
-                    `<span class="question-text">${text}</span>` +
-                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+                    `<span class="question-text">${text}</span>`;
                 if (!textContainer.classList.contains('text-container')) {
                     textContainer.classList.add('text-container-small');
                 }
@@ -327,7 +388,6 @@
                 enableTTSButton();
 
                 const selectedQuestion = allQuestions[currentQuestionIndex];
-                const selectedPunishment = selectedQuestion['punishment'];
                 const cardType = friendlyFears.includes(selectedQuestion) ? 'Friendly Fears' :
                     shadyShenanigans.includes(selectedQuestion) ? 'Shady Shenanigans' :
                         subtleShots.includes(selectedQuestion) ? 'Subtle Shots' :
@@ -336,12 +396,12 @@
 
                 currentQuestionIndex++;
 
-                return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
+                return { question: selectedQuestion['question'], cardType: cardType };
             }
 
             document.querySelector('.question-button').addEventListener('click', () => {
                 const selectedQuestionObj = getNextQuestion();
-                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
+                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
                 if (!hasBeenClicked) {
                     enableTTSButton();

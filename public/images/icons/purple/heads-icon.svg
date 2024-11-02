@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485 485">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1f1f1f;
+        stroke: #9d8aff;
+        stroke-miterlimit: 10;
+        stroke-width: 35px;
+      }
+
+      .cls-2 {
+        fill: #9d8aff;
+        font-family: LEMONMILK-Medium, 'LEMON MILK';
+        font-size: 100px;
+        font-weight: 500;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer_1">
+    <circle class="cls-1" cx="242.5" cy="242.5" r="225"/>
+    <text class="cls-2" transform="translate(69.4 273.33)"><tspan x="0" y="0">HEADS</tspan></text>
+  </g>
+</svg>

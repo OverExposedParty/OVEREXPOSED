@@ -106,34 +106,30 @@ body {
     color: #ff5f5f;
 }
 
-.back-button-container {
-    position: fixed;
-    top: calc(var(--headerheight) + 5vh);
-    left: 1%;
-    width:auto;
-}
-
 .back-button {
+    position: absolute;
+    top: calc(var(--headerheight) + 5vh);
+    left: 20px;
+    text-align: center;
     border: none;
     cursor: pointer;
-    background-color: #202020;
-    border: var(--bordersize) solid var(--primarypagecolour);
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
     color: var(--primarypagecolour);
-    font-size: 80%;
+    font-size: 1.5vh;
     padding: 5px 10px;
     border-radius: 50px;
     margin: 0 10px;
-    min-width: 80px;
-    max-width: 100px;
-    width: 15vw;
+    width: 10vh;
     font-family: LemonMilk;
     z-index: 600;
-    position: relative;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .back-button:hover {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
 }
 
 .button-container {
@@ -147,12 +143,12 @@ body {
 
 .button-container button {
     font-family: LemonMilk;
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
     flex: 1 1 auto;
     cursor: pointer;
     width: 100%;
-    background-color: #202020;
+    background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--primarypagecolour);
     font-size: 100%;
     padding: 3% 5%;
@@ -160,20 +156,52 @@ body {
     border-radius: 50px;
     text-align: center;
     font-family: LemonMilk;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .button-container button:hover {
     background-color: var(--primarypagecolour);
-    color: #202020;
+    color: var(--backgroundcolour);
 }
-.tts-button {
-    cursor: pointer;
-    width: 7.5%;
-    height: 7.5%;
+
+.side-buttons {
+    height: auto;
+    width: auto;
+    right: 0.5%;
+    bottom: 50%;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(50%);
     position: fixed;
+    display: flex;
+    gap: 5px;
+}
+.side-buttons.single{
+    height: auto;
+    width: auto;
     right: 1.5%;
-    bottom: 1.5%;
-    z-index: 900;
+    bottom: 5%;
+    position: fixed;
+    display: flex;
+    gap: 5px;
+}
+.side-button,.tts-button {
+    cursor: pointer;
+    width: 7.5vh;
+    height: 7.5vh;
+    z-index: 100;
+    padding: 0.5vh;
+    transition: width 0.3s, height 0.3s, padding 0.3s;
+}
+.side-button.active,.tts-button.active {
+    width: 8.5vh;
+    height: 8.5vh;
+    padding: 0;
+}
+.tts-button:hover,.side-button:hover {
+    width: 8.5vh;
+    height: 8.5vh;
+    padding: 0;
 }
 .tts-button.disabled {
     color: #6e6e6e;
@@ -181,7 +209,11 @@ body {
     opacity: 0.6;
 }
 
+
 @media (orientation: portrait) {
+    .side-buttons {
+        right: 1%;
+    }
     .text-container {
         font-size:180%
 
@@ -205,36 +237,7 @@ body {
         font-size: 100%;
     }
     .button-container button:hover {
-        background-color: #202020;
+        background-color: var(--backgroundcolour);
         color:  var(--primarypagecolour);
-    }
-
-    .back-button {
-        border: none;
-        cursor: pointer;
-        background-color: #202020;
-        border: 1vw solid var(--primarypagecolour);
-        color: var(--primarypagecolour);
-        font-size: 60%;
-        padding: 5px 5px;
-        margin: 0 10px;
-        width: 10vw;
-        font-family: LemonMilk;
-        position: relative;
-    }
-
-
-
-    .back-button-container {
-        position: fixed;
-        top: calc(var(--headerheight) + 2.5vh);
-        left: 2.5vw;
-    }
-    .tts-button {
-        cursor: pointer;
-        width: 15vw;
-        height: 15vw;
-        right: 5%;
-        bottom: 2.5%;
     }
 }

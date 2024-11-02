@@ -1,5 +1,7 @@
 :root {
-    --backgroundcolour: #131313;
+    --primarypagecolour: #9D8AFF;
+    --secondarypagecolour: #7F71B2;
+    --backgroundcolour: #202020;
     --secondarybackgroundcolour: #131313;
     --warningcolour: #FF3333;
     --bordersize: 5px;

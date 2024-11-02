@@ -27,6 +27,9 @@ const overlay = document.querySelector('#overlay');
 const settingsVibrationCheckbox = document.getElementById('settings-vibration');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
 
+const spinContainer = document.querySelector('.spin-the-wheel-container');
+const coinFlipContainer = document.getElementById('coin-flip-container');
+
 const helpContainer = document.getElementById('help-container');
 
 const subscriberFormBox = document.getElementById('subscriber-form-box');
@@ -68,14 +71,8 @@ function toggleSettings() {
     }
     else {
         settingsBox.classList.remove('active');
-        if ((!helpContainer.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
+        if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
-        }
-        if (helpContainer.classList.contains('active')) {
-            helpContainer.classList.remove('active')
-        }
-        if (extraMenuContainer.classList.contains('active')) {
-            extraMenuContainer.classList.remove('active')
         }
     }
 }
@@ -92,14 +89,8 @@ function toggleHelp() {
     }
     else {
         helpContainer.classList.remove('active');
-        if ((!settingsBox.classList.contains('active') && !extraMenuContainer.classList.contains('active'))) {
+        if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
-        }
-        if (settingsBox.classList.contains('active')) {
-            settingsBox.classList.remove('active')
-        }
-        if (extraMenuContainer.classList.contains('active')) {
-            extraMenuContainer.classList.remove('active')
         }
     }
 }
@@ -116,14 +107,8 @@ function toggleExtraMenu() {
     }
     else {
         extraMenuContainer.classList.remove('active');
-        if ((!settingsBox.classList.contains('active') && !helpContainer.classList.contains('active'))) {
+        if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
-        }
-        if (settingsBox.classList.contains('active')) {
-            settingsBox.classList.remove('active')
-        }
-        if (helpContainer.classList.contains('active')) {
-            helpContainer.classList.remove('active')
         }
     }
 }
@@ -142,18 +127,13 @@ function toggleOverlay() {
         if (helpContainer && helpContainer.classList.contains('active')) {
             helpContainer.classList.remove('active');
         }
-    }
-}
-
-function clickOutsideHandler(event) {
-    if (settingsBox.style.display === 'block' &&
-        !settingsBox.contains(event.target) &&
-        !settingsIcon.contains(event.target) &&
-        !overlay.contains(event.target)) {
-        settingsBox.style.display = 'none';
-        overlay.classList.remove('active');
-        if (subscriberFormBoxSuccess && subscriberFormBoxSuccess.classList.contains('active')) {
-            subscriberFormBoxSuccess.classList.remove('active');
+        if (spinContainer && spinContainer.classList.contains('active')) {
+            spinContainer.classList.remove('active');
+            spinButton.classList.remove('active');
+        }
+        if (coinFlipContainer && coinFlipContainer.classList.contains('active')) {
+            coinFlipContainer.classList.remove('active');
+            coinFlipButton.classList.remove('active');
         }
     }
 }
@@ -161,7 +141,6 @@ function clickOutsideHandler(event) {
 settingsIcon.addEventListener('click', toggleSettings);
 helpIcon.addEventListener('click', toggleHelp);
 overlay.addEventListener('click', toggleOverlay);
-document.addEventListener('click', clickOutsideHandler);
 
 extraMenuIcon.addEventListener('click', toggleExtraMenu);
 
@@ -231,4 +210,25 @@ window.addEventListener('load', function () {
         heading.remove();
     }, 1000);
 });
+
+//Overlay remove
+const classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container'];
+
+function findActiveElementsWithClasses(classArray) {
+    // Select all elements in the body
+    const allElements = document.body.querySelectorAll('*');
+
+    // Filter elements that contain all the classes from classArray
+    const elementsWithClasses = Array.from(allElements).filter(element =>
+        classArray.every(className => element.classList.contains(className))
+    );
+
+    // Further filter the list to only include elements with the 'active' class
+    const activeElements = elementsWithClasses.filter(element =>
+        element.classList.contains('active')
+    );
+    return activeElements;
+}
+
+
 

@@ -204,9 +204,9 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
-    <div class="back-button-container">
-        <button class="back-button">BACK</button>
-    </div>
+
+    <button class="back-button">BACK</button>
+    
     <div class="container">
         <div class="content">
             <div class="gamemode-text">Truth</div>
@@ -227,7 +227,9 @@
             </div>
         </div>
     </div>
-    <img src="/images/icons/blue/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+    <div class="side-buttons">
+        <img src="/images/icons/blue/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+    </div>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
     <script>
@@ -268,6 +270,13 @@
 
             const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            const sideButtonsContainer = document.querySelector('.side-buttons');
+            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+            if(sideButtonsContainer.querySelectorAll('.side-button').length <= 1){
+                sideButtonsContainer.classList.add('single');
+            }
+
 
             async function fetchQuestions() {
                 const shouldFetchIceBreaker = localStorage.getItem('truth-or-dare-ice-breaker') === 'true';

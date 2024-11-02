@@ -59,6 +59,7 @@
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
+
     <header class="header" id="header">
         <div class="icon-container extra-menu-icon">
             <div class="extra-menu-icon">
@@ -75,7 +76,27 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">GAME SETTINGS</h2>
+        <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!
+            </highlight><br><br>
+
+            Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to
+            enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
+            <br><br>
+
+            Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This
+            feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
+        </p>
+    </div>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/purple/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -96,7 +117,9 @@
             </div>
         </div>
     </div>
+
     <div class="overlay" id="overlay"></div>
+
     <div class="settings-box" id="settings-box">
         <h2 id="settings-title" class="settings-title">Settings</h2>
         <div class="settings-content">
@@ -124,15 +147,16 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
+
     <div class="warning-box" id="warning-box">
         <h2 id="warning-title" class="warning-title">NSFW</h2>
         <img src="/images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
         <p class="warning-text">This content is not suitable for all audiences.</p>
         <a href="paranoia" class="start-game-warning-button">START GAME</a>
     </div>
-    <div class="home-button-container">
-        <button class="home-button">HOME</button>
-    </div>
+
+    <button class="home-button">HOME</button>
+
     <div class="main-container">
         <div class="packs-container">
             <div class="packs-header-container">
@@ -155,12 +179,14 @@
             </div>
             <div class="game-settings-container">
                 <div class="button-container">
-                    <button data-key="paranoia-settings-punishment">Drinking Punishment</button>
+                    <button data-key="paranoia-settings-punishment">Drink Wheel</button>
+                    <button data-key="paranoia-settings-coin-flip">Lucky Coin Flip</button>
                 </div>
                 <button class="start-game-button">Start Game</button>
             </div>
         </div>
     </div>
+
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
     <script>

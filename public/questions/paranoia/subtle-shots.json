@@ -1,83 +1,235 @@
 {
     "paranoia-subtle-shots": [
         {
-            "question": "Who here would be the best at hiding a dead body?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to forget a friend's birthday?"
         },
         {
-            "question": "Which person in this room is most likely to win a million dollars but lose it all within a year?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who’s had the most awkward encounter with a crush?"
         },
         {
-            "question": "Who here is most likely to accidentally leak a government secret?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who might be secretly talking behind someone’s back?"
         },
         {
-            "question": "Who in this room would most likely create a viral conspiracy theory?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to have an embarrassing secret about their past?"
         },
         {
-            "question": "Which person here would be the first to turn on the group in a crisis situation?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who’s the messiest drunk?"
         },
         {
-            "question": "Who is most likely to have a secret double life?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who might secretly have a controversial obsession?"
         },
         {
-            "question": "Who here is most likely to be late to their own wedding?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to shock everyone with a secret past?"
         },
         {
-            "question": "Which person in this room is most likely to move to another country and never return?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who has the biggest ego?"
         },
         {
-            "question": "Who here is most likely to accidentally start a fire?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who has the worst hygiene?"
         },
         {
-            "question": "Who here is most likely to accidentally reveal a friend’s secret?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to steal from their parents?"
         },
         {
-            "question": "Which person in this room is most likely to win a hotdog eating contest?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to sleep with their boss?"
         },
         {
-            "question": "Who here is most likely to forget their own birthday?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s least likely to move on after a breakup?"
         },
         {
-            "question": "Which person in this room is most likely to get a tattoo they regret?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to forgive a cheating partner?"
         },
         {
-            "question": "Who here is most likely to accidentally send a text to the wrong person?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to get ghosted?"
         },
         {
-            "question": "Who in this room is most likely to get lost in their own neighborhood?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to be friend-zoned after a bad kiss?"
         },
         {
-            "question": "Who here is most likely to accidentally cause a citywide power outage?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who’s most likely to be a “simp”?"
         },
         {
-            "question": "Which person in this room is most likely to befriend a ghost?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Most likely to fall in love with their best friend?"
         },
         {
-            "question": "Who in this room is most likely to crash a wedding uninvited?",
-            "drinking-punishment": "Take 2 sips of your drink"
+            "question": "Who’s most likely to have a sugar daddy/mommy?"
         },
         {
-            "question": "Who here is most likely to go viral for something embarrassing?",
-            "drinking-punishment": "Take 3 sips of your drink"
+            "question": "Who’d work out and go to work without showering?"
+        },
+        {
+            "question": "Most likely to go to prison for life—and why?"
+        },
+        {
+            "question": "Most likely to lie to a friend?"
+        },
+        {
+            "question": "Who’d wear revealing clothing on purpose?"
+        },
+        {
+            "question": "Who was the first to lose their virginity?"
+        },
+        {
+            "question": "Who’s the biggest lightweight?"
+        },
+        {
+            "question": "Who’s most likely to get their heart broken?"
+        },
+        {
+            "question": "Who’d jump from relationship to relationship?"
+        },
+        {
+            "question": "Who’s the biggest attention-seeker?"
+        },
+        {
+            "question": "Who’s most likely to fall in love with a friends-with-benefits?"
+        },
+        {
+            "question": "Who’s the group’s biggest problem-maker?"
+        },
+        {
+            "question": "Who’s the biggest flirt?"
+        },
+        {
+            "question": "Who’s most likely to break someone’s heart?"
+        },
+        {
+            "question": "Who’s most likely to do something illegal for fun?"
+        },
+        {
+            "question": "Who’s most likely to exaggerate achievements on their resume?"
+        },
+        {
+            "question": "Who’s most likely to get caught lying about their whereabouts?"
+        },
+        {
+            "question": "Who’s likely to have a hidden agenda when giving advice?"
+        },
+        {
+            "question": "Who might be hiding significant debt?"
+        },
+        {
+            "question": "Who’s most likely to keep old, embarrassing messages or emails?"
+        },
+        {
+            "question": "Who’s most likely to hide a major purchase from their partner?"
+        },
+        {
+            "question": "Who secretly envies someone else’s lifestyle?"
+        },
+        {
+            "question": "Who would make up an elaborate story to cover a minor mistake?"
+        },
+        {
+            "question": "Who’s most likely to lie about their social life?"
+        },
+        {
+            "question": "Who’s likely to have an unspoken rivalry with someone in the group?"
+        },
+        {
+            "question": "Who exaggerates accomplishments on social media?"
+        },
+        {
+            "question": "Who’s most likely to keep secrets from close friends?"
+        },
+        {
+            "question": "Who’s most likely to lie about past relationships?"
+        },
+        {
+            "question": "Who’s likely to hide past mistakes or regrets?"
+        },
+        {
+            "question": "Who has a secret crush on someone they shouldn’t?"
+        },
+        {
+            "question": "Who’s likely to have an unorthodox approach to dating?"
+        },
+        {
+            "question": "Who’s most likely to stay in a one-sided relationship?"
+        },
+        {
+            "question": "Who’s most likely to get canceled online?"
+        },
+        {
+            "question": "Who’s most likely to snitch on a friend?"
+        },
+        {
+            "question": "Who’s likely to be into witchcraft?"
+        },
+        {
+            "question": "Who’s secretly jealous of others' success?"
+        },
+        {
+            "question": "Who’s most likely to pretend to be more knowledgeable than they are?"
+        },
+        {
+            "question": "Who exaggerates stories to look better?"
+        },
+        {
+            "question": "Who might give backhanded compliments?"
+        },
+        {
+            "question": "Who’s most likely to feel upset when not in the spotlight?"
+        },
+        {
+            "question": "Who privately questions their values or beliefs?"
+        },
+        {
+            "question": "Who’s the most opinionated?"
+        },
+        {
+            "question": "Who would catfish someone?"
+        },
+        {
+            "question": "Who’s most likely to leave a friend with the bill?"
+        },
+        {
+            "question": "Who’s the cheapest person?"
+        },
+        {
+            "question": "Who has the worst game?"
+        },
+        {
+            "question": "Who’s the fakest person here?"
+        },
+        {
+            "question": "Who’d flirt with someone who’s taken?"
+        },
+        {
+            "question": "Who’s been involved in a love triangle?"
+        },
+        {
+            "question": "Who’s most likely to fall for a toxic relationship for the attraction?"
+        },
+        {
+            "question": "Who’s used fake accounts to flirt or stalk?"
+        },
+        {
+            "question": "Who’s trying to be someone they’re not?"
+        },
+        {
+            "question": "Who has the biggest ego here?"
+        },
+        {
+            "question": "Who might secretly keep tabs on an ex’s social media?"
+        },
+        {
+            "question": "Who’s most likely to hide a relationship from friends or family?"
+        },
+        {
+            "question": "Who’s fantasized about a teacher or professor?"
+        },
+        {
+            "question": "Who’s the smelliest?"
+        },
+        {
+            "question": "Who is the least attractive here?"
+        },
+        {
+            "question": "Who’s the worst at making decisions?"
+        },
+        {
+            "question": "Who’s a master manipulator?"
         }
     ]
-  }
-  
-  
-  
+}
