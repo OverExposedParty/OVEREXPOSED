@@ -259,11 +259,8 @@ button.disabled {
         padding: 0.75vw 1.75vw;
         bottom: 0vh;
     }
-
-    .home-button-container {
-        position: absolute;
+    .home-button {
         top: calc(var(--headerheight) + 20px);
-        left: 2.5vw;
     }
     .element:hover {
         background-color: initial;
