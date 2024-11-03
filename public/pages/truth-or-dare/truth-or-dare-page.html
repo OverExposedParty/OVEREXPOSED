@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta property="og:description"
         content="Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
-        <title>TRUTH OR DARE</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
+    <title>TRUTH OR DARE</title>
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="spin-the-wheel.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -124,6 +126,14 @@
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
     <header class="header" id="header">
         <div class="icon-container extra-menu-icon">
             <div class="extra-menu-icon">
@@ -206,7 +216,7 @@
     </div>
 
     <button class="back-button">BACK</button>
-    
+
     <div class="container">
         <div class="content">
             <div class="gamemode-text">Truth</div>
@@ -228,7 +238,8 @@
         </div>
     </div>
     <div class="side-buttons">
-        <img src="/images/icons/blue/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+        <img src="/images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="/images/icons/blue/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
     </div>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
@@ -269,14 +280,18 @@
             let currentPunishment;
 
             const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
+            const spinWheelEnabled = localStorage.getItem('truth-or-dare-settings-drink-wheel') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
 
             const sideButtonsContainer = document.querySelector('.side-buttons');
             const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
-            if(sideButtonsContainer.querySelectorAll('.side-button').length <= 1){
-                sideButtonsContainer.classList.add('single');
-            }
 
+            if (!spinWheelEnabled) {
+                document.getElementById('spin-button').style.height = '0';
+                document.getElementById('spin-button').style.width = '0';
+
+                sideButtonsContainer.classList.add('single'); //change if more buttons are added
+            }
 
             async function fetchQuestions() {
                 const shouldFetchIceBreaker = localStorage.getItem('truth-or-dare-ice-breaker') === 'true';
@@ -444,13 +459,13 @@
 
             document.getElementById('tts-button').addEventListener('click', () => {
                 const gamemodeText = document.querySelector('.gamemode-text').textContent;
-                const textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`; 
+                const textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`;
                 const selectedVoiceName = getSelectedVoice();
 
                 console.log(textToSpeak);
 
                 if (selectedVoiceName) {
-                    responsiveVoice.speak(textToSpeak, selectedVoiceName , { rate: 1});
+                    responsiveVoice.speak(textToSpeak, selectedVoiceName, { rate: 1 });
                 } else {
                     responsiveVoice.speak(textToSpeak, "UK English Male", { rate: 1 });
                 }
@@ -480,6 +495,7 @@
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
     </script>
+    <script src="/spin-the-wheel.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
 
