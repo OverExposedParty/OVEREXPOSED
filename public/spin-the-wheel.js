@@ -97,7 +97,7 @@ function drawSector(sector, i) {
     ctx.rotate(ang + arc / 2);
     ctx.textAlign = "right";
     ctx.fillStyle = sector.text;
-    ctx.font = "bold 18px 'LemonMilk', sans-serif";
+    ctx.font = "bold 16px 'LemonMilk', sans-serif";
     ctx.fillText(sector.label, rad - 10, 10);
     //
 

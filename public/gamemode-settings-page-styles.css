@@ -137,12 +137,6 @@ body {
     border-color: var(--primarypagecolour);
 }
 
-.button-container button:active {
-    background-color: var(--primarypagecolour);
-    color: var(--backgroundcolour);
-    border-color: var(--primarypagecolour);
-}
-
 .button-container button:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
     border-color: var(--secondarypagecolour);
@@ -266,5 +260,16 @@ button.disabled {
         background-color: initial;
         color: initial;
         border-color: initial;
+    }
+    .button-container button:not(.disabled):hover {
+        background-color: var(--backgroundcolour);
+        border-color: var(--backgroundcolour);
+        color: #999999;
+    }
+    
+    .button-container button.active:not(.disabled):hover {
+        background-color: var(--primarypagecolour);
+        border-color: var(--primarypagecolour);
+        color: var(--backgroundcolour);
     }
 }

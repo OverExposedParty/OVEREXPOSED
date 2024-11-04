@@ -92,7 +92,8 @@
             enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
             <br><br>
 
-            Enable <highlight>Drinking Punishments</highlight> and <highlight>Drink Wheel</highlight> to add drinking forfeits! This
+            Enable <highlight>Drinking Punishments</highlight> and <highlight>Drink Wheel</highlight> to add drinking
+            forfeits! This
             feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
         </p>
     </div>
@@ -183,14 +184,14 @@
             </div>
             <div class="game-settings-container">
                 <div class="button-container">
-                    <button data-key="truth-or-dare-settings-punishment">Drinking Punishment</button>
-                    <!-- <button data-key="truth-or-dare-settings-drink-wheel">Drink Wheel</button>  -->
+                    <button data-key="truth-or-dare-settings-punishment" class="game-settings-pack-nsfw">Drinking Punishment</button>
+                    <button data-key="truth-or-dare-settings-drink-wheel" class="game-settings-pack-nsfw">Drink Wheel</button>
                 </div>
                 <button class="start-game-button">Start Game</button>
             </div>
         </div>
     </div>
-    
+
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
     <script>
@@ -208,10 +209,15 @@
 
             const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
             const packButtons = document.querySelectorAll('.packs-container .button-container button');
-            const drinkingPunishmentButton = document.querySelector('[data-key="truth-or-dare-settings-punishment"]');
             const startGameButton = document.querySelector('.start-game-button');
             const warningBox = document.getElementById('warning-box');
             const warningStartButton = document.querySelector('.start-game-warning-button');
+
+            const nsfwButtons = document.querySelectorAll('.pack-nsfw');
+            const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
+
+            const drinkingPunishmentButton = document.querySelector('[data-key="truth-or-dare-settings-punishment"]');
+            const drinkWheelButton = document.querySelector('[data-key="truth-or-dare-settings-drink-wheel"]');
 
             function updateStartGameButton() {
                 const anyActive = Array.from(packButtons).some(button => button.classList.contains('active'));
@@ -220,16 +226,20 @@
             }
 
             if (!eighteenPlusEnabled) {
-                for (let i = 3; i < packButtons.length; i++) {
-                    packButtons[i].disabled = true;
-                    packButtons[i].classList.add('disabled');
+                nsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
 
-                    const key = packButtons[i].getAttribute('data-key');
+                    const key = button.getAttribute('data-key');
                     localStorage.setItem(key, 'false');
-                }
-                drinkingPunishmentButton.disabled = true;
-                drinkingPunishmentButton.classList.add('disabled');
-                localStorage.setItem(drinkingPunishmentButton.getAttribute('data-key'), 'false');
+                });
+                gameSettingsNsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    localStorage.setItem(button.getAttribute('data-key'), 'false');
+                });
+
             }
 
             document.querySelectorAll('button').forEach(button => {
