@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:description"
         content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
 
     <title>WHAT IS OVEREXPOSED</title>
     <link rel="stylesheet" href="what-is-overexposed-style.css">
@@ -99,9 +100,9 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
-        <div class="icon-container help-icon" style = "height:0;">
-            <div class="help-icon" style = "height:0;">
-                <img src="/images/icons/help-icon.svg" alt="Help" style = "height:0;">
+        <div class="icon-container help-icon" style="height:0;">
+            <div class="help-icon" style="height:0;">
+                <img src="/images/icons/help-icon.svg" alt="Help" style="height:0;">
             </div>
         </div>
     </header>
@@ -175,6 +176,8 @@
     <script src="/social-media-links.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
     <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
         //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         let isSpeaking = false;
@@ -188,13 +191,15 @@
         const frontImages = [
             '/images/what-is-overexposed/front/what-is-overexposed.svg',
             '/images/what-is-overexposed/front/party-games.svg',
-            '/images/what-is-overexposed/front/truth-or-dare.svg'
+            '/images/what-is-overexposed/front/truth-or-dare.svg',
+            '/images/what-is-overexposed/front/paranoia.svg'
         ];
 
         const backImages = [
             '/images/what-is-overexposed/back/what-is-overexposed.svg',
             '/images/what-is-overexposed/back/party-games.svg',
-            '/images/what-is-overexposed/back/truth-or-dare.svg'
+            '/images/what-is-overexposed/back/truth-or-dare.svg',
+            '/images/what-is-overexposed/back/paranoia.svg'
         ];
 
         const card = document.querySelector('.card');

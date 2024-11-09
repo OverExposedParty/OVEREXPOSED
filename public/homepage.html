@@ -134,8 +134,8 @@
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
-                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
+                <div class="front"><img src="/images/card-titles/front/paranoia.svg" alt="Paranoia Front"></div>
+                <div class="back"><img src="/images/card-titles/back/paranoia.svg" alt="Paranoia Back"></div>
             </div>
         </div>
         <div class="grid-item">
@@ -178,7 +178,7 @@
                             window.location.href = 'truth-or-dare-settings';
                             break;
                         case 1:
-                            //window.location.href = 'paranoia-settings';
+                            window.location.href = 'paranoia-settings';
                             break;
                         case 2:
                             //window.location.href = 'never-have-i-ever-settings';
@@ -209,7 +209,7 @@
 
         function changeFavicon(index) {
             const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
-            const colorFolders = ['blue', 'grey', 'grey', 'grey', 'grey', 'grey'];
+            const colorFolders = ['blue', 'purple', 'grey', 'grey', 'grey', 'grey'];
 
             const faviconLinks = document.querySelectorAll('link[rel="icon"]');
 
@@ -224,7 +224,7 @@
         }
 
         function changeHeaderColor(index) {
-            const colors = ['#66CCFF', '#999999', '#999999', '#999999', '#999999', '#999999'];
+            const colors = ['#66CCFF', '#9D8AFF', '#999999', '#999999', '#999999', '#999999'];
             selectedColor = colors[index % colors.length];
             header.style.backgroundColor = selectedColor;
             containerTitle.style.color = selectedColor;
