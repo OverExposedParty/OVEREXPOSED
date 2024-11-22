@@ -76,7 +76,28 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">GAME SETTINGS</h2>
+        <p class="help-text">Pack difficulity is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!
+            </highlight><br><br>
+
+            Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to
+            enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
+            <br><br>
+
+            Enable <highlight>Odd Man Out</highlight> to add drinking
+            forfeits! This
+            feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
+        </p>
+    </div>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/orange/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -88,11 +109,11 @@
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
-                <a id="instagram-link" href="#"><img class="social-media-image" id="instagram-icon"
+                <a id="instagram-link" href="#" target="_blank"><img class="social-media-image" id="instagram-icon"
                         src="/images/icons/orange/instagram-icon.svg" alt="Instagram"></a>
             </div>
             <div class="social-media-image-container">
-                <a id="tiktok-link" href="#"><img class="social-media-image" id="tik-tok-icon"
+                <a id="tiktok-link" href="#" target="_blank"><img class="social-media-image" id="tik-tok-icon"
                         src="/images/icons/orange/tik-tok-icon.svg" alt="TikTok"></a>
             </div>
         </div>
@@ -146,8 +167,7 @@
                     </button>
                     <button data-key="never-have-i-ever-digging-deeper" class="pack-nsfw">DIGGING DEEPER !!!</button>
                     <button data-key="never-have-i-ever-verbal-diarrhea" class="pack-nsfw">VERBAL DIARRHEA !!!!</button>
-                    <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw">RAW AND UNFILTERED
-                        !!!!!</button>
+                    <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw">RAW AND UNFILTERED !!!!!</button>
                 </div>
             </div>
         </div>
@@ -158,7 +178,7 @@
             </div>
             <div class="game-settings-container">
                 <div class="button-container">
-                    <button data-key="never-have-i-ever-settings-punishment">Drinking Punishment</button>
+                    <button data-key="never-have-i-ever-settings-odd-man-out">Odd Man Out</button>
                 </div>
                 <button class="start-game-button">Start Game</button>
             </div>
@@ -180,7 +200,7 @@
             const warningBox = document.getElementById('warning-box');
             const warningStartButton = document.querySelector('.start-game-warning-button');
             const packButtons = document.querySelectorAll('.packs-container .button-container button');
-            const drinkingPunishmentButton = document.querySelector('[data-key="never-have-i-ever-settings-punishment"]');
+            const oddManOutButton = document.querySelector('[data-key="never-have-i-ever-settings-odd-man-out"]');
             const startGameButton = document.querySelector('.start-game-button');
             const homeButton = document.querySelector('.home-button');
 
@@ -192,16 +212,16 @@
 
             const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
             if (!eighteenPlusEnabled) {
-                for (let i = 2; i < packButtons.length; i++) {
+                for (let i = 3; i < packButtons.length; i++) {
                     packButtons[i].disabled = true;
                     packButtons[i].classList.add('disabled');
 
                     const key = packButtons[i].getAttribute('data-key');
                     localStorage.setItem(key, 'false');
                 }
-                drinkingPunishmentButton.disabled = true;
-                drinkingPunishmentButton.classList.add('disabled');
-                localStorage.setItem(drinkingPunishmentButton.getAttribute('data-key'), 'false');
+                oddManOutButton.disabled = true;
+                oddManOutButton.classList.add('disabled');
+                localStorage.setItem(oddManOutButton.getAttribute('data-key'), 'false');
             }
 
             document.querySelectorAll('button').forEach(button => {

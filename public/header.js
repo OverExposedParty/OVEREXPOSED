@@ -68,6 +68,10 @@ function toggleSettings() {
         if (helpContainer.classList.contains('active')) {
             helpContainer.classList.remove('active');
         }
+        if (spinContainer && spinContainer.classList.contains('active')) {
+            spinContainer.classList.remove('active');
+            spinButton.classList.remove('active');
+        }
     }
     else {
         settingsBox.classList.remove('active');
@@ -86,6 +90,10 @@ function toggleHelp() {
         if (settingsBox.classList.contains('active')) {
             settingsBox.classList.remove('active');
         }
+        if (spinContainer && spinContainer.classList.contains('active')) {
+            spinContainer.classList.remove('active');
+            spinButton.classList.remove('active');
+        }
     }
     else {
         helpContainer.classList.remove('active');
@@ -103,6 +111,10 @@ function toggleExtraMenu() {
         }
         if (settingsBox.classList.contains('active')) {
             settingsBox.classList.remove('active');
+        }
+        if (spinContainer && spinContainer.classList.contains('active')) {
+            spinContainer.classList.remove('active');
+            spinButton.classList.remove('active');
         }
     }
     else {

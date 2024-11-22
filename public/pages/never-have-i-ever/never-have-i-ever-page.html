@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEVER HAVE I EVER</title>
+
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="spin-the-wheel.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -60,13 +62,13 @@
         }
 
         .gamemode-text {
-            font-size: 150%;
+            font-size: 450%;
         }
 
         @media (max-width: 400px),
         (max-height: 700px) {
             .gamemode-text {
-                font-size: 18px;
+                font-size: 45px;
             }
         }
     </style>
@@ -74,6 +76,14 @@
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
     <header class="header" id="header">
         <div class="icon-container extra-menu-icon">
             <div class="extra-menu-icon">
@@ -90,7 +100,24 @@
                 <img src="/images/icons/settings.svg" alt="Settings">
             </div>
         </div>
+        <div class="icon-container help-icon">
+            <div class="help-icon">
+                <img src="/images/icons/help-icon.svg" alt="Help">
+            </div>
+        </div>
     </header>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">HOW TO PLAY</h2>
+        <p class="help-text">You'll be given a question. Everyone in the room must indicate whether or not thet have done the prompt.
+            <br><br>
+            If the person has they'll need to put a finger down or take a sip (depending on the rules agreed on).
+            <br><br>
+            toggle <highlight class="NSFW">NSFW</highlight> mode and activate <br>
+            <highlight>Odd Man Out</highlight> where the odd person out must spin the wheel and perform the punishment given.
+        </p>
+    </div>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="/images/icons/orange/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
@@ -102,11 +129,11 @@
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
-                <a id="instagram-link" href="#"><img class="social-media-image" id="instagram-icon"
+                <a id="instagram-link" href="#" target="_blank"><img class="social-media-image" id="instagram-icon"
                         src="/images/icons/orange/instagram-icon.svg" alt="Instagram"></a>
             </div>
             <div class="social-media-image-container">
-                <a id="tiktok-link" href="#"><img class="social-media-image" id="tik-tok-icon"
+                <a id="tiktok-link" href="#" target="_blank"><img class="social-media-image" id="tik-tok-icon"
                         src="/images/icons/orange/tik-tok-icon.svg" alt="TikTok"></a>
             </div>
         </div>
@@ -139,12 +166,12 @@
             <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
         </div>
     </div>
-    <div class="back-button-container">
+
         <button class="back-button">BACK</button>
-    </div>
+
     <div class="container">
         <div class="content">
-            <div class="gamemode-text">Never Have I Ever</div>
+            <div class="gamemode-text">N.H.I.E</div>
             <div class="main-image-container">
                 <img src="/images/blank-cards/never-have-i-ever-blank-card.svg" alt="Never Have I Ever Blank Card"
                     class="main-image">
@@ -158,7 +185,10 @@
             </div>
         </div>
     </div>
-    <img src="/images/icons/orange/tts-icon.svg" alt="TTS Icon" class="tts-button disabled" id="tts-button">
+    <div class="side-buttons">
+        <img src="/images/icons/orange/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="/images/icons/orange/odd-man-out-icon.svg" alt="Odd Man Out Icon" class="side-button" id="odd-man-out-button">
+    </div>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
     <script>
@@ -175,8 +205,25 @@
             let ttsButtonTimeout;
             let currentUtterance = null;
 
-            const punishmentEnabled = localStorage.getItem('never-have-i-ever-settings-punishment') === 'true';
+            const punishmentEnabled = localStorage.getItem('never-have-i-ever-punishment') === 'true';
+            const oddManOutEnabled = localStorage.getItem('never-have-i-ever-settings-odd-man-out') === 'true';
+
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            const sideButtonsContainer = document.querySelector('.side-buttons');
+            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+
+            var sidebuttonLength = sideButtonElements.length;
+
+            if (!oddManOutEnabled) {
+                document.getElementById('odd-man-out-button').style.height = '0';
+                document.getElementById('odd-man-out-button').style.width = '0';
+                sidebuttonLength-=1;
+            }
+            if (sidebuttonLength <= 1) {
+                sideButtonsContainer.classList.add('single');
+            }
+
 
             let simpleAdmissions = [];
             let risingSuspicions = [];
@@ -186,6 +233,8 @@
 
             let allQuestions = [];
             let currentQuestionIndex = 0;
+
+            
 
             async function loadJSONFiles() {
                 const shouldFetchSimpleAdmissions = localStorage.getItem('never-have-i-ever-simple-admissions') === 'true';
@@ -359,6 +408,16 @@
 
             await loadJSONFiles();
         });
+
+        //Make the Page size fit the page
+        function updateVh() {
+            let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
+            document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+        }
+
+        window.addEventListener('load', updateVh);
+        window.addEventListener('resize', updateVh);
+
         const heading = document.createElement('h1');
         heading.textContent = 'NEVER HAVE I EVER';
         heading.style.color = selectedColor;
@@ -366,6 +425,7 @@
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
     </script>
+    <script src="/odd-man-out.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
 

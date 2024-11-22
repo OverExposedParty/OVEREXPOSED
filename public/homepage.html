@@ -85,11 +85,11 @@
         <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
         <div class="social-media-container">
             <div class="social-media-image-container">
-                <a id="instagram-link" href="#"><img class="social-media-image" id="instagram-icon"
+                <a id="instagram-link" href="#" target="_blank"><img class="social-media-image" id="instagram-icon"
                         src="/images/icons/blue/instagram-icon.svg" alt="Instagram"></a>
             </div>
             <div class="social-media-image-container">
-                <a id="tiktok-link" href="#"><img class="social-media-image" id="tik-tok-icon"
+                <a id="tiktok-link" href="#" target="_blank"><img class="social-media-image" id="tik-tok-icon"
                         src="/images/icons/blue/tik-tok-icon.svg" alt="TikTok"></a>
             </div>
         </div>
@@ -140,8 +140,8 @@
         </div>
         <div class="grid-item">
             <div class="card">
-                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
-                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
+                <div class="front"><img src="/images/card-titles/front/never-have-i-ever.svg" alt="Never Have I Ever Front"></div>
+                <div class="back"><img src="/images/card-titles/back/never-have-i-ever.svg" alt="Never Have I Ever Back"></div>
             </div>
         </div>
         <div class="grid-item">
@@ -181,7 +181,7 @@
                             window.location.href = 'paranoia-settings';
                             break;
                         case 2:
-                            //window.location.href = 'never-have-i-ever-settings';
+                            window.location.href = 'never-have-i-ever-settings';
                             break;
                         case 3:
                             //window.location.href = 'most-likely-to-settings';
@@ -209,7 +209,7 @@
 
         function changeFavicon(index) {
             const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
-            const colorFolders = ['blue', 'purple', 'grey', 'grey', 'grey', 'grey'];
+            const colorFolders = ['blue', 'purple', 'orange', 'grey', 'grey', 'grey'];
 
             const faviconLinks = document.querySelectorAll('link[rel="icon"]');
 
@@ -224,7 +224,7 @@
         }
 
         function changeHeaderColor(index) {
-            const colors = ['#66CCFF', '#9D8AFF', '#999999', '#999999', '#999999', '#999999'];
+            const colors = ['#66CCFF', '#9D8AFF', '#FF9266', '#999999', '#999999', '#999999'];
             selectedColor = colors[index % colors.length];
             header.style.backgroundColor = selectedColor;
             containerTitle.style.color = selectedColor;

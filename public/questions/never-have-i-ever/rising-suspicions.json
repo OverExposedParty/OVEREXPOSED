@@ -1,237 +1,175 @@
 {
-    "never-have-i-ever-rising-suspicions": [
-      {
-        "question": "Never have I ever used a fake ID.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been in a physical fight.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a paranormal experience.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been expelled.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever stolen anything.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been fired.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever given someone a fake number.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever tried guessing someone’s password.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever catfished someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been catfished by someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever peed in a pool.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever used someone else's toothbrush.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever enjoyed a smell I’m supposed to find gross.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gone several days without showering.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gone commando in public.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever deleted a post because it didn't get enough likes.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gotten in a car accident.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever cried at school.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever re-gifted a gift.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever knowingly spread a rumour.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever cut my own hair.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever lied to get out of plans with friends.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever used a pick-up line.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever broken a promise.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever felt nervous in front of someone in this room.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever broken up with someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had to go to court.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever started a fire.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been the alibi for a lying friend.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever pretended I was sick for attention.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been blackout drunk.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been hospitalized.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever lied about my income.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever snitched on someone else.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever set a friend up on a date.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever slept in a car.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a near death experience.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever thrown up in public.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever shot a gun.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever accidently dropped a baby.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever run a red light.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been the subject of a rumor that wasn't true.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever cried at a party.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever cried in public.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever called the police on someone else.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had the police called on me.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever blamed someone else for something I did.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever snitched on someone and gotten them in trouble.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever crushed on someone in this room.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been kicked out of a place.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever shaved my head.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever taken a number 2 in a public bathroom.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever farted and blamed someone else.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a crush on a sibling's friend.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever stayed at a luxury hotel.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been invited on a yacht.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever blamed a sibling for something I did.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever worn something I took out of the dirty laundry.",
-        "drinking-punishment": ""
-      }
-    ]
-  }
-  
+  "never-have-i-ever-rising-suspicions": [
+    {
+      "question": "Never have I ever used a fake ID."
+    },
+    {
+      "question": "Never have I ever been in a physical fight."
+    },
+    {
+      "question": "Never have I ever had a paranormal experience."
+    },
+    {
+      "question": "Never have I ever been expelled."
+    },
+    {
+      "question": "Never have I ever stolen anything."
+    },
+    {
+      "question": "Never have I ever been fired."
+    },
+    {
+      "question": "Never have I ever given someone a fake number."
+    },
+    {
+      "question": "Never have I ever tried guessing someone’s password."
+    },
+    {
+      "question": "Never have I ever catfished someone."
+    },
+    {
+      "question": "Never have I ever been catfished."
+    },
+    {
+      "question": "Never have I ever peed in a pool."
+    },
+    {
+      "question": "Never have I ever used someone else's toothbrush."
+    },
+    {
+      "question": "Never have I ever enjoyed a gross smell."
+    },
+    {
+      "question": "Never have I ever gone several days without showering."
+    },
+    {
+      "question": "Never have I ever gone commando in public."
+    },
+    {
+      "question": "Never have I ever deleted a post for lack of likes."
+    },
+    {
+      "question": "Never have I ever been in a car accident."
+    },
+    {
+      "question": "Never have I ever cried at school."
+    },
+    {
+      "question": "Never have I ever re-gifted a gift."
+    },
+    {
+      "question": "Never have I ever knowingly spread a rumor."
+    },
+    {
+      "question": "Never have I ever cut my own hair."
+    },
+    {
+      "question": "Never have I ever lied to avoid plans with friends."
+    },
+    {
+      "question": "Never have I ever used a pick-up line."
+    },
+    {
+      "question": "Never have I ever broken a promise."
+    },
+    {
+      "question": "Never have I ever felt nervous in front of someone here."
+    },
+    {
+      "question": "Never have I ever broken up with someone."
+    },
+    {
+      "question": "Never have I ever had to go to court."
+    },
+    {
+      "question": "Never have I ever started a fire."
+    },
+    {
+      "question": "Never have I ever been an alibi for a lying friend."
+    },
+    {
+      "question": "Never have I ever pretended to be sick for attention."
+    },
+    {
+      "question": "Never have I ever been blackout drunk."
+    },
+    {
+      "question": "Never have I ever been hospitalized."
+    },
+    {
+      "question": "Never have I ever lied about my income."
+    },
+    {
+      "question": "Never have I ever snitched on someone."
+    },
+    {
+      "question": "Never have I ever set a friend up on a date."
+    },
+    {
+      "question": "Never have I ever slept in a car."
+    },
+    {
+      "question": "Never have I ever had a near-death experience."
+    },
+    {
+      "question": "Never have I ever thrown up in public."
+    },
+    {
+      "question": "Never have I ever shot a gun."
+    },
+    {
+      "question": "Never have I ever dropped a baby."
+    },
+    {
+      "question": "Never have I ever run a red light."
+    },
+    {
+      "question": "Never have I ever been the subject of a false rumor."
+    },
+    {
+      "question": "Never have I ever cried at a party."
+    },
+    {
+      "question": "Never have I ever cried in public."
+    },
+    {
+      "question": "Never have I ever called the police on someone."
+    },
+    {
+      "question": "Never have I ever had the police called on me."
+    },
+    {
+      "question": "Never have I ever blamed someone else for my mistake."
+    },
+    {
+      "question": "Never have I ever crushed on someone here."
+    },
+    {
+      "question": "Never have I ever been kicked out of a place."
+    },
+    {
+      "question": "Never have I ever shaved my head."
+    },
+    {
+      "question": "Never have I ever pooped in a public bathroom."
+    },
+    {
+      "question": "Never have I ever farted and blamed someone else."
+    },
+    {
+      "question": "Never have I ever had a crush on a sibling's friend."
+    },
+    {
+      "question": "Never have I ever stayed at a luxury hotel."
+    },
+    {
+      "question": "Never have I ever been invited on a yacht."
+    },
+    {
+      "question": "Never have I ever blamed a sibling for my mistake."
+    },
+    {
+      "question": "Never have I ever worn clothes from the dirty laundry."
+    }
+  ]
+}

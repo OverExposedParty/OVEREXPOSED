@@ -74,7 +74,6 @@ body {
     transform: translate(-50%, -50%);
     width: 90%;
     height: 60%;
-    min-width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -203,7 +202,7 @@ body {
     height: 8.5vh;
     padding: 0;
 }
-.tts-button.disabled {
+.side-button.disabled {
     color: #6e6e6e;
     cursor: not-allowed;
     opacity: 0.6;
@@ -215,7 +214,7 @@ body {
         right: 1%;
     }
     .text-container {
-        font-size:180%
+        font-size:170%;
 
     }
 

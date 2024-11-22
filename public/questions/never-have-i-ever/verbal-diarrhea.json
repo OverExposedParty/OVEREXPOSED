@@ -1,273 +1,69 @@
 {
-    "never-have-i-ever-verbal-diarrhea": [
-      {
-        "question": "Never have I ever stalked an ex on social media.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever made out in a public place.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever kissed a friend's ex.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever told someone 'I love you' without meaning it.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever cheated on someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever sent a nude.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever dated someone older than me.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever dated someone younger than me.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever stayed in a relationship that I really wasn’t feeling.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever kissed someone I just met.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever thought about getting back with an ex.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever flirted just to get something I wanted.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever said 'I love you' to someone by accident.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a dirty dream about a super unexpected person.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever dated someone super annoying only because they’re cute.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever fallen out of love.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever drunk-dialed my ex.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever bribed someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had to take a walk of shame.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gone to a strip club.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gotten divorced.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever read a partner's text messages.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever convinced a friend to dump a partner.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever convinced a partner to dump a friend.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever called a partner the wrong name.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever flashed someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever received nudes.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever seen a deadbody.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a wardrobe malfunction.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever tried to make an ex jealous.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever paid for adult content.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone of the same sex or gender.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever flirted with a married person.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever walked in on my parents.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been walked in on.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gone to work high.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone I met online.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a pregnancy scare.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever kissed my best friend.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever lied about my body count.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever watched porn with someone else.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever showered with someone of the opposite sex.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had hotel sex.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone on holiday.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever sent a dirty text to the wrong person.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone from work.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever worn something to seduce someone.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up in the kitchen.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up in a public toilet.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with a roommate.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a crush on a friend's parent.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with more than one person in a week.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up on a couch.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up on a boat.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been caught watching porn.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever taken a sexual photo of someone else.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone on the first night of meeting them.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone in a friend's house.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone right after a breakup.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever hooked up with someone after a first date.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever slid into an ex's DMs.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever kissed someone with a tongue piercing.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever been in love with someone without them knowing.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever had a crush on a friend's sibling.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever dirtymacked a friend.",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever drank because I was feeling sad. What happened?",
-        "drinking-punishment": ""
-      },
-      {
-        "question": "Never have I ever gotten into a physical fight with a friend.",
-        "drinking-punishment": ""
-      }
-    ]
-  }
-  
+  "never-have-i-ever-verbal-diarrhea": [
+    { "question": "Never have I ever stalked an ex on social media." },
+    { "question": "Never have I ever been someone’s one call from jail." },
+    { "question": "Never have I ever slept with someone without knowing their name." },
+    { "question": "Never have I ever made out in a cinema." },
+    { "question": "Never have I ever done hard drugs." },
+    { "question": "Never have I ever spent a night in jail." },
+    { "question": "Never have I ever had a friend with benefits." },
+    { "question": "Never have I ever smoked weed." },
+    { "question": "Never have I ever talked to family about my sex life." },
+    { "question": "Never have I ever gone streaking." },
+    { "question": "Never have I ever gone on a week-long bender." },
+    { "question": "Never have I ever made out in public." },
+    { "question": "Never have I ever kissed a friend's ex." },
+    { "question": "Never have I ever said 'I love you' without meaning it." },
+    { "question": "Never have I ever had a crush on someone much older." },
+    { "question": "Never have I ever cheated on a partner." },
+    { "question": "Never have I ever sent or received nudes." },
+    { "question": "Never have I ever dated someone significantly older or younger than me." },
+    { "question": "Never have I ever done body shots." },
+    { "question": "Never have I ever stayed in a relationship I wasn’t feeling." },
+    { "question": "Never have I ever kissed someone I just met." },
+    { "question": "Never have I ever thought about getting back with an ex." },
+    { "question": "Never have I ever flirted to get what I wanted." },
+    { "question": "Never have I ever had a dirty dream about an unexpected person." },
+    { "question": "Never have I ever fallen out of love." },
+    { "question": "Never have I ever drunk-dialed my ex." },
+    { "question": "Never have I ever bribed someone." },
+    { "question": "Never have I ever had to take a walk of shame." },
+    { "question": "Never have I ever gone to a strip club." },
+    { "question": "Never have I ever read a partner's texts." },
+    { "question": "Never have I ever convinced someone to break up." },
+    { "question": "Never have I ever called a partner the wrong name." },
+    { "question": "Never have I ever flashed someone." },
+    { "question": "Never have I ever seen someone die." },
+    { "question": "Never have I ever had a wardrobe malfunction." },
+    { "question": "Never have I ever tried to make an ex jealous." },
+    { "question": "Never have I ever paid for adult content." },
+    { "question": "Never have I ever flirted with a married person." },
+    { "question": "Never have I ever walked in on my parents or been walked in on." },
+    { "question": "Never have I ever gone to work high." },
+    { "question": "Never have I ever had a pregnancy scare." },
+    { "question": "Never have I ever kissed my best friend." },
+    { "question": "Never have I ever lied about my body count." },
+    { "question": "Never have I ever watched porn with someone else." },
+    { "question": "Never have I ever showered with someone." },
+    { "question": "Never have I ever sent a dirty text to the wrong person." },
+    { "question": "Never have I ever worn something to seduce someone." },
+    { "question": "Never have I ever had a crush on a friend's parent." },
+    { "question": "Never have I ever been caught watching porn." },
+    { "question": "Never have I ever taken a sexual photo of someone else." },
+    { "question": "Never have I ever slid into an ex's DMs." },
+    { "question": "Never have I ever kissed someone with a tongue piercing." },
+    { "question": "Never have I ever been in love with someone who didn’t know." },
+    { "question": "Never have I ever had a crush on a friend's sibling." },
+    { "question": "Never have I ever dirty-macked a friend." },
+    { "question": "Never have I ever drunk alcohol to cope with sadness." },
+    { "question": "Never have I ever gotten into a physical fight with a friend." },
+    { "question": "Never have I ever been kissed on the beach." },
+    { "question": "Never have I ever bailed on a blind date." },
+    { "question": "Never have I ever shoplifted something." },
+    { "question": "Never have I ever trespassed." },
+    { "question": "Never have I ever been to a strip club." },
+    { "question": "Never have I ever had a crush on a friend’s parent." },
+    { "question": "Never have I ever gotten a hickey or given one." },
+    { "question": "Never have I ever experimented with same-sex experiences." }
+  ]
+}
