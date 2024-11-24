@@ -32,17 +32,17 @@ function toggleSpinTheWheel() {
 }
 
 const sectors = [
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
-    { color: secondaryColour, text: backgroundColour, label: "All Sip" },
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
-    { color: secondaryColour, text: backgroundColour, label: "Mate" },
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
     { color: secondaryColour, text: backgroundColour, label: "Waterfall" },
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
-    { color: secondaryColour, text: backgroundColour, label: "All Sip" },
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
-    { color: secondaryColour, text: backgroundColour, label: "Mate" },
-    { color: primaryColour, text: backgroundColour, label: "You sip" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
+    { color: secondaryColour, text: backgroundColour, label: "Spicy Shot" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
+    { color: secondaryColour, text: backgroundColour, label: "Skip" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
+    { color: secondaryColour, text: backgroundColour, label: "Waterfall" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
+    { color: secondaryColour, text: backgroundColour, label: "Spicy Shot" },
+    { color: primaryColour, text: backgroundColour, label: "2 Sips" },
     { color: backgroundColour, text: primaryColour, label: "Down it" }
 ];
 

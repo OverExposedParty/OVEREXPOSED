@@ -43,7 +43,7 @@ const sectors = [
     { color: primaryColour, text: backgroundColour, label: "1 sip" },
     { color: secondaryColour, text: backgroundColour, label: "3 sips" },
     { color: primaryColour, text: backgroundColour, label: "1 sip" },
-    { color: backgroundColour, text: secondaryColour, label: "Down it" }
+    { color: backgroundColour, text: primaryColour, label: "Down it" }
 ];
 
 const events = {

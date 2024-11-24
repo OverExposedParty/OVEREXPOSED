@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="gamemode-page-styles.css">
     <link rel="stylesheet" href="rotate-device.css">
+    <link rel="stylesheet" href="spin-the-wheel.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -74,6 +75,13 @@
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
 
     <header class="header" id="header">
         <div class="icon-container extra-menu-icon">
@@ -167,6 +175,7 @@
     </div>
     <div class="side-buttons">
         <img src="/images/icons/yellow/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
+        <img src="/images/icons/yellow/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
     </div>
     <script src="/header.js"></script>
     <script src="/social-media-links.js"></script>
@@ -185,13 +194,19 @@
             let ttsButtonTimeout;
             let currentUtterance = null;
 
-            const punishmentEnabled = localStorage.getItem('most-likely-to-settings-punishment') === 'true';
+            const spinWheelEnabled = localStorage.getItem('most-likely-to-settings-drink-wheel') === 'true';
             const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
 
             const sideButtonsContainer = document.querySelector('.side-buttons');
             const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
 
-            sideButtonsContainer.classList.add('single');
+            if (!spinWheelEnabled) {
+                document.getElementById('spin-button').style.height = '0';
+                document.getElementById('spin-button').style.width = '0';
+
+                sideButtonsContainer.classList.add('single'); //change if more buttons are added
+            }
+
 
             let calmAndCasual = [];
             let mildMischief = [];
@@ -327,11 +342,10 @@
                 disableTTSButton();
             });
 
-            function updateTextContainer(text, cardType, punishment) {
+            function updateTextContainer(text, cardType) {
                 const textContainer = document.querySelector('.text-container');
                 textContainer.innerHTML =
-                    `<span class="question-text">${text}</span>` +
-                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+                    `<span class="question-text">${text}</span>`;
                 if (!textContainer.classList.contains('text-container')) {
                     textContainer.classList.add('text-container-small');
                 }
@@ -349,7 +363,6 @@
                 enableTTSButton();
 
                 const selectedQuestion = allQuestions[currentQuestionIndex];
-                const selectedPunishment = selectedQuestion['punishment'];
                 const cardType =
                     calmAndCasual.includes(selectedQuestion) ? 'Calm And Casual' :
                         mildMischief.includes(selectedQuestion) ? 'Mild Mischief' :
@@ -359,12 +372,12 @@
 
                 currentQuestionIndex++;
 
-                return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
+                return { question: selectedQuestion['question'],  cardType: cardType };
             }
 
             document.querySelector('.question-button').addEventListener('click', () => {
                 const selectedQuestionObj = getNextQuestion();
-                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
+                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
                 if (!hasBeenClicked) {
                     enableTTSButton();
@@ -383,6 +396,7 @@
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
     </script>
+    <script src="/spin-the-wheel.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 </body>
 
