@@ -180,9 +180,9 @@ buttons.forEach(button => {
             localStorage.setItem(btn.getAttribute('data-key'), 'false');
         });
 
-        selectButton(button);
         localStorage.setItem(button.getAttribute('data-key'), 'true');
         localStorage.setItem('selectedTTSButton', button.getAttribute('data-key'));
+        selectButton(button);
     });
 });
 

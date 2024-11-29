@@ -58,6 +58,16 @@
     </style>
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
@@ -163,9 +173,8 @@
             <div class="packs-content-container">
                 <div class="button-container">
                     <button data-key="never-have-i-ever-simple-admissions" class="pack-sfw">SIMPLE ADMISSIONS !</button>
-                    <button data-key="never-have-i-ever-rising-suspicions" class="pack-sfw">RISING SUSPICIONS !!
-                    </button>
-                    <button data-key="never-have-i-ever-digging-deeper" class="pack-nsfw">DIGGING DEEPER !!!</button>
+                    <button data-key="never-have-i-ever-rising-suspicions" class="pack-sfw">RISING SUSPICIONS !!</button>
+                    <button data-key="never-have-i-ever-digging-deeper" class="pack-sfw">DIGGING DEEPER !!!</button>
                     <button data-key="never-have-i-ever-verbal-diarrhea" class="pack-nsfw">VERBAL DIARRHEA !!!!</button>
                     <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw">RAW AND UNFILTERED !!!!!</button>
                 </div>
@@ -199,6 +208,10 @@
             const overlay = document.getElementById('overlay');
             const warningBox = document.getElementById('warning-box');
             const warningStartButton = document.querySelector('.start-game-warning-button');
+
+            const nsfwButtons = document.querySelectorAll('.pack-nsfw');
+            const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
+
             const packButtons = document.querySelectorAll('.packs-container .button-container button');
             const oddManOutButton = document.querySelector('[data-key="never-have-i-ever-settings-odd-man-out"]');
             const startGameButton = document.querySelector('.start-game-button');
@@ -211,17 +224,22 @@
             }
 
             const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
+            
             if (!eighteenPlusEnabled) {
-                for (let i = 3; i < packButtons.length; i++) {
-                    packButtons[i].disabled = true;
-                    packButtons[i].classList.add('disabled');
+                nsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
 
-                    const key = packButtons[i].getAttribute('data-key');
+                    const key = button.getAttribute('data-key');
                     localStorage.setItem(key, 'false');
-                }
-                oddManOutButton.disabled = true;
-                oddManOutButton.classList.add('disabled');
-                localStorage.setItem(oddManOutButton.getAttribute('data-key'), 'false');
+                });
+                gameSettingsNsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    localStorage.setItem(button.getAttribute('data-key'), 'false');
+                });
+
             }
 
             document.querySelectorAll('button').forEach(button => {

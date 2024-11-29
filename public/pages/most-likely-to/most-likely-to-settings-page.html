@@ -58,6 +58,16 @@
     </style>
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
     <header class="header" id="header">
@@ -92,7 +102,7 @@
             enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
             <br><br>
 
-            Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This
+            Enable <highlight>Drink Wheel</highlight> to add drinking forfeits! This
             feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
         </p>
     </div>
@@ -163,11 +173,9 @@
                 <div class="button-container">
                     <button data-key="most-likely-to-calm-and-casual" class="pack-sfw">CALM AND CASUAL !</button>
                     <button data-key="most-likely-to-mild-mischief" class="pack-sfw">MILD MISCHIEF !!</button>
-                    <button data-key="most-likely-to-unsolicited-strays" class="pack-nsfw">UNSOLICITED
-                        STRAYS!!!</button>
+                    <button data-key="most-likely-to-unsolicited-strays" class="pack-sfw">UNSOLICITED STRAYS !!!</button>
                     <button data-key="most-likely-to-open-season" class="pack-nsfw">OPEN SEASON !!!!</button>
-                    <button data-key="most-likely-to-unfiltered-assaults" class="pack-nsfw">UNFILTERED
-                        ASSAULTS!!!!!</button>
+                    <button data-key="most-likely-to-unfiltered-assaults" class="pack-nsfw">UNFILTERED ASSAULTS !!!!!</button>
                 </div>
             </div>
         </div>
@@ -204,6 +212,10 @@
             const startGameButton = document.querySelector('.start-game-button');
             const warningBox = document.getElementById('warning-box');
             const warningStartButton = document.querySelector('.start-game-warning-button');
+
+            const nsfwButtons = document.querySelectorAll('.pack-nsfw');
+            const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
+
             const homeButton = document.querySelector('.home-button');
 
             function updateStartGameButton() {
@@ -213,17 +225,20 @@
             }
 
             if (!eighteenPlusEnabled) {
-                for (let i = 2; i < packButtons.length; i++) {
-                    packButtons[i].disabled = true;
-                    packButtons[i].classList.add('disabled');
+                nsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
 
-                    const key = packButtons[i].getAttribute('data-key');
+                    const key = button.getAttribute('data-key');
                     localStorage.setItem(key, 'false');
-                }
+                });
+                gameSettingsNsfwButtons.forEach(button => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
 
-                drinkingPunishmentButton.disabled = true;
-                drinkingPunishmentButton.classList.add('disabled');
-                localStorage.setItem(drinkingPunishmentButton.getAttribute('data-key'), 'false');
+                    localStorage.setItem(button.getAttribute('data-key'), 'false');
+                });
+
             }
 
             document.querySelectorAll('button').forEach(button => {
