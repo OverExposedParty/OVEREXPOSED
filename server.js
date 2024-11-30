@@ -15,8 +15,11 @@ app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org"], // Added external script source
-    objectSrc: ["'none'"]
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org", "https://www.googletagmanager.com", "https://*.google-analytics.com"],
+    objectSrc: ["'none'"],
+    connectSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com"],
+    imgSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com"],
+    frameSrc: ["https://www.googletagmanager.com", "https://*.google-analytics.com"],
   }
 }));
 app.use(helmet.frameguard({ action: 'sameorigin' }));

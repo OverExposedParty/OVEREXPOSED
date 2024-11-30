@@ -7,7 +7,8 @@
     <meta property="og:description"
         content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
     <meta http-equiv="Content-Security-Policy"
-        content="script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
+
 
     <title>WHAT IS OVEREXPOSED</title>
     <link rel="stylesheet" href="what-is-overexposed-style.css">
@@ -81,11 +82,11 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-ZFD5EBXYE5');
+    gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
 <body>
@@ -205,7 +206,7 @@
             '/images/what-is-overexposed/front/paranoia.svg',
             '/images/what-is-overexposed/front/never-have-i-ever.svg',
             '/images/what-is-overexposed/front/most-likely-to.svg'
-            
+
         ];
 
         const backImages = [
