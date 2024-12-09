@@ -246,5 +246,6 @@ body {
     }
     .back-button {
         top: calc(var(--headerheight) + 20px);
+        left: 10px;
     }
 }
