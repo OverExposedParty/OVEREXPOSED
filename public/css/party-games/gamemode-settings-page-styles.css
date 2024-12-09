@@ -258,7 +258,7 @@ button.disabled {
         margin: 0 auto;
         padding: 0;
         background-color: var(--secondarybackgroundcolour);
-        height: 90%;
+        height: 60%;
         display: flex;
     }
     
