@@ -1,0 +1,97 @@
+:root {
+    --bordersize: 5px;
+    --headerheight:5vh;
+}
+.warning-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 42vh;
+    height: auto;
+    padding: 2%;
+    background-color: #101010;
+    border: var(--bordersize) solid #101010;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    text-align: center;
+    font-family: LemonMilk;
+    border-radius: 25px;
+    max-width: 60vw;
+    max-height: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+.warning-box.active {
+    display: block;
+}
+
+
+
+
+.warning-image {
+    width: 35%;
+    height: 35%;
+    margin: 2.5% 0;
+}
+
+.warning-title {
+    color: var(--warningcolour);
+    font-size: 300%;
+    margin: 2.5% 0%;
+}
+
+.warning-text {
+    color: var(--warningcolour);
+    font-size: 100%;
+    margin: 5% 0 7.5%;
+}
+
+.start-game-warning-button {
+    background-color: #101010;
+    color: var(--warningcolour);
+    border: 6px solid var(--warningcolour);
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 100%;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.start-game-warning-button:hover {
+    background-color: var(--warningcolour);
+    color: #202020;
+    border-color: var(--warningcolour);
+}
+
+@media (orientation: portrait) {
+    .start-game-warning-button {
+        border: 1vw solid var(--warningcolour);
+    }
+    .warning-image {
+        width: 35%;
+        height: 35%;
+        margin-bottom: 2.5%;
+    }
+
+    .warning-title {
+        font-size: 200%;
+    }
+
+    .warning-text {
+        font-size: 60%;
+        padding-bottom: 0vh;
+    }
+
+    .start-game-warning-button {
+        font-size: 60%;
+        margin-bottom: 5%;
+    }
+    .warning-box {
+        padding: 10%;
+    }
+}

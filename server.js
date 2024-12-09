@@ -52,57 +52,57 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'homepage.html'));
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepage', 'homepage.html'));
 });
 
 app.get('/what-is-overexposed', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'what-is-overexposed.html'));
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'what-is-overexposed', 'what-is-overexposed.html'));
 });
 
 app.get('/truth-or-dare-settings', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'truth-or-dare', 'truth-or-dare-settings-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'truth-or-dare', 'truth-or-dare-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/truth-or-dare', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'truth-or-dare', 'truth-or-dare-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'truth-or-dare', 'truth-or-dare-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/paranoia-settings', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'paranoia', 'paranoia-settings-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'paranoia', 'paranoia-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/paranoia', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'paranoia', 'paranoia-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'paranoia', 'paranoia-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/never-have-i-ever-settings', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'never-have-i-ever', 'never-have-i-ever-settings-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'never-have-i-ever', 'never-have-i-ever-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/never-have-i-ever', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'never-have-i-ever', 'never-have-i-ever-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'never-have-i-ever', 'never-have-i-ever-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/most-likely-to-settings', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'most-likely-to', 'most-likely-to-settings-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
 app.get('/most-likely-to', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'most-likely-to', 'most-likely-to-page.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
@@ -112,16 +112,22 @@ app.get('/insights', (req, res) => {
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
-
+//Blogs
 app.get('/insights/final-year-stress', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
 
+app.get('/insights/new-years-eve-party', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'nye-party.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
 // Handle 404 (Page Not Found)
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+  res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html'));
 });
 
 // Start the server

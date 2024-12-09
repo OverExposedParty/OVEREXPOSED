@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+
+    <title>NEVER HAVE I EVER</title>
+
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/orange/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/orange/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/orange/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/orange/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/orange/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/orange/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/orange/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/orange/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/orange/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/orange/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/orange/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/orange/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/orange/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/orange/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/orange/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="/images/favicons/orange/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="/images/favicons/orange/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="/images/favicons/orange/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="/images/favicons/orange/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/orange/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/orange/favicon-512x512.png">
+
+    <style>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .back-button,
+            .side-buttons,
+            .tts-button {
+                display: none;
+            }
+
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container,
+            .spin-the-wheel-container {
+                display: none !important;
+            }
+        }
+
+        .header {
+            background-color: #FF9266;
+        }
+
+        .gamemode-text {
+            font-size: 450%;
+        }
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
+            .gamemode-text {
+                font-size: 45px;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <button class="back-button">BACK</button>
+
+    <div class="container">
+        <div class="content">
+            <div class="gamemode-text-container">
+                <img class="gamemode-text-svg" src="/images/party-games/never-have-i-ever/nhie-text.svg">
+            </div>
+            <div class="main-image-container">
+                <img src="/images/blank-cards/never-have-i-ever-blank-card.svg" alt="Never Have I Ever Blank Card"
+                    class="main-image">
+                <div class="text-container">
+                    Never Have I Ever
+                </div>
+                <div class="card-type-text">card type</div>
+            </div>
+            <div class="button-container">
+                <button id="question-button" class="question-button">Next Question</button>
+            </div>
+        </div>
+    </div>
+    <div class="side-buttons">
+        <img src="/images/icons/orange/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="/images/icons/orange/odd-man-out-icon.svg" alt="Odd Man Out Icon" class="side-button"
+            id="odd-man-out-button">
+    </div>
+
+    <script src="/scripts/general/header.js"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
+
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/orange/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/orange/instagram-icon.svg)');
+
+        //Header & Settings
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            let rotateIcon = document.querySelector('.rotate-icon');
+            rotateIcon.src = '/images/icons/orange/rotate-phone-icon.svg';
+
+            let hasBeenClicked = false;
+            let voices = [];
+            let ttsButtonTimeout;
+            let currentUtterance = null;
+
+            const punishmentEnabled = localStorage.getItem('never-have-i-ever-punishment') === 'true';
+            const oddManOutEnabled = localStorage.getItem('never-have-i-ever-settings-odd-man-out') === 'true';
+
+            const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            const sideButtonsContainer = document.querySelector('.side-buttons');
+            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+
+            var sidebuttonLength = sideButtonElements.length;
+
+            helpTitle.textContent = 'HOW TO PLAY';
+
+            helpText.innerHTML = `
+    You'll be given a question. Everyone in the room must indicate whether or not they have 
+    done the prompt.
+    <br><br>
+    If the person has, they'll need to put a finger down or take a sip (depending on the rules agreed on).
+    <br><br>
+    Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
+    <br><highlight>Odd Man Out</highlight>, where the odd person out must spin the wheel and perform the punishment given.
+`;
+
+            if (!oddManOutEnabled) {
+                document.getElementById('odd-man-out-button').style.height = '0';
+                document.getElementById('odd-man-out-button').style.width = '0';
+                sidebuttonLength -= 1;
+            }
+            if (sidebuttonLength <= 1) {
+                sideButtonsContainer.classList.add('single');
+            }
+
+
+            let simpleAdmissions = [];
+            let risingSuspicions = [];
+            let diggingDeeper = [];
+            let verbalDiarrhea = [];
+            let rawAndUnfiltered = [];
+
+            let allQuestions = [];
+            let currentQuestionIndex = 0;
+
+
+
+            async function loadJSONFiles() {
+                const shouldFetchSimpleAdmissions = localStorage.getItem('never-have-i-ever-simple-admissions') === 'true';
+                const shouldFetchRisingSuspicions = localStorage.getItem('never-have-i-ever-rising-suspicions') === 'true';
+                const shouldFetchDiggingDeeper = localStorage.getItem('never-have-i-ever-digging-deeper') === 'true';
+                const shouldFetchVerbalDiarrhea = localStorage.getItem('never-have-i-ever-verbal-diarrhea') === 'true';
+                const shouldFetchRawAndUnfiltered = localStorage.getItem('never-have-i-ever-raw-and-unfiltered') === 'true';
+
+                const files = [];
+                if (shouldFetchSimpleAdmissions) files.push('/questions/never-have-i-ever/simple-admissions.json');
+                if (shouldFetchRisingSuspicions) files.push('/questions/never-have-i-ever/rising-suspicions.json');
+                if (shouldFetchDiggingDeeper) files.push('/questions/never-have-i-ever/digging-deeper.json');
+                if (shouldFetchVerbalDiarrhea) files.push('/questions/never-have-i-ever/verbal-diarrhea.json');
+                if (shouldFetchRawAndUnfiltered) files.push('/questions/never-have-i-ever/raw-and-unfiltered.json');
+
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
+
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
+
+                    const simpleAdmissionsData = shouldFetchSimpleAdmissions ? await responses[files.indexOf('/questions/never-have-i-ever/simple-admissions.json')].json() : { 'never-have-i-ever-simple-admissions': [] };
+                    const risingSuspicionsData = shouldFetchRisingSuspicions ? await responses[files.indexOf('/questions/never-have-i-ever/rising-suspicions.json')].json() : { 'never-have-i-ever-rising-suspicions': [] };
+                    const diggingDeeperData = shouldFetchDiggingDeeper ? await responses[files.indexOf('/questions/never-have-i-ever/digging-deeper.json')].json() : { 'never-have-i-ever-digging-deeper': [] };
+                    const verbalDiarrheaData = shouldFetchVerbalDiarrhea ? await responses[files.indexOf('/questions/never-have-i-ever/verbal-diarrhea.json')].json() : { 'never-have-i-ever-verbal-diarrhea': [] };
+                    const rawAndUnfilteredData = shouldFetchRawAndUnfiltered ? await responses[files.indexOf('/questions/never-have-i-ever/raw-and-unfiltered.json')].json() : { 'never-have-i-ever-raw-and-unfiltered': [] };
+
+                    simpleAdmissions = simpleAdmissionsData['never-have-i-ever-simple-admissions'] || [];
+                    risingSuspicions = risingSuspicionsData['never-have-i-ever-rising-suspicions'] || [];
+                    diggingDeeper = diggingDeeperData['never-have-i-ever-digging-deeper'] || [];
+                    verbalDiarrhea = verbalDiarrheaData['never-have-i-ever-verbal-diarrhea'] || [];
+                    rawAndUnfiltered = rawAndUnfilteredData['never-have-i-ever-raw-and-unfiltered'] || [];
+
+                    allQuestions = [...simpleAdmissions, ...risingSuspicions, ...diggingDeeper, ...verbalDiarrhea, ...rawAndUnfiltered];
+
+                    shuffleQuestions();
+
+                } catch (error) {
+                    console.error('Failed to load JSON files:', error);
+                }
+            }
+
+            function shuffleQuestions() {
+                for (let i = allQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+                }
+                currentQuestionIndex = 0;
+            }
+
+            function enableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.remove('disabled');
+                }
+            }
+
+            function disableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (!ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.add('disabled');
+                    clearTimeout(ttsButtonTimeout);
+                    ttsButtonTimeout = setTimeout(() => {
+                        enableTTSButton();
+                    }, 8000);
+                }
+            }
+
+            function stopSpeech() {
+                if (responsiveVoice.isPlaying()) {
+                    responsiveVoice.cancel();
+                }
+            }
+
+            function vibrateOnClick() {
+                if (vibrationEnabled && 'vibrate' in navigator) {
+                    navigator.vibrate(200);
+                }
+            }
+
+            document.querySelector('.back-button').addEventListener('click', () => {
+                window.location.href = 'never-have-i-ever-settings';
+            });
+
+            function getSelectedVoice() {
+                const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
+
+                const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`);
+
+                switch (selectedVoiceKey) {
+                    case 'tts-voice-male1':
+                        return 'UK English Male';
+                    case 'tts-voice-male2':
+                        return 'US English Male';
+                    case 'tts-voice-female1':
+                        return 'UK English Female';
+                    case 'tts-voice-female2':
+                        return 'US English Female';
+                    default:
+                        return 'UK English Male';
+                }
+            }
+            document.getElementById('tts-button').addEventListener('click', () => {
+                const textContainerText = document.querySelector('.text-container').textContent;
+                const selectedVoiceName = getSelectedVoice();
+
+                if (selectedVoiceName) {
+                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                } else {
+                    responsiveVoice.speak(textContainerText, "US English Female");
+                }
+
+                disableTTSButton();
+            });
+
+            function updateTextContainer(text, cardType, punishment) {
+                const textContainer = document.querySelector('.text-container');
+                textContainer.innerHTML =
+                    `<span class="question-text">${text}</span>` +
+                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+                if (!textContainer.classList.contains('text-container')) {
+                    textContainer.classList.add('text-container-small');
+                }
+                document.querySelector('.card-type-text').textContent = cardType;
+
+                if (!hasBeenClicked) {
+                    hasBeenClicked = true;
+                    enableTTSButton();
+                }
+
+                vibrateOnClick();
+            }
+
+            function getNextQuestion() {
+                if (currentQuestionIndex >= allQuestions.length) {
+                    shuffleQuestions();
+                }
+
+                stopSpeech();
+                enableTTSButton();
+
+                const selectedQuestion = allQuestions[currentQuestionIndex];
+                const selectedPunishment = selectedQuestion['punishment'];
+                const cardType = simpleAdmissions.includes(selectedQuestion) ? 'Simple Admissions' :
+                    risingSuspicions.includes(selectedQuestion) ? 'Rising Suspicions' :
+                        diggingDeeper.includes(selectedQuestion) ? 'Digging Deeper' :
+                            verbalDiarrhea.includes(selectedQuestion) ? 'Verbal Diarrhea' :
+                                'Raw and Unfiltered';
+
+                currentQuestionIndex++;
+
+                return { question: selectedQuestion['question'], punishment: selectedPunishment, cardType: cardType };
+            }
+
+            document.querySelector('.question-button').addEventListener('click', () => {
+                const selectedQuestionObj = getNextQuestion();
+                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
+
+                if (!hasBeenClicked) {
+                    enableTTSButton();
+                    hasBeenClicked = true;
+                }
+                vibrateOnClick();
+            });
+
+            await loadJSONFiles();
+        });
+
+        //Make the Page size fit the page
+        function updateVh() {
+            let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
+            document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+        }
+
+        window.addEventListener('load', updateVh);
+        window.addEventListener('resize', updateVh);
+
+        const heading = document.createElement('h1');
+        heading.textContent = 'NEVER HAVE I EVER';
+        heading.style.color = selectedColor;
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
+    </script>
+    <script src="/scripts/party-games/never-have-i-ever/odd-man-out.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+</body>
+
+</html>

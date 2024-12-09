@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
-    
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+
     <title>BLOG</title>
-    <link rel="stylesheet" href="/header.css">
-    <link rel="stylesheet" href="/rotate-device.css">
-    <link rel="stylesheet" href="blog-landing-page-style.css">
-    <link rel="stylesheet" href="settings-style.css">
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+    <link rel="stylesheet" href="/css/blogs/blog-landing-page-style.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blogs/blue/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blogs/blue/favicon-32x32.png">
@@ -54,86 +54,20 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-ZFD5EBXYE5');
+    gtag('config', 'G-ZFD5EBXYE5');
 </script>
+
+<script src="/scripts/general/header-html.js"></script>
 
 <body>
     <div class="full-page-container-static" id="full-page-container-static"></div>
-    <header class="header" id="header">
-        <div class="icon-container extra-menu-icon">
-            <div class="extra-menu-icon">
-                <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
-            </div>
-        </div>
-        <div class="logo-container">
-            <a href="/">
-                <img src="/images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
-            </a>
-        </div>
-        <div class="icon-container settings-icon">
-            <div class="settings-icon">
-                <img src="/images/icons/settings.svg" alt="Settings">
-            </div>
-        </div>
-        <div class="icon-container help-icon" style="height:0;">
-            <div class="help-icon" style="height:0;">
-                <img src="/images/icons/help-icon.svg" alt="Help" style="height:0;">
-            </div>
-        </div>
-    </header>
 
-    <div class="landscape-message">
-        Please rotate your phone to continue
-        <img src="/images/icons/blogs/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
-    </div>
-    <div class="extra-menu-container">
-        <h1 class="extra-menu-title">Menu</h1>
-        <a href="/"><button class="extra-menu-button">PARTY GAMES</button></a>
-        <a href="/insights"><button class="extra-menu-button">INSIGHTS</button></a>
-        <a href="/what-is-overexposed"><button class="extra-menu-button">WHAT IS OVEREXPOSED?</button></a>
-        <div class="social-media-container">
-            <div class="social-media-image-container">
-                <a id="instagram-link" href="#" target="_blank"><img class="social-media-image" id="instagram-icon"
-                        src="/images/icons/blogs/blue/instagram-icon.svg" alt="Instagram"></a>
-            </div>
-            <div class="social-media-image-container">
-                <a id="tiktok-link" href="#"><img class="social-media-image" id="tik-tok-icon"
-                        src="/images/icons/blogs/blue/tik-tok-icon.svg" alt="TikTok"></a>
-            </div>
-        </div>
-    </div>
-    <div class="overlay" id="overlay"></div>
-    <div class="settings-box" id="settings-box">
-        <h2 id="settings-title" class="settings-title">Settings</h2>
-        <div class="settings-content">
-            <div class="settings-option">
-                <label for="settings-nsfw">NSFW</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="settings-nsfw">
-                    <span class="slider"></span>
-                </label>
-            </div>
+    <div id="header-placeholder"></div>
 
-            <div class="settings-option">
-                <label for="settings-vibration">VIBRATION</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" style="opacity: 0;" id="settings-vibration">
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <div class="tts-voice-buttons">
-            <div class="tts-voice-button" data-button="1" data-key="tts-voice-male1">M1</div>
-            <div class="tts-voice-button" data-button="2" data-key="tts-voice-male2">M2</div>
-            <div class="tts-voice-button" data-button="3" data-key="tts-voice-female1">F1</div>
-            <div class="tts-voice-button" data-button="4" data-key="tts-voice-female2">F2</div>
-        </div>
-    </div>
     <div class="parent-container">
         <div class="title-container">
             <button class="filter-button" id="filter-button">FILTER</button>
@@ -150,27 +84,40 @@
             </div>
             <div class="tag-container">
                 <label><input type="checkbox" name="filter" value="tag1" class="tag-checkbox" id="tag1"
-                        checked><span>########</span></label>
+                        checked><span>University Life</span></label>
                 <label><input type="checkbox" name="filter" value="tag2" class="tag-checkbox" id="tag2"
-                        checked><span>########</span></label>
+                        checked><span>Mental Health & Well-being</span></label>
                 <label><input type="checkbox" name="filter" value="tag3" class="tag-checkbox" id="tag3"
-                        checked><span>########</span></label>
+                        checked><span>Productivity & Time Management</span></label>
+                <label><input type="checkbox" name="filter" value="tag4" class="tag-checkbox" id="tag4"
+                        checked><span>Social Life & Relationships</span></label>
+                <label><input type="checkbox" name="filter" value="tag5" class="tag-checkbox" id="tag5"
+                        checked><span>Adulting & Career</span></label>
                 <label><input type="checkbox" name="filter" value="all" class="tag-checkbox" id="tag-all"
                         checked><span>all</span></label>
             </div>
         </div>
 
         <div class="container" id="blog-container">
-            
+
         </div>
     </div>
-    <script src="/header.js"></script>
-    <script src="/social-media-links.js"></script>
+
+    <script src="/scripts/general/header.js"></script>
+
     <script>
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-        selectButton(selectedButton);
+
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/blue/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/blue/instagram-icon.svg)');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const rotateIcon = document.querySelector('.rotate-icon');
+            rotateIcon.src = '/images/icons/blogs/blue/rotate-phone-icon.svg';
+        });
+
         //Landing Page Scripts
-        let currentlyOpenPostIndex = null; 
+        let currentlyOpenPostIndex = null;
         document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
         document.documentElement.style.setProperty('--tag2colour', '#F57C69');
         document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
@@ -178,6 +125,8 @@
         const tag1Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag1colour');
         const tag2Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag2colour');
         const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
+        const tag4Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag4colour');
+        const tag5Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag5colour');
 
         const filterButton = document.querySelector('.filter-button');
         const filterContainer = document.querySelector('.filter-container');
@@ -243,6 +192,10 @@
                     return tag2Colour;
                 case 'tag3':
                     return tag3Colour;
+                case 'tag4':
+                    return tag4Colour;
+                case 'tag5':
+                    return tag5Colour;
                 default:
                     return primaryPageColour;
             }
@@ -456,6 +409,9 @@
             }
         }
 
+
+        
+
         window.addEventListener('resize', moveSearchBarBasedOnOrientation);
 
         document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
@@ -466,11 +422,6 @@
         heading.style.fontFamily = 'LemonMilk';
         heading.style.fontSize = '5vh';
         heading.style.textAlign = 'center';
-
     </script>
-
-
-
 </body>
-
 </html>

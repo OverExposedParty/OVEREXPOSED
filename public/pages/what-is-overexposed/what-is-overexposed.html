@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:description"
+        content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ 'unsafe-inline';">
+
+
+    <title>WHAT IS OVEREXPOSED</title>
+    <link rel="stylesheet" href="/css/what-is-overexposed/what-is-overexposed-style.css">
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blue/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/blue/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/blue/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/blue/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/blue/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/blue/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/blue/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/blue/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/blue/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/blue/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/blue/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/blue/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/blue/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/blue/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="/images/favicons/blue/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="/images/favicons/blue/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="/images/favicons/blue/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/blue/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/blue/favicon-512x512.png">
+
+    <style>
+        #swipe-indicator {
+            position: absolute;
+            bottom: 12vh;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            text-align: center;
+            animation: swipeGlowAnimation 0.5s linear forwards;
+        }
+
+        @keyframes swipeGlowAnimation {
+            0% {
+                transform: translateX(300%) scale(1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateX(0) scale(1);
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-300%) scale(0.8);
+                box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div id="header-placeholder"></div>
+
+    <div class="landscape-message" id="landscape-message">
+        Please rotate your phone to continue
+        <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">OVEREXPOSED</h2>
+    </div>
+
+    <img src="/images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
+    <div class="container">
+        <div class="about-us-container">
+            <h1 class="about-us-text">INFO</h1>
+        </div>
+
+        <div class="card-container">
+            <div class="card">
+                <img class="front" src="/images/what-is-overexposed/front/what-is-overexposed.svg"
+                    alt="Overexposed Front">
+                <img class="back" src="/images/what-is-overexposed/back/what-is-overexposed.svg" alt="Overexposed Back">
+            </div>
+        </div>
+        <div id="swipe-indicator" class="swipe-indicator"></div>
+    </div>
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+    <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+        //Header & Settings
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        let isSpeaking = false;
+        const cardTexts = [
+            { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
+            { front: 'Party Games', back: 'Truth Or Dare... Unknown...' },
+            { front: 'Truth or Dare', back: 'Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!' }
+        ];
+
+        const frontImages = [
+            '/images/what-is-overexposed/front/what-is-overexposed.svg',
+            '/images/what-is-overexposed/front/party-games.svg',
+            '/images/what-is-overexposed/front/truth-or-dare.svg',
+            '/images/what-is-overexposed/front/paranoia.svg',
+            '/images/what-is-overexposed/front/never-have-i-ever.svg',
+            '/images/what-is-overexposed/front/most-likely-to.svg'
+
+        ];
+
+        const backImages = [
+            '/images/what-is-overexposed/back/what-is-overexposed.svg',
+            '/images/what-is-overexposed/back/party-games.svg',
+            '/images/what-is-overexposed/back/truth-or-dare.svg',
+            '/images/what-is-overexposed/back/paranoia.svg',
+            '/images/what-is-overexposed/back/never-have-i-ever.svg',
+            '/images/what-is-overexposed/back/most-likely-to.svg'
+        ];
+
+        const card = document.querySelector('.card');
+        const frontImg = document.querySelector('.card .front');
+        const backImg = document.querySelector('.card .back');
+        const ttsButton = document.getElementById('tts-button');
+
+
+        let startX = 0;
+        let isDragging = false;
+        let currentRotationY = 0;
+        let imageIndex = 0;
+        let hasSwipedLeft = false;
+
+        function isFrontVisible() {
+            return Math.abs(currentRotationY % 360) < 90 || Math.abs(currentRotationY % 360) > 270;
+        }
+
+        function isBackVisible() {
+            return !isFrontVisible();
+        }
+
+        function startSwipe(x) {
+            startX = x;
+            isDragging = true;
+        }
+
+        function endSwipe(x) {
+            if (!isDragging) return;
+
+            const endX = x;
+            const swipeDirection = endX - startX;
+
+            if (Math.abs(swipeDirection) > 50) {
+                if (swipeDirection > 0 && imageIndex === 0 && isFrontVisible()) {
+                    isDragging = false;
+                    return;
+                } else if (swipeDirection < 0 && imageIndex === frontImages.length - 1 && isBackVisible()) {
+                    isDragging = false;
+                    return;
+                }
+
+                const rotationAmount = swipeDirection > 0 ? 180 : -180;
+                currentRotationY += rotationAmount;
+                card.style.transform = `rotateY(${currentRotationY}deg)`;
+
+                if (Math.abs(currentRotationY) % 360 === 0) {
+                    if (currentRotationY % 360 === 0 && swipeDirection < 0) {
+                        imageIndex = (imageIndex + 1) % frontImages.length;
+                    }
+                }
+
+                if (Math.abs(currentRotationY) % 180 === 0) {
+                    if (currentRotationY % 180 === 0 && swipeDirection > 0 && isBackVisible()) {
+                        imageIndex = (imageIndex - 1 + frontImages.length) % frontImages.length;
+                    }
+
+                    if (isFrontVisible()) {
+                        frontImg.src = frontImages[imageIndex];
+                    }
+
+                    if (isBackVisible()) {
+                        backImg.src = backImages[imageIndex];
+                    }
+                }
+
+                if (swipeDirection < 0 && !hasSwipedLeft) {
+                    hasSwipedLeft = true;
+                    hideSwipeIndicator();
+                }
+            }
+            isDragging = false;
+        }
+
+        function getSelectedVoice() {
+            const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
+
+            const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+
+            console.log(`Selected Voice Key: ${selectedVoiceKey}`);
+
+            switch (selectedVoiceKey) {
+                case 'tts-voice-male1':
+                    return 'UK English Male';
+                case 'tts-voice-male2':
+                    return 'US English Male';
+                case 'tts-voice-female1':
+                    return 'UK English Female';
+                case 'tts-voice-female2':
+                    return 'US English Female';
+                default:
+                    return 'UK English Male';
+            }
+        }
+        function estimateSpeechDuration(text) {
+            const words = text.split(" ").length;
+            const averageWordDuration = 0.6;
+            return words * averageWordDuration * 1000;
+        }
+
+        function readText(text) {
+            if (isSpeaking) {
+                responsiveVoice.cancel();
+                isSpeaking = false;
+                ttsButton.src = "/images/icons/grey/tts-icon.svg";
+            } else {
+                const selectedVoice = getSelectedVoice();
+                responsiveVoice.speak(text, selectedVoice);
+
+                isSpeaking = true;
+                ttsButton.src = "/images/icons/blue/tts-icon.svg";
+
+                const duration = estimateSpeechDuration(text);
+                setTimeout(() => {
+                    isSpeaking = false;
+                    ttsButton.src = "/images/icons/grey/tts-icon.svg";
+                }, duration);
+            }
+        }
+
+        ttsButton.addEventListener('click', () => {
+            const currentText = isFrontVisible() ? cardTexts[imageIndex].front : cardTexts[imageIndex].back;
+            readText(currentText);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (e.button === 0 || e.button === 1) {
+                startSwipe(e.clientX);
+            }
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.button === 0 || e.button === 1) {
+                endSwipe(e.clientX);
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                //
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                startSwipe(e.touches[0].clientX);
+            }
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length === 1) {
+                endSwipe(e.changedTouches[0].clientX);
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length === 1) {
+            }
+        });
+
+        function hideSwipeIndicator() {
+            const swipeIndicator = document.getElementById('swipe-indicator');
+            swipeIndicator.style.animation = 'none';
+            swipeIndicator.style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.card img');
+            images.forEach(img => {
+                img.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                });
+            });
+            function startSwipeIndicator() {
+                if (!hasSwipedLeft) {
+                    const swipeIndicator = document.getElementById('swipe-indicator');
+                    swipeIndicator.style.display = 'flex';
+                    swipeIndicator.style.animation = 'swipeGlowAnimation 0.5s linear forwards';
+                    swipeIndicator.style.margin = '0 auto';
+                    setTimeout(() => {
+                        if (!hasSwipedLeft) {
+                            swipeIndicator.style.display = 'none';
+                        }
+                    }, 500);
+                }
+            }
+            startSwipeIndicator();
+            setInterval(startSwipeIndicator, 2500);
+        });
+
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'WHAT IS OVEREXPOSED?';
+        heading.style.color = selectedColor;
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
+        heading.classList.add('loading-screen');
+    </script>
+</body>
+
+    <script src="/scripts/general/header.js"></script>
+</html>

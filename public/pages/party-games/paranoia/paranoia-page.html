@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+
+    <title>PARANOIA</title>
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
+    <link rel="stylesheet" href="/css/party-games/coin-flip.css">
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/purple/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/purple/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/purple/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/purple/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/purple/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/purple/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/purple/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/purple/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/purple/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/purple/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/purple/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/purple/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/purple/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/purple/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/purple/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="/images/favicons/purple/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="/images/favicons/purple/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="/images/favicons/purple/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="/images/favicons/purple/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/purple/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/purple/favicon-512x512.png">
+
+    <style>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .header {
+            background-color: var(--primarypagecolour);
+        }
+
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .container,
+            .header,
+            .back-button,
+            .side-buttons,
+            .tts-button{
+                display: none;
+            }
+
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container,
+            .spin-the-wheel-container  {
+                display: none !important;
+            }
+        }
+
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
+            .gamemode-text {
+                font-size: 190%;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
+    <div class="coin-flip-container" id="coin-flip-container">
+        <button id="coin-button">
+            <div class="coin" id="coin"><img src="/images/icons/purple/heads-icon.svg"></div>
+        </button>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <button class="back-button">BACK</button>
+
+    <div class="container">
+        <div class="content">
+            <div class="gamemode-text-container">
+                <img class="gamemode-text-svg" src="/images/party-games/paranoia/paranoia-text.svg">
+            </div>
+            <div class="main-image-container">
+                <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
+                <div class="text-container">
+                    Paranoia
+                </div>
+                <div class="card-type-text">card type</div>
+            </div>
+            <div class="button-container">
+                <button id="question-button" class="question-button">Next Question</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-buttons">
+        <img src="/images/icons/purple/heads-icon.svg" alt="Heads Icon" class="side-button" id="coin-flip-button">
+        <img src="/images/icons/purple/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
+        <img src="/images/icons/purple/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
+    </div>
+
+    <script src="/scripts/general/header.js"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
+
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/purple/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/purple/instagram-icon.svg)');
+
+        //Header & Settings
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        document.addEventListener('DOMContentLoaded', async () => {
+            const rotateIcon = document.querySelector('.rotate-icon');
+            rotateIcon.src = '/images/icons/purple/rotate-phone-icon.svg';
+
+            let hasBeenClicked = false;
+            let ttsButtonTimeout;
+            let currentQuestionIndex = 0;
+
+            const punishmentEnabled = localStorage.getItem('paranoia-settings-punishment') === 'true';
+            const coinFlipEnabled = localStorage.getItem('paranoia-settings-coin-flip') === 'true';
+
+            const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
+
+            const sideButtonsContainer = document.querySelector('.side-buttons');
+            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+
+            helpTitle.textContent = 'HOW TO PLAY';
+
+helpText.innerHTML = `
+    You'll be given a question. Without showing anyone in the room, pick someone who fits the 
+    prompt best and watch them panic.
+    <br><br>
+    If the person would like to find out the question, they have the ability to flip a coin to find out.
+    <br><br>
+    Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
+    <highlight>Drink Wheel</highlight>, where the person chosen will have 
+    to spin the drink wheel to find out the question.
+`;
+
+            if (sideButtonsContainer.querySelectorAll('.side-button').length < 1) {
+                sideButtonsContainer.classList.add('single');
+            }
+
+            if (!punishmentEnabled) {
+                document.getElementById('spin-button').style.height = '0';
+                document.getElementById('spin-button').style.width = '0';
+            }
+            if (!coinFlipEnabled) {
+                document.getElementById('coin-flip-button').style.height = '0';
+                document.getElementById('coin-flip-button').style.width = '0';
+            }
+
+
+            let hiddenAgendas = [];
+            let subtleShots = [];
+            let friendlyFears = [];
+            let behindClosedDoors = [];
+            let shadyShenanigans = [];
+
+            let allQuestions = [];
+
+            async function loadJSONFiles() {
+                const shouldFetchFriendlyFears = localStorage.getItem('paranoia-friendly-fears') === 'true';
+                const shouldFetchShadyShenanigans = localStorage.getItem('paranoia-shady-shenanigans') === 'true';
+                const shouldFetchSubtleShots = localStorage.getItem('paranoia-subtle-shots') === 'true';
+                const shouldFetchHiddenAgendas = localStorage.getItem('paranoia-hidden-agendas') === 'true';
+                const shouldFetchBehindClosedDoors = localStorage.getItem('paranoia-behind-closed-doors') === 'true';
+
+                const files = [];
+                if (shouldFetchFriendlyFears) files.push('/questions/paranoia/friendly-fears.json');
+                if (shouldFetchShadyShenanigans) files.push('/questions/paranoia/shady-shenanigans.json');
+                if (shouldFetchSubtleShots) files.push('/questions/paranoia/subtle-shots.json');
+                if (shouldFetchHiddenAgendas) files.push('/questions/paranoia/hidden-agendas.json');
+                if (shouldFetchBehindClosedDoors) files.push('/questions/paranoia/behind-closed-doors.json');
+
+                try {
+                    const responses = await Promise.all(files.map(file => fetch(file)));
+
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+                        }
+                    });
+
+                    const friendlyFearsData = shouldFetchFriendlyFears ? await responses[files.indexOf('/questions/paranoia/friendly-fears.json')].json() : { 'paranoia-friendly-fears': [] };
+                    const shadyShenanigansData = shouldFetchShadyShenanigans ? await responses[files.indexOf('/questions/paranoia/shady-shenanigans.json')].json() : { 'paranoia-shady-shenanigans': [] };
+                    const subtleShotsData = shouldFetchSubtleShots ? await responses[files.indexOf('/questions/paranoia/subtle-shots.json')].json() : { 'paranoia-subtle-shots': [] };
+                    const hiddenAgendasData = shouldFetchHiddenAgendas ? await responses[files.indexOf('/questions/paranoia/hidden-agendas.json')].json() : { 'paranoia-hidden-agendas': [] };
+                    const behindClosedDoorsData = shouldFetchBehindClosedDoors ? await responses[files.indexOf('/questions/paranoia/behind-closed-doors.json')].json() : { 'paranoia-behind-closed-doors': [] };
+
+                    friendlyFears = friendlyFearsData['paranoia-friendly-fears'] || [];
+                    shadyShenanigans = shadyShenanigansData['paranoia-shady-shenanigans'] || [];
+                    subtleShots = subtleShotsData['paranoia-subtle-shots'] || [];
+                    hiddenAgendas = hiddenAgendasData['paranoia-hidden-agendas'] || [];
+                    behindClosedDoors = behindClosedDoorsData['paranoia-behind-closed-doors'] || [];
+
+                    allQuestions = [...friendlyFears, ...shadyShenanigans, ...subtleShots, ...hiddenAgendas, ...behindClosedDoors];
+
+                    shuffleQuestions();
+
+                } catch (error) {
+                    console.error('Failed to load JSON files:', error);
+                }
+            }
+
+            function shuffleQuestions() {
+                for (let i = allQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+                }
+                currentQuestionIndex = 0;
+            }
+
+            function enableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.remove('disabled');
+                }
+            }
+
+            function disableTTSButton() {
+                const ttsButton = document.getElementById('tts-button');
+                if (!ttsButton.classList.contains('disabled')) {
+                    ttsButton.classList.add('disabled');
+                    clearTimeout(ttsButtonTimeout);
+                    ttsButtonTimeout = setTimeout(() => {
+                        enableTTSButton();
+                    }, 8000);
+                }
+            }
+            function stopSpeech() {
+                if (responsiveVoice.isPlaying()) {
+                    responsiveVoice.cancel();
+                }
+            }
+
+
+            function vibrateOnClick() {
+                if (vibrationEnabled && 'vibrate' in navigator) {
+                    navigator.vibrate(200);
+                }
+            }
+
+            document.querySelector('.back-button').addEventListener('click', () => {
+                window.location.href = 'paranoia-settings';
+            });
+
+            function getSelectedVoice() {
+                const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
+
+                const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+
+                console.log(`Selected Voice Key: ${selectedVoiceKey}`);
+
+                switch (selectedVoiceKey) {
+                    case 'tts-voice-male1':
+                        return 'UK English Male';
+                    case 'tts-voice-male2':
+                        return 'US English Male';
+                    case 'tts-voice-female1':
+                        return 'UK English Female';
+                    case 'tts-voice-female2':
+                        return 'US English Female';
+                    default:
+                        return 'UK English Male';
+                }
+            }
+
+            document.getElementById('tts-button').addEventListener('click', () => {
+                const textContainerText = document.querySelector('.text-container').textContent;
+                const selectedVoiceName = getSelectedVoice();
+
+                if (selectedVoiceName) {
+                    responsiveVoice.speak(textContainerText, selectedVoiceName);
+                } else {
+                    responsiveVoice.speak(textContainerText, "US English Female");
+                }
+
+                disableTTSButton();
+            });
+
+            function updateTextContainer(text, cardType) {
+                const textContainer = document.querySelector('.text-container');
+                textContainer.innerHTML =
+                    `<span class="question-text">${text}</span>`;
+                if (!textContainer.classList.contains('text-container')) {
+                    textContainer.classList.add('text-container-small');
+                }
+                document.querySelector('.card-type-text').textContent = cardType;
+            }
+
+            function getNextQuestion() {
+                if (currentQuestionIndex >= allQuestions.length) {
+                    shuffleQuestions();
+                }
+                stopSpeech();
+                enableTTSButton();
+
+                const selectedQuestion = allQuestions[currentQuestionIndex];
+                const cardType = friendlyFears.includes(selectedQuestion) ? 'Friendly Fears' :
+                    shadyShenanigans.includes(selectedQuestion) ? 'Shady Shenanigans' :
+                        subtleShots.includes(selectedQuestion) ? 'Subtle Shots' :
+                            hiddenAgendas.includes(selectedQuestion) ? 'Hidden Agendas' :
+                                'Behind Closed Doors';
+
+                currentQuestionIndex++;
+
+                return { question: selectedQuestion['question'], cardType: cardType };
+            }
+
+            document.querySelector('.question-button').addEventListener('click', () => {
+                const selectedQuestionObj = getNextQuestion();
+                updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
+
+                if (!hasBeenClicked) {
+                    enableTTSButton();
+                    hasBeenClicked = true;
+                }
+                vibrateOnClick();
+            });
+            await loadJSONFiles();
+        });
+        //Make the Page size fit the page
+        function updateVh() {
+            let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
+            document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+        }
+
+        window.addEventListener('load', updateVh);
+        window.addEventListener('resize', updateVh);
+
+        //First Time Loading Page
+        if (!localStorage.getItem('paranoia-first-time')) {
+            localStorage.setItem('paranoia-first-time', 'true');
+            toggleHelp();
+        }
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'PARANOIA';
+        heading.style.color = selectedColor;
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
+    </script>
+    <script src="/scripts/party-games/spin-the-wheel.js"></script>
+    <script src="/scripts/party-games/paranoia/coin-flip.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+</body>
+
+</html>

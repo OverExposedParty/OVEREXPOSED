@@ -1,0 +1,34 @@
+{
+    "paranoia-packs": [
+        {
+            "pack-name": "Friendly Fears",
+            "pack-path": "/questions/never-have-i-ever/friendly-fears.json",
+            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
+            "pack-colour": "#9D8AFF"
+        },
+        {
+            "pack-name": "Shady Shenanigans",
+            "pack-path": "/questions/never-have-i-ever/shady-shenanigans.json",
+            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
+            "pack-colour": "#9D8AFF"
+        },
+        {
+            "pack-name": "Subtle Shots",
+            "pack-path": "/questions/never-have-i-ever/subtle-shots.json",
+            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
+            "pack-colour": "#9D8AFF"
+        },
+        {
+            "pack-name": "Hidden Agendas",
+            "pack-path": "/questions/never-have-i-ever/hidden-agendas.json",
+            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
+            "pack-colour": "#9D8AFF"
+        },
+        {
+            "pack-name": "Behind Closed Doors",
+            "pack-path": "/questions/never-have-i-ever/behind-closed-doors.json",
+            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
+            "pack-colour": "#9D8AFF"
+        }
+    ]
+}

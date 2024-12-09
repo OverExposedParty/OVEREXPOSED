@@ -1,0 +1,46 @@
+{
+    "most-likely-to-packs": [
+        {
+            "pack-name": "Calm and Casual",
+            "pack-path": "/questions/most-likely-to/calm-and-casual.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "#FFEE66"
+        },
+        {
+            "pack-name": "Mild Mischief",
+            "pack-path": "/questions/most-likely-to/mild-mischief.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "#FFEE66"
+        },
+        {
+            "pack-name": "Unsolicited Strays",
+            "pack-path": "/questions/most-likely-to/unsolicited-strays.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "#FFEE66"
+        },
+        {
+            "pack-name": "Open Season",
+            "pack-path": "/questions/most-likely-to/open-season.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "#FFEE66"
+        },
+        {
+            "pack-name": "Unfiltered Assaults",
+            "pack-path": "/questions/most-likely-to/unfiltered-assaults.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "#FFEE66"
+        },
+        {
+            "pack-name": "Naughty or Nice",
+            "pack-path": "/questions/most-likely-to/naughty-or-nice.json",
+            "pack-card": "/images/blank-cards/limited/naughty-or-nice-blank-card.svg",
+            "pack-colour": "#2E8B57"
+        },
+        {
+            "pack-name": "Memories & Mayhem",
+            "pack-path": "/questions/most-likely-to/memories-and-mayhem.json",
+            "pack-card": "/images/blank-cards/limited/memories-and-mayhem-blank-card.svg",
+            "pack-colour": "#F8F4E3"
+        }
+    ]
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+
+    <title>TRUTH OR DARE SETTINGS</title>
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-settings-page-styles.css">
+    <link rel="stylesheet" href="/css/general/warning-message-style.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blue/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/blue/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/blue/favicon-64x64.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/blue/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/blue/favicon-128x128.png">
+    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/blue/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/blue/favicon-512x512.png">
+    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/blue/favicon-57x57.png">
+    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/blue/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/blue/favicon-114x114.png">
+    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/blue/favicon-120x120.png">
+    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/blue/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/blue/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/blue/favicon-180x180.png">
+    <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+    <meta name="msapplication-square70x70logo" content="/images/favicons/blue/favicon-70x70.png">
+    <meta name="msapplication-square150x150logo" content="/images/favicons/blue/favicon-150x150.png">
+    <meta name="msapplication-square310x310logo" content="/images/favicons/blue/favicon-310x310.png">
+    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/blue/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/blue/favicon-512x512.png">
+    <style>
+        .landscape-message {
+            color: var(--primarypagecolour);
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .main-container,
+            .header,
+            .home-button-container,
+            .help-container {
+                display: none;
+            }
+
+            .warning-box,
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div id="header-placeholder"></div>
+
+    <div class="warning-box" id="warning-box">
+        <h2 id="warning-title" class="warning-title">NSFW</h2>
+        <img src="/images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
+        <p class="warning-text">This content is not suitable for all audiences.</p>
+        <a href="truth-or-dare" class="start-game-warning-button">START GAME</a>
+    </div>
+
+    <div class="home-button-container">
+        <button class="home-button">HOME</button>
+    </div>
+
+    <div class="main-container">
+        <div class="game-settings-button-container">
+            <button id="packs-settings" class="settings-button active">Packs</button>
+            <button id="game-settings" class="settings-button">Game Settings</button>
+        </div>
+        <div class="packs-container active">
+            <div class="packs-header-container">
+                <h2 class="packs-header">Truth or Dare Packs</h2>
+            </div>
+            <div class="packs-content-container">
+                <div class="button-container">
+                    <button data-key="truth-or-dare-ice-breaker" class="pack-sfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">ICE BREAKER !</button>
+                    <button data-key="truth-or-dare-cheeky-confessions" class="pack-sfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">CHEEKY CONFESSIONS !!</button>
+                    <button data-key="truth-or-dare-troubled-teens" class="pack-sfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">TROUBLED TEENS !!!</button>
+                    <button data-key="truth-or-dare-adult-confessions" class="pack-nsfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">ADULT CONFESSIONS !!!!</button>
+                    <button data-key="truth-or-dare-risky-revelations" class="pack-nsfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">RISKY REVELATIONS
+                        !!!!!</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator-container"></div>
+        <div class="settings-container">
+            <div class="settings-header-container">
+                <h2 class="settings-header">Game Settings</h2>
+            </div>
+            <div class="game-settings-container">
+                <div class="button-container">
+                    <button data-key="truth-or-dare-settings-punishment" class="game-settings-pack-nsfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">Drinking Punishment</button>
+                    <button data-key="truth-or-dare-settings-drink-wheel" class="game-settings-pack-nsfw"
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">Drink Wheel</button>
+                </div>
+            </div>
+        </div>
+        <button class="start-game-button" id="truth-or-dare">Start Game</button>
+    </div>
+
+    <script src="/scripts/general/header.js"></script>
+
+    <script>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
+        //Truth Or Dare Settings
+        document.addEventListener('DOMContentLoaded', function () {
+            rotateIcon = document.querySelector('.rotate-icon');
+            rotateIcon.src = '/images/icons/blue/rotate-phone-icon.svg';
+
+            helpTitle.textContent = 'GAME SETTINGS';
+            helpText.innerHTML = `
+    Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
+    <br><br>
+    Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to
+    enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
+    <br><br>
+    Enable <highlight>Drinking Punishments</highlight> and <highlight>Drink Wheel</highlight> to add drinking
+    forfeits! This feature also requires <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
+`;
+        });
+        // Page Load Transition
+        const heading = document.createElement('h1');
+        heading.textContent = 'TRUTH OR DARE SETTINGS';
+        heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        heading.style.fontFamily = 'LemonMilk';
+        heading.style.fontSize = '5vh';
+        heading.style.textAlign = 'center';
+    </script>
+    <script src="/scripts/party-games/game-settings.js"></script>
+</body>
+
+</html>

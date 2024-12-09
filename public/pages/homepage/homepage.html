@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:description"
+        content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
+    <meta name="keywords"
+        content="OverExposed, Online Card Game, Truth or Dare, Never Have I Ever, Paranoia, Most likely to, Digital Card Game, Truth Or Dare questions, Paranoia questions, Most likely to questions, Never have I ever questions, Party games, Fun games, Social games, Interactive games, Free games, Drinking games">
+    <meta property="og:title" content="OVEREXPOSED - The Ultimate Party Game Experience">
+    <meta property="og:description"
+        content="Play party games such as Truth or Dare,Paranoia, Never Have I Ever and Most Likely To online with OverExposed. Fun and easy party games for everyone!">
+    <meta property="og:type" content="website">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com;">
+
+    <title>PARTY GAMES</title>
+    <link rel="stylesheet" href="/css/homepage/homepage-styles.css">
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/blue/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/blue/favicon-120x120.png">
+    <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
+    <meta name="msapplication-TileColor" content="#202020">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <style>
+        .landscape-message {
+            color: #66CCFF;
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container,
+            .header,
+            .container-title {
+                display: none;
+            }
+
+            .overlay,
+            .settings-box,
+            .help-container,
+            .extra-menu-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="full-page-container-static" id="full-page-container-static"></div>
+
+    <div id="header-placeholder"></div>
+
+    <div class="landscape-message" id="landscape-message">
+        Please rotate your phone to continue
+        <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
+    </div>
+
+    <div class="help-container" id="help-container">
+        <h2 class="help-title">OVEREXPOSED</h2>
+    </div>
+    <h1 class="container-title" id="container-title">Party Games</h1>
+    <div class="container">
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/truth-or-dare.svg" alt="Truth Or Dare Front">
+                </div>
+                <div class="back"><img src="/images/card-titles/back/truth-or-dare.svg" alt="Truth Or Dare Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/paranoia.svg" alt="Paranoia Front"></div>
+                <div class="back"><img src="/images/card-titles/back/paranoia.svg" alt="Paranoia Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/never-have-i-ever.svg"
+                        alt="Never Have I Ever Front"></div>
+                <div class="back"><img src="/images/card-titles/back/never-have-i-ever.svg"
+                        alt="Never Have I Ever Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/most-likely-to.svg" alt="Most Likely To Front">
+                </div>
+                <div class="back"><img src="/images/card-titles/back/most-likely-to.svg" alt="Most Likely To Back">
+                </div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="card">
+                <div class="front"><img src="/images/card-titles/front/coming-soon.svg" alt="Coming Soon Front"></div>
+                <div class="back"><img src="/images/card-titles/back/coming-soon.svg" alt="Coming Soon Back"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/general/header.js"></script>
+    <script defer>
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
+        helpTitle.textContent = 'PARTY GAMES';
+
+        helpText.innerHTML = `
+    Welcome to <highlight>OVEREXPOSED</highlight> Your ultimate online destination for classic party games!!!
+`;
+
+        //HomePage
+        const cards = document.querySelectorAll('.grid-item .card');
+
+        cards.forEach((card, index) => {
+            card.addEventListener('click', function (event) {
+                if (card.classList.contains('flipped')) {
+                    switch (index) {
+                        case 0:
+                            window.location.href = 'truth-or-dare-settings';
+                            break;
+                        case 1:
+                            window.location.href = 'paranoia-settings';
+                            break;
+                        case 2:
+                            window.location.href = 'never-have-i-ever-settings';
+                            break;
+                        case 3:
+                            window.location.href = 'most-likely-to-settings';
+                            break;
+                        case 4:
+                            //window.location.href = 'coming-soon-settings';
+                            break;
+                        case 5:
+                            //window.location.href = 'coming-soon-settings';
+                            break;
+                    }
+                } else {
+                    cards.forEach(otherCard => {
+                        if (otherCard !== card && otherCard.classList.contains('flipped')) {
+                            otherCard.classList.remove('flipped');
+                        }
+                    });
+
+                    card.classList.add('flipped');
+                    changeHeaderColor(index);
+                    changeFavicon(index);
+                }
+            });
+        });
+
+        function changeFavicon(index) {
+            const sizes = ['16x16', '32x32', '48x48', '64x64', '96x96', '128x128', '256x256', '512x512'];
+            const colorFolders = ['blue', 'purple', 'orange', 'yellow', 'grey', 'grey'];
+
+            const faviconLinks = document.querySelectorAll('link[rel="icon"]');
+
+            faviconLinks.forEach((favicon, i) => {
+                const size = sizes[i % sizes.length];
+                const colorFolder = colorFolders[index % colorFolders.length];
+                favicon.href = `/images/favicons/${colorFolder}/favicon-${size}.png`;
+                rotateIcon.src = `/images/icons/${colorFolder}/rotate-phone-icon.svg`;
+
+                document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/${colorFolder}/tik-tok-icon.svg)`);
+                document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/${colorFolder}/instagram-icon.svg)`);
+            });
+        }
+
+        function changeHeaderColor(index) {
+            const colors = ['#66CCFF', '#9D8AFF', '#FF9266', '#FFEE66', '#999999', '#999999'];
+            const secondaryColors = ['#427BB9', '#7F71B2', '#B96542', '#B9AA42', '#666666', '#666666'];
+            selectedColor = colors[index % colors.length];
+            selectedSecondaryColor = secondaryColors[index % secondaryColors.length];
+
+            document.documentElement.style.setProperty('--primarypagecolour', selectedColor);
+            document.documentElement.style.setProperty('--secondarypagecolour', selectedSecondaryColor);
+        }
+
+        const heading = document.createElement('img');
+        heading.src = '/images/logo-square.svg';
+        heading.classList.add('loading-screen');
+    </script>
+</body>
+
+</html>
