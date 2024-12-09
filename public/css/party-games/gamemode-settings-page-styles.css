@@ -122,9 +122,6 @@ body {
     padding: 10px 20px;
     font-family: LemonMilk;
     font-size: 2.5vh;
-    color: #999999;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
     border-radius: 50px;
     cursor: pointer;
     text-align: center;
@@ -133,6 +130,11 @@ body {
     white-space: nowrap;
     display: inline-block;
     transition: background-color 0.3s, color 0.3s;
+}
+.button-container button:not(.start-game-button){
+    color: #999999;
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
 }
 
 /*
@@ -189,7 +191,7 @@ button.disabled {
 
 .start-game-button:active {
     background-color: var(--primarypagecolour);
-    color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
     border-color: var(--primarypagecolour);
 }
 
