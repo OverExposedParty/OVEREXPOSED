@@ -179,6 +179,8 @@ button.disabled {
     transition: background-color 0.3s, color 0.3s;
     position: relative;
 
+
+
 }
 
 .start-game-button:hover,
@@ -258,7 +260,7 @@ button.disabled {
         margin: 0 auto;
         padding: 0;
         background-color: var(--secondarybackgroundcolour);
-        height: 60%;
+        height: 90%;
         display: flex;
     }
     
@@ -286,15 +288,7 @@ button.disabled {
         width:90%;
     }
 
-    .start-game-button {
-        position: absolute;
-        bottom: 7.5vh;
-        left: 50%;
-        transform: translateX(-50%);  /* This will center it horizontally */
-        margin: 0vh auto 0;  /* Adjust top margin as needed */
-        font-size: 2.5vh;
-        padding: 10px 20px;
-    }
+
 
     .home-button {
         top: calc(var(--headerheight) + 20px);

@@ -170,6 +170,4 @@ function checkOrientationAndAddButton() {
     }
 }
 
-checkOrientationAndAddButton();
-
 window.addEventListener('resize', checkOrientationAndAddButton);
