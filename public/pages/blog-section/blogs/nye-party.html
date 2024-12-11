@@ -82,7 +82,7 @@
     <div class="back-button-container">
         <a href="/insights"><button class="back-button">BACK</button></a>
     </div>
-    <img src="/images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
+    <div alt="TTS Icon" class="tts-button" id="tts-button"></div>
     <div class="parent-container">
         <div class="title-container">
             <h1 class="title-text">Top New Year’s Eve Drinking Games to Keep the Party Alive All Night</h1>
@@ -293,6 +293,8 @@
 
         document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/green/tik-tok-icon.svg)');
         document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/green/instagram-icon.svg)');
+
+        document.documentElement.style.setProperty('--ttsactiveicon', 'url(/images/icons/blogs/green/tts-icon.svg)');
 
         document.addEventListener('DOMContentLoaded', async () => {
             let rotateIcon = document.querySelector('.rotate-icon');

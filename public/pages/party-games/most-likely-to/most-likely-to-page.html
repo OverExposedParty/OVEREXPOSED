@@ -112,7 +112,7 @@
         Please rotate your phone to continue
         <img src="/images/icons/yellow/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
-    
+
     <div class="back-button-container">
         <button class="back-button">BACK</button>
     </div>
@@ -171,6 +171,16 @@
                 sideButtonsContainer.classList.add('single'); //change if more buttons are added
             }
 
+            helpTitle.textContent = 'HOW TO PLAY';
+
+            helpText.innerHTML = `
+You'll be given a question. As a group decided who's most likely to perform or relate to the question best'.
+<br><br>
+Whoever the group votes as the person has to perform a punishment.
+<br><br>
+Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
+<br><highlight>Drink Wheel</highlight>, where the person chosen must spin the wheel and perform the punishment given.
+`;
 
 
             let allQuestions = [];

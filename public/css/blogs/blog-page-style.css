@@ -9,6 +9,9 @@
     --tag3colour: #AA88F0; 
     --tag4colour: #67E1A3; 
     --tag5colour: #F672D2; 
+
+    --ttsicon: url(/images/icons/grey/tts-icon.svg);
+    --ttsactiveicon: url(/images/icons/blogs/blue/tts-icon.svg);
 }
 .container,.title-container {
     width: 40vw;
@@ -181,6 +184,14 @@ body {
     right: 20px;
     bottom: 20px;
     z-index: 500;
+
+    background-image: var(--ttsicon);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.tts-button.active {
+    background-image: var(--ttsactiveicon);
 }
 .back-button-container {
     position: fixed;

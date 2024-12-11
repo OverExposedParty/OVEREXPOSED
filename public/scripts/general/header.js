@@ -117,9 +117,15 @@ function toggleSettings() {
     if (findActiveElementsWithClasses(classArray).length == 0) {
         overlay.classList.remove('active');
     }
-    else if(!(overlay.classList.contains('active'))){
-        overlay.classList.add('active');
+    else{
+        if(!(overlay.classList.contains('active'))){
+            toggleOverlay();
+        }
+        else{
+            setActiveClass(elementClassArray,settingsBox);
+        }
     }
+
 }
 function toggleHelp() {
     helpContainer.classList.toggle('active');
@@ -127,8 +133,13 @@ function toggleHelp() {
     if (findActiveElementsWithClasses(classArray).length == 0) {
         overlay.classList.remove('active');
     }
-    else if(!(overlay.classList.contains('active'))){
-        overlay.classList.add('active');
+    else{
+        if(!(overlay.classList.contains('active'))){
+            toggleOverlay();
+        }
+        else{
+            setActiveClass(elementClassArray,helpContainer);
+        }
     }
 }
 function toggleExtraMenu() {
@@ -136,15 +147,20 @@ function toggleExtraMenu() {
     addElementIfNotExists(elementClassArray, extraMenuContainer);
     if (findActiveElementsWithClasses(classArray).length == 0) {
         overlay.classList.remove('active');
+        setActiveClass(elementClassArray,extraMenuContainer);
     }
-    else if(!(overlay.classList.contains('active'))){
-        toggleOverlay();
+    else{
+        if(!(overlay.classList.contains('active'))){
+            toggleOverlay();
+        }
+        else{
+            setActiveClass(elementClassArray,extraMenuContainer);
+        }
     }
 }
 
 function toggleOverlay() {
     overlay.classList.toggle('active');
-    console.log(elementClassArray);
     if (!overlay.classList.contains('active')) {
         elementClassArray.forEach(element => {
             if (element) {
@@ -153,6 +169,15 @@ function toggleOverlay() {
         });
     }
 }
+
+function setActiveClass(selectedElements, keepActive) {
+    selectedElements.forEach(element => {
+        if (element !== keepActive) {
+            element.classList.remove('active');
+        }
+    });
+}
+
 
 waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
@@ -186,16 +211,14 @@ function waitForButtons(selector, callback) {
     const observer = new MutationObserver(() => {
         const buttons = document.querySelectorAll(selector);
         if (buttons.length > 0) {
-            observer.disconnect(); // Stop observing once the buttons are found
-            callback(buttons); // Pass the buttons to the callback
+            observer.disconnect();
+            callback(buttons); 
         }
     });
 
-    // Observe changes in the DOM
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Main logic for TTS button handling
 function handleTTSButtons(buttons) {
     const defaultButtonIndex = 0;
     const savedKey = localStorage.getItem('selectedTTSButton');
@@ -229,11 +252,8 @@ function handleTTSButtons(buttons) {
     }
 }
 
-// Start waiting for buttons and execute logic when found
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
-
-//Transition page
 window.addEventListener('load', function () {
     if (!localStorage.getItem('webpage-first-time')) {
         localStorage.setItem('webpage-first-time', 'true');
@@ -263,7 +283,6 @@ window.addEventListener('load', function () {
     }, 1000);
 });
 
-//Overlay remove
 let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container'];
 let elementClassArray = [];
 
@@ -274,15 +293,11 @@ function addElementIfNotExists(array, element) {
 }
 
 function findActiveElementsWithClasses(classArray) {
-    // Select all elements in the body
     const allElements = document.body.querySelectorAll('*');
-
-    // Filter elements that contain at least one class from classArray
     const elementsWithClasses = Array.from(allElements).filter(element =>
         classArray.some(className => element.classList.contains(className))
     );
 
-    // Further filter the list to only include elements with the 'active' class
     const activeElements = elementsWithClasses.filter(element =>
         element.classList.contains('active')
     );
@@ -314,7 +329,7 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
 
     function waitForElement(selector, timeout = 5000) {
         return new Promise((resolve, reject) => {
-            const intervalTime = 100; // Check every 100ms
+            const intervalTime = 100; //ms
             let elapsedTime = 0;
     
             const interval = setInterval(() => {

@@ -14,6 +14,7 @@ const spinButton = document.getElementById('odd-man-out-button');
 spinButton.addEventListener('click', toggleSpinTheWheel);
 
 function toggleSpinTheWheel() {
+    addElementIfNotExists(elementClassArray, spinContainer);
     spinDisabled = false;
     spinEl.textContent = 'SPIN';
     if (!spinContainer.classList.contains('active')) {

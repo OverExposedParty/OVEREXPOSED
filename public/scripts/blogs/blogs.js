@@ -17,11 +17,7 @@ let isSpeaking = false;
 
 function getSelectedVoice() {
     const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-    voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
-
     const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-
-    console.log(`Selected Voice Key: ${selectedVoiceKey}`);
 
     switch (selectedVoiceKey) {
         case 'tts-voice-male1':
@@ -41,17 +37,17 @@ function readText(text) {
     if (isSpeaking) {
         responsiveVoice.cancel();
         isSpeaking = false;
-        ttsButton.src = "/images/icons/grey/tts-icon.svg";
+        ttsButton.classList.remove('active');
     } else {
         const selectedVoice = getSelectedVoice();
         responsiveVoice.speak(text, selectedVoice);
 
         isSpeaking = true;
-        ttsButton.src = "/images/icons/blogs/green/tts-icon.svg";
+        ttsButton.classList.add('active');
 
         responsiveVoice.onend = () => {
             isSpeaking = false;
-            ttsButton.src = "/images/icons/grey/tts-icon.svg";
+            ttsButton.classList.remove('active');
         };
     }
 }

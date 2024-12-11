@@ -49,7 +49,7 @@
 
             .main-container,
             .header,
-            .home-button-container {
+            .home-button {
                 display: none;
             }
 
@@ -113,6 +113,8 @@
                     <button data-key="most-likely-to-unfiltered-assaults" class="pack-nsfw"
                         data-primary-color="var(--primarypagecolour)"
                         data-secondary-color="var(--secondarypagecolour)">UNFILTERED ASSAULTS !!!!!</button>
+                    <button data-key="most-likely-to-memories-and-mayhem" class="pack-nsfw" data-primary-color="#F8F4E3"
+                        data-secondary-color="#C1B77E">MEMORIES AND MAYHEM !!!!!</button>
                 </div>
             </div>
         </div>
@@ -125,7 +127,7 @@
                 <div class="button-container">
                     <button data-key="most-likely-to-settings-drink-wheel" data-primary-color="#FFEE66"
                         data-secondary-color="#B9AA42" class="game-settings-pack-nsfw">Drink Wheel</button>
-                        <button class="start-game-button" id="most-likely-to">Start Game</button>
+                    <button class="start-game-button" id="most-likely-to">Start Game</button>
                 </div>
             </div>
         </div>
@@ -139,7 +141,7 @@
         document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/yellow/instagram-icon.svg)');
         document.addEventListener('DOMContentLoaded', function () {
             const drinkingPunishmentButton = document.querySelector('[data-key="most-likely-to-settings-punishment"]');
-        //Header & Settings
+            //Header & Settings
             rotateIcon = document.querySelector('.rotate-icon');
             rotateIcon.src = '/images/icons/yellow/rotate-phone-icon.svg';
             //Help Container 
