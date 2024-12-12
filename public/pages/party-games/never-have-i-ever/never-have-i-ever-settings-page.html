@@ -78,6 +78,7 @@
     <div id="header-placeholder"></div>
 
     <div class="warning-box" id="warning-box">
+        <button class="close-menu-button warning"></button>
         <h2 id="warning-title" class="warning-title">NSFW</h2>
         <img src="/images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
         <p class="warning-text">This content is not suitable for all audiences.</p>
@@ -133,12 +134,16 @@
         document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/orange/tik-tok-icon.svg)');
         document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/orange/instagram-icon.svg)');
 
+        document.documentElement.style.setProperty('--closebuttonicon', 'url(/images/icons/orange/close-menu-icon.svg)');
+        document.documentElement.style.setProperty('--closebuttonhovericon', 'url(/images/icons/orange/close-menu-hover-icon.svg)');
+
         //Header & Settings
         document.addEventListener('DOMContentLoaded', function () {
 
             rotateIcon = document.querySelector('.rotate-icon');
             rotateIcon.src = '/images/icons/orange/rotate-phone-icon.svg';
 
+            helpTitle.textContent = 'GAME SETTINGS';
             helpText.innerHTML = `
     Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
     <br><br>

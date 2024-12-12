@@ -78,6 +78,11 @@ let helpContainer = document.createElement('div');
 helpContainer.className = 'help-container';
 helpContainer.id = 'help-container';
 
+// Create the button element
+const closeMenuButton = document.createElement('button');
+closeMenuButton.classList.add('close-menu-button');
+helpContainer.appendChild(closeMenuButton);
+
 let helpTitle = document.createElement('h2');
 helpTitle.className = 'help-title';
 helpTitle.textContent = '';
@@ -305,6 +310,17 @@ function findActiveElementsWithClasses(classArray) {
     return activeElements;
 }
 
+function removeActiveClassFromParent(childElement) {
+    if (!childElement || !(childElement instanceof HTMLElement)) {
+        console.error('Invalid element provided.');
+        return;
+    }
+
+    const parentElement = childElement.parentElement;
+    if (parentElement && parentElement.classList.contains('active')) {
+        parentElement.classList.remove('active');
+    }
+}
 
 function waitForElementWithTimeout(selector, callback, timeout = 10000) {
     const element = document.querySelector(selector);
@@ -361,3 +377,13 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
 waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.close-menu-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            removeActiveClassFromParent(this);
+            toggleOverlay();
+        });
+    });
+});

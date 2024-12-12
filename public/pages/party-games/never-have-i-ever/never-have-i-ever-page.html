@@ -101,6 +101,7 @@
     <div class="full-page-container-static" id="full-page-container-static"></div>
 
     <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <button class="close-menu-button"></button>
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -143,6 +144,9 @@
 
         document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/orange/tik-tok-icon.svg)');
         document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/orange/instagram-icon.svg)');
+
+        document.documentElement.style.setProperty('--closebuttonicon', 'url(/images/icons/orange/close-menu-icon.svg)');
+        document.documentElement.style.setProperty('--closebuttonhovericon', 'url(/images/icons/orange/close-menu-hover-icon.svg)');
 
         //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');

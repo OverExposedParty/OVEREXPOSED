@@ -9,6 +9,12 @@
 
     --tiktokicon: url(/images/icons/blue/tik-tok-icon.svg);
     --instagramicon: url(/images/icons/blue/instagram-icon.svg);
+
+    --closebuttonicon: url(/images/icons/blue/close-menu-icon.svg);
+    --closebuttonhovericon: url(/images/icons/blue/close-menu-hover-icon.svg);
+
+    --warningclosebuttonicon: url(/images/icons/red/close-menu-icon.svg);
+    --warningclosebuttonhovericon: url(/images/icons/red/close-menu-hover-icon.svg);
 }
 
 /* Customize the scrollbar */
@@ -43,7 +49,32 @@
     src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
     font-family: LemonMilk;
 }
+.close-menu-button {
+    width: 10%;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 4%;
+    right: 4%;
 
+    background-image: var(--closebuttonicon);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+}
+.close-menu-button:hover{
+    background-image: var(--closebuttonhovericon);
+}
+.close-menu-button.warning{
+    background-image: var(--warningclosebuttonicon);
+}
+.close-menu-button.warning:hover{
+    background-image: var(--warningclosebuttonhovericon);
+}
 .header {
     width: 100%;
     height: var(--headerheight);

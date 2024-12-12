@@ -143,6 +143,7 @@
     <div class="full-page-container-static" id="full-page-container-static"></div>
 
     <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <button class="close-menu-button"></button>
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -156,7 +157,7 @@
     <div class="container">
         <div class="content">
             <div class="gamemode-text-container">
-                <img class="gamemode-text-svg" src="/images/party-games/truth-or-dare/truth-text.svg">
+                <img class="gamemode-text-svg" src="/images/party-games/truth-or-dare/truth-text.svg" alt="Truth">
             </div>
             <div class="main-image-container">
                 <img src="/images/blank-cards/truth-or-dare-blank-card.svg" alt="Truth or Dare Blank Card"
@@ -216,8 +217,8 @@
             let ttsButtonTimeout;
             let currentUtterance = null;
 
-            let currentQuestion;
-            let currentPunishment;
+            let currentQuestion = " or Dare";
+            let currentPunishment = "";
 
             const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
             const spinWheelEnabled = localStorage.getItem('truth-or-dare-settings-drink-wheel') === 'true';
@@ -324,6 +325,7 @@
                 else if (type == 'dare') {
                     truthOrDareText.src = "/images/party-games/truth-or-dare/dare-text.svg";
                 }
+                truthOrDareText.setAttribute('alt',type);
             }
 
             function enableTTSButton() {
@@ -417,8 +419,11 @@
 
 
             document.getElementById('tts-button').addEventListener('click', () => {
-                const gamemodeText = document.querySelector('.gamemode-text').textContent;
-                const textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`;
+                const gamemodeText = document.querySelector('.gamemode-text-svg').getAttribute('alt');
+                let textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`;
+                if(currentPunishment === ""){
+                    textToSpeak = `${gamemodeText} - ${currentQuestion}`;
+                }
                 const selectedVoiceName = getSelectedVoice();
 
                 console.log(textToSpeak);
