@@ -452,6 +452,17 @@ input:checked+.slider:before {
     background-color: var(--warningcolour);
 }
 
+.overlay-text {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--primarypagecolour);
+    font-size: 15px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
 @media (orientation: portrait) {
     .help-container {
         position: fixed;

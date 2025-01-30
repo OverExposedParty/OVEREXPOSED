@@ -143,10 +143,17 @@
     <div class="full-page-container-static" id="full-page-container-static"></div>
 
     <div class="spin-the-wheel-container" id="spin-the-wheel-container">
-        <button class="close-menu-button"></button>
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
+        </div>
+    </div>
+
+    <div class="question-zoomed-container">
+        <div class="question-zoomed-container-text-container">
+            <h2>Truth Or Dare</h2>
+
+            <h3></h3>
         </div>
     </div>
 
@@ -228,7 +235,7 @@
             const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
 
             const truthOrDareText = document.querySelector('.gamemode-text-svg');
-            
+
             helpTitle.textContent = 'HOW TO PLAY';
 
             helpText.innerHTML = `
@@ -241,7 +248,12 @@
     Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
     <highlight>Drinking Punishments</highlight> where failing results in a drinking consequence.
 `;
-
+            if(punishmentEnabled){
+                questionZoomedContainerText.style.marginTop = '55%';
+            }
+            else{
+                questionZoomedContainerText.style.marginTop = '65%';
+            }
             if (!spinWheelEnabled) {
                 document.getElementById('spin-button').style.height = '0';
                 document.getElementById('spin-button').style.width = '0';
@@ -312,7 +324,10 @@
                 textContainer.innerHTML =
                     `<span class="question-text">${text}</span>` +
                     (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
-
+                questionZoomedContainerText.textContent = text;
+                if(punishmentEnabled){
+                    questionZoomedContainerPunishmentText.textContent = "Punishment: " + punishment;
+                }
                 const displayCardType = cardType.split('-').pop().toUpperCase();
                 document.querySelector('.card-type-text').textContent = displayCardType;
                 vibrateOnClick();
@@ -325,7 +340,7 @@
                 else if (type == 'dare') {
                     truthOrDareText.src = "/images/party-games/truth-or-dare/dare-text.svg";
                 }
-                truthOrDareText.setAttribute('alt',type);
+                truthOrDareText.setAttribute('alt', type);
             }
 
             function enableTTSButton() {
@@ -421,7 +436,7 @@
             document.getElementById('tts-button').addEventListener('click', () => {
                 const gamemodeText = document.querySelector('.gamemode-text-svg').getAttribute('alt');
                 let textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`;
-                if(currentPunishment === ""){
+                if (currentPunishment === "") {
                     textToSpeak = `${gamemodeText} - ${currentQuestion}`;
                 }
                 const selectedVoiceName = getSelectedVoice();
@@ -437,6 +452,29 @@
                 disableTTSButton();
             });
         });
+        //Press Main Image Container
+        const mainImageContainer = document.querySelector('.main-image-container');
+        const mainImageContainerText = document.querySelector('.text-container')
+
+        mainImageContainer.addEventListener('click', toggleQuestionZoomedContainer);
+
+        function toggleQuestionZoomedContainer() {
+            addElementIfNotExists(elementClassArray, questionZoomedContainer);
+            if (!questionZoomedContainer.classList.contains('active')) {
+                questionZoomedContainer.classList.add('active');
+                questionZoomedContainer.classList.add('active');
+                if (!overlay.classList.contains('active')) {
+                    overlay.classList.add('active');
+                }
+            }
+            else {
+                questionZoomedContainer.classList.remove('active');
+                if (findActiveElementsWithClasses(classArray).length == 0) {
+                    overlay.classList.remove('active');
+                }
+            }
+        }
+
         //Make the Page size fit the page
         function updateVh() {
             let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
@@ -446,11 +484,6 @@
         window.addEventListener('load', updateVh);
         window.addEventListener('resize', updateVh);
 
-        //First Time Loading Page
-        if (!localStorage.getItem('truth-or-dare-first-time')) {
-            localStorage.setItem('truth-or-dare-first-time', 'true');
-            toggleHelp();
-        }
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'TRUTH OR DARE';

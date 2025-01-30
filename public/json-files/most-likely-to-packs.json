@@ -29,12 +29,6 @@
             "pack-path": "/questions/most-likely-to/unfiltered-assaults.json",
             "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
             "pack-colour": "#FFEE66"
-        },
-        {
-            "pack-name": "Memories and Mayhem",
-            "pack-path": "/questions/most-likely-to/memories-and-mayhem.json",
-            "pack-card": "/images/blank-cards/limited/memories-and-mayhem-blank-card.svg",
-            "pack-colour": "#F8F4E3"
         }
     ]
 }

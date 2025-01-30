@@ -125,6 +125,12 @@ app.get('/insights/new-years-eve-party', (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/insights/valentines-day', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'valentines-day-blog.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
 // Handle 404 (Page Not Found)
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html'));

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
 
     <title>PARANOIA</title>
     <link rel="stylesheet" href="/css/general/header.css">
@@ -53,11 +54,12 @@
         }
 
         @media (max-width: 768px) and (orientation: landscape) {
+
             .container,
             .header,
             .back-button,
             .side-buttons,
-            .tts-button{
+            .tts-button {
                 display: none;
             }
 
@@ -65,7 +67,7 @@
             .settings-box,
             .help-container,
             .extra-menu-container,
-            .spin-the-wheel-container  {
+            .spin-the-wheel-container {
                 display: none !important;
             }
         }
@@ -83,11 +85,11 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-ZFD5EBXYE5');
+    gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
 <script src="/scripts/general/header-html.js"></script>
@@ -96,7 +98,6 @@
     <div class="full-page-container-static" id="full-page-container-static"></div>
 
     <div class="spin-the-wheel-container" id="spin-the-wheel-container">
-        <button class="close-menu-button"></button>
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -104,10 +105,13 @@
     </div>
 
     <div class="coin-flip-container" id="coin-flip-container">
-        <button class="close-menu-button"></button>
         <button id="coin-button">
             <div class="coin" id="coin"><img src="/images/icons/purple/heads-icon.svg"></div>
         </button>
+    </div>
+
+    <div class="question-zoomed-container">
+        <h2></h2>
     </div>
 
     <div id="header-placeholder"></div>
@@ -119,13 +123,13 @@
             <div class="gamemode-text-container">
                 <img class="gamemode-text-svg" src="/images/party-games/paranoia/paranoia-text.svg">
             </div>
-            <div class="main-image-container">
+            <button class="main-image-container">
                 <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
                 <div class="text-container">
                     Paranoia
                 </div>
                 <div class="card-type-text">card type</div>
-            </div>
+            </button>
             <div class="button-container">
                 <button id="question-button" class="question-button">Next Question</button>
             </div>
@@ -147,9 +151,6 @@
         document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/purple/tik-tok-icon.svg)');
         document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/purple/instagram-icon.svg)');
 
-        document.documentElement.style.setProperty('--closebuttonicon', 'url(/images/icons/purple/close-menu-icon.svg)');
-        document.documentElement.style.setProperty('--closebuttonhovericon', 'url(/images/icons/purple/close-menu-hover-icon.svg)');
-
         //Header & Settings
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         document.addEventListener('DOMContentLoaded', async () => {
@@ -170,7 +171,7 @@
 
             helpTitle.textContent = 'HOW TO PLAY';
 
-helpText.innerHTML = `
+            helpText.innerHTML = `
     You'll be given a question. Without showing anyone in the room, pick someone who fits the 
     prompt best and watch them panic.
     <br><br>
@@ -365,6 +366,32 @@ helpText.innerHTML = `
             });
             await loadJSONFiles();
         });
+
+        //Press Main Image Container
+        const mainImageContainer = document.querySelector('.main-image-container');
+        const mainImageContainerText = document.querySelector('.text-container')
+
+        mainImageContainer.addEventListener('click', toggleQuestionZoomedContainer);
+
+        function toggleQuestionZoomedContainer() {
+            addElementIfNotExists(elementClassArray, questionZoomedContainer);
+            if (!questionZoomedContainer.classList.contains('active')) {
+                questionZoomedContainer.classList.add('active');
+                questionZoomedContainer.classList.add('active');
+                questionZoomedContainerText.textContent = mainImageContainerText.textContent;
+                console.log(questionZoomedContainerText);
+                if (!overlay.classList.contains('active')) {
+                    overlay.classList.add('active');
+                }
+            }
+            else {
+                questionZoomedContainer.classList.remove('active');
+                if (findActiveElementsWithClasses(classArray).length == 0) {
+                    overlay.classList.remove('active');
+                }
+            }
+        }
+
         //Make the Page size fit the page
         function updateVh() {
             let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
@@ -374,11 +401,6 @@ helpText.innerHTML = `
         window.addEventListener('load', updateVh);
         window.addEventListener('resize', updateVh);
 
-        //First Time Loading Page
-        if (!localStorage.getItem('paranoia-first-time')) {
-            localStorage.setItem('paranoia-first-time', 'true');
-            toggleHelp();
-        }
         // Page Load Transition
         const heading = document.createElement('h1');
         heading.textContent = 'PARANOIA';

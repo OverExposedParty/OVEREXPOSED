@@ -27,6 +27,10 @@ const nsfwCheckbox = document.getElementById('settings-nsfw');
 const spinContainer = document.querySelector('.spin-the-wheel-container');
 const coinFlipContainer = document.getElementById('coin-flip-container');
 
+const questionZoomedContainer = document.querySelector('.question-zoomed-container');
+const questionZoomedContainerText = document.querySelector('.question-zoomed-container h2');
+const questionZoomedContainerPunishmentText = document.querySelector('.question-zoomed-container h3');
+
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
@@ -79,10 +83,6 @@ helpContainer.className = 'help-container';
 helpContainer.id = 'help-container';
 
 // Create the button element
-const closeMenuButton = document.createElement('button');
-closeMenuButton.classList.add('close-menu-button');
-helpContainer.appendChild(closeMenuButton);
-
 let helpTitle = document.createElement('h2');
 helpTitle.className = 'help-title';
 helpTitle.textContent = '';
@@ -94,11 +94,12 @@ helpText.className = 'help-text';
 helpContainer.appendChild(helpText);
 document.body.appendChild(helpContainer);
 
-// Overlay 
 const overlay = document.createElement('div');
 overlay.classList.add('overlay');
 overlay.id = 'overlay';
+overlay.innerHTML = '<p class="overlay-text">Tap empty area to close</p>';
 document.body.appendChild(overlay);
+
 
 // Rotate Icon
 const landscapeMessage = document.createElement('div');
@@ -260,10 +261,6 @@ function handleTTSButtons(buttons) {
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
 window.addEventListener('load', function () {
-    if (!localStorage.getItem('webpage-first-time')) {
-        localStorage.setItem('webpage-first-time', 'true');
-        toggleSettings();
-    }
     const container = document.createElement('div');
     const staticFullPageContainer = document.getElementById("full-page-container-static");
     container.className = 'full-page-container';
@@ -288,7 +285,7 @@ window.addEventListener('load', function () {
     }, 1000);
 });
 
-let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container'];
+let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container', 'question-zoomed-container'];
 let elementClassArray = [];
 
 function addElementIfNotExists(array, element) {
@@ -377,13 +374,3 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
 waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
-
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.close-menu-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            removeActiveClassFromParent(this);
-            toggleOverlay();
-        });
-    });
-});
