@@ -107,9 +107,8 @@ landscapeMessage.classList.add('landscape-message');
 
 const messageText = document.createTextNode('Please rotate your phone to continue');
 
-let rotateIcon = document.createElement('img');
-rotateIcon.setAttribute('src', '/images/icons/blue/rotate-phone-icon.svg');
-rotateIcon.setAttribute('alt', 'Rotate Icon');
+let rotateIcon = document.createElement('div');
+rotateIcon.setAttribute('id', 'rotate-icon');
 rotateIcon.classList.add('rotate-icon');
 
 landscapeMessage.appendChild(messageText);
@@ -213,6 +212,7 @@ waitForElementWithTimeout('.extra-menu-container', (element) => {
     extraMenuContainer = element;
 }, 10000);
 
+
 function waitForButtons(selector, callback) {
     const observer = new MutationObserver(() => {
         const buttons = document.querySelectorAll(selector);
@@ -262,8 +262,8 @@ waitForButtons('.tts-voice-button', handleTTSButtons);
 
 window.addEventListener('load', function () {
     const container = document.createElement('div');
-    const staticFullPageContainer = document.getElementById("full-page-container-static");
-    container.className = 'full-page-container';
+    const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
+    container.className = 'splash-screen-container';
 
     container.appendChild(heading);
 
@@ -275,8 +275,8 @@ window.addEventListener('load', function () {
 
     setTimeout(function () {
         container.classList.remove('center');
-        staticFullPageContainer.remove();
-        container.classList.add('left');
+        staticSplashScreenContainer.remove();
+        container.classList.add('down');
     }, 300);
 
     setTimeout(function () {
@@ -285,7 +285,7 @@ window.addEventListener('load', function () {
     }, 1000);
 });
 
-let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container', 'question-zoomed-container'];
+let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container', 'question-zoomed-container', 'overexposure-container'];
 let elementClassArray = [];
 
 function addElementIfNotExists(array, element) {
@@ -374,3 +374,66 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
 waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
+
+function transitionSplashScreen(link,splashScreen) {
+    document.documentElement.style.setProperty('--splashscreen',splashScreen);
+    const container = document.createElement('div');
+    container.className = 'splash-screen-container down'; 
+    document.body.appendChild(container);
+
+    setTimeout(() => {
+        container.classList.remove('down');
+        container.classList.add('center');
+    }, 50); // Slight delay to ensure CSS applies
+
+    // Listen for transition end
+    container.addEventListener('transitionend', function onTransitionEnd(event) {
+        if (event.propertyName === 'top') { // Ensure we're detecting the correct transition
+            container.removeEventListener('transitionend', onTransitionEnd);
+            window.location.href = link;
+        }
+    });
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoContainer = document.querySelector('.logo-container');
+    
+    const partyGamesLink = document.getElementById('party-games-link');
+    const overexposureLink = document.getElementById('overexposure-link');
+    const insightsLink = document.getElementById('insights-link');
+    const whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+
+    if (logoContainer) {
+        logoContainer.addEventListener('click', function() {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+        });
+    }
+
+    if (partyGamesLink) {
+        partyGamesLink.addEventListener('click', function() {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+        });
+    }
+    if (overexposureLink) {
+        overexposureLink.addEventListener('click', function() {
+            transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
+        });
+    }
+    if (insightsLink) {
+        insightsLink.addEventListener('click', function() {
+            transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
+        });
+    }
+    if (whatIsOverexposedLink) {
+        whatIsOverexposedLink.addEventListener('click', function() {
+            transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
+        });
+    }
+
+});
+
+// Page Load Transition
+const heading = document.createElement('div');
+heading.classList.add('loading-screen');

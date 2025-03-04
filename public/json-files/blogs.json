@@ -2,13 +2,14 @@
     "blogs": [
         {
             "tag": "tag4",
-            "image": "thumbnail-valentines-day.png",
+            "image": "thumbnail-break-the-ice-not-hearts.png",
             "title": "Break the Ice, Not Hearts: How 'Never Have I Ever' Can Spark Your Valentine’s Date Night",
             "content": "Valentine’s Day is just around the corner, and whether you’re planning a first date, celebrating with your long-time partner, or looking to add a fun twist to your evening...",
             "author": "Valerie Ahwieh",
             "date": "31/01/2024",
-            "search-tags": "31/01/2024, Decemember 09 2024, 9th December 2024, 12/09/2024 Valerie Ahwieh, Top New Year’s Eve Drinking Games to Keep the Party Alive All Night, New Year's Eve Party, New Year's Eve Parties, Social Life & Relationships, Social Life and Relationships",
-            "file-name": "/valentines-day"
+            "search-tags": "31/01/2024, Decemember 09 2024, 9th December 2024, 12/09/2024 Valerie Ahwieh, Break the Ice, Not Hearts, Valentine's Day, Social Life & Relationships, Social Life and Relationships",
+            "splash-screen": "social-life-and-relationships/break-the-ice-not-hearts.png",
+            "file-name": "/break-the-ice-not-hearts"
         },
         {
             "tag": "tag4",
@@ -18,6 +19,7 @@
             "author": "Valerie Ahwieh",
             "date": "09/12/2024",
             "search-tags": "09/12/2024, Decemember 09 2024, 9th December 2024, 12/09/2024 Valerie Ahwieh, Top New Year’s Eve Drinking Games to Keep the Party Alive All Night, New Year's Eve Party, New Year's Eve Parties, Social Life & Relationships, Social Life and Relationships",
+            "splash-screen": "social-life-and-relationships/top-new-years-eve-games.png",
             "file-name": "/new-years-eve-party"
         }
     ]

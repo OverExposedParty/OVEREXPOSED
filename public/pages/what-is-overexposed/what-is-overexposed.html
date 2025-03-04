@@ -15,30 +15,42 @@
     <link rel="stylesheet" href="/css/general/header.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blue/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blue/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/blue/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/blue/favicon-64x64.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/blue/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/blue/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/blue/favicon-256x256.png">
-    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/blue/favicon-512x512.png">
-    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/blue/favicon-57x57.png">
-    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/blue/favicon-72x72.png">
-    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/blue/favicon-114x114.png">
-    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/blue/favicon-120x120.png">
-    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/blue/favicon-144x144.png">
-    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/blue/favicon-152x152.png">
-    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/blue/favicon-180x180.png">
-    <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
-    <meta name="msapplication-TileColor" content="#202020">
-    <meta name="msapplication-square70x70logo" content="/images/favicons/blue/favicon-70x70.png">
-    <meta name="msapplication-square150x150logo" content="/images/favicons/blue/favicon-150x150.png">
-    <meta name="msapplication-square310x310logo" content="/images/favicons/blue/favicon-310x310.png">
-    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/blue/favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/blue/favicon-512x512.png">
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
+
+    <meta name="robots" content="index, follow">
+    <meta name="description"
+        content="Discover OVEREXPOSED – the ultimate platform for party games, anonymous confessions, and real-life insights. Play, share, and explore today!">
+    <meta name="keywords"
+        content="what is OVEREXPOSED, about OVEREXPOSED, party games, anonymous confessions, life insights, truth or dare, never have I ever, most likely to">
+    <meta name="author" content="OVEREXPOSED">
+    <meta property="og:title" content="What is OVEREXPOSED? | Play, Share & Explore">
+    <meta property="og:description"
+        content="Learn what OVEREXPOSED is all about! From party games to anonymous confessions and life insights, it's your go-to platform for fun and real talk.">
+    <meta property="og:image"
+        content="https://overexposed.app/images/icons/overexposed/overexposed/meta/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/what-is-overexposed">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What is OVEREXPOSED? | Play, Share & Explore">
+    <meta name="twitter:description"
+        content="Get to know OVEREXPOSED! A platform for party games, anonymous confessions, and life insights. Play, share, and explore now!">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/overexposed/meta/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/what-is-overexposed">
+
 
     <style>
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .container {
+                display: none;
+            }
+        }
+
         #swipe-indicator {
             position: absolute;
             bottom: 12vh;
@@ -79,6 +91,10 @@
     </style>
 </head>
 
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/what-is-overexposed.png')");
+</script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
@@ -92,17 +108,16 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="full-page-container-static" id="full-page-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
 
     <div id="header-placeholder"></div>
 
+    <button class="back-button">HOME</button>
+
     <div class="landscape-message" id="landscape-message">
         Please rotate your phone to continue
-        <img src="/images/icons/blue/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon" id="rotate-icon">
-    </div>
-
-    <div class="help-container" id="help-container">
-        <h2 class="help-title">OVEREXPOSED</h2>
+        <img src="/images/icons/overexposed/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon"
+            id="rotate-icon">
     </div>
 
     <img src="/images/icons/grey/tts-icon.svg" alt="TTS Icon" class="tts-button" id="tts-button">
@@ -126,8 +141,11 @@
         document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
         document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
         //Header & Settings
+        const backButton = document.querySelector('.back-button');
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         let isSpeaking = false;
+
+
         const cardTexts = [
             { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
             { front: 'Party Games', back: 'Truth Or Dare... Unknown...' },
@@ -140,7 +158,10 @@
             '/images/what-is-overexposed/front/truth-or-dare.svg',
             '/images/what-is-overexposed/front/paranoia.svg',
             '/images/what-is-overexposed/front/never-have-i-ever.svg',
-            '/images/what-is-overexposed/front/most-likely-to.svg'
+            '/images/what-is-overexposed/front/most-likely-to.svg',
+            '/images/what-is-overexposed/front/insights.svg',
+            '/images/what-is-overexposed/front/overexposure.svg'
+
 
         ];
 
@@ -150,7 +171,9 @@
             '/images/what-is-overexposed/back/truth-or-dare.svg',
             '/images/what-is-overexposed/back/paranoia.svg',
             '/images/what-is-overexposed/back/never-have-i-ever.svg',
-            '/images/what-is-overexposed/back/most-likely-to.svg'
+            '/images/what-is-overexposed/back/most-likely-to.svg',
+            '/images/what-is-overexposed/back/insights.svg',
+            '/images/what-is-overexposed/back/overexposure.svg'
         ];
 
         const card = document.querySelector('.card');
@@ -262,7 +285,7 @@
                 responsiveVoice.speak(text, selectedVoice);
 
                 isSpeaking = true;
-                ttsButton.src = "/images/icons/blue/tts-icon.svg";
+                ttsButton.src = "/images/icons/overexposed/tts-icon.svg";
 
                 const duration = estimateSpeechDuration(text);
                 setTimeout(() => {
@@ -342,16 +365,14 @@
             setInterval(startSwipeIndicator, 2500);
         });
 
-        // Page Load Transition
-        const heading = document.createElement('h1');
-        heading.textContent = 'WHAT IS OVEREXPOSED?';
-        heading.style.color = selectedColor;
-        heading.style.fontFamily = 'LemonMilk';
-        heading.style.fontSize = '5vh';
-        heading.style.textAlign = 'center';
-        heading.classList.add('loading-screen');
+        backButton.addEventListener('click', () => {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        });
+
+
     </script>
 </body>
 
-    <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js"></script>
+
 </html>

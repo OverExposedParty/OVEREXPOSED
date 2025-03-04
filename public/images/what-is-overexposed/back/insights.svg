@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 257.33 418.91">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5 {
+        font-family: LEMONMILK-Medium, 'LEMON MILK';
+        font-weight: 500;
+      }
+
+      .cls-6 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-7, .cls-8 {
+        fill: #6a9ef6;
+      }
+
+      .cls-9 {
+        letter-spacing: -.17em;
+      }
+
+      .cls-10 {
+        fill: none;
+        stroke: #6a9ef6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 5.05px;
+      }
+
+      .cls-11 {
+        font-family: LEMONMILK-Bold, 'LEMON MILK';
+        font-weight: 700;
+      }
+
+      .cls-12, .cls-4 {
+        letter-spacing: 0em;
+      }
+
+      .cls-13 {
+        letter-spacing: -.15em;
+      }
+
+      .cls-14 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-15, .cls-5 {
+        letter-spacing: -.09em;
+      }
+
+      .cls-16 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-17 {
+        letter-spacing: -.2em;
+      }
+
+      .cls-3, .cls-18 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-19 {
+        fill: #202020;
+      }
+
+      .cls-20 {
+        letter-spacing: -.1em;
+      }
+
+      .cls-21 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-22 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-23 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-24 {
+        letter-spacing: 0em;
+      }
+
+      .cls-25 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-8 {
+        font-size: 13.75px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer_1">
+    <g>
+      <g>
+        <path class="cls-19" d="M21.45,2.52h214.44c10.44,0,18.92,8.48,18.92,18.92v376.02c0,10.44-8.48,18.92-18.92,18.92H21.45c-10.44,0-18.92-8.48-18.92-18.92V21.45C2.52,11,11,2.52,21.45,2.52Z"/>
+        <path class="cls-10" d="M21.45,2.52h214.44c10.44,0,18.92,8.48,18.92,18.92v376.02c0,10.44-8.48,18.92-18.92,18.92H21.45c-10.44,0-18.92-8.48-18.92-18.92V21.45C2.52,11,11,2.52,21.45,2.52Z"/>
+        <g>
+          <g>
+            <path class="cls-7" d="M19.08,28.42v2.39h4.22v2.45h-4.22v2.52h4.91v2.44h-7.37v-12.22h7.37v2.42h-4.91Z"/>
+            <path class="cls-7" d="M28.61,31.88l-3.49-5.88h2.82l2.09,3.7,2.09-3.7h2.82l-3.5,5.87,3.72,6.36h-2.82l-2.32-4.1-2.31,4.1h-2.82l3.72-6.35Z"/>
+            <path class="cls-7" d="M36.39,26h4.29c2.37,0,4.3,1.86,4.3,4.13s-1.93,4.12-4.3,4.12h-1.83v3.97h-2.46v-12.22ZM42.52,30.11c0-.93-.83-1.68-1.84-1.68h-1.83v3.38h1.83c1.02.02,1.84-.76,1.84-1.71Z"/>
+          </g>
+          <g>
+            <path class="cls-7" d="M16.75,20.81c0-2.28,1.86-4.14,4.13-4.14s4.13,1.86,4.13,4.14-1.86,4.12-4.14,4.12-4.12-1.85-4.12-4.12ZM23.4,20.8c0-1.39-1.13-2.52-2.52-2.52s-2.51,1.13-2.51,2.52,1.13,2.51,2.51,2.51,2.52-1.13,2.52-2.51Z"/>
+            <path class="cls-7" d="M32.23,16.83l-3.72,8.14h-.06l-3.7-8.14h1.69l2.04,4.61,2.04-4.61h1.71Z"/>
+            <path class="cls-7" d="M34.63,18.4v1.55h2.74v1.59h-2.74v1.64h3.19v1.59h-4.79v-7.95h4.79v1.57h-3.19Z"/>
+            <path class="cls-7" d="M43.14,24.77l-2.53-3.76v3.76h-1.6v-7.95s2.59,0,2.59,0c1.48,0,2.7,1.14,2.7,2.57,0,1.02-.62,1.91-1.47,2.21l2.26,3.16h-1.95ZM40.61,20.4h1.03c.54.01,1.02-.43,1.02-1s-.49-1-1.02-1h-1.03v2Z"/>
+          </g>
+          <path class="cls-7" d="M20.81,46.13c-1.41,0-2.55-1.15-2.55-2.54s1.15-2.56,2.55-2.56,2.56,1.15,2.56,2.56-1.15,2.54-2.56,2.54ZM20.81,47.77c2.31,0,4.2-1.88,4.2-4.17s-1.89-4.21-4.2-4.21-4.19,1.89-4.19,4.21,1.89,4.17,4.19,4.17Z"/>
+          <path class="cls-7" d="M28.48,47.77c1.73,0,2.93-.93,2.93-2.41,0-1.24-.84-1.92-2.18-2.55-.93-.43-1.54-.6-1.54-1.08,0-.41.45-.76,1.06-.76.45,0,.92.19,1.16.67l1.2-.84c-.37-.97-1.28-1.43-2.38-1.43-1.48,0-2.66.92-2.66,2.32,0,1.28,1,1.78,1.9,2.23.85.42,1.81.89,1.81,1.48,0,.43-.51.74-1.27.74-.69,0-1.21-.26-1.56-.83l-1.3.91c.54,1,1.52,1.55,2.84,1.55Z"/>
+          <polygon class="cls-7" points="37.24 41.15 37.24 39.55 32.38 39.55 32.38 47.61 37.24 47.61 37.24 46 34 46 34 44.34 36.78 44.34 36.78 42.72 34 42.72 34 41.15 37.24 41.15"/>
+          <path class="cls-7" d="M40.79,46h-.74v-4.84h.73c1.6,0,2.57.92,2.57,2.43s-.97,2.41-2.55,2.41ZM40.78,39.55h-2.35v8.06h2.35c2.61,0,4.2-1.52,4.2-4.02s-1.59-4.05-4.2-4.04Z"/>
+        </g>
+      </g>
+      <g>
+        <path class="cls-7" d="M182.46,393.1h1.91v9.48h-1.91v-9.48Z"/>
+        <path class="cls-7" d="M193.64,393.08v9.68h-.09l-5.63-5.47v5.31h-1.91v-9.67h.09l5.62,5.46v-5.31h1.91Z"/>
+        <path class="cls-7" d="M194.79,400.95l1.52-1.07c.42.67,1.02.98,1.84.98.89,0,1.49-.36,1.49-.87,0-.69-1.13-1.24-2.13-1.73-1.06-.53-2.23-1.11-2.23-2.62,0-1.64,1.39-2.72,3.13-2.72,1.29,0,2.36.54,2.79,1.68l-1.41.98c-.28-.56-.83-.79-1.36-.79-.71,0-1.24.41-1.24.9,0,.56.72.76,1.81,1.27,1.57.74,2.56,1.54,2.56,3,0,1.73-1.41,2.83-3.44,2.83-1.55,0-2.7-.65-3.33-1.82Z"/>
+        <path class="cls-7" d="M202.72,393.1h1.91v9.48h-1.91v-9.48Z"/>
+        <path class="cls-7" d="M215.37,398.06c0,2.98-2.05,4.71-4.52,4.71-2.79,0-4.99-2.21-4.99-4.92s2.21-4.95,4.92-4.95c1.23.01,2.54.58,3.47,1.48l-1.06,1.58c-.74-.72-1.59-1.13-2.43-1.13-1.47,0-2.96,1.25-2.96,3.02,0,1.65,1.28,3,3.13,3,1.35,0,2.32-.69,2.39-1.83h-2.45v-1.76h4.46c.03.28.05.54.05.8Z"/>
+        <path class="cls-7" d="M223.81,393.1v9.48h-1.9v-3.8h-3.4v3.8h-1.9v-9.48h1.9v3.79h3.4v-3.79h1.9Z"/>
+        <path class="cls-7" d="M231.45,394.99h-2.33v7.59h-1.91v-7.59h-2.33v-1.89h6.57v1.89Z"/>
+        <path class="cls-7" d="M232.03,400.95l1.52-1.07c.42.67,1.02.98,1.84.98.89,0,1.49-.36,1.49-.87,0-.69-1.14-1.24-2.13-1.73-1.06-.53-2.23-1.11-2.23-2.62,0-1.64,1.39-2.72,3.13-2.72,1.29,0,2.36.54,2.79,1.68l-1.41.98c-.28-.56-.83-.79-1.36-.79-.71,0-1.24.41-1.24.9,0,.56.72.76,1.81,1.27,1.57.74,2.56,1.54,2.56,3,0,1.73-1.41,2.83-3.44,2.83-1.55,0-2.7-.65-3.33-1.82Z"/>
+      </g>
+    </g>
+    <text class="cls-8" transform="translate(16.19 104.27)"><tspan class="cls-11" x="0" y="0">Insights</tspan><tspan class="cls-2" x="70.31" y="0" xml:space="preserve"> is </tspan><tspan class="cls-5" x="90.91" y="0">y</tspan><tspan class="cls-4" x="98.85" y="0">our go</tspan><tspan class="cls-3" x="158.44" y="0">-t</tspan><tspan class="cls-4" x="171.68" y="0">o </tspan><tspan class="cls-2"><tspan x="0" y="16.5">source </tspan><tspan class="cls-23" x="62.37" y="16.5">f</tspan><tspan x="69.88" y="16.5">or essential </tspan></tspan><tspan class="cls-2"><tspan class="cls-18" x="0" y="33">t</tspan><tspan x="7.53" y="33">opics, ranging from </tspan></tspan><tspan class="cls-2"><tspan x="0" y="49.5">university life and men</tspan><tspan class="cls-20" x="184.77" y="49.5">t</tspan><tspan x="191.49" y="49.5">al </tspan></tspan><tspan class="cls-2"><tspan x="0" y="66">hea</tspan><tspan class="cls-13" x="28.92" y="66">l</tspan><tspan class="cls-12" x="34.66" y="66">th </tspan><tspan class="cls-18" x="56.86" y="66">t</tspan><tspan x="64.39" y="66">o productivit</tspan><tspan class="cls-1" x="176.08" y="66">y</tspan><tspan x="183.75" y="66">, </tspan></tspan><tspan class="cls-2"><tspan x="0" y="82.5">time man</tspan><tspan class="cls-22" x="70.52" y="82.5">a</tspan><tspan x="80.2" y="82.5">gemen</tspan><tspan class="cls-15" x="131.32" y="82.5">t</tspan><tspan class="cls-24" x="138.18" y="82.5">, and </tspan></tspan><tspan class="cls-2"><tspan x="0" y="99">career gr</tspan><tspan class="cls-6" x="80.9" y="99">o</tspan><tspan class="cls-24" x="92.36" y="99">wth. Exp</tspan><tspan class="cls-14" x="158.06" y="99">l</tspan><tspan x="165.48" y="99">ore </tspan></tspan><tspan class="cls-2"><tspan x="0" y="115.5">pr</tspan><tspan class="cls-22" x="18.15" y="115.5">a</tspan><tspan class="cls-12" x="27.84" y="115.5">ctical tips, a</tspan><tspan class="cls-21" x="131.31" y="115.5">d</tspan><tspan x="140.52" y="115.5">vice, and </tspan></tspan><tspan class="cls-2"><tspan x="0" y="132">personal reflections </tspan><tspan class="cls-18" x="178.66" y="132">t</tspan><tspan class="cls-12" x="186.19" y="132">o </tspan></tspan><tspan class="cls-2"><tspan x="0" y="148.5">help </tspan><tspan class="cls-15" x="38.83" y="148.5">y</tspan><tspan x="46.78" y="148.5">ou n</tspan><tspan class="cls-17" x="83.63" y="148.5">a</tspan><tspan x="91.64" y="148.5">vi</tspan><tspan class="cls-25" x="106.16" y="148.5">g</tspan><tspan class="cls-20" x="116.97" y="148.5">a</tspan><tspan x="126.32" y="148.5">te the </tspan></tspan><tspan class="cls-2"><tspan x="0" y="165">challenges and miles</tspan><tspan class="cls-18" x="174" y="165">t</tspan><tspan x="181.53" y="165">ones </tspan></tspan><tspan class="cls-2"><tspan x="0" y="181.5">of eve</tspan><tspan class="cls-15" x="50.69" y="181.5">r</tspan><tspan x="58.8" y="181.5">y</tspan><tspan class="cls-16" x="67.95" y="181.5">d</tspan><tspan class="cls-9" x="77.15" y="181.5">a</tspan><tspan x="85.49" y="181.5">y life.</tspan></tspan></text>
+  </g>
+</svg>

@@ -13,53 +13,37 @@
     <link rel="stylesheet" href="/css/general/warning-message-style.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/purple/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/purple/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/purple/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/purple/favicon-64x64.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/purple/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/purple/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/purple/favicon-256x256.png">
-    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/purple/favicon-512x512.png">
-    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/purple/favicon-57x57.png">
-    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/purple/favicon-72x72.png">
-    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/purple/favicon-114x114.png">
-    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/purple/favicon-120x120.png">
-    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/purple/favicon-144x144.png">
-    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/purple/favicon-152x152.png">
-    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/purple/favicon-180x180.png">
-    <meta name="msapplication-TileImage" content="/images/favicons/purple/favicon-144x144.png">
-    <meta name="msapplication-TileColor" content="#202020">
-    <meta name="msapplication-square70x70logo" content="/images/favicons/purple/favicon-70x70.png">
-    <meta name="msapplication-square150x150logo" content="/images/favicons/purple/favicon-150x150.png">
-    <meta name="msapplication-square310x310logo" content="/images/favicons/purple/favicon-310x310.png">
-    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/purple/favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/purple/favicon-512x512.png">
-    <style>
-        .header {
-            background-color: #9D8AFF;
-        }
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/paranoia/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/paranoia/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/paranoia/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/paranoia/favicons/favicon-180x180.png">
 
-        .landscape-message {
-            color: var(--primarypagecolour);
-        }
+    <meta name="description"
+        content="Play Paranoia online with friends! OVEREXPOSED brings thrilling and mysterious questions that will keep the party going. Ready to test your friendships? Try it now!">
+    <meta name="keywords"
+        content="paranoia game, online paranoia, party games, free paranoia game, fun games, drinking games, OVEREXPOSED, digital card game">
+    <meta name="author" content="OVEREXPOSED">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta property="og:description"
+        content="Uncover secrets and stir up excitement with OVEREXPOSED's Paranoia game! A fun and suspenseful party game for friends, teens, and adults. Play online for free now!">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/paranoia/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/paranoia-settings">
+    <meta property="og:type" content="website">
 
-        @media (max-width: 768px) and (orientation: landscape) {
-
-            .main-container,
-            .header,
-            .home-button {
-                display: none;
-            }
-
-            .warning-box,
-            .overlay {
-                display: none !important;
-            }
-        }
-    </style>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Who’s got something to hide? Find out with OVEREXPOSED's Paranoia game! Play online with friends for fun and shocking revelations!">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/meta/paranoia/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/paranoia-settings">
+    
 </head>
-
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/paranoia-settings.png')");
+    document.documentElement.style.setProperty('--splashscreennext', "url('/images/splash-screens/paranoia.png')");
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
@@ -73,7 +57,7 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="full-page-container-static" id="full-page-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
 
     <div id="header-placeholder"></div>
 
@@ -81,10 +65,10 @@
         <h2 id="warning-title" class="warning-title">NSFW</h2>
         <img src="/images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
         <p class="warning-text">This content is not suitable for all audiences.</p>
-        <a href="paranoia" class="start-game-warning-button">START GAME</a>
+        <button class="start-game-warning-button">START GAME</button>
     </div>
 
-    <button class="home-button">HOME</button>
+    <button class="back-button">back</button>
 
     <div class="main-container">
         <div class="game-settings-button-container">
@@ -122,13 +106,13 @@
             </div>
             <div class="game-settings-container">
                 <div class="button-container">
-                    <button data-key="paranoia-settings-punishment" data-primary-color="var(--primarypagecolour)"
+                    <button data-key="paranoia-drink-wheel" data-primary-color="var(--primarypagecolour)"
                         data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack-nsfw">Drink
                         Wheel</button>
-                    <button data-key="paranoia-settings-coin-flip" data-primary-color="var(--primarypagecolour)"
+                    <button data-key="paranoia-coin-flip" data-primary-color="var(--primarypagecolour)"
                         data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack-nsfw">Lucky Coin
                         Flip</button>
-                        <button class="start-game-button" id="paranoia">Start Game</button>
+                    <button class="start-game-button" id="paranoia">Start Game</button>
                 </div>
             </div>
         </div>
@@ -138,17 +122,15 @@
     <script src="/scripts/general/header.js"></script>
 
     <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF'); //C8A2D8
+        document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
         document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
 
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/purple/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/purple/instagram-icon.svg)');
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 
         //Header & Settings
         document.addEventListener('DOMContentLoaded', function () {
-            rotateIcon = document.querySelector('.rotate-icon');
-            rotateIcon.src = '/images/icons/purple/rotate-phone-icon.svg';
-
             helpTitle.textContent = 'GAME SETTINGS';
 
             helpText.innerHTML = `
@@ -161,13 +143,7 @@
     <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
 `;
         });
-        // Page Load Transition
-        const heading = document.createElement('h1');
-        heading.textContent = 'PARANOIA SETTINGS';
-        heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-        heading.style.fontFamily = 'LemonMilk';
-        heading.style.fontSize = '5vh';
-        heading.style.textAlign = 'center';
+
     </script>
     <script src="/scripts/party-games/game-settings.js"></script>
 </body>

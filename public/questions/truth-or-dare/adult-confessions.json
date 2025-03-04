@@ -1,852 +1,852 @@
 {
   "truth-or-dare-adult-confessions": [
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's your biggest turn-on?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most embarrassing thing you’ve ever done while drunk?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the most embarrassing thing you've ever done in public?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What is your biggest turn-off in a relationship?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever lied to get out of a bad date?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What is your most unusual guilty pleasure?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever cheated on someone or been cheated on? Give full details.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the biggest secret you've ever kept from a partner?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever sabotaged a relationship out of jealousy or spite?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever had a secret relationship? Why did you keep it hidden?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the wildest lie you’ve ever told to avoid trouble?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most impulsive thing you’ve done while intoxicated?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's a deal-breaker for you in a relationship that might surprise others?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most inappropriate thing you've ever done in public?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most awkward conversation you've had with a family member?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever ghosted someone? Why did you do it?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something you're scared to try but secretly want to?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's a personal dream or goal you've never told anyone about?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's a lie you're still ashamed of telling?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the biggest age gap you've had with a partner?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What do you regret not doing in life so far?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most awkward thing you've ever said during a date?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the most expensive thing you've bought just to impress someone?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the most shameful thing you've done for love or lust?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever had a crush on someone your friend was dating?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever cried in public? What happened?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever been in love with two people at the same time?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something illegal you've done but don’t feel guilty about?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most inappropriate thing you’ve done at someone else’s house?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the worst rejection you've ever faced?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most ridiculous thing you've ever spent money on?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the weirdest way you've met someone you dated?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the weirdest thing you've ever Googled?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most embarrassing thing that’s happened in front of a large group?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the worst reason you’ve ever given for breaking up with someone?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever been rejected in front of a crowd? What happened?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most childish thing you've done recently?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever had a crush on someone way older? How much older?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever accidentally texted the wrong person? What did you say?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something you've done that made you feel guilty, but you've never confessed?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the worst thing you've said during a fight with a partner?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the weirdest thing you've tried but never want to do again?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the cringiest thing you've done while drunk texting?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most awkward encounter you've had with an ex’s new partner?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the weirdest interaction you’ve had with a child?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most embarrassing thing you've done when meeting someone's family?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most ridiculous thing you've spent too much money on?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the most awkward conversation you’ve had with someone much younger than you?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "If you had to marry someone in this room right now, who would you choose?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Would you ever get plastic surgery?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Do you still have feelings for any of your exes?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Would you date your high school crush today?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Why did your last relationship end?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever had a holiday fling?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What do you want written on your tombstone?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's one thing in your life you wish you could change?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What was the greatest day of your life?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the best date you've been on?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever had a rebound?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something no one knows about you?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What age were you the most chaotic?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What crime would you commit if doing it would prevent it from happening again?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Which ex would you consider getting back with?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something you’ve always wanted to do but haven’t?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the most romantic gesture in your opinion?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Would you visit a nudist beach?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's your least favorite part of daily life?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s been your most physically or mentally painful experience?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What bridges are you glad you burned?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "If you could murder someone without getting caught, who would it be?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the youngest age partner you’d date?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Which family member annoys you the most and why?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's your greatest fear in relationships?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Who in this room would you make your emergency contact?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the scariest thing that's ever happened to you?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "If you could set anyone here up with your best friend, who and why?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What was your biggest childhood fear?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Who's your favorite person in your immediate family?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "When was the last time a partner of yours embarrassed you?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the hardest drug you’ve tried?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever been arrested? What happened?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Who's the most surprising person to ever slide into your DMs?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's your most embarrassing childhood memory?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "When was the last time you watched an adult movie?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Would you marry someone rich even if you weren’t in love with them?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever been caught checking someone out?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's your least favorite school memory?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Who was the last person you said, “I love you” to?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What was your first heartbreak?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever broken someone's heart?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Can cheating ever be justified? How?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever thrown up in public?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s one responsibility you wish you didn’t have?",
       "punishment": "Take a sip."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the scariest thing you’ve ever done?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever gotten blackout drunk?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s something you’ve done that you still feel guilty about?",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the weirdest place you’ve ever exchanged numbers?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever said, “I love you,” but didn’t mean it? To who?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's something you dread doing but know you have to?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What are you most proud of in your life?",
       "punishment": "Take 2 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "If you were rescuing people from a burning building and could only save one person in this room, who would you save?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever hooked up with someone and instantly regretted it?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the most inappropriate text you’ve ever sent by accident?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What’s the fastest time you've gone from meeting to hooking up?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "What's the dirtiest message you’ve ever sent?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever hooked up with a coworker? How did it turn out?",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Truth",
+      "question-type": "truth",
       "question": "Have you ever lied about your sexual experiences to impress someone? What was the lie?",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Perform a dramatic reading of the most romantic or embarrassing text you've ever received.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Reveal a secret or confession in a group chat with friends or family that you've never told them before.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Text your mom saying you're thinking about making a life-changing decision (like moving to another country or changing careers).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Swap an item of clothing with someone for the next three rounds.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call someone you know and pretend to be a customer service agent, handling their “complaints.”",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Show everyone the contents of your bag or purse without hiding anything.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Text your ex “Happy Birthday” (even if it’s not their birthday!).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Switch outfits with another player for the rest of the game.",
       "punishment": "Finish your drink."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Share a secret someone told you without revealing their name.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Eat a surprise snack with your eyes closed (chosen by the group).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Post a photo of your hand with an engagement ring on social media, without explaining it.",
       "punishment": "Finish your drink."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Give life advice to every player, one piece for each person.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Act like a baby until your next turn.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Give a player a 1-minute back massage.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Share your most scandalous hot take on any topic of your choice.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Serenade the person to your right with a love song.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let the person on your right do or redo your makeup.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Show everyone your driver’s license photo.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Reply to the first five Instagram stories on your timeline, no matter what they are.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Post your oldest selfie on your private story with no caption.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Take off your top for the next three rounds.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Say something deeply romantic to the person sitting to your right.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Cut off a small chunk of your hair—right from the front.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Put your hand in the toilet.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "DM your celebrity crush something flirtatious.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Say something normal to the person on your right in your sexiest voice.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let the person to your right do your makeup (without looking in a mirror).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call your crush and pretend you’re drunk while confessing your feelings.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Confess a secret you've never told anyone in the room.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call your ex and ask them what went wrong in your relationship.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Eat a raw egg or take a shot of hot sauce (your choice).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Share the most embarrassing thing you've ever said on a date.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Stick your foot in the toilet and flush it.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Mix orange juice with milk and drink it in front of everyone.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Pretend to give a lap dance to a chair.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Send a voice note to a random contact using your sexiest voice.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Lick someone's earlobe (with their consent!).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Text your crush “I can’t stop thinking about last night\" (even if nothing happened).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Play “7 Minutes in Heaven” with someone chosen by the group.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Whisper in someone's ear what you would do to them if you were alone.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let someone write something sexy on your body with a marker.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let someone write something negative about you on your back with a marker. You can’t look at it until the game is over.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let someone send a risqué message from your phone.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Kiss someone’s hand while maintaining intense eye contact.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Text a random contact: 'Let’s hook up tonight.'",
       "punishment": "Finish your drink."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Pretend to moan loudly for 30 seconds straight.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let someone touch your inner thigh for 10 seconds.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Send a text to a random person in your contacts that says: 'I want you.'",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Make out with your hand passionately for one full minute while the group watches.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call someone and ask if they’d be interested in a threesome.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Let someone send a naughty text to your ex from your phone.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Write a dirty message on someone’s body with a marker.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Send a picture of your feet to a random contact in your phone.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Kiss someone’s neck for 10 seconds.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Describe in detail how you would seduce the person to your left.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call a random contact and ask them for advice on dirty talk.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call a friend and ask them to rate you out of 10 on sex appeal.",
       "punishment": "Take 5 sips"
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call a friend of the opposite sex and ask them why the two of you never dated.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Give a detailed description of your ideal intimate encounter (use your imagination!).",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Call someone and ask if they've ever thought about you in a naughty way.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Dirty talk someone in the room while keeping a completely straight face.",
       "punishment": "Take 4 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Give someone a sexy 30-second back massage in front of the group.",
       "punishment": "Take 3 sips."
     },
     {
-      "question_type": "Dare",
+      "question-type": "dare",
       "question": "Text your ex 'I still dream about you.'",
       "punishment": "Take 4 sips."
     }

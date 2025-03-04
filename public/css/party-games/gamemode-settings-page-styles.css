@@ -180,6 +180,7 @@ button.disabled {
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s;
     position: absolute;
+    margin-top:0;
 }
 
 .start-game-button:hover,
@@ -209,8 +210,11 @@ button.disabled {
 
 @media (orientation: portrait) {
     .start-game-button {
+        margin-top:5vh;
         position: relative;
         bottom:0;
+        width:60vw;
+        justify-content: center;
     }
     .button-container {
         justify-content: center;
@@ -244,7 +248,7 @@ button.disabled {
     .main-container {
         flex-direction: column;
         margin-top: 15vh;
-        height: 70vh;
+        height: 80vh;
         width: 100vw;
     }
 
@@ -256,20 +260,18 @@ button.disabled {
     .settings-container {
         display:none;
         border-radius: 2.5px;
+        width: 90%;
     }
     .packs-container.active,
     .settings-container.active {
-        width: 90%;
         margin: 0 auto;
         padding: 0;
         background-color: var(--secondarybackgroundcolour);
-        height: 90%;
+        height: 80%;
         display: flex;
     }
     
-
     .settings-container {
-        height: auto;
         display: none;
     }
 
@@ -291,10 +293,9 @@ button.disabled {
         width:90%;
     }
 
-
-
     .home-button {
         top: calc(var(--headerheight) + 20px);
+        left: 5px;
     }
 
     .element:hover {
@@ -313,5 +314,14 @@ button.disabled {
         background-color: var(--primarypagecolour);
         border-color: var(--primarypagecolour);
         color: var(--backgroundcolour);
+    }
+
+    .game-settings-container,.packs-content-container {
+        height:53.5vh;
+    }
+}
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-container {
+        display: none;
     }
 }

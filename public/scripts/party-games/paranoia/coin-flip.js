@@ -29,8 +29,8 @@ function tossCoinFunction() {
     const faceCoin = randomVal < 0.5 ? 'Heads' : 'Tails';
     const backgroundContainer = randomVal < 0.5 ? 'var(--backgroundcolour)' : 'var(--primarypagecolour)';
     const imageUrl = faceCoin === 'Heads' ?
-        '/images/icons/purple/heads-icon.svg' :
-        '/images/icons/purple/tails-icon.svg';
+        '/images/icons/paranoia/heads-icon.svg' :
+        '/images/icons/paranoia/tails-icon.svg';
 
     coinIcon.classList.add('flip');
 

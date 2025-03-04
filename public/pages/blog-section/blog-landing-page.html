@@ -7,49 +7,53 @@
     <meta http-equiv="Content-Security-Policy"
         content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
 
-    <title>BLOG</title>
+    <title>INSIGHTS</title>
     <link rel="stylesheet" href="/css/general/header.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/blogs/blog-landing-page-style.css">
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blogs/blue/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blogs/blue/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/blogs/blue/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/blogs/blue/favicon-64x64.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/blogs/blue/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="119x128" href="/images/favicons/blogs/blue/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/blogs/blue/favicon-256x256.png">
-    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/blogs/blue/favicon-512x512.png">
-    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/blogs/blue/favicon-57x57.png">
-    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/blogs/blue/favicon-72x72.png">
-    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/blogs/blue/favicon-114x114.png">
-    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/blogs/blue/favicon-120x120.png">
-    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/blogs/blue/favicon-144x144.png">
-    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/blogs/blue/favicon-152x152.png">
-    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/blogs/blue/favicon-180x180.png">
-    <meta name="msapplication-TileImage" content="/images/favicons/blogs/blue/favicon-144x144.png">
-    <meta name="msapplication-TileColor" content="#202020">
-    <meta name="msapplication-square70x70logo" content="/images/favicons/blogs/blue/favicon-70x70.png">
-    <meta name="msapplication-square150x150logo" content="/images/favicons/blogs/blue/favicon-150x150.png">
-    <meta name="msapplication-square310x310logo" content="/images/favicons/blogs/blue/favicon-310x310.png">
-    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/blogs/blue/favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/blogs/blue/favicon-512x512.png">
+    <link rel="icon" type="image/png" sizes="15x16"
+        href="/images/icons/blogs/primary-colour/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32"
+        href="/images/icons/blogs/primary-colour/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96"
+        href="/images/icons/blogs/primary-colour/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180"
+        href="/images/icons/blogs/primary-colour/favicons/favicon-180x180.png">
+
+    <meta name="robots" content="index, follow">
+    <meta name="description"
+        content="Explore expert tips and advice on university life, mental health, productivity, relationships, and career growth. Stay informed with OVEREXPOSED Insights.">
+    <meta name="keywords"
+        content="university life, mental health, productivity tips, time management, relationships, career advice, adulting, OVEREXPOSED, life tips">
+    <meta name="author" content="OVEREXPOSED">
+    <meta property="og:title" content="Insights - Tips on Life, Productivity & Well-Being | OVEREXPOSED">
+    <meta property="og:description"
+        content="From university struggles to career growth, OVEREXPOSED Insights covers mental health, productivity, relationships, and more. Read now!">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/insights/meta/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/insights">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Insights - Tips on Life, Productivity & Well-Being | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Get expert advice on university life, mental health, productivity, relationships, and career success with OVEREXPOSED Insights.">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/insights/meta/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/insights">
 
     <style>
-        .disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .header {
-            background-color: var(--primarypagecolour);
-        }
-
-        .landscape-message {
-            color: var(--primarypagecolour);
+        @media (max-width: 768px) and (orientation: landscape) {
+            .back-button {
+                display: none;
+            }
         }
     </style>
 </head>
+
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/insights.png')");
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
@@ -64,9 +68,11 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="full-page-container-static" id="full-page-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
 
     <div id="header-placeholder"></div>
+
+    <button class="back-button">HOME</button>
 
     <div class="parent-container">
         <div class="title-container">
@@ -108,12 +114,11 @@
     <script>
         selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
 
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/blue/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/blue/instagram-icon.svg)');
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/blogs/primary-colour/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/primary-colour/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/primary-colour/instagram-icon.svg)');
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const rotateIcon = document.querySelector('.rotate-icon');
-            rotateIcon.src = '/images/icons/blogs/blue/rotate-phone-icon.svg';
         });
 
         //Landing Page Scripts
@@ -127,6 +132,14 @@
         const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
         const tag4Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag4colour');
         const tag5Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag5colour');
+
+        helpTitle.textContent = 'INSIGHTS';
+
+        helpText.innerHTML = `
+            Welcome to <highlight>INSIGHTS</highlight> Explore blogs on social life, relationships, university, mental health, productivity, and adulting. Get tips, stories, and advice to navigate life’s journey.
+        `;
+
+        const backButton = document.querySelector('.back-button');
 
         const filterButton = document.querySelector('.filter-button');
         const filterContainer = document.querySelector('.filter-container');
@@ -202,88 +215,100 @@
         }
 
         function createBlogPost(blog, index) {
-    const blogContainer = document.getElementById('blog-container');
-    const tagColor = getTextColorForTag(blog.tag);
-    console.log(tagColor);
+            const blogContainer = document.getElementById('blog-container');
+            const tagColor = getTextColorForTag(blog.tag);
 
-    const postDiv = document.createElement('div');
-    postDiv.classList.add('blog-post-container');
-    postDiv.id = `post-${index}`;
-    postDiv.dataset.tag = blog.tag;
-    postDiv.dataset.searchTags = blog['search-tags'].toLowerCase();
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('blog-post-container');
+            postDiv.id = `post-${index}`;
+            postDiv.dataset.tag = blog.tag;
+            postDiv.dataset.searchTags = blog['search-tags'].toLowerCase();
 
-    const button = document.createElement('button');
-    button.classList.add('blog-post-button');
-    button.textContent = blog.title;
+            const button = document.createElement('button');
+            button.classList.add('blog-post-button');
+            button.textContent = blog.title;
+            button.style.borderColor = tagColor;
+            button.style.color = tagColor;
 
-    const blogContentDiv = document.createElement('div');
-    blogContentDiv.classList.add('blog-post-content');
-    blogContentDiv.style.display = 'none';
-    blogContentDiv.style.maxHeight = '0';
-    blogContentDiv.style.overflow = 'hidden';
-    blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
+            const blogContentDiv = document.createElement('div');
+            blogContentDiv.classList.add('blog-post-content');
+            blogContentDiv.style.display = 'none';
+            blogContentDiv.style.maxHeight = '0';
+            blogContentDiv.style.overflow = 'hidden';
+            blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
 
-    button.style.borderColor = tagColor;
-    button.style.color = tagColor;
+            // Image Button
+            const img = document.createElement('img');
+            img.classList.add('blog-post-image');
+            img.src = `/images/blog-thumbnails/${blog.image}`;
+            img.alt = blog.title;
 
-    const img = document.createElement('img');
-    img.classList.add('blog-post-image');
-    img.src = `/images/blog-thumbnails/${blog.image}`;
-    img.alt = blog.title;
+            const imgButton = document.createElement('button');
+            imgButton.classList.add('blog-post-image-button');
+            imgButton.appendChild(img);
+            imgButton.style.border = 'none';
+            imgButton.style.background = 'none';
+            imgButton.style.cursor = 'pointer';
 
-    const link = document.createElement('a');
-    link.href = window.location.href + blog['file-name'];
+            imgButton.addEventListener('click', () => {
+                transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
+            });
 
-    // Append the image to the link
-    link.appendChild(img);
+            blogContentDiv.appendChild(imgButton);  // Replacing `link` with `imgButton`
 
-    blogContentDiv.appendChild(link);
+            const header = document.createElement('h2');
+            header.classList.add('blog-post-image-header');
+            header.textContent = blog.title;
+            header.style.color = tagColor;
 
-    const header = document.createElement('h2');
-    header.classList.add('blog-post-image-header');
-    header.textContent = blog.title;
-    header.style.color = getTextColorForTag(blog.tag);
+            const contentText = document.createElement('h3');
+            contentText.classList.add('blog-post-image-text');
+            contentText.textContent = blog.content.split(' ').slice(0, 40).join(' ') + '...';
+            contentText.style.color = tagColor;
 
-    const contentText = document.createElement('h3');
-    contentText.classList.add('blog-post-image-text');
-    const lines = blog.content.split(' ').slice(0, 40).join(' ') + '...';
-    contentText.textContent = lines;
-    contentText.style.color = getTextColorForTag(blog.tag);
+            const extraDetailsContainer = document.createElement('div');
+            extraDetailsContainer.classList.add('extra-details-container');
 
-    const extraDetailsContainer = document.createElement('div');
-    extraDetailsContainer.classList.add('extra-details-container');
+            const authorElement = document.createElement('span');
+            authorElement.classList.add('author');
+            authorElement.textContent = `Author: ${blog.author}`;
+            authorElement.style.color = tagColor;
 
-    const authorElement = document.createElement('span');
-    authorElement.classList.add('author');
-    authorElement.textContent = `Author: ${blog.author}`;
-    authorElement.style.color = tagColor;
+            const dateElement = document.createElement('span');
+            dateElement.classList.add('date');
+            dateElement.textContent = `Date: ${blog.date}`;
+            dateElement.style.color = tagColor;
 
-    const dateElement = document.createElement('span');
-    dateElement.classList.add('date');
-    dateElement.textContent = `Date: ${blog.date}`;
-    dateElement.style.color = tagColor;
+            extraDetailsContainer.appendChild(authorElement);
+            extraDetailsContainer.appendChild(dateElement);
 
-    extraDetailsContainer.appendChild(authorElement);
-    extraDetailsContainer.appendChild(dateElement);
+            // Read More Button
+            const readMoreButton = document.createElement('button');
+            readMoreButton.textContent = 'Read More';
+            readMoreButton.classList.add('read-more-button');
+            readMoreButton.style.color = tagColor;
+            readMoreButton.style.border = 'none';
+            readMoreButton.style.background = 'none';
+            readMoreButton.style.cursor = 'pointer';
+            readMoreButton.style.display = 'block';
+            readMoreButton.style.margin = '0 auto';
 
-    const readMoreLink = document.createElement('a');
-    readMoreLink.href = window.location.href + blog['file-name'];
-    readMoreLink.textContent = 'Read More';
-    readMoreLink.classList.add('read-more-link');
-    readMoreLink.style.color = tagColor;
+            readMoreButton.addEventListener('click', () => {
+                transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
+            });
 
-    blogContentDiv.appendChild(header);
-    blogContentDiv.appendChild(contentText);
-    blogContentDiv.appendChild(extraDetailsContainer);
-    blogContentDiv.appendChild(readMoreLink);
+            blogContentDiv.appendChild(header);
+            blogContentDiv.appendChild(contentText);
+            blogContentDiv.appendChild(extraDetailsContainer);
+            blogContentDiv.appendChild(readMoreButton);  // Replacing `readMoreLink` with `readMoreButton`
 
-    postDiv.appendChild(button);
-    postDiv.appendChild(blogContentDiv);
+            postDiv.appendChild(button);
+            postDiv.appendChild(blogContentDiv);
+            blogContainer.appendChild(postDiv);
 
-    blogContainer.appendChild(postDiv);
+            button.addEventListener('click', () => openBlogPost(index));
+        }
 
-    button.addEventListener('click', () => openBlogPost(index));
-}
 
 
         function openBlogPost(index) {
@@ -423,12 +448,11 @@
 
         document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
 
-        const heading = document.createElement('h1');
-        heading.textContent = 'INSIGHTS';
-        heading.style.color = selectedColor;
-        heading.style.fontFamily = 'LemonMilk';
-        heading.style.fontSize = '5vh';
-        heading.style.textAlign = 'center';
+        backButton.addEventListener('click', () => {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        });
+
+
     </script>
 </body>
 

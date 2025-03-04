@@ -11,7 +11,10 @@ const warningColour = rootStyles.getPropertyValue('--warningcolour').trim();
 
 const spinButton = document.getElementById('odd-man-out-button');
 
-spinButton.addEventListener('click', toggleSpinTheWheel);
+if(spinButton){
+    spinButton.addEventListener('click', toggleSpinTheWheel);
+}
+
 
 function toggleSpinTheWheel() {
     addElementIfNotExists(elementClassArray, spinContainer);

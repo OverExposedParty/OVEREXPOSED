@@ -114,32 +114,6 @@ body {
     color: #ff5f5f;
 }
 
-.back-button {
-    position: absolute;
-    top: calc(var(--headerheight) + 5vh);
-    left: 20px;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
-    color: var(--primarypagecolour);
-    font-size: 1.5vh;
-    padding: 5px 10px;
-    border-radius: 50px;
-    margin: 0 10px;
-    width: 10vh;
-    font-family: LemonMilk;
-    z-index: 600;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.back-button:hover {
-    background-color: var(--primarypagecolour);
-    color: var(--backgroundcolour);
-    border-color: var(--primarypagecolour);
-}
-
 .button-container {
     display: flex;
     align-items: center;
@@ -278,8 +252,16 @@ body {
         background-color: var(--backgroundcolour);
         color:  var(--primarypagecolour);
     }
-    .back-button {
-        top: calc(var(--headerheight) + 20px);
-        left: 10px;
+    .content{
+        max-width: 55vw;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .side-buttons,
+    .tts-button,
+    .container {
+        display: none;
     }
 }

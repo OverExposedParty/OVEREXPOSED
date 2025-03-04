@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <meta name="robots" content="noindex, nofollow">
     <meta property="og:description"
         content="Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!">
     <meta http-equiv="Content-Security-Policy"
@@ -18,39 +20,12 @@
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/favicons/blue/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/favicons/blue/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="45x48" href="/images/favicons/blue/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="60x64" href="/images/favicons/blue/favicon-64x64.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/favicons/blue/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="128x128" href="/images/favicons/blue/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="238x256" href="/images/favicons/blue/favicon-256x256.png">
-    <link rel="icon" type="image/png" sizes="476x512" href="/images/favicons/blue/favicon-512x512.png">
-    <link rel="apple-touch-icon" sizes="53x57" href="/images/favicons/blue/favicon-57x57.png">
-    <link rel="apple-touch-icon" sizes="67x72" href="/images/favicons/blue/favicon-72x72.png">
-    <link rel="apple-touch-icon" sizes="106x114" href="/images/favicons/blue/favicon-114x114.png">
-    <link rel="apple-touch-icon" sizes="112x120" href="/images/favicons/blue/favicon-120x120.png">
-    <link rel="apple-touch-icon" sizes="134x144" href="/images/favicons/blue/favicon-144x144.png">
-    <link rel="apple-touch-icon" sizes="141x152" href="/images/favicons/blue/favicon-152x152.png">
-    <link rel="apple-touch-icon" sizes="167x180" href="/images/favicons/blue/favicon-180x180.png">
-    <meta name="msapplication-TileImage" content="/images/favicons/blue/favicon-144x144.png">
-    <meta name="msapplication-TileColor" content="#202020">
-    <meta name="msapplication-square70x70logo" content="/images/favicons/blue/favicon-70x70.png">
-    <meta name="msapplication-square150x150logo" content="/images/favicons/blue/favicon-150x150.png">
-    <meta name="msapplication-square310x310logo" content="/images/favicons/blue/favicon-310x310.png">
-    <link rel="icon" type="image/png" sizes="179x192" href="/images/favicons/blue/favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/images/favicons/blue/favicon-512x512.png">
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
 
     <style>
-        .landscape-message {
-            color: var(--primarypagecolour);
-        }
-
-        .disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
         .split-button-container {
             display: flex;
             align-items: center;
@@ -61,7 +36,7 @@
         }
 
         .split-question-button {
-            background-color: #202020;
+            background-color: var(--backgroundcolour);
             border: var(--bordersize) solid var(--primarypagecolour);
             color: var(--primarypagecolour);
             font-size: 100%;
@@ -75,7 +50,7 @@
 
         .split-question-button:hover {
             background-color: var(--primarypagecolour);
-            color: #202020;
+            color: var(--backgroundcolour);;
         }
 
         .or-text {
@@ -84,9 +59,6 @@
             margin: 0 2%;
         }
 
-        .gamemode-text {
-            font-size: 450%;
-        }
 
         @media (max-width: 400px),
         (max-height: 700px) {
@@ -100,32 +72,18 @@
                 font-size: 100%;
                 margin: 0 5%;
             }
-
-            .gamemode-text {
-                font-size: 350%;
-            }
         }
 
         @media (max-width: 768px) and (orientation: landscape) {
-
-            .container,
-            .header,
-            .back-button,
-            .side-buttons,
-            .tts-button {
-                display: none;
-            }
-
-            .overlay,
-            .settings-box,
-            .help-container,
-            .extra-menu-container,
             .spin-the-wheel-container {
                 display: none !important;
             }
         }
     </style>
 </head>
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/truth-or-dare.png')");
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
@@ -140,7 +98,7 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="full-page-container-static" id="full-page-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
 
     <div class="spin-the-wheel-container" id="spin-the-wheel-container">
         <div id="spin_the_wheel">
@@ -184,58 +142,32 @@
         </div>
     </div>
     <div class="side-buttons">
-        <img src="/images/icons/blue/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
-        <img src="/images/icons/blue/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
+        <img src="/images/icons/overexposed/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="/images/icons/overexposed/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
     </div>
 
     <script src="/scripts/general/header.js"></script>
 
     <script>
+        const gamemode = "truth-or-dare";
+        const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+
+        const spinWheelEnabled = localStorage.getItem('truth-or-dare-drink-wheel') === 'true';
+            
+            if (!spinWheelEnabled) {
+                document.getElementById('spin-button').remove();
+            }
+    </script>
+
+    <script src="/scripts/party-games/general/party-games.js"></script>
+    <script src="/scripts/party-games/truth-or-dare/get-next-question.js"></script>
+
+    <script>
         document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
         document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 
-        //Header & Settings
-        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
         //Truth Or Dare Page
         document.addEventListener('DOMContentLoaded', async () => {
-            const rotateIcon = document.querySelector('.rotate-icon');
-            rotateIcon.src = '/images/icons/blue/rotate-phone-icon.svg';
-
-            const questions = {
-                truth: [],
-                dare: []
-            };
-
-            const usedQuestions = {
-                truth: [],
-                dare: []
-            };
-
-            const packNameMapping = {
-                'truth-or-dare-ice-breaker': 'Ice Breaker',
-                'truth-or-dare-adult-confessions': 'Adult Confessions',
-                'truth-or-dare-troubled-teens': 'Troubled Teens',
-                'truth-or-dare-cheeky-confessions': 'Cheeky Confessions',
-                'truth-or-dare-risky-revelations': 'Risky Revelations'
-            };
-
-            let hasBeenClicked = false;
-            let voices = [];
-            let ttsButtonTimeout;
-            let currentUtterance = null;
-
-            let currentQuestion = " or Dare";
-            let currentPunishment = "";
-
-            const punishmentEnabled = localStorage.getItem('truth-or-dare-settings-punishment') === 'true';
-            const spinWheelEnabled = localStorage.getItem('truth-or-dare-settings-drink-wheel') === 'true';
-            const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
-
-            const sideButtonsContainer = document.querySelector('.side-buttons');
-            const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
-
-            const truthOrDareText = document.querySelector('.gamemode-text-svg');
-
             helpTitle.textContent = 'HOW TO PLAY';
 
             helpText.innerHTML = `
@@ -248,249 +180,8 @@
     Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
     <highlight>Drinking Punishments</highlight> where failing results in a drinking consequence.
 `;
-            if(punishmentEnabled){
-                questionZoomedContainerText.style.marginTop = '55%';
-            }
-            else{
-                questionZoomedContainerText.style.marginTop = '65%';
-            }
-            if (!spinWheelEnabled) {
-                document.getElementById('spin-button').style.height = '0';
-                document.getElementById('spin-button').style.width = '0';
-
-                sideButtonsContainer.classList.add('single'); //change if more buttons are added
-            }
-
-            async function fetchQuestions() {
-                const shouldFetchIceBreaker = localStorage.getItem('truth-or-dare-ice-breaker') === 'true';
-                const shouldFetchAdultConfessions = localStorage.getItem('truth-or-dare-adult-confessions') === 'true';
-                const shouldFetchTroubledTeens = localStorage.getItem('truth-or-dare-troubled-teens') === 'true';
-                const shouldFetchCheekyConfessions = localStorage.getItem('truth-or-dare-cheeky-confessions') === 'true';
-                const shouldFetchRiskyRevelations = localStorage.getItem('truth-or-dare-risky-revelations') === 'true';
-
-                const files = [];
-                if (shouldFetchIceBreaker) {
-                    files.push('/questions/truth-or-dare/icebreaker.json');
-                }
-                if (shouldFetchAdultConfessions) {
-                    files.push('/questions/truth-or-dare/adult-confessions.json');
-                }
-                if (shouldFetchTroubledTeens) {
-                    files.push('/questions/truth-or-dare/troubled-teens.json');
-                }
-                if (shouldFetchCheekyConfessions) {
-                    files.push('/questions/truth-or-dare/cheeky-confessions.json');
-                }
-                if (shouldFetchRiskyRevelations) {
-                    files.push('/questions/truth-or-dare/risky-revelations.json');
-                }
-
-                try {
-                    for (const file of files) {
-                        const response = await fetch(file);
-                        if (!response.ok) throw new Error(`Failed to fetch ${file}: ${response.statusText}`);
-                        const data = await response.json();
-
-                        for (const key of Object.keys(data)) {
-                            const displayName = packNameMapping[key] || key;
-                            data[key].forEach(item => {
-                                if (item.question_type === 'Truth') {
-                                    questions.truth.push({ ...item, packKey: displayName, punishment: item.punishment });
-                                } else if (item.question_type === 'Dare') {
-                                    questions.dare.push({ ...item, packKey: displayName, punishment: item.punishment });
-                                }
-                            });
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error fetching questions:', error);
-                }
-            }
-
-            function getRandomQuestion(type) {
-                const availableQuestions = questions[type].filter(q => !usedQuestions[type].includes(q));
-                if (availableQuestions.length === 0) {
-                    document.querySelector('.text-container').textContent = `No more ${type} questions available.`;
-                    return null;
-                }
-                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-                const question = availableQuestions[randomIndex];
-                usedQuestions[type].push(question);
-                return question;
-            }
-
-            function updateTextContainer(text, cardType, punishment) {
-                const textContainer = document.querySelector('.text-container');
-                textContainer.innerHTML =
-                    `<span class="question-text">${text}</span>` +
-                    (punishmentEnabled ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
-                questionZoomedContainerText.textContent = text;
-                if(punishmentEnabled){
-                    questionZoomedContainerPunishmentText.textContent = "Punishment: " + punishment;
-                }
-                const displayCardType = cardType.split('-').pop().toUpperCase();
-                document.querySelector('.card-type-text').textContent = displayCardType;
-                vibrateOnClick();
-            }
-
-            function updateTruthOrDareText(type) {
-                if (type == 'truth') {
-                    truthOrDareText.src = "/images/party-games/truth-or-dare/truth-text.svg";
-                }
-                else if (type == 'dare') {
-                    truthOrDareText.src = "/images/party-games/truth-or-dare/dare-text.svg";
-                }
-                truthOrDareText.setAttribute('alt', type);
-            }
-
-            function enableTTSButton() {
-                const ttsButton = document.getElementById('tts-button');
-                if (ttsButton.classList.contains('disabled')) {
-                    ttsButton.classList.remove('disabled');
-                }
-            }
-
-            function disableTTSButton() {
-                const ttsButton = document.getElementById('tts-button');
-                if (!ttsButton.classList.contains('disabled')) {
-                    ttsButton.classList.add('disabled');
-                    clearTimeout(ttsButtonTimeout);
-                    ttsButtonTimeout = setTimeout(() => {
-                        enableTTSButton();
-                    }, 8000);
-                }
-            }
-
-            function stopSpeech() {
-                if (responsiveVoice.isPlaying()) {
-                    responsiveVoice.cancel();
-                }
-            }
-            function vibrateOnClick() {
-                if (vibrationEnabled && 'vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
-            }
-
-            document.getElementById('truth-button').addEventListener('click', () => {
-                stopSpeech();
-                if (hasBeenClicked) return;
-                hasBeenClicked = true;
-                const question = getRandomQuestion('truth');
-                if (question) {
-                    updateTextContainer(question.question, question.packKey, question.punishment);
-                    updateTruthOrDareText('truth');
-                    enableTTSButton();
-
-                    currentQuestion = question.question;
-                    currentPunishment = question.punishment;
-                }
-                hasBeenClicked = false;
-            });
-
-            document.getElementById('dare-button').addEventListener('click', () => {
-                stopSpeech();
-                if (hasBeenClicked) return;
-                hasBeenClicked = true;
-                const question = getRandomQuestion('dare');
-                if (question) {
-                    updateTextContainer(question.question, question.packKey, question.punishment);
-                    updateTruthOrDareText('dare');
-                    enableTTSButton();
-
-                    currentQuestion = question.question;
-                    currentPunishment = question.punishment;
-                }
-                hasBeenClicked = false;
-            });
-
-            document.querySelector('.back-button').addEventListener('click', () => {
-                window.location.href = 'truth-or-dare-settings';
-            });
-
-            function getSelectedVoice() {
-                const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-                voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
-
-                const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-
-                console.log(`Selected Voice Key: ${selectedVoiceKey}`);
-
-                switch (selectedVoiceKey) {
-                    case 'tts-voice-male1':
-                        return 'UK English Male';
-                    case 'tts-voice-male2':
-                        return 'US English Male';
-                    case 'tts-voice-female1':
-                        return 'UK English Female';
-                    case 'tts-voice-female2':
-                        return 'US English Female';
-                    default:
-                        return 'UK English Male';
-                }
-            }
-
-            await fetchQuestions();
-
-
-            document.getElementById('tts-button').addEventListener('click', () => {
-                const gamemodeText = document.querySelector('.gamemode-text-svg').getAttribute('alt');
-                let textToSpeak = `${gamemodeText} - ${currentQuestion}  Punishment: ${currentPunishment}`;
-                if (currentPunishment === "") {
-                    textToSpeak = `${gamemodeText} - ${currentQuestion}`;
-                }
-                const selectedVoiceName = getSelectedVoice();
-
-                console.log(textToSpeak);
-
-                if (selectedVoiceName) {
-                    responsiveVoice.speak(textToSpeak, selectedVoiceName, { rate: 1 });
-                } else {
-                    responsiveVoice.speak(textToSpeak, "UK English Male", { rate: 1 });
-                }
-
-                disableTTSButton();
-            });
         });
-        //Press Main Image Container
-        const mainImageContainer = document.querySelector('.main-image-container');
-        const mainImageContainerText = document.querySelector('.text-container')
 
-        mainImageContainer.addEventListener('click', toggleQuestionZoomedContainer);
-
-        function toggleQuestionZoomedContainer() {
-            addElementIfNotExists(elementClassArray, questionZoomedContainer);
-            if (!questionZoomedContainer.classList.contains('active')) {
-                questionZoomedContainer.classList.add('active');
-                questionZoomedContainer.classList.add('active');
-                if (!overlay.classList.contains('active')) {
-                    overlay.classList.add('active');
-                }
-            }
-            else {
-                questionZoomedContainer.classList.remove('active');
-                if (findActiveElementsWithClasses(classArray).length == 0) {
-                    overlay.classList.remove('active');
-                }
-            }
-        }
-
-        //Make the Page size fit the page
-        function updateVh() {
-            let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
-            document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
-        }
-
-        window.addEventListener('load', updateVh);
-        window.addEventListener('resize', updateVh);
-
-        // Page Load Transition
-        const heading = document.createElement('h1');
-        heading.textContent = 'TRUTH OR DARE';
-        heading.style.color = selectedColor;
-        heading.style.fontFamily = 'LemonMilk';
-        heading.style.fontSize = '5vh';
-        heading.style.textAlign = 'center';
     </script>
     <script src="/scripts/party-games/spin-the-wheel.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>

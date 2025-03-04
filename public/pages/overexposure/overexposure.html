@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta property="og:description"
+        content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://docs.google.com https://doc-0g-8s-sheets.googleusercontent.com https://script.google.com/ https://script.googleusercontent.com/; 
+                 script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdnjs.cloudflare.com/ https://script.google.com/ https://script.googleusercontent.com/ 'unsafe-inline';">
+
+    <title>OVEREXPOSURE</title>
+    <link rel="stylesheet" href="/css/overexposure/overexposure.css">
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposure/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposure/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposure/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposure/favicons/favicon-180x180.png">
+
+    <meta name="robots" content="index, follow">
+    <meta name="description"
+        content="Share and explore anonymous secrets on OVEREXPOSED. Read real confessions, vent without judgment, and connect through shared experiences.">
+    <meta name="keywords"
+        content="anonymous secrets, confessions, share secrets, read secrets, OVEREXPOSED, online secrets, true stories, anonymous confessions">
+    <meta name="author" content="OVEREXPOSED">
+    <meta property="og:title" content="Overexposure - Share & Read Anonymous Secrets | OVEREXPOSED">
+    <meta property="og:description"
+        content="Got a secret? Share it anonymously or read confessions from others on OVEREXPOSED. No judgment, just real stories waiting to be told.">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposure/meta/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/overexposure">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Overexposure - Share & Read Anonymous Secrets | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Unfiltered. Anonymous. Real. Share your secrets or read confessions from others on OVEREXPOSED.">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/overexposure/meta/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/overexposure">
+
+    <style>
+        @media (max-width: 768px) and (orientation: landscape) {
+
+            .overexposure-container,
+            .floating-container,
+            .container-title {
+                display: none;
+            }
+
+            .overexposure-container,
+            .warning-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/overexposure.png')");
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+
+    <div id="header-placeholder"></div>
+
+    <button class="back-button">HOME</button>
+
+    <div class="overexposure-container" id="overexposure-container">
+        <div class="title-container">
+            <h1 class="title-text" id="title-text"></h1>
+            <div class="title-text-editor " id="title-text-editor">
+                <input type="text" name="Title" placeholder="New Title" id="title-text-editor-input" maxlength="50" />
+            </div>
+
+        </div>
+        <div class="container">
+            <div class="contents-container" id="contents-container">
+                <P></P>
+                <div class="contents-text-editor " id="contents-text-editor">
+                    <textarea placeholder="Type here..." maxlength="500"></textarea>
+                    <div class="overexposure-publish-button">Publish</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wrapper" style="position: absolute; width: 100vw; height: 100vh; overflow: hidden;">
+        <div id="floating-container" class="floating-container">
+            <div class="safe-zone" id="safe-zone"></div>
+            <h2>Welcome to OVEREXPOSURE</h2>
+            <p id="computer-controls">
+                Hold <highlight>Middle Mouse Button</highlight> and drag to traverse
+                <br>
+                Use <highlight>Scroll Wheel</highlight> to zoom in and out
+                <br>
+                Click <highlight>Left Mouse Button</highlight> to select
+                <br>
+                Double click <highlight>Left Mouse Button</highlight> to add a card
+            </p>
+
+            <p class="active" id="mobile-controls">
+                Swipe with one <highlight>finger</highlight> to traverse
+                <br>
+                Pinch with two <highlight>fingers</highlight> to zoom in and out
+                <br>
+                <highlight>Tap</highlight> a card to select
+                <br>
+                Double <highlight>Tap</highlight> to add a card
+            </p>
+        </div>
+    </div>
+    <div class="warning-container" id="exit-menu-container">
+        <h2>Are you sure you want to exit?</h2>
+        <div class="warning-button-container">
+            <button id="exit-menu-button-yes">Yes</button>
+            <button id="exit-menu-button-no">No</button>
+        </div>
+    </div>
+
+    <div class="warning-container" id="publish-error-container">
+        <h2>Post incomplete</h2>
+        <p>*Make sure all fields are filled</p>
+    </div>
+
+    <div class="warning-container" id="uploading-post-container" style="color: var(--primarypagecolour);">
+        <h2 id="uploading-text">Uploading Post</h2>
+    </div>
+
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+
+    <script src="/scripts/overexposure/overexposure-data.js"></script>
+    <script src="/scripts/overexposure/camera-view.js"></script>
+    <script src="/scripts/general/header.js"></script>
+    <script>
+
+        document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#B74C57');
+
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/overexposure/tik-tok-icon.svg)');
+        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/overexposure/instagram-icon.svg)');
+
+        helpTitle.textContent = 'OVEREXPOSURE';
+
+        helpText.innerHTML = `
+Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, or wild experiences—completely anonymously. No filters, no judgment—just raw, uncut truths. Dare to expose?
+`;
+
+        //Header & Settings
+        const backButton = document.querySelector('.back-button');
+        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+        let isSpeaking = false;
+
+        backButton.addEventListener('click', () => {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        });
+
+
+    </script>
+</body>
+
+
+
+</html>

@@ -193,33 +193,6 @@ body {
 .tts-button.active {
     background-image: var(--ttsactiveicon);
 }
-.back-button-container {
-    position: fixed;
-    top: calc(var(--headerheight) + 5vh);
-    left: 20px;
-
-    z-index: 700;
-}
-.back-button {
-    font-size: 16px;
-    padding: 5px 10px;
-    width: 18vw;
-    min-width: 80px;
-    max-width: 100px;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
-    color: var(--primarypagecolour);
-    border-radius: 50px;
-    font-family: LemonMilk;
-    transition: background-color 0.3s, color 0.3s;
-}
-.back-button:hover {
-    background-color: var(--primarypagecolour);
-    border: var(--bordersize) solid var(--primarypagecolour);
-    color: var(--backgroundcolour);
-    border-radius: 50px;
-    font-family: LemonMilk;
-}
 .contents-item{
     color: var(--primarypagecolour);
     cursor: pointer;

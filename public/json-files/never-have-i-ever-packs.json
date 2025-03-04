@@ -1,33 +1,33 @@
 {
-    "most-likely-to-packs": [
+    "never-have-i-ever-packs": [
         {
             "pack-name": "Simple Admissions",
             "pack-path": "/questions/never-have-i-ever/simple-admissions.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
             "pack-colour": "#FF9266"
         },
         {
             "pack-name": "Rising Suspicions",
             "pack-path": "/questions/never-have-i-ever/rising-suspicions.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
             "pack-colour": "#FF9266"
         },
         {
             "pack-name": "Digging Deeper",
             "pack-path": "/questions/never-have-i-ever/digging-deeper.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
             "pack-colour": "#FF9266"
         },
         {
             "pack-name": "Verbal Diarrhea",
             "pack-path": "/questions/never-have-i-ever/verbal-diarrhea.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
             "pack-colour": "#FF9266"
         },
         {
             "pack-name": "Raw and Unfiltered",
             "pack-path": "/questions/never-have-i-ever/raw-and-unfiltered.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
             "pack-colour": "#FF9266"
         }
     ]

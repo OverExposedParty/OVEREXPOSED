@@ -1,173 +1,178 @@
 document.addEventListener('DOMContentLoaded', function () {
-const overlay = document.getElementById('overlay');
+    const overlay = document.getElementById('overlay');
 
-const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
-const packButtons = document.querySelectorAll('.packs-container .button-container button');
-const startGameButton = document.querySelector('.start-game-button');
-const warningBox = document.getElementById('warning-box');
-const warningStartButton = document.querySelector('.start-game-warning-button');
+    const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
+    const packButtons = document.querySelectorAll('.packs-container .button-container button');
+    const startGameButton = document.querySelector('.start-game-button');
+    const warningBox = document.getElementById('warning-box');
+    const warningStartButton = document.querySelector('.start-game-warning-button');
 
-const nsfwButtons = document.querySelectorAll('.pack-nsfw');
-const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
+    const nsfwButtons = document.querySelectorAll('.pack-nsfw');
+    const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
 
-const homeButton = document.querySelector('.home-button');
+    const backButton = document.querySelector('.back-button');
 
-const packsContainer = document.querySelector('.packs-container');
-const gameSettingsContainer = document.querySelector('.settings-container');
+    const packsContainer = document.querySelector('.packs-container');
+    const gameSettingsContainer = document.querySelector('.settings-container');
 
-const packsSettingsContainerButton = document.getElementById('packs-settings')
-const gameSettingsContainerButton = document.getElementById('game-settings')
+    const packsSettingsContainerButton = document.getElementById('packs-settings')
+    const gameSettingsContainerButton = document.getElementById('game-settings')
 
-const settingsButtons = document.querySelectorAll('.game-settings-button-container');
+    const settingsButtons = document.querySelectorAll('.game-settings-button-container');
 
-function updateStartGameButton() {
-    const anyActive = Array.from(packButtons).some(button => button.classList.contains('active'));
-    startGameButton.classList.toggle('disabled', !anyActive);
-    startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
-}
+    function updateStartGameButton() {
+        const anyActive = Array.from(packButtons).some(button => button.classList.contains('active'));
+        startGameButton.classList.toggle('disabled', !anyActive);
+        startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
+    }
 
-if (!eighteenPlusEnabled) {
-    nsfwButtons.forEach(button => {
-        button.disabled = true;
-        button.classList.add('disabled');
+    if (!eighteenPlusEnabled) {
+        nsfwButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.add('disabled');
 
+            const key = button.getAttribute('data-key');
+            localStorage.setItem(key, 'false');
+        });
+        gameSettingsNsfwButtons.forEach(button => {
+            button.disabled = true;
+            button.classList.add('disabled');
+
+            localStorage.setItem(button.getAttribute('data-key'), 'false');
+        });
+
+    }
+
+    packsSettingsContainerButton.addEventListener('click', () => {
+        if (!(packsSettingsContainerButton.classList.contains('active'))) {
+            console.log('button pressed');
+            packsSettingsContainerButton.classList.add('active');
+            packsContainer.classList.add('active');
+            gameSettingsContainer.classList.remove('active');
+            document.getElementById('game-settings').classList.remove('active');
+        }
+    });
+    gameSettingsContainerButton.addEventListener('click', () => {
+        if (!(gameSettingsContainerButton.classList.contains('active'))) {
+            console.log('button pressed');
+            gameSettingsContainerButton.classList.add('active');
+            gameSettingsContainer.classList.add('active');
+            packsContainer.classList.remove('active');
+            document.getElementById('packs-settings').classList.remove('active');
+        }
+    });
+
+
+
+    document.querySelectorAll('button:not(.settings-button):not(.start-game-button)').forEach(button => {
         const key = button.getAttribute('data-key');
-        localStorage.setItem(key, 'false');
-    });
-    gameSettingsNsfwButtons.forEach(button => {
-        button.disabled = true;
-        button.classList.add('disabled');
+        const savedState = localStorage.getItem(key);
 
-        localStorage.setItem(button.getAttribute('data-key'), 'false');
-    });
+        const primaryColor = button.getAttribute('data-primary-color');
+        const secondaryColor = button.getAttribute('data-secondary-color');
 
-}
+        if (savedState === 'true') {
+            button.classList.add('active');
 
-packsSettingsContainerButton.addEventListener('click', () => {
-    if (!(packsSettingsContainerButton.classList.contains('active'))) {
-        console.log('button pressed');
-        packsSettingsContainerButton.classList.add('active');
-        packsContainer.classList.add('active');
-        gameSettingsContainer.classList.remove('active');
-        document.getElementById('game-settings').classList.remove('active');
-    }
-});
-gameSettingsContainerButton.addEventListener('click', () => {
-    if (!(gameSettingsContainerButton.classList.contains('active'))) {
-        console.log('button pressed');
-        gameSettingsContainerButton.classList.add('active');
-        gameSettingsContainer.classList.add('active');
-        packsContainer.classList.remove('active');
-        document.getElementById('packs-settings').classList.remove('active');
-    }
-});
-
-
-
-document.querySelectorAll('button:not(.settings-button):not(.start-game-button)').forEach(button => {
-    const key = button.getAttribute('data-key');
-    const savedState = localStorage.getItem(key);
-
-    const primaryColor = button.getAttribute('data-primary-color');
-    const secondaryColor = button.getAttribute('data-secondary-color');
-
-    if (savedState === 'true') {
-        button.classList.add('active');
-
-        if (primaryColor !== null) {
-            button.style.backgroundColor = primaryColor;
-            button.style.color = 'var(--backgroundcolour)';
-            button.style.borderColor = primaryColor;
-        }
-    }
-    else if (savedState === 'false') {
-        button.classList.remove('active');
-
-        if (primaryColor !== null) {
-            button.style.backgroundColor = 'var(--backgroundcolour)';
-            button.style.color = '#999999';
-            button.style.borderColor = 'var(--backgroundcolour)';
-        }
-    }
-    if (button.disabled) {
-        button.style.backgroundColor = '#333333';
-        button.style.color = '#666666';
-        button.style.borderColor = '#333333';
-    }
-
-    button.addEventListener('click', () => {
-        if (!button.disabled) {
-            button.classList.toggle('active');
-            const isActive = button.classList.contains('active');
-            localStorage.setItem(key, isActive ? 'true' : 'false');
-            if (button.classList.contains('active')) {
+            if (primaryColor !== null) {
                 button.style.backgroundColor = primaryColor;
                 button.style.color = 'var(--backgroundcolour)';
                 button.style.borderColor = primaryColor;
-            } else {
-                button.style.backgroundColor = 'var(--backgroundcolour)';
-                button.style.color = '#999999';
-                button.style.borderColor = 'var(--backgroundcolour)';
             }
-            updateStartGameButton();
         }
-    });
+        else if (savedState === 'false') {
+            button.classList.remove('active');
 
-    button.addEventListener('mouseenter', () => {
-        if (!button.disabled && primaryColor !== null) {
-            button.style.backgroundColor = secondaryColor;
-            button.style.borderColor = secondaryColor;
-            updateStartGameButton();
-        }
-    });
-
-    button.addEventListener('mouseleave', () => {
-        if (!button.disabled && primaryColor !== null) {
-            if (button.classList.contains('active')) {
-                button.style.backgroundColor = primaryColor;
-                button.style.color = 'var(--backgroundcolour)';
-                button.style.borderColor = primaryColor;
-            } else {
+            if (primaryColor !== null) {
                 button.style.backgroundColor = 'var(--backgroundcolour)';
                 button.style.color = '#999999';
                 button.style.borderColor = 'var(--backgroundcolour)';
             }
         }
+        if (button.disabled) {
+            button.style.backgroundColor = '#333333';
+            button.style.color = '#666666';
+            button.style.borderColor = '#333333';
+        }
+
+        button.addEventListener('click', () => {
+            if (!button.disabled) {
+                button.classList.toggle('active');
+                const isActive = button.classList.contains('active');
+                localStorage.setItem(key, isActive ? 'true' : 'false');
+                if (button.classList.contains('active')) {
+                    button.style.backgroundColor = primaryColor;
+                    button.style.color = 'var(--backgroundcolour)';
+                    button.style.borderColor = primaryColor;
+                } else {
+                    button.style.backgroundColor = 'var(--backgroundcolour)';
+                    button.style.color = '#999999';
+                    button.style.borderColor = 'var(--backgroundcolour)';
+                }
+                updateStartGameButton();
+            }
+        });
+
+        button.addEventListener('mouseenter', () => {
+            if (!button.disabled && primaryColor !== null) {
+                button.style.backgroundColor = secondaryColor;
+                button.style.borderColor = secondaryColor;
+                updateStartGameButton();
+            }
+        });
+
+        button.addEventListener('mouseleave', () => {
+            if (!button.disabled && primaryColor !== null) {
+                if (button.classList.contains('active')) {
+                    button.style.backgroundColor = primaryColor;
+                    button.style.color = 'var(--backgroundcolour)';
+                    button.style.borderColor = primaryColor;
+                } else {
+                    button.style.backgroundColor = 'var(--backgroundcolour)';
+                    button.style.color = '#999999';
+                    button.style.borderColor = 'var(--backgroundcolour)';
+                }
+            }
+        });
     });
-});
 
-updateStartGameButton();
+    updateStartGameButton();
 
-homeButton.addEventListener('click', () => {
-    window.location.href = '/';
-});
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen('/party-games', "url('/images/splash-screens/party-games.png')")
+    });
 
-startGameButton.addEventListener('click', () => {
-    const nsfwPacksActive = Array.from(packButtons).some(button => button.classList.contains('active') && button.classList.contains('pack-nsfw'));
+    startGameButton.addEventListener('click', () => {
+        const nsfwPacksActive = Array.from(packButtons).some(button => button.classList.contains('active') && button.classList.contains('pack-nsfw'));
 
-    if (nsfwPacksActive) {
-        addElementIfNotExists(elementClassArray, warningBox);
-        warningBox.classList.add('active');
-        overlay.classList.add('active');
-    } else {
-        window.location.href = startGameButton.id;
-    }
-});
-
+        if (nsfwPacksActive) {
+            addElementIfNotExists(elementClassArray, warningBox);
+            warningBox.classList.add('active');
+            overlay.classList.add('active');
+        } else {
+            transitionSplashScreen(startGameButton.id, getComputedStyle(document.documentElement).getPropertyValue('--splashscreennext'))
+        }
+    });
+    warningStartButton.addEventListener('click', () => {
+        transitionSplashScreen(startGameButton.id,getComputedStyle(document.documentElement).getPropertyValue('--splashscreennext'))
+    });
 
 });
 
 function checkOrientationAndAddButton() {
     const gameSettingsContainer = document.querySelector('.settings-container');
     const startGameButton = document.querySelector('.start-game-button');
+    const mainContainer = document.querySelector('.main-container');
 
-    if ((window.innerHeight > window.innerWidth) && (gameSettingsContainer.contains(startGameButton))) {
-        gameSettingsContainer.removeChild(startGameButton);
-        document.querySelector('.main-container').appendChild(startGameButton);
+    if ((window.innerHeight > window.innerWidth) && document.querySelector('.settings-container .start-game-button')) {
+        gameSettingsContainer.querySelector('.button-container').removeChild(startGameButton);
+        mainContainer.appendChild(startGameButton);
     }
-    else if ((window.innerHeight < window.innerWidth) && (!gameSettingsContainer.contains(startGameButton))) {
-        gameSettingsContainer.appendChild(startGameButton);
+    else if ((window.innerHeight < window.innerWidth) && !document.querySelector('.settings-container .start-game-button')) {
+        gameSettingsContainer.querySelector('.button-container').appendChild(startGameButton);
     }
 }
 
+// Call the function when the page loads and when the window resizes
+window.addEventListener('load', checkOrientationAndAddButton);
 window.addEventListener('resize', checkOrientationAndAddButton);

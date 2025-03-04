@@ -15,13 +15,14 @@ app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org", "https://www.googletagmanager.com", "https://*.google-analytics.com"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org", "https://www.googletagmanager.com", "https://*.google-analytics.com", "https://cdnjs.cloudflare.com", "https://script.google.com", "https://script.googleusercontent.com"],
     objectSrc: ["'none'"],
-    connectSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com"],
+    connectSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com", "https://docs.google.com", "https://doc-0g-8s-sheets.googleusercontent.com", "https://script.google.com", "https://script.googleusercontent.com"],
     imgSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com"],
-    frameSrc: ["https://www.googletagmanager.com", "https://*.google-analytics.com"],
+    frameSrc: ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://script.google.com", "https://script.googleusercontent.com"],
   }
 }));
+
 app.use(helmet.frameguard({ action: 'sameorigin' }));
 app.use(helmet.noSniff());
 app.use(helmet.referrerPolicy({ policy: 'no-referrer-when-downgrade' }));
@@ -35,11 +36,13 @@ app.use(permissionsPolicy({
 }));
 
 // Use CORS middleware
-app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
-}));
+/*app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+})); */
+
+app.use(cors());
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -52,7 +55,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepage', 'homepage.html'));
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html'));
+});
+
+app.get('/party-games', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'party-games-homepage.html'));
 });
 
 app.get('/what-is-overexposed', (req, res) => {
@@ -112,6 +119,12 @@ app.get('/insights', (req, res) => {
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
+
+app.get('/overexposure', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
 //Blogs
 app.get('/insights/final-year-stress', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
@@ -125,8 +138,13 @@ app.get('/insights/new-years-eve-party', (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/insights/break-the-ice-not-hearts', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
 app.get('/insights/valentines-day', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'valentines-day-blog.html');
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });

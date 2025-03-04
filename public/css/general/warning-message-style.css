@@ -60,6 +60,7 @@
     font-size: 100%;
     transition: background-color 0.3s ease;
     text-decoration: none;
+    font-family: LemonMilk;
 }
 
 .start-game-warning-button:hover {
@@ -93,5 +94,11 @@
     }
     .warning-box {
         padding: 10%;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .warning-box{
+        display: none !important;
     }
 }

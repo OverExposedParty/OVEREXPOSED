@@ -80,3 +80,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const backButton = document.querySelector('.back-button');
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')")
+    });
+});
