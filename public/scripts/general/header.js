@@ -35,6 +35,7 @@ const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
 window.onload = function() {
+    setTimeout(() => {
     let logoContainer = document.querySelector('.logo-container');
     let partyGamesLink = document.getElementById('party-games-link');
     let overexposureLink = document.getElementById('overexposure-link');
@@ -44,7 +45,6 @@ window.onload = function() {
     if (logoContainer) {
         logoContainer.addEventListener('click', function() {
             transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
-    
         });
     }
     
@@ -69,6 +69,7 @@ window.onload = function() {
         });
     }
     console.log(whatIsOverexposedLink);
+}, 500);
 };
 
 
@@ -379,24 +380,16 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
         }
     });
 
-    function waitForElement(selector, timeout = 5000) {
-        return new Promise((resolve, reject) => {
-            const intervalTime = 100; //ms
-            let elapsedTime = 0;
-    
-            const interval = setInterval(() => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    clearInterval(interval);
-                    resolve(element);
-                }
-                elapsedTime += intervalTime;
-                if (elapsedTime >= timeout) {
-                    clearInterval(interval);
-                    reject(new Error(`Element with selector "${selector}" not found within ${timeout}ms`));
-                }
-            }, intervalTime);
+    function waitForElement(selector, callback) {
+        const observer = new MutationObserver((mutations, obs) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                callback(element);
+                obs.disconnect(); // Stop observing once found
+            }
         });
+    
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 
     observer.observe(document.body, {
