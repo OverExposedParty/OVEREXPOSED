@@ -24,19 +24,23 @@ body {
     justify-content: center;
     align-items: center;
     width: 100vw;
+    height: 100vh;
     box-sizing: border-box;
     height: calc(var(--vh, 1vh) * 100);
 }
 
 .content {
+    height: auto;
+    width: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0;
+    left: 50vw;
+    bottom: 50vh;
     box-sizing: border-box;
-    width: auto;
-    height: auto;
+    transform: translateY(3.5vh);
     max-width: 60vw;
 }
 
@@ -247,17 +251,5 @@ body {
     .button-container button:hover {
         background-color: var(--backgroundcolour);
         color:  var(--primarypagecolour);
-    }
-    .content{
-        max-width: 55vw;
-    }
-}
-
-@media (max-width: 768px) and (orientation: landscape) {
-
-    .side-buttons,
-    .tts-button,
-    .container {
-        display: none;
     }
 }
