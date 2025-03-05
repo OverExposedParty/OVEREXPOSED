@@ -407,7 +407,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (logoContainer) {
         logoContainer.addEventListener('click', function() {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+            transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
+
         });
     }
 
@@ -446,15 +447,3 @@ function updateVh() {
 
 window.addEventListener('load', updateVh);
 window.addEventListener('resize', updateVh);
-
-logoContainer.addEventListener('touchend', function (event) {
-    // Handle touch event logic here, like toggling menu or going to the link
-    event.preventDefault(); // Prevent any default action
-    // Your logic for logo click (toggle settings, etc.)
-}, { passive: true });
-
-extraMenuIcon.addEventListener('touchend', function (event) {
-    // Handle touch event for extra menu
-    event.preventDefault();
-    toggleExtraMenu();
-}, { passive: true });
