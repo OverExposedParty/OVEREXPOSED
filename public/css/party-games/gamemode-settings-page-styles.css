@@ -183,8 +183,7 @@ button.disabled {
     margin-top:0;
 }
 
-.start-game-button:hover,
-.home-button:hover {
+.start-game-button:hover{
     background-color: var(--primarypagecolour);
     color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
@@ -215,6 +214,11 @@ button.disabled {
         bottom:0;
         width:60vw;
         justify-content: center;
+        background-color: var(--backgroundcolour);
+        border: var(--bordersize) solid var(--backgroundcolour);
+    }
+    .start-game-button:hover{
+        color: var(--backgroundcolour);
     }
     .button-container {
         justify-content: center;
@@ -259,7 +263,7 @@ button.disabled {
     .packs-container,
     .settings-container {
         display:none;
-        border-radius: 2.5px;
+        border-radius: 10px;
         width: 90%;
     }
     .packs-container.active,
@@ -279,8 +283,8 @@ button.disabled {
     .settings-header-container {
         margin-top: 0;
         margin-bottom: 0;
-        padding-top: 2vh;
-        padding-bottom: 2vh;
+        padding-top: 1.5vh;
+        padding-bottom: 1.5vh;
     }
 
     .packs-header,
