@@ -30,17 +30,19 @@ body {
 }
 
 .content {
+    height: auto;
+    width: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0;
+    left: 50vw;
+    bottom: 50vh;
     box-sizing: border-box;
-    width: auto;
-    height: auto;
-    max-width: 100%;
+    transform: translateY(3.5vh);
+    max-width: 60vw;
 }
-
 
 .gamemode-text {
     font-size: 43px;
@@ -59,7 +61,7 @@ body {
 
 .main-image-container {
     position: relative;
-    width: 100%;
+    width: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -71,7 +73,7 @@ body {
 }
 
 .main-image {
-    width: auto;
+    width:100%;
 }
 
 .text-container {
@@ -251,7 +253,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        height: 70vh;
+        max-width: 55vw;
     }
 }
 
