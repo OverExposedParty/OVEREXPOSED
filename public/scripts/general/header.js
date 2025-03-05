@@ -405,34 +405,35 @@ function transitionSplashScreen(link,splashScreen) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    if (logoContainer) {
-        logoContainer.addEventListener('click', function() {
-            transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
-        });
-    }
 
-    if (partyGamesLink) {
-        partyGamesLink.addEventListener('click', function() {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
-        });
-    }
-    if (overexposureLink) {
-        overexposureLink.addEventListener('click', function() {
-            transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
-        });
-    }
-    if (insightsLink) {
-        insightsLink.addEventListener('click', function() {
-            transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
-        });
-    }
-    if (whatIsOverexposedLink) {
-        whatIsOverexposedLink.addEventListener('click', function() {
-            transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
-        });
-    }
 
 });
+if (logoContainer) {
+    logoContainer.addEventListener('click', function() {
+        transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
+    });
+}
+
+if (partyGamesLink) {
+    partyGamesLink.addEventListener('click', function() {
+        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+    });
+}
+if (overexposureLink) {
+    overexposureLink.addEventListener('click', function() {
+        transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
+    });
+}
+if (insightsLink) {
+    insightsLink.addEventListener('click', function() {
+        transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
+    });
+}
+if (whatIsOverexposedLink) {
+    whatIsOverexposedLink.addEventListener('click', function() {
+        transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
+    });
+}
 
 // Page Load Transition
 const heading = document.createElement('div');
