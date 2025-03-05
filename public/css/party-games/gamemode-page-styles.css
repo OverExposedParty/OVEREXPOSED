@@ -61,7 +61,7 @@ body {
 
 .main-image-container {
     position: relative;
-    width: 100%;
+    width: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -73,7 +73,7 @@ body {
 }
 
 .main-image {
-    width:auto;
+    width:100%;
 }
 
 .text-container {
@@ -228,6 +228,7 @@ body {
     }
     .text-container {
         font-size:170%;
+
     }
 
     .question-text {
@@ -239,10 +240,9 @@ body {
     }
 
     .card-type-text {
-        bottom: 2.5%;
+        bottom: 3%;
         right: 7.5%;
         font-size: 60%;
-
     }
     .button-container button {
         border:  var(--bordersize) solid var(--primarypagecolour);
@@ -253,7 +253,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        max-width: 60vw;
+        max-width: 55vw;
     }
 }
 
