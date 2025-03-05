@@ -239,7 +239,7 @@ body {
     }
 
     .card-type-text {
-        bottom: 2.5%;
+        bottom: 100px;
         right: 7.5%;
         font-size: 60%;
     }
