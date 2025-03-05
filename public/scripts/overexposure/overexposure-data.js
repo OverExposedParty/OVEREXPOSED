@@ -29,7 +29,6 @@ const publishButton = document.querySelector(".overexposure-publish-button");
 
 let count = 0;
 let intervalId = null;
-let lastTapTime = 0;
 let touchTimer;
 
 function formatDate(timestamp) {
@@ -50,6 +49,7 @@ function isIntervalActive() {
 }
 
 function showFloatingText(message, x, y) {
+    console.log("x: " + x + "y " + y);
     const floatingText = document.createElement("div");
     floatingText.textContent = message;
     floatingText.style.position = "absolute";
@@ -174,6 +174,7 @@ function handleDoubleClick(event) {
 }
 
 function handleTouchStart(event) {
+    console.log("touch started");
     touchTimer = setTimeout(() => {
         handleToucHold(event); // Trigger on long press
     }, 500); // Adjust duration for long press detection (e.g., 500ms)
@@ -184,30 +185,34 @@ function handleTouchEnd() {
 }
 
 function handleToucHold(event) {
-    const currentTime = new Date().getTime();
-    if (currentTime - lastTapTime < 300) {  // Detects double tap
-        event.preventDefault();
+    event.preventDefault();
 
-        const rect = floatingContainer.getBoundingClientRect();
-        const computedStyle = getComputedStyle(floatingContainer);
-        const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
+    const touch = event.touches[0] || event.changedTouches[0];
+    console.log(touch);
+    const rect = floatingContainer.getBoundingClientRect();
+    const computedStyle = getComputedStyle(floatingContainer);
+    const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
+
+    const touchX = (touch.clientX - rect.left) / scale;
+    const touchY = (touch.clientY - rect.top) / scale;
+
+    const normalizedX = (touchX / canvasWidth) * 2 - 1;
+    const normalizedY = (touchY / canvasHeight) * 2 - 1;
     
-        const clickX = (event.clientX - rect.left) / scale;
-        const clickY = (event.clientY - rect.top) / scale;
-    
-        const normalizedX = (clickX / canvasWidth) * 2 - 1;
-        const normalizedY = (clickY / canvasHeight) * 2 - 1;
-        
-        placeCard(event, normalizedX, normalizedY);
-    }
-    lastTapTime = currentTime;
+
+    placeCard(event, normalizedX, normalizedY);
 }
 function placeCard(event, normalizedX, normalizedY) {
     const safeZone = document.querySelector(".safe-zone");
     const floatingContainer = document.querySelector(".floating-container");
-
+    const touch = event.touches[0] || event.changedTouches[0];
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+        if(isTouchActive){
+            showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
+        }
+        else{
+            showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+        }
         return;
     }
 
