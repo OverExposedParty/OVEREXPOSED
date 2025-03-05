@@ -55,7 +55,7 @@ body {
     width:100%;
 }
 .gamemode-text-container {
-    width:100%;
+    width:auto;
     margin-bottom: 10px;
 }
 
@@ -253,7 +253,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        max-width: 70vw;
+        max-width: 60vw;
     }
 }
 
