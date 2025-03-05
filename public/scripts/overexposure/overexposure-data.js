@@ -30,6 +30,7 @@ const publishButton = document.querySelector(".overexposure-publish-button");
 let count = 0;
 let intervalId = null;
 let lastTapTime = 0;
+let touchTimer;
 
 function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -172,25 +173,35 @@ function handleDoubleClick(event) {
     placeCard(event, normalizedX, normalizedY);
 }
 
-function handleTouchDoubleTap(event) {
+function handleTouchStart(event) {
+    touchTimer = setTimeout(() => {
+        handleToucHold(event); // Trigger on long press
+    }, 500); // Adjust duration for long press detection (e.g., 500ms)
+}
+
+function handleTouchEnd() {
+    clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
+}
+
+function handleToucHold(event) {
     const currentTime = new Date().getTime();
     if (currentTime - lastTapTime < 300) {  // Detects double tap
         event.preventDefault();
 
-        const floatingContainer = document.querySelector(".floating-container");
-        if (!floatingContainer) return;
-
         const rect = floatingContainer.getBoundingClientRect();
-
-        // Place in the center of the floating container
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        placeCard(event, 0, 0);  // Normalized (0,0) places it in the center
+        const computedStyle = getComputedStyle(floatingContainer);
+        const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
+    
+        const clickX = (event.clientX - rect.left) / scale;
+        const clickY = (event.clientY - rect.top) / scale;
+    
+        const normalizedX = (clickX / canvasWidth) * 2 - 1;
+        const normalizedY = (clickY / canvasHeight) * 2 - 1;
+        
+        placeCard(event, normalizedX, normalizedY);
     }
     lastTapTime = currentTime;
 }
-
 function placeCard(event, normalizedX, normalizedY) {
     const safeZone = document.querySelector(".safe-zone");
     const floatingContainer = document.querySelector(".floating-container");
@@ -207,7 +218,8 @@ function placeCard(event, normalizedX, normalizedY) {
 }
 
 // Attach touch event listener
-wrapper.addEventListener("touchend", handleTouchDoubleTap);
+wrapper.addEventListener("touchstart", handleTouchStart);
+wrapper.addEventListener("touchend", handleTouchEnd);
 wrapper.addEventListener("dblclick", handleDoubleClick);
 
 let lastTap = 0;
