@@ -239,8 +239,13 @@ body {
     }
 
     .card-type-text {
-        bottom: 100px;
+        bottom: 10px;
         right: 7.5%;
+
+    }
+    .card-type-text {
+        bottom: 15px;
+        right: 20px;
         font-size: 60%;
     }
     .button-container button {
