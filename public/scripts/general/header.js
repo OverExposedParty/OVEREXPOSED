@@ -384,7 +384,7 @@ function transitionSplashScreen(link,splashScreen) {
     setTimeout(() => {
         container.classList.remove('down');
         container.classList.add('center');
-    }, 50); // Slight delay to ensure CSS applies
+    }, 100); // Slight delay to ensure CSS applies
 
     // Listen for transition end
     container.addEventListener('transitionend', function onTransitionEnd(event) {
@@ -405,25 +405,56 @@ document.addEventListener('DOMContentLoaded', function() {
     const insightsLink = document.getElementById('insights-link');
     const whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
 
-    function addTapListener(element, path, imageUrl) {
-        if (element) {
-            element.addEventListener('click', function() {
-                transitionSplashScreen(path, imageUrl);
-            });
-            element.addEventListener('touchstart', function() {
-                transitionSplashScreen(path, imageUrl);
-            });
-        }
+    if (logoContainer) {
+        logoContainer.addEventListener('click', function() {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+        });
     }
-    
-    addTapListener(logoContainer, '/', "url('/images/splash-screens/overexposed.png')");
-    addTapListener(partyGamesLink, '/', "url('/images/splash-screens/overexposed.png')");
-    addTapListener(overexposureLink, '/overexposure', "url('/images/splash-screens/overexposure.png')");
-    addTapListener(insightsLink, '/insights', "url('/images/splash-screens/insights.png')");
-    addTapListener(whatIsOverexposedLink, '/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
-    
+
+    if (partyGamesLink) {
+        partyGamesLink.addEventListener('click', function() {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+        });
+    }
+    if (overexposureLink) {
+        overexposureLink.addEventListener('click', function() {
+            transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
+        });
+    }
+    if (insightsLink) {
+        insightsLink.addEventListener('click', function() {
+            transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
+        });
+    }
+    if (whatIsOverexposedLink) {
+        whatIsOverexposedLink.addEventListener('click', function() {
+            transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
+        });
+    }
+
 });
 
 // Page Load Transition
 const heading = document.createElement('div');
 heading.classList.add('loading-screen');
+
+//Make the Page size fit the page
+function updateVh() {
+    let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
+    document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+}
+
+window.addEventListener('load', updateVh);
+window.addEventListener('resize', updateVh);
+
+logoContainer.addEventListener('touchend', function (event) {
+    // Handle touch event logic here, like toggling menu or going to the link
+    event.preventDefault(); // Prevent any default action
+    // Your logic for logo click (toggle settings, etc.)
+}, { passive: true });
+
+extraMenuIcon.addEventListener('touchend', function (event) {
+    // Handle touch event for extra menu
+    event.preventDefault();
+    toggleExtraMenu();
+}, { passive: true });

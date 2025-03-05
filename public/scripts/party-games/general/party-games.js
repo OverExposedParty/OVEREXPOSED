@@ -235,12 +235,3 @@ function toggleQuestionZoomedContainer() {
         }
     }
 }
-
-//Make the Page size fit the page
-function updateVh() {
-    let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
-    document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
-}
-
-window.addEventListener('load', updateVh);
-window.addEventListener('resize', updateVh);

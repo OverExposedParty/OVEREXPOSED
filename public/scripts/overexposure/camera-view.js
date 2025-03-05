@@ -52,7 +52,7 @@ container.addEventListener('touchstart', (event) => {
 });
 
 container.addEventListener('touchmove', (event) => {
-    if (isTouchDragging && event.touches.length === 1) {
+    if (isTouchDragging) {
         targetX = event.touches[0].clientX - touchStartX;
         targetY = event.touches[0].clientY - touchStartY;
     }
