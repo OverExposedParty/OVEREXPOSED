@@ -29,6 +29,7 @@ const publishButton = document.querySelector(".overexposure-publish-button");
 
 let count = 0;
 let intervalId = null;
+let lastTapTime = 0;
 
 function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -156,13 +157,7 @@ function createFloatingButton(row, draft = false) {
     }
 }
 function handleDoubleClick(event) {
-    const safeZone = document.querySelector(".safe-zone");
-    const floatingContainer = document.querySelector(".floating-container");
-
-    if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
-        return;
-    }
+    if (isTouchActive) return;
 
     const rect = floatingContainer.getBoundingClientRect();
     const computedStyle = getComputedStyle(floatingContainer);
@@ -173,6 +168,37 @@ function handleDoubleClick(event) {
 
     const normalizedX = (clickX / canvasWidth) * 2 - 1;
     const normalizedY = (clickY / canvasHeight) * 2 - 1;
+    
+    placeCard(event, normalizedX, normalizedY);
+}
+
+function handleTouchDoubleTap(event) {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastTapTime < 300) {  // Detects double tap
+        event.preventDefault();
+
+        const floatingContainer = document.querySelector(".floating-container");
+        if (!floatingContainer) return;
+
+        const rect = floatingContainer.getBoundingClientRect();
+
+        // Place in the center of the floating container
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        placeCard(event, 0, 0);  // Normalized (0,0) places it in the center
+    }
+    lastTapTime = currentTime;
+}
+
+function placeCard(event, normalizedX, normalizedY) {
+    const safeZone = document.querySelector(".safe-zone");
+    const floatingContainer = document.querySelector(".floating-container");
+
+    if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
+        showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+        return;
+    }
 
     contentsTextArea.value = "";
     titleTextInput.value = "";
@@ -180,6 +206,8 @@ function handleDoubleClick(event) {
     createFloatingButton(["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), normalizedX.toString(), normalizedY.toString()], true);
 }
 
+// Attach touch event listener
+wrapper.addEventListener("touchend", handleTouchDoubleTap);
 wrapper.addEventListener("dblclick", handleDoubleClick);
 
 let lastTap = 0;

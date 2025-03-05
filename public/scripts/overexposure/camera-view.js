@@ -1,5 +1,6 @@
 const container = document.getElementById("floating-container");
 let isDragging = false;
+let isTouchActive = false;
 let startX, startY;
 let offsetX = ((window.innerWidth - getComputedStyle(document.documentElement).getPropertyValue('--canvasWidth').trim().replace('px', '')) / 2);
 let offsetY = ((window.innerHeight - getComputedStyle(document.documentElement).getPropertyValue('--canvasHeight').trim().replace('px', '')) / 2);
@@ -19,9 +20,21 @@ const minScale = shortestViewportDim / containerShortestDim; // Ensure it fits w
 // Center the container at start
 gsap.set(container, { x: offsetX, y: offsetY, scale: baseScale });
 
+// Function to enable mouse or touch controls exclusively
+function enableMouseControls() {
+    isTouchActive = false;
+}
+
+function enableTouchControls() {
+    isTouchActive = true;
+}
+
 // Middle Mouse Button Drag Logic
 document.addEventListener("mousedown", (event) => {
+    if (isTouchActive) return; // Ignore if touch is active
+
     if (event.button === 1) { // Middle Mouse Button
+        enableMouseControls();
         isDragging = true;
         startX = event.clientX - targetX;
         startY = event.clientY - targetY;
@@ -44,6 +57,8 @@ let touchStartY = 0;
 let isTouchDragging = false;
 
 container.addEventListener('touchstart', (event) => {
+    enableTouchControls();
+
     if (event.touches.length === 1) { // One finger swipe
         isTouchDragging = true;
         touchStartX = event.touches[0].clientX - targetX;
@@ -79,6 +94,8 @@ function getBrowserZoom() {
 
 // Zooming logic with mouse wheel
 document.addEventListener('wheel', (event) => {
+    if (isTouchActive) return; // Ignore if touch is active
+
     event.preventDefault(); // Prevent page scrolling while zooming
 
     // Get the browser zoom level
@@ -109,6 +126,8 @@ let initialDistance = null;
 let initialScale = baseScale;
 
 container.addEventListener('touchstart', (event) => {
+    enableTouchControls();
+
     if (event.touches.length === 2) { // Two fingers for pinch
         initialDistance = getDistance(event.touches[0], event.touches[1]);
         initialScale = baseScale;
@@ -147,4 +166,3 @@ function updateZoom() {
         ease: "power2.out"
     });
 }
-
