@@ -34,6 +34,13 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
+const logoContainer = document.querySelector('.logo-container');
+    
+const partyGamesLink = document.getElementById('party-games-link');
+const overexposureLink = document.getElementById('overexposure-link');
+const insightsLink = document.getElementById('insights-link');
+const whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+
 // Declare the variable with the desired URL
 const instagramUrl = "https://www.instagram.com/oe.app/";
 const tiktokUrl = "https://www.tiktok.com/@overexposed.app";
@@ -398,17 +405,9 @@ function transitionSplashScreen(link,splashScreen) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const logoContainer = document.querySelector('.logo-container');
-    
-    const partyGamesLink = document.getElementById('party-games-link');
-    const overexposureLink = document.getElementById('overexposure-link');
-    const insightsLink = document.getElementById('insights-link');
-    const whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
-
     if (logoContainer) {
         logoContainer.addEventListener('click', function() {
             transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
-
         });
     }
 
