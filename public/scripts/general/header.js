@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
         });
     }
+    console.log(whatIsOverexposedLink);
 });
 
 
