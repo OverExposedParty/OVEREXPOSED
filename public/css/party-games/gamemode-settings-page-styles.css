@@ -267,7 +267,7 @@ button.disabled {
         margin: 0 auto;
         padding: 0;
         background-color: var(--secondarybackgroundcolour);
-        height: 80%;
+        height: 70%;
         display: flex;
     }
     
@@ -279,13 +279,13 @@ button.disabled {
     .settings-header-container {
         margin-top: 0;
         margin-bottom: 0;
-        padding-top: 1vh;
-        padding-bottom: 1vh;
+        padding-top: 2vh;
+        padding-bottom: 2vh;
     }
 
     .packs-header,
     .settings-header {
-        font-size: 6vw;
+        font-size: 4.5vw;
     }
 
     .button-container button {
@@ -317,7 +317,8 @@ button.disabled {
     }
 
     .game-settings-container,.packs-content-container {
-        height:53.5vh;
+        height:50vh;
+        padding:0;
     }
 }
 @media (max-width: 768px) and (orientation: landscape) {
