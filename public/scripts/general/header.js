@@ -34,12 +34,42 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
-const logoContainer = document.querySelector('.logo-container');
+document.addEventListener('DOMContentLoaded', function() {
+    let logoContainer = document.querySelector('.logo-container');
+    let partyGamesLink = document.getElementById('party-games-link');
+    let overexposureLink = document.getElementById('overexposure-link');
+    let insightsLink = document.getElementById('insights-link');
+    let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+
+    if (logoContainer) {
+        logoContainer.addEventListener('click', function() {
+            transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
     
-const partyGamesLink = document.getElementById('party-games-link');
-const overexposureLink = document.getElementById('overexposure-link');
-const insightsLink = document.getElementById('insights-link');
-const whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+        });
+    }
+    
+    if (partyGamesLink) {
+        partyGamesLink.addEventListener('click', function() {
+            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+        });
+    }
+    if (overexposureLink) {
+        overexposureLink.addEventListener('click', function() {
+            transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
+        });
+    }
+    if (insightsLink) {
+        insightsLink.addEventListener('click', function() {
+            transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
+        });
+    }
+    if (whatIsOverexposedLink) {
+        whatIsOverexposedLink.addEventListener('click', function() {
+            transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
+        });
+    }
+});
+
 
 // Declare the variable with the desired URL
 const instagramUrl = "https://www.instagram.com/oe.app/";
@@ -218,6 +248,7 @@ waitForElementWithTimeout('header', (element) => {
 waitForElementWithTimeout('.extra-menu-container', (element) => {
     extraMenuContainer = element;
 }, 10000);
+
 
 
 function waitForButtons(selector, callback) {
@@ -402,33 +433,6 @@ function transitionSplashScreen(link,splashScreen) {
     });
 }
 
-if (logoContainer) {
-    logoContainer.addEventListener('click', function() {
-        transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
-        console.log("pressed");
-    });
-}
-
-if (partyGamesLink) {
-    partyGamesLink.addEventListener('click', function() {
-        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
-    });
-}
-if (overexposureLink) {
-    overexposureLink.addEventListener('click', function() {
-        transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
-    });
-}
-if (insightsLink) {
-    insightsLink.addEventListener('click', function() {
-        transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
-    });
-}
-if (whatIsOverexposedLink) {
-    whatIsOverexposedLink.addEventListener('click', function() {
-        transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
-    });
-}
 
 // Page Load Transition
 const heading = document.createElement('div');
