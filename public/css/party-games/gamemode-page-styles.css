@@ -253,7 +253,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        max-width: 55vw;
+        max-width: 60vw;
     }
 }
 
