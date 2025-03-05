@@ -95,16 +95,17 @@
         </div>
     </div>
 </body>
-<script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js" defer></script>
 <script defer>
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+    document.addEventListener('DOMContentLoaded', function () {
+        helpTitle.textContent = 'PARTY GAMES';
 
-    helpTitle.textContent = 'PARTY GAMES';
-
-    helpText.innerHTML = `
+        helpText.innerHTML = `
     Welcome to <highlight>OVEREXPOSED</highlight> Your ultimate online destination for classic party games!!!
 `;
+    });
 
     //HomePage
     const cards = document.querySelectorAll('.grid-item .card');
