@@ -255,10 +255,6 @@ body {
     .content{
         max-width: 60vw;
     }
-    .gamemode-text-container {
-        margin-bottom: 5px;
-    }
-    
 }
 
 @media (max-width: 768px) and (orientation: landscape) {
