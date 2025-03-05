@@ -251,8 +251,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        max-width: auto;
-        max-height:55vh;
+        height: 70vh;
     }
 }
 
