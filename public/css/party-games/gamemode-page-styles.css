@@ -248,7 +248,7 @@ body {
         color:  var(--primarypagecolour);
     }
     .content{
-        max-width: 60vw;
+        max-width: auto;
         max-height:60vh;
     }
 }
