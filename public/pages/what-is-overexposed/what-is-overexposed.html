@@ -29,8 +29,7 @@
     <meta property="og:title" content="What is OVEREXPOSED? | Play, Share & Explore">
     <meta property="og:description"
         content="Learn what OVEREXPOSED is all about! From party games to anonymous confessions and life insights, it's your go-to platform for fun and real talk.">
-    <meta property="og:image"
-        content="https://overexposed.app/images/icons/overexposed/overexposed/meta/og-image.jpg">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/overexposed/meta/og-image.jpg">
     <meta property="og:url" content="https://overexposed.app/what-is-overexposed">
     <meta property="og:type" content="website">
 
@@ -135,243 +134,243 @@
         </div>
         <div id="swipe-indicator" class="swipe-indicator"></div>
     </div>
-
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
-        //Header & Settings
-        const backButton = document.querySelector('.back-button');
-        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-        let isSpeaking = false;
-
-
-        const cardTexts = [
-            { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
-            { front: 'Party Games', back: 'Truth Or Dare... Unknown...' },
-            { front: 'Truth or Dare', back: 'Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!' }
-        ];
-
-        const frontImages = [
-            '/images/what-is-overexposed/front/what-is-overexposed.svg',
-            '/images/what-is-overexposed/front/party-games.svg',
-            '/images/what-is-overexposed/front/truth-or-dare.svg',
-            '/images/what-is-overexposed/front/paranoia.svg',
-            '/images/what-is-overexposed/front/never-have-i-ever.svg',
-            '/images/what-is-overexposed/front/most-likely-to.svg',
-            '/images/what-is-overexposed/front/insights.svg',
-            '/images/what-is-overexposed/front/overexposure.svg'
+</body>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+    //Header & Settings
+    const backButton = document.querySelector('.back-button');
+    selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    let isSpeaking = false;
 
 
-        ];
+    const cardTexts = [
+        { front: 'What is overexposed?', back: 'The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! Overexposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s "Never Have I Ever," "Most Likely To," or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!' },
+        { front: 'Party Games', back: 'Truth Or Dare... Unknown...' },
+        { front: 'Truth or Dare', back: 'Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!' }
+    ];
 
-        const backImages = [
-            '/images/what-is-overexposed/back/what-is-overexposed.svg',
-            '/images/what-is-overexposed/back/party-games.svg',
-            '/images/what-is-overexposed/back/truth-or-dare.svg',
-            '/images/what-is-overexposed/back/paranoia.svg',
-            '/images/what-is-overexposed/back/never-have-i-ever.svg',
-            '/images/what-is-overexposed/back/most-likely-to.svg',
-            '/images/what-is-overexposed/back/insights.svg',
-            '/images/what-is-overexposed/back/overexposure.svg'
-        ];
-
-        const card = document.querySelector('.card');
-        const frontImg = document.querySelector('.card .front');
-        const backImg = document.querySelector('.card .back');
-        const ttsButton = document.getElementById('tts-button');
+    const frontImages = [
+        '/images/what-is-overexposed/front/what-is-overexposed.svg',
+        '/images/what-is-overexposed/front/party-games.svg',
+        '/images/what-is-overexposed/front/truth-or-dare.svg',
+        '/images/what-is-overexposed/front/paranoia.svg',
+        '/images/what-is-overexposed/front/never-have-i-ever.svg',
+        '/images/what-is-overexposed/front/most-likely-to.svg',
+        '/images/what-is-overexposed/front/insights.svg',
+        '/images/what-is-overexposed/front/overexposure.svg'
 
 
-        let startX = 0;
-        let isDragging = false;
-        let currentRotationY = 0;
-        let imageIndex = 0;
-        let hasSwipedLeft = false;
+    ];
 
-        function isFrontVisible() {
-            return Math.abs(currentRotationY % 360) < 90 || Math.abs(currentRotationY % 360) > 270;
-        }
+    const backImages = [
+        '/images/what-is-overexposed/back/what-is-overexposed.svg',
+        '/images/what-is-overexposed/back/party-games.svg',
+        '/images/what-is-overexposed/back/truth-or-dare.svg',
+        '/images/what-is-overexposed/back/paranoia.svg',
+        '/images/what-is-overexposed/back/never-have-i-ever.svg',
+        '/images/what-is-overexposed/back/most-likely-to.svg',
+        '/images/what-is-overexposed/back/insights.svg',
+        '/images/what-is-overexposed/back/overexposure.svg'
+    ];
 
-        function isBackVisible() {
-            return !isFrontVisible();
-        }
+    const card = document.querySelector('.card');
+    const frontImg = document.querySelector('.card .front');
+    const backImg = document.querySelector('.card .back');
+    const ttsButton = document.getElementById('tts-button');
 
-        function startSwipe(x) {
-            startX = x;
-            isDragging = true;
-        }
 
-        function endSwipe(x) {
-            if (!isDragging) return;
+    let startX = 0;
+    let isDragging = false;
+    let currentRotationY = 0;
+    let imageIndex = 0;
+    let hasSwipedLeft = false;
 
-            const endX = x;
-            const swipeDirection = endX - startX;
+    function isFrontVisible() {
+        return Math.abs(currentRotationY % 360) < 90 || Math.abs(currentRotationY % 360) > 270;
+    }
 
-            if (Math.abs(swipeDirection) > 50) {
-                if (swipeDirection > 0 && imageIndex === 0 && isFrontVisible()) {
-                    isDragging = false;
-                    return;
-                } else if (swipeDirection < 0 && imageIndex === frontImages.length - 1 && isBackVisible()) {
-                    isDragging = false;
-                    return;
-                }
+    function isBackVisible() {
+        return !isFrontVisible();
+    }
 
-                const rotationAmount = swipeDirection > 0 ? 180 : -180;
-                currentRotationY += rotationAmount;
-                card.style.transform = `rotateY(${currentRotationY}deg)`;
+    function startSwipe(x) {
+        startX = x;
+        isDragging = true;
+    }
 
-                if (Math.abs(currentRotationY) % 360 === 0) {
-                    if (currentRotationY % 360 === 0 && swipeDirection < 0) {
-                        imageIndex = (imageIndex + 1) % frontImages.length;
-                    }
-                }
+    function endSwipe(x) {
+        if (!isDragging) return;
 
-                if (Math.abs(currentRotationY) % 180 === 0) {
-                    if (currentRotationY % 180 === 0 && swipeDirection > 0 && isBackVisible()) {
-                        imageIndex = (imageIndex - 1 + frontImages.length) % frontImages.length;
-                    }
+        const endX = x;
+        const swipeDirection = endX - startX;
 
-                    if (isFrontVisible()) {
-                        frontImg.src = frontImages[imageIndex];
-                    }
+        if (Math.abs(swipeDirection) > 50) {
+            if (swipeDirection > 0 && imageIndex === 0 && isFrontVisible()) {
+                isDragging = false;
+                return;
+            } else if (swipeDirection < 0 && imageIndex === frontImages.length - 1 && isBackVisible()) {
+                isDragging = false;
+                return;
+            }
 
-                    if (isBackVisible()) {
-                        backImg.src = backImages[imageIndex];
-                    }
-                }
+            const rotationAmount = swipeDirection > 0 ? 180 : -180;
+            currentRotationY += rotationAmount;
+            card.style.transform = `rotateY(${currentRotationY}deg)`;
 
-                if (swipeDirection < 0 && !hasSwipedLeft) {
-                    hasSwipedLeft = true;
-                    hideSwipeIndicator();
+            if (Math.abs(currentRotationY) % 360 === 0) {
+                if (currentRotationY % 360 === 0 && swipeDirection < 0) {
+                    imageIndex = (imageIndex + 1) % frontImages.length;
                 }
             }
-            isDragging = false;
-        }
 
-        function getSelectedVoice() {
-            const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-            voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
+            if (Math.abs(currentRotationY) % 180 === 0) {
+                if (currentRotationY % 180 === 0 && swipeDirection > 0 && isBackVisible()) {
+                    imageIndex = (imageIndex - 1 + frontImages.length) % frontImages.length;
+                }
 
-            const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+                if (isFrontVisible()) {
+                    frontImg.src = frontImages[imageIndex];
+                }
 
-            console.log(`Selected Voice Key: ${selectedVoiceKey}`);
+                if (isBackVisible()) {
+                    backImg.src = backImages[imageIndex];
+                }
+            }
 
-            switch (selectedVoiceKey) {
-                case 'tts-voice-male1':
-                    return 'UK English Male';
-                case 'tts-voice-male2':
-                    return 'US English Male';
-                case 'tts-voice-female1':
-                    return 'UK English Female';
-                case 'tts-voice-female2':
-                    return 'US English Female';
-                default:
-                    return 'UK English Male';
+            if (swipeDirection < 0 && !hasSwipedLeft) {
+                hasSwipedLeft = true;
+                hideSwipeIndicator();
             }
         }
-        function estimateSpeechDuration(text) {
-            const words = text.split(" ").length;
-            const averageWordDuration = 0.6;
-            return words * averageWordDuration * 1000;
-        }
+        isDragging = false;
+    }
 
-        function readText(text) {
-            if (isSpeaking) {
-                responsiveVoice.cancel();
+    function getSelectedVoice() {
+        const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
+        voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
+
+        const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
+
+        console.log(`Selected Voice Key: ${selectedVoiceKey}`);
+
+        switch (selectedVoiceKey) {
+            case 'tts-voice-male1':
+                return 'UK English Male';
+            case 'tts-voice-male2':
+                return 'US English Male';
+            case 'tts-voice-female1':
+                return 'UK English Female';
+            case 'tts-voice-female2':
+                return 'US English Female';
+            default:
+                return 'UK English Male';
+        }
+    }
+    function estimateSpeechDuration(text) {
+        const words = text.split(" ").length;
+        const averageWordDuration = 0.6;
+        return words * averageWordDuration * 1000;
+    }
+
+    function readText(text) {
+        if (isSpeaking) {
+            responsiveVoice.cancel();
+            isSpeaking = false;
+            ttsButton.src = "/images/icons/grey/tts-icon.svg";
+        } else {
+            const selectedVoice = getSelectedVoice();
+            responsiveVoice.speak(text, selectedVoice);
+
+            isSpeaking = true;
+            ttsButton.src = "/images/icons/overexposed/tts-icon.svg";
+
+            const duration = estimateSpeechDuration(text);
+            setTimeout(() => {
                 isSpeaking = false;
                 ttsButton.src = "/images/icons/grey/tts-icon.svg";
-            } else {
-                const selectedVoice = getSelectedVoice();
-                responsiveVoice.speak(text, selectedVoice);
-
-                isSpeaking = true;
-                ttsButton.src = "/images/icons/overexposed/tts-icon.svg";
-
-                const duration = estimateSpeechDuration(text);
-                setTimeout(() => {
-                    isSpeaking = false;
-                    ttsButton.src = "/images/icons/grey/tts-icon.svg";
-                }, duration);
-            }
+            }, duration);
         }
+    }
 
-        ttsButton.addEventListener('click', () => {
-            const currentText = isFrontVisible() ? cardTexts[imageIndex].front : cardTexts[imageIndex].back;
-            readText(currentText);
-        });
+    ttsButton.addEventListener('click', () => {
+        const currentText = isFrontVisible() ? cardTexts[imageIndex].front : cardTexts[imageIndex].back;
+        readText(currentText);
+    });
 
-        document.addEventListener('mousedown', (e) => {
-            if (e.button === 0 || e.button === 1) {
-                startSwipe(e.clientX);
-            }
-        });
-
-        document.addEventListener('mouseup', (e) => {
-            if (e.button === 0 || e.button === 1) {
-                endSwipe(e.clientX);
-            }
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                //
-            }
-        });
-
-        document.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                startSwipe(e.touches[0].clientX);
-            }
-        });
-
-        document.addEventListener('touchend', (e) => {
-            if (e.changedTouches.length === 1) {
-                endSwipe(e.changedTouches[0].clientX);
-            }
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            if (isDragging && e.touches.length === 1) {
-            }
-        });
-
-        function hideSwipeIndicator() {
-            const swipeIndicator = document.getElementById('swipe-indicator');
-            swipeIndicator.style.animation = 'none';
-            swipeIndicator.style.display = 'none';
+    document.addEventListener('mousedown', (e) => {
+        if (e.button === 0 || e.button === 1) {
+            startSwipe(e.clientX);
         }
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = document.querySelectorAll('.card img');
-            images.forEach(img => {
-                img.addEventListener('dragstart', (e) => {
-                    e.preventDefault();
-                });
+    document.addEventListener('mouseup', (e) => {
+        if (e.button === 0 || e.button === 1) {
+            endSwipe(e.clientX);
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            //
+        }
+    });
+
+    document.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            startSwipe(e.touches[0].clientX);
+        }
+    });
+
+    document.addEventListener('touchend', (e) => {
+        if (e.changedTouches.length === 1) {
+            endSwipe(e.changedTouches[0].clientX);
+        }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging && e.touches.length === 1) {
+        }
+    });
+
+    function hideSwipeIndicator() {
+        const swipeIndicator = document.getElementById('swipe-indicator');
+        swipeIndicator.style.animation = 'none';
+        swipeIndicator.style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = document.querySelectorAll('.card img');
+        images.forEach(img => {
+            img.addEventListener('dragstart', (e) => {
+                e.preventDefault();
             });
-            function startSwipeIndicator() {
-                if (!hasSwipedLeft) {
-                    const swipeIndicator = document.getElementById('swipe-indicator');
-                    swipeIndicator.style.display = 'flex';
-                    swipeIndicator.style.animation = 'swipeGlowAnimation 0.5s linear forwards';
-                    swipeIndicator.style.margin = '0 auto';
-                    setTimeout(() => {
-                        if (!hasSwipedLeft) {
-                            swipeIndicator.style.display = 'none';
-                        }
-                    }, 500);
-                }
+        });
+        function startSwipeIndicator() {
+            if (!hasSwipedLeft) {
+                const swipeIndicator = document.getElementById('swipe-indicator');
+                swipeIndicator.style.display = 'flex';
+                swipeIndicator.style.animation = 'swipeGlowAnimation 0.5s linear forwards';
+                swipeIndicator.style.margin = '0 auto';
+                setTimeout(() => {
+                    if (!hasSwipedLeft) {
+                        swipeIndicator.style.display = 'none';
+                    }
+                }, 500);
             }
-            startSwipeIndicator();
-            setInterval(startSwipeIndicator, 2500);
-        });
+        }
+        startSwipeIndicator();
+        setInterval(startSwipeIndicator, 2500);
+    });
 
-        backButton.addEventListener('click', () => {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
-        });
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+    });
 
 
-    </script>
-</body>
+</script>
+
 
 <script src="/scripts/general/header.js"></script>
 

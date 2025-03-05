@@ -108,352 +108,351 @@
 
         </div>
     </div>
+</body>
+<script src="/scripts/general/header.js"></script>
 
-    <script src="/scripts/general/header.js"></script>
+<script>
+    selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
 
-    <script>
-        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/blogs/primary-colour/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/primary-colour/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/primary-colour/instagram-icon.svg)');
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/blogs/primary-colour/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/blogs/primary-colour/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/blogs/primary-colour/instagram-icon.svg)');
+    document.addEventListener('DOMContentLoaded', async () => {
+    });
 
-        document.addEventListener('DOMContentLoaded', async () => {
-        });
+    //Landing Page Scripts
+    let currentlyOpenPostIndex = null;
+    document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
+    document.documentElement.style.setProperty('--tag2colour', '#F57C69');
+    document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
 
-        //Landing Page Scripts
-        let currentlyOpenPostIndex = null;
-        document.documentElement.style.setProperty('--tag1colour', '#F6C86D');
-        document.documentElement.style.setProperty('--tag2colour', '#F57C69');
-        document.documentElement.style.setProperty('--tag3colour', '#AA88F0');
+    const tag1Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag1colour');
+    const tag2Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag2colour');
+    const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
+    const tag4Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag4colour');
+    const tag5Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag5colour');
 
-        const tag1Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag1colour');
-        const tag2Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag2colour');
-        const tag3Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag3colour');
-        const tag4Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag4colour');
-        const tag5Colour = getComputedStyle(document.documentElement).getPropertyValue('--tag5colour');
+    helpTitle.textContent = 'INSIGHTS';
 
-        helpTitle.textContent = 'INSIGHTS';
-
-        helpText.innerHTML = `
+    helpText.innerHTML = `
             Welcome to <highlight>INSIGHTS</highlight> Explore blogs on social life, relationships, university, mental health, productivity, and adulting. Get tips, stories, and advice to navigate life’s journey.
         `;
 
-        const backButton = document.querySelector('.back-button');
+    const backButton = document.querySelector('.back-button');
 
-        const filterButton = document.querySelector('.filter-button');
-        const filterContainer = document.querySelector('.filter-container');
-        const sortSelect = document.querySelector('.dropdown-menu select');
-        const searchInput = document.getElementById('search-bar');
+    const filterButton = document.querySelector('.filter-button');
+    const filterContainer = document.querySelector('.filter-container');
+    const sortSelect = document.querySelector('.dropdown-menu select');
+    const searchInput = document.getElementById('search-bar');
 
-        filterButton.addEventListener('click', () => {
-            const isVisible = filterContainer.style.display === 'flex';
-            filterContainer.style.display = isVisible ? 'none' : 'flex';
-            filterButton.classList.toggle('hidden', isVisible);
-        });
-
-
-        sortSelect.addEventListener('change', () => {
-            fetchBlogData();
-        });
-
-        async function fetchBlogData() {
-            try {
-                const response = await fetch('/json-files/blogs.json');
-                const blogData = await response.json();
-                sortAndDisplayBlogs(blogData.blogs);
-            } catch (error) {
-                console.error('Error fetching the blog data:', error);
-            }
-        }
-
-        function sortAndDisplayBlogs(blogs) {
-            const sortOrder = sortSelect.value;
-            const sortedBlogs = blogs.sort((a, b) => {
-                const dateA = convertDateToTimestamp(a.date);
-                const dateB = convertDateToTimestamp(b.date);
-                return sortOrder === 'option1' ? dateB - dateA : dateA - dateB;
-            });
-            displayBlogs(sortedBlogs);
-        }
-
-        function convertDateToTimestamp(dateString) {
-            const [day, month, year] = dateString.split('/').map(Number);
-            return new Date(year, month - 1, day).getTime();
-        }
-
-        function displayBlogs(blogs) {
-            const blogContainer = document.getElementById('blog-container');
-            blogContainer.innerHTML = '';
-
-            blogs.forEach((blog, index) => createBlogPost(blog, index));
-            filterBlogPosts();
-
-            openFirstBlogPostWithDelay();
-        }
-        function openFirstBlogPostWithDelay() {
-            setTimeout(() => {
-                openBlogPost(0);
-            }, 220);
-        }
-
-        function getTextColorForTag(tag) {
-            switch (tag) {
-                case 'tag1':
-                    return tag1Colour;
-                case 'tag2':
-                    return tag2Colour;
-                case 'tag3':
-                    return tag3Colour;
-                case 'tag4':
-                    return tag4Colour;
-                case 'tag5':
-                    return tag5Colour;
-                default:
-                    return primaryPageColour;
-            }
-        }
-
-        function createBlogPost(blog, index) {
-            const blogContainer = document.getElementById('blog-container');
-            const tagColor = getTextColorForTag(blog.tag);
-
-            const postDiv = document.createElement('div');
-            postDiv.classList.add('blog-post-container');
-            postDiv.id = `post-${index}`;
-            postDiv.dataset.tag = blog.tag;
-            postDiv.dataset.searchTags = blog['search-tags'].toLowerCase();
-
-            const button = document.createElement('button');
-            button.classList.add('blog-post-button');
-            button.textContent = blog.title;
-            button.style.borderColor = tagColor;
-            button.style.color = tagColor;
-
-            const blogContentDiv = document.createElement('div');
-            blogContentDiv.classList.add('blog-post-content');
-            blogContentDiv.style.display = 'none';
-            blogContentDiv.style.maxHeight = '0';
-            blogContentDiv.style.overflow = 'hidden';
-            blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
-
-            // Image Button
-            const img = document.createElement('img');
-            img.classList.add('blog-post-image');
-            img.src = `/images/blog-thumbnails/${blog.image}`;
-            img.alt = blog.title;
-
-            const imgButton = document.createElement('button');
-            imgButton.classList.add('blog-post-image-button');
-            imgButton.appendChild(img);
-            imgButton.style.border = 'none';
-            imgButton.style.background = 'none';
-            imgButton.style.cursor = 'pointer';
-
-            imgButton.addEventListener('click', () => {
-                transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
-            });
-
-            blogContentDiv.appendChild(imgButton);  // Replacing `link` with `imgButton`
-
-            const header = document.createElement('h2');
-            header.classList.add('blog-post-image-header');
-            header.textContent = blog.title;
-            header.style.color = tagColor;
-
-            const contentText = document.createElement('h3');
-            contentText.classList.add('blog-post-image-text');
-            contentText.textContent = blog.content.split(' ').slice(0, 40).join(' ') + '...';
-            contentText.style.color = tagColor;
-
-            const extraDetailsContainer = document.createElement('div');
-            extraDetailsContainer.classList.add('extra-details-container');
-
-            const authorElement = document.createElement('span');
-            authorElement.classList.add('author');
-            authorElement.textContent = `Author: ${blog.author}`;
-            authorElement.style.color = tagColor;
-
-            const dateElement = document.createElement('span');
-            dateElement.classList.add('date');
-            dateElement.textContent = `Date: ${blog.date}`;
-            dateElement.style.color = tagColor;
-
-            extraDetailsContainer.appendChild(authorElement);
-            extraDetailsContainer.appendChild(dateElement);
-
-            // Read More Button
-            const readMoreButton = document.createElement('button');
-            readMoreButton.textContent = 'Read More';
-            readMoreButton.classList.add('read-more-button');
-            readMoreButton.style.color = tagColor;
-            readMoreButton.style.border = 'none';
-            readMoreButton.style.background = 'none';
-            readMoreButton.style.cursor = 'pointer';
-            readMoreButton.style.display = 'block';
-            readMoreButton.style.margin = '0 auto';
-
-            readMoreButton.addEventListener('click', () => {
-                transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
-            });
-
-            blogContentDiv.appendChild(header);
-            blogContentDiv.appendChild(contentText);
-            blogContentDiv.appendChild(extraDetailsContainer);
-            blogContentDiv.appendChild(readMoreButton);  // Replacing `readMoreLink` with `readMoreButton`
-
-            postDiv.appendChild(button);
-            postDiv.appendChild(blogContentDiv);
-            blogContainer.appendChild(postDiv);
-
-            button.addEventListener('click', () => openBlogPost(index));
-        }
+    filterButton.addEventListener('click', () => {
+        const isVisible = filterContainer.style.display === 'flex';
+        filterContainer.style.display = isVisible ? 'none' : 'flex';
+        filterButton.classList.toggle('hidden', isVisible);
+    });
 
 
-
-        function openBlogPost(index) {
-            if (currentlyOpenPostIndex !== null && currentlyOpenPostIndex !== index) {
-                closeBlogPost(currentlyOpenPostIndex);
-            }
-
-            const postDiv = document.getElementById(`post-${index}`);
-            const button = postDiv.querySelector('.blog-post-button');
-            const blogContentDiv = postDiv.querySelector('.blog-post-content');
-
-            const buttonColor = button.style.borderColor || primaryPageColour;
-
-            button.style.display = 'none';
-            blogContentDiv.style.display = 'block';
-            blogContentDiv.style.maxHeight = blogContentDiv.scrollHeight + 'px';
-            blogContentDiv.style.opacity = '1';
-
-            currentlyOpenPostIndex = index;
-        }
-
-        function closeBlogPost(index) {
-            const postDiv = document.getElementById(`post-${index}`);
-            const button = postDiv.querySelector('.blog-post-button');
-            const blogContentDiv = postDiv.querySelector('.blog-post-content');
-
-            blogContentDiv.style.maxHeight = '0';
-            blogContentDiv.style.opacity = '0';
-            setTimeout(() => {
-                blogContentDiv.style.display = 'none';
-                button.style.display = 'block';
-            }, 500);
-
-            currentlyOpenPostIndex = null;
-        }
-
-        function filterBlogPosts() {
-            const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
-            const selectedTags = Array.from(tagCheckboxes)
-                .filter(checkbox => checkbox.checked)
-                .map(checkbox => checkbox.value);
-
-            const searchString = searchInput.value.toLowerCase();
-            const blogPosts = document.querySelectorAll('.blog-post-container');
-
-            blogPosts.forEach(post => {
-                const postTag = post.dataset.tag;
-                const postSearchTags = post.dataset.searchTags;
-
-                if ((selectedTags.includes(postTag) || selectedTags.includes('all')) &&
-                    postSearchTags.includes(searchString)) {
-                    post.style.display = 'block';
-                } else {
-                    post.style.display = 'none';
-                }
-            });
-        }
-
-        const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
-        const tagAllCheckbox = document.getElementById('tag-all');
-
-        tagAllCheckbox.addEventListener('change', () => {
-            const isChecked = tagAllCheckbox.checked;
-            tagCheckboxes.forEach(checkbox => {
-                if (checkbox !== tagAllCheckbox) {
-                    checkbox.checked = isChecked;
-                }
-            });
-            filterBlogPosts();
-        });
-
-        tagCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                if (!checkbox.checked) {
-                    tagAllCheckbox.checked = false;
-                } else {
-                    const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
-                    tagAllCheckbox.checked = allChecked;
-                }
-
-                const allCheckedExceptTagAll = Array.from(tagCheckboxes).every(cb => cb.checked || cb === tagAllCheckbox);
-                tagAllCheckbox.checked = allCheckedExceptTagAll;
-
-                filterBlogPosts();
-            });
-        });
-
-        searchInput.addEventListener('input', filterBlogPosts);
-
+    sortSelect.addEventListener('change', () => {
         fetchBlogData();
+    });
 
-        const mediaQuery = window.matchMedia('(max-width: 768px) and (orientation: landscape)');
-
-        function handleMediaChange(e) {
-            const container = document.querySelector('.container');
-            const header = document.querySelector('.header');
-            const titleContainer = document.querySelector('.title-container');
-            const filterContainer = document.querySelector('.filter-container');
-
-            if (e.matches) {
-                if (container) container.style.display = 'none';
-                if (header) header.style.display = 'none';
-                if (titleContainer) titleContainer.style.display = 'none';
-                if (filterContainer) filterContainer.style.display = 'none';
-            } else {
-                if (container) container.style.display = 'block ';
-                if (header) header.style.display = 'flex';
-                if (titleContainer) titleContainer.style.display = 'flex';
-                if (filterContainer) filterContainer.style.display = 'flex';
-            }
+    async function fetchBlogData() {
+        try {
+            const response = await fetch('/json-files/blogs.json');
+            const blogData = await response.json();
+            sortAndDisplayBlogs(blogData.blogs);
+        } catch (error) {
+            console.error('Error fetching the blog data:', error);
         }
+    }
 
-        handleMediaChange(mediaQuery);
+    function sortAndDisplayBlogs(blogs) {
+        const sortOrder = sortSelect.value;
+        const sortedBlogs = blogs.sort((a, b) => {
+            const dateA = convertDateToTimestamp(a.date);
+            const dateB = convertDateToTimestamp(b.date);
+            return sortOrder === 'option1' ? dateB - dateA : dateA - dateB;
+        });
+        displayBlogs(sortedBlogs);
+    }
 
-        mediaQuery.addEventListener('change', handleMediaChange);
+    function convertDateToTimestamp(dateString) {
+        const [day, month, year] = dateString.split('/').map(Number);
+        return new Date(year, month - 1, day).getTime();
+    }
 
-        function moveSearchBarBasedOnOrientation() {
-            const searchBar = document.getElementById('search-bar');
-            const filterContainer = document.querySelector('.tag-container');
-            const titleContainer = document.querySelector('.title-container');
+    function displayBlogs(blogs) {
+        const blogContainer = document.getElementById('blog-container');
+        blogContainer.innerHTML = '';
 
-            if (window.matchMedia("(orientation: portrait)").matches) {
-                if (!filterContainer.contains(searchBar)) {
-                    filterContainer.appendChild(searchBar);
-                }
-            } else {
-                if (!titleContainer.contains(searchBar)) {
-                    titleContainer.appendChild(searchBar);
-                }
-            }
+        blogs.forEach((blog, index) => createBlogPost(blog, index));
+        filterBlogPosts();
+
+        openFirstBlogPostWithDelay();
+    }
+    function openFirstBlogPostWithDelay() {
+        setTimeout(() => {
+            openBlogPost(0);
+        }, 220);
+    }
+
+    function getTextColorForTag(tag) {
+        switch (tag) {
+            case 'tag1':
+                return tag1Colour;
+            case 'tag2':
+                return tag2Colour;
+            case 'tag3':
+                return tag3Colour;
+            case 'tag4':
+                return tag4Colour;
+            case 'tag5':
+                return tag5Colour;
+            default:
+                return primaryPageColour;
         }
+    }
 
+    function createBlogPost(blog, index) {
+        const blogContainer = document.getElementById('blog-container');
+        const tagColor = getTextColorForTag(blog.tag);
 
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('blog-post-container');
+        postDiv.id = `post-${index}`;
+        postDiv.dataset.tag = blog.tag;
+        postDiv.dataset.searchTags = blog['search-tags'].toLowerCase();
 
+        const button = document.createElement('button');
+        button.classList.add('blog-post-button');
+        button.textContent = blog.title;
+        button.style.borderColor = tagColor;
+        button.style.color = tagColor;
 
-        window.addEventListener('resize', moveSearchBarBasedOnOrientation);
+        const blogContentDiv = document.createElement('div');
+        blogContentDiv.classList.add('blog-post-content');
+        blogContentDiv.style.display = 'none';
+        blogContentDiv.style.maxHeight = '0';
+        blogContentDiv.style.overflow = 'hidden';
+        blogContentDiv.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
 
-        document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
+        // Image Button
+        const img = document.createElement('img');
+        img.classList.add('blog-post-image');
+        img.src = `/images/blog-thumbnails/${blog.image}`;
+        img.alt = blog.title;
 
-        backButton.addEventListener('click', () => {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        const imgButton = document.createElement('button');
+        imgButton.classList.add('blog-post-image-button');
+        imgButton.appendChild(img);
+        imgButton.style.border = 'none';
+        imgButton.style.background = 'none';
+        imgButton.style.cursor = 'pointer';
+
+        imgButton.addEventListener('click', () => {
+            transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
         });
 
+        blogContentDiv.appendChild(imgButton);  // Replacing `link` with `imgButton`
 
-    </script>
-</body>
+        const header = document.createElement('h2');
+        header.classList.add('blog-post-image-header');
+        header.textContent = blog.title;
+        header.style.color = tagColor;
+
+        const contentText = document.createElement('h3');
+        contentText.classList.add('blog-post-image-text');
+        contentText.textContent = blog.content.split(' ').slice(0, 40).join(' ') + '...';
+        contentText.style.color = tagColor;
+
+        const extraDetailsContainer = document.createElement('div');
+        extraDetailsContainer.classList.add('extra-details-container');
+
+        const authorElement = document.createElement('span');
+        authorElement.classList.add('author');
+        authorElement.textContent = `Author: ${blog.author}`;
+        authorElement.style.color = tagColor;
+
+        const dateElement = document.createElement('span');
+        dateElement.classList.add('date');
+        dateElement.textContent = `Date: ${blog.date}`;
+        dateElement.style.color = tagColor;
+
+        extraDetailsContainer.appendChild(authorElement);
+        extraDetailsContainer.appendChild(dateElement);
+
+        // Read More Button
+        const readMoreButton = document.createElement('button');
+        readMoreButton.textContent = 'Read More';
+        readMoreButton.classList.add('read-more-button');
+        readMoreButton.style.color = tagColor;
+        readMoreButton.style.border = 'none';
+        readMoreButton.style.background = 'none';
+        readMoreButton.style.cursor = 'pointer';
+        readMoreButton.style.display = 'block';
+        readMoreButton.style.margin = '0 auto';
+
+        readMoreButton.addEventListener('click', () => {
+            transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
+        });
+
+        blogContentDiv.appendChild(header);
+        blogContentDiv.appendChild(contentText);
+        blogContentDiv.appendChild(extraDetailsContainer);
+        blogContentDiv.appendChild(readMoreButton);  // Replacing `readMoreLink` with `readMoreButton`
+
+        postDiv.appendChild(button);
+        postDiv.appendChild(blogContentDiv);
+        blogContainer.appendChild(postDiv);
+
+        button.addEventListener('click', () => openBlogPost(index));
+    }
+
+
+
+    function openBlogPost(index) {
+        if (currentlyOpenPostIndex !== null && currentlyOpenPostIndex !== index) {
+            closeBlogPost(currentlyOpenPostIndex);
+        }
+
+        const postDiv = document.getElementById(`post-${index}`);
+        const button = postDiv.querySelector('.blog-post-button');
+        const blogContentDiv = postDiv.querySelector('.blog-post-content');
+
+        const buttonColor = button.style.borderColor || primaryPageColour;
+
+        button.style.display = 'none';
+        blogContentDiv.style.display = 'block';
+        blogContentDiv.style.maxHeight = blogContentDiv.scrollHeight + 'px';
+        blogContentDiv.style.opacity = '1';
+
+        currentlyOpenPostIndex = index;
+    }
+
+    function closeBlogPost(index) {
+        const postDiv = document.getElementById(`post-${index}`);
+        const button = postDiv.querySelector('.blog-post-button');
+        const blogContentDiv = postDiv.querySelector('.blog-post-content');
+
+        blogContentDiv.style.maxHeight = '0';
+        blogContentDiv.style.opacity = '0';
+        setTimeout(() => {
+            blogContentDiv.style.display = 'none';
+            button.style.display = 'block';
+        }, 500);
+
+        currentlyOpenPostIndex = null;
+    }
+
+    function filterBlogPosts() {
+        const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
+        const selectedTags = Array.from(tagCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        const searchString = searchInput.value.toLowerCase();
+        const blogPosts = document.querySelectorAll('.blog-post-container');
+
+        blogPosts.forEach(post => {
+            const postTag = post.dataset.tag;
+            const postSearchTags = post.dataset.searchTags;
+
+            if ((selectedTags.includes(postTag) || selectedTags.includes('all')) &&
+                postSearchTags.includes(searchString)) {
+                post.style.display = 'block';
+            } else {
+                post.style.display = 'none';
+            }
+        });
+    }
+
+    const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
+    const tagAllCheckbox = document.getElementById('tag-all');
+
+    tagAllCheckbox.addEventListener('change', () => {
+        const isChecked = tagAllCheckbox.checked;
+        tagCheckboxes.forEach(checkbox => {
+            if (checkbox !== tagAllCheckbox) {
+                checkbox.checked = isChecked;
+            }
+        });
+        filterBlogPosts();
+    });
+
+    tagCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            if (!checkbox.checked) {
+                tagAllCheckbox.checked = false;
+            } else {
+                const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
+                tagAllCheckbox.checked = allChecked;
+            }
+
+            const allCheckedExceptTagAll = Array.from(tagCheckboxes).every(cb => cb.checked || cb === tagAllCheckbox);
+            tagAllCheckbox.checked = allCheckedExceptTagAll;
+
+            filterBlogPosts();
+        });
+    });
+
+    searchInput.addEventListener('input', filterBlogPosts);
+
+    fetchBlogData();
+
+    const mediaQuery = window.matchMedia('(max-width: 768px) and (orientation: landscape)');
+
+    function handleMediaChange(e) {
+        const container = document.querySelector('.container');
+        const header = document.querySelector('.header');
+        const titleContainer = document.querySelector('.title-container');
+        const filterContainer = document.querySelector('.filter-container');
+
+        if (e.matches) {
+            if (container) container.style.display = 'none';
+            if (header) header.style.display = 'none';
+            if (titleContainer) titleContainer.style.display = 'none';
+            if (filterContainer) filterContainer.style.display = 'none';
+        } else {
+            if (container) container.style.display = 'block ';
+            if (header) header.style.display = 'flex';
+            if (titleContainer) titleContainer.style.display = 'flex';
+            if (filterContainer) filterContainer.style.display = 'flex';
+        }
+    }
+
+    handleMediaChange(mediaQuery);
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+
+    function moveSearchBarBasedOnOrientation() {
+        const searchBar = document.getElementById('search-bar');
+        const filterContainer = document.querySelector('.tag-container');
+        const titleContainer = document.querySelector('.title-container');
+
+        if (window.matchMedia("(orientation: portrait)").matches) {
+            if (!filterContainer.contains(searchBar)) {
+                filterContainer.appendChild(searchBar);
+            }
+        } else {
+            if (!titleContainer.contains(searchBar)) {
+                titleContainer.appendChild(searchBar);
+            }
+        }
+    }
+
+
+
+
+    window.addEventListener('resize', moveSearchBarBasedOnOrientation);
+
+    document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
+
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+    });
+
+
+</script>
 
 </html>

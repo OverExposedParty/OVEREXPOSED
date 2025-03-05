@@ -38,7 +38,7 @@
     <meta name="twitter:image"
         content="https://overexposed.app/images/icons/overexposed/meta/paranoia/twitter-image.jpg">
     <link rel="canonical" href="https://overexposed.app/paranoia-settings">
-    
+
 </head>
 <script>
     document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/paranoia-settings.png')");
@@ -118,22 +118,23 @@
         </div>
 
     </div>
+</body>
 
-    <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js"></script>
 
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 
-        //Header & Settings
-        document.addEventListener('DOMContentLoaded', function () {
-            helpTitle.textContent = 'GAME SETTINGS';
+    //Header & Settings
+    document.addEventListener('DOMContentLoaded', function () {
+        helpTitle.textContent = 'GAME SETTINGS';
 
-            helpText.innerHTML = `
+        helpText.innerHTML = `
     Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
     <br><br>
     Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to 
@@ -142,10 +143,9 @@
     Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This feature also requires 
     <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
 `;
-        });
+    });
 
-    </script>
-    <script src="/scripts/party-games/game-settings.js"></script>
-</body>
+</script>
+<script src="/scripts/party-games/game-settings.js"></script>
 
 </html>

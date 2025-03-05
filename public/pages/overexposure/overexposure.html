@@ -139,43 +139,43 @@
     <div class="warning-container" id="uploading-post-container" style="color: var(--primarypagecolour);">
         <h2 id="uploading-text">Uploading Post</h2>
     </div>
+</body>
+
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="/scripts/overexposure/overexposure-data.js"></script>
+<script src="/scripts/overexposure/camera-view.js"></script>
+<script src="/scripts/general/header.js"></script>
+<script>
 
+    document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#B74C57');
 
-    <script src="/scripts/overexposure/overexposure-data.js"></script>
-    <script src="/scripts/overexposure/camera-view.js"></script>
-    <script src="/scripts/general/header.js"></script>
-    <script>
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/overexposure/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/overexposure/instagram-icon.svg)');
 
-        document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#B74C57');
+    helpTitle.textContent = 'OVEREXPOSURE';
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/overexposure/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/overexposure/instagram-icon.svg)');
-
-        helpTitle.textContent = 'OVEREXPOSURE';
-
-        helpText.innerHTML = `
+    helpText.innerHTML = `
 Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, or wild experiences—completely anonymously. No filters, no judgment—just raw, uncut truths. Dare to expose?
 `;
 
-        //Header & Settings
-        const backButton = document.querySelector('.back-button');
-        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-        let isSpeaking = false;
+    //Header & Settings
+    const backButton = document.querySelector('.back-button');
+    selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    let isSpeaking = false;
 
-        backButton.addEventListener('click', () => {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
-        });
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+    });
 
 
-    </script>
-</body>
+</script>
+
 
 
 

@@ -107,28 +107,29 @@
             </div>
             <div class="game-settings-container">
                 <div class="button-container">
-                    <button data-key="never-have-i-ever-odd-man-out"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        class="game-settings-pack-nsfw">Odd Man Out</button>
+                    <button data-key="never-have-i-ever-odd-man-out" data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack-nsfw">Odd Man
+                        Out</button>
                     <button class="start-game-button" id="never-have-i-ever">Start Game</button>
                 </div>
             </div>
         </div>
     </div>
-    <script src="/scripts/general/header.js"></script>
+</body>
+<script src="/scripts/general/header.js"></script>
 
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
 
-        //Header & Settings
-        document.addEventListener('DOMContentLoaded', function () {
-            helpTitle.textContent = 'GAME SETTINGS';
-            helpText.innerHTML = `
+    //Header & Settings
+    document.addEventListener('DOMContentLoaded', function () {
+        helpTitle.textContent = 'GAME SETTINGS';
+        helpText.innerHTML = `
     Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
     <br><br>
     Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to enable 
@@ -137,10 +138,9 @@
     Enable <highlight>Odd Man Out</highlight> to add drinking forfeits! This feature also requires 
     <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
 `;
-        });
+    });
 
-    </script>
-    <script src="/scripts/party-games/game-settings.js"></script>
-</body>
+</script>
+<script src="/scripts/party-games/game-settings.js"></script>
 
 </html>

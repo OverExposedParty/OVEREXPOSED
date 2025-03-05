@@ -88,37 +88,38 @@
         <img src="/images/icons/never-have-i-ever/odd-man-out-icon.svg" alt="Odd Man Out Icon" class="side-button"
             id="odd-man-out-button">
     </div>
+</body>
 
-    <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js"></script>
 
-    <script>
-        const gamemode = "never-have-i-ever";
-        const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+<script>
+    const gamemode = "never-have-i-ever";
+    const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
-        const oddManOutEnabled = localStorage.getItem('never-have-i-ever-odd-man-out') === 'true';
+    const oddManOutEnabled = localStorage.getItem('never-have-i-ever-odd-man-out') === 'true';
 
-        if (!oddManOutEnabled) {
-            document.getElementById('odd-man-out-button').remove();
-        }
-    </script>
+    if (!oddManOutEnabled) {
+        document.getElementById('odd-man-out-button').remove();
+    }
+</script>
 
-    <script src="/scripts/party-games/general/party-games.js"></script>
-    <script src="/scripts/party-games/general/get-next-question.js"></script>
+<script src="/scripts/party-games/general/party-games.js"></script>
+<script src="/scripts/party-games/general/get-next-question.js"></script>
 
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
 
-        //Header & Settings
-        selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-        document.addEventListener('DOMContentLoaded', async () => {
-            helpTitle.textContent = 'HOW TO PLAY';
+    //Header & Settings
+    selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    document.addEventListener('DOMContentLoaded', async () => {
+        helpTitle.textContent = 'HOW TO PLAY';
 
-            helpText.innerHTML = `
+        helpText.innerHTML = `
     You'll be given a question. Everyone in the room must indicate whether or not they have 
     done the prompt.
     <br><br>
@@ -127,11 +128,11 @@
     Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
     <br><highlight>Odd Man Out</highlight>, where the odd person out must spin the wheel and perform the punishment given.
 `;
-        });
+    });
 
-    </script>
-    <script src="/scripts/party-games/never-have-i-ever/odd-man-out.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-</body>
+</script>
+<script src="/scripts/party-games/never-have-i-ever/odd-man-out.js"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+
 
 </html>

@@ -50,7 +50,8 @@
 
         .split-question-button:hover {
             background-color: var(--primarypagecolour);
-            color: var(--backgroundcolour);;
+            color: var(--backgroundcolour);
+            ;
         }
 
         .or-text {
@@ -145,32 +146,33 @@
         <img src="/images/icons/overexposed/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
         <img src="/images/icons/overexposed/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
     </div>
+</body>
 
-    <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js"></script>
 
-    <script>
-        const gamemode = "truth-or-dare";
-        const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+<script>
+    const gamemode = "truth-or-dare";
+    const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
-        const spinWheelEnabled = localStorage.getItem('truth-or-dare-drink-wheel') === 'true';
-            
-            if (!spinWheelEnabled) {
-                document.getElementById('spin-button').remove();
-            }
-    </script>
+    const spinWheelEnabled = localStorage.getItem('truth-or-dare-drink-wheel') === 'true';
 
-    <script src="/scripts/party-games/general/party-games.js"></script>
-    <script src="/scripts/party-games/truth-or-dare/get-next-question.js"></script>
+    if (!spinWheelEnabled) {
+        document.getElementById('spin-button').remove();
+    }
+</script>
 
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+<script src="/scripts/party-games/general/party-games.js"></script>
+<script src="/scripts/party-games/truth-or-dare/get-next-question.js"></script>
 
-        //Truth Or Dare Page
-        document.addEventListener('DOMContentLoaded', async () => {
-            helpTitle.textContent = 'HOW TO PLAY';
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 
-            helpText.innerHTML = `
+    //Truth Or Dare Page
+    document.addEventListener('DOMContentLoaded', async () => {
+        helpTitle.textContent = 'HOW TO PLAY';
+
+        helpText.innerHTML = `
     You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare</highlight>.
     <br><br>
     <highlight>Truth</highlight> may reveal personal details or secrets.
@@ -180,11 +182,11 @@
     Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
     <highlight>Drinking Punishments</highlight> where failing results in a drinking consequence.
 `;
-        });
+    });
 
-    </script>
-    <script src="/scripts/party-games/spin-the-wheel.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-</body>
+</script>
+<script src="/scripts/party-games/spin-the-wheel.js"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+
 
 </html>

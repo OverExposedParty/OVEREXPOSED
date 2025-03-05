@@ -25,6 +25,7 @@
 
     <style>
         @media (max-width: 768px) and (orientation: landscape) {
+
             .spin-the-wheel-container,
             .coin-flip-container {
                 display: none !important;
@@ -94,41 +95,42 @@
         <img src="/images/icons/paranoia/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
         <img src="/images/icons/paranoia/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
     </div>
+</body>
 
-    <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/header.js"></script>
 
-    <script>
-        const gamemode = "paranoia";
-        const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+<script>
+    const gamemode = "paranoia";
+    const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
-        const spinWheelEnabled = localStorage.getItem('paranoia-drink-wheel') === 'true';
-        const coinFlipEnabled = localStorage.getItem('paranoia-coin-flip') === 'true';
+    const spinWheelEnabled = localStorage.getItem('paranoia-drink-wheel') === 'true';
+    const coinFlipEnabled = localStorage.getItem('paranoia-coin-flip') === 'true';
 
-        if (!spinWheelEnabled) {
-            document.getElementById('spin-button').remove();
-        }
-        if (!coinFlipEnabled) {
-            document.getElementById('coin-flip-button').remove();
-        }
+    if (!spinWheelEnabled) {
+        document.getElementById('spin-button').remove();
+    }
+    if (!coinFlipEnabled) {
+        document.getElementById('coin-flip-button').remove();
+    }
 
-    </script>
+</script>
 
-    <script src="/scripts/party-games/general/party-games.js"></script>
-    <script src="/scripts/party-games/general/get-next-question.js"></script>
+<script src="/scripts/party-games/general/party-games.js"></script>
+<script src="/scripts/party-games/general/get-next-question.js"></script>
 
-    <script>
-        document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
-        document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
 
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
-        document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 
-        //Header & Settings
-        document.addEventListener('DOMContentLoaded', async () => {
-            helpTitle.textContent = 'HOW TO PLAY';
+    //Header & Settings
+    document.addEventListener('DOMContentLoaded', async () => {
+        helpTitle.textContent = 'HOW TO PLAY';
 
-            helpText.innerHTML = `
+        helpText.innerHTML = `
     You'll be given a question. Without showing anyone in the room, pick someone who fits the 
     prompt best and watch them panic.
     <br><br>
@@ -138,13 +140,12 @@
     <highlight>Drink Wheel</highlight>, where the person chosen will have 
     to spin the drink wheel to find out the question.
 `;
-        });
+    });
 
 
-    </script>
-    <script src="/scripts/party-games/spin-the-wheel.js"></script>
-    <script src="/scripts/party-games/paranoia/coin-flip.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-</body>
+</script>
+<script src="/scripts/party-games/spin-the-wheel.js"></script>
+<script src="/scripts/party-games/paranoia/coin-flip.js"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 
 </html>
