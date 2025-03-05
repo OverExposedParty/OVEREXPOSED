@@ -241,12 +241,8 @@ body {
     .card-type-text {
         bottom: 10px;
         right: 7.5%;
-
-    }
-    .card-type-text {
-        bottom: 20px;
-        right: 20px;
         font-size: 60%;
+
     }
     .button-container button {
         border:  var(--bordersize) solid var(--primarypagecolour);
