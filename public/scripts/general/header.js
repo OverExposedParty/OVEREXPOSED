@@ -402,15 +402,10 @@ function transitionSplashScreen(link,splashScreen) {
     });
 }
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-
-
-});
 if (logoContainer) {
     logoContainer.addEventListener('click', function() {
         transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
+        console.log("pressed");
     });
 }
 
