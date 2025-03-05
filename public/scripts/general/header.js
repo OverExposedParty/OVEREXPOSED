@@ -34,7 +34,7 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
-document.addEventListener('DOMContentLoaded', function() {
+window.onload = function() {
     let logoContainer = document.querySelector('.logo-container');
     let partyGamesLink = document.getElementById('party-games-link');
     let overexposureLink = document.getElementById('overexposure-link');
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     console.log(whatIsOverexposedLink);
-});
+};
 
 
 // Declare the variable with the desired URL
