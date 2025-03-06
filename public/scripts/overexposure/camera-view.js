@@ -1,6 +1,5 @@
 const container = document.getElementById("floating-container");
 const wrapper = document.getElementById("wrapper");
-
 let isDragging = false;
 let isTouchActive = false;
 let startX, startY;
@@ -70,7 +69,7 @@ let touchStartX = 0;
 let touchStartY = 0;
 let isTouchDragging = false;
 
-wrapper.addEventListener('touchstart', (event) => {
+container.addEventListener('touchstart', (event) => {
     if (event.touches.length === 1) { // One finger swipe
         enableTouchControls();
         isTouchDragging = true;
@@ -79,14 +78,14 @@ wrapper.addEventListener('touchstart', (event) => {
     }
 });
 
-wrapper.addEventListener('touchmove', (event) => {
+container.addEventListener('touchmove', (event) => {
     if (isTouchDragging) {
         cameraPosition.x = event.touches[0].clientX - touchStartX;
         cameraPosition.y = event.touches[0].clientY - touchStartY;
     }
 });
 
-wrapper.addEventListener('touchend', () => {
+container.addEventListener('touchend', () => {
     isTouchDragging = false;
 });
 
@@ -148,7 +147,7 @@ container.addEventListener("touchstart", (event) => {
     }
 });
 
-wrapper.addEventListener("touchmove", (event) => {
+container.addEventListener("touchmove", (event) => {
     event.preventDefault();
     if (event.touches.length === 2) {
         const currentDistance = getDistance(event.touches[0], event.touches[1]);
@@ -196,6 +195,7 @@ function getMiddlePoint(touches) {
 }
 
 function updateZoom() {
+    // Combine browser zoom and custom scale
     let browserZoom = getBrowserZoom();
     let finalScale = baseScale * browserZoom;
 
