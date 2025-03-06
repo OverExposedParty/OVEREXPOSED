@@ -24,58 +24,84 @@ body {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 100vh;
     box-sizing: border-box;
-    height: calc(var(--vh, 1vh) * 100);
+    height: calc(var(--vh, 1vh) * 100 - var(--headerheight)); /* Subtracts header height */
+    margin-top: var(--headerheight); /* Pushes it down */
 }
 
 .content {
-    height: auto;
-    width: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 0;
-    left: 50vw;
-    bottom: 50vh;
-    box-sizing: border-box;
-    transform: translateY(3.5vh);
-    max-width: 65vw;
+    justify-content: space-around;
+    height: auto;
+    width: auto; /* Content width will adjust based on main image width */
+    max-height:auto;
 }
 
-.gamemode-text {
-    font-size: 43px;
-    font-weight: bold;
-    color: var(--primarypagecolour);
-    text-align: center;
-    padding-bottom: 5px;
-}
-.gamemode-text-svg{
-    width:100%;
-}
-.gamemode-text-container {
-    width:100%;
-    margin-bottom: 10px;
+.gamemode-text-container,
+.main-image-container,
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:0.5vh 0;
 }
 
 .main-image-container {
     position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: LemonMilk;
-    background-color: transparent;
+    background: none;
     border: none;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .main-image {
-    width:100%;
+    width: 100%; /* Set a fixed width or use a percentage */
+    height: auto;
 }
 
+
+.text-container {
+    position: absolute;
+    bottom: 10px;
+    color: var(--primarypagecolour);
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    font-family: LemonMilk;
+}
+
+.card-type-text {
+    position: absolute;
+    bottom: 2.5%; /* Slight offset from the bottom */
+    right: 5%; /* Slight offset from the right */
+    font-size: 0.75rem;
+    color: var(--primarypagecolour);
+    font-family: LemonMilk;
+    text-align: right;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.question-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff5722;
+    color: white;
+    transition: background 0.3s ease;
+}
+
+.question-button:hover {
+    background-color: #e64a19;
+}
 .text-container {
     position: absolute;
     top: 50%;
@@ -93,15 +119,7 @@ body {
     box-sizing: border-box;
 }
 
-.card-type-text {
-    position: absolute;
-    bottom: 15px;
-    right: 7.5%;
-    font-size: 70%;
-    color: var(--primarypagecolour);
-    font-family: LemonMilk;
-    text-align: right;
-}
+
 
 .question-text {
     font-size: 40%;
@@ -114,14 +132,6 @@ body {
     color: #ff5f5f;
 }
 
-.button-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 5%;
-    width: 100%;
-    box-sizing: border-box;
-}
 
 .button-container button {
     font-family: LemonMilk;
@@ -223,33 +233,29 @@ body {
 }
 
 @media (orientation: portrait) {
-    .side-buttons {
-        right: 1%;
+    @media (orientation: portrait) {
+        .gamemode-text-container,
+        .main-image-container,
+        .button-container {
+            width: 80vw; /* Adjust the width dynamically */
+            max-width: 300px; /* Prevent elements from getting too big */
+        }
+    
+        .text-container {
+            font-size: 175%; /* Reduce font size */
+            width: 80%; /* Keep text contained */
+        }
+    
+        .side-buttons {
+            width: auto;
+            height: auto;
+            right: 2%;
+        }
+    
+        .side-button, .tts-button {
+            width: 6vh;
+            height: 6vh;
+        }
     }
-    .text-container {
-        font-size:170%;
-
-    }
-
-    .question-text {
-        font-size: 50%;
-    }
-
-    .punishment-text {
-        font-size: 25%;
-    }
-
-    .card-type-text {
-        bottom: 3%;
-        right: 7.5%;
-        font-size: 60%;
-    }
-    .button-container button {
-        border:  var(--bordersize) solid var(--primarypagecolour);
-        font-size: 100%;
-    }
-    .button-container button:hover {
-        background-color: var(--backgroundcolour);
-        color:  var(--primarypagecolour);
-    }
+    
 }
