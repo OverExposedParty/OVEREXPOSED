@@ -9,6 +9,12 @@ let targetY = offsetY;
 let baseScale = 1; // Base scale factor
 let zoomSpeed = 0.05; // Speed of zooming
 
+// Store the position of the container in an object
+const cameraPosition = {
+    x: targetX,
+    y: targetY
+};
+
 // Get original container size
 const containerRect = container.getBoundingClientRect();
 
@@ -36,16 +42,16 @@ document.addEventListener("mousedown", (event) => {
     if (event.button === 1) { // Middle Mouse Button
         enableMouseControls();
         isDragging = true;
-        startX = event.clientX - targetX;
-        startY = event.clientY - targetY;
+        startX = event.clientX - cameraPosition.x;
+        startY = event.clientY - cameraPosition.y;
         event.preventDefault(); // Prevent default middle-click behavior
     }
 });
 
 document.addEventListener("mousemove", (event) => {
     if (isDragging) {
-        targetX = event.clientX - startX;
-        targetY = event.clientY - startY;
+        cameraPosition.x = event.clientX - startX;
+        cameraPosition.y = event.clientY - startY;
     }
 });
 
@@ -57,19 +63,18 @@ let touchStartY = 0;
 let isTouchDragging = false;
 
 container.addEventListener('touchstart', (event) => {
-    enableTouchControls();
-
     if (event.touches.length === 1) { // One finger swipe
+        enableTouchControls();
         isTouchDragging = true;
-        touchStartX = event.touches[0].clientX - targetX;
-        touchStartY = event.touches[0].clientY - targetY;
+        touchStartX = event.touches[0].clientX - cameraPosition.x;
+        touchStartY = event.touches[0].clientY - cameraPosition.y;
     }
 });
 
 container.addEventListener('touchmove', (event) => {
     if (isTouchDragging) {
-        targetX = event.touches[0].clientX - touchStartX;
-        targetY = event.touches[0].clientY - touchStartY;
+        cameraPosition.x = event.touches[0].clientX - touchStartX;
+        cameraPosition.y = event.touches[0].clientY - touchStartY;
     }
 });
 
@@ -79,7 +84,7 @@ container.addEventListener('touchend', () => {
 
 // Smooth Animation with GSAP
 function smoothMove() {
-    gsap.to(container, { x: targetX, y: targetY, duration: 1, ease: "power2.out" });
+    gsap.to(container, { x: cameraPosition.x, y: cameraPosition.y, duration: 1, ease: "power2.out" });
     requestAnimationFrame(smoothMove);
 }
 smoothMove(); // Start smooth movement loop
@@ -114,8 +119,8 @@ document.addEventListener('wheel', (event) => {
     // Apply the zoom while keeping it centered
     gsap.to(container, {
         scale: finalScale,
-        x: targetX - (window.innerWidth / 2 - targetX) * (finalScale - baseScale),
-        y: targetY - (window.innerHeight / 2 - targetY) * (finalScale - baseScale),
+        x: cameraPosition.x - (window.innerWidth / 2 - cameraPosition.x) * (finalScale - baseScale),
+        y: cameraPosition.y - (window.innerHeight / 2 - cameraPosition.y) * (finalScale - baseScale),
         duration: 1.5,
         ease: "power2.out"
     });
@@ -126,8 +131,6 @@ let initialDistance = null;
 let initialScale = baseScale;
 
 container.addEventListener('touchstart', (event) => {
-    enableTouchControls();
-
     if (event.touches.length === 2) { // Two fingers for pinch
         initialDistance = getDistance(event.touches[0], event.touches[1]);
         initialScale = baseScale;
@@ -160,8 +163,8 @@ function updateZoom() {
     // Apply the zoom while keeping it centered
     gsap.to(container, {
         scale: finalScale,
-        x: targetX - (window.innerWidth / 2 - targetX) * (finalScale - baseScale),
-        y: targetY - (window.innerHeight / 2 - targetY) * (finalScale - baseScale),
+        x: cameraPosition.x - (window.innerWidth / 2 - cameraPosition.x) * (finalScale - baseScale),
+        y: cameraPosition.y - (window.innerHeight / 2 - cameraPosition.y) * (finalScale - baseScale),
         duration: 1.5,
         ease: "power2.out"
     });

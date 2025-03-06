@@ -27,6 +27,24 @@ const exitMenuNo = document.getElementById("exit-menu-button-no");
 
 const publishButton = document.querySelector(".overexposure-publish-button");
 
+const maxTouchRadius = 50;
+
+let singleTouchPosition = {
+    x: 0,
+    y: 0
+};
+
+function calculateTouchDistance(cameraPosition, singleTouchPosition) {
+    // Calculate the distance between camera and touch in 2D space
+    const dx = singleTouchPosition.x - cameraPosition.x;
+    const dy = singleTouchPosition.y - cameraPosition.y;
+
+    return Math.sqrt(dx * dx + dy * dy); // Return Euclidean distance in 2D
+}
+
+
+
+
 let count = 0;
 let intervalId = null;
 let touchTimer;
@@ -84,7 +102,7 @@ async function fetchCSV() {
 
     // Use PapaParse to parse the CSV data
     Papa.parse(data, {
-        complete: function(results) {
+        complete: function (results) {
             console.log("Parsed CSV Data:", results.data);
 
             // Assuming the first row is the header, start from the second row
@@ -169,16 +187,26 @@ function handleDoubleClick(event) {
 
     const normalizedX = (clickX / canvasWidth) * 2 - 1;
     const normalizedY = (clickY / canvasHeight) * 2 - 1;
-    
+
     placeCard(event, normalizedX, normalizedY);
 }
 
 function handleTouchStart(event) {
-    console.log("touch started");
-    touchTimer = setTimeout(() => {
-        handleToucHold(event); // Trigger on long press
-    }, 500); // Adjust duration for long press detection (e.g., 500ms)
+    if (event.touches.length === 1) {
+        console.log("touch started");
+        singleTouchPosition.x = cameraPosition.x;
+        singleTouchPosition.y = cameraPosition.y;
+        touchTimer = setTimeout(() => {
+            handleToucHold(event); // Trigger on long press
+        }, 500); // Adjust duration for long press detection (e.g., 500ms)
+    }
+    else {
+        if (touchTimer) {
+            clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
+        }
+    }
 }
+
 
 function handleTouchEnd() {
     clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
@@ -186,7 +214,15 @@ function handleTouchEnd() {
 
 function handleToucHold(event) {
     event.preventDefault();
+    const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
 
+    // Add a safety check if the touch radius is too small
+    if (touchRadius < maxTouchRadius) {
+        console.log("touchRadius is too small");
+        return;
+    }
+
+    console.log(touchRadius);
     const touch = event.touches[0] || event.changedTouches[0];
     console.log(touch);
     const rect = floatingContainer.getBoundingClientRect();
@@ -198,7 +234,7 @@ function handleToucHold(event) {
 
     const normalizedX = (touchX / canvasWidth) * 2 - 1;
     const normalizedY = (touchY / canvasHeight) * 2 - 1;
-    
+
 
     placeCard(event, normalizedX, normalizedY);
 }
@@ -207,10 +243,10 @@ function placeCard(event, normalizedX, normalizedY) {
     const floatingContainer = document.querySelector(".floating-container");
     const touch = event.touches[0] || event.changedTouches[0];
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        if(isTouchActive){
+        if (isTouchActive) {
             showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
         }
-        else{
+        else {
             showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
         }
         return;
@@ -329,35 +365,35 @@ async function saveDataToGoogleSheets(draftData) {
 }
 
 
-    const observer = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === "attributes" && mutation.attributeName === "class") {
-                if (!overexposureContainer.classList.contains("active")) {
-                    const draftButtons = document.querySelectorAll(".floating-button.draft");
-                    if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
-                        if (incompletePostContainer.classList.contains('active')) {
-                            incompletePostContainer.classList.remove('active');
-                            overexposureContainer.classList.add('active');
-                            overlay.classList.add('active');
-                        }
-                        else if (draftButtons.length > 0) {
-                            overlay.classList.add('active');
-                            overexposureContainer.classList.add('active');
-                            exitMenuContainer.classList.add('active');
-                        }
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") {
+            if (!overexposureContainer.classList.contains("active")) {
+                const draftButtons = document.querySelectorAll(".floating-button.draft");
+                if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
+                    if (incompletePostContainer.classList.contains('active')) {
+                        incompletePostContainer.classList.remove('active');
+                        overexposureContainer.classList.add('active');
+                        overlay.classList.add('active');
                     }
-                    else {
-                        document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
+                    else if (draftButtons.length > 0) {
+                        overlay.classList.add('active');
+                        overexposureContainer.classList.add('active');
+                        exitMenuContainer.classList.add('active');
                     }
                 }
-                if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                    uploadingText.textContent = "Uploading Post"
+                else {
+                    document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
                 }
             }
+            if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
+                clearInterval(intervalId);
+                intervalId = null;
+                uploadingText.textContent = "Uploading Post"
+            }
         }
-    });
+    }
+});
 
 observer.observe(overexposureContainer, { attributes: true, attributeFilter: ["class"] });
 observer.observe(exitMenuContainer, { attributes: true, attributeFilter: ["class"] });
@@ -395,18 +431,18 @@ function ExitMenuButtonNo() {
     exitMenuContainer.classList.remove('active');
 }
 
-overexposureContainer.addEventListener("mousedown", function() {
+overexposureContainer.addEventListener("mousedown", function () {
     if (incompletePostContainer.classList.contains("active")) {
-      incompletePostContainer.classList.remove("active");
+        incompletePostContainer.classList.remove("active");
     }
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
-      }
-  });
+    }
+});
 
-  function detectTouchScreen() {
+function detectTouchScreen() {
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
+
     const computerControls = document.getElementById("computer-controls");
     const mobileControls = document.getElementById("mobile-controls");
 
