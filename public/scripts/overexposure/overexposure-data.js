@@ -172,6 +172,9 @@ function createFloatingButton(row, draft = false) {
     button.addEventListener("click", () => {
         selectCard(button, false)
     });
+    button.addEventListener("touchstart", () => {
+        selectCard(button, false)
+    });
 
     if (draft) {
         button.classList.add("draft");

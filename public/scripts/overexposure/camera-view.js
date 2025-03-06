@@ -68,7 +68,7 @@ let touchStartX = 0;
 let touchStartY = 0;
 let isTouchDragging = false;
 
-container.addEventListener('touchstart', (event) => {
+document.body.addEventListener('touchstart', (event) => {
     if (event.touches.length === 1) { // One finger swipe
         enableTouchControls();
         isTouchDragging = true;
@@ -77,14 +77,14 @@ container.addEventListener('touchstart', (event) => {
     }
 });
 
-container.addEventListener('touchmove', (event) => {
+document.body.addEventListener('touchmove', (event) => {
     if (isTouchDragging) {
         cameraPosition.x = event.touches[0].clientX - touchStartX;
         cameraPosition.y = event.touches[0].clientY - touchStartY;
     }
 });
 
-container.addEventListener('touchend', () => {
+document.body.addEventListener('touchend', () => {
     isTouchDragging = false;
 });
 
@@ -124,7 +124,7 @@ document.addEventListener('wheel', (event) => {
     });
 });
 
-container.addEventListener("touchstart", (event) => {
+document.body.addEventListener("touchstart", (event) => {
     enableTouchControls();
     event.preventDefault();
     if (event.touches.length === 2) {
@@ -146,7 +146,7 @@ container.addEventListener("touchstart", (event) => {
     }
 });
 
-container.addEventListener("touchmove", (event) => {
+document.body.addEventListener("touchmove", (event) => {
     event.preventDefault();
     if (event.touches.length === 2) {
         const currentDistance = getDistance(event.touches[0], event.touches[1]);
