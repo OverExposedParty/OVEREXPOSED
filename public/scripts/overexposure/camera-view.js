@@ -7,7 +7,13 @@ let offsetY = ((window.innerHeight - getComputedStyle(document.documentElement).
 let targetX = offsetX;
 let targetY = offsetY;
 let baseScale = 1; // Base scale factor
+let targetScale = baseScale;
 let zoomSpeed = 0.05; // Speed of zooming
+
+// Touchscreen pinch-to-zoom logic
+let initialDistance = null;
+let initialScale = baseScale;
+
 
 // Store the position of the container in an object
 const cameraPosition = {
@@ -103,48 +109,42 @@ document.addEventListener('wheel', (event) => {
 
     event.preventDefault(); // Prevent page scrolling while zooming
 
-    // Get the browser zoom level
-    let browserZoom = getBrowserZoom();
-
-    // Adjust the baseScale based on user input
+    // Adjust the targetScale based on scroll direction
     if (event.deltaY < 0) {
-        baseScale += zoomSpeed;
+        targetScale += zoomSpeed;
     } else {
-        baseScale = Math.max(minScale, baseScale - zoomSpeed);
+        targetScale = Math.max(minScale, targetScale - zoomSpeed);
     }
 
-    // Combine browser zoom and custom scale
-    let finalScale = baseScale * browserZoom;
-
-    // Apply the zoom while keeping it centered
+    // Smooth zoom animation
     gsap.to(container, {
-        scale: finalScale,
-        x: cameraPosition.x - (window.innerWidth / 2 - cameraPosition.x) * (finalScale - baseScale),
-        y: cameraPosition.y - (window.innerHeight / 2 - cameraPosition.y) * (finalScale - baseScale),
-        duration: 1.5,
+        scale: targetScale,
+        duration: 1.5, // Adjust for a smoother feel
         ease: "power2.out"
     });
 });
 
-// Touchscreen pinch-to-zoom logic
-let initialDistance = null;
-let initialScale = baseScale;
-
-container.addEventListener('touchstart', (event) => {
-    if (event.touches.length === 2) { // Two fingers for pinch
+container.addEventListener("touchstart", (event) => {
+    if (event.touches.length === 2) {
         initialDistance = getDistance(event.touches[0], event.touches[1]);
-        initialScale = baseScale;
+        initialScale = targetScale;
     }
     event.preventDefault();
 });
 
-container.addEventListener('touchmove', (event) => {
-    if (event.touches.length === 2) { // Two fingers for pinch
+container.addEventListener("touchmove", (event) => {
+    if (event.touches.length === 2) {
         const currentDistance = getDistance(event.touches[0], event.touches[1]);
-        const scaleFactor = currentDistance / initialDistance; // Calculate scale change
+        const scaleFactor = currentDistance / initialDistance;
 
-        baseScale = Math.max(minScale, initialScale * scaleFactor); // Apply the zoom while respecting the minimum scale
-        updateZoom();
+        targetScale = Math.max(minScale, initialScale * scaleFactor);
+
+        // Apply smooth zoom animation
+        gsap.to(container, {
+            scale: targetScale,
+            duration: 1.5,
+            ease: "power2.out"
+        });
     }
     event.preventDefault();
 });
