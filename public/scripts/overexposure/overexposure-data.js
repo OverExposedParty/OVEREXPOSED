@@ -235,9 +235,7 @@ function handleToucHold(event) {
     const normalizedX = (touchX / canvasWidth) * 2 - 1;
     const normalizedY = (touchY / canvasHeight) * 2 - 1;
 
-    if (touchRadius > maxTouchRadius) {
-        placeCard(event, normalizedX, normalizedY);
-    }
+
 }
 function placeCard(event, normalizedX, normalizedY) {
     const safeZone = document.querySelector(".safe-zone");
