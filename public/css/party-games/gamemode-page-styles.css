@@ -25,8 +25,10 @@ body {
     align-items: center;
     width: 100vw;
     box-sizing: border-box;
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight)); /* Subtracts header height */
-    margin-top: var(--headerheight); /* Pushes it down */
+    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    /* Subtracts header height */
+    margin-top: var(--headerheight);
+    /* Pushes it down */
 }
 
 .content {
@@ -35,8 +37,9 @@ body {
     align-items: center;
     justify-content: space-around;
     height: auto;
-    width: auto; /* Content width will adjust based on main image width */
-    max-height:auto;
+    width: auto;
+    /* Content width will adjust based on main image width */
+    max-height: auto;
 }
 
 .gamemode-text-container,
@@ -46,7 +49,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin:0.5vh 0;
+    margin: 0.5vh 0;
 }
 
 .main-image-container {
@@ -61,7 +64,8 @@ body {
 }
 
 .main-image {
-    width: 100%; /* Set a fixed width or use a percentage */
+    width: 100%;
+    /* Set a fixed width or use a percentage */
     height: auto;
 }
 
@@ -78,8 +82,10 @@ body {
 
 .card-type-text {
     position: absolute;
-    bottom: 2.5%; /* Slight offset from the bottom */
-    right: 5%; /* Slight offset from the right */
+    bottom: 2.5%;
+    /* Slight offset from the bottom */
+    right: 5%;
+    /* Slight offset from the right */
     font-size: 0.75rem;
     color: var(--primarypagecolour);
     font-family: LemonMilk;
@@ -102,6 +108,7 @@ body {
 .question-button:hover {
     background-color: #e64a19;
 }
+
 .text-container {
     position: absolute;
     top: 50%;
@@ -168,7 +175,8 @@ body {
     display: flex;
     gap: 5px;
 }
-.side-buttons.single{
+
+.side-buttons.single {
     height: auto;
     width: auto;
     right: 1.5%;
@@ -177,7 +185,9 @@ body {
     display: flex;
     gap: 5px;
 }
-.side-button,.tts-button {
+
+.side-button,
+.tts-button {
     cursor: pointer;
     width: 7.5vh;
     height: 7.5vh;
@@ -185,77 +195,90 @@ body {
     padding: 0.5vh;
     transition: width 0.3s, height 0.3s, padding 0.3s;
 }
-.side-button.active,.tts-button.active {
+
+.side-button.active,
+.tts-button.active {
     width: 8.5vh;
     height: 8.5vh;
     padding: 0;
 }
-.tts-button:hover,.side-button:hover {
+
+.tts-button:hover,
+.side-button:hover {
     width: 8.5vh;
     height: 8.5vh;
     padding: 0;
 }
+
 .side-button.disabled {
     color: #6e6e6e;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.question-zoomed-container{
-    background-color: var(--secondarybackgroundcolour); 
-    width:350px;
+.question-zoomed-container {
+    background-color: var(--secondarybackgroundcolour);
+    width: 350px;
     max-width: 75vw;
     border-radius: 50px;
-    position:absolute;
+    position: absolute;
     justify-content: center;
     align-items: center;
     top: 50%;
-    left: 50%; /* Center horizontally as well */
-    transform: translate(-50%, -50%); /* Center both vertically and horizontally */
-    z-index:900;
+    left: 50%;
+    /* Center horizontally as well */
+    transform: translate(-50%, -50%);
+    /* Center both vertically and horizontally */
+    z-index: 900;
     display: none;
     aspect-ratio: 9/16;
-    border:  var(--bordersize) solid var(--primarypagecolour);
+    border: var(--bordersize) solid var(--primarypagecolour);
 }
-.question-zoomed-container.active{
+
+.question-zoomed-container.active {
     display: block;
 }
-.question-zoomed-container h2{
-    margin-top:65%;
+
+.question-zoomed-container h2 {
+    margin-top: 65%;
     text-align: center;
     color: var(--primarypagecolour);
     padding: 5%;
 }
-.question-zoomed-container h3{
+
+.question-zoomed-container h3 {
     text-align: center;
     color: #ff5f5f;
     padding: 5%;
 }
 
 @media (orientation: portrait) {
-    @media (orientation: portrait) {
-        .gamemode-text-container,
-        .main-image-container,
-        .button-container {
-            width: 80vw; /* Adjust the width dynamically */
-            max-width: 300px; /* Prevent elements from getting too big */
-        }
-    
-        .text-container {
-            font-size: 175%; /* Reduce font size */
-            width: 80%; /* Keep text contained */
-        }
-    
-        .side-buttons {
-            width: auto;
-            height: auto;
-            right: 2%;
-        }
-    
-        .side-button, .tts-button {
-            width: 6vh;
-            height: 6vh;
-        }
+
+    .gamemode-text-container,
+    .main-image-container,
+    .button-container {
+        width: 80vw;
+        max-width: 300px;
+        background-color: aqua;
     }
-    
+
+    .text-container {
+        font-size: 175%;
+        /* Reduce font size */
+        width: 80%;
+        /* Keep text contained */
+    }
+
+    .side-buttons {
+        width: auto;
+        height: auto;
+        right: 2%;
+    }
+
+    .side-button,
+    .tts-button {
+        width: 6vh;
+        height: 6vh;
+    }
+
 }
