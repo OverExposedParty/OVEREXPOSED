@@ -261,12 +261,14 @@ body {
         max-width: 300px;
         background-color: aqua;
     }
+    .gamemode-text-svg {
+        width: 100%; /* Make the image take up 100% of the container's width */
+        height: auto; /* Maintain the aspect ratio */
+    }
 
     .text-container {
         font-size: 175%;
-        /* Reduce font size */
         width: 80%;
-        /* Keep text contained */
     }
 
     .side-buttons {
