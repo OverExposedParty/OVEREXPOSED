@@ -196,7 +196,6 @@ function getMiddlePoint(touches) {
 }
 
 function updateZoom() {
-    // Combine browser zoom and custom scale
     let browserZoom = getBrowserZoom();
     let finalScale = baseScale * browserZoom;
 
