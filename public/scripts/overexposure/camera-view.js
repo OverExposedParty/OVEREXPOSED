@@ -64,11 +64,13 @@ document.addEventListener("mousemove", (event) => {
 document.addEventListener("mouseup", () => { isDragging = false; });
 
 // Touchscreen swipe logic
+let activeFingers = 0;
 let touchStartX = 0;
 let touchStartY = 0;
 let isTouchDragging = false;
 
 container.addEventListener('touchstart', (event) => {
+    activeFingers = event.touches.length;
     if (event.touches.length === 1) { // One finger swipe
         enableTouchControls();
         isTouchDragging = true;
@@ -84,8 +86,11 @@ container.addEventListener('touchmove', (event) => {
     }
 });
 
-container.addEventListener('touchend', () => {
-    isTouchDragging = false;
+container.addEventListener('touchend', (event) => {
+    activeFingers = event.touches.length;
+    if (activeFingers === 0) {
+        isTouchDragging = false;
+    }
 });
 
 // Smooth Animation with GSAP
