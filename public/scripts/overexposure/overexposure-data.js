@@ -173,39 +173,18 @@ function handleDoubleClick(event) {
     placeCard(event, normalizedX, normalizedY);
 }
 
-function handleTouchMove(event) {
-    const touch = event.touches[0];
-    const deltaX = Math.abs(touch.clientX - touchStartX);
-    const deltaY = Math.abs(touch.clientY - touchStartY);
-
-    // If the touch moves too far, cancel the long press
-    if (deltaX > 50 || deltaY > 50) {
-        touchMoved = true;
-        clearTimeout(touchTimer); // Cancel the long press timer
-    }
-}
-
 function handleTouchStart(event) {
-    if (event.touches.length === 1) {
-        const touch = event.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-        touchMoved = false; // Reset movement flag
-
-        touchTimer = setTimeout(() => {
-            if (!touchMoved) {
-                handleTouchHold(event); // Trigger on long press if no movement
-            }
-        }, 500); // Adjust duration for long press detection (e.g., 500ms)
-    }
+    console.log("touch started");
+    touchTimer = setTimeout(() => {
+        handleToucHold(event); // Trigger on long press
+    }, 500); // Adjust duration for long press detection (e.g., 500ms)
 }
-
 
 function handleTouchEnd() {
     clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
 }
 
-function handleTouchHold(event) {
+function handleToucHold(event) {
     event.preventDefault();
 
     const touch = event.touches[0] || event.changedTouches[0];
@@ -219,6 +198,7 @@ function handleTouchHold(event) {
 
     const normalizedX = (touchX / canvasWidth) * 2 - 1;
     const normalizedY = (touchY / canvasHeight) * 2 - 1;
+    
 
     placeCard(event, normalizedX, normalizedY);
 }
@@ -244,7 +224,6 @@ function placeCard(event, normalizedX, normalizedY) {
 
 // Attach touch event listener
 wrapper.addEventListener("touchstart", handleTouchStart);
-wrapper.addEventListener("touchmove", handleTouchMove);
 wrapper.addEventListener("touchend", handleTouchEnd);
 wrapper.addEventListener("dblclick", handleDoubleClick);
 
