@@ -198,7 +198,7 @@ function handleTouchStart(event) {
         singleTouchPosition.y = cameraPosition.y;
         touchTimer = setTimeout(() => {
             handleToucHold(event); // Trigger on long press
-        }, 500); // Adjust duration for long press detection (e.g., 500ms)
+        }, 1000); // Adjust duration for long press detection (e.g., 500ms)
     }
     else {
         if (touchTimer) {
