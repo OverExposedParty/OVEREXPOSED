@@ -125,14 +125,29 @@ document.addEventListener('wheel', (event) => {
 });
 
 container.addEventListener("touchstart", (event) => {
+    enableTouchControls();
+    event.preventDefault();
     if (event.touches.length === 2) {
         initialDistance = getDistance(event.touches[0], event.touches[1]);
         initialScale = targetScale;
     }
-    event.preventDefault();
+
+    if (event.touches.length === 1) { 
+        // Single finger swipe
+        isTouchDragging = true;
+        touchStartX = event.touches[0].clientX - cameraPosition.x;
+        touchStartY = event.touches[0].clientY - cameraPosition.y;
+    } else if (event.touches.length > 1) {
+        // Multiple fingers: calculate middle point
+        isTouchDragging = true;
+        const midPoint = getMiddlePoint(event.touches);
+        touchStartX = midPoint.x - cameraPosition.x;
+        touchStartY = midPoint.y - cameraPosition.y;
+    }
 });
 
 container.addEventListener("touchmove", (event) => {
+    event.preventDefault();
     if (event.touches.length === 2) {
         const currentDistance = getDistance(event.touches[0], event.touches[1]);
         const scaleFactor = currentDistance / initialDistance;
@@ -146,13 +161,36 @@ container.addEventListener("touchmove", (event) => {
             ease: "power2.out"
         });
     }
-    event.preventDefault();
+
+
+    if (isTouchDragging) {
+        let midPoint;
+        if (event.touches.length === 1) {
+            midPoint = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+        } else {
+            midPoint = getMiddlePoint(event.touches);
+        }
+
+        cameraPosition.x = midPoint.x - touchStartX;
+        cameraPosition.y = midPoint.y - touchStartY;
+    }
 });
 
 function getDistance(touch1, touch2) {
     const dx = touch2.clientX - touch1.clientX;
     const dy = touch2.clientY - touch1.clientY;
     return Math.sqrt(dx * dx + dy * dy);
+}
+function getMiddlePoint(touches) {
+    let sumX = 0, sumY = 0;
+    for (let i = 0; i < touches.length; i++) {
+        sumX += touches[i].clientX;
+        sumY += touches[i].clientY;
+    }
+    return {
+        x: sumX / touches.length,
+        y: sumY / touches.length
+    };
 }
 
 function updateZoom() {
