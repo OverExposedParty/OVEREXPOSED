@@ -2,8 +2,27 @@
     --canvasHeight: 5000px;
     --canvasWidth: 5000px;
     --cardWidth: 200px;
-    --cardRatio: 1.64044950946;
+    --cardRatio: 1/1.64044950946;
+
+    --cardtemplate: url(/images/overexposure/card-template.svg);
 }
+
+.create-card {
+    aspect-ratio: var(--cardRatio);
+    width: 100px;
+    position: absolute;
+    background-image: var(--cardtemplate);
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 300;
+    transition: width 1s linear;
+}
+
+.create-card.grow {
+    width: 200px;
+}
+
+
 img {
     pointer-events: none;
     user-select: none;

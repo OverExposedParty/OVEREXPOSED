@@ -47,7 +47,10 @@ function calculateTouchDistance(cameraPosition, singleTouchPosition) {
 
 let count = 0;
 let intervalId = null;
+
+let initiateHoldTimer
 let touchTimer;
+let creatingCard;
 
 function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -193,43 +196,92 @@ function handleDoubleClick(event) {
 
 function handleTouchStart(event) {
     if (event.touches.length === 1) {
-        console.log("touch started");
-        singleTouchPosition.x = cameraPosition.x;
-        singleTouchPosition.y = cameraPosition.y;
+
+        initiateHoldTimer = setTimeout(() => {
+            const touch = event.touches[0] || event.changedTouches[0];
+            const rect = floatingContainer.getBoundingClientRect();
+            const computedStyle = getComputedStyle(floatingContainer);
+            const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
+        
+            const touchX = (touch.clientX - rect.left) / scale;
+            const touchY = (touch.clientY - rect.top) / scale;
+    
+            singleTouchPosition.x = cameraPosition.x;
+            singleTouchPosition.y = cameraPosition.y;
+            
+            creatingCard = document.createElement('div');
+            creatingCard.classList.add('create-card');
+            setTimeout(() => {
+                creatingCard.classList.add('grow');
+            }, 10);
+            
+            // Convert positions to pixel values
+            creatingCard.style.left = `${touchX}px`;
+            creatingCard.style.top = `${touchY}px`;
+            
+            floatingContainer.appendChild(creatingCard);
+        }, 250);
+
         touchTimer = setTimeout(() => {
             handleToucHold(event); // Trigger on long press
-        }, 1000); // Adjust duration for long press detection (e.g., 500ms)
+        }, 1250);
+
+        // Continuously monitor touch distance during the touch event
+        wrapper.addEventListener('touchmove', monitorTouchDistance);
     }
     else {
         if (touchTimer) {
-            clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
+            clearTimeout(initiateHoldTimer);
+            clearTimeout(touchTimer);
         }
     }
 }
 
+function monitorTouchDistance(event) {
+    const touch = event.touches[0] || event.changedTouches[0];
+    const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
+
+    // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
+    if (touchRadius > maxTouchRadius) {
+        if(creatingCard){
+            creatingCard.remove();
+            creatingCard = null;
+        }
+        clearTimeout(initiateHoldTimer);
+        clearTimeout(touchTimer);
+        wrapper.removeEventListener('touchmove', monitorTouchDistance);
+    }
+}
+
+
 
 function handleTouchEnd() {
-    clearTimeout(touchTimer); // Cancel long press if the user lifts finger early
+    clearTimeout(initiateHoldTimer);
+    clearTimeout(touchTimer);
+    if(creatingCard){
+        creatingCard.remove();
+        creatingCard = null;
+    }
 }
 
 function handleToucHold(event) {
     event.preventDefault();
     const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
-
+    wrapper.removeEventListener('touchmove', monitorTouchDistance);
     // Add a safety check if the touch radius is too small
     if (touchRadius > maxTouchRadius) {
         console.log("touchRadius is too small");
-
-        console.log("maxTouchRadius: " + maxTouchRadius)
-        console.log("touchRadius: " + touchRadius);
+        if(creatingCard){
+            creatingCard.remove();
+            creatingCard = null;
+        }
         
         return;
     }
-    console.log("maxTouchRadius: " + maxTouchRadius)
-    console.log("touchRadius: " + touchRadius);
+    //console.log("maxTouchRadius: " + maxTouchRadius)
+    //console.log("touchRadius: " + touchRadius);
 
     const touch = event.touches[0] || event.changedTouches[0];
-    console.log(touch);
     const rect = floatingContainer.getBoundingClientRect();
     const computedStyle = getComputedStyle(floatingContainer);
     const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
@@ -249,9 +301,17 @@ function placeCard(event, normalizedX, normalizedY) {
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
         if (isTouchActive) {
             showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
+            if(creatingCard){
+                creatingCard.remove();
+                creatingCard = null;
+            }
         }
         else {
             showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+            if(creatingCard){
+                creatingCard.remove();
+                creatingCard = null;
+            }
         }
         return;
     }
