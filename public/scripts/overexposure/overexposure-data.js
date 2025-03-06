@@ -47,6 +47,9 @@ function calculateTouchDistance(cameraPosition, singleTouchPosition) {
 let count = 0;
 let intervalId = null;
 
+let touchStartTime = null;
+let touchDuration = 1000;
+
 let initiateHoldTimer
 let touchTimer;
 let creatingCard;
@@ -171,8 +174,23 @@ function createFloatingButton(row, draft = false) {
     button.addEventListener("click", () => {
         selectCard(button, false)
     });
+
     button.addEventListener("touchstart", () => {
-        selectCard(button, false)
+        touchStartTime = Date.now(); // Record the time when the touch starts
+    });
+
+    button.addEventListener("touchend", (event) => {
+        const touchEndTime = Date.now(); // Record the time when the touch ends
+        const touchHeldDuration = touchEndTime - touchStartTime; // Calculate the duration of the touch
+
+        // If the button was held down long enough, trigger the action
+        const touch = event.touches[0] || event.changedTouches[0];
+        const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
+
+        // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
+        if (touchRadius > maxTouchRadius && touchHeldDuration >= touchDuration) {
+            selectCard(button, false);
+        }
     });
 
     if (draft) {
@@ -204,23 +222,23 @@ function handleTouchStart(event) {
             const rect = floatingContainer.getBoundingClientRect();
             const computedStyle = getComputedStyle(floatingContainer);
             const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
-        
+
             const touchX = (touch.clientX - rect.left) / scale;
             const touchY = (touch.clientY - rect.top) / scale;
-    
+
             singleTouchPosition.x = cameraPosition.x;
             singleTouchPosition.y = cameraPosition.y;
-            
+
             creatingCard = document.createElement('div');
             creatingCard.classList.add('create-card');
             setTimeout(() => {
                 creatingCard.classList.add('grow');
             }, 10);
-            
+
             // Convert positions to pixel values
             creatingCard.style.left = `${touchX}px`;
             creatingCard.style.top = `${touchY}px`;
-            
+
             floatingContainer.appendChild(creatingCard);
         }, 250);
 
@@ -245,7 +263,7 @@ function monitorTouchDistance(event) {
 
     // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
     if (touchRadius > maxTouchRadius) {
-        if(creatingCard){
+        if (creatingCard) {
             creatingCard.remove();
             creatingCard = null;
         }
@@ -260,7 +278,7 @@ function monitorTouchDistance(event) {
 function handleTouchEnd() {
     clearTimeout(initiateHoldTimer);
     clearTimeout(touchTimer);
-    if(creatingCard){
+    if (creatingCard) {
         creatingCard.remove();
         creatingCard = null;
     }
@@ -273,11 +291,11 @@ function handleToucHold(event) {
     // Add a safety check if the touch radius is too small
     if (touchRadius > maxTouchRadius) {
         console.log("touchRadius is too small");
-        if(creatingCard){
+        if (creatingCard) {
             creatingCard.remove();
             creatingCard = null;
         }
-        
+
         return;
     }
     //console.log("maxTouchRadius: " + maxTouchRadius)
@@ -303,14 +321,14 @@ function placeCard(event, normalizedX, normalizedY) {
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
         if (isTouchActive) {
             showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
-            if(creatingCard){
+            if (creatingCard) {
                 creatingCard.remove();
                 creatingCard = null;
             }
         }
         else {
             showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
-            if(creatingCard){
+            if (creatingCard) {
                 creatingCard.remove();
                 creatingCard = null;
             }
