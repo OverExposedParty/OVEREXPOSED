@@ -217,12 +217,17 @@ function handleToucHold(event) {
     const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
 
     // Add a safety check if the touch radius is too small
-    if (touchRadius < maxTouchRadius) {
+    if (touchRadius > maxTouchRadius) {
         console.log("touchRadius is too small");
+
+        console.log("maxTouchRadius: " + maxTouchRadius)
+        console.log("touchRadius: " + touchRadius);
+        
         return;
     }
+    console.log("maxTouchRadius: " + maxTouchRadius)
+    console.log("touchRadius: " + touchRadius);
 
-    console.log(touchRadius);
     const touch = event.touches[0] || event.changedTouches[0];
     console.log(touch);
     const rect = floatingContainer.getBoundingClientRect();
@@ -235,7 +240,7 @@ function handleToucHold(event) {
     const normalizedX = (touchX / canvasWidth) * 2 - 1;
     const normalizedY = (touchY / canvasHeight) * 2 - 1;
 
-
+    placeCard(event, normalizedX, normalizedY);
 }
 function placeCard(event, normalizedX, normalizedY) {
     const safeZone = document.querySelector(".safe-zone");
