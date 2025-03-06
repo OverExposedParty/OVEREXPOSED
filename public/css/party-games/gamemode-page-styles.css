@@ -257,9 +257,8 @@ body {
     .gamemode-text-container,
     .main-image-container,
     .button-container {
-        width: 80vw;
-        max-width: 300px;
-        background-color: aqua;
+        width: 300px;
+        max-width: 60vw;
     }
     .gamemode-text-svg {
         width: 100%; /* Make the image take up 100% of the container's width */
