@@ -207,6 +207,12 @@ function createFloatingButton(row, draft = false) {
             button.classList.add('touchhover');
         }, touchDuration);
     });
+    button.addEventListener("touchmove", () => {
+        const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
+        if (touchRadius > maxTouchRadius) {
+            button.classList.remove('touchhover');
+        }
+    });
 
     button.addEventListener("touchend", (event) => {
         const touchEndTime = Date.now(); // Record the time when the touch ends
@@ -245,7 +251,7 @@ function handleDoubleClick(event) {
 }
 
 function handleTouchStart(event) {
-    if (event.touches.length === 1 && ((safeZone && !safeZone.contains(event.target)) && (!isClickInsideContainer(event, document.querySelectorAll('.no-place')) && !isClickInsideContainer(event, document.querySelectorAll('.floating-button'))))) {
+    if (event.touches.length === 1) {
         initiateHoldTimer = setTimeout(() => {
             const touch = event.touches[0] || event.changedTouches[0];
             const rect = floatingContainer.getBoundingClientRect();
