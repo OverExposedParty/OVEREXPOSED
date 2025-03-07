@@ -58,11 +58,6 @@
         }
     </style>
 </head>
-
-<script>
-    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/overexposed.png')");
-</script>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
@@ -76,7 +71,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -115,13 +111,13 @@
             if (card.classList.contains('flipped')) {
                 switch (index) {
                     case 0:
-                        transitionSplashScreen('party-games', "url('/images/splash-screens/party-games.png')")
+                        transitionSplashScreen('party-games', "/images/splash-screens/party-games.png")
                         break;
                     case 1:
-                        transitionSplashScreen('insights', "url('/images/splash-screens/insights.png')")
+                        transitionSplashScreen('insights', "/images/splash-screens/insights.png")
                         break;
                     case 2:
-                        transitionSplashScreen('overexposure', "url('/images/splash-screens/overexposure.png')")
+                        transitionSplashScreen('overexposure', "/images/splash-screens/overexposure.png")
                         break;
                 }
             } else {

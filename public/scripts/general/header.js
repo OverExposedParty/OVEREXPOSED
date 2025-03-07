@@ -44,28 +44,28 @@ window.onload = function() {
 
     if (logoContainer) {
         logoContainer.addEventListener('click', function() {
-            transitionSplashScreen('/', `url('${window.location.origin}/images/splash-screens/overexposed.png')`);
+            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
         });
     }
     
     if (partyGamesLink) {
         partyGamesLink.addEventListener('click', function() {
-            transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')");
+            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
         });
     }
     if (overexposureLink) {
         overexposureLink.addEventListener('click', function() {
-            transitionSplashScreen('/overexposure', "url('/images/splash-screens/overexposure.png')");
+            transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
         });
     }
     if (insightsLink) {
         insightsLink.addEventListener('click', function() {
-            transitionSplashScreen('/insights', "url('/images/splash-screens/insights.png')");
+            transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
         });
     }
     if (whatIsOverexposedLink) {
         whatIsOverexposedLink.addEventListener('click', function() {
-            transitionSplashScreen('/what-is-overexposed', "url('/images/splash-screens/what-is-overexposed.png')");
+            transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
         });
     }
     console.log(whatIsOverexposedLink);
@@ -301,13 +301,10 @@ function handleTTSButtons(buttons) {
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
 window.addEventListener('load', function () {
-    const container = document.createElement('div');
+    const container = document.getElementById("splash-screen-container");
     const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
-    container.className = 'splash-screen-container';
 
-    container.appendChild(heading);
 
-    document.body.appendChild(container);
 
     setTimeout(function () {
         container.classList.add('center');
@@ -408,9 +405,11 @@ waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
 }, 15000);
 
 function transitionSplashScreen(link,splashScreen) {
-    document.documentElement.style.setProperty('--splashscreen',splashScreen);
     const container = document.createElement('div');
     container.className = 'splash-screen-container down'; 
+    const img = document.createElement('img');
+    img.src = splashScreen;
+    container.appendChild(img);
     document.body.appendChild(container);
 
     setTimeout(() => {

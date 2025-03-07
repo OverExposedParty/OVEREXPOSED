@@ -57,9 +57,6 @@
         }
     </style>
 </head>
-<script>
-    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/overexposure.png')");
-</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
@@ -73,7 +70,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposure.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposure.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -102,7 +100,7 @@
         <div id="floating-container" class="floating-container">
             <div class="safe-zone" id="safe-zone"></div>
             <h2>Welcome to OVEREXPOSURE</h2>
-            <p id="computer-controls">
+            <p id="computer-controls" class="active">
                 Hold <highlight>Middle Mouse Button</highlight> and drag to traverse
                 <br>
                 Use <highlight>Scroll Wheel</highlight> to zoom in and out
@@ -112,7 +110,7 @@
                 Double click <highlight>Left Mouse Button</highlight> to add a card
             </p>
 
-            <p class="active" id="mobile-controls">
+            <p id="mobile-controls">
                 Swipe with one <highlight>finger</highlight> to traverse
                 <br>
                 Pinch with two <highlight>fingers</highlight> to zoom in and out

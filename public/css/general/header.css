@@ -6,8 +6,6 @@
     --warningcolour: #FF3333;
     --bordersize: 5px;
     --headerheight: 5vh;
-    --splashscreen: url('/images/splash-screens/overexposed.png');
-    --splashscreennext: url('/images/splash-screens/truth-or-dare.png');
 
     --tiktokicon: url(/images/icons/overexposed/tik-tok-icon.svg);
     --instagramicon: url(/images/icons/overexposed/instagram-icon.svg);
@@ -535,7 +533,8 @@ input:checked+.slider:before {
     }
 }
 
-.splash-screen-container,.splash-screen-container-static {
+.splash-screen-container,
+.splash-screen-container-static {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -546,15 +545,17 @@ input:checked+.slider:before {
     justify-content: center;
     align-items: center;
     opacity: 1;
-
-    background-color: #202020;
-    background-image: var(--splashscreen);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: auto 100%;
     transition: top 0.5s ease-in-out;
-    will-change: opacity, transform;
+    overflow: hidden;
 }
+
+.splash-screen-container img,
+.splash-screen-container-static img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
 
 .splash-screen-container {
     right: 0;
@@ -573,7 +574,6 @@ input:checked+.slider:before {
 @media (orientation: portrait) {
     .splash-screen-container img {
         height: 100%;
-        width: 100%;
     }
 
     .splash-screen-container.center {

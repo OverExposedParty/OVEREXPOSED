@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateStartGameButton();
 
     backButton.addEventListener('click', () => {
-        transitionSplashScreen('/party-games', "url('/images/splash-screens/party-games.png')")
+        transitionSplashScreen('/party-games', "/images/splash-screens/party-games.png")
     });
 
     startGameButton.addEventListener('click', () => {
@@ -150,11 +150,11 @@ document.addEventListener('DOMContentLoaded', function () {
             warningBox.classList.add('active');
             overlay.classList.add('active');
         } else {
-            transitionSplashScreen(startGameButton.id, getComputedStyle(document.documentElement).getPropertyValue('--splashscreennext'))
+            transitionSplashScreen(startGameButton.id, `/images/splash-screens/${startGameButton.id}.png`);
         }
     });
     warningStartButton.addEventListener('click', () => {
-        transitionSplashScreen(startGameButton.id,getComputedStyle(document.documentElement).getPropertyValue('--splashscreennext'))
+        transitionSplashScreen(startGameButton.id, `/images/splash-screens/${startGameButton.id}.png`);
     });
 
 });

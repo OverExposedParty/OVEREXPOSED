@@ -60,11 +60,6 @@
         }
     </style>
 </head>
-
-<script>
-    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/party-games.png')");
-</script>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
 <script>
@@ -78,7 +73,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/party-games.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/party-games.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -153,16 +149,16 @@
             if (card.classList.contains('flipped')) {
                 switch (index) {
                     case 0:
-                        transitionSplashScreen('truth-or-dare-settings', "url('/images/splash-screens/truth-or-dare-settings.png')")
+                        transitionSplashScreen('truth-or-dare-settings', "/images/splash-screens/truth-or-dare-settings.png")
                         break;
                     case 1:
-                        transitionSplashScreen('paranoia-settings', "url('/images/splash-screens/paranoia-settings.png')")
+                        transitionSplashScreen('paranoia-settings', "images/splash-screens/paranoia-settings.png")
                         break;
                     case 2:
-                        transitionSplashScreen('never-have-i-ever-settings', "url('/images/splash-screens/never-have-i-ever-settings.png')")
+                        transitionSplashScreen('never-have-i-ever-settings', "/images/splash-screens/never-have-i-ever-settings.png")
                         break;
                     case 3:
-                        transitionSplashScreen('most-likely-to-settings', "url('/images/splash-screens/most-likely-to-settings.png')")
+                        transitionSplashScreen('most-likely-to-settings', "/images/splash-screens/most-likely-to-settings.png")
                         break;
                     case 4:
                         //window.location.href = 'coming-soon-settings';
@@ -213,7 +209,7 @@
     }
 
     backButton.addEventListener('click', () => {
-        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
     });
 
 

@@ -66,7 +66,7 @@ function vibrateOnClick() {
 }
 
 document.querySelector('.back-button').addEventListener('click', () => {
-    transitionSplashScreen(`${gamemode}-settings`, `url('/images/splash-screens/${gamemode}-settings.png')`);
+    transitionSplashScreen(`${gamemode}-settings`, `/images/splash-screens/${gamemode}-settings.png`);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {

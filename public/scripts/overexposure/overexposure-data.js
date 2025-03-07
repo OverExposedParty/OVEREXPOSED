@@ -586,6 +586,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Run the function on page load
+window.addEventListener("load", detectTouchScreen);
+
 window.addEventListener("touchstart", detectTouchScreen);
 window.addEventListener("click", detectTouchScreen);
 

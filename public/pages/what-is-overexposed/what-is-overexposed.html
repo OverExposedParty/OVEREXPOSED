@@ -107,7 +107,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/what-is-overexposed.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/what-is-overexposed.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -365,7 +366,7 @@
     });
 
     backButton.addEventListener('click', () => {
-        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        transitionSplashScreen('/', '/images/splash-screens/overexposed.png')
     });
 
 

@@ -68,7 +68,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/insights.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/insights.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -294,7 +295,7 @@
         readMoreButton.style.margin = '0 auto';
 
         readMoreButton.addEventListener('click', () => {
-            transitionSplashScreen(`insights${blog['file-name']}`, `url('/images/splash-screens/blogs/${blog['splash-screen']}')`);
+            transitionSplashScreen(`insights${blog['file-name']}`, `/images/splash-screens/blogs/${blog['splash-screen']}`);
         });
 
         blogContentDiv.appendChild(header);
@@ -449,7 +450,7 @@
     document.addEventListener('DOMContentLoaded', moveSearchBarBasedOnOrientation);
 
     backButton.addEventListener('click', () => {
-        transitionSplashScreen('/', "url('/images/splash-screens/overexposed.png')")
+        transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
     });
 
 
