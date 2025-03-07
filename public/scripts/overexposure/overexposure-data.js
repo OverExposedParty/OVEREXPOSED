@@ -252,6 +252,13 @@ function handleDoubleClick(event) {
 
 function handleTouchStart(event) {
     if (event.touches.length === 1) {
+
+        if(isClickInsideContainer(event, document.querySelectorAll('.floating-button'))){
+            return;
+        }
+        if(isClickInsideContainer(event, document.querySelectorAll('.no-place'))){
+            return;
+        }
         initiateHoldTimer = setTimeout(() => {
             const touch = event.touches[0] || event.changedTouches[0];
             const rect = floatingContainer.getBoundingClientRect();
@@ -279,7 +286,7 @@ function handleTouchStart(event) {
 
         touchTimer = setTimeout(() => {
             if (creatingCard) {
-                handleToucHold(event);
+                handleTouchHold(event);
             }
         }, 1250);
     }
@@ -317,13 +324,12 @@ function handleTouchEnd() {
     }
 }
 
-function handleToucHold(event) {
+function handleTouchHold(event) {
     event.preventDefault();
     const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
     wrapper.removeEventListener('touchmove', monitorTouchDistance);
     // Add a safety check if the touch radius is too small
     if ((touchRadius > maxTouchRadius) && ((safeZone && !safeZone.contains(event.target)) && (!isClickInsideContainer(event, document.querySelectorAll('.no-place')) && !isClickInsideContainer(event, document.querySelectorAll('.floating-button'))))) {
-        console.log("touchRadius is too small");
         if (creatingCard) {
             creatingCard.remove();
             creatingCard = null;
