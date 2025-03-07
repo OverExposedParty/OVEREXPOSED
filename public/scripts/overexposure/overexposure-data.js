@@ -4,6 +4,11 @@ const googleScriptSaveCardURL = "https://script.google.com/macros/s/AKfycbzdAGne
 const canvasWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasWidth').trim(), 10);
 const canvasHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasHeight').trim(), 10);
 
+const cardWidth = getComputedStyle(document.documentElement).getPropertyValue('--cardWidth');
+const cardWidthValue = parseFloat(cardWidth);
+
+const safeZone = document.querySelector(".safe-zone");
+
 const titleText = document.querySelector(".title-text");
 const contentsContainerText = document.querySelector('.contents-container p');
 
@@ -12,9 +17,6 @@ const contentsTextEditor = document.getElementById("contents-text-editor");
 const floatingContainer = document.getElementById("floating-container");
 
 const overexposureContainer = document.getElementById("overexposure-container");
-const exitMenuContainer = document.getElementById("exit-menu-container");
-const incompletePostContainer = document.getElementById("publish-error-container");
-const uploadingPostContainer = document.getElementById("uploading-post-container");
 
 const uploadingText = document.getElementById("uploading-text");
 
@@ -24,9 +26,19 @@ const titleTextInput = document.getElementById("title-text-editor-input");
 const exitMenuYes = document.getElementById("exit-menu-button-yes");
 const exitMenuNo = document.getElementById("exit-menu-button-no");
 
+const submitPostYes = document.getElementById("submit-post-yes");
+const submitPostNo = document.getElementById("submit-post-no");
+
 const publishButton = document.querySelector(".overexposure-publish-button");
 
+const exitMenuContainer = document.getElementById("exit-menu-container");
+const incompletePostContainer = document.getElementById("publish-error-container");
+const uploadingPostContainer = document.getElementById("uploading-post-container");
+const areYouSurePostContainer = document.getElementById("are-you-sure-container");
+
+
 const maxTouchRadius = 50;
+let closeOverexposureContainer = false;
 
 let singleTouchPosition = {
     x: 0,
@@ -41,14 +53,11 @@ function calculateTouchDistance(cameraPosition, singleTouchPosition) {
     return Math.sqrt(dx * dx + dy * dy); // Return Euclidean distance in 2D
 }
 
-
-
-
 let count = 0;
 let intervalId = null;
 
 let touchStartTime = null;
-let touchDuration = 1000;
+let touchDuration = 500;
 
 let initiateHoldTimer
 let touchTimer;
@@ -69,6 +78,16 @@ function updateEllipses() {
 
 function isIntervalActive() {
     return intervalId !== null;
+}
+
+function isClickInsideContainer(event, containerTargets) {
+    if (containerTargets.length === 0) {
+        return false;
+    }
+
+    return Array.from(containerTargets).some(containerTarget =>
+        containerTarget.contains(event.target)
+    );
 }
 
 function showFloatingText(message, x, y) {
@@ -143,17 +162,22 @@ function createFloatingButton(row, draft = false) {
     button.setAttribute("data-title", title);
     button.setAttribute("data-text", text);
 
+    const noPlaceDiv = document.createElement("div");
+    noPlaceDiv.classList.add("no-place");
+    noPlaceDiv.appendChild(button);
+    floatingContainer.appendChild(noPlaceDiv);
+
     // Append elements
     button.appendChild(img);
     button.appendChild(span);
     floatingContainer.appendChild(button);
 
-    // Normalize positions and set styles
-    const normalizedX = (parseFloat(xPosition) + 1) / 2;
-    const normalizedY = (parseFloat(yPosition) + 1) / 2;
+    // Directly use the raw xPosition and yPosition without normalization
+    button.style.left = `${parseFloat(xPosition)}px`;
+    button.style.top = `${parseFloat(yPosition)}px`;
 
-    button.style.left = `${normalizedX * canvasWidth}px`;
-    button.style.top = `${normalizedY * canvasHeight}px`;
+    noPlaceDiv.style.left = `${parseFloat(xPosition) - cardWidthValue / 4}px`;
+    noPlaceDiv.style.top = `${parseFloat(yPosition) - cardWidthValue / 4}px`;
 
     // Apply animation
     const speed = Math.random() * 5 + 2;
@@ -177,27 +201,36 @@ function createFloatingButton(row, draft = false) {
 
     button.addEventListener("touchstart", () => {
         touchStartTime = Date.now(); // Record the time when the touch starts
+        singleTouchPosition.x = cameraPosition.x;
+        singleTouchPosition.y = cameraPosition.y;
+        setTimeout(() => {
+            button.classList.add('touchhover');
+        }, touchDuration);
     });
 
     button.addEventListener("touchend", (event) => {
         const touchEndTime = Date.now(); // Record the time when the touch ends
         const touchHeldDuration = touchEndTime - touchStartTime; // Calculate the duration of the touch
-
+        button.classList.remove('touchhover');
         // If the button was held down long enough, trigger the action
         const touch = event.touches[0] || event.changedTouches[0];
         const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
+        console.log(touchRadius)
+
 
         // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
-        if (touchRadius > maxTouchRadius && touchHeldDuration >= touchDuration) {
+        if (touchRadius < maxTouchRadius && touchHeldDuration >= touchDuration) {
             selectCard(button, false);
         }
     });
 
     if (draft) {
         button.classList.add("draft");
+        noPlaceDiv.classList.add("draft");
         selectCard(button, true)
     }
 }
+
 function handleDoubleClick(event) {
     if (isTouchActive) return;
 
@@ -208,15 +241,11 @@ function handleDoubleClick(event) {
     const clickX = (event.clientX - rect.left) / scale;
     const clickY = (event.clientY - rect.top) / scale;
 
-    const normalizedX = (clickX / canvasWidth) * 2 - 1;
-    const normalizedY = (clickY / canvasHeight) * 2 - 1;
-
-    placeCard(event, normalizedX, normalizedY);
+    placeCard(event, clickX, clickY);
 }
 
 function handleTouchStart(event) {
-    if (event.touches.length === 1) {
-
+    if (event.touches.length === 1 && ((safeZone && !safeZone.contains(event.target)) && (!isClickInsideContainer(event, document.querySelectorAll('.no-place')) && !isClickInsideContainer(event, document.querySelectorAll('.floating-button'))))) {
         initiateHoldTimer = setTimeout(() => {
             const touch = event.touches[0] || event.changedTouches[0];
             const rect = floatingContainer.getBoundingClientRect();
@@ -243,11 +272,10 @@ function handleTouchStart(event) {
         }, 250);
 
         touchTimer = setTimeout(() => {
-            handleToucHold(event); // Trigger on long press
+            if (creatingCard) {
+                handleToucHold(event);
+            }
         }, 1250);
-
-        // Continuously monitor touch distance during the touch event
-        wrapper.addEventListener('touchmove', monitorTouchDistance);
     }
     else {
         if (touchTimer) {
@@ -255,6 +283,7 @@ function handleTouchStart(event) {
             clearTimeout(touchTimer);
         }
     }
+    wrapper.addEventListener('touchmove', monitorTouchDistance);
 }
 
 function monitorTouchDistance(event) {
@@ -273,8 +302,6 @@ function monitorTouchDistance(event) {
     }
 }
 
-
-
 function handleTouchEnd() {
     clearTimeout(initiateHoldTimer);
     clearTimeout(touchTimer);
@@ -289,7 +316,7 @@ function handleToucHold(event) {
     const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
     wrapper.removeEventListener('touchmove', monitorTouchDistance);
     // Add a safety check if the touch radius is too small
-    if (touchRadius > maxTouchRadius) {
+    if ((touchRadius > maxTouchRadius) && ((safeZone && !safeZone.contains(event.target)) && (!isClickInsideContainer(event, document.querySelectorAll('.no-place')) && !isClickInsideContainer(event, document.querySelectorAll('.floating-button'))))) {
         console.log("touchRadius is too small");
         if (creatingCard) {
             creatingCard.remove();
@@ -309,17 +336,13 @@ function handleToucHold(event) {
     const touchX = (touch.clientX - rect.left) / scale;
     const touchY = (touch.clientY - rect.top) / scale;
 
-    const normalizedX = (touchX / canvasWidth) * 2 - 1;
-    const normalizedY = (touchY / canvasHeight) * 2 - 1;
-
-    placeCard(event, normalizedX, normalizedY);
+    placeCard(event, touchX, touchY);
 }
-function placeCard(event, normalizedX, normalizedY) {
-    const safeZone = document.querySelector(".safe-zone");
+function placeCard(event, positionX, positionY) {
     const floatingContainer = document.querySelector(".floating-container");
-    const touch = event.touches[0] || event.changedTouches[0];
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
         if (isTouchActive) {
+            const touch = event.touches[0] || event.changedTouches[0];
             showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
             if (creatingCard) {
                 creatingCard.remove();
@@ -339,7 +362,7 @@ function placeCard(event, normalizedX, normalizedY) {
     contentsTextArea.value = "";
     titleTextInput.value = "";
 
-    createFloatingButton(["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), normalizedX.toString(), normalizedY.toString()], true);
+    createFloatingButton(["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), positionX.toString(), positionY.toString()], true);
 }
 
 // Attach touch event listener
@@ -357,9 +380,6 @@ wrapper.addEventListener("touchend", function (event) {
     lastTap = currentTime;
 });
 
-
-
-
 function setOverexposureContainerToEditor(isActive) {
     if (isActive) {
         contentsContainerText.classList.remove('active');
@@ -375,9 +395,17 @@ function setOverexposureContainerToEditor(isActive) {
 }
 
 fetchCSV();
-
 publishButton.addEventListener("click", async () => {
+    if (titleTextInput.value.trim() === "" || contentsTextArea.value.trim() === "") {
+        incompletePostContainer.classList.toggle('active');
+    }
+    else{
+        areYouSurePostContainer.classList.add('active');
+    }
+});
+submitPostYes.addEventListener("click", async () => {
     // Get the draft button data
+    areYouSurePostContainer.classList.remove('active');
     const draftButtons = document.querySelectorAll(".floating-button.draft");
     if (titleTextInput.value.trim() === "" || contentsTextArea.value.trim() === "") {
         incompletePostContainer.classList.toggle('active');
@@ -395,8 +423,8 @@ publishButton.addEventListener("click", async () => {
                 const text = button.getAttribute("data-text");
                 const id = button.getAttribute("data-id");
                 const date = button.getAttribute("data-date");
-                const xPosition = ((parseFloat(button.style.left) / canvasWidth) * 2) - 1;
-                const yPosition = ((parseFloat(button.style.top) / canvasHeight) * 2) - 1;
+                const xPosition = parseInt(button.style.left, 10);
+                const yPosition = parseInt(button.style.top, 10);
 
                 button.querySelector(".button-text").textContent = title;
 
@@ -419,6 +447,9 @@ publishButton.addEventListener("click", async () => {
             uploadingPostContainer.classList.remove("active");
         }
     }
+});
+submitPostNo.addEventListener("click", async () => {
+    areYouSurePostContainer.classList.remove('active');
 });
 
 // Function to save draft data to Google Sheets (via backend or API)
@@ -463,11 +494,18 @@ const observer = new MutationObserver((mutationsList) => {
                     else if (draftButtons.length > 0) {
                         overlay.classList.add('active');
                         overexposureContainer.classList.add('active');
-                        exitMenuContainer.classList.add('active');
+                        if (!(areYouSurePostContainer.classList.contains('active'))) {
+                            exitMenuContainer.classList.add('active');
+                        }
+                        else {
+                            areYouSurePostContainer.classList.remove('active');
+                        }
+
                     }
                 }
                 else {
                     document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
+                    document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
                 }
             }
             if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
@@ -504,10 +542,9 @@ exitMenuYes.addEventListener("click", ExitMenuButtonYes);
 exitMenuNo.addEventListener("click", ExitMenuButtonNo);
 
 function ExitMenuButtonYes() {
-    let contentsTextArea = document.querySelector("#contents-text-editor textarea");
+    titleTextInput.value = "";
     contentsTextArea.value = "";
     exitMenuContainer.classList.remove('active');
-
     toggleOverlay();
 }
 
@@ -521,6 +558,10 @@ overexposureContainer.addEventListener("mousedown", function () {
     }
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
+        areYouSurePostContainer.classList.remove('active');
+    }
+    if (areYouSurePostContainer.classList.contains("active")) {
+        areYouSurePostContainer.classList.remove('active');
     }
 });
 
@@ -540,5 +581,6 @@ function detectTouchScreen() {
 }
 
 // Run the function on page load
-window.addEventListener("load", detectTouchScreen);
+window.addEventListener("touchstart", detectTouchScreen);
+window.addEventListener("click", detectTouchScreen);
 

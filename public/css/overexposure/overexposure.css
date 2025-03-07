@@ -4,6 +4,8 @@
     --cardWidth: 200px;
     --cardRatio: 1/1.64044950946;
 
+    --noplacepadding: 100px;
+
     --cardtemplate: url(/images/overexposure/card-template.svg);
 }
 
@@ -16,12 +18,12 @@
     background-repeat: no-repeat;
     z-index: 300;
     transition: width 1s linear;
+    pointer-events: none;
 }
 
 .create-card.grow {
     width: 200px;
 }
-
 
 img {
     pointer-events: none;
@@ -36,13 +38,17 @@ highlight {
 }
 .safe-zone {
     height: 575px;
-    width: 750px;
-    /* background-color: rgba(75, 104, 104, 0.123); */
+    width: 1100px;
     position: absolute; 
     top: 47.5%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+}
+.no-place{ 
+    width: calc( var(--cardWidth) * 1.5);
+    aspect-ratio: var(--cardRatio);
+    position: absolute;
 }
 
 .floating-container {
@@ -151,6 +157,10 @@ highlight {
     justify-content: center;
     z-index: 1; /* Default z-index for all buttons */
     transition: z-index 0s, transform 0.2s; /* Smooth transition */
+}
+
+.floating-button.touchhover img {
+    transform: scale(1.1)
 }
 
 .floating-button img {
