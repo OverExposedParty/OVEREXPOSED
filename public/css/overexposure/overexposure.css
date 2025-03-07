@@ -28,7 +28,7 @@
 img {
     pointer-events: none;
     user-select: none;
-  }
+}
 
 highlight {
     color: var(--backgroundcolour);
@@ -36,17 +36,19 @@ highlight {
     padding: 0 10px 0 10px;
     border-radius: 25px;
 }
+
 .safe-zone {
     height: 575px;
     width: 1100px;
-    position: absolute; 
+    position: absolute;
     top: 47.5%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
 }
-.no-place{ 
-    width: calc( var(--cardWidth) * 1.5);
+
+.no-place {
+    width: calc(var(--cardWidth) * 1.5);
     aspect-ratio: var(--cardRatio);
     position: absolute;
 }
@@ -57,19 +59,23 @@ highlight {
     height: var(--canvasHeight);
     box-shadow: 0px 5px 10px var(--warningcolour);
     outline: 2px solid var(--warningcolour);
-    
+
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Centers content vertically */
-    align-items: center; /* Centers content horizontally */
-    
+    flex-direction: column;
+    /* Stack elements vertically */
+    justify-content: center;
+    /* Centers content vertically */
+    align-items: center;
+    /* Centers content horizontally */
+
     text-align: center;
     font-size: 20px;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
     user-select: none;
 }
-.warning-container{
+
+.warning-container {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -91,18 +97,20 @@ highlight {
     color: var(--warningcolour);
     display: none;
 }
-.warning-container.active{
+
+.warning-container.active {
     display: flex;
 }
 
-.warning-container h2{
-    font-size:20px;
-}
-.warning-container p{
-    font-size:20px;
+.warning-container h2 {
+    font-size: 20px;
 }
 
-.warning-container button{
+.warning-container p {
+    font-size: 20px;
+}
+
+.warning-container button {
     background-color: #101010;
     color: var(--warningcolour);
     border: 4px solid var(--warningcolour);
@@ -113,7 +121,7 @@ highlight {
     transition: background-color 0.3s ease;
     text-decoration: none;
     font-family: LemonMilk;
-    width:25%;
+    width: 25%;
 }
 
 .warning-container button:hover {
@@ -121,12 +129,13 @@ highlight {
     color: #202020;
     border-color: var(--warningcolour);
 }
-.warning-button-container{
+
+.warning-button-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap:10px;
-    width:100%;
+    gap: 10px;
+    width: 100%;
 }
 
 .floating-container p {
@@ -134,8 +143,9 @@ highlight {
     line-height: 1.5;
     margin-top: 0;
     margin-bottom: 10px;
-    display:none;
+    display: none;
 }
+
 .floating-container p.active {
     display: block;
 }
@@ -155,8 +165,10 @@ highlight {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1; /* Default z-index for all buttons */
-    transition: z-index 0s, transform 0.2s; /* Smooth transition */
+    z-index: 1;
+    /* Default z-index for all buttons */
+    transition: z-index 0s, transform 0.2s;
+    /* Smooth transition */
 }
 
 .floating-button.touchhover img {
@@ -166,11 +178,13 @@ highlight {
 .floating-button img {
     width: var(--cardWidth);
     opacity: 0.9;
-    transition: transform 0.2s, opacity 0.2s; /* Smooth transition */
+    transition: transform 0.2s, opacity 0.2s;
+    /* Smooth transition */
 }
 
 .floating-button:hover img {
-    transform: scale(1.1);  /* Scale the image */
+    transform: scale(1.1);
+    /* Scale the image */
     opacity: 1;
 }
 
@@ -179,22 +193,26 @@ highlight {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -55%);
-    width: 80%; /* Adjust as needed */
+    width: 80%;
+    /* Adjust as needed */
     color: var(--primarypagecolour);
     font-size: 16px;
     pointer-events: none;
-    transition: transform 0.2s; /* Smooth transition for text */
+    transition: transform 0.2s;
+    /* Smooth transition for text */
     font-family: LemonMilk;
     user-select: none;
 }
 
 .floating-button:hover .button-text {
-    transform: translate(-50%, -55%) scale(1.1); /* Scale the text when hovered */
+    transform: translate(-50%, -55%) scale(1.1);
+    /* Scale the text when hovered */
 }
 
 /* Add a higher z-index on hover to bring the hovered button above others */
 .floating-button:hover {
-    z-index: 10; /* This brings the hovered button to the front */
+    z-index: 10;
+    /* This brings the hovered button to the front */
 }
 
 .overexposure-container {
@@ -203,20 +221,21 @@ highlight {
     margin-top: calc(var(--headerheight) + 5vh);
     flex-direction: column;
     align-items: center;
-    
+
     width: 100%;
     margin-bottom: 0;
     position: fixed;
-    top: 0; /* Set this to control its vertical position */
+    top: 0;
+    /* Set this to control its vertical position */
     z-index: 1001;
     pointer-events: none;
 }
 
-.overexposure-container.active{
+.overexposure-container.active {
     display: flex;
 }
 
-.overexposure-publish-button{
+.overexposure-publish-button {
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
     border: 4px solid var(--primarypagecolour);
@@ -224,13 +243,14 @@ highlight {
     border-radius: 50px;
     cursor: pointer;
     font-size: 100%;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, color 0.3s;
     text-decoration: none;
     font-family: LemonMilk;
-    width:25%;
+    width: 25%;
     text-align: center;
 
     margin: 2.5vh auto;
+    
 }
 
 .overexposure-publish-button:hover {
@@ -239,30 +259,39 @@ highlight {
     border-color: var(--primarypagecolour);
 }
 
-.title-text-editor{
+button:disabled {
+    background-color: var(--backgroundcolour);
+    border-color: var(--backgroundcolour);
+    color: #999999;
+    pointer-events: none;
+}
+
+.title-text-editor {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width:100%;
+    width: 100%;
     display: none;
 }
 
-.title-text-editor.active{
+.title-text-editor.active {
     display: flex;
 }
 
-.contents-text-editor{
-    width:100%;
+.contents-text-editor {
+    width: 100%;
     display: none;
-    margin:0;
+    margin: 0;
     height: 100%;
     flex-direction: column;
 }
 
-.contents-text-editor.active{
+.contents-text-editor.active {
     display: flex;
 }
-input,textarea {
+
+input,
+textarea {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -273,7 +302,8 @@ input,textarea {
     font-family: LemonMilk;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     outline: none;
 }
 
@@ -286,17 +316,18 @@ textarea {
     width: auto;
     height: 100%;
     resize: none;
-    padding:5%;
+    padding: 5%;
 }
 
-.container,.title-container {
+.container,
+.title-container {
     width: 40vw;
-    min-width:640px;
+    min-width: 640px;
 
     display: flex;
     flex-direction: column;
     z-index: 1002;
-    pointer-events:all;
+    pointer-events: all;
 }
 
 .title-container {
@@ -314,7 +345,7 @@ textarea {
 
 .container {
     position: relative;
-    height: 90%;
+    height: 80%;
     background-color: var(--backgroundcolour);
 }
 
@@ -329,7 +360,7 @@ textarea {
     display: none;
 }
 
-.title-text.active{
+.title-text.active {
     display: flex;
 }
 
@@ -338,6 +369,7 @@ textarea {
     height: 100%;
 
 }
+
 .contents-container h2 {
     width: 100%;
     height: auto;
@@ -349,6 +381,7 @@ textarea {
     color: var(--primarypagecolour);
     font-size: 180%;
 }
+
 .contents-container h3 {
     width: 100%;
     height: auto;
@@ -362,7 +395,7 @@ textarea {
 }
 
 
-.contents-container p{
+.contents-container p {
     width: auto;
     height: auto;
     margin: 0 auto;
@@ -372,29 +405,32 @@ textarea {
     font-family: LemonMilk;
     color: var(--primarypagecolour);
     font-size: 15px;
-    padding:5%;
+    padding: 5%;
     display: none;
     white-space: pre-line;
 }
 
-.contents-container p.active{
+.contents-container p.active {
     display: flex;
 }
 
-.contents-container p a{
+.contents-container p a {
     color: var(--primarypagecolour);
 }
 
-.contents-container p a:hover{
+.contents-container p a:hover {
     color: var(--primarypagecolour);
 }
 
 @media (orientation: portrait) {
-    .container,.title-container {
+
+    .container,
+    .title-container {
         width: 85vw;
-        min-width:auto;
+        min-width: auto;
     }
+
     .container {
-        height: 65%;
+        height: 75%;
     }
 }

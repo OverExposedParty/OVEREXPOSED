@@ -32,11 +32,10 @@ const submitPostNo = document.getElementById("submit-post-no");
 const publishButton = document.querySelector(".overexposure-publish-button");
 
 const exitMenuContainer = document.getElementById("exit-menu-container");
-const incompletePostContainer = document.getElementById("publish-error-container");
 const uploadingPostContainer = document.getElementById("uploading-post-container");
 const areYouSurePostContainer = document.getElementById("are-you-sure-container");
 
-
+publishButton.disabled = true;
 const maxTouchRadius = 50;
 let closeOverexposureContainer = false;
 
@@ -253,10 +252,10 @@ function handleDoubleClick(event) {
 function handleTouchStart(event) {
     if (event.touches.length === 1) {
 
-        if(isClickInsideContainer(event, document.querySelectorAll('.floating-button'))){
+        if (isClickInsideContainer(event, document.querySelectorAll('.floating-button'))) {
             return;
         }
-        if(isClickInsideContainer(event, document.querySelectorAll('.no-place'))){
+        if (isClickInsideContainer(event, document.querySelectorAll('.no-place'))) {
             return;
         }
         initiateHoldTimer = setTimeout(() => {
@@ -408,56 +407,46 @@ function setOverexposureContainerToEditor(isActive) {
 
 fetchCSV();
 publishButton.addEventListener("click", async () => {
-    if (titleTextInput.value.trim() === "" || contentsTextArea.value.trim() === "") {
-        incompletePostContainer.classList.toggle('active');
-    }
-    else{
-        areYouSurePostContainer.classList.add('active');
-    }
+    areYouSurePostContainer.classList.add('active');
 });
 submitPostYes.addEventListener("click", async () => {
     // Get the draft button data
     areYouSurePostContainer.classList.remove('active');
     const draftButtons = document.querySelectorAll(".floating-button.draft");
-    if (titleTextInput.value.trim() === "" || contentsTextArea.value.trim() === "") {
-        incompletePostContainer.classList.toggle('active');
-    }
-    else {
-        if (draftButtons.length > 0) {
-            uploadingPostContainer.classList.add("active");
-            intervalId = setInterval(updateEllipses, 400);
-            const draftData = [];
+    if (draftButtons.length > 0) {
+        uploadingPostContainer.classList.add("active");
+        intervalId = setInterval(updateEllipses, 400);
+        const draftData = [];
+        draftButtons.forEach(button => {
+            button.setAttribute("data-title", titleTextInput.value.trim());
+            button.setAttribute("data-text", contentsTextArea.value.trim());
+
+            const title = button.getAttribute("data-title");
+            const text = button.getAttribute("data-text");
+            const id = button.getAttribute("data-id");
+            const date = button.getAttribute("data-date");
+            const xPosition = parseInt(button.style.left, 10);
+            const yPosition = parseInt(button.style.top, 10);
+
+            button.querySelector(".button-text").textContent = title;
+
+            draftData.push([title, text, id, date, xPosition, yPosition]);
+        });
+
+        // Save the draft data to the CSV/Google Sheets (using a backend server or Google Sheets API)
+        try {
+            const response = await saveDataToGoogleSheets(draftData);
+            overlay.classList.remove('active');
+            overexposureContainer.classList.remove('active');
+            console.log("Draft data saved successfully:", response);
             draftButtons.forEach(button => {
-                button.setAttribute("data-title", titleTextInput.value.trim());
-                button.setAttribute("data-text", contentsTextArea.value.trim());
-
-                const title = button.getAttribute("data-title");
-                const text = button.getAttribute("data-text");
-                const id = button.getAttribute("data-id");
-                const date = button.getAttribute("data-date");
-                const xPosition = parseInt(button.style.left, 10);
-                const yPosition = parseInt(button.style.top, 10);
-
-                button.querySelector(".button-text").textContent = title;
-
-                draftData.push([title, text, id, date, xPosition, yPosition]);
+                button.classList.remove("draft");
             });
-
-            // Save the draft data to the CSV/Google Sheets (using a backend server or Google Sheets API)
-            try {
-                const response = await saveDataToGoogleSheets(draftData);
-                overlay.classList.remove('active');
-                overexposureContainer.classList.remove('active');
-                console.log("Draft data saved successfully:", response);
-                draftButtons.forEach(button => {
-                    button.classList.remove("draft");
-                });
-                // You can add logic to reset the draft or show a confirmation message
-            } catch (error) {
-                console.error("Error saving draft data:", error);
-            }
-            uploadingPostContainer.classList.remove("active");
+            // You can add logic to reset the draft or show a confirmation message
+        } catch (error) {
+            console.error("Error saving draft data:", error);
         }
+        uploadingPostContainer.classList.remove("active");
     }
 });
 submitPostNo.addEventListener("click", async () => {
@@ -498,12 +487,7 @@ const observer = new MutationObserver((mutationsList) => {
             if (!overexposureContainer.classList.contains("active")) {
                 const draftButtons = document.querySelectorAll(".floating-button.draft");
                 if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
-                    if (incompletePostContainer.classList.contains('active')) {
-                        incompletePostContainer.classList.remove('active');
-                        overexposureContainer.classList.add('active');
-                        overlay.classList.add('active');
-                    }
-                    else if (draftButtons.length > 0) {
+                    if (draftButtons.length > 0) {
                         overlay.classList.add('active');
                         overexposureContainer.classList.add('active');
                         if (!(areYouSurePostContainer.classList.contains('active'))) {
@@ -557,6 +541,7 @@ function ExitMenuButtonYes() {
     titleTextInput.value = "";
     contentsTextArea.value = "";
     exitMenuContainer.classList.remove('active');
+    publishButton.disabled = true;
     toggleOverlay();
 }
 
@@ -565,9 +550,6 @@ function ExitMenuButtonNo() {
 }
 
 overexposureContainer.addEventListener("mousedown", function () {
-    if (incompletePostContainer.classList.contains("active")) {
-        incompletePostContainer.classList.remove("active");
-    }
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
         areYouSurePostContainer.classList.remove('active');
@@ -591,6 +573,17 @@ function detectTouchScreen() {
         mobileControls.classList.remove("active");
     }
 }
+function togglePublishButton() {
+    if (titleTextInput.value.trim() !== "" && contentsTextArea.value.trim() !== "") {
+        publishButton.disabled = false;
+    } else {
+        publishButton.disabled = true;
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    titleTextInput.addEventListener("input", togglePublishButton);
+    contentsTextArea.addEventListener("input", togglePublishButton);
+});
 
 // Run the function on page load
 window.addEventListener("touchstart", detectTouchScreen);
