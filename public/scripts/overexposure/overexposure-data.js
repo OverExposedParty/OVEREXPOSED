@@ -79,6 +79,26 @@ function isIntervalActive() {
     return intervalId !== null;
 }
 
+function getOverlappingDiv(currentDiv, currentDivType) {
+    const rect1 = currentDiv.getBoundingClientRect();
+
+    for (let div of currentDivType) {
+        if (div !== currentDiv) { // Ensure it's not checking itself
+            const rect2 = div.getBoundingClientRect();
+
+            if (
+                rect1.right > rect2.left &&
+                rect1.left < rect2.right &&
+                rect1.bottom > rect2.top &&
+                rect1.top < rect2.bottom
+            ) {
+                return div; // Return the first overlapping div found
+            }
+        }
+    }
+    return null; // No overlapping div found
+}
+
 function isClickInsideContainer(event, containerTargets) {
     if (containerTargets.length === 0) {
         return false;
@@ -89,7 +109,7 @@ function isClickInsideContainer(event, containerTargets) {
     );
 }
 
-function showFloatingText(message, x, y) {
+function displayFloatingText(message, x, y) {
     console.log("x: " + x + "y " + y);
     const floatingText = document.createElement("div");
     floatingText.textContent = message;
@@ -117,6 +137,21 @@ function showFloatingText(message, x, y) {
         floatingText.remove();
     }, 700);
 }
+
+function showFloatingText(event) {
+    if (isTouchActive) {
+        const touch = event.touches[0] || event.changedTouches[0];
+        displayFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
+    } else {
+        displayFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+    }
+
+    if (creatingCard) {
+        creatingCard.remove();
+        creatingCard = null;
+    }
+}
+
 
 
 async function fetchCSV() {
@@ -192,6 +227,12 @@ function createFloatingButton(row, draft = false) {
             easing: "ease-in-out"
         }
     );
+    if (getOverlappingDiv(noPlaceDiv, document.querySelectorAll(".no-place")) !== null) {
+        showFloatingText();
+        button.remove();
+        noPlaceDiv.remove();
+        return;
+    }
 
     // Handle button click
     button.addEventListener("click", () => {
@@ -251,13 +292,6 @@ function handleDoubleClick(event) {
 
 function handleTouchStart(event) {
     if (event.touches.length === 1) {
-
-        if (isClickInsideContainer(event, document.querySelectorAll('.floating-button'))) {
-            return;
-        }
-        if (isClickInsideContainer(event, document.querySelectorAll('.no-place'))) {
-            return;
-        }
         initiateHoldTimer = setTimeout(() => {
             const touch = event.touches[0] || event.changedTouches[0];
             const rect = floatingContainer.getBoundingClientRect();
@@ -269,18 +303,19 @@ function handleTouchStart(event) {
 
             singleTouchPosition.x = cameraPosition.x;
             singleTouchPosition.y = cameraPosition.y;
+            if (!isClickInsideContainer(event, document.querySelectorAll('.floating-button'))) {
+                creatingCard = document.createElement('div');
+                creatingCard.classList.add('create-card');
+                setTimeout(() => {
+                    creatingCard.classList.add('grow');
+                }, 10);
 
-            creatingCard = document.createElement('div');
-            creatingCard.classList.add('create-card');
-            setTimeout(() => {
-                creatingCard.classList.add('grow');
-            }, 10);
+                // Convert positions to pixel values
+                creatingCard.style.left = `${touchX}px`;
+                creatingCard.style.top = `${touchY}px`;
 
-            // Convert positions to pixel values
-            creatingCard.style.left = `${touchX}px`;
-            creatingCard.style.top = `${touchY}px`;
-
-            floatingContainer.appendChild(creatingCard);
+                floatingContainer.appendChild(creatingCard);
+            }
         }, 250);
 
         touchTimer = setTimeout(() => {
@@ -328,12 +363,13 @@ function handleTouchHold(event) {
     const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
     wrapper.removeEventListener('touchmove', monitorTouchDistance);
     // Add a safety check if the touch radius is too small
-    if ((touchRadius > maxTouchRadius) && ((safeZone && !safeZone.contains(event.target)) && (!isClickInsideContainer(event, document.querySelectorAll('.no-place')) && !isClickInsideContainer(event, document.querySelectorAll('.floating-button'))))) {
+    if (touchRadius > maxTouchRadius || (safeZone && safeZone.contains(event.target)) || (isClickInsideContainer(event, document.querySelectorAll('.no-place')) || isClickInsideContainer(event, document.querySelectorAll('.floating-button')))) {
+        console.log("radius exceeded");
+        showFloatingText(event);
         if (creatingCard) {
             creatingCard.remove();
             creatingCard = null;
         }
-
         return;
     }
     //console.log("maxTouchRadius: " + maxTouchRadius)
@@ -352,21 +388,7 @@ function handleTouchHold(event) {
 function placeCard(event, positionX, positionY) {
     const floatingContainer = document.querySelector(".floating-container");
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        if (isTouchActive) {
-            const touch = event.touches[0] || event.changedTouches[0];
-            showFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
-            if (creatingCard) {
-                creatingCard.remove();
-                creatingCard = null;
-            }
-        }
-        else {
-            showFloatingText("Card cannot be placed here", event.clientX, event.clientY);
-            if (creatingCard) {
-                creatingCard.remove();
-                creatingCard = null;
-            }
-        }
+        showFloatingText();
         return;
     }
 

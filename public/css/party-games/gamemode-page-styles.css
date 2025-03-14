@@ -60,7 +60,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .main-image {
@@ -257,11 +256,11 @@ body {
     .gamemode-text-container,
     .main-image-container,
     .button-container {
-        width: 300px;
+         /* width: 300px; */
         max-width: 60vw;
     }
     .gamemode-text-svg {
-        width: 100%; /* Make the image take up 100% of the container's width */
+        width: 100%; 
         height: auto; /* Maintain the aspect ratio */
     }
 
