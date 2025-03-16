@@ -218,12 +218,12 @@ const mainImageContainerText = document.querySelector('.text-container')
 mainImageContainer.addEventListener('click', toggleQuestionZoomedContainer);
 
 function toggleQuestionZoomedContainer() {
+    const questionZoomedContainerImg = document.querySelector('.question-zoomed-container img');
+    questionZoomedContainerImg.src = document.querySelector('.main-image-container img').src;
     addElementIfNotExists(elementClassArray, questionZoomedContainer);
     if (!questionZoomedContainer.classList.contains('active')) {
         questionZoomedContainer.classList.add('active');
-        questionZoomedContainer.classList.add('active');
         questionZoomedContainerText.textContent = mainImageContainerText.textContent;
-        console.log(questionZoomedContainerText);
         if (!overlay.classList.contains('active')) {
             overlay.classList.add('active');
         }

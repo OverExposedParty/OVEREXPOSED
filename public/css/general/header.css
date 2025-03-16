@@ -6,6 +6,7 @@
     --warningcolour: #FF3333;
     --bordersize: 5px;
     --headerheight: 5vh;
+    --cardRatio: 1/1.64044950946;
 
     --tiktokicon: url(/images/icons/overexposed/tik-tok-icon.svg);
     --instagramicon: url(/images/icons/overexposed/instagram-icon.svg);
@@ -190,9 +191,9 @@ body {
     font-size: 200%;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
-    ;
     outline: none;
     border: 0;
+    transition: color 0.3s, background-color 0.3s, font-size 0.3s;
 }
 
 .extra-menu-button:hover {
@@ -306,7 +307,6 @@ input:checked+.slider:before {
     width: 100%;
     height: 100px;
     justify-content: left;
-
 }
 
 .social-media-image-container {
@@ -317,7 +317,12 @@ input:checked+.slider:before {
     /* Center the content vertically */
     width: 25%;
 }
-
+.social-media-image{
+    transition: transform 0.3s;
+}
+.social-media-image:hover{
+    transform: scale(1.25);
+}
 .social-media-image.tiktok {
     height: 5vh;
     width: 5vh;

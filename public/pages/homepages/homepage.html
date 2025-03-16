@@ -16,6 +16,9 @@
         content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com;">
 
     <title>HOME</title>
+
+    <link rel="preload" href="/images/splash-screens/overexposed.png" as="image">
+
     <link rel="stylesheet" href="/css/homepages/homepage-styles.css">
     <link rel="stylesheet" href="/css/general/header.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
@@ -24,7 +27,7 @@
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
-
+    
     <meta name="robots" content="index, follow">
     <meta name="description"
         content="OVEREXPOSED is your ultimate destination for party games, anonymous confessions, and life insights. Play, share, and explore – all in one place.">
@@ -71,8 +74,8 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager"></div>
 
     <div id="header-placeholder"></div>
 

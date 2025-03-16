@@ -8,41 +8,54 @@ const cardWidth = getComputedStyle(document.documentElement).getPropertyValue('-
 const cardWidthValue = parseFloat(cardWidth);
 
 const safeZone = document.querySelector(".safe-zone");
-
 const titleText = document.querySelector(".title-text");
 const contentsContainerText = document.querySelector('.contents-container p');
-
 const titleTextEditor = document.querySelector(".title-text-editor");
 const contentsTextEditor = document.getElementById("contents-text-editor");
 const floatingContainer = document.getElementById("floating-container");
-
 const overexposureContainer = document.getElementById("overexposure-container");
-
 const uploadingText = document.getElementById("uploading-text");
-
 const contentsTextArea = document.querySelector("#contents-text-editor textarea");
 const titleTextInput = document.getElementById("title-text-editor-input");
-
 const exitMenuYes = document.getElementById("exit-menu-button-yes");
 const exitMenuNo = document.getElementById("exit-menu-button-no");
-
 const submitPostYes = document.getElementById("submit-post-yes");
 const submitPostNo = document.getElementById("submit-post-no");
-
 const publishButton = document.querySelector(".overexposure-publish-button");
-
 const exitMenuContainer = document.getElementById("exit-menu-container");
 const uploadingPostContainer = document.getElementById("uploading-post-container");
 const areYouSurePostContainer = document.getElementById("are-you-sure-container");
 
 publishButton.disabled = true;
-const maxTouchRadius = 50;
+
 let closeOverexposureContainer = false;
 
-let singleTouchPosition = {
-    x: 0,
-    y: 0
-};
+let nameList = new Set();
+
+async function loadNames() {
+    try {
+        const response = await fetch("/json-files/names.json"); // Ensure this file is in the same directory
+        const data = await response.json();
+        nameList = new Set(data.map(name => name.toLowerCase())); // Convert to lowercase for case-insensitive matching
+    } catch (error) {
+        console.error("Error loading names:", error);
+    }
+}
+
+function censorText(text) {
+    return text.replace(/\b[\w'-]+\b(?=[\s.,!?]|$)/g, (word) => {
+        return nameList.has(word.toLowerCase()) ? "*".repeat(word.length) : word;
+    });
+}
+
+contentsTextArea.addEventListener("input", function () {
+    console.log("typing");
+    const cursorPosition = this.selectionStart; // Save cursor position
+    this.value = censorText(this.value);
+    this.setSelectionRange(cursorPosition, cursorPosition); // Restore cursor position
+});
+
+loadNames();
 
 function calculateTouchDistance(cameraPosition, singleTouchPosition) {
     // Calculate the distance between camera and touch in 2D space
@@ -52,15 +65,7 @@ function calculateTouchDistance(cameraPosition, singleTouchPosition) {
     return Math.sqrt(dx * dx + dy * dy); // Return Euclidean distance in 2D
 }
 
-let count = 0;
-let intervalId = null;
 
-let touchStartTime = null;
-let touchDuration = 500;
-
-let initiateHoldTimer
-let touchTimer;
-let creatingCard;
 
 function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -152,8 +157,6 @@ function showFloatingText(event) {
     }
 }
 
-
-
 async function fetchCSV() {
     const response = await fetch(csvUrl);
     const data = await response.text();
@@ -165,7 +168,7 @@ async function fetchCSV() {
 
             // Assuming the first row is the header, start from the second row
             results.data.slice(1).forEach(row => {
-                createFloatingButton(row, false);
+                createFloatingButton(null,row, false);
             });
         },
         header: false, // Adjust this if you want to include headers
@@ -173,7 +176,7 @@ async function fetchCSV() {
     });
 }
 
-function createFloatingButton(row, draft = false) {
+function createFloatingButton(event = null,row, draft = false) {
     const [title = "New Title", text = "Type here...", date = new Date().toISOString(), id = Date.now(), xPosition = "0", yPosition = "0"] = row;
 
     // Create button element
@@ -228,7 +231,7 @@ function createFloatingButton(row, draft = false) {
         }
     );
     if (getOverlappingDiv(noPlaceDiv, document.querySelectorAll(".no-place")) !== null) {
-        showFloatingText();
+        showFloatingText(event);
         button.remove();
         noPlaceDiv.remove();
         return;
@@ -277,141 +280,22 @@ function createFloatingButton(row, draft = false) {
     }
 }
 
-function handleDoubleClick(event) {
-    if (isTouchActive) return;
 
-    const rect = floatingContainer.getBoundingClientRect();
-    const computedStyle = getComputedStyle(floatingContainer);
-    const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
 
-    const clickX = (event.clientX - rect.left) / scale;
-    const clickY = (event.clientY - rect.top) / scale;
 
-    placeCard(event, clickX, clickY);
-}
 
-function handleTouchStart(event) {
-    if (event.touches.length === 1) {
-        initiateHoldTimer = setTimeout(() => {
-            const touch = event.touches[0] || event.changedTouches[0];
-            const rect = floatingContainer.getBoundingClientRect();
-            const computedStyle = getComputedStyle(floatingContainer);
-            const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
-
-            const touchX = (touch.clientX - rect.left) / scale;
-            const touchY = (touch.clientY - rect.top) / scale;
-
-            singleTouchPosition.x = cameraPosition.x;
-            singleTouchPosition.y = cameraPosition.y;
-            if (!isClickInsideContainer(event, document.querySelectorAll('.floating-button'))) {
-                creatingCard = document.createElement('div');
-                creatingCard.classList.add('create-card');
-                setTimeout(() => {
-                    creatingCard.classList.add('grow');
-                }, 10);
-
-                // Convert positions to pixel values
-                creatingCard.style.left = `${touchX}px`;
-                creatingCard.style.top = `${touchY}px`;
-
-                floatingContainer.appendChild(creatingCard);
-            }
-        }, 250);
-
-        touchTimer = setTimeout(() => {
-            if (creatingCard) {
-                handleTouchHold(event);
-            }
-        }, 1250);
-    }
-    else {
-        if (touchTimer) {
-            clearTimeout(initiateHoldTimer);
-            clearTimeout(touchTimer);
-        }
-    }
-    wrapper.addEventListener('touchmove', monitorTouchDistance);
-}
-
-function monitorTouchDistance(event) {
-    const touch = event.touches[0] || event.changedTouches[0];
-    const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
-
-    // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
-    if (touchRadius > maxTouchRadius) {
-        if (creatingCard) {
-            creatingCard.remove();
-            creatingCard = null;
-        }
-        clearTimeout(initiateHoldTimer);
-        clearTimeout(touchTimer);
-        wrapper.removeEventListener('touchmove', monitorTouchDistance);
-    }
-}
-
-function handleTouchEnd() {
-    clearTimeout(initiateHoldTimer);
-    clearTimeout(touchTimer);
-    if (creatingCard) {
-        creatingCard.remove();
-        creatingCard = null;
-    }
-}
-
-function handleTouchHold(event) {
-    event.preventDefault();
-    const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
-    wrapper.removeEventListener('touchmove', monitorTouchDistance);
-    // Add a safety check if the touch radius is too small
-    if (touchRadius > maxTouchRadius || (safeZone && safeZone.contains(event.target)) || (isClickInsideContainer(event, document.querySelectorAll('.no-place')) || isClickInsideContainer(event, document.querySelectorAll('.floating-button')))) {
-        console.log("radius exceeded");
-        showFloatingText(event);
-        if (creatingCard) {
-            creatingCard.remove();
-            creatingCard = null;
-        }
-        return;
-    }
-    //console.log("maxTouchRadius: " + maxTouchRadius)
-    //console.log("touchRadius: " + touchRadius);
-
-    const touch = event.touches[0] || event.changedTouches[0];
-    const rect = floatingContainer.getBoundingClientRect();
-    const computedStyle = getComputedStyle(floatingContainer);
-    const scale = parseFloat(computedStyle.transform.split(', ')[3]) || 1;
-
-    const touchX = (touch.clientX - rect.left) / scale;
-    const touchY = (touch.clientY - rect.top) / scale;
-
-    placeCard(event, touchX, touchY);
-}
 function placeCard(event, positionX, positionY) {
     const floatingContainer = document.querySelector(".floating-container");
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        showFloatingText();
+        showFloatingText(event);
         return;
     }
 
     contentsTextArea.value = "";
     titleTextInput.value = "";
 
-    createFloatingButton(["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), positionX.toString(), positionY.toString()], true);
+    createFloatingButton(event,["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), positionX.toString(), positionY.toString()], true);
 }
-
-// Attach touch event listener
-wrapper.addEventListener("touchstart", handleTouchStart);
-wrapper.addEventListener("touchend", handleTouchEnd);
-wrapper.addEventListener("dblclick", handleDoubleClick);
-
-let lastTap = 0;
-wrapper.addEventListener("touchend", function (event) {
-    let currentTime = new Date().getTime();
-    let tapLength = currentTime - lastTap;
-    if (tapLength < 300 && tapLength > 0) { // 300ms threshold for double tap
-        handleDoubleClick(event);
-    }
-    lastTap = currentTime;
-});
 
 function setOverexposureContainerToEditor(isActive) {
     if (isActive) {
@@ -581,20 +465,7 @@ overexposureContainer.addEventListener("mousedown", function () {
     }
 });
 
-function detectTouchScreen() {
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    const computerControls = document.getElementById("computer-controls");
-    const mobileControls = document.getElementById("mobile-controls");
-
-    if (isTouch) {
-        mobileControls.classList.add("active");
-        computerControls.classList.remove("active");
-    } else {
-        computerControls.classList.add("active");
-        mobileControls.classList.remove("active");
-    }
-}
 function togglePublishButton() {
     if (titleTextInput.value.trim() !== "" && contentsTextArea.value.trim() !== "") {
         publishButton.disabled = false;
@@ -607,9 +478,4 @@ document.addEventListener("DOMContentLoaded", function () {
     contentsTextArea.addEventListener("input", togglePublishButton);
 });
 
-// Run the function on page load
-window.addEventListener("load", detectTouchScreen);
-
-window.addEventListener("touchstart", detectTouchScreen);
-window.addEventListener("click", detectTouchScreen);
 
