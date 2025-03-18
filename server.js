@@ -125,6 +125,15 @@ app.get('/overexposure', (req, res) => {
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });
+
+app.get('/overexposure/:timestamp', (req, res) => {
+  const timestamp = req.params.timestamp; // This will capture the dynamic timestamp part
+  const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
+  // Your logic for handling the request
+  res.sendFile(filePath);
+});
+
+
 //Blogs
 app.get('/insights/final-year-stress', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');

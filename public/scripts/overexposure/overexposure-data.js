@@ -162,6 +162,11 @@ function showFloatingText(event) {
     }
 }
 
+function getIDFromURL() {
+    const pathSegments = window.location.pathname.split("/");
+    return pathSegments[pathSegments.length - 1]; // Assuming ID is the last segment
+}
+
 async function fetchCSV() {
     const response = await fetch(csvUrl);
     const data = await response.text();
@@ -171,10 +176,23 @@ async function fetchCSV() {
         complete: function (results) {
             console.log("Parsed CSV Data:", results.data);
 
-            // Assuming the first row is the header, start from the second row
+            // Get the ID from the URL
+            const idFromURL = getIDFromURL();
+            let idFound = false;
+
+            // Check if any row contains the ID
             results.data.slice(1).forEach(row => {
-                createFloatingButton(null,row, false);
+                if (row.includes(idFromURL)) {
+                    idFound = true; // Set flag if ID is found
+                }
+                createFloatingButton(null, row, false);
             });
+
+            // If the ID was not found, run the function again
+            if (!idFound) {
+                console.log(`ID ${idFromURL} not found`);
+                cleanOverexposureUrl()
+            }
         },
         header: false, // Adjust this if you want to include headers
         skipEmptyLines: true // Skip empty lines
@@ -182,7 +200,8 @@ async function fetchCSV() {
 }
 
 function createFloatingButton(event = null,row, draft = false) {
-    const [title = "New Title", text = "Type here...", date = new Date().toISOString(), id = Date.now(), xPosition = "0", yPosition = "0"] = row;
+    const idFromURL = getIDFromURL();
+    const [title = "New Title", text = "Type here...", id  = new Date().toISOString(), date = Date.now(),  xPosition = "0", yPosition = "0"] = row;
 
     // Create button element
     const button = document.createElement("button");
@@ -283,6 +302,10 @@ function createFloatingButton(event = null,row, draft = false) {
         noPlaceDiv.classList.add("draft");
         selectCard(button, true)
     }
+    if (id === idFromURL) {
+        cleanOverexposureUrl();
+        selectCard(button, false)
+    }
 }
 
 
@@ -299,7 +322,7 @@ function placeCard(event, positionX, positionY) {
     contentsTextArea.value = "";
     titleTextInput.value = "";
 
-    createFloatingButton(event,["New Title", "Type here...", formatDate(Date.now()), new Date().toISOString(), positionX.toString(), positionY.toString()], true);
+    createFloatingButton(event,["New Title", "Type here...", new Date().toISOString(), formatDate(Date.now()), positionX.toString(), positionY.toString()], true);
 }
 
 function setOverexposureContainerToEditor(isActive) {
@@ -364,6 +387,7 @@ submitPostYes.addEventListener("click", async () => {
             draftButtons.forEach(button => {
                 button.classList.remove("draft");
             });
+            cleanOverexposureUrl();
             // You can add logic to reset the draft or show a confirmation message
         } catch (error) {
             console.error("Error saving draft data:", error);
@@ -408,6 +432,9 @@ async function saveDataToGoogleSheets(draftData) {
 const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === "attributes" && mutation.attributeName === "class") {
+            if(!overlay.classList.contains("active")){
+                cleanOverexposureUrl();
+            }
             if (!overexposureContainer.classList.contains("active")) {
                 const draftButtons = document.querySelectorAll(".floating-button.draft");
                 if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
@@ -432,6 +459,7 @@ const observer = new MutationObserver((mutationsList) => {
                 else {
                     document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
                     document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
+                    history.pushState(null, "", window.location.pathname);
                 }
             }
             if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
@@ -450,7 +478,9 @@ observer.observe(postIncompleteContainer, { attributes: true, attributeFilter: [
 
 function selectCard(button, draft) {
     overexposureContainer.classList.add("active");
-
+    const dataId = button.getAttribute("data-id");
+    history.pushState(null, "", window.location.pathname.replace(/\/$/, '') + "/" + dataId);
+    
     titleText.textContent = button.getAttribute("data-title");
     contentsContainerText.innerHTML = button.getAttribute("data-text");
 
@@ -510,4 +540,36 @@ document.addEventListener("DOMContentLoaded", function () {
     contentsTextArea.addEventListener("input", togglePublishButton);
 });
 
+function cleanOverexposureUrl() {
+    const currentUrl = window.location.pathname;
+    const basePath = "/overexposure";
+    
+    // Find the position of "/overexposure/"
+    const overexposureIndex = currentUrl.indexOf(basePath);
 
+    // Check if "/overexposure/" exists in the URL
+    if (overexposureIndex !== -1) {
+        // Keep the part before the additional segment and append a "/"
+        const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
+
+        // Update the URL without reloading the page
+        history.pushState(null, "", newUrl);
+    }
+}
+
+function cleanOverexposureUrl() {
+    const currentUrl = window.location.pathname;
+    const basePath = "/overexposure";
+    
+    // Find the position of "/overexposure/"
+    const overexposureIndex = currentUrl.indexOf(basePath);
+
+    // Check if "/overexposure/" exists in the URL
+    if (overexposureIndex !== -1) {
+        // Keep the part before the additional segment and append a "/"
+        const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
+
+        // Update the URL without reloading the page
+        history.pushState(null, "", newUrl);
+    }
+}
