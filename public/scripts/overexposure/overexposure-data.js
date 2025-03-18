@@ -17,6 +17,7 @@ const overexposureContainer = document.getElementById("overexposure-container");
 const uploadingText = document.getElementById("uploading-text");
 const contentsTextArea = document.querySelector("#contents-text-editor textarea");
 const titleTextInput = document.getElementById("title-text-editor-input");
+
 const exitMenuYes = document.getElementById("exit-menu-button-yes");
 const exitMenuNo = document.getElementById("exit-menu-button-no");
 const submitPostYes = document.getElementById("submit-post-yes");
@@ -25,6 +26,9 @@ const publishButton = document.querySelector(".overexposure-publish-button");
 const exitMenuContainer = document.getElementById("exit-menu-container");
 const uploadingPostContainer = document.getElementById("uploading-post-container");
 const areYouSurePostContainer = document.getElementById("are-you-sure-container");
+const postIncompleteContainer = document.getElementById("post-incomplete-container");
+
+let currentWarningContainer;
 
 publishButton.disabled = true;
 
@@ -42,16 +46,17 @@ async function loadNames() {
     }
 }
 
-function censorText(text) {
-    return text.replace(/\b[\w'-]+\b(?=[\s.,!?]|$)/g, (word) => {
-        return nameList.has(word.toLowerCase()) ? "*".repeat(word.length) : word;
-    });
-}
+function detectName(text) {
+    let doc = nlp(text);
+    let detectedNames = doc.people().out('array');
+    detectedNames = detectedNames.filter(name => /^[A-Za-z]+$/.test(name)); // Only letters allowed
 
+    return detectedNames.length > 0 ? { hasName: true, name: detectedNames } : { hasName: false, name: null };
+}
 contentsTextArea.addEventListener("input", function () {
     console.log("typing");
     const cursorPosition = this.selectionStart; // Save cursor position
-    this.value = censorText(this.value);
+    console.log(detectName(this.value));
     this.setSelectionRange(cursorPosition, cursorPosition); // Restore cursor position
 });
 
@@ -313,14 +318,25 @@ function setOverexposureContainerToEditor(isActive) {
 
 fetchCSV();
 publishButton.addEventListener("click", async () => {
-    areYouSurePostContainer.classList.add('active');
+    if(detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName){
+        console.log(detectName(contentsTextArea.value));
+        postIncompleteContainer.classList.add('active');
+        currentWarningContainer = postIncompleteContainer;
+    }
+    else{
+        areYouSurePostContainer.classList.add('active');
+        console.log("Posting");
+        currentWarningContainer = areYouSurePostContainer;
+    }
 });
 submitPostYes.addEventListener("click", async () => {
     // Get the draft button data
     areYouSurePostContainer.classList.remove('active');
+    currentWarningContainer = null;
     const draftButtons = document.querySelectorAll(".floating-button.draft");
     if (draftButtons.length > 0) {
         uploadingPostContainer.classList.add("active");
+        currentWarningContainer = uploadingPostContainer;
         intervalId = setInterval(updateEllipses, 400);
         const draftData = [];
         draftButtons.forEach(button => {
@@ -353,10 +369,12 @@ submitPostYes.addEventListener("click", async () => {
             console.error("Error saving draft data:", error);
         }
         uploadingPostContainer.classList.remove("active");
+        currentWarningContainer = uploadingPostContainer;
     }
 });
 submitPostNo.addEventListener("click", async () => {
     areYouSurePostContainer.classList.remove('active');
+    currentWarningContainer = null;
 });
 
 // Function to save draft data to Google Sheets (via backend or API)
@@ -396,11 +414,17 @@ const observer = new MutationObserver((mutationsList) => {
                     if (draftButtons.length > 0) {
                         overlay.classList.add('active');
                         overexposureContainer.classList.add('active');
-                        if (!(areYouSurePostContainer.classList.contains('active'))) {
+                        if(currentWarningContainer === postIncompleteContainer){
+                            currentWarningContainer = null;
+                            postIncompleteContainer.classList.remove('active');
+                        }
+                        else if (!(areYouSurePostContainer.classList.contains('active'))) {
                             exitMenuContainer.classList.add('active');
+                            currentWarningContainer = exitMenuContainer;
                         }
                         else {
                             areYouSurePostContainer.classList.remove('active');
+                            currentWarningContainer = null;
                         }
 
                     }
@@ -422,6 +446,7 @@ const observer = new MutationObserver((mutationsList) => {
 observer.observe(overexposureContainer, { attributes: true, attributeFilter: ["class"] });
 observer.observe(exitMenuContainer, { attributes: true, attributeFilter: ["class"] });
 observer.observe(uploadingPostContainer, { attributes: true, attributeFilter: ["class"] });
+observer.observe(postIncompleteContainer, { attributes: true, attributeFilter: ["class"] });
 
 function selectCard(button, draft) {
     overexposureContainer.classList.add("active");
@@ -453,15 +478,22 @@ function ExitMenuButtonYes() {
 
 function ExitMenuButtonNo() {
     exitMenuContainer.classList.remove('active');
+    currentWarningContainer = null;
 }
 
 overexposureContainer.addEventListener("mousedown", function () {
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
         areYouSurePostContainer.classList.remove('active');
+        currentWarningContainer = null;
     }
     if (areYouSurePostContainer.classList.contains("active")) {
         areYouSurePostContainer.classList.remove('active');
+        currentWarningContainer = null;
+    }
+    if (postIncompleteContainer.classList.contains("active")) {
+        postIncompleteContainer.classList.remove('active');
+        currentWarningContainer = null;
     }
 });
 

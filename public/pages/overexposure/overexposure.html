@@ -7,8 +7,8 @@
     <meta property="og:description"
         content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
     <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://docs.google.com https://doc-0g-8s-sheets.googleusercontent.com https://script.google.com/ https://script.googleusercontent.com/; 
-                 script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdnjs.cloudflare.com/ https://script.google.com/ https://script.googleusercontent.com/ 'unsafe-inline';">
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://docs.google.com https://doc-0g-8s-sheets.googleusercontent.com https://script.google.com/ https://script.googleusercontent.com/ https://unpkg.com/compromise; 
+                 script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdnjs.cloudflare.com/ https://script.google.com/ https://script.googleusercontent.com/ https://unpkg.com/compromise 'unsafe-inline';">
 
     <title>OVEREXPOSURE</title>
 
@@ -143,11 +143,21 @@
             <button id="submit-post-no">No</button>
         </div>
     </div>
+
+    <div class="warning-container" id="uploading-post-container" style="color: var(--primarypagecolour);">
+        <h2 id="uploading-text">Uploading Post</h2>
+    </div>
+
+    <div class="warning-container" id="post-incomplete-container">
+        <h2>Failed to post</h2>
+        <p>*Make sure no names are used</p>
+    </div>
 </body>
 
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://unpkg.com/compromise"></script>
 
 <script src="/scripts/overexposure/camera-view.js"></script>
 <script src="/scripts/overexposure/overexposure-data.js"></script>
@@ -166,7 +176,7 @@
     helpTitle.textContent = 'OVEREXPOSURE';
 
     helpText.innerHTML = `
-Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, or wild experiences—completely anonymously. No filters, no judgment—just raw, uncut truths. Dare to expose?
+Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, or wild experiences—completely anonymously. No filters, no judgment—just raw, uncut truths. The only rule? No names.  Dare to expose?
 `;
 
     //Header & Settings
