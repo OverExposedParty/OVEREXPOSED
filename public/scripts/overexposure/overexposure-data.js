@@ -573,3 +573,11 @@ function cleanOverexposureUrl() {
         history.pushState(null, "", newUrl);
     }
 }
+
+const textInput = document.getElementById("text-input");
+const charCounter = document.getElementById("char-counter");
+const maxLength = textInput.getAttribute("maxlength");
+
+textInput.addEventListener("input", () => {
+    charCounter.textContent =  maxLength - textInput.value.length;
+});

@@ -286,6 +286,17 @@ button:disabled {
     flex-direction: column;
 }
 
+#char-counter {
+    font-size: 14px;
+    color: gray;
+    position: absolute;
+    bottom: 35px; /* Adjust based on button position */
+    right: 10px;
+    pointer-events: none; /* Prevent interaction */
+    padding: 0 10px 6.5vh 0 ;
+    font-family: LemonMilk;
+}
+
 .contents-text-editor.active {
     display: flex;
 }
@@ -409,6 +420,7 @@ textarea {
     padding: 5%;
     display: none;
     white-space: pre-line;
+    overflow-y: auto;
 }
 
 .contents-container p.active {
