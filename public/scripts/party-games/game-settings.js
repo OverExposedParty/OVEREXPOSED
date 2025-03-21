@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const overlay = document.getElementById('overlay');
 
-    const eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
+    let eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
     const packButtons = document.querySelectorAll('.packs-container .button-container button');
     const startGameButton = document.querySelector('.start-game-button');
     const warningBox = document.getElementById('warning-box');
@@ -26,23 +26,57 @@ document.addEventListener('DOMContentLoaded', function () {
         startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
     }
 
-    if (!eighteenPlusEnabled) {
-        nsfwButtons.forEach(button => {
-            button.disabled = true;
-            button.classList.add('disabled');
+    const storageObserver = new LocalStorageObserver();
 
-            const key = button.getAttribute('data-key');
-            localStorage.setItem(key, 'false');
-        });
-        gameSettingsNsfwButtons.forEach(button => {
-            button.disabled = true;
-            button.classList.add('disabled');
-
-            localStorage.setItem(button.getAttribute('data-key'), 'false');
-        });
-
+    // Add a listener to observe changes to 'settings-nsfw'
+    storageObserver.addListener((key, oldValue, newValue) => {
+        if (key === 'settings-nsfw') {
+            console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+            if (oldValue !== newValue) {
+                eighteenPlusEnabled = newValue;
+                setNSFWMode();
+                console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+            }
+        }
+    });
+    
+    function setNSFWMode(){
+        if (eighteenPlusEnabled) {
+            nsfwButtons.forEach(button => {
+                button.disabled = false;
+                button.classList.remove('disabled');
+    
+                const key = button.getAttribute('data-key');
+                localStorage.setItem(key, 'false');
+            });
+            gameSettingsNsfwButtons.forEach(button => {
+                button.disabled = false;
+                button.classList.remove('disabled');
+    
+                localStorage.setItem(button.getAttribute('data-key'), 'true');
+            });
+        }
+        else {
+            nsfwButtons.forEach(button => {
+                button.disabled = true;
+                button.classList.add('disabled');
+                button.classList.remove('active');
+    
+                const key = button.getAttribute('data-key');
+                localStorage.setItem(key, 'false');
+            });
+            gameSettingsNsfwButtons.forEach(button => {
+                button.disabled = true;
+                button.classList.add('disabled');
+                button.classList.remove('active');
+    
+                localStorage.setItem(button.getAttribute('data-key'), 'false');
+            });
+        }
     }
 
+    setNSFWMode();
+    
     packsSettingsContainerButton.addEventListener('click', () => {
         if (!(packsSettingsContainerButton.classList.contains('active'))) {
             console.log('button pressed');
@@ -68,70 +102,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const key = button.getAttribute('data-key');
         const savedState = localStorage.getItem(key);
 
-        const primaryColor = button.getAttribute('data-primary-color');
-        const secondaryColor = button.getAttribute('data-secondary-color');
-
         if (savedState === 'true') {
             button.classList.add('active');
-
-            if (primaryColor !== null) {
-                button.style.backgroundColor = primaryColor;
-                button.style.color = 'var(--backgroundcolour)';
-                button.style.borderColor = primaryColor;
-            }
         }
         else if (savedState === 'false') {
             button.classList.remove('active');
-
-            if (primaryColor !== null) {
-                button.style.backgroundColor = 'var(--backgroundcolour)';
-                button.style.color = '#999999';
-                button.style.borderColor = 'var(--backgroundcolour)';
-            }
         }
-        if (button.disabled) {
-            button.style.backgroundColor = '#333333';
-            button.style.color = '#666666';
-            button.style.borderColor = '#333333';
-        }
-
         button.addEventListener('click', () => {
             if (!button.disabled) {
                 button.classList.toggle('active');
                 const isActive = button.classList.contains('active');
                 localStorage.setItem(key, isActive ? 'true' : 'false');
-                if (button.classList.contains('active')) {
-                    button.style.backgroundColor = primaryColor;
-                    button.style.color = 'var(--backgroundcolour)';
-                    button.style.borderColor = primaryColor;
-                } else {
-                    button.style.backgroundColor = 'var(--backgroundcolour)';
-                    button.style.color = '#999999';
-                    button.style.borderColor = 'var(--backgroundcolour)';
-                }
-                updateStartGameButton();
-            }
-        });
 
-        button.addEventListener('mouseenter', () => {
-            if (!button.disabled && primaryColor !== null) {
-                button.style.backgroundColor = secondaryColor;
-                button.style.borderColor = secondaryColor;
                 updateStartGameButton();
-            }
-        });
-
-        button.addEventListener('mouseleave', () => {
-            if (!button.disabled && primaryColor !== null) {
-                if (button.classList.contains('active')) {
-                    button.style.backgroundColor = primaryColor;
-                    button.style.color = 'var(--backgroundcolour)';
-                    button.style.borderColor = primaryColor;
-                } else {
-                    button.style.backgroundColor = 'var(--backgroundcolour)';
-                    button.style.color = '#999999';
-                    button.style.borderColor = 'var(--backgroundcolour)';
-                }
             }
         });
     });

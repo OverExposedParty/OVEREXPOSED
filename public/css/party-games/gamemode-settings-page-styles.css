@@ -137,7 +137,7 @@ body {
     border: var(--bordersize) solid var(--backgroundcolour);
 }
 
-/*
+
 .button-container button.active {
     background-color: var(--primarypagecolour);
     color: var(--backgroundcolour);
@@ -153,13 +153,13 @@ body {
     background-color: var(--secondarypagecolour);
     color: var(--backgroundcolour);
 }
-*/
+
 button.disabled {
-    background-color: #333333;
-    color: #666666;
-    border-color: #333333;
-    cursor: not-allowed;
-    pointer-events: none;
+    background-color: #333333 !important; 
+    color: #666666 !important;
+    border-color: #333333 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }
 
 .start-game-button {

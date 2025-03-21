@@ -9,7 +9,7 @@ const cardWidthValue = parseFloat(cardWidth);
 
 const safeZone = document.querySelector(".safe-zone");
 const titleText = document.querySelector(".title-text");
-const contentsContainerText = document.querySelector('.contents-container p');
+const contentsContainerText = document.querySelector('.contents-container-text');
 const titleTextEditor = document.querySelector(".title-text-editor");
 const contentsTextEditor = document.getElementById("contents-text-editor");
 const floatingContainer = document.getElementById("floating-container");
@@ -34,13 +34,26 @@ publishButton.disabled = true;
 
 let closeOverexposureContainer = false;
 
+const storageObserver = new LocalStorageObserver();
+
+storageObserver.addListener((key, oldValue, newValue) => {
+    if (key === 'settings-nsfw') {
+        //console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+        if (oldValue !== newValue) {
+            eighteenPlusEnabled = newValue;
+            SetFloatingButtons();
+            //console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+        }
+    }
+});
+
 let nameList = new Set();
 
 async function loadNames() {
     try {
-        const response = await fetch("/json-files/names.json"); // Ensure this file is in the same directory
+        const response = await fetch("/json-files/names.json");
         const data = await response.json();
-        nameList = new Set(data.map(name => name.toLowerCase())); // Convert to lowercase for case-insensitive matching
+        nameList = new Set(data.map(name => name.toLowerCase()));
     } catch (error) {
         console.error("Error loading names:", error);
     }
@@ -49,25 +62,23 @@ async function loadNames() {
 function detectName(text) {
     let doc = nlp(text);
     let detectedNames = doc.people().out('array');
-    detectedNames = detectedNames.filter(name => /^[A-Za-z]+$/.test(name)); // Only letters allowed
+    detectedNames = detectedNames.filter(name => /^[A-Za-z]+$/.test(name));
 
     return detectedNames.length > 0 ? { hasName: true, name: detectedNames } : { hasName: false, name: null };
 }
 contentsTextArea.addEventListener("input", function () {
-    console.log("typing");
-    const cursorPosition = this.selectionStart; // Save cursor position
+    const cursorPosition = this.selectionStart;
     console.log(detectName(this.value));
-    this.setSelectionRange(cursorPosition, cursorPosition); // Restore cursor position
+    this.setSelectionRange(cursorPosition, cursorPosition);
 });
 
 loadNames();
 
 function calculateTouchDistance(cameraPosition, singleTouchPosition) {
-    // Calculate the distance between camera and touch in 2D space
     const dx = singleTouchPosition.x - cameraPosition.x;
     const dy = singleTouchPosition.y - cameraPosition.y;
 
-    return Math.sqrt(dx * dx + dy * dy); // Return Euclidean distance in 2D
+    return Math.sqrt(dx * dx + dy * dy);
 }
 
 
@@ -81,7 +92,7 @@ function formatDate(timestamp) {
 }
 
 function updateEllipses() {
-    count = (count + 1) % 4; // Cycles between 0, 1, 2, 3
+    count = (count + 1) % 4;
     uploadingText.textContent = "Uploading Post" + ".".repeat(count);
 }
 
@@ -93,7 +104,7 @@ function getOverlappingDiv(currentDiv, currentDivType) {
     const rect1 = currentDiv.getBoundingClientRect();
 
     for (let div of currentDivType) {
-        if (div !== currentDiv) { // Ensure it's not checking itself
+        if (div !== currentDiv) {
             const rect2 = div.getBoundingClientRect();
 
             if (
@@ -102,11 +113,11 @@ function getOverlappingDiv(currentDiv, currentDivType) {
                 rect1.bottom > rect2.top &&
                 rect1.top < rect2.bottom
             ) {
-                return div; // Return the first overlapping div found
+                return div;
             }
         }
     }
-    return null; // No overlapping div found
+    return null;
 }
 
 function isClickInsideContainer(event, containerTargets) {
@@ -135,6 +146,7 @@ function displayFloatingText(message, x, y) {
     floatingText.style.pointerEvents = "none";
     floatingText.style.transition = "opacity 1s ease-out, transform 1s ease-out";
     floatingText.style.fontFamily = "LemonMilk";
+    floatingText.style.zIndex = "900";
 
     document.body.appendChild(floatingText);
 
@@ -148,12 +160,12 @@ function displayFloatingText(message, x, y) {
     }, 700);
 }
 
-function showFloatingText(event) {
+function showFloatingText(event,message) {
     if (isTouchActive) {
         const touch = event.touches[0] || event.changedTouches[0];
-        displayFloatingText("Card cannot be placed here", touch.clientX, touch.clientY);
+        displayFloatingText(message, touch.clientX, touch.clientY);
     } else {
-        displayFloatingText("Card cannot be placed here", event.clientX, event.clientY);
+        displayFloatingText(message, event.clientX, event.clientY);
     }
 
     if (creatingCard) {
@@ -164,60 +176,51 @@ function showFloatingText(event) {
 
 function getIDFromURL() {
     const pathSegments = window.location.pathname.split("/");
-    return pathSegments[pathSegments.length - 1]; // Assuming ID is the last segment
+    return pathSegments[pathSegments.length - 1];
 }
 
 async function fetchCSV() {
     const response = await fetch(csvUrl);
     const data = await response.text();
 
-    // Use PapaParse to parse the CSV data
     Papa.parse(data, {
         complete: function (results) {
             console.log("Parsed CSV Data:", results.data);
-
-            // Get the ID from the URL
             const idFromURL = getIDFromURL();
             let idFound = false;
-
-            // Check if any row contains the ID
             results.data.slice(1).forEach(row => {
                 if (row.includes(idFromURL)) {
-                    idFound = true; // Set flag if ID is found
+                    idFound = true;
                 }
                 createFloatingButton(null, row, false);
             });
 
-            // If the ID was not found, run the function again
             if (!idFound) {
                 console.log(`ID ${idFromURL} not found`);
                 cleanOverexposureUrl()
             }
         },
-        header: false, // Adjust this if you want to include headers
-        skipEmptyLines: true // Skip empty lines
+        header: false,
+        skipEmptyLines: true
     });
+    SetFloatingButtons();
 }
 
-function createFloatingButton(event = null,row, draft = false) {
+function createFloatingButton(event = null, row, draft = false) {
     const idFromURL = getIDFromURL();
-    const [title = "New Title", text = "Type here...", id  = new Date().toISOString(), date = Date.now(),  xPosition = "0", yPosition = "0"] = row;
+    const [title = "New Title", text = "Type here...", id = new Date().toISOString(), date = Date.now(), xPosition = "0", yPosition = "0"] = row;
 
-    // Create button element
     const button = document.createElement("button");
     button.classList.add("floating-button");
 
-    // Create the image element
     const img = document.createElement("img");
     img.src = "/images/overexposure/card-template.svg";
     img.classList.add("floating-image");
 
-    // Create the span for button text
     const span = document.createElement("span");
     span.classList.add("button-text");
     span.textContent = title;
 
-    // Add attributes to the button
     button.setAttribute("data-id", id);
     button.setAttribute("data-date", date);
     button.setAttribute("data-title", title);
@@ -228,19 +231,16 @@ function createFloatingButton(event = null,row, draft = false) {
     noPlaceDiv.appendChild(button);
     floatingContainer.appendChild(noPlaceDiv);
 
-    // Append elements
     button.appendChild(img);
     button.appendChild(span);
     floatingContainer.appendChild(button);
 
-    // Directly use the raw xPosition and yPosition without normalization
     button.style.left = `${parseFloat(xPosition)}px`;
     button.style.top = `${parseFloat(yPosition)}px`;
 
     noPlaceDiv.style.left = `${parseFloat(xPosition) - cardWidthValue / 4}px`;
     noPlaceDiv.style.top = `${parseFloat(yPosition) - cardWidthValue / 4}px`;
 
-    // Apply animation
     const speed = Math.random() * 5 + 2;
     button.animate(
         [
@@ -255,19 +255,18 @@ function createFloatingButton(event = null,row, draft = false) {
         }
     );
     if (getOverlappingDiv(noPlaceDiv, document.querySelectorAll(".no-place")) !== null) {
-        showFloatingText(event);
+        showFloatingText(event,"Card cannot be placed here");
         button.remove();
         noPlaceDiv.remove();
         return;
     }
 
-    // Handle button click
     button.addEventListener("click", () => {
         selectCard(button, false)
     });
 
     button.addEventListener("touchstart", () => {
-        touchStartTime = Date.now(); // Record the time when the touch starts
+        touchStartTime = Date.now();
         singleTouchPosition.x = cameraPosition.x;
         singleTouchPosition.y = cameraPosition.y;
         setTimeout(() => {
@@ -282,16 +281,11 @@ function createFloatingButton(event = null,row, draft = false) {
     });
 
     button.addEventListener("touchend", (event) => {
-        const touchEndTime = Date.now(); // Record the time when the touch ends
-        const touchHeldDuration = touchEndTime - touchStartTime; // Calculate the duration of the touch
+        const touchEndTime = Date.now();
+        const touchHeldDuration = touchEndTime - touchStartTime;
         button.classList.remove('touchhover');
-        // If the button was held down long enough, trigger the action
         const touch = event.touches[0] || event.changedTouches[0];
         const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
-        console.log(touchRadius)
-
-
-        // If touchRadius exceeds maxTouchRadius, remove the creatingCard immediately
         if (touchRadius < maxTouchRadius && touchHeldDuration >= touchDuration) {
             selectCard(button, false);
         }
@@ -314,15 +308,22 @@ function createFloatingButton(event = null,row, draft = false) {
 
 function placeCard(event, positionX, positionY) {
     const floatingContainer = document.querySelector(".floating-container");
+    const bool = localStorage.getItem('settings-nsfw');
+
+    if (bool === 'false') {
+        showFloatingText(event,"Enable NSFW in settings");
+        return;
+    }
+
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        showFloatingText(event);
+        showFloatingText(event,"Card cannot be placed here");
         return;
     }
 
     contentsTextArea.value = "";
     titleTextInput.value = "";
 
-    createFloatingButton(event,["New Title", "Type here...", new Date().toISOString(), formatDate(Date.now()), positionX.toString(), positionY.toString()], true);
+    createFloatingButton(event, ["New Title", "Type here...", new Date().toISOString().replace(/[-:T.]/g, '').split('Z')[0], formatDate(Date.now()), positionX.toString(), positionY.toString()], true);
 }
 
 function setOverexposureContainerToEditor(isActive) {
@@ -341,19 +342,16 @@ function setOverexposureContainerToEditor(isActive) {
 
 fetchCSV();
 publishButton.addEventListener("click", async () => {
-    if(detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName){
-        console.log(detectName(contentsTextArea.value));
+    if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
         postIncompleteContainer.classList.add('active');
         currentWarningContainer = postIncompleteContainer;
     }
-    else{
+    else {
         areYouSurePostContainer.classList.add('active');
-        console.log("Posting");
         currentWarningContainer = areYouSurePostContainer;
     }
 });
 submitPostYes.addEventListener("click", async () => {
-    // Get the draft button data
     areYouSurePostContainer.classList.remove('active');
     currentWarningContainer = null;
     const draftButtons = document.querySelectorAll(".floating-button.draft");
@@ -378,7 +376,6 @@ submitPostYes.addEventListener("click", async () => {
             draftData.push([title, text, id, date, xPosition, yPosition]);
         });
 
-        // Save the draft data to the CSV/Google Sheets (using a backend server or Google Sheets API)
         try {
             const response = await saveDataToGoogleSheets(draftData);
             overlay.classList.remove('active');
@@ -388,7 +385,6 @@ submitPostYes.addEventListener("click", async () => {
                 button.classList.remove("draft");
             });
             cleanOverexposureUrl();
-            // You can add logic to reset the draft or show a confirmation message
         } catch (error) {
             console.error("Error saving draft data:", error);
         }
@@ -401,11 +397,9 @@ submitPostNo.addEventListener("click", async () => {
     currentWarningContainer = null;
 });
 
-// Function to save draft data to Google Sheets (via backend or API)
 async function saveDataToGoogleSheets(draftData) {
     try {
         console.log("Sending data to Google Sheets:", draftData);
-        // Convert draftData array to URLSearchParams format
         const formData = new URLSearchParams();
         draftData.forEach((item, index) => {
             formData.append(`title_${index}`, item[0]);
@@ -418,10 +412,10 @@ async function saveDataToGoogleSheets(draftData) {
 
         const response = await fetch(googleScriptSaveCardURL, {
             method: 'POST',
-            body: formData, // Sending as URL encoded form data
+            body: formData,
         });
 
-        const responseText = await response.text(); // Read response as text
+        const responseText = await response.text();
         console.log("Response from Google Sheets:", responseText);
     } catch (error) {
         console.error("Error sending draft data:", error);
@@ -432,7 +426,7 @@ async function saveDataToGoogleSheets(draftData) {
 const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === "attributes" && mutation.attributeName === "class") {
-            if(!overlay.classList.contains("active")){
+            if (!overlay.classList.contains("active")) {
                 cleanOverexposureUrl();
             }
             if (!overexposureContainer.classList.contains("active")) {
@@ -441,7 +435,7 @@ const observer = new MutationObserver((mutationsList) => {
                     if (draftButtons.length > 0) {
                         overlay.classList.add('active');
                         overexposureContainer.classList.add('active');
-                        if(currentWarningContainer === postIncompleteContainer){
+                        if (currentWarningContainer === postIncompleteContainer) {
                             currentWarningContainer = null;
                             postIncompleteContainer.classList.remove('active');
                         }
@@ -477,10 +471,25 @@ observer.observe(uploadingPostContainer, { attributes: true, attributeFilter: ["
 observer.observe(postIncompleteContainer, { attributes: true, attributeFilter: ["class"] });
 
 function selectCard(button, draft) {
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + window.scrollX + rect.width / 2;
+    const centerY = rect.top + window.scrollY + rect.height / 2;
+
+    const bool = localStorage.getItem('settings-nsfw');
+
+    if(button.querySelector('img').classList.contains("disabled")){
+        displayFloatingText("Enable NSFW in settings", centerX, centerY);
+        return;
+    }
+
+    if (bool === 'false') {
+        displayFloatingText("Enable NSFW in settings", centerX, centerY);
+        return;
+    }
     overexposureContainer.classList.add("active");
     const dataId = button.getAttribute("data-id");
     history.pushState(null, "", window.location.pathname.replace(/\/$/, '') + "/" + dataId);
-    
+
     titleText.textContent = button.getAttribute("data-title");
     contentsContainerText.innerHTML = button.getAttribute("data-text");
 
@@ -543,16 +552,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function cleanOverexposureUrl() {
     const currentUrl = window.location.pathname;
     const basePath = "/overexposure";
-    
-    // Find the position of "/overexposure/"
     const overexposureIndex = currentUrl.indexOf(basePath);
 
-    // Check if "/overexposure/" exists in the URL
     if (overexposureIndex !== -1) {
-        // Keep the part before the additional segment and append a "/"
         const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
-
-        // Update the URL without reloading the page
         history.pushState(null, "", newUrl);
     }
 }
@@ -560,24 +563,48 @@ function cleanOverexposureUrl() {
 function cleanOverexposureUrl() {
     const currentUrl = window.location.pathname;
     const basePath = "/overexposure";
-    
-    // Find the position of "/overexposure/"
+
     const overexposureIndex = currentUrl.indexOf(basePath);
 
-    // Check if "/overexposure/" exists in the URL
     if (overexposureIndex !== -1) {
-        // Keep the part before the additional segment and append a "/"
         const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
-
-        // Update the URL without reloading the page
         history.pushState(null, "", newUrl);
     }
 }
 
 const textInput = document.getElementById("text-input");
 const charCounter = document.getElementById("char-counter");
-const maxLength = textInput.getAttribute("maxlength");
+const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 
 textInput.addEventListener("input", () => {
-    charCounter.textContent =  maxLength - textInput.value.length;
+    const remaining = maxLength - textInput.value.length;
+    charCounter.textContent = remaining;
+
+    if (remaining < 100) {
+        // charCounter.style.display = "block";
+        charCounter.style.color = "var(--primarypagecolour)";
+    } else {
+        //charCounter.style.display = "none";
+        charCounter.style.color = "gray";
+    }
 });
+
+function SetFloatingButtons() {
+    const bool = localStorage.getItem('settings-nsfw');
+    const buttons = document.querySelectorAll('.floating-button img');
+
+    if (bool === 'true') {
+        document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
+        buttons.forEach(button => {
+            button.src = "/images/overexposure/card-template.svg";
+            button.classList.remove("disabled")
+        });
+    }
+    else{
+        document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+        buttons.forEach(button => {
+            button.src = "/images/overexposure/card-template-blank.svg";
+            button.classList.add("disabled")
+        });
+    }
+}

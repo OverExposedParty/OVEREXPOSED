@@ -34,6 +34,30 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
+class LocalStorageObserver {
+    constructor() {
+      this.listeners = [];
+      this.originalSetItem = localStorage.setItem;
+      this.originalGetItem = localStorage.getItem;
+  
+      localStorage.setItem = (key, value) => {
+        const oldValue = this.originalGetItem.call(localStorage, key);
+        this.originalSetItem.call(localStorage, key, value);
+        this.notifyListeners(key, oldValue, value);
+      };
+    }
+  
+    addListener(callback) {
+      this.listeners.push(callback);
+    }
+
+    notifyListeners(key, oldValue, newValue) {
+      this.listeners.forEach((listener) => {
+        listener(key, oldValue, newValue);
+      });
+    }
+  }
+
 window.onload = function() {
     setTimeout(() => {
     let logoContainer = document.querySelector('.logo-container');

@@ -90,10 +90,11 @@
         </div>
         <div class="container">
             <div class="contents-container" id="contents-container">
-                <P></P>
+                <div class="contents-container-text">
+                </div>
                 <div class="contents-text-editor " id="contents-text-editor">
                     <textarea id="text-input" placeholder="Type here..." maxlength="800"></textarea>
-                        <span id="char-counter"></span>
+                        <span id="char-counter">800</span>
                     <button class="overexposure-publish-button">Publish</button>
                 </div>
             </div>
@@ -119,9 +120,9 @@
                 <br>
                 Pinch with two <highlight>fingers</highlight> to zoom in and out
                 <br>
-                <highlight>Hold</highlight> a card to select
+                <highlight>Hold</highlight> down a card to select it
                 <br>
-                <highlight>Hold</highlight> empty space to add a card
+                <highlight>Hold</highlight> down an empty space to add a card
             </p>
         </div>
     </div>
@@ -160,11 +161,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script src="https://unpkg.com/compromise"></script>
 
+<script src="/scripts/general/header.js"></script>
+
 <script src="/scripts/overexposure/camera-view.js"></script>
 <script src="/scripts/overexposure/overexposure-data.js"></script>
 <script src="/scripts/overexposure/overexposure-touch-controls.js"></script>
 <script src="/scripts/overexposure/overexposure-computer-controls.js"></script>
-<script src="/scripts/general/header.js"></script>
 <script>
 
     document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
