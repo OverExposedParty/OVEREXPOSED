@@ -456,5 +456,14 @@ textarea {
         font-size: 10px;
         min-width: 60px;
     }
+    .floating-container p {
+        font-size: 12.5px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
     
+    .floating-container h2 {
+        font-size: 22px;
+        margin-bottom: 6px;
+    } 
 }
