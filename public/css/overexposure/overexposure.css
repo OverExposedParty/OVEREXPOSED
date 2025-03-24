@@ -420,7 +420,7 @@ textarea {
     text-align: left;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .contents-container-text.active {
