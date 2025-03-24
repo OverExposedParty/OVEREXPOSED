@@ -331,6 +331,7 @@ textarea {
     height: 100%;
     resize: none;
     padding: 5%;
+    overflow-y: scroll;
 }
 
 .container,

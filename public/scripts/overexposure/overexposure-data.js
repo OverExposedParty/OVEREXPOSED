@@ -68,7 +68,6 @@ function detectName(text) {
 }
 contentsTextArea.addEventListener("input", function () {
     const cursorPosition = this.selectionStart;
-    console.log(detectName(this.value));
     this.setSelectionRange(cursorPosition, cursorPosition);
 });
 
@@ -586,6 +585,13 @@ textInput.addEventListener("input", () => {
     } else {
         //charCounter.style.display = "none";
         charCounter.style.color = "gray";
+    }
+});
+
+titleTextInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        contentsTextArea.focus();
     }
 });
 
