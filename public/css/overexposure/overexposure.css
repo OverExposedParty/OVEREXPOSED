@@ -464,6 +464,7 @@ textarea {
     
     .floating-container h2 {
         font-size: 22px;
-        margin-bottom: 6px;
+        line-height: 1.7;
+        margin-bottom: 0px;
     } 
 }
