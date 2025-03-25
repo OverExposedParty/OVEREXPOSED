@@ -191,7 +191,7 @@ function toggleClass(selectedClass,classArray) {
         removeElementIfExists(classArray, selectedClass);
     }
 
-    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0) {
+    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0) {
         overlay.classList.remove('active');
     }
     else{
@@ -212,6 +212,7 @@ function toggleSettings() {
 }
 
 function toggleOverlay(bool) {
+    console.log(permanantElementClassArray);
     if(bool === true){
         overlay.classList.add('active');
     }

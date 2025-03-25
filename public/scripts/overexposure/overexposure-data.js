@@ -601,6 +601,9 @@ function SetNSFW() {
     const bool = localStorage.getItem('settings-nsfw');
     const buttons = document.querySelectorAll('.floating-button img');
 
+    const sizes = ['16x16', '32x32', '96x96', '180x180'];
+    const faviconLinks = document.querySelectorAll('link[rel="icon"]');
+
     if (bool === 'true') {
         enableNSFWContainer.classList.remove('active');
         removeElementIfExists(permanantElementClassArray, enableNSFWContainer);
@@ -609,6 +612,15 @@ function SetNSFW() {
         buttons.forEach(button => {
             button.src = "/images/overexposure/card-template.svg";
             button.classList.remove("disabled")
+        });
+
+        faviconLinks.forEach((favicon, i) => {
+            const size = sizes[i % sizes.length];
+            favicon.href = `/images/icons/overexposure/favicons/favicon-${size}.png`;
+
+            document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
+            document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/overexposure/tik-tok-icon.svg)`);
+            document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/overexposure/instagram-icon.svg)`);
         });
     }
     else{
@@ -619,6 +631,15 @@ function SetNSFW() {
         buttons.forEach(button => {
             button.src = "/images/overexposure/card-template-blank.svg";
             button.classList.add("disabled")
+        });
+
+        faviconLinks.forEach((favicon, i) => {
+            const size = sizes[i % sizes.length];
+            favicon.href = `/images/icons/grey/favicons/favicon-${size}.png`;
+
+            document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/grey/rotate-phone-icon.svg)`);
+            document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/grey/tik-tok-icon.svg)`);
+            document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/grey/instagram-icon.svg)`);
         });
     }
 }
