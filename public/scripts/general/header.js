@@ -179,62 +179,51 @@ landscapeMessage.appendChild(rotateIcon);
 
 document.body.appendChild(landscapeMessage);
 
-function toggleSettings() {
-    settingsBox.classList.toggle('active');
-    addElementIfNotExists(elementClassArray, settingsBox);
-    if (findActiveElementsWithClasses(classArray).length == 0) {
-        overlay.classList.remove('active');
+function toggleClass(selectedClass,classArray) {
+    selectedClass.classList.toggle('active');
+    if(selectedClass.classList.contains('active')){
+        if(classArray == settingsElementClassArray){
+            removeAllElements(classArray);
+        }
+        addElementIfNotExists(classArray, selectedClass);
     }
     else{
-        if(!(overlay.classList.contains('active'))){
-            toggleOverlay();
-        }
-        else{
-            setActiveClass(elementClassArray,settingsBox);
-        }
+        removeElementIfExists(classArray, selectedClass);
     }
 
-}
-function toggleHelp() {
-    helpContainer.classList.toggle('active');
-    addElementIfNotExists(elementClassArray, helpContainer);
-    if (findActiveElementsWithClasses(classArray).length == 0) {
+    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0) {
         overlay.classList.remove('active');
     }
     else{
         if(!(overlay.classList.contains('active'))){
-            toggleOverlay();
-        }
-        else{
-            setActiveClass(elementClassArray,helpContainer);
+            toggleOverlay(true);
         }
     }
+}
+
+function toggleHelp() {
+    toggleClass(helpContainer,settingsElementClassArray)
 }
 function toggleExtraMenu() {
-    extraMenuContainer.classList.toggle('active');
-    addElementIfNotExists(elementClassArray, extraMenuContainer);
-    if (findActiveElementsWithClasses(classArray).length == 0) {
-        overlay.classList.remove('active');
-        setActiveClass(elementClassArray,extraMenuContainer);
-    }
-    else{
-        if(!(overlay.classList.contains('active'))){
-            toggleOverlay();
-        }
-        else{
-            setActiveClass(elementClassArray,extraMenuContainer);
-        }
-    }
+    toggleClass(extraMenuContainer,settingsElementClassArray)
+}
+function toggleSettings() {
+    toggleClass(settingsBox,settingsElementClassArray)
 }
 
-function toggleOverlay() {
-    overlay.classList.toggle('active');
-    if (!overlay.classList.contains('active')) {
-        elementClassArray.forEach(element => {
-            if (element) {
-                element.classList.remove('active');
-            }
-        });
+function toggleOverlay(bool) {
+    if(bool === true){
+        overlay.classList.add('active');
+    }
+    else{
+        if(popUpClassArray.length > 0){
+            removeAllElements(popUpClassArray)
+        }
+        else if(permanantElementClassArray.length == 0){
+            overlay.classList.remove('active');
+        }
+        removeAllElements(settingsElementClassArray);
+        removeAllElements(elementClassArray);
     }
 }
 
@@ -246,7 +235,6 @@ function setActiveClass(selectedElements, keepActive) {
     });
 }
 
-
 waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
@@ -256,7 +244,7 @@ waitForElementWithTimeout('.help-icon', (helpIcon) => {
 }, 15000);
 
 waitForElementWithTimeout('#overlay', (overlay) => {
-    overlay.addEventListener('click', toggleOverlay);
+    overlay.addEventListener('click', () => toggleOverlay(false));
 }, 15000);
 
 waitForElementWithTimeout('.extra-menu-icon', (extraMenuIcon) => {
@@ -348,11 +336,30 @@ window.addEventListener('load', function () {
 
 let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container', 'question-zoomed-container', 'overexposure-container'];
 let elementClassArray = [];
+let popUpClassArray = [];
+let settingsElementClassArray = [];
+let permanantElementClassArray = [];
 
 function addElementIfNotExists(array, element) {
     if (!array.includes(element)) {
         array.push(element);
     }
+}
+
+function removeElementIfExists(array, element) {
+    const index = array.indexOf(element);
+    if (index !== -1) {
+        array.splice(index, 1);
+    }
+}
+
+function elementExists(array, element) {
+    return Array.isArray(array) && array.includes(element);
+}
+
+function removeAllElements(array) {
+    array.forEach(element => element.classList.remove("active"));
+    array.length = 0;
 }
 
 function findActiveElementsWithClasses(classArray) {

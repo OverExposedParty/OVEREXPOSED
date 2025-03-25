@@ -47,13 +47,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.remove('disabled');
     
                 const key = button.getAttribute('data-key');
-                localStorage.setItem(key, 'false');
+                if (!localStorage.getItem(key)) {
+                    localStorage.setItem(key, 'false');
+                }
+                
             });
             gameSettingsNsfwButtons.forEach(button => {
                 button.disabled = false;
                 button.classList.remove('disabled');
-    
-                localStorage.setItem(button.getAttribute('data-key'), 'true');
+                
+                const key = button.getAttribute('data-key');
+                if (!localStorage.getItem(key)) {
+                    localStorage.setItem(key, 'false');
+                }
             });
         }
         else {
@@ -113,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.toggle('active');
                 const isActive = button.classList.contains('active');
                 localStorage.setItem(key, isActive ? 'true' : 'false');
-
                 updateStartGameButton();
             }
         });

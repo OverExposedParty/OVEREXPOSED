@@ -28,11 +28,13 @@ const uploadingPostContainer = document.getElementById("uploading-post-container
 const areYouSurePostContainer = document.getElementById("are-you-sure-container");
 const postIncompleteContainer = document.getElementById("post-incomplete-container");
 
-let currentWarningContainer;
+const enableNSFWContainer = document.getElementById("enable-nsfw-container");
 
 publishButton.disabled = true;
 
-let closeOverexposureContainer = false;
+const textInput = document.getElementById("text-input");
+const charCounter = document.getElementById("char-counter");
+const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 
 const storageObserver = new LocalStorageObserver();
 
@@ -41,7 +43,7 @@ storageObserver.addListener((key, oldValue, newValue) => {
         //console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
         if (oldValue !== newValue) {
             eighteenPlusEnabled = newValue;
-            SetFloatingButtons();
+            SetNSFW();
             //console.log(`Value changed! Now NSFW is set to: ${newValue}`);
         }
     }
@@ -202,7 +204,7 @@ async function fetchCSV() {
         header: false,
         skipEmptyLines: true
     });
-    SetFloatingButtons();
+    SetNSFW();
 }
 
 function createFloatingButton(event = null, row, draft = false) {
@@ -343,20 +345,20 @@ fetchCSV();
 publishButton.addEventListener("click", async () => {
     if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
         postIncompleteContainer.classList.add('active');
-        currentWarningContainer = postIncompleteContainer;
+        addElementIfNotExists(popUpClassArray, postIncompleteContainer); 
     }
     else {
         areYouSurePostContainer.classList.add('active');
-        currentWarningContainer = areYouSurePostContainer;
+        addElementIfNotExists(popUpClassArray, areYouSurePostContainer); 
     }
 });
 submitPostYes.addEventListener("click", async () => {
     areYouSurePostContainer.classList.remove('active');
-    currentWarningContainer = null;
+    removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     const draftButtons = document.querySelectorAll(".floating-button.draft");
     if (draftButtons.length > 0) {
         uploadingPostContainer.classList.add("active");
-        currentWarningContainer = uploadingPostContainer;
+        addElementIfNotExists(popUpClassArray, uploadingPostContainer); 
         intervalId = setInterval(updateEllipses, 400);
         const draftData = [];
         draftButtons.forEach(button => {
@@ -388,12 +390,12 @@ submitPostYes.addEventListener("click", async () => {
             console.error("Error saving draft data:", error);
         }
         uploadingPostContainer.classList.remove("active");
-        currentWarningContainer = uploadingPostContainer;
+        addElementIfNotExists(popUpClassArray, uploadingPostContainer); 
     }
 });
 submitPostNo.addEventListener("click", async () => {
     areYouSurePostContainer.classList.remove('active');
-    currentWarningContainer = null;
+    removeElementIfExists(popUpClassArray, areYouSurePostContainer)
 });
 
 async function saveDataToGoogleSheets(draftData) {
@@ -434,17 +436,17 @@ const observer = new MutationObserver((mutationsList) => {
                     if (draftButtons.length > 0) {
                         overlay.classList.add('active');
                         overexposureContainer.classList.add('active');
-                        if (currentWarningContainer === postIncompleteContainer) {
-                            currentWarningContainer = null;
+                        addElementIfNotExists(elementClassArray, overexposureContainer);
+                        if (elementExists(popUpClassArray,postIncompleteContainer)) {
                             postIncompleteContainer.classList.remove('active');
                         }
                         else if (!(areYouSurePostContainer.classList.contains('active'))) {
                             exitMenuContainer.classList.add('active');
-                            currentWarningContainer = exitMenuContainer;
+                            addElementIfNotExists(popUpClassArray, exitMenuContainer); 
                         }
                         else {
                             areYouSurePostContainer.classList.remove('active');
-                            currentWarningContainer = null;
+                            removeElementIfExists(popUpClassArray, areYouSurePostContainer)
                         }
 
                     }
@@ -453,6 +455,7 @@ const observer = new MutationObserver((mutationsList) => {
                     document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
                     document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
                     history.pushState(null, "", window.location.pathname);
+                    charCounter.textContent = maxLength;
                 }
             }
             if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
@@ -510,28 +513,31 @@ function ExitMenuButtonYes() {
     titleTextInput.value = "";
     contentsTextArea.value = "";
     exitMenuContainer.classList.remove('active');
+    removeElementIfExists(popUpClassArray, exitMenuContainer)
     publishButton.disabled = true;
-    toggleOverlay();
+    toggleOverlay(false);
 }
 
 function ExitMenuButtonNo() {
     exitMenuContainer.classList.remove('active');
-    currentWarningContainer = null;
+    removeElementIfExists(popUpClassArray, exitMenuContainer)
 }
 
 overexposureContainer.addEventListener("mousedown", function () {
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
         areYouSurePostContainer.classList.remove('active');
-        currentWarningContainer = null;
+
+        removeElementIfExists(popUpClassArray, exitMenuContainer)
+        removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     }
     if (areYouSurePostContainer.classList.contains("active")) {
         areYouSurePostContainer.classList.remove('active');
-        currentWarningContainer = null;
+        removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     }
     if (postIncompleteContainer.classList.contains("active")) {
         postIncompleteContainer.classList.remove('active');
-        currentWarningContainer = null;
+        removeElementIfExists(popUpClassArray, postIncompleteContainer)
     }
 });
 
@@ -571,10 +577,6 @@ function cleanOverexposureUrl() {
     }
 }
 
-const textInput = document.getElementById("text-input");
-const charCounter = document.getElementById("char-counter");
-const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
-
 textInput.addEventListener("input", () => {
     const remaining = maxLength - textInput.value.length;
     charCounter.textContent = remaining;
@@ -595,11 +597,14 @@ titleTextInput.addEventListener("keydown", (event) => {
     }
 });
 
-function SetFloatingButtons() {
+function SetNSFW() {
     const bool = localStorage.getItem('settings-nsfw');
     const buttons = document.querySelectorAll('.floating-button img');
 
     if (bool === 'true') {
+        enableNSFWContainer.classList.remove('active');
+        removeElementIfExists(permanantElementClassArray, enableNSFWContainer);
+        toggleOverlay(false);
         document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
         buttons.forEach(button => {
             button.src = "/images/overexposure/card-template.svg";
@@ -607,6 +612,9 @@ function SetFloatingButtons() {
         });
     }
     else{
+        enableNSFWContainer.classList.add('active');
+        addElementIfNotExists(permanantElementClassArray, enableNSFWContainer);
+        toggleOverlay(true);
         document.documentElement.style.setProperty('--primarypagecolour', '#999999');
         buttons.forEach(button => {
             button.src = "/images/overexposure/card-template-blank.svg";
