@@ -263,6 +263,7 @@ function createFloatingButton(event = null, row, draft = false) {
     }
 
     button.addEventListener("click", () => {
+        if(isTouchActive) {return;}
         selectCard(button, false)
     });
 

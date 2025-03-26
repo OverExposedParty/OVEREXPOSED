@@ -177,6 +177,10 @@ highlight {
     transform: scale(1.1)
 }
 
+.floating-button.touchhover .button-text {
+    transform: translate(-50%, -55%) scale(1.1);
+}
+
 .floating-button img {
     width: var(--cardWidth);
     opacity: 0.9;
@@ -207,12 +211,6 @@ highlight {
 .floating-button:hover .button-text {
     transform: translate(-50%, -55%) scale(1.1);
     /* Scale the text when hovered */
-}
-
-/* Add a higher z-index on hover to bring the hovered button above others */
-.floating-button:hover {
-    z-index: 10;
-    /* This brings the hovered button to the front */
 }
 
 .overexposure-container {

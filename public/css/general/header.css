@@ -364,7 +364,7 @@ input:checked+.slider:before {
     margin: 0 10px;
     width: 10vh;
     font-family: LemonMilk;
-    z-index: 600;
+    z-index: 750;
     transition: background-color 0.3s, color 0.3s;
 }
 
