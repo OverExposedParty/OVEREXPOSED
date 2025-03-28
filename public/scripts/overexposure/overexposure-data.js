@@ -489,7 +489,6 @@ observer.observe(uploadingPostContainer, { attributes: true, attributeFilter: ["
 observer.observe(postIncompleteContainer, { attributes: true, attributeFilter: ["class"] });
 
 function selectCard(button, draft) {
-    playSoundEffect(soundContainerOpen);
     const rect = button.getBoundingClientRect();
     const centerX = rect.left + window.scrollX + rect.width / 2;
     const centerY = rect.top + window.scrollY + rect.height / 2;
@@ -521,6 +520,7 @@ function selectCard(button, draft) {
 
     overlay.classList.add("active");
     addElementIfNotExists(elementClassArray, overexposureContainer);
+    playSoundEffect(soundContainerOpen);
 }
 
 exitMenuYes.addEventListener("click", ExitMenuButtonYes);
