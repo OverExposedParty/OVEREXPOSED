@@ -20,7 +20,7 @@ const settingsBoxLabels = document.querySelectorAll('#settings-box label');
 const settingsBoxTitle = document.querySelector('#settings-title');
 let settingsBox = document.querySelector('#settings-box');
 
-const settingsVibrationCheckbox = document.getElementById('settings-vibration');
+const settingsSoundCheckbox = document.getElementById('settings-sound');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
 
 
@@ -33,6 +33,33 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
+
+const soundContainerOpen  = new Audio('/sounds/header/container-open.wav');
+soundContainerOpen.preload = 'auto';
+
+const soundContainerClose  = new Audio('/sounds/header/container-close.wav');
+soundContainerClose.preload = 'auto';
+
+const soundSliderEnabled = new Audio('/sounds/header/slider-enabled.wav');
+soundSliderEnabled.preload = 'auto';
+
+const soundSliderDisabled = new Audio('/sounds/header/slider-disabled.wav');
+soundSliderDisabled.preload = 'auto';
+
+const soundSplashScreenUp = new Audio('/sounds/header/splash-screen-up.wav');
+soundSplashScreenUp.preload = 'auto';
+
+const soundSplashScreenDown = new Audio('/sounds/header/splash-screen-down.wav');
+soundSplashScreenDown.preload = 'auto';
+
+const soundButtonClicked = new Audio('/sounds/header/button-click.wav');
+soundButtonClicked.preload = 'auto';
+
+const soundButtonDeselect = new Audio('/sounds/header/button-deselect.wav');
+soundButtonDeselect.preload = 'auto';
+
+const soundCardFlip = new Audio('/sounds/homepage/card-flip.wav');
+soundCardFlip.preload = 'auto';
 
 class LocalStorageObserver {
     constructor() {
@@ -104,7 +131,7 @@ const tiktokUrl = "https://www.tiktok.com/@overexposed.app";
 document.addEventListener('DOMContentLoaded', function () {
     const instagramLink = document.getElementById('instagram-link');
     const tiktokLink = document.getElementById('tiktok-link');
-    const vibrationSetting = document.getElementById('settings-vibration');
+    const soundSetting = document.getElementById('settings-sound');
     const nsfwSetting = document.getElementById('settings-nsfw');
 
     waitForElementWithTimeout('#tiktok-link', (element) => {
@@ -115,17 +142,19 @@ document.addEventListener('DOMContentLoaded', function () {
         element.href = instagramUrl;
     }, 15000);
 
-    waitForElementWithTimeout('#settings-vibration', (settingsVibrationCheckbox) => {
-        if (!('vibrate' in navigator) || /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent)) {
-            settingsVibrationCheckbox.disabled = true;
-            settingsVibrationCheckbox.nextElementSibling.style.opacity = 0.5;
-        } else {
-            if (localStorage.getItem('settings-vibration') === 'true') {
-                settingsVibrationCheckbox.checked = true;
-            }
+    waitForElementWithTimeout('#settings-sound', (settingsSoundCheckbox) => {
+        if (localStorage.getItem('settings-sound') === 'true') {
+            settingsSoundCheckbox.checked = true;
         }
-        settingsVibrationCheckbox.addEventListener('change', function () {
-            localStorage.setItem('settings-vibration', settingsVibrationCheckbox.checked);
+
+        settingsSoundCheckbox.addEventListener('change', function () {
+            localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
+            if(settingsSoundCheckbox.checked){
+                playSoundEffect(soundSliderEnabled);
+            }
+            else{
+                playSoundEffect(soundSliderDisabled);
+            }
         });
     }, 15000);
 
@@ -136,6 +165,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         nsfwCheckbox.addEventListener('change', function () {
             localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
+            if(nsfwCheckbox.checked){
+                playSoundEffect(soundSliderEnabled);
+            }
+            else{
+                playSoundEffect(soundSliderDisabled);
+            }
         });
     }, 15000);
 });
@@ -186,9 +221,11 @@ function toggleClass(selectedClass,classArray) {
             removeAllElements(classArray);
         }
         addElementIfNotExists(classArray, selectedClass);
+        playSoundEffect(soundContainerOpen);
     }
     else{
         removeElementIfExists(classArray, selectedClass);
+        playSoundEffect(soundContainerClose);
     }
 
     if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0) {
@@ -200,15 +237,14 @@ function toggleClass(selectedClass,classArray) {
         }
     }
 }
-
 function toggleHelp() {
-    toggleClass(helpContainer,settingsElementClassArray)
+    toggleClass(helpContainer,settingsElementClassArray);
 }
 function toggleExtraMenu() {
-    toggleClass(extraMenuContainer,settingsElementClassArray)
+    toggleClass(extraMenuContainer,settingsElementClassArray);
 }
 function toggleSettings() {
-    toggleClass(settingsBox,settingsElementClassArray)
+    toggleClass(settingsBox,settingsElementClassArray);
 }
 
 function toggleOverlay(bool) {
@@ -222,6 +258,7 @@ function toggleOverlay(bool) {
         }
         else if(permanantElementClassArray.length == 0){
             overlay.classList.remove('active');
+            playSoundEffect(soundContainerClose);
         }
         removeAllElements(settingsElementClassArray);
         removeAllElements(elementClassArray);
@@ -327,6 +364,7 @@ window.addEventListener('load', function () {
         container.classList.remove('center');
         staticSplashScreenContainer.remove();
         container.classList.add('down');
+        playSoundEffect(soundSplashScreenDown);
     }, 300);
 
     setTimeout(function () {
@@ -447,6 +485,7 @@ function transitionSplashScreen(link,splashScreen) {
     setTimeout(() => {
         container.classList.remove('down');
         container.classList.add('center');
+        playSoundEffect(soundSplashScreenUp);
     }, 100); // Slight delay to ensure CSS applies
 
     // Listen for transition end
@@ -456,6 +495,15 @@ function transitionSplashScreen(link,splashScreen) {
             window.location.href = link;
         }
     });
+}
+
+function playSoundEffect(soundEffect) {
+    const bool = localStorage.getItem('settings-sound');
+    if (bool === 'false') {
+        return;
+    }
+    soundEffect.currentTime = 0;
+    soundEffect.play();
 }
 
 

@@ -223,6 +223,7 @@ function toggleQuestionZoomedContainer() {
     addElementIfNotExists(elementClassArray, questionZoomedContainer);
     if (!questionZoomedContainer.classList.contains('active')) {
         questionZoomedContainer.classList.add('active');
+        playSoundEffect(soundContainerOpen);
         questionZoomedContainerText.textContent = mainImageContainerText.textContent;
         if (!overlay.classList.contains('active')) {
             overlay.classList.add('active');

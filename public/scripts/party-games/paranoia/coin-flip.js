@@ -3,6 +3,9 @@ const tossBtn = document.getElementById('coin-button');
 
 const coinFlipButton = document.getElementById('coin-flip-button');
 
+const soundCoinFlip = new Audio('/sounds/party-games/coin-flip.wav');
+soundCoinFlip.preload = 'auto';
+
 coinFlipButton.addEventListener('click', toggleCoinFlip);
 tossBtn.addEventListener('click', () => {
     tossCoinFunction();
@@ -13,12 +16,14 @@ function toggleCoinFlip() {
     if (!coinFlipContainer.classList.contains('active')) {
         coinFlipContainer.classList.add('active');
         coinFlipButton.classList.add('active');
+        playSoundEffect(soundContainerOpen);
         if (!overlay.classList.contains('active')) {
             overlay.classList.add('active');
         }
     }
     else {
         coinFlipContainer.classList.remove('active');
+        playSoundEffect(soundContainerClose);
         if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
         }
@@ -33,7 +38,7 @@ function tossCoinFunction() {
         '/images/icons/paranoia/tails-icon.svg';
 
     coinIcon.classList.add('flip');
-
+    playSoundEffect(soundCoinFlip);
     setTimeout(() => {
         coinIcon.innerHTML =
             `<img src="${imageUrl}" alt="${faceCoin}">`;
@@ -46,3 +51,4 @@ function tossCoinFunction() {
         coinIcon.classList.remove('flip');
     }, 1000);
 }
+

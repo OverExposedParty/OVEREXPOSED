@@ -120,6 +120,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isActive = button.classList.contains('active');
                 localStorage.setItem(key, isActive ? 'true' : 'false');
                 updateStartGameButton();
+                if(isActive){
+                    playSoundEffect(soundButtonDeselect);
+                }
+                else{
+                    playSoundEffect(soundButtonClicked);
+                }
             }
         });
     });
@@ -137,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addElementIfNotExists(elementClassArray, warningBox);
             warningBox.classList.add('active');
             overlay.classList.add('active');
+            playSoundEffect(soundContainerOpen);
         } else {
             transitionSplashScreen(startGameButton.id, `/images/splash-screens/${startGameButton.id}.png`);
         }

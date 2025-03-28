@@ -71,8 +71,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/insights.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/insights.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/insights.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/insights.png"
+            alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -154,6 +156,13 @@
         const isVisible = filterContainer.style.display === 'flex';
         filterContainer.style.display = isVisible ? 'none' : 'flex';
         filterButton.classList.toggle('hidden', isVisible);
+        if (isVisible) {
+            playSoundEffect(soundButtonDeselect);
+        }
+        else {
+            playSoundEffect(soundButtonClicked);
+        }
+
     });
 
 
@@ -310,7 +319,11 @@
         postDiv.appendChild(blogContentDiv);
         blogContainer.appendChild(postDiv);
 
-        button.addEventListener('click', () => openBlogPost(index));
+        button.addEventListener('click', () => {
+            playSoundEffect(soundButtonClicked);
+            openBlogPost(index);
+        });
+
     }
 
 
@@ -388,7 +401,9 @@
         checkbox.addEventListener('change', () => {
             if (!checkbox.checked) {
                 tagAllCheckbox.checked = false;
+                playSoundEffect(soundButtonDeselect);
             } else {
+                playSoundEffect(soundButtonClicked);
                 const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
                 tagAllCheckbox.checked = allChecked;
             }

@@ -77,6 +77,7 @@
     justify-content: center;
     align-items: center;
     font-size: 70%;
+    cursor: pointer;
 }
 .filter-button.hidden {
     border-color: gray;
@@ -128,6 +129,7 @@
     margin-bottom: 5px;
     font-family: LemonMilk;
     font-size: small;
+    cursor: pointer;
 
 }
 .tag-checkbox {
@@ -275,6 +277,7 @@
     padding: 1vh 1vw;
     font-family: LemonMilk;
     width:100%;
+    cursor: pointer;
 }
 .blog-post-image
 {

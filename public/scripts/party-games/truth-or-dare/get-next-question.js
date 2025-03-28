@@ -40,6 +40,7 @@ function updateTruthOrDareText(type) {
 
 document.getElementById('truth-button').addEventListener('click', () => {
     stopSpeech();
+    playSoundEffect(soundButtonClicked);
     if (hasBeenClicked) return;
     hasBeenClicked = true;
     const selectedQuestionObj = getNextQuestion('truth');
@@ -56,6 +57,7 @@ document.getElementById('truth-button').addEventListener('click', () => {
 
 document.getElementById('dare-button').addEventListener('click', () => {
     stopSpeech();
+    playSoundEffect(soundButtonClicked);
     if (hasBeenClicked) return;
     hasBeenClicked = true;
     const question = getNextQuestion('dare');

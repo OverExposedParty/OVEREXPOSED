@@ -133,6 +133,7 @@ body {
     font-size: 70%;
     margin-top: 1vh;
     margin-bottom: 2.5vh;
+    cursor: pointer;
 }
 .contents-table-container .contents-table-button {
     margin-top: 1vh;
