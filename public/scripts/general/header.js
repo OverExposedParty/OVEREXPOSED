@@ -57,6 +57,8 @@ async function loadSoundEffects() {
         cardCannotBePlacedHere: '/sounds/overexposure/card-cannot-be-place-here.wav',
         postIncomplete: '/sounds/overexposure/post-incomplete.wav',
         postUploaded: '/sounds/overexposure/post-uploaded.wav',
+        wheelSpin: '/sounds/party-games/wheel-spin.wav',
+        coinFlip: '/sounds/party-games/coin-flip.wav',
     };
 
     for (const [key, url] of Object.entries(soundEffects)) {

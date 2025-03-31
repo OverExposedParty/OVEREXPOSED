@@ -4,13 +4,13 @@ const contentTableContainer = document.getElementById('contents-table-container'
 const ttsButton = document.getElementById('tts-button');
 
 standaloneButton.addEventListener('click', function () {
-    playSoundEffect(soundButtonClicked);
+    playSoundEffect('buttonClicked');
     standaloneButton.style.display = 'none';
     contentTableContainer.style.display = 'block';
 });
 
 containerButton.addEventListener('click', function () {
-    playSoundEffect(soundButtonDeselect);
+    playSoundEffect('buttonDeselect');
     contentTableContainer.style.display = 'none';
     standaloneButton.style.display = 'flex';
 });
@@ -40,14 +40,14 @@ function readText(text) {
         responsiveVoice.cancel();
         isSpeaking = false;
         ttsButton.classList.remove('active');
-        playSoundEffect(soundButtonDeselect);
+        playSoundEffect('buttonDeselect');
     } else {
         const selectedVoice = getSelectedVoice();
         responsiveVoice.speak(text, selectedVoice);
 
         isSpeaking = true;
         ttsButton.classList.add('active');
-        playSoundEffect(soundButtonClicked);
+        playSoundEffect('buttonClicked');
 
         responsiveVoice.onend = () => {
             isSpeaking = false;

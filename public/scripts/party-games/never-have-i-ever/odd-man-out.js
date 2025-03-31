@@ -23,14 +23,14 @@ function toggleSpinTheWheel() {
     if (!spinContainer.classList.contains('active')) {
         spinContainer.classList.add('active');
         spinButton.classList.add('active');
-        playSoundEffect(soundContainerOpen);
+        playSoundEffect('containerOpen');
         if (!overlay.classList.contains('active')) {
             overlay.classList.add('active');
         }
     }
     else {
         spinContainer.classList.remove('active');
-        playSoundEffect(soundContainerClose);
+        playSoundEffect('containerClose');
         if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
         }

@@ -11,9 +11,6 @@ const warningColour = rootStyles.getPropertyValue('--warningcolour').trim();
 
 const spinButton = document.getElementById('spin-button');
 
-const soundWheelSpin = new Audio('/sounds/party-games/wheel-spin.wav');
-soundWheelSpin.preload = 'auto';
-
 if(spinButton){
     spinButton.addEventListener('click', toggleSpinTheWheel);
 }
@@ -25,14 +22,14 @@ function toggleSpinTheWheel() {
     if (!spinContainer.classList.contains('active')) {
         spinContainer.classList.add('active');
         spinButton.classList.add('active');
-        playSoundEffect(soundContainerOpen);
+        playSoundEffect('containerOpen');
         if (!overlay.classList.contains('active')) {
             overlay.classList.add('active');
         }
     }
     else {
         spinContainer.classList.remove('active');
-        playSoundEffect(soundContainerClose);
+        playSoundEffect('containerClose');
         if (findActiveElementsWithClasses(classArray).length == 0) {
             overlay.classList.remove('active');
         }
@@ -159,7 +156,7 @@ function init() {
         spinButtonClicked = true; // Flag to indicate spin started
         spinDisabled = true;
         spinning = true;
-        playSoundEffect(soundWheelSpin);
+        playSoundEffect('wheelSpin');
     });
 }
 

@@ -157,10 +157,10 @@
         filterContainer.style.display = isVisible ? 'none' : 'flex';
         filterButton.classList.toggle('hidden', isVisible);
         if (isVisible) {
-            playSoundEffect(soundButtonDeselect);
+            playSoundEffect('buttonDeselect');
         }
         else {
-            playSoundEffect(soundButtonClicked);
+            playSoundEffect('buttonClicked');
         }
 
     });
@@ -320,7 +320,7 @@
         blogContainer.appendChild(postDiv);
 
         button.addEventListener('click', () => {
-            playSoundEffect(soundButtonClicked);
+            playSoundEffect('buttonClicked');
             openBlogPost(index);
         });
 
@@ -401,9 +401,9 @@
         checkbox.addEventListener('change', () => {
             if (!checkbox.checked) {
                 tagAllCheckbox.checked = false;
-                playSoundEffect(soundButtonDeselect);
+                playSoundEffect('buttonDeselect');
             } else {
-                playSoundEffect(soundButtonClicked);
+                playSoundEffect('buttonClicked');
                 const allChecked = Array.from(tagCheckboxes).every(cb => cb.checked);
                 tagAllCheckbox.checked = allChecked;
             }

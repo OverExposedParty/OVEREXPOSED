@@ -16,7 +16,7 @@ function getNextQuestion() {
 }
 
 document.querySelector('.question-button').addEventListener('click', () => {
-    playSoundEffect(soundButtonClicked);
+    playSoundEffect('buttonClicked');
     const selectedQuestionObj = getNextQuestion();
     updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
