@@ -36,15 +36,6 @@ const textInput = document.getElementById("text-input");
 const charCounter = document.getElementById("char-counter");
 const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 
-const soundCardCannotBePlacedHere = new Audio('/sounds/overexposure/card-cannot-be-place-here.wav');
-soundCardCannotBePlacedHere.preload = 'auto';
-
-const soundPostIncomplete = new Audio('/sounds/overexposure/post-incomplete.wav');
-soundPostIncomplete.preload = 'auto';
-
-const soundPostUploaded = new Audio('/sounds/overexposure/post-uploaded.wav');
-soundPostUploaded.preload = 'auto';
-
 const storageObserver = new LocalStorageObserver();
 
 storageObserver.addListener((key, oldValue, newValue) => {
@@ -171,7 +162,7 @@ function displayFloatingText(message, x, y) {
 }
 
 function showFloatingText(event,message) {
-    playSoundEffect(soundCardCannotBePlacedHere);
+    playSoundEffect('cardCannotBePlacedHere');
     if (isTouchActive) {
         const touch = event.touches[0] || event.changedTouches[0];
         displayFloatingText(message, touch.clientX, touch.clientY);
@@ -355,10 +346,10 @@ function setOverexposureContainerToEditor(isActive) {
 fetchCSV();
 publishButton.addEventListener("click", async () => {
     if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
-        playSoundEffect(soundPostIncomplete);
+        playSoundEffect('postIncomplete');
         postIncompleteContainer.classList.add('active');
         addElementIfNotExists(popUpClassArray, postIncompleteContainer); 
-        playSoundEffect(soundContainerClose);
+        playSoundEffect('containerClose');
     }
     else {
         areYouSurePostContainer.classList.add('active');
@@ -395,14 +386,14 @@ submitPostYes.addEventListener("click", async () => {
             overlay.classList.remove('active');
             overexposureContainer.classList.remove('active');
             console.log("Draft data saved successfully:", response);
-            playSoundEffect(soundPostUploaded);
+            playSoundEffect('postUploaded');
             draftButtons.forEach(button => {
                 button.classList.remove("draft");
             });
             cleanOverexposureUrl();
         } catch (error) {
             console.error("Error saving draft data:", error);
-            playSoundEffect(soundPostIncomplete);
+            playSoundEffect('postIncomplete');
         }
         uploadingPostContainer.classList.remove("active");
         addElementIfNotExists(popUpClassArray, uploadingPostContainer); 
@@ -434,7 +425,7 @@ async function saveDataToGoogleSheets(draftData) {
         const responseText = await response.text();
         console.log("Response from Google Sheets:", responseText);
     } catch (error) {
-        playSoundEffect(soundPostIncomplete);
+        playSoundEffect('postIncomplete');
         console.error("Error sending draft data:", error);
     }
 }
@@ -520,7 +511,7 @@ function selectCard(button, draft) {
 
     overlay.classList.add("active");
     addElementIfNotExists(elementClassArray, overexposureContainer);
-    playSoundEffect(soundContainerOpen);
+    playSoundEffect('containerOpen');
 }
 
 exitMenuYes.addEventListener("click", ExitMenuButtonYes);

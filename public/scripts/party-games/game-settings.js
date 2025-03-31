@@ -121,10 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.setItem(key, isActive ? 'true' : 'false');
                 updateStartGameButton();
                 if(isActive){
-                    playSoundEffect(soundButtonDeselect);
+                    playSoundEffect('buttonDeselect');
                 }
                 else{
-                    playSoundEffect(soundButtonClicked);
+                    playSoundEffect('buttonClicked');
                 }
             }
         });
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addElementIfNotExists(elementClassArray, warningBox);
             warningBox.classList.add('active');
             overlay.classList.add('active');
-            playSoundEffect(soundContainerOpen);
+            playSoundEffect('containerOpen');
         } else {
             transitionSplashScreen(startGameButton.id, `/images/splash-screens/${startGameButton.id}.png`);
         }

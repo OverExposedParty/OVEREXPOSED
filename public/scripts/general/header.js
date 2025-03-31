@@ -34,32 +34,68 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
-const soundContainerOpen  = new Audio('/sounds/header/container-open.wav');
-soundContainerOpen.preload = 'auto';
+let audioContext;
+let soundBuffers = {}; 
 
-const soundContainerClose  = new Audio('/sounds/header/container-close.wav');
-soundContainerClose.preload = 'auto';
+const audioBuffers = {};
 
-const soundSliderEnabled = new Audio('/sounds/header/slider-enabled.wav');
-soundSliderEnabled.preload = 'auto';
+async function loadSoundEffects() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
 
-const soundSliderDisabled = new Audio('/sounds/header/slider-disabled.wav');
-soundSliderDisabled.preload = 'auto';
+    const soundEffects = {
+        containerOpen: '/sounds/header/container-open.wav',
+        containerClose: '/sounds/header/container-close.wav',
+        sliderEnabled: '/sounds/header/slider-enabled.wav',
+        sliderDisabled: '/sounds/header/slider-disabled.wav',
+        splashScreenUp: '/sounds/header/splash-screen-up.wav',
+        splashScreenDown: '/sounds/header/splash-screen-down.wav',
+        buttonClicked: '/sounds/header/button-click.wav',
+        buttonDeselect: '/sounds/header/button-deselect.wav',
+        cardFlip: '/sounds/homepage/card-flip.wav',
+        cardCannotBePlacedHere: '/sounds/overexposure/card-cannot-be-place-here.wav',
+        postIncomplete: '/sounds/overexposure/post-incomplete.wav',
+        postUploaded: '/sounds/overexposure/post-uploaded.wav',
+    };
 
-const soundSplashScreenUp = new Audio('/sounds/header/splash-screen-up.wav');
-soundSplashScreenUp.preload = 'auto';
+    for (const [key, url] of Object.entries(soundEffects)) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-const soundSplashScreenDown = new Audio('/sounds/header/splash-screen-down.wav');
-soundSplashScreenDown.preload = 'auto';
+            const arrayBuffer = await response.arrayBuffer();
+            const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-const soundButtonClicked = new Audio('/sounds/header/button-click.wav');
-soundButtonClicked.preload = 'auto';
+            soundBuffers[key] = decodedBuffer;
+            console.log(`✅ Sound loaded: ${key}`);
+        } catch (error) {
+            console.error(`❌ Error loading sound: ${key}`, error);
+        }
+    }
+}
 
-const soundButtonDeselect = new Audio('/sounds/header/button-deselect.wav');
-soundButtonDeselect.preload = 'auto';
+async function playSoundEffect(soundKey) {
+    const bool = localStorage.getItem('settings-sound');
+    if (bool === 'false') {
+        return;
+    }
 
-const soundCardFlip = new Audio('/sounds/homepage/card-flip.wav');
-soundCardFlip.preload = 'auto';
+    if (audioContext.state === "suspended") {
+        await audioContext.resume(); // Resume if it's blocked
+    }
+
+    const buffer = soundBuffers[soundKey];
+    if (!buffer) {
+        console.warn(`Sound not loaded: ${soundKey}`);
+        return;
+    }
+
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+}
 
 class LocalStorageObserver {
     constructor() {
@@ -150,10 +186,10 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsSoundCheckbox.addEventListener('change', function () {
             localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
             if(settingsSoundCheckbox.checked){
-                playSoundEffect(soundSliderEnabled);
+                playSoundEffect('sliderEnabled');
             }
             else{
-                playSoundEffect(soundSliderDisabled);
+                playSoundEffect('sliderDisabled');
             }
         });
     }, 15000);
@@ -166,10 +202,10 @@ document.addEventListener('DOMContentLoaded', function () {
         nsfwCheckbox.addEventListener('change', function () {
             localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
             if(nsfwCheckbox.checked){
-                playSoundEffect(soundSliderEnabled);
+                playSoundEffect('sliderEnabled');
             }
             else{
-                playSoundEffect(soundSliderDisabled);
+                playSoundEffect('sliderDisabled');
             }
         });
     }, 15000);
@@ -221,11 +257,11 @@ function toggleClass(selectedClass,classArray) {
             removeAllElements(classArray);
         }
         addElementIfNotExists(classArray, selectedClass);
-        playSoundEffect(soundContainerOpen);
+        playSoundEffect('containerOpen');
     }
     else{
         removeElementIfExists(classArray, selectedClass);
-        playSoundEffect(soundContainerClose);
+        playSoundEffect('containerClose');
     }
 
     if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0) {
@@ -258,7 +294,7 @@ function toggleOverlay(bool) {
         }
         else if(permanantElementClassArray.length == 0){
             overlay.classList.remove('active');
-            playSoundEffect(soundContainerClose);
+            playSoundEffect('containerClose');
         }
         removeAllElements(settingsElementClassArray);
         removeAllElements(elementClassArray);
@@ -350,21 +386,21 @@ function handleTTSButtons(buttons) {
 
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
-window.addEventListener('load', function () {
+window.addEventListener('load', async function () {
+
     const container = document.getElementById("splash-screen-container");
     const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
 
-
-
+    
     setTimeout(function () {
         container.classList.add('center');
     }, 50);
-
+    await loadSoundEffects();
     setTimeout(function () {
         container.classList.remove('center');
         staticSplashScreenContainer.remove();
         container.classList.add('down');
-        playSoundEffect(soundSplashScreenDown);
+        playSoundEffect('splashScreenDown');
     }, 300);
 
     setTimeout(function () {
@@ -485,7 +521,7 @@ function transitionSplashScreen(link,splashScreen) {
     setTimeout(() => {
         container.classList.remove('down');
         container.classList.add('center');
-        playSoundEffect(soundSplashScreenUp);
+        playSoundEffect('splashScreenUp');
     }, 100); // Slight delay to ensure CSS applies
 
     // Listen for transition end
@@ -496,16 +532,6 @@ function transitionSplashScreen(link,splashScreen) {
         }
     });
 }
-
-function playSoundEffect(soundEffect) {
-    const bool = localStorage.getItem('settings-sound');
-    if (bool === 'false') {
-        return;
-    }
-    soundEffect.currentTime = 0;
-    soundEffect.play();
-}
-
 
 // Page Load Transition
 const heading = document.createElement('div');
