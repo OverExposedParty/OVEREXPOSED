@@ -7,6 +7,20 @@ const permissionsPolicy = require('permissions-policy');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const { spawn } = require('child_process');
+
+// Start PocketBase server
+const pocketbasePath = path.join(__dirname, 'pocketbase.exe'); // Use 'pocketbase' on Mac/Linux
+const pb = spawn(pocketbasePath, ['serve'], {
+  cwd: __dirname,
+  stdio: 'inherit',
+});
+
+pb.on('error', (err) => {
+  console.error('Failed to start PocketBase:', err);
+});
+
+
 // Add security headers using helmet
 app.use(helmet());
 

@@ -305,10 +305,6 @@ function createFloatingButton(event = null, row, draft = false) {
     }
 }
 
-
-
-
-
 function placeCard(event, positionX, positionY) {
     const floatingContainer = document.querySelector(".floating-container");
     const bool = localStorage.getItem('settings-nsfw');
