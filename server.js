@@ -19,8 +19,12 @@ const logStream = fs.createWriteStream('pocketbase.log', { flags: 'a' }); // 'a'
 // Start PocketBase server with the necessary flags to listen on all interfaces
 const pb = spawn(pocketbasePath, ['serve', '--http', '0.0.0.0:8090'], {
   cwd: __dirname,
-  stdio: ['inherit', logStream, logStream], // Log both stdout and stderr to file
+  stdio: ['pipe', 'pipe', 'pipe'], // Use 'pipe' for stdio to allow handling the streams
 });
+
+// Redirect the output to the log file
+pb.stdout.pipe(logStream);  // Pipe stdout to the log file
+pb.stderr.pipe(logStream);  // Pipe stderr to the log file
 
 // Error handling for when PocketBase fails to start
 pb.on('error', (err) => {
@@ -39,6 +43,7 @@ pb.on('exit', (code, signal) => {
     fs.appendFileSync('error.log', `PocketBase was terminated by signal ${signal}\n`);
   }
 });
+
 // Add security headers using helmet
 app.use(helmet());
 
