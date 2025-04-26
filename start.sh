@@ -7,5 +7,5 @@ chmod +x ./pocketbase
 nohup node server.js &
 
 # Start pocketbase
-./pocketbase serve --http overexposed.app:8090
+./pocketbase serve --http 143.110.162.204:8090
 
