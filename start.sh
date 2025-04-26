@@ -1,4 +1,6 @@
+#!/bin/bash
 
+chmod +x ./pocketbase
 
-# Start node server.js in the background
-nohup node server.js 
+nohup node server.js &
+nohup ./pocketbase serve --http 0.0.0.0:8090 &
