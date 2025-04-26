@@ -12,16 +12,32 @@ const { spawn } = require('child_process');
 // Path to the PocketBase executable
 const pocketbasePath = path.join(__dirname, 'pocketbase'); // Use 'pocketbase' on Mac/Linux
 
+// Create a write stream for PocketBase logs
+const logStream = fs.createWriteStream('pocketbase.log', { flags: 'a' }); // 'a' appends to the file
+
 // Start PocketBase server with the necessary flags to listen on all interfaces
 const pb = spawn(pocketbasePath, ['serve', '--http', '0.0.0.0:8090'], {
   cwd: __dirname,
-  stdio: 'inherit',
+  stdio: ['inherit', logStream, logStream], // Log both stdout and stderr to file
 });
 
+// Error handling for when PocketBase fails to start
 pb.on('error', (err) => {
   console.error('Failed to start PocketBase:', err);
+  fs.appendFileSync('error.log', `Error: ${err}\n`); // Log the error to a separate error log file
 });
 
+// Handling the exit of the PocketBase process
+pb.on('exit', (code, signal) => {
+  if (code) {
+    console.error(`PocketBase exited with code ${code}`);
+    fs.appendFileSync('error.log', `PocketBase exited with code ${code}\n`);
+  }
+  if (signal) {
+    console.error(`PocketBase was terminated by signal ${signal}`);
+    fs.appendFileSync('error.log', `PocketBase was terminated by signal ${signal}\n`);
+  }
+});
 // Add security headers using helmet
 app.use(helmet());
 
