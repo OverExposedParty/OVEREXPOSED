@@ -9,9 +9,11 @@ const PORT = process.env.PORT || 3000;
 
 const { spawn } = require('child_process');
 
-// Start PocketBase server
+// Path to the PocketBase executable
 const pocketbasePath = path.join(__dirname, 'pocketbase'); // Use 'pocketbase' on Mac/Linux
-const pb = spawn(pocketbasePath, ['serve'], {
+
+// Start PocketBase server with the necessary flags to listen on all interfaces
+const pb = spawn(pocketbasePath, ['serve', '--http', '0.0.0.0:8090'], {
   cwd: __dirname,
   stdio: 'inherit',
 });
@@ -19,7 +21,6 @@ const pb = spawn(pocketbasePath, ['serve'], {
 pb.on('error', (err) => {
   console.error('Failed to start PocketBase:', err);
 });
-
 
 // Add security headers using helmet
 app.use(helmet());
