@@ -7,4 +7,4 @@ chmod 755 ./pocketbase
 nohup node server.js > server.log 2>&1 &
 
 # Run PocketBase server in the background and redirect output to a log file
-nohup ./pocketbase serve --http 0.0.0.0:8090 > pocketbase.log 2>&1 &
+# nohup ./pocketbase serve --http 0.0.0.0:8090 > pocketbase.log 2>&1 &
