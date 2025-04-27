@@ -3,11 +3,54 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const permissionsPolicy = require('permissions-policy');
-
+const fs = require('fs');
+const { spawn } = require('child_process');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Path to the PocketBase executable
+const pocketbasePath = path.join(__dirname, 'pocketbase'); // Adjust if necessary
+
+// Create a write stream for PocketBase logs
+const logStream = fs.createWriteStream('pocketbase.log', { flags: 'a' }); // 'a' appends to the file
+
+// Start PocketBase server with the necessary flags to listen on all interfaces
+const pb = spawn(pocketbasePath, ['serve', '--http', '0.0.0.0:8090'], {
+  cwd: __dirname,
+  stdio: ['pipe', 'pipe', 'pipe'], // Use 'pipe' for stdio to allow handling the streams
+});
+
+// Pipe output to log file
+pb.stdout.pipe(logStream);
+pb.stderr.pipe(logStream);
+
+// Log to console as well
+pb.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+pb.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+// Error handling for when PocketBase fails to start
+pb.on('error', (err) => {
+  console.error('Failed to start PocketBase:', err);
+  fs.appendFileSync('error.log', `Error: ${err}\n`);
+});
+
+// Handling the exit of the PocketBase process
+pb.on('exit', (code, signal) => {
+  if (code) {
+    console.error(`PocketBase exited with code ${code}`);
+    fs.appendFileSync('error.log', `PocketBase exited with code ${code}\n`);
+  }
+  if (signal) {
+    console.error(`PocketBase was terminated by signal ${signal}`);
+    fs.appendFileSync('error.log', `PocketBase was terminated by signal ${signal}\n`);
+  }
+});
 
 // Add security headers using helmet
 app.use(helmet());
