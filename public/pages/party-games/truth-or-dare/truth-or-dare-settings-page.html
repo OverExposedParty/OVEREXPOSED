@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js 'unsafe-inline';">
 
     <title>TRUTH OR DARE SETTINGS</title>
 
@@ -56,8 +56,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/truth-or-dare-settings.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/truth-or-dare-settings.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/truth-or-dare-settings.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img
+            src="/images/splash-screens/truth-or-dare-settings.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -74,56 +76,101 @@
         <div class="game-settings-button-container">
             <button id="packs-settings" class="settings-button active">Packs</button>
             <button id="game-settings" class="settings-button">Game Settings</button>
+            <button id="online-settings" class="settings-button disabled">Online</button>
         </div>
         <div class="packs-container active">
-            <div class="packs-header-container">
+            <div class="header-container">
                 <h2 class="packs-header">Truth or Dare Packs</h2>
             </div>
             <div class="packs-content-container">
-                <div class="button-container">
-                    <button data-key="truth-or-dare-ice-breaker" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">ICE BREAKER !</button>
-                    <button data-key="truth-or-dare-cheeky-confessions" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">CHEEKY CONFESSIONS !!</button>
-                    <button data-key="truth-or-dare-troubled-teens" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">TROUBLED TEENS !!!</button>
-                    <button data-key="truth-or-dare-adult-confessions" class="pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">ADULT CONFESSIONS !!!!</button>
-                    <button data-key="truth-or-dare-risky-revelations" class="pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">RISKY REVELATIONS
-                        !!!!!</button>
+                <div class="container">
+                    <div class="button-container">
+                        <button data-key="truth-or-dare-ice-breaker" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Perfect for easing into the night and getting everyone to loosen up. Whether it’s embarrassing truths or goofy dares, this pack is your ultimate catalyst for hilarious, unexpected moments. You’ll laugh, you’ll cringe, and you’ll make memories you’ll never forget.">ICE
+                            BREAKER !</button>
+                        <button data-key="truth-or-dare-cheeky-confessions" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="filled with juicy truths and hilarious dares that will have everyone spilling their most embarrassing secrets and doing outrageous challenges. From pretending to be sick to spilling the tea on your worst habits, this pack is perfect for those who love a bit of mischief and laughter. Get ready for awkward moments, embarrassing confessions.">CHEEKY
+                            CONFESSIONS !!</button>
+                        <button data-key="truth-or-dare-troubled-teens" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Full of embarrassing moments, awkward confessions, and cringe-worthy dares, this game is guaranteed to bring laughter and unforgettable stories to the table. Perfect for a night of fun and surprises.">TROUBLED
+                            TEENS !!!</button>
+                        <button data-key="truth-or-dare-adult-confessions" class="pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Full of raw and revealing truths, this game is all about opening up to your deepest secrets and most embarrassing moments. Brace yourself for confessions that will spark laughter, awkwardness, and plenty of jaw-dropping stories. Perfect for those who want to get real and let loose.">ADULT
+                            CONFESSIONS
+                            !!!!</button>
+                        <button data-key="truth-or-dare-risky-revelations" class="pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Uncover the wildest, most scandalous secrets with daring truths and bold dares. Push boundaries, confess intimate moments, and challenge your comfort zone. Perfect for spicing up any game with a little risk and a lot of fun!">RISKY
+                            REVELATIONS
+                            !!!!!</button>
+                    </div>
+                    <div class="container-description">
+                        <h2></h2>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="separator-container"></div>
         <div class="settings-container">
-            <div class="settings-header-container">
+            <div class="header-container">
                 <h2 class="settings-header">Game Settings</h2>
             </div>
             <div class="game-settings-container">
-                <div class="button-container">
-                    <button data-key="truth-or-dare-punishment" class="game-settings-pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">Drink Punishment</button>
-                    <button data-key="truth-or-dare-drink-wheel" class="game-settings-pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">Drink Wheel</button>
-                    <button class="start-game-button" id="truth-or-dare">Start Game</button>
+                <div class="container">
+                    <div class="button-container">
+                        <button data-key="truth-or-dare-punishment" class="game-settings-pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Can’t do what the card says? No escape—take the shots instead. Your pride or your liver, you choose. Need help setting default shot counts or customizing penalties?">Drink
+                            Punishment</button>
+                        <button data-key="truth-or-dare-drink-wheel" class="game-settings-pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="The Drinking Wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink.">Drink
+                            Wheel</button>
+                        <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
+                            class="game-settings-pack-sfw disabled" id="button-online">Online</button>
+                    </div>
+                    <div class="container-description">
+                        <h2></h2>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="online-game-settings-container">
+            <div class="header-container">
+                <h2>Online</h2>
+            </div>
+            <div class="online-settings-container">
+                <div class="container">
+                    <div class="container-section" id="party-code-container">
+                        <input type="text" id="party-code" name="codeInput"
+                            value="https://overexposed.app/most-likely-to/settings/" readonly>
+                    </div>
+                    <div class="container-section" id="users">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="start-game-button" id="truth-or-dare">Start Game</button>
     </div>
 </body>
 
 <script src="/scripts/general/header.js"></script>
 
 <script>
+    const partyGameMode = 'Truth Or Dare'
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 
@@ -142,6 +189,9 @@
     });
 
 </script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/general/online-settings.js"></script>
+<script src="/scripts/party-games/online-game-settings.js"></script>
 <script src="/scripts/party-games/game-settings.js"></script>
 
 

@@ -3,11 +3,6 @@ let voices = [];
 let ttsButtonTimeout;
 let currentUtterance = null;
 
-let allQuestions = [];
-let currentQuestionIndex = 0;
-let questionPackMap = []; // Maps questions to their respective packs
-let cardPackMap = []; // Maps cards to their respective packs
-
 const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
 
 function stopSpeech() {
@@ -66,7 +61,7 @@ function vibrateOnClick() {
 }
 
 document.querySelector('.back-button').addEventListener('click', () => {
-    transitionSplashScreen(`${gamemode}-settings`, `/images/splash-screens/${gamemode}-settings.png`);
+    transitionSplashScreen(addSettingsExtensionToCurrentURL(), `/images/splash-screens/${gamemode}-settings.png`);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -77,91 +72,6 @@ var sidebuttonLength = sideButtonElements.length;
 console.log(sideButtonElements);
 if (sidebuttonLength <= 1) {
     sideButtonsContainer.classList.add('single');
-}
-
-async function loadJSONFiles() {
-    try {
-        const packsResponse = await fetch(`/json-files/${gamemode}-packs.json`);
-        if (!packsResponse.ok) {
-            console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
-            return;
-        }
-
-        const packsData = await packsResponse.json();
-        const packs = packsData[`${gamemode}-packs`];
-
-        const filesToFetch = packs
-            .filter(pack => {
-                const key = `${gamemode}-${pack["pack-name"].toLowerCase().replace(/\s+/g, '-')}`;
-                return localStorage.getItem(key) === 'true';
-            })
-            .map(pack => pack["pack-path"]);
-
-        console.log('Files to Fetch:', filesToFetch);
-
-        const responses = await Promise.all(filesToFetch.map(file => fetch(file)));
-
-        const questionsArrays = await Promise.all(
-            responses.map(async response => {
-                if (!response.ok) {
-                    console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
-                    return {};
-                }
-                const data = await response.json();
-                console.log('Fetched Data:', data);
-                return data; // Return the entire object containing the question arrays
-            })
-        );
-
-        // Add each question from each object to the allQuestions array one at a time
-        questionsArrays.forEach((data, index) => {
-            Object.keys(data).forEach(packName => {
-                const questions = data[packName];
-                if (Array.isArray(questions)) {
-                    questions.forEach(question => {
-                        allQuestions.push(question);
-                        questionPackMap.push(packName.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()).replace(formattedGamemode, "").trim());
-                    });
-                } else {
-                    console.error(`Expected an array of questions for pack: ${packName}, but received:`, questions);
-                }
-            });
-        });
-
-        // Now also save the pack-card in the cardPackMap array
-        packs.forEach(pack => {
-            const packName = pack["pack-name"];
-            const packCard = pack["pack-card"];
-            const packColour = pack["pack-colour"];
-            cardPackMap.push({ packName, packCard, packColour });
-        });
-
-        // Check if punishment exists in localStorage and add it
-        if (localStorage.getItem(`${gamemode}-punishment`)) {
-            allQuestions.push("punishment");
-        }
-
-        if (allQuestions.length > 0) {
-            shuffleQuestions();
-            console.log(allQuestions);
-            console.log(questionPackMap);
-            console.log(cardPackMap); // Log the cardPackMap to see the result
-        } else {
-            console.error('No questions available to shuffle.');
-            window.location.href = `${gamemode}-settings`;
-        }
-
-    } catch (error) {
-        console.error('Failed to load JSON files:', error);
-    }
-}
-
-function shuffleQuestions() {
-    for (let i = allQuestions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
-        [questionPackMap[i], questionPackMap[j]] = [questionPackMap[j], questionPackMap[i]];
-    }
 }
 
 function disableTTSButton() {
@@ -236,3 +146,15 @@ function toggleQuestionZoomedContainer() {
         }
     }
 }
+
+function addSettingsExtensionToCurrentURL() {
+    const currentURL = window.location.href;
+    if (!currentURL.endsWith('/settings')) {
+      const newURL = currentURL.endsWith('/')
+        ? currentURL + 'settings'
+        : currentURL + '/settings';
+      return newURL;
+    }
+    return currentURL;
+  }
+  

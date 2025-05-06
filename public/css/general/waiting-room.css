@@ -1,0 +1,75 @@
+.waiting-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55vh;
+    height: auto;
+    padding: 2%;
+    background-color: #101010;
+    border: var(--bordersize) solid #101010;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    z-index: 800;
+    text-align: center;
+    font-family: LemonMilk;
+    border-radius: 25px;
+    max-width: 60vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--primarypagecolour);
+    display: none;
+}
+
+.waiting-container.active {
+    display: flex;
+}
+
+.waiting-container h2 {
+    font-size: 20px;
+}
+
+.waiting-container p {
+    font-size: 20px;
+}
+
+.waiting-container button {
+    background-color: #101010;
+    color: var(--primarypagecolour);
+    border: 4px solid var(--primarypagecolour);
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 100%;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    font-family: LemonMilk;
+    width: 25%;
+}
+
+.waiting-container button:hover {
+    background-color: var(--primarypagecolour);
+    color: #202020;
+    border-color: var(--primarypagecolour);
+}
+
+.waiting-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.waiting-container input{
+    width: 60%;
+    height: 30px;
+    font-family: LemonMilk;
+    color: var(--primarypagecolour);
+    background-color: var(--backgroundcolour);
+    outline: none;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    margin-bottom: 2vh;
+}

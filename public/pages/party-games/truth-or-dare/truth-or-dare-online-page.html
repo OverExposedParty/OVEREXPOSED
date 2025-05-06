@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:description"
+        content="Truth or Dare cranks up the fun with wild prompts and tough choices. Pick truth or dare, reveal it to the group, and either spill your secrets or complete the dare…fail, and a punishment awaits!">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+
+
+    <title>TRUTH OR DARE</title>
+
+    <link rel="preload" href="/images/splash-screens/truth-or-dare.png" as="image">
+
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
+
+    <style>
+        .split-button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 0.1vw;
+            margin-top: 10px;
+        }
+
+        .split-question-button {
+            background-color: var(--backgroundcolour);
+            border: var(--bordersize) solid var(--primarypagecolour);
+            color: var(--primarypagecolour);
+            font-size: 100%;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 50px;
+            flex: 1;
+            text-align: center;
+            font-family: LemonMilk;
+        }
+
+        .split-question-button:hover {
+            background-color: var(--primarypagecolour);
+            color: var(--backgroundcolour);
+            ;
+        }
+
+        .or-text {
+            font-size: 125%;
+            color: #66CCFF;
+            margin: 0 2%;
+        }
+
+
+        @media (max-width: 400px),
+        (max-height: 700px) {
+            .split-question-button {
+                font-size: 100%;
+                border: var(--bordersize) solid #66CCFF;
+                max-width: 40%;
+            }
+
+            .or-text {
+                font-size: 100%;
+                margin: 0 5%;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .spin-the-wheel-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZFD5EBXYE5');
+</script>
+
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/truth-or-dare.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/truth-or-dare.png" alt="Splash Screen"></div>
+
+    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+        <div id="spin_the_wheel">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <div id="spin">SPIN</div>
+        </div>
+    </div>
+
+    <div class="question-zoomed-container">
+        <img src="/images/blank-cards/truth-or-dare-blank-card.svg">
+        <h2></h2>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <button class="back-button">BACK</button>
+
+    <div class="container">
+        <div class="content">
+            <div class="gamemode-text-container">
+                <img class="gamemode-text-svg" src="/images/party-games/truth-or-dare/truth-text.svg" alt="Truth">
+            </div>
+            <div class="main-image-container">
+                <img src="/images/blank-cards/truth-or-dare-blank-card.svg" alt="Truth or Dare Blank Card"
+                    class="main-image">
+                <div class="text-container">
+                    Truth Or Dare
+                </div>
+                <div class="card-type-text">card type</div>
+            </div>
+            <div class="button-container">
+                <div class="split-button-container">
+                    <button id="truth-button" class="split-question-button">TRUTH</button>
+                    <span class="or-text">or</span>
+                    <button id="dare-button" class="split-question-button">DARE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="side-buttons">
+        <img src="/images/icons/overexposed/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
+        <img src="/images/icons/overexposed/spin-icon.svg" alt="Spin Icon" class="side-button" id="spin-button">
+    </div>
+</body>
+
+<script src="/scripts/general/header.js"></script>
+
+<script>
+    const gamemode = "truth-or-dare";
+    const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+
+    const spinWheelEnabled = localStorage.getItem('truth-or-dare-drink-wheel') === 'true';
+
+    if (!spinWheelEnabled) {
+        document.getElementById('spin-button').remove();
+    }
+</script>
+
+<script src="/scripts/party-games/general/party-games.js"></script>
+<script src="/scripts/party-games/truth-or-dare/get-next-question.js"></script>
+
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
+    //Truth Or Dare Page
+    document.addEventListener('DOMContentLoaded', async () => {
+        helpTitle.textContent = 'HOW TO PLAY';
+
+        helpText.innerHTML = `
+    You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare</highlight>.
+    <br><br>
+    <highlight>Truth</highlight> may reveal personal details or secrets.
+    <br><br>
+    <highlight>Dare</highlight> will require you to perform an action.
+    <br><br>
+    Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
+    <highlight>Drinking Punishments</highlight> where failing results in a drinking consequence.
+`;
+    });
+
+</script>
+<script src="/scripts/party-games/spin-the-wheel.js"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+
+
+</html>

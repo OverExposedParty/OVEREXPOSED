@@ -38,6 +38,17 @@ const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 
 const storageObserver = new LocalStorageObserver();
 
+const { protocol, hostname } = window.location;
+const socket = io(`${protocol}//${hostname}:3000`);
+
+socket.on('connect', () => {
+  console.log('Socket connected successfully');
+});
+
+socket.on('connect_error', (err) => {
+  console.error('Socket connection error:', err);
+});
+
 storageObserver.addListener((key, oldValue, newValue) => {
     if (key === 'settings-nsfw') {
         //console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
@@ -181,32 +192,83 @@ function getIDFromURL() {
     return pathSegments[pathSegments.length - 1];
 }
 
-async function fetchCSV() {
-    const response = await fetch(csvUrl);
-    const data = await response.text();
+async function fetchConfessions() {
+    try {
+        const response = await fetch('/api/confessions');
+        const data = await response.json();
 
-    Papa.parse(data, {
-        complete: function (results) {
-            console.log("Parsed CSV Data:", results.data);
-            const idFromURL = getIDFromURL();
-            let idFound = false;
-            results.data.slice(1).forEach(row => {
-                if (row.includes(idFromURL)) {
-                    idFound = true;
+        console.log("📥 Confessions from MongoDB:", data);
+
+        const idFromURL = getIDFromURL();
+        let idFound = false;
+
+        data.forEach(confession => {
+            if (confession.id === idFromURL) {
+                idFound = true;
+            }
+            createFloatingButton(null, [
+                confession.title,
+                confession.text,
+                confession.id,
+                confession.date,
+                confession.x,
+                confession.y
+            ], false);
+        });
+
+        if (!idFound) {
+            console.log(`ID ${idFromURL} not found`);
+            cleanOverexposureUrl();
+        }
+
+        SetNSFW();
+    } catch (error) {
+        console.error("❌ Error fetching confessions:", error);
+    }
+}
+
+async function updateConfessions() {
+    try {
+        // Fetch the new confessions from the API
+        const response = await fetch('/api/confessions');
+        const data = await response.json();
+
+        console.log("📥 Confessions from MongoDB:", data);
+
+        // Get all existing floating buttons
+        const floatingButtons = document.querySelectorAll('.floating-button');
+        
+        // Iterate through the confessions
+        data.forEach(confession => {
+            let isNewConfession = true;
+
+            // Check if a floating button with the same ID already exists
+            floatingButtons.forEach(button => {
+                if (button.getAttribute('data-id') === confession.id) {
+                    isNewConfession = false;
                 }
-                createFloatingButton(null, row, false);
             });
 
-            if (!idFound) {
-                console.log(`ID ${idFromURL} not found`);
-                cleanOverexposureUrl()
+            // If the confession is new, create a new floating button
+            if (isNewConfession) {
+                createFloatingButton(null, [
+                    confession.title,
+                    confession.text,
+                    confession.id,
+                    confession.date,
+                    confession.x,
+                    confession.y
+                ], false);
             }
-        },
-        header: false,
-        skipEmptyLines: true
-    });
-    SetNSFW();
+        });
+
+    } catch (error) {
+        console.error("❌ Error fetching confessions:", error);
+    }
 }
+socket.on("confessions-updated", async (change) => {
+    updateConfessions();
+});
 
 function createFloatingButton(event = null, row, draft = false) {
     const idFromURL = getIDFromURL();
@@ -339,7 +401,7 @@ function setOverexposureContainerToEditor(isActive) {
     }
 }
 
-fetchCSV();
+fetchConfessions();
 publishButton.addEventListener("click", async () => {
     if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
         playSoundEffect('postIncomplete');
@@ -378,7 +440,7 @@ submitPostYes.addEventListener("click", async () => {
         });
 
         try {
-            const response = await saveDataToGoogleSheets(draftData);
+            const response = await saveDataToMongoDB(draftData);
             overlay.classList.remove('active');
             overexposureContainer.classList.remove('active');
             console.log("Draft data saved successfully:", response);
@@ -400,29 +462,27 @@ submitPostNo.addEventListener("click", async () => {
     removeElementIfExists(popUpClassArray, areYouSurePostContainer)
 });
 
-async function saveDataToGoogleSheets(draftData) {
+async function saveDataToMongoDB(draftData) {
     try {
-        console.log("Sending data to Google Sheets:", draftData);
-        const formData = new URLSearchParams();
-        draftData.forEach((item, index) => {
-            formData.append(`title_${index}`, item[0]);
-            formData.append(`text_${index}`, item[1]);
-            formData.append(`id_${index}`, item[2]);
-            formData.append(`date_${index}`, item[3]);
-            formData.append(`x_${index}`, item[4]);
-            formData.append(`y_${index}`, item[5]);
-        });
+        const [title, text, id, date, x, y] = draftData[0]; // ✅ Destructure first item
 
-        const response = await fetch(googleScriptSaveCardURL, {
+        const confession = { title, text, id, date, x, y };
+
+        console.log("📤 Saving confession", confession);
+
+        const response = await fetch('/api/confessions', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(confession)
         });
 
-        const responseText = await response.text();
-        console.log("Response from Google Sheets:", responseText);
+        const result = await response.json();
+        console.log("✅ Response from MongoDB:", result);
     } catch (error) {
         playSoundEffect('postIncomplete');
-        console.error("Error sending draft data:", error);
+        console.error("❌ Error sending confession to MongoDB:", error);
     }
 }
 

@@ -1,0 +1,17 @@
+# Ignore environment variables
+.env
+
+# Node dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS-specific
+.DS_Store
+
+# Optional: IDE files
+.vscode/
+.idea/

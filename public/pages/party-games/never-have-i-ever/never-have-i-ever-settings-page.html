@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com 'unsafe-inline';">
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js 'unsafe-inline';">
 
     <title>NEVER HAVE I EVER SETTINGS</title>
 
@@ -57,8 +57,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/never-have-i-ever-settings.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/never-have-i-ever-settings.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/never-have-i-ever-settings.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img
+            src="/images/splash-screens/never-have-i-ever-settings.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
 
@@ -75,50 +77,94 @@
         <div class="game-settings-button-container">
             <button id="packs-settings" class="settings-button active">Packs</button>
             <button id="game-settings" class="settings-button">Game Settings</button>
+            <button id="online-settings" class="settings-button disabled">Online</button>
         </div>
         <div class="packs-container active">
-            <div class="packs-header-container">
+            <div class="header-container">
                 <h2 class="packs-header">Never Have I Ever Packs</h2>
             </div>
             <div class="packs-content-container">
-                <div class="button-container">
-                    <button data-key="never-have-i-ever-simple-admissions" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">SIMPLE ADMISSIONS !</button>
-                    <button data-key="never-have-i-ever-rising-suspicions" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">RISING SUSPICIONS !!</button>
-                    <button data-key="never-have-i-ever-digging-deeper" class="pack-sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">DIGGING DEEPER !!!</button>
-                    <button data-key="never-have-i-ever-verbal-diarrhea" class="pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">VERBAL DIARRHEA !!!!</button>
-                    <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">RAW AND UNFILTERED !!!!!</button>
+                <div class="container">
+                    <div class="button-container">
+                        <button data-key="never-have-i-ever-simple-admissions" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="This pack is all about light-hearted confessions and simple yet revealing moments from your past. It's perfect for sharing those small but funny experiences, from embarrassing encounters to bucket-list adventures, and everything in between. Get ready for a fun, no-pressure session of “Never Have I Ever” that’ll spark laughter and maybe even a few unexpected admissions!">SIMPLE
+                            ADMISSIONS !</button>
+                        <button data-key="never-have-i-ever-rising-suspicions" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="This pack will have everyone questioning who's really hiding secrets! It's full of questions that explore the more mischievous and suspicious moments from your past. Whether it’s a shady situation, a close call, or something you’ve done that you hope no one ever finds out, this game will bring out the most unexpected confessions. Get ready for laughs, jaw-dropping stories, and maybe even some shocking revelations.">RISING
+                            SUSPICIONS !!</button>
+                        <button data-key="never-have-i-ever-digging-deeper" class="pack-sfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="This pack pulls no punches. It's all about personal confessions, complicated relationships, emotional slip-ups, and the messy parts of life we usually keep quiet. From heartbreaks and hidden regrets to impulsive choices and raw truths, these questions are designed to spark deeper conversations and unexpected vulnerability. Brace yourself—things might get real.">DIGGING
+                            DEEPER
+                            !!!</button>
+                        <button data-key="never-have-i-ever-verbal-diarrhea" class="pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="Unfiltered. Unapologetic. Unholy. This pack is not for the faint of heart—it’s where wild nights, chaotic choices, and scandalous hookups take center stage. Expect oversharing, jaw-drops, and more than a few “I can’t believe they said that” moments. If you're ready to spill the messiest tea, this is your battlefield.">VERBAL
+                            DIARRHEA
+                            !!!!</button>
+                        <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack-nsfw"
+                            data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)"
+                            data-description="This is the no-holds-barred, X-rated zone. Explicit, daring, and downright filthy—this pack dives deep into your most NSFW stories, taboos, and unspoken kinks. Nothing is too wild, too dirty, or too intimate. If you blush easily, skip this one. If not… welcome to the deep end.">RAW
+                            AND UNFILTERED
+                            !!!!!</button>
+                    </div>
+                    <div class="container-description">
+                        <h2></h2>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="separator-container"></div>
         <div class="settings-container">
-            <div class="settings-header-container">
+            <div class="header-container">
                 <h2 class="settings-header">Game Settings</h2>
             </div>
             <div class="game-settings-container">
-                <div class="button-container">
-                    <button data-key="never-have-i-ever-odd-man-out" data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack-nsfw">Odd Man
-                        Out</button>
-                    <button class="start-game-button" id="never-have-i-ever">Start Game</button>
+                <div class="container">
+                    <div class="button-container">
+                        <button data-key="never-have-i-ever-odd-man-out" data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack-nsfw"
+                            data-description="Spin the wheel and complete the challenge it lands on to reveal your question. No task, no question—no excuses.">Odd Man
+                            Out</button>
+                        <button data-primary-color="var(--primarypagecolour)"
+                            data-secondary-color="#B9AA42" class="game-settings-pack-sfw disabled"
+                            id="button-online">Online</button>
+                    </div>
+                    <div class="container-description">
+                        <h2></h2>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="online-game-settings-container">
+            <div class="header-container">
+                <h2>Online</h2>
+            </div>
+            <div class="online-settings-container">
+                <div class="container">
+                    <div class="container-section" id="party-code-container">
+                        <input type="text" id="party-code" name="codeInput"
+                            value="https://overexposed.app/most-likely-to/settings/" readonly>
+                    </div>
+                    <div class="container-section" id="users">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="start-game-button" id="never-have-i-ever">Start Game</button>
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
 
 <script>
+    const partyGameMode = 'Never Have I Ever'
     document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
@@ -141,6 +187,9 @@
     });
 
 </script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/general/online-settings.js"></script>
+<script src="/scripts/party-games/online-game-settings.js"></script>
 <script src="/scripts/party-games/game-settings.js"></script>
 
 </html>

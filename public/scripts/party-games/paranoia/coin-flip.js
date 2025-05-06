@@ -35,7 +35,7 @@ function tossCoinFunction() {
         '/images/icons/paranoia/tails-icon.svg';
 
     coinIcon.classList.add('flip');
-    playSoundEffect(soundCoinFlip);
+    playSoundEffect('coinFlip');
     setTimeout(() => {
         coinIcon.innerHTML =
             `<img src="${imageUrl}" alt="${faceCoin}">`;

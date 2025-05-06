@@ -1,0 +1,253 @@
+.main-container {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center horizontally */
+    z-index: 100;
+}
+.card-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    box-sizing: border-box;
+    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    /* Subtracts header height */
+    margin-top: var(--headerheight);
+    /* Pushes it down */
+}
+.card-container.active {
+    display: flex;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: auto;
+    width: auto;
+    /* Content width will adjust based on main image width */
+    max-height: auto;
+}
+.main-image-container,
+.regular-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5vh 0;
+    z-index: 101;
+}
+.main-image-container{
+    position: relative;
+}
+.main-image {
+    width: 100%;
+    /* Set a fixed width or use a percentage */
+    height: auto;
+}
+
+
+.card-type-text {
+    position: absolute;
+    bottom: 2.5%;
+    /* Slight offset from the bottom */
+    right: 5%;
+    /* Slight offset from the right */
+    font-size: 0.75rem;
+    color: var(--primarypagecolour);
+    font-family: LemonMilk;
+    text-align: right;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.text-container {
+    bottom: 10px;
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    font-family: LemonMilk;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    
+}
+.regular-button-container button {
+    font-family: LemonMilk;
+    background-color: var(--backgroundcolour);
+    color: var(--primarypagecolour);
+    flex: 1 1 auto;
+    width: 100%;
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--primarypagecolour);
+    font-size: 100%;
+    padding: 3% 5%;
+    border-radius: 50px;
+    text-align: center;
+    font-family: LemonMilk;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.regular-button-container button:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+}
+
+.content-container,
+.button-container{
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin: 1vh auto;
+    gap: 10px; /* Optional: adds spacing between buttons */
+}
+.user-confirmed-section {
+    position: relative;
+    width: 80%;
+    display: flex;
+    color: var(--backgroundcolour);
+    justify-content: center;
+    align-items: center;
+    margin: 0; /* Remove any vertical margin */
+    padding: 1vh 10%; 
+    gap: 15px 5px;
+}
+.user-confirmed-section .icon {
+    font-family: LemonMilk;
+    font-weight: bold;
+    font-size: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+.user-confirmed-section .icon.yes{
+    color: var(--primarypagecolour);
+}
+.user-confirmed-section .icon.no{
+    color: var(--warningcolour);
+}
+.content-container h1,
+.content-container h2,
+.content-container p{
+    font-family: LemonMilk;
+    text-align: center;
+    color: var(--primarypagecolour);
+}
+
+.content-container h1{
+    font-size: 30px;
+}
+.content-container h2{
+    font-size: 20px;
+}
+.content-container p{
+    font-size: 15px;
+}
+.main-container button{
+    font-family: LemonMilk;
+    padding: 10px 20px;
+    min-width: 120px;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+
+    outline: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    color: var(--primarypagecolour);
+    background-color: var(--backgroundcolour); 
+    border-color: var(--backgroundcolour);
+
+    transition: background-color 0.3s, color 0.3s;
+}
+.button-container button{
+    width:100%;
+    font-size: 1.5vw;
+}
+.button-container button.active{
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour); 
+    border-color: var(--primarypagecolour);
+}
+
+.selected-user-container {
+    display: none;
+    flex-direction: column;
+    border-radius: 10px;
+    height: 70%;
+    aspect-ratio: 9/16;
+    background-color: var(--secondarybackgroundcolour);
+    position: relative; /* Needed for absolute positioning inside */
+    overflow: hidden;
+}
+
+.selected-user-container.small{
+    height: 40%;
+    aspect-ratio: 4/3;
+}
+
+.selected-user-container.very-small{
+    justify-content: center;
+    height: 20%;
+    aspect-ratio: 16/9;
+    margin: 0 auto;
+    gap: 0;
+}
+
+.selected-user-container.very-small .content-container{
+    margin: 0.25vh auto;
+}
+
+.select-button-container {
+    position: absolute;
+    bottom: 7.5%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: auto;
+    gap: 2.5%;
+}
+
+.select-button {
+    font-family: LemonMilk;
+    font-size: 1vw;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    color: var(--primarypagecolour);
+    background-color: var(--backgroundcolour);
+    cursor: pointer;
+    width: 40%;
+    box-sizing: border-box;
+}
+
+
+.selected-user-container.active{
+    display: flex;
+}
+
+.main-container button:not(.active):hover {
+    background-color: var(--secondarypagecolour);
+    color: var(--secondarybackgroundcolour);
+    border-color: var(--primarypagecolour);
+}

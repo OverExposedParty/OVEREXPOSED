@@ -1,12 +1,3 @@
-* {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-user-drag: none;
-}
-
 html,
 body {
     margin: 0;
@@ -16,26 +7,24 @@ body {
 }
 
 @font-face {
-    src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
     font-family: LemonMilk;
+    src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
 }
 
 .home-button {
     position: absolute;
-    top: calc(var(--headerheight) + 5vh);
-    left: 20px;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    background-color: var(--secondarybackgroundcolour);
-    border: var(--bordersize) solid var(--secondarybackgroundcolour);
-    color: var(--primarypagecolour);
+    top: calc(var(--headerheight) + 20px);
+    left: 5px;
+    font-family: LemonMilk;
     font-size: 1.5vh;
     padding: 5px 10px;
-    border-radius: 50px;
-    margin: 0 10px;
     width: 10vh;
-    font-family: LemonMilk;
+    border: var(--bordersize) solid var(--secondarybackgroundcolour);
+    border-radius: 50px;
+    background-color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    text-align: center;
     z-index: 600;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -45,117 +34,259 @@ body {
 }
 
 .main-container {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    margin-top: 15vh;
     display: flex;
-    height: calc(100vh - var(--headerheight));
-    margin-top: var(--headerheight);
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
 }
 
 .packs-container,
-.settings-container {
-    display: flex;
+.settings-container,
+.online-game-settings-container {
+    display: none;
     flex-direction: column;
-    width: 65%;
-    /* Width of packs-container */
+    border-radius: 10px;
+    width: 90vw;
+    max-width: 1280px;
+    height: 70%;
+    background-color: var(--secondarybackgroundcolour);
 }
 
-.settings-container {
-    width: 35%;
-    /* Width of settings-container */
+.packs-container.active,
+.settings-container.active,
+.online-game-settings-container.active{
+    display: flex;
+    margin: 0 auto;
+    padding: 0;
 }
 
-.separator-container {
-    background-color: var(--primarypagecolour);
-    border-radius: 50px;
-    width: 10px;
-    height: 75vh;
-    top: 50%;
-    transform: translateY(12.5%);
-}
-
-.packs-header-container,
-.settings-header-container {
+.header-container {
     display: flex;
     justify-content: center;
-    padding: 10px 20px;
-    height: auto;
-    padding-bottom: 5vh;
-    padding-top: 10vh;
+    padding: 1.5vh 20px;
+    margin:1.5vh 0;
+    width: 100%;
 }
 
-.packs-header,
-.settings-header {
-    font-size: 40px;
+.header-container h2 {
+    font-size: 4.5vh;
     margin: 0;
-    padding: 0;
     text-align: center;
     font-family: LemonMilk;
     color: var(--primarypagecolour);
 }
 
-.packs-content-container {
-    flex: 1;
-    padding: 20px;
+.packs-content-container,
+.game-settings-container,
+.online-settings-container  {
+    height: 50vh;
+    padding: 0;
     overflow-y: auto;
-}
-
-.game-settings-container {
     display: flex;
-    flex-direction: column;
-    padding: 20px;
-    align-items: center;
-    height:53.5vh;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
 .button-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    justify-content: left;
-    width: 90%;
-}
-
-.game-settings-container .button-container {
+    gap: 15px 5px;
     justify-content: center;
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
 }
 
 .button-container button {
-    padding: 10px 20px;
     font-family: LemonMilk;
-    font-size: 2.5vh;
-    border-radius: 50px;
-    cursor: pointer;
-    text-align: center;
-    box-sizing: border-box;
+    font-size: 1vw;
+    padding: 10px 20px;
     min-width: 120px;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
     white-space: nowrap;
-    display: inline-block;
+    box-sizing: border-box;
+    width: auto;
     transition: background-color 0.3s, color 0.3s;
 }
-.button-container button:not(.start-game-button){
-    color: #999999;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
+.container{
+    width:100%;
+    height:100%;
+    position: relative;
+}
+.container-section {
+    position: relative;
+    width: 80%;
+    display: flex;
+    color: var(--primarypagecolour);
+    justify-content: left;
+    align-items: center;
+    margin: 0; /* Remove any vertical margin */
+    padding: 1vh 10%; 
+    gap: 15px 5px;
 }
 
+.container-section input{
+    width: 100%;
+    font-size: 2.5vh;
+
+    color: var(--primarypagecolour);
+    background-color: var(--backgroundcolour); 
+    border-color: var(--backgroundcolour);
+
+    outline: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    user-select: text;
+    pointer-events: auto;
+    pointer-events: auto; /* Ensure pointer events are enabled */
+}
+
+.container-section .user-icon{
+    position: relative;
+    font-family: LemonMilk;
+    font-size: 1vw;
+    padding: 10px 20px;
+    min-width: 120px;
+    border-radius: 50px;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: auto;
+    box-shadow: none;
+    transition: background-color 0.3s, color 0.3s;
+
+    background-color: var(--backgroundcolour); 
+    border-color: var(--backgroundcolour);
+    color: var(--primarypagecolour);
+
+    padding-right: 25px;
+}
+
+.user-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.user-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: LemonMilk;
+    font-size: 1vw;
+    padding: 10px 20px;
+    min-width: 120px;
+    border-radius: 50px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    background-color: var(--backgroundcolour);
+    color: var(--primarypagecolour);
+    border: none;
+    position: relative;
+    width: auto;
+}
+
+.checkmark {
+    width: 16px;
+    height: 16px;
+    border: 0px solid #333;  /* Adjust border color as needed */
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    cursor: default;
+}
+
+/* The checked state styling */
+.checkmark.checked {
+    background-color: var(--primarypagecolour);
+}
+
+/* Adding a checkmark symbol when checked */
+.checkmark.checked::before {
+    content: '✔';
+    position: absolute;
+    top: 0;
+    left: 3px;
+    font-size: 12px; /* Adjust the size of the checkmark */
+    color: var(--backgroundcolour);
+}
+
+.button-text {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.close-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    cursor: pointer;
+    color: red;
+    font-size: 16px;
+  }
+.container-description {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: none;
+    color: var(--primarypagecolour);
+    justify-content: center;
+    align-items: center;
+    margin: 0; /* Remove any vertical margin */
+    padding: 1vh 0; /* Optional: gives breathing room inside */
+}
+.container-description.active {
+    display: flex;
+}
+
+.container-description h2{
+    font-size: 2vh;
+    text-align: center;
+    padding: 0 10%;
+}
+
+.button-container button:not(.start-game-button) {
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
+    color: #999999;
+}
 
 .button-container button.active {
     background-color: var(--primarypagecolour);
-    color: var(--backgroundcolour);
     border-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
 }
 
 .button-container button:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
     border-color: var(--secondarypagecolour);
+    color: #999999;
 }
 
 .button-container button.active:not(.disabled):hover {
     background-color: var(--secondarypagecolour);
+    border-color: var(--secondarypagecolour);
     color: var(--backgroundcolour);
 }
 
-button.disabled {
-    background-color: #333333 !important; 
+button.disabled,
+.start-game-button.disabled {
+    background-color: #333333 !important;
     color: #666666 !important;
     border-color: #333333 !important;
     cursor: not-allowed !important;
@@ -163,27 +294,27 @@ button.disabled {
 }
 
 .start-game-button {
-    margin: 0vh auto;
-    bottom:12.5vh;
-    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
     font-family: LemonMilk;
     font-size: 2.5vh;
-    color: var(--primarypagecolour);
-    background-color: var(--secondarybackgroundcolour);
-    border: var(--bordersize) solid var(--secondarybackgroundcolour);
+    padding: 10px 20px;
+    width: 60vw;
+    max-width: 300px;
+    margin: 2.5vh auto 0;
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
     border-radius: 50px;
+    color: var(--primarypagecolour);
     cursor: pointer;
     text-align: center;
-    box-sizing: border-box;
     white-space: nowrap;
-    display: flex;
+    box-sizing: border-box;
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s;
-    position: absolute;
-    margin-top:0;
 }
 
-.start-game-button:hover{
+.start-game-button:hover {
     background-color: var(--primarypagecolour);
     color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
@@ -195,138 +326,54 @@ button.disabled {
     border-color: var(--primarypagecolour);
 }
 
-.start-game-button.disabled {
-    background-color: #333333;
-    color: #666666;
-    border-color: #444444;
-    cursor: not-allowed;
-    pointer-events: none;
+.game-settings-button-container {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: left;
+    align-items: center;
+    width: 80%;
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
-.game-settings-button-container {
-    display: none;
+.game-settings-button-container button {
+    font-family: LemonMilk;
+    padding: 5px 20px;
+    background-color: var(--secondarybackgroundcolour);
+    color: #999999;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+}
+
+.game-settings-button-container button.active {
+    background-color: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+}
+
+.element:hover {
+    background-color: initial;
+    color: initial;
+    border-color: initial;
 }
 
 @media (orientation: portrait) {
-    .start-game-button {
-        margin-top:2.5vh;
-        position: relative;
-        bottom:0;
-        width:60vw;
-        justify-content: center;
-        background-color: var(--backgroundcolour);
-        border: var(--bordersize) solid var(--backgroundcolour);
-    }
-    .start-game-button:hover{
-        color: var(--backgroundcolour);
-    }
-    .button-container {
-        justify-content: center;
-        width:100%;
-        height: auto;
-        overflow-y: auto;
-        gap: 15px 5px;
-    }
-    .game-settings-button-container {
-        display: grid;
-        grid-auto-flow: column;
-        justify-content: left;
-        align-items: center;
-        width:80%;
-        margin: 0 auto;
-    }
-    .game-settings-button-container button {
-        padding: 5px 20px;
-        border: none;
-        background-color: var(--secondarybackgroundcolour);
-        color: #999999;
-        cursor: pointer;
-        border-radius: 10px 10px 0 0;
-        font-family: LemonMilk;
-    }
-    .game-settings-button-container button.active{
-        background-color: var(--primarypagecolour); 
-        color: var(--secondarybackgroundcolour);
-    }
-
-    .main-container {
-        flex-direction: column;
-        margin-top: 15vh;
-        height: 80vh;
-        width: 100vw;
-    }
-
-    .separator-container {
-        display: none;
-    }
-
-    .packs-container,
-    .settings-container {
-        display:none;
-        border-radius: 10px;
-        width: 90%;
-    }
-    .packs-container.active,
-    .settings-container.active {
-        margin: 0 auto;
-        padding: 0;
-        background-color: var(--secondarybackgroundcolour);
-        height: 70%;
-        display: flex;
-    }
-    
-    .settings-container {
-        display: none;
-    }
-
-    .packs-header-container,
-    .settings-header-container {
-        margin-top: 0;
-        margin-bottom: 0;
-        padding-top: 1.5vh;
-        padding-bottom: 1.5vh;
-    }
 
     .packs-header,
     .settings-header {
         font-size: 4.5vw;
     }
 
+    .packs-content-container,
+    .game-settings-container {
+        margin:1.5vh 0 0 0;
+        flex-direction: column;
+        align-items: center;
+        height: 50vh;
+    }
+
     .button-container button {
-        font-size: 4.5vw;
-        width:90%;
-    }
-
-    .home-button {
-        top: calc(var(--headerheight) + 20px);
-        left: 5px;
-    }
-
-    .element:hover {
-        background-color: initial;
-        color: initial;
-        border-color: initial;
-    }
-
-    .button-container button:not(.disabled):hover {
-        background-color: var(--backgroundcolour);
-        border-color: var(--backgroundcolour);
-        color: #999999;
-    }
-
-    .button-container button.active:not(.disabled):hover {
-        background-color: var(--primarypagecolour);
-        border-color: var(--primarypagecolour);
-        color: var(--backgroundcolour);
-    }
-
-    .game-settings-container,.packs-content-container {
-        height:50vh;
-        padding:0;
-    }
-}
-@media (max-width: 768px) and (orientation: landscape) {
-    .main-container {
-        display: none;
+        width: 90%;
+        font-size: 2vh;
     }
 }
