@@ -20,7 +20,8 @@ const socketIo = require('socket.io'); // Import socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
 
-
+console.log('database 1: ' + process.env.MONGO_URI_OVEREXPOSURE);
+console.log('database 2: ' + process.env.MONGO_URI_OVEREXPOSED);
 // Use async/await for MongoDB connections
 async function connectDatabases() {
   try {
