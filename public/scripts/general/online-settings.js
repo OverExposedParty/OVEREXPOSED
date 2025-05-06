@@ -2,6 +2,7 @@ let hostedParty = false;
 
 const { protocol, hostname } = window.location;
 const socket = io(`${protocol}//${hostname}:3000`);
+console.log(socket);
 
 socket.on('connect', () => {
   console.log('Socket connected successfully');
