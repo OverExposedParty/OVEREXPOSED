@@ -13,7 +13,7 @@ socket.on('connect_error', (err) => {
 
 // Listen for confirmation that the user joined the party
 socket.on('joined-party', (data) => {
-  //console.log(data.message);  // Log success message from the server
+  console.log(data.message);  // Log success message from the server
 });
 
 let partyCode;
