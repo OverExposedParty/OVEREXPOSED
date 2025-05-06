@@ -1,5 +1,5 @@
 # Ignore environment variables
-
+.env
 
 # Node dependencies
 node_modules/
