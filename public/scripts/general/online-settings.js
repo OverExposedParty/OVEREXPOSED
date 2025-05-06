@@ -122,10 +122,8 @@ function updateOnlineParty({
 
 async function addUserToParty({ partyId, newComputerId, newUsername, newUserReady }) {
   try {
-    console.log("DEVICE_ID: " + newComputerId);
     // Step 1: Get existing party data
     const existingData = await getExistingPartyData(partyId);
-    console.log('Existing data:', existingData);  // Debug log
 
     // Ensure that existingData[0] (or whatever index you need) is used correctly
     const currentPartyData = existingData[0] || {}; // Ensure we get the first item (if it's an array)
