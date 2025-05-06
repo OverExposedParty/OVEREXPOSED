@@ -191,29 +191,6 @@ app.delete('/api/party-games', async (req, res) => {
   }
 });
 
-// Route to delete a party game by partyId
-app.delete('/api/party-games', async (req, res) => {
-  const { partyCode } = req.query;
-
-  if (!partyCode) {
-    return res.status(400).json({ error: 'Party code is required' });
-  }
-
-  try {
-    // Find and delete the party game by partyId
-    const deletedParty = await OnlineParty.findOneAndDelete({ partyId: partyCode });
-
-    if (!deletedParty) {
-      return res.status(404).json({ error: 'Party game not found' });
-    }
-
-    res.json({ message: 'Party game deleted successfully', deletedParty });
-  } catch (err) {
-    console.error('❌ Error deleting party game:', err);
-    res.status(500).json({ error: 'Failed to delete party game' });
-  }
-});
-
 app.post('/api/party-games/remove-user', async (req, res) => {
   try {
     const { partyId, computerIdToRemove } = req.body;
@@ -431,8 +408,8 @@ app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html'));
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`✅ Server listening on port ${PORT}`);
 });
 
 
