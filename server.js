@@ -24,11 +24,11 @@ const io = socketIo(server);
 // Use async/await for MongoDB connections
 async function connectDatabases() {
   try {
-    await mongoose.connect(process.env.MONGO_URI_OVEREXPOSURE);
+    await mongoose.connect(MONGO_URI_OVEREXPOSURE);
     console.log('✅ Connected to OVEREXPOSURE Database');
 
     // Updated connection for second database, removed deprecated options
-    await mongoose.createConnection(process.env.MONGO_URI_OVEREXPOSED).asPromise();
+    await mongoose.createConnection(MONGO_URI_OVEREXPOSED).asPromise();
 
     console.log('✅ Connected to OVEREXPOSED Database');
   } catch (err) {
