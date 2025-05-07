@@ -238,12 +238,12 @@ socket.on("party-updated", async (change) => {
   if (partyCode) {
     const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await res.json();
-    userPingToParty(deviceId, partyCode);
     if (!data || data.length === 0) return;
 
     const latestPing = data[0].lastPinged;
     if (lastKnownPing && new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
       console.log('🟢 Party data changed!');
+      userPingToParty(deviceId, partyCode);
       //Paranoia Page
       if (data[0].isPlaying) {
         if(data[0].userInstructions == "SHOW_PUBLIC_CARD"){
@@ -312,16 +312,17 @@ async function checkAndDeleteEmptyParty(partyId) {
 
 async function deleteParty() {
   try {
-    console.log(partyCode);
-    const res = await fetch(`/api/party-games?partyCode=${partyCode}`, {
-      method: 'DELETE',
-    });
-
     const existingData = await getExistingPartyData(partyCode);
     if (!existingData || existingData.length === 0) {
       console.warn('No party data found.');
       return;
     }
+    for(let i = 0;i<existingData[0].computerIds.length;i++){
+      deleteUserIcon(existingData[0].computerIds[i]);
+    }
+    const res = await fetch(`/api/party-games?partyCode=${partyCode}`, {
+      method: 'DELETE',
+    });
 
     const currentPartyData = existingData[0];
     if (currentPartyData.isPlaying == true) {
