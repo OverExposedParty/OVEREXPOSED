@@ -130,7 +130,6 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
   try {
     const existingData = await getExistingPartyData(partyId);
     const currentPartyData = existingData[0] || {};
-    console.log(currentPartyData.usersReady);
 
     const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
 
@@ -242,7 +241,7 @@ socket.on("party-updated", async (change) => {
     if (!data || data.length === 0) return;
 
     const latestPing = data[0].lastPinged;
-
+    console.log(data[0].usersReady);
     if (lastKnownPing && new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
       console.log('🟢 Party data changed!');
       //Paranoia Page
