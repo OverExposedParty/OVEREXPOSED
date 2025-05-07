@@ -194,10 +194,10 @@ async function setPageforUser(){
   const data = await response.json();
 
   if(data[0].computerIds[data[0].playerTurn] == deviceId){
-    
+    gameContainerPrivate.add('active');
   }
   else{
-
+    waitingForPlayerContainer.add('active');
   }
 }
 
