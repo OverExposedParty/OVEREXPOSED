@@ -130,6 +130,7 @@ function updateTextContainer(text, cardType, punishment) {
   document.querySelector('#private-view .card-type-text').textContent = cardType;
 }
 initialisePage();
+
 async function initialisePage() {
   const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
   const data = await response.json();
@@ -187,6 +188,19 @@ async function initialisePage() {
   } else {
   }
 }
+
+async function setPageforUser(){
+  const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
+  const data = await response.json();
+
+  if(data[0].computerIds[data[0].playerTurn] == deviceId){
+    
+  }
+  else{
+
+  }
+}
+
 completePunishmentButtonConfirm.addEventListener('click', () => {
   confirmPunishmentUserIconContainer.querySelector(`#${deviceId}`).classList.add('yes');
 });

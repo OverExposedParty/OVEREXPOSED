@@ -91,6 +91,7 @@ function updateOnlineParty({
   userInstructions,
   isPlaying,
   lastPinged,
+  usersLastPing,
   playerTurn,
   shuffleSeed
 }) {
@@ -105,6 +106,7 @@ function updateOnlineParty({
     ...(userInstructions !== undefined && { userInstructions }),
     ...(isPlaying !== undefined && { isPlaying }),
     ...(lastPinged !== undefined && { lastPinged }),
+    ...(usersLastPing !== undefined && { usersLastPing }),
     ...(playerTurn !== undefined && { playerTurn }),
     ...(shuffleSeed !== undefined && { shuffleSeed })
   };
@@ -135,14 +137,14 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
 
     // Check if user already exists (based on device ID)
     const existingIndex = computerIds.indexOf(newComputerId);
-
+    userPingToParty(deviceId, partyCode);
     if (existingIndex !== -1) {
       // User already exists, update their info instead
       return UpdateUserPartyData({
         partyId,
         computerId: newComputerId,
         newUsername,
-        newUserReady
+        newUserReady,
       });
     }
 
@@ -176,7 +178,6 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
     // Step 1: Fetch existing party data
     const existingData = await getExistingPartyData(partyId);
     const partyIndex = existingData.indexOf(partyId);
-    console.log('Existing data:', JSON.stringify(existingData, null, 2));  // Debug log
 
     if (!existingData || existingData.length === 0) {
       throw new Error('No party data found.');
@@ -192,7 +193,7 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
     if (index === -1) {
       throw new Error(`Computer ID "${computerId}" not found in party.`);
     }
-
+    userPingToParty(deviceId, partyCode);
     // Step 3: Update values at the found index
     if (newUsername !== undefined) usernames[index] = newUsername;
     if (newUserReady !== undefined) usersReady[index] = newUserReady;
@@ -237,11 +238,10 @@ socket.on("party-updated", async (change) => {
   if (partyCode) {
     const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await res.json();
-
+    userPingToParty(deviceId, partyCode);
     if (!data || data.length === 0) return;
 
     const latestPing = data[0].lastPinged;
-    console.log(data[0].usersReady);
     if (lastKnownPing && new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
       console.log('🟢 Party data changed!');
       //Paranoia Page
@@ -262,12 +262,6 @@ socket.on("party-updated", async (change) => {
             waitingForPlayerText.textContent = "Reading Card...";
           }
         }
-      }
-      //Game Settings page
-      else {
-        if (hostedParty) {
-          checkForGameSettingsUpdates(data[0]);
-        }
         else if(waitingForHost){
           if (hostname === 'overexposed.app') {
             transitionSplashScreen(`${protocol}//${hostname}` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
@@ -276,6 +270,12 @@ socket.on("party-updated", async (change) => {
           }
         }
       }
+      }
+      //Game Settings page
+      else {
+        if (hostedParty) {
+          checkForGameSettingsUpdates(data[0]);
+        }
       // Handle update (refresh UI, show message, etc.)
     }
     lastKnownPing = latestPing;
@@ -375,6 +375,34 @@ async function setIsPlayingForParty(partyId, newIsPlayingValue) {
     console.error('❌ Failed to update isPlaying:', error);
   }
 }
+
+async function userPingToParty(deviceId, partyId) {
+  try {
+    const existingData = await getExistingPartyData(partyId);
+    if (!existingData || existingData.length === 0) {
+      throw new Error('No party data found.');
+    }
+
+    const currentPartyData = existingData[0];
+    const { computerIds = [], usersLastPing = [] } = currentPartyData;
+
+    const index = computerIds.indexOf(deviceId);
+    if (index === -1) {
+      throw new Error(`Device ID "${deviceId}" not found in party.`);
+    }
+
+    usersLastPing[index] = Date.now();
+
+    return updateOnlineParty({
+      partyId,
+      usersLastPing,
+    });
+  } catch (err) {
+    console.error('❌ Failed to ping user in party:', err);
+    throw err;
+  }
+}
+
 
 function formatPackName(name) {
   return name.toLowerCase().replace(/\s+/g, '-');

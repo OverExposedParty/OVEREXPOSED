@@ -22,6 +22,7 @@ partyCode = segments.pop() || segments.pop(); // handle trailing slash
 waitingForHost = true;
 
 async function checkPartyExists() {
+    overlay.classList.add('active');
     const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await response.json();
     console.log(data);

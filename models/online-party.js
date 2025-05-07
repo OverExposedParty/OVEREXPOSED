@@ -11,6 +11,7 @@ const OnlinePartySchema = new mongoose.Schema({
   userInstructions: { type: String, required: true },
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },
+  usersLastPing: { type: [Boolean], required: true },
   playerTurn: { type: Number, required: true },
   shuffleSeed: { type: Number, required: true },
 });
