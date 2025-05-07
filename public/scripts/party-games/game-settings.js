@@ -18,6 +18,11 @@ const packsContainer = document.querySelector('.packs-container');
 const gameSettingsContainer = document.querySelector('.settings-container');
 const onlineSettingsContainer = document.querySelector('.online-game-settings-container');
 
+const enterUsernameContainer = document.querySelector('.waiting-container');
+const enterUsernameButton = enterUsernameContainer.querySelector('.waiting-button-container button');
+const partyUsernameInput = document.getElementById('party-username');
+
+
 const packsSettingsContainerButton = document.getElementById('packs-settings')
 const gameSettingsContainerButton = document.getElementById('game-settings')
 const onlineSettingsContainerButton = document.getElementById('online-settings')
@@ -240,6 +245,10 @@ onlineButton.addEventListener('click', () => {
         });
         createUserIcon(deviceId, "Player 1", true);
         inputPartyCode.value = partyCode;
+
+        enterUsernameContainer.classList.add('active');
+        addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
+        overlay.classList.add('active');
     }
     else {
         onlineSettingsContainerButton.classList.add('disabled');
@@ -305,6 +314,23 @@ function removeSettingsExtensionFromCurrentURL() {
     }
     return currentURL;
 }
+enterUsernameButton.addEventListener('click', async function () {
+    const username = partyUsernameInput.value.trim();
+
+    if (username === '') {
+        console.log('Username is empty');
+        return;
+    }
+    await UpdateUserPartyData({
+        partyId: partyCode,
+        computerId: deviceId,
+        newUsername: username,
+        newUserReady: true
+    });
+    enterUsernameContainer.classList.remove('active');
+    removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
+    overlay.classList.remove('active');
+});
 
 function startOnlineGame() {
     setIsPlayingForParty(partyCode, true)

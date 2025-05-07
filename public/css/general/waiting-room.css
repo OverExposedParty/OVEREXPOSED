@@ -73,3 +73,11 @@
     text-align: center;
     margin-bottom: 2vh;
 }
+
+@media (orientation: portrait) {
+    .waiting-container button {
+        padding: 5px 10px;
+        font-size: 70%;
+        width: 50%;
+    }
+}
