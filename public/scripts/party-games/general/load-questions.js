@@ -72,11 +72,12 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             const packColour = pack["pack-colour"];
             cardPackMap.push({ packName, packCard, packColour });
         });
-
-        if (localStorage.getItem(`${gamemode}-punishment`)) {
-            allQuestions.push("punishment");
+        console.log(gamemode);
+        if(gamemode == "Truth Or Dare"){
+            if (localStorage.getItem(`${gamemode}-punishment`)) {
+                allQuestions.push("punishment");
+            }
         }
-
         if (allQuestions.length > 0) {
             if(seedShuffle){
                 shuffleQuestions(seedShuffle);
