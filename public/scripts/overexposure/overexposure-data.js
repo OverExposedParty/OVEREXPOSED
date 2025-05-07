@@ -39,7 +39,14 @@ const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 const storageObserver = new LocalStorageObserver();
 
 const { protocol, hostname } = window.location;
-const socket = io(`${protocol}//${hostname}`);
+
+if (hostname === 'overexposed.app') {
+    const socket = io(`${protocol}//${hostname}`);
+} else {
+    const socket = io(`${protocol}//${hostname}:3000`);
+}
+
+
 
 socket.on('connect', () => {
   console.log('Socket connected successfully');

@@ -252,8 +252,6 @@ inputPartyCode.addEventListener('click', () => {
     inputPartyCode.select();
 });
 
-
-
 startGameButton.addEventListener('click', () => {
     const nsfwPacksActive = Array.from(packButtons).some(button => button.classList.contains('active') && button.classList.contains('pack-nsfw'));
 

@@ -1,7 +1,13 @@
 let hostedParty = false;
+let waitingForHost = false;
 
 const { protocol, hostname } = window.location;
-const socket = io(`${protocol}//${hostname}`);
+let socket;
+if (hostname === 'overexposed.app') {
+  socket = io(`${protocol}//${hostname}`);
+} else {
+  socket = io(`${protocol}//${hostname}:3000`);
+}
 
 socket.on('connect', () => {
   console.log('Socket connected successfully');
@@ -249,6 +255,13 @@ socket.on("party-updated", async (change) => {
         if (hostedParty) {
           checkForGameSettingsUpdates(data[0]);
         }
+        else if(waitingForHost){
+          if (hostname === 'overexposed.app') {
+            transitionSplashScreen(`${protocol}//${hostname}` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
+          } else {
+            transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
+          }
+        }
       }
       // Handle update (refresh UI, show message, etc.)
     }
@@ -349,3 +362,8 @@ async function setIsPlayingForParty(partyId, newIsPlayingValue) {
     console.error('❌ Failed to update isPlaying:', error);
   }
 }
+
+function formatPackName(name) {
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+

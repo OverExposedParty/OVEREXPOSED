@@ -19,6 +19,8 @@ const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
+waitingForHost = true;
+
 async function checkPartyExists() {
     const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await response.json();
