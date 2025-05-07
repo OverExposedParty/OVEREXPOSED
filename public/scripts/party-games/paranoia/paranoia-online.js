@@ -14,6 +14,10 @@ const waitingForPlayerContainer = document.getElementById('waiting-for-player');
 const waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
 const waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p')
 
+const playerHasPassedContainer = document.getElementById('player-has-passed');
+const playerHasPassedTitle = playerHasPassedContainer.querySelector('.content-container h2');
+const playerHasPassedText = playerHasPassedContainer.querySelector('.content-container p');
+
 const gameContainerPublic = document.querySelector('#public-view.card-container');
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
 
@@ -24,12 +28,6 @@ const completePunishmentContainer = document.getElementById('complete-punishment
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
 const confirmPunishmentButtonContainer = document.getElementById('select-punishment-container');
 const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-container');
-
-
-const playerHasPassedContainer = document.getElementById('player-has-passed');
-const playerHasPassedTitle = playerHasPassedContainer.querySelector('.content-container h2');
-const playerHasPassedText = playerHasPassedContainer.querySelector('.content-container p');
-
 
 const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
@@ -46,10 +44,13 @@ const completePunishmentButtonPass = document.querySelector('#complete-punishmen
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
-buttonChoosePlayer.addEventListener('click', () => {
-  gameContainerPrivate.classList.remove('active');
-  selectUserContainer.classList.add('active');
-});
+  buttonChoosePlayer.addEventListener('click', async () => {
+    gameContainerPrivate.classList.remove('active');
+    selectUserContainer.classList.add('active');
+    SendInstruction("WAITING_FOR_PLAYER:CHOOSING_PLAYER",true);
+    // When player presses choose player in private card section 
+  });
+  
 buttonNextQuestion.addEventListener('click', () => {
   gameContainerPublic.classList.remove('active');
   waitingForPlayerContainer.classList.add('active');
@@ -58,18 +59,21 @@ buttonNextQuestion.addEventListener('click', () => {
 confirmPlayerButton.addEventListener('click', () => {
   selectUserContainer.classList.remove('active');
   selectPunishmentContainer.classList.add('active');
-  //When playuer confirms
+  SendInstruction("CHOOSING_PUNISHMENT:"+selectUserButtonContainer.getAttribute('selected-id'),false);
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
   if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-coin-flip') {
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP",false);
     pickHeadsOrTailsContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-drink-wheel') {
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL",false);
     drinkWheelContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT",false);
     completePunishmentContainer.classList.add('active');
   }
 });

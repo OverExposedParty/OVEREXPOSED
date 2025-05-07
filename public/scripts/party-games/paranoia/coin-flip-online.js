@@ -41,25 +41,15 @@ async function tossCoinFunction() {
 
         let instruction = "";
         if((isHeads && faceCoin == "Heads") || (!isHeads && faceCoin == "Tails")){
-            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:" + currentPartyData.usernames[currentPartyData.playerTurn]; //instruction ="NEXT_USER_TURN";
-            updateOnlineParty({
-                partyId: partyCode,
-                userInstructions: instruction,
-                lastPinged: Date.now(),
-              });
+            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
         }
         else{
-            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:" + currentPartyData.usernames[currentPartyData.playerTurn];
-
-            updateOnlineParty({
-                partyId: partyCode,
-                userInstructions: instruction,
-                lastPinged: Date.now(),
-              });
+            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:";
         }
+        SendInstruction(instruction,true);
     }, 2500);
     setTimeout(() => {
-        instruction ="NEXT_USER_TURN";
+        instruction ="DISPLAY_PUBLIC_CARD";
         currentPlayerTurn++;
         if(currentPlayerTurn > existingData.computerIds.length){
             currentPlayerTurn = 0;

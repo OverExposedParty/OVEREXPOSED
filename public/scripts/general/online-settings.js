@@ -246,7 +246,7 @@ socket.on("party-updated", async (change) => {
       userPingToParty(deviceId, partyCode);
       //Paranoia Page
       if (data[0].isPlaying) {
-        if(data[0].userInstructions == "SHOW_PUBLIC_CARD"){ 
+        if(data[0].userInstructions == "DISPLAY_PUBLIC_CARD"){ 
 
         }
         else if(data[0].userInstructions == "NEXT_USER_TURN"){
@@ -257,6 +257,15 @@ socket.on("party-updated", async (change) => {
         }
         else if (data[0].userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
           UserSelectedForPunishment(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
+          UserSelectedForPunishment(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
+          ChosePunishment(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
+          ChoosingPunishment(data[0].userInstructions);
         }
         else if(waitingForHost){
           if (hostname === 'overexposed.app') {
