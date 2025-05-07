@@ -47,7 +47,7 @@ async function checkPartyExists() {
                     partyId: partyCode,
                     newComputerId: deviceId,
                     newUsername: 'Player ' + data[0].usernames.length + 1,
-                    newUserReady: false
+                    newUserReady: true
                 });
             }
             console.log("DEVICE_ID: " + deviceId);
