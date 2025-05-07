@@ -9,9 +9,10 @@ const confirmPunishmentUserIconContainer = document.getElementById('confirm-puni
 const nextQuestionUserIconContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
+
 const waitingForPlayerContainer = document.getElementById('waiting-for-player');
-const waitingForPlayerTitle = waitingForPlayerContainer.querySelector('content-container h2')
-const waitingForPlayerText = waitingForPlayerContainer.querySelector('content-container p')
+const waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
+const waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p')
 
 const gameContainerPublic = document.querySelector('#public-view.card-container');
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
@@ -23,7 +24,12 @@ const completePunishmentContainer = document.getElementById('complete-punishment
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
 const confirmPunishmentButtonContainer = document.getElementById('select-punishment-container');
 const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-container');
+
+
 const playerHasPassedContainer = document.getElementById('player-has-passed');
+const playerHasPassedTitle = playerHasPassedContainer.querySelector('.content-container h2');
+const playerHasPassedText = playerHasPassedContainer.querySelector('.content-container p');
+
 
 const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
@@ -52,6 +58,7 @@ buttonNextQuestion.addEventListener('click', () => {
 confirmPlayerButton.addEventListener('click', () => {
   selectUserContainer.classList.remove('active');
   selectPunishmentContainer.classList.add('active');
+  //When playuer confirms
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
@@ -96,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const selectedQuestionObj = getNextQuestion();
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
+  setPageforUser();
 });
 
 function updateTextContainer(text, cardType, punishment) {
@@ -138,8 +146,10 @@ async function initialisePage() {
   if (data.length > 0) {
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].computerIds.length; i++) {
-        const userButton = createUserButton(data[0].computerIds[i], data[0].usernames[i]);
-        selectUserButtonContainer.appendChild(userButton);
+        if(data[0].computerIds[i] != deviceId){
+          const userButton = createUserButton(data[0].computerIds[i], data[0].usernames[i]);
+          selectUserButtonContainer.appendChild(userButton);
+        }
       }
       const partyGamemodeSettings = parseGameSettings(data[0].gameSettings)
       for (let i = 0; i < partyGamemodeSettings.length; i++) {
@@ -194,10 +204,10 @@ async function setPageforUser(){
   const data = await response.json();
 
   if(data[0].computerIds[data[0].playerTurn] == deviceId){
-    gameContainerPrivate.add('active');
+    gameContainerPrivate.classList.add('active');
   }
   else{
-    waitingForPlayerContainer.add('active');
+    waitingForPlayerContainer.classList.add('active');
   }
 }
 

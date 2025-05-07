@@ -246,21 +246,17 @@ socket.on("party-updated", async (change) => {
       userPingToParty(deviceId, partyCode);
       //Paranoia Page
       if (data[0].isPlaying) {
-        if(data[0].userInstructions == "SHOW_PUBLIC_CARD"){
+        if(data[0].userInstructions == "SHOW_PUBLIC_CARD"){ 
 
         }
         else if(data[0].userInstructions == "NEXT_USER_TURN"){
-          const selectedQuestionObj = getNextQuestion();
-          updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
-
-          if(data[0].computerIds[data[0].playerTurn] == deviceId){
-            gameContainerPrivate.classList.add('active');
-          }
-          else{
-            waitingForPlayerContainer.classList.add('active');
-            waitingForPlayerTitle.textContent = "Waiting for " + data[0].usernames[data[0].playerTurn]
-            waitingForPlayerText.textContent = "Reading Card...";
-          }
+          NextUserTurn();
+        }
+        else if (data[0].userInstructions.includes("USER_HAS_PASSED")) {
+          UserHasPassed(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
+          UserSelectedForPunishment(data[0].userInstructions);
         }
         else if(waitingForHost){
           if (hostname === 'overexposed.app') {
@@ -269,6 +265,9 @@ socket.on("party-updated", async (change) => {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
         }
+        await updateOnlineParty({
+          userInstructions: "",
+        });
       }
       }
       //Game Settings page

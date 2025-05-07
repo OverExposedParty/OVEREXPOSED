@@ -6,7 +6,15 @@ tossBtn.addEventListener('click', () => {
     tossCoinFunction();
 });
 
-function tossCoinFunction() {
+async function tossCoinFunction() {
+    const existingData = await getExistingPartyData(partyCode);
+    if (!existingData || existingData.length === 0) {
+      console.warn('No party data found.');
+      return;
+    }
+
+    const currentPartyData = existingData[0];
+
     const randomVal = Math.random();
     const faceCoin = randomVal < 0.5 ? 'Heads' : 'Tails';
     const backgroundContainer = randomVal < 0.5 ? 'var(--backgroundcolour)' : 'var(--primarypagecolour)';
@@ -28,11 +36,12 @@ function tossCoinFunction() {
         coinIcon.classList.remove('flip');
     }, 1000);
     setTimeout(() => {
-        let instruction = "";
         playerHasPassedContainer.classList.add('active');
         coinFlipContainer.classList.remove('active');
+
+        let instruction = "";
         if((isHeads && faceCoin == "Heads") || (!isHeads && faceCoin == "Tails")){
-            instruction ="SHOW_PUBLIC_CARD";
+            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:" + currentPartyData.usernames[currentPartyData.playerTurn]; //instruction ="NEXT_USER_TURN";
             updateOnlineParty({
                 partyId: partyCode,
                 userInstructions: instruction,
@@ -40,17 +49,28 @@ function tossCoinFunction() {
               });
         }
         else{
-            instruction ="NEXT_USER_TURN";
-            currentPlayerTurn++;
+            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:" + currentPartyData.usernames[currentPartyData.playerTurn];
 
             updateOnlineParty({
                 partyId: partyCode,
                 userInstructions: instruction,
-                playerTurn: currentPlayerTurn,
                 lastPinged: Date.now(),
               });
         }
-
     }, 2500);
+    setTimeout(() => {
+        instruction ="NEXT_USER_TURN";
+        currentPlayerTurn++;
+        if(currentPlayerTurn > existingData.computerIds.length){
+            currentPlayerTurn = 0;
+        }
+
+        updateOnlineParty({
+            partyId: partyCode,
+            userInstructions: instruction,
+            playerTurn: currentPlayerTurn,
+            lastPinged: Date.now(),
+          });
+    }, 5000);
 }
 
