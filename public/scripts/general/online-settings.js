@@ -130,6 +130,7 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
   try {
     const existingData = await getExistingPartyData(partyId);
     const currentPartyData = existingData[0] || {};
+    console.log(currentPartyData.usersReady);
 
     const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
 
