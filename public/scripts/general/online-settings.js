@@ -128,27 +128,39 @@ function updateOnlineParty({
 
 async function addUserToParty({ partyId, newComputerId, newUsername, newUserReady }) {
   try {
-    // Step 1: Get existing party data
     const existingData = await getExistingPartyData(partyId);
+    const currentPartyData = existingData[0] || {};
 
-    // Ensure that existingData[0] (or whatever index you need) is used correctly
-    const currentPartyData = existingData[0] || {}; // Ensure we get the first item (if it's an array)
+    const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
 
-    // Step 2: Append new data to existing arrays
-    const updatedComputerIds = [...(currentPartyData.computerIds || []), newComputerId];
-    const updatedUsernames = [...(currentPartyData.usernames || []), newUsername];
-    const updatedUsersReady = [...(currentPartyData.usersReady || []), newUserReady];
+    // Check if user already exists (based on device ID)
+    const existingIndex = computerIds.indexOf(newComputerId);
 
-    console.log('Updated data:', { updatedComputerIds, updatedUsernames, updatedUsersReady });  // Debug log
+    if (existingIndex !== -1) {
+      // User already exists, update their info instead
+      return UpdateUserPartyData({
+        partyId,
+        computerId: newComputerId,
+        newUsername,
+        newUserReady
+      });
+    }
 
-    // Step 3: Update using existing update function
+    const updatedComputerIds = [...computerIds, newComputerId];
+    const updatedUsernames = [...usernames, newUsername];
+
+    // Ensure usersReady stays in sync by appending to it only
+    const updatedUsersReady = [...usersReady, newUserReady];
+
+    console.log('Updated data:', { updatedComputerIds, updatedUsernames, updatedUsersReady });
+
     return updateOnlineParty({
       partyId,
       computerIds: updatedComputerIds,
       usernames: updatedUsernames,
       usersReady: updatedUsersReady,
-      gamemode: currentPartyData.gamemode || 'Truth Or Dare',  // Include gamemode from existing data
-      isPlaying: currentPartyData.isPlaying || false,    // Include isPlaying from existing data
+      gamemode: currentPartyData.gamemode || 'Truth Or Dare',
+      isPlaying: currentPartyData.isPlaying || false,
       lastPinged: Date.now(),
       shuffleSeed: currentPartyData.shuffleSeed
     });
@@ -157,6 +169,7 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
     throw err;
   }
 }
+
 
 async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserReady }) {
   try {

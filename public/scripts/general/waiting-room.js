@@ -38,7 +38,7 @@ async function checkPartyExists() {
                     partyId: partyCode,  // make sure this variable is defined
                     computerId: deviceId,  // or just `deviceId`
                     newUsername: "NewName", // keeps usersReady unchanged
-                    newUserReady: false
+                    newUserReady: true
                 });
                 console.log("partyCode: " + partyCode);
             }
