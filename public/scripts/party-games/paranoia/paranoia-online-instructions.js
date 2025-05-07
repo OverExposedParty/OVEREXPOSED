@@ -33,10 +33,19 @@ function UserHasPassed(instruction) {
 
 function WaitingForPlayer(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  waitingForPlayerContainer.classList.add('active');
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
-  if(parsedInstructions.reason == "CHOOSING_PLAYER"){
+  if(parsedInstructions.reason == "CHOOSE_PLAYER"){
     waitingForPlayerText.textContent = "Choosing Player...";
+    if (currentPartyData.computerIds[currentPartyData.playerTurn] == deviceId) {
+      waitingForPlayerContainer.classList.remove('active');
+      selectUserContainer.classList.add('active');
+    }
+    else{
+      selectUserContainer.classList.remove('active');
+      waitingForPlayerContainer.classList.add('active');
+
+    }
+
   }
 }
 
@@ -44,7 +53,7 @@ function ChoosingPunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
   waitingForPlayerContainer.classList.add('active');
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
-  if(parsedInstructions.reason == "CHOOSING_PLAYER"){
+  if(parsedInstructions.reason == "CHOOSE_PLAYER"){
     waitingForPlayerText.textContent = "Choosing Player...";
   }
 }

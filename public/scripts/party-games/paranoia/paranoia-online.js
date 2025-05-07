@@ -33,7 +33,7 @@ const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
 const buttonChoosePlayer = document.getElementById('button-choose-player');
 const buttonNextQuestion = document.getElementById('button-next-question');
-const confirmPlayerButton = document.getElementById('select-user-container').querySelector('.select-button-container button');
+const confirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
 const confirmPunishmentButton = document.getElementById('select-punishment-container').querySelector('.select-button-container button');
 
 const completePunishmentButtonConfirm = document
@@ -45,9 +45,7 @@ const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
   buttonChoosePlayer.addEventListener('click', async () => {
-    gameContainerPrivate.classList.remove('active');
-    selectUserContainer.classList.add('active');
-    SendInstruction("WAITING_FOR_PLAYER:CHOOSING_PLAYER",true);
+    SendInstruction("WAITING_FOR_PLAYER:CHOOSE_PLAYER",true);
     // When player presses choose player in private card section 
   });
   

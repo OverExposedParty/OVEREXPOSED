@@ -259,7 +259,7 @@ socket.on("party-updated", async (change) => {
           UserSelectedForPunishment(data[0].userInstructions);
         }
         else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
-          UserSelectedForPunishment(data[0].userInstructions);
+          WaitingForPlayer(data[0].userInstructions);
         }
         else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
           ChosePunishment(data[0].userInstructions);
