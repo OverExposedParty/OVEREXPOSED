@@ -23,8 +23,6 @@ async function NextUserTurn() {
 }
 
 async function NextQuestion() {
-  nextQuestionContainer.classList.add('active');
-
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
@@ -34,7 +32,8 @@ async function NextQuestion() {
   const index = currentPartyData.computerIds.indexOf(deviceId);
   if (currentPartyData.usersReady[index] == false) {
     currentPartyData.usersReady[index] = true;
-    const icons = nextQuestionContainer.querySelectorAll('.icon');
+    nextQuestionContainer.classList.add('active');
+    const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
     let totalUsersReady = 0;
     for (let i = 0; i < icons.length; i++) {
       if (currentPartyData.usersReady[i] == true) {
