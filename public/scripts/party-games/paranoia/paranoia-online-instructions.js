@@ -1,10 +1,15 @@
-function NextUserTurn() {
+async function NextUserTurn() {
   const selectedQuestionObj = getNextQuestion();
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
 
   playerHasPassedContainer.classList.remove('active');
-  
 
   if (GetSelectedPlayerTurnID() == deviceId) {
     gameContainerPrivate.classList.add('active');
