@@ -31,7 +31,7 @@ async function NextQuestion() {
     return;
   }
   const currentPartyData = existingData[0];
-  const index = currentPartyData.computerIds.indexOf(computerId);
+  const index = currentPartyData.computerIds.indexOf(deviceId);
   currentPartyData.usersReady[index] = true;
 
   const icons = nextQuestionContainer.querySelectorAll('.icon');
