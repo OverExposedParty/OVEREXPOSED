@@ -38,13 +38,13 @@ async function NextQuestion() {
   let totalUsersReady = 0;
   for (let i = 0; i < icons.length; i++) {
     if (currentPartyData.usersReady[i] == true) {
-      icons.classList.remove('no');
-      icons.classList.add('yes');
+      icons[i].classList.remove('no');
+      icons[i].classList.add('yes');
       totalUsersReady++;
     }
     else {
-      icons.classList.remove('yes');
-      icons.classList.add('no');
+      icons[i].classList.remove('yes');
+      icons[i].classList.add('no');
     }
   }
   console.log("totalUsersReady: " + totalUsersReady);
