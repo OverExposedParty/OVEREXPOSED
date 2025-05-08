@@ -95,8 +95,10 @@ function UserSelectedForPunishment(instruction) {
 }
 
 function DisplayPublicCard(){
-  gameContainerPublic.classList.add('active');
   confirmPunishmentContainer.classList.remove('active');
+  playerHasPassedContainer.classList.remove('active');
+  
+  gameContainerPublic.classList.add('active');
 }
 
 function parseInstruction(input) {

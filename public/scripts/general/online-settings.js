@@ -247,7 +247,7 @@ socket.on("party-updated", async (change) => {
       //Paranoia Page
       if (data[0].isPlaying) {
         if(data[0].userInstructions == "DISPLAY_PUBLIC_CARD"){ 
-
+          DisplayPublicCard();
         }
         else if(data[0].userInstructions == "NEXT_USER_TURN"){
           NextUserTurn();
