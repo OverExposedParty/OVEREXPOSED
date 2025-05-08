@@ -47,6 +47,7 @@ async function NextQuestion() {
       icons.classList.add('no');
     }
   }
+  console.log("totalUsersReady: " + totalUsersReady);
   if (totalUsersReady == currentPartyData.computerIds.length) {
     await updateOnlineParty({
       partyId: partyCode,
