@@ -191,6 +191,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
     });
   }
   else if (questionIndex == null){
+    console.log("updated player turn");
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,
@@ -199,6 +200,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
     });
   }
   else{
+    console.log("updated player turn and question index");
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,
