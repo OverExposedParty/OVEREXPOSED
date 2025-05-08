@@ -50,6 +50,7 @@ async function tossCoinFunction() {
         setTimeout(() => {
             instruction ="NEXT_USER_TURN";
             currentPartyData.currentCardIndex++;
+            currentPartyData.playerTurn++;
             if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
                 currentPartyData.playerTurn = 0;
             }

@@ -170,8 +170,6 @@ function parseInstructionWithDeviceID(input) {
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
   let instruction = "";
-  console.log("currentPlayerTurn: " + currentPlayerTurn);
-  console.log("questionIndex: " + questionIndex);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
