@@ -51,19 +51,13 @@ async function tossCoinFunction() {
             SendInstruction(instruction,true,currentPartyData.playerTurn,questionCardIndex);
         }
         else{
-            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
-            SendInstruction(instruction,true);
-            setTimeout(() => {
-                instruction ="NEXT_USER_TURN";
-                questionCardIndex++;
-                currentPartyData.playerTurn++;
-                console.log("questionCardIndex: " +questionCardIndex);
-                console.log("playerTurn: " +currentPartyData.playerTurn);
-                if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
-                    currentPartyData.playerTurn = 0;
-                }
-                SendInstruction(instruction,false,currentPartyData.playerTurn,questionCardIndex);
-            }, 2500);
+            instruction ="DISPLAY_PUBLIC_CARD";
+            questionCardIndex++;
+            currentPartyData.playerTurn++;
+            if(currentPartyData.playerTurn >= currentPartyData.computerIds.length){
+                currentPartyData.playerTurn = 0;
+            }
+            SendInstruction(instruction,true,currentPartyData.playerTurn,questionCardIndex);
         }
     }, 2500);
 }
