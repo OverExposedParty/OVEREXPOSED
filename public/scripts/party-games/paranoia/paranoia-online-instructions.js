@@ -22,7 +22,7 @@ async function NextUserTurn() {
   }
 }
 
-async function NextQuestion(instruction) {
+async function NextQuestion() {
   nextQuestionContainer.classList.add('active');
 
   const existingData = await getExistingPartyData(partyCode);

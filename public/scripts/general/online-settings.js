@@ -253,7 +253,7 @@ socket.on("party-updated", async (change) => {
           NextUserTurn();
         }
         else if(data[0].userInstructions == "NEXT_QUESTION"){
-          NextUserTurn();
+          NextQuestion();
         }
         else if (data[0].userInstructions.includes("USER_HAS_PASSED")) {
           UserHasPassed(data[0].userInstructions);
