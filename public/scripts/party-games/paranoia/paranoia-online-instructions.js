@@ -11,7 +11,7 @@ async function NextUserTurn() {
 
   playerHasPassedContainer.classList.remove('active');
 
-  if (GetSelectedPlayerTurnID() == deviceId) {
+  if (await GetSelectedPlayerTurnID() == deviceId) {
     gameContainerPrivate.classList.add('active');
   }
   else {
