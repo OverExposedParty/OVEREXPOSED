@@ -244,7 +244,7 @@ onlineButton.addEventListener('click', () => {
             shuffleSeed: newShuffleSeed
         });
         createUserIcon(deviceId, "Player 1", true);
-        inputPartyCode.value = partyCode;
+        inputPartyCode.value = "https://overexposed.app/" + partyCode;
 
         enterUsernameContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);

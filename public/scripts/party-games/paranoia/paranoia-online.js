@@ -63,15 +63,12 @@ confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
   if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-coin-flip') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP", false);
-    pickHeadsOrTailsContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-drink-wheel') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL", false);
-    drinkWheelContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT", false);
-    completePunishmentContainer.classList.add('active');
   }
 });
 

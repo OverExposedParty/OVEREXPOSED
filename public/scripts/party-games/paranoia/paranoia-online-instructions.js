@@ -105,25 +105,30 @@ function ChoosingPunishment(instruction) {
     waitingForPlayerContainer.classList.add('active');
   }
 }
-function ChosePunishment(instruction) {
+async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-
-  waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
-  if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
-    if (!pickHeadsOrTailsContainer.classList.contains('active')) {
+  if (await GetSelectedPlayerTurnID() === deviceId) {
+    if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
+      pickHeadsOrTailsContainer.classList.add('active');
+    }
+    else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
+      drinkWheelContainer.classList.add('active');
+    }
+    else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
+      completePunishmentContainer.classList.add('active');
+    }
+  }
+  else {
+    waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
+    if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
       waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Calling coin flip...";
     }
-  }
-  else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
-
-    if (!pickHeadsOrTailsContainer.classList.contains('active')) {
+    else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
       waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Spinning drink wheel...";
     }
-  }
-  else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
-    if (!pickHeadsOrTailsContainer.classList.contains('active')) {
+    else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
       waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Reading punishment...";
     }
@@ -170,6 +175,8 @@ function parseInstructionWithDeviceID(input) {
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
   let instruction = "";
+  console.log("currentPlayerTurn: " + currentPlayerTurn);
+  console.log("questionIndex: " + questionIndex);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
@@ -190,7 +197,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
       lastPinged: Date.now(),
     });
   }
-  else if (questionIndex == null){
+  else if (questionIndex == null) {
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,
@@ -198,7 +205,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
       playerTurn: currentPlayerTurn,
     });
   }
-  else{
+  else {
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,

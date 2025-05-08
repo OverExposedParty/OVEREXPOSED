@@ -44,22 +44,24 @@ async function tossCoinFunction() {
         if((isHeads && faceCoin == "Heads") || (!isHeads && faceCoin == "Tails")){
             instruction ="DISPLAY_PUBLIC_CARD";
             questionCardIndex++;
-            console.log("questionCardIndex: " + questionCardIndex);
+            currentPartyData.currentCardIndex = questionCardIndex;
             currentPartyData.playerTurn++;
-            if(currentPartyData.playerTurn >= currentPartyData.computerIds.length){
-                currentPartyData.playerTurn = 0;
+            if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
+              currentPartyData.playerTurn = 0;
             }
-            SendInstruction(instruction,true,currentPartyData.playerTurn,questionCardIndex);
+            SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
+            
         }
         else{
             instruction ="DISPLAY_PUBLIC_CARD";
             questionCardIndex++;
-            console.log("questionCardIndex: " + questionCardIndex);
+            currentPartyData.currentCardIndex = questionCardIndex;
             currentPartyData.playerTurn++;
-            if(currentPartyData.playerTurn >= currentPartyData.computerIds.length){
-                currentPartyData.playerTurn = 0;
+            if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
+              currentPartyData.playerTurn = 0;
             }
-            SendInstruction(instruction,true,currentPartyData.playerTurn,questionCardIndex);
+            SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
+            
         }
     }, 2500);
 }
