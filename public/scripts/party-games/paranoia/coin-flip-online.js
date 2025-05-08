@@ -55,7 +55,12 @@ async function tossCoinFunction() {
         }
         else{
             instruction ="DISPLAY_PUBLIC_CARD";
-            SendInstruction(instruction,true);
+            currentPartyData.currentCardIndex++;
+            currentPartyData.playerTurn++;
+            if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
+                currentPartyData.playerTurn = 0;
+            }
+            SendInstruction(instruction,true,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
         }
     }, 2500);
 }
