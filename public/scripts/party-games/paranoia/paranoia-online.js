@@ -1,5 +1,4 @@
 let isHeads = false;
-let currentPlayerTurn = 0;
 
 const url = window.location.href;
 const segments = url.split('/');

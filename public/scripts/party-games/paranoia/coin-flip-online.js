@@ -50,14 +50,14 @@ async function tossCoinFunction() {
         setTimeout(() => {
             instruction ="NEXT_USER_TURN";
             currentPartyData.currentCardIndex++;
-            if(currentPlayerTurn > currentPartyData.computerIds.length){
-                currentPlayerTurn = 0;
+            if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
+                currentPartyData.playerTurn = 0;
             }
     
             updateOnlineParty({
                 partyId: partyCode,
                 userInstructions: instruction,
-                playerTurn: currentPlayerTurn,
+                playerTurn: currentPartyData.playerTurn,
                 lastPinged: Date.now(),
                 currentCardIndex: currentPartyData.currentCardIndex
               });
