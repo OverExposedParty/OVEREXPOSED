@@ -48,6 +48,7 @@ async function NextQuestion() {
     }
   }
   console.log("totalUsersReady: " + totalUsersReady);
+  console.log("currentPartyData.computerIds.length: " + currentPartyData.computerIds.length);
   if (totalUsersReady == currentPartyData.computerIds.length) {
     await updateOnlineParty({
       partyId: partyCode,
