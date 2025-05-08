@@ -1,18 +1,12 @@
-async function NextUserTurn() {
+function NextUserTurn() {
   const selectedQuestionObj = getNextQuestion();
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  if(playerHasPassedContainer.classList.contains('active')){
-    playerHasPassedContainer.classList.remove('active');
-  }
-  const currentPartyData = existingData[0];
 
-  if (currentPartyData.computerIds[currentPartyData.playerTurn] == deviceId) {
+  playerHasPassedContainer.classList.remove('active');
+  
+
+  if (GetSelectedPlayerTurnID() == deviceId) {
     gameContainerPrivate.classList.add('active');
   }
   else {
@@ -36,7 +30,7 @@ function WaitingForPlayer(instruction) {
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
   if(parsedInstructions.reason == "CHOOSE_PLAYER"){
     waitingForPlayerText.textContent = "Choosing Player...";
-    if (currentPartyData.computerIds[currentPartyData.playerTurn] == deviceId) {
+    if (GetSelectedPlayerTurnID() == deviceId) {
       waitingForPlayerContainer.classList.remove('active');
       selectUserContainer.classList.add('active');
     }
@@ -140,4 +134,26 @@ async function GetUsername(computerId){
 
   const index = currentPartyData.computerIds.indexOf(computerId);
   return currentPartyData.usernames[index];
+}
+
+async function GetUserID(username){
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+
+  const index = currentPartyData.usernames.indexOf(username);
+  return currentPartyData.computerIds[index];
+}
+
+async function GetSelectedPlayerTurnID(){
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+  return currentPartyData.computerIds[currentPartyData.playerTurn];
 }
