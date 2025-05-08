@@ -108,9 +108,9 @@ function ChoosingPunishment(instruction) {
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
   const selectedDeviceId = await GetSelectedPlayerTurnID()
-  console.log("deviceId: " + parsedInstructions.deviceId);
-  console.log("GetSelectedPlayerTurnID: " + selectedDeviceId);
-  if ( selectedDeviceId == parsedInstructions.deviceId) {
+  console.log("deviceId: " + deviceId);
+  console.log("parsedInstructions.deviceId: " + parsedInstructions.deviceId);
+  if ( deviceId == parsedInstructions.deviceId) {
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
       pickHeadsOrTailsContainer.classList.add('active');
     }
