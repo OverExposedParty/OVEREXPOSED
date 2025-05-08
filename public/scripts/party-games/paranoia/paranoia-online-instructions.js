@@ -25,13 +25,13 @@ function UserHasPassed(instruction) {
   }
 }
 
-function WaitingForPlayer(instruction) {
+async function WaitingForPlayer(instruction) {
   let parsedInstructions = parseInstruction(instruction)
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
   if(parsedInstructions.reason == "CHOOSE_PLAYER"){
     waitingForPlayerText.textContent = "Choosing Player...";
-    if (GetSelectedPlayerTurnID() == deviceId) {
-      waitingForPlayerContainer.classList.remove('active');
+    if (await GetSelectedPlayerTurnID() === deviceId) {
+      gameContainerPrivate.classList.remove('active');
       selectUserContainer.classList.add('active');
     }
     else{
@@ -39,16 +39,21 @@ function WaitingForPlayer(instruction) {
       waitingForPlayerContainer.classList.add('active');
 
     }
-
   }
 }
 
 function ChoosingPunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
-  waitingForPlayerContainer.classList.add('active');
+  selectUserContainer.classList.remove('active');
+  let parseInstructionWithDeviceID = parseInstruction(instruction)
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
-  if(parsedInstructions.reason == "CHOOSE_PLAYER"){
-    waitingForPlayerText.textContent = "Choosing Player...";
+  waitingForPlayerText.textContent = "Choosing Punishment...";
+  if(parseInstructionWithDeviceID.deviceId == deviceId){
+    waitingForPlayerContainer.classList.remove('active');
+    selectPunishmentContainer.classList.add('active');
+  }
+  else{
+    selectUserContainer.classList.remove('active');
+    waitingForPlayerContainer.classList.add('active');
   }
 }
 function ChosePunishment(instruction) {

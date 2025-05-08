@@ -44,34 +44,32 @@ const completePunishmentButtonPass = document.querySelector('#complete-punishmen
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
-  buttonChoosePlayer.addEventListener('click', async () => {
-    SendInstruction("WAITING_FOR_PLAYER:CHOOSE_PLAYER",true);
-    // When player presses choose player in private card section 
-  });
-  
+buttonChoosePlayer.addEventListener('click', async () => {
+  SendInstruction("WAITING_FOR_PLAYER:CHOOSE_PLAYER", true);
+  // When player presses choose player in private card section 
+});
+
 buttonNextQuestion.addEventListener('click', () => {
   gameContainerPublic.classList.remove('active');
   waitingForPlayerContainer.classList.add('active');
 });
 
 confirmPlayerButton.addEventListener('click', () => {
-  selectUserContainer.classList.remove('active');
-  selectPunishmentContainer.classList.add('active');
-  SendInstruction("CHOOSING_PUNISHMENT:"+selectUserButtonContainer.getAttribute('selected-id'),false);
+  SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), false);
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
   if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-coin-flip') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP",false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP", false);
     pickHeadsOrTailsContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-drink-wheel') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL",false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL", false);
     drinkWheelContainer.classList.add('active');
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT",false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT", false);
     completePunishmentContainer.classList.add('active');
   }
 });
@@ -148,7 +146,7 @@ async function initialisePage() {
   if (data.length > 0) {
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].computerIds.length; i++) {
-        if(data[0].computerIds[i] != deviceId){
+        if (data[0].computerIds[i] != deviceId) {
           const userButton = createUserButton(data[0].computerIds[i], data[0].usernames[i]);
           selectUserButtonContainer.appendChild(userButton);
         }
@@ -188,7 +186,7 @@ async function initialisePage() {
           removeUsersReady[key] = false;
         }
       }
-      
+
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: removeUsersReady,
@@ -201,14 +199,14 @@ async function initialisePage() {
   }
 }
 
-async function setPageforUser(){
+async function setPageforUser() {
   const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
   const data = await response.json();
 
-  if(data[0].computerIds[data[0].playerTurn] == deviceId){
+  if (data[0].computerIds[data[0].playerTurn] == deviceId) {
     gameContainerPrivate.classList.add('active');
   }
-  else{
+  else {
     waitingForPlayerContainer.classList.add('active');
   }
 }
