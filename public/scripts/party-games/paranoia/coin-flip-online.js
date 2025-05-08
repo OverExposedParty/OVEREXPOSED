@@ -42,20 +42,21 @@ async function tossCoinFunction() {
         let instruction = "";
         if((isHeads && faceCoin == "Heads") || (!isHeads && faceCoin == "Tails")){
             instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
+            SendInstruction(instruction,true);
+            setTimeout(() => {
+                instruction ="NEXT_USER_TURN";
+                currentPartyData.currentCardIndex++;
+                currentPartyData.playerTurn++;
+                if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
+                    currentPartyData.playerTurn = 0;
+                }
+                SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
+            }, 2500);
         }
         else{
             instruction ="DISPLAY_PUBLIC_CARD";
+            SendInstruction(instruction,true);
         }
-        SendInstruction(instruction,true);
-        setTimeout(() => {
-            instruction ="NEXT_USER_TURN";
-            currentPartyData.currentCardIndex++;
-            currentPartyData.playerTurn++;
-            if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
-                currentPartyData.playerTurn = 0;
-            }
-            SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
-        }, 2500);
     }, 2500);
 }
 
