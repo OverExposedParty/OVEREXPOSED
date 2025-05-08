@@ -14,6 +14,7 @@ async function tossCoinFunction() {
     }
 
     const currentPartyData = existingData[0];
+    let questionCardIndex = currentPartyData.currentCardIndex;
 
     const randomVal = Math.random();
     const faceCoin = randomVal < 0.5 ? 'Heads' : 'Tails';
@@ -41,26 +42,26 @@ async function tossCoinFunction() {
 
         let instruction = "";
         if((isHeads && faceCoin == "Heads") || (!isHeads && faceCoin == "Tails")){
+            instruction ="DISPLAY_PUBLIC_CARD";
+            questionCardIndex++;
+            currentPartyData.playerTurn++;
+            if(currentPartyData.playerTurn >= currentPartyData.computerIds.length){
+                currentPartyData.playerTurn = 0;
+            }
+            SendInstruction(instruction,true,currentPartyData.playerTurn,questionCardIndex);
+        }
+        else{
             instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
             SendInstruction(instruction,true);
             setTimeout(() => {
                 instruction ="NEXT_USER_TURN";
-                currentPartyData.currentCardIndex++;
+                questionCardIndex++;
                 currentPartyData.playerTurn++;
                 if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
                     currentPartyData.playerTurn = 0;
                 }
-                SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
+                SendInstruction(instruction,false,currentPartyData.playerTurn,questionCardIndex);
             }, 2500);
-        }
-        else{
-            instruction ="DISPLAY_PUBLIC_CARD";
-            currentPartyData.currentCardIndex++;
-            currentPartyData.playerTurn++;
-            if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
-                currentPartyData.playerTurn = 0;
-            }
-            SendInstruction(instruction,true,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
         }
     }, 2500);
 }
