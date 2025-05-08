@@ -78,13 +78,13 @@ completePunishmentButtonConfirm.addEventListener('click', () => {
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
-  pickHeadsOrTailsContainer.remove('active');
+  pickHeadsOrTailsContainer.classList.remove('active');
   coinFlipContainer.classList.add('active');
   isHeads = true;
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #tails').addEventListener('click', () => {
-  pickHeadsOrTailsContainer.remove('active');
+  pickHeadsOrTailsContainer.classList.remove('active');
   coinFlipContainer.classList.add('active');
   isHeads = false;
 });
