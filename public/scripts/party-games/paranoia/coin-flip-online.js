@@ -53,14 +53,7 @@ async function tossCoinFunction() {
             if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
                 currentPartyData.playerTurn = 0;
             }
-    
-            updateOnlineParty({
-                partyId: partyCode,
-                userInstructions: instruction,
-                playerTurn: currentPartyData.playerTurn,
-                lastPinged: Date.now(),
-                currentCardIndex: currentPartyData.currentCardIndex
-              });
+            SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
         }, 2500);
     }, 2500);
 }
