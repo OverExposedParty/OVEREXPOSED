@@ -44,10 +44,10 @@ async function WaitingForPlayer(instruction) {
 
 function ChoosingPunishment(instruction) {
   selectUserContainer.classList.remove('active');
-  let parseInstructionWithDeviceID = parseInstruction(instruction)
+  let parsedInstructions = parseInstructionWithDeviceID(instruction)
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
   waitingForPlayerText.textContent = "Choosing Punishment...";
-  if(parseInstructionWithDeviceID.deviceId == deviceId){
+  if(parsedInstructions.deviceId == deviceId){
     waitingForPlayerContainer.classList.remove('active');
     selectPunishmentContainer.classList.add('active');
   }
