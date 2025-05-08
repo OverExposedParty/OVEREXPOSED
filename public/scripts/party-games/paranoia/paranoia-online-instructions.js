@@ -19,6 +19,7 @@ function NextUserTurn() {
 function UserHasPassed(instruction) {
   let parsedInstructions = parseInstruction(instruction)
   playerHasPassedContainer.classList.add('active');
+  waitingForPlayerContainer.classList.remove('active');
   playerHasPassedTitle.textContent = parsedInstructions.username + " has passed";
   if(parsedInstructions.reason == "USER_CALLED_WRONG_FACE"){
     playerHasPassedText.textContent = "unsuccessful coin flip";
@@ -58,16 +59,26 @@ function ChoosingPunishment(instruction) {
 }
 function ChosePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  waitingForPlayerContainer.classList.add('active');
+
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
   if(parsedInstructions.reason == "PARANOIA_COIN_FLIP"){
-    waitingForPlayerText.textContent = "Flipping coin...";
+    if(!pickHeadsOrTailsContainer.classList.contains('active')){
+      waitingForPlayerContainer.classList.add('active');
+      waitingForPlayerText.textContent = "Calling coin flip...";
+    }
   }
   else if(parsedInstructions.reason == "PARANOIA_DRINK_WHEEL"){
-    waitingForPlayerText.textContent = "Spinning drink wheel...";
+
+    if(!pickHeadsOrTailsContainer.classList.contains('active')){
+      waitingForPlayerContainer.classList.add('active');
+      waitingForPlayerText.textContent = "Spinning drink wheel...";
+    }
   }
   else if(parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT"){
-    waitingForPlayerText.textContent = "Reading punishment...";
+    if(!pickHeadsOrTailsContainer.classList.contains('active')){
+      waitingForPlayerContainer.classList.add('active');
+      waitingForPlayerText.textContent = "Reading punishment...";
+    }
   }
 }
 function UserSelectedForPunishment(instruction) {

@@ -47,20 +47,20 @@ async function tossCoinFunction() {
             instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:";
         }
         SendInstruction(instruction,true);
+        setTimeout(() => {
+            instruction ="DISPLAY_PUBLIC_CARD";
+            currentPlayerTurn++;
+            if(currentPlayerTurn > currentPartyData.computerIds.length){
+                currentPlayerTurn = 0;
+            }
+    
+            updateOnlineParty({
+                partyId: partyCode,
+                userInstructions: instruction,
+                playerTurn: currentPlayerTurn,
+                lastPinged: Date.now(),
+              });
+        }, 2500);
     }, 2500);
-    setTimeout(() => {
-        instruction ="DISPLAY_PUBLIC_CARD";
-        currentPlayerTurn++;
-        if(currentPlayerTurn > existingData.computerIds.length){
-            currentPlayerTurn = 0;
-        }
-
-        updateOnlineParty({
-            partyId: partyCode,
-            userInstructions: instruction,
-            playerTurn: currentPlayerTurn,
-            lastPinged: Date.now(),
-          });
-    }, 5000);
 }
 
