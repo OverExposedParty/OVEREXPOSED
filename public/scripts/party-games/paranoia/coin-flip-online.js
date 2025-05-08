@@ -48,7 +48,7 @@ async function tossCoinFunction() {
         }
         SendInstruction(instruction,true);
         setTimeout(() => {
-            instruction ="DISPLAY_PUBLIC_CARD";
+            instruction ="NEXT_USER_TURN";
             currentPlayerTurn++;
             if(currentPlayerTurn > currentPartyData.computerIds.length){
                 currentPlayerTurn = 0;
