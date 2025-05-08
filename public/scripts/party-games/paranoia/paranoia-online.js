@@ -6,7 +6,7 @@ partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
 const confirmPunishmentUserIconContainer = document.getElementById('confirm-punishment-container').querySelector('.content-container .user-confirmed-section');
 
-const nextQuestionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
+const nextQuestionContainer = document.getElementById('next-question-container')
 const nextQuestionSectionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
