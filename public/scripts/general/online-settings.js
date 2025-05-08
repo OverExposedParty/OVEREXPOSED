@@ -246,7 +246,7 @@ socket.on("party-updated", async (change) => {
       userPingToParty(deviceId, partyCode);
       //Paranoia Page
       if (data[0].isPlaying) {
-        if(data[0].userInstructions == "DISPLAY_PUBLIC_CARD"){ 
+        if(data[0].userInstructions.includes("DISPLAY_PUBLIC_CARD")){ 
           DisplayPublicCard();
         }
         else if(data[0].userInstructions == "NEXT_USER_TURN"){
