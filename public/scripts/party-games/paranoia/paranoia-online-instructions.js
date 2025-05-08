@@ -120,6 +120,7 @@ async function ChosePunishment(instruction) {
     else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
       completePunishmentContainer.classList.add('active');
     }
+    console.log("what the helly");
   }
   else {
     waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
