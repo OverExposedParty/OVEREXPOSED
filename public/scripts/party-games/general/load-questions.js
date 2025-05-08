@@ -72,7 +72,6 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             const packColour = pack["pack-colour"];
             cardPackMap.push({ packName, packCard, packColour });
         });
-        console.log(gamemode);
         if(gamemode == "Truth Or Dare"){
             if (localStorage.getItem(`${gamemode}-punishment`)) {
                 allQuestions.push("punishment");
@@ -121,16 +120,22 @@ function shuffleQuestions(seed = null) {
     }
 }
 
-function getNextQuestion() {
-    if (currentQuestionIndex >= allQuestions.length) {
-        shuffleQuestions();
-        currentQuestionIndex = 0;
+function getNextQuestion(index = null) {
+    let selectedQuestion;
+    let cardType;
+    if(index == null){
+        if (currentQuestionIndex >= allQuestions.length) {
+            shuffleQuestions();
+            currentQuestionIndex = 0;
+        }
+        selectedQuestion = allQuestions[currentQuestionIndex];
+        cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
+    
+        currentQuestionIndex++;
     }
-
-    const selectedQuestion = allQuestions[currentQuestionIndex];
-    const cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
-
-    currentQuestionIndex++;
-
+    else{
+        selectedQuestion = allQuestions[index];
+        cardType = questionPackMap[index] || 'Unknown Pack';
+    }
     return { question: selectedQuestion['question'], cardType: cardType };
 }

@@ -14,6 +14,7 @@ const OnlinePartySchema = new mongoose.Schema({
   usersLastPing: { type: [Date], required: true },
   playerTurn: { type: Number, required: true },
   shuffleSeed: { type: Number, required: true },
+  currentCardIndex: { type: Number, default: 0 },
 });
 
 

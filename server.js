@@ -137,7 +137,7 @@ app.get('/api/party-games', async (req, res) => {
 
 app.post('/api/party-games', async (req, res) => {
   try {
-    const { partyId, computerIds, gamemode, usernames, gameSettings, selectedPacks, usersReady, userInstructions, isPlaying, lastPinged, usersLastPing, playerTurn, shuffleSeed } = req.body;
+    const { partyId, computerIds, gamemode, usernames, gameSettings, selectedPacks, usersReady, userInstructions, isPlaying, lastPinged, usersLastPing, playerTurn, shuffleSeed, currentCardIndex } = req.body;
 
     // Find and update the existing party game document by partyId, or create a new one if none exists
     const updatedParty = await OnlineParty.findOneAndUpdate(
@@ -154,7 +154,8 @@ app.post('/api/party-games', async (req, res) => {
         lastPinged,
         usersLastPing,
         playerTurn,
-        shuffleSeed
+        shuffleSeed,
+        currentCardIndex,
       },
       {
         new: true,       // Return the updated document

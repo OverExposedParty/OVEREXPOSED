@@ -44,12 +44,12 @@ async function tossCoinFunction() {
             instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
         }
         else{
-            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:";
+            instruction ="DISPLAY_PUBLIC_CARD";
         }
         SendInstruction(instruction,true);
         setTimeout(() => {
             instruction ="NEXT_USER_TURN";
-            currentPlayerTurn++;
+            currentPartyData.currentCardIndex++;
             if(currentPlayerTurn > currentPartyData.computerIds.length){
                 currentPlayerTurn = 0;
             }
@@ -59,6 +59,7 @@ async function tossCoinFunction() {
                 userInstructions: instruction,
                 playerTurn: currentPlayerTurn,
                 lastPinged: Date.now(),
+                currentCardIndex: currentPartyData.currentCardIndex
               });
         }, 2500);
     }, 2500);

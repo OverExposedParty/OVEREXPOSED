@@ -6,7 +6,9 @@ const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
 const confirmPunishmentUserIconContainer = document.getElementById('confirm-punishment-container').querySelector('.content-container .user-confirmed-section');
-const nextQuestionUserIconContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
+
+const nextQuestionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
+const nextQuestionSectionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
 
@@ -51,7 +53,7 @@ buttonChoosePlayer.addEventListener('click', async () => {
 
 buttonNextQuestion.addEventListener('click', () => {
   gameContainerPublic.classList.remove('active');
-  waitingForPlayerContainer.classList.add('active');
+  SendInstruction("NEXT_QUESTION");
 });
 
 confirmPlayerButton.addEventListener('click', () => {
@@ -177,7 +179,7 @@ async function initialisePage() {
       console.log(data[0].computerIds.length);
       for (let i = 0; i < data[0].computerIds.length; i++) {
         confirmPunishmentUserIconContainer.appendChild(createUserIcon(data[0].computerIds));
-        nextQuestionUserIconContainer.appendChild(createUserIcon(data[0].computerIds));
+        nextQuestionSectionContainer.appendChild(createUserIcon(data[0].computerIds));
       }
       let removeUsersReady = data[0].usersReady;
 

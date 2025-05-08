@@ -1,13 +1,13 @@
 async function NextUserTurn() {
-  const selectedQuestionObj = getNextQuestion();
-  updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
-
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
   const currentPartyData = existingData[0];
+
+  const selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+  updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
   playerHasPassedContainer.classList.remove('active');
 
@@ -18,6 +18,48 @@ async function NextUserTurn() {
     waitingForPlayerTitle.textContent = "Waiting for " + currentPartyData.usernames[currentPartyData.playerTurn]
     waitingForPlayerText.textContent = "Reading Card...";
     waitingForPlayerContainer.classList.add('active');
+  }
+}
+
+async function NextQuestion(instruction) {
+  nextQuestionContainer.classList.add('active');
+
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+  const index = currentPartyData.computerIds.indexOf(computerId);
+  currentPartyData.usersReady[index] = true;
+
+  const icons = nextQuestionContainer.querySelectorAll('.icon');
+  let totalUsersReady = 0;
+  for(let i = 0;i<icons.length;i++){
+    if(currentPartyData.usersReady[i] == true){
+      icons.classList.remove('no');
+      icons.classList.add('yes');
+      totalUsersReady++;
+    }
+    else{
+      icons.classList.remove('yes');
+      icons.classList.add('no');
+    }
+  }
+  if(totalUsersReady == currentPartyData.computerIds.length){
+    await updateOnlineParty({
+      partyId: partyCode,
+      usersReady: currentPartyData.usersReady,
+      userInstructions: "NEXT_USER_TURN",
+      lastPinged: Date.now(),
+    });
+  }
+  else{
+    await updateOnlineParty({
+      partyId: partyCode,
+      usersReady: currentPartyData.usersReady,
+      lastPinged: Date.now(),
+    });
   }
 }
 
@@ -102,6 +144,7 @@ function UserSelectedForPunishment(instruction) {
 function DisplayPublicCard(){
   confirmPunishmentContainer.classList.remove('active');
   playerHasPassedContainer.classList.remove('active');
+  nextQuestionContainer.classList.remove('active');
   
   gameContainerPublic.classList.add('active');
 }
