@@ -62,13 +62,13 @@ confirmPlayerButton.addEventListener('click', () => {
 confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
   if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-coin-flip') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP", false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:"+deviceId, false);
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-drink-wheel') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL", false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:"+deviceId, false);
   }
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT", false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:"+deviceId, false);
   }
 });
 

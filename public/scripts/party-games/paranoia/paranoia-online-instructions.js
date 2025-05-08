@@ -106,8 +106,8 @@ function ChoosingPunishment(instruction) {
   }
 }
 async function ChosePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
-  if (await GetSelectedPlayerTurnID() === deviceId) {
+  let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
+  if (await GetSelectedPlayerTurnID() === parsedInstructions.deviceId) {
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
       pickHeadsOrTailsContainer.classList.add('active');
     }
@@ -170,6 +170,15 @@ function parseInstructionWithDeviceID(input) {
     instruction,
     deviceId,
     username
+  };
+}
+
+function parseInstructionWithReasonAndDeviceID(input) {
+  const [instruction, reason, deviceId] = input.split(":");
+  return {
+    instruction,
+    reason,
+    deviceId
   };
 }
 
