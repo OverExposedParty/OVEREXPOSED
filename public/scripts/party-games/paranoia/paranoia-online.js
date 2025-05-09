@@ -74,10 +74,10 @@ confirmPunishmentButton.addEventListener('click', () => {
 });
 
 completePunishmentButtonPass.addEventListener('click', () => {
-    SendInstruction("PUNISHMENT_OFFER:PASS"+deviceId);
+    SendInstruction("PUNISHMENT_OFFER:PASS:"+deviceId);
 });
 completePunishmentButtonPass.addEventListener('click', () => {
-    SendInstruction("PUNISHMENT_OFFER:CONFIRM"+deviceId);
+    SendInstruction("PUNISHMENT_OFFER:CONFIRM:"+deviceId);
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
