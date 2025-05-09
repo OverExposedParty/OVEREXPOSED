@@ -170,22 +170,22 @@ async function PunishmentOffer(instruction) {
       completePunishmentContainer.classList.remove('active');
       SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:");
     }
-    else if (parsedInstructions.reason == "CONFIRM") {
-      for (let i = 0; i < currentPartyData.usersReady.length; i++) {
-        currentPartyData.usersReady[i] = false;
-      }
-      completePunishmentContainer.classList.remove('active');
-      icons[index].classList.add('yes');
-      waitingForConfirmPunishmentContainer.classList.add('active');
-      SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
+  }
+  else if (parsedInstructions.reason == "CONFIRM") {
+    for (let i = 0; i < currentPartyData.usersReady.length; i++) {
+      currentPartyData.usersReady[i] = false;
     }
+    completePunishmentContainer.classList.remove('active');
+    icons[index].classList.add('yes');
+    waitingForConfirmPunishmentContainer.classList.add('active');
+    SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
   }
 }
 
 async function HasUserDonePunishment(instruction) {
-    if (parsedInstructions.deviceId != deviceId) {
-        waitingForConfirmPunishmentContainer.classList.add('active');
-    }
+  if (parsedInstructions.deviceId != deviceId) {
+    waitingForConfirmPunishmentContainer.classList.add('active');
+  }
 }
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
