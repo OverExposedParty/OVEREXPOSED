@@ -156,14 +156,13 @@ function DisplayPunishmentToUser(instruction) {
 
 async function PunishmentOffer(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
-  if (parsedInstructions.reason == "PASS") {
-    const existingData = await getExistingPartyData(partyCode);
+      const existingData = await getExistingPartyData(partyCode);
     if (!existingData || existingData.length === 0) {
       console.warn('No party data found.');
       return;
     }
     const currentPartyData = existingData[0];
-
+  if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
       SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:");
     }
