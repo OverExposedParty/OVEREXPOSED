@@ -24,7 +24,7 @@ async function NextUserTurn() {
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
   for (let i = 0; i < icons.length; i++) {
     if (currentPartyData.usersReady[i] == true) {
-      icons[i].classList.add('yes');
+      icons[i].classList.remove('yes');
     }
   }
 }
@@ -58,12 +58,14 @@ async function NextQuestion() {
       for (let i = 0; i < currentPartyData.usersReady.length; i++) {
         currentPartyData.usersReady[i] = false;
       }
+      currentPartyData.currentCardIndex++;
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: currentPartyData.usersReady,
         userInstructions: "NEXT_USER_TURN",
         lastPinged: Date.now(),
         usersLastPing: currentPartyData.usersLastPing,
+        currentCardIndex: currentPartyData.currentCardIndex,
       });
     }
     else if (!gameContainerPublic.classList.contains('active')) {
