@@ -49,6 +49,9 @@ async function NextQuestion() {
     currentPartyData.usersLastPing[index] = Date.now();
 
     if (totalUsersReady == currentPartyData.computerIds.length) {
+      for(let i = 0;i<currentPartyData.usersReady.length;i++){
+        currentPartyData.usersReady[i] = false;
+      }
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: currentPartyData.usersReady,
