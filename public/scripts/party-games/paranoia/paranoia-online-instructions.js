@@ -202,6 +202,8 @@ async function UserHasPassed(instruction) {
 }
 
 async function HasUserDonePunishment(instruction) {
+  console.log("parsedInstructions.deviceId: "+parsedInstructions.deviceId);
+  console.log("deviceId: "+deviceId);
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.deviceId != deviceId) {
     waitingForConfirmPunishmentContainer.classList.remove('active');
