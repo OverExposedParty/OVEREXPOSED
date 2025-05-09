@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-    content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
     <title>PARANOIA</title>
     <link rel="stylesheet" href="/css/general/header.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/party-games/paranoia/paranoia-online.css">
-    
+
     <link rel="stylesheet" href="/css/party-games/coin-flip.css">
     <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
 
@@ -23,8 +23,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png"
+            alt="Splash Screen"></div>
 
     <div class="spin-the-wheel-container " id="spin-the-wheel-container">
         <div id="spin_the_wheel">
@@ -38,7 +40,7 @@
             <div class="coin" id="coin"><img src="/images/icons/paranoia/heads-icon.svg"></div>
         </button>
     </div>
-    
+
     <div id="header-placeholder"></div>
 
     <div class="card-container " id="private-view">
@@ -48,7 +50,8 @@
             </div>
             <div class="main-image-container">
                 <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
-                <div class="text-container">If you could switch lives with anyone for a day, who would it be and why?</div>
+                <div class="text-container">If you could switch lives with anyone for a day, who would it be and why?
+                </div>
                 <div class="card-type-text">card type</div>
             </div>
             <div class="regular-button-container">
@@ -64,7 +67,8 @@
             </div>
             <div class="main-image-container">
                 <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
-                <div class="text-container">If you could switch lives with anyone for a day, who would it be and why?</div>
+                <div class="text-container">If you could switch lives with anyone for a day, who would it be and why?
+                </div>
                 <div class="card-type-text">card type</div>
             </div>
             <div class="regular-button-container">
@@ -85,7 +89,7 @@
             </div>
             <div class="select-button-container">
                 <button class="select-button">Confirm</button>
-              </div>
+            </div>
         </div>
 
         <div class="selected-user-container " id="select-punishment-container">
@@ -99,7 +103,7 @@
             </div>
             <div class="select-button-container">
                 <button class="select-button">Confirm</button>
-              </div>
+            </div>
         </div>
 
         <div class="selected-user-container " id="complete-punishment-container">
@@ -112,7 +116,7 @@
             <div class="select-button-container">
                 <button class="select-button" id="confirm">Confirm</button>
                 <button class="select-button" id="pass">Pass</button>
-              </div>
+            </div>
         </div>
 
         <div class="selected-user-container " id="confirm-punishment-container">
@@ -122,14 +126,10 @@
             <div class="content-container">
                 <h2>Did Player1 taken their 2 shots.</h2>
             </div>
-            <div class="content-container">
-                <div class="user-confirmed-section">
-                </div>
-            </div>
             <div class="select-button-container">
                 <button class="select-button">Yes</button>
                 <button class="select-button">No</button>
-              </div>
+            </div>
         </div>
 
         <div class="selected-user-container very-small " id="heads-or-tails-pick-container">
@@ -139,12 +139,22 @@
             <div class="select-button-container">
                 <button class="select-button" id="heads">Heads</button>
                 <button class="select-button" id="tails">Tails</button>
-              </div>
+            </div>
         </div>
 
         <div class="selected-user-container very-small " id="next-question-container">
             <div class="content-container">
                 <h2>Next question</h2>
+            </div>
+            <div class="content-container">
+                <div class="user-confirmed-section">
+                </div>
+            </div>
+        </div>
+
+        <div class="selected-user-container very-small " id="waiting-for-confirm-punishment-contaier">
+            <div class="content-container">
+                <h2>Waiting for players</h2>
             </div>
             <div class="content-container">
                 <div class="user-confirmed-section">

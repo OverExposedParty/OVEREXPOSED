@@ -156,7 +156,7 @@ function init() {
         spinButtonClicked = true; // Flag to indicate spin started
         spinDisabled = true;
         spinning = true;
-        //playSoundEffect('wheelSpin');
+        playSoundEffect('wheelSpin');
     });
 }
 
@@ -171,6 +171,6 @@ events.addListener("spinEnd", async (sector) => {
 
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    completePunishmentContainer.classList.add('active');
+    SendInstruction("DISPLAY_PUNISHMENT_TO_USER:"+deviceId);
     drinkWheelContainer.classList.remove('active');
 });

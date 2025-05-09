@@ -4,7 +4,8 @@ const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
-const confirmPunishmentUserIconContainer = document.getElementById('confirm-punishment-container').querySelector('.content-container .user-confirmed-section');
+const waitingForConfirmPunishmentContainer = document.getElementById('waiting-for-confirm-punishment-contaier')
+const waitingForConfirmPunishmentIconContainer = waitingForConfirmPunishmentContainer.querySelector('.content-container .user-confirmed-section');
 
 const nextQuestionContainer = document.getElementById('next-question-container')
 const nextQuestionSectionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
@@ -28,7 +29,6 @@ const gameContainerPrivate = document.querySelector('#private-view.card-containe
 const selectUserButtonContainer = document.getElementById('select-user-container').querySelector('.selected-user-container .button-container');
 const selectPunishmentContainer = document.getElementById('select-punishment-container')
 const selectPunishmentButtonContainer = document.getElementById('select-punishment-container').querySelector('.selected-user-container .button-container');
-const completePunishmentContainer = document.getElementById('complete-punishment-container');
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
 const confirmPunishmentButtonContainer = document.getElementById('select-punishment-container');
 const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-container');
@@ -39,10 +39,9 @@ const buttonChoosePlayer = document.getElementById('button-choose-player');
 const buttonNextQuestion = document.getElementById('button-next-question');
 const confirmPunishmentButton = document.getElementById('select-punishment-container').querySelector('.select-button-container button');
 
-const completePunishmentButtonConfirm = document
-  .querySelector('#complete-punishment-container .select-button-container #confirm');
-
-const completePunishmentButtonPass = document.querySelector('#complete-punishment-container .select-button-container #pass');
+const completePunishmentContainer = document.getElementById('complete-punishment-container');
+const completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
+const completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container #pass');
 
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
@@ -72,6 +71,13 @@ confirmPunishmentButton.addEventListener('click', () => {
   else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:"+deviceId, false);
   }
+});
+
+completePunishmentButtonPass.addEventListener('click', () => {
+    SendInstruction("PUNISHMENT_OFFER:PASS"+deviceId);
+});
+completePunishmentButtonPass.addEventListener('click', () => {
+    SendInstruction("PUNISHMENT_OFFER:CONFIRM"+deviceId);
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
@@ -172,7 +178,7 @@ async function initialisePage() {
       });
       console.log(data[0].computerIds.length);
       for (let i = 0; i < data[0].computerIds.length; i++) {
-        confirmPunishmentUserIconContainer.appendChild(createUserIcon(data[0].computerIds[i]));
+        waitingForConfirmPunishmentIconContainer.appendChild(createUserIcon(data[0].computerIds[i]));
         nextQuestionSectionContainer.appendChild(createUserIcon(data[0].computerIds[i]));
       }
       let removeUsersReady = data[0].usersReady;
@@ -208,11 +214,11 @@ async function setPageforUser() {
 }
 
 completePunishmentButtonConfirm.addEventListener('click', () => {
-  confirmPunishmentUserIconContainer.querySelector(`#${deviceId}`).classList.add('yes');
+  waitingForConfirmPunishmentIconContainer.querySelector(`#${deviceId}`).classList.add('yes');
 });
 
 completePunishmentButtonPass.addEventListener('click', () => {
-  confirmPunishmentUserIconContainer.querySelector(`#${deviceId}`).classList.add('no');
+  waitingForConfirmPunishmentIconContainer.querySelector(`#${deviceId}`).classList.add('no');
 });
 
 

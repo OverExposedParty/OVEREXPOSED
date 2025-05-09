@@ -68,7 +68,7 @@ async function NextQuestion() {
       for (let i = 0; i < currentPartyData.usersReady.length; i++) {
         currentPartyData.usersReady[i] = false;
       }
-      if(deviceId == currentPartyData.computerIds[0]){
+      if (deviceId == currentPartyData.computerIds[0]) {
         currentPartyData.currentCardIndex++;
       }
       console.log(currentPartyData.currentCardIndex);
@@ -105,6 +105,9 @@ function UserHasPassed(instruction) {
   if (parsedInstructions.reason == "USER_CALLED_WRONG_FACE") {
     playerHasPassedText.textContent = "unsuccessful coin flip";
   }
+  else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
+    playerHasPassedText.textContent = "punishment has been forfeited";
+  }
 }
 
 async function WaitingForPlayer(instruction) {
@@ -138,9 +141,55 @@ function ChoosingPunishment(instruction) {
     waitingForPlayerContainer.classList.add('active');
   }
 }
+
+function DisplayPunishmentToUser(instruction) {
+  selectUserContainer.classList.remove('active');
+  let parsedInstructions = parseInstructionWithDeviceID(instruction)
+  waitingForPlayerText.textContent = "Showing player punishment...";
+  if (parsedInstructions.deviceId == deviceId) {
+    completePunishmentContainer.classList.add('active');
+  }
+  else {
+    waitingForPlayerContainer.classList.add('active');
+  }
+}
+
+async function PunishmentOffer(instruction) {
+  if (parsedInstructions.reason == "PASS") {
+    const existingData = await getExistingPartyData(partyCode);
+    if (!existingData || existingData.length === 0) {
+      console.warn('No party data found.');
+      return;
+    }
+    const currentPartyData = existingData[0];
+    const index = currentPartyData.computerIds.indexOf(deviceId);
+    const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
+
+    let parsedInstructions = parseInstructionWithDeviceID(instruction)
+
+    if (parsedInstructions.deviceId == deviceId) {
+      completePunishmentContainer.classList.remove('active');
+      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:");
+    }
+    else if (parsedInstructions.reason == "CONFIRM") {
+      for (let i = 0; i < currentPartyData.usersReady.length; i++) {
+        currentPartyData.usersReady[i] = false;
+      }
+      completePunishmentContainer.classList.remove('active');
+      icons[index].classList.add('yes');
+      waitingForConfirmPunishmentContainer.classList.add('active');
+      SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
+    }
+  }
+}
+
+async function HasUserDonePunishment(instruction) {
+    if (parsedInstructions.deviceId != deviceId) {
+        waitingForConfirmPunishmentContainer.classList.add('active');
+    }
+}
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
-  const selectedDeviceId = await GetSelectedPlayerTurnID()
   if (deviceId == parsedInstructions.deviceId) {
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
       pickHeadsOrTailsContainer.classList.add('active');

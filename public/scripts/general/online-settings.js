@@ -266,6 +266,15 @@ socket.on("party-updated", async (change) => {
         else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
           ChoosingPunishment(data[0].userInstructions);
         }
+        else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")){
+          DisplayPunishmentToUser(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")){
+          PunishmentOffer(data[0].userInstructions);
+        }
+        else if (data[0].userInstructions.includes("HAS_USER_DONE_PUNISHMENT")){
+          HasUserDonePunishment(data[0].userInstructions);
+        }
         else if(waitingForHost){
           if (hostname === 'overexposed.app') {
             transitionSplashScreen(`${protocol}//${hostname}` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
