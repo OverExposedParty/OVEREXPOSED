@@ -10,7 +10,7 @@ async function NextUserTurn() {
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
   playerHasPassedContainer.classList.remove('active');
-  nextQuestionSectionContainer.classList.remove('active');
+  nextQuestionContainer.classList.remove('active');
 
   if (await GetSelectedPlayerTurnID() == deviceId) {
     waitingForPlayerContainer.classList.remove('active');

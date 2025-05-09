@@ -10,6 +10,9 @@ const nextQuestionContainer = document.getElementById('next-question-container')
 const nextQuestionSectionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
+const selectUserContainerQuestionText = selectUserContainer.querySelector('.content-container h2');;
+
+const confirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
 
 const waitingForPlayerContainer = document.getElementById('waiting-for-player');
 const waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
@@ -34,7 +37,6 @@ const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
 const buttonChoosePlayer = document.getElementById('button-choose-player');
 const buttonNextQuestion = document.getElementById('button-next-question');
-const confirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
 const confirmPunishmentButton = document.getElementById('select-punishment-container').querySelector('.select-button-container button');
 
 const completePunishmentButtonConfirm = document
@@ -103,9 +105,12 @@ function updateTextContainer(text, cardType, punishment) {
 
   const textContainerPrivate = document.querySelector('#private-view .text-container');
   const textContainerPublic = document.querySelector('#public-view .text-container');
-  // Update the innerHTML to include the question text and optionally the punishment
+
   textContainerPrivate.textContent = text;
   textContainerPublic.textContent = text;
+  selectUserContainerQuestionText.textContent = text;
+
+  
 
   const searchPackName = cardType.toLowerCase();
 
