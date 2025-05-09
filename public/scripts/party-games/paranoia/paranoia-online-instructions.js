@@ -161,10 +161,11 @@ async function PunishmentOffer(instruction) {
     for (let i = 0; i < currentPartyData.usersReady.length; i++) {
       currentPartyData.usersReady[i] = false;
     }
-    const index = currentPartyData.computerIds.indexOf(deviceId);
+    const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
     const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
     icons[index].classList.add('yes');
-    SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
+    currentPartyData.usersReady[index] = true;
+    SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId, false, null, null, currentPartyData.usersReady);
   }
 }
 
@@ -186,6 +187,9 @@ async function UserHasPassed(instruction) {
   }
   else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
     playerHasPassedText.textContent = "punishment has been forfeited";
+  }
+  else if (parsedInstructions.reason == "USER_DIDNT_DO_PUNISHMENT") {
+    playerHasPassedText.textContent = "punishment not complete";
   }
 
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -214,8 +218,8 @@ async function HasUserDonePunishment(instruction) {
     confirmPunishmentContainer.classList.remove('active');
     console.log("device match");
   }
-  console.log("parsedInstructions.deviceId: "+parsedInstructions.deviceId);
-  console.log("deviceId: "+deviceId);
+  console.log("parsedInstructions.deviceId: " + parsedInstructions.deviceId);
+  console.log("deviceId: " + deviceId);
 }
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
@@ -256,6 +260,57 @@ function UserSelectedForPunishment(instruction) {
     waitingForPlayerContainer.classList.add('active');
     waitingForPlayerTitle.textContent = "Waiting for " + GetUsername(parsedInstructions.deviceId);
     waitingForPlayerText.textContent = "Choosing Punishment...";
+  }
+}
+
+async function AnswerToUserDonePunishment(instruction) {
+  let parsedInstructions = parseInstructionWithDeviceID(instruction);
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+
+  const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
+  const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
+  if (currentPartyData.usersReady[index] == false) {
+    icons[index].classList.add('yes');
+    currentPartyData.usersReady[index] = true;
+    currentPartyData.usersLastPing[index] = Date.now();
+
+    let totalUsersReady = 0;
+    for (let i = 0; i < icons.length; i++) {
+      if (currentPartyData.usersReady[i] == true) {
+        totalUsersReady++;
+      }
+    }
+    if (totalUsersReady == currentPartyData.usersReady.length) {
+      const yesIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("yes")).length;
+      const noIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("no")).length;
+
+      if (yesIconsCount >= noIconsCount) {
+        instruction = "DISPLAY_PUBLIC_CARD";
+        currentPartyData.currentCardIndex++;
+        currentPartyData.playerTurn++;
+        if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
+          currentPartyData.playerTurn = 0;
+        }
+        SendInstruction(instruction, true, currentPartyData.playerTurn, currentPartyData.currentCardIndex);
+      }
+      else {
+        SendInstruction("USER_HAS_PASSED:USER_DIDNT_DO_PUNISHMENT:" + parsedInstructions.deviceId, true);
+      }
+    }
+    else {
+      await updateOnlineParty({
+        partyId: partyCode,
+        userInstructions: instruction,
+        lastPinged: Date.now(),
+        usersLastPing: currentPartyData.usersLastPing,
+        usersReady: currentPartyData.usersReady,
+      });
+    }
   }
 }
 
@@ -305,7 +360,7 @@ function parseInstructionWithReason_DeviceIdAndUserName(input) {
   };
 }
 
-async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
+async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null, updateUsersReady = nul) {
   let instruction = "";
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
@@ -322,7 +377,16 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
     instruction = string;
   }
   console.log("🧪 Instruction Received:", instruction);
-  if (questionIndex == null && currentPlayerTurn == null) {
+  if (questionIndex == null && currentPlayerTurn == null && currentPlayerTurn != null) {
+    await updateOnlineParty({
+      partyId: partyCode,
+      userInstructions: instruction,
+      lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
+      usersReady: updateUsersReady,
+    });
+  }
+  else if (questionIndex == null && currentPlayerTurn == null) {
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,

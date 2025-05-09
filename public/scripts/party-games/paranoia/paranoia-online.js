@@ -27,11 +27,13 @@ const gameContainerPublic = document.querySelector('#public-view.card-container'
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
 
 const selectUserButtonContainer = document.getElementById('select-user-container').querySelector('.selected-user-container .button-container');
-const selectPunishmentContainer = document.getElementById('select-punishment-container')
-const selectPunishmentButtonContainer = document.getElementById('select-punishment-container').querySelector('.selected-user-container .button-container');
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
-const confirmPunishmentButtonContainer = document.getElementById('select-punishment-container');
 const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-container');
+
+const selectPunishmentContainer = document.getElementById('select-punishment-container')
+const selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
+const selectPunishmentButtonYes = selectPunishmentContainer.querySelector('.selected-user-container .button-container #yes');
+const selectPunishmentButtonNo = selectPunishmentContainer.querySelector('.selected-user-container .button-container #no');
 
 const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
@@ -62,13 +64,13 @@ confirmPlayerButton.addEventListener('click', () => {
 
 confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
-  if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-coin-flip') {
+  if (selectPunishmentContainer.getAttribute('id') == 'paranoia-coin-flip') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:"+deviceId, false);
   }
-  else if (confirmPunishmentButtonContainer.getAttribute('id') == 'paranoia-drink-wheel') {
+  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-drink-wheel') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:"+deviceId, false);
   }
-  else if (confirmPunishmentButtonContainer.getAttribute('id') == 'take-a-shot') {
+  else if (selectPunishmentContainer.getAttribute('id') == 'take-a-shot') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:"+deviceId, false);
   }
 });
@@ -92,6 +94,10 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
   pickHeadsOrTailsContainer.classList.remove('active');
   coinFlipContainer.classList.add('active');
   isHeads = false;
+});
+
+selectPunishmentButtonYes.addEventListener('click', () => {
+  
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -174,7 +180,7 @@ async function initialisePage() {
       selectPunishmentButtons.forEach(button => {
         button.addEventListener('click', () => {
           selectPunishmentButtons.forEach(btn => btn.classList.remove('active'));
-          confirmPunishmentButtonContainer.setAttribute('id', button.getAttribute('id'))
+          selectPunishmentContainer.setAttribute('id', button.getAttribute('id'))
           button.classList.add('active');
         });
       });
