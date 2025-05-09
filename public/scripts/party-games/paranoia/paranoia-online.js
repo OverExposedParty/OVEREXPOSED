@@ -139,7 +139,6 @@ initialisePage();
 async function initialisePage() {
   const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
   const data = await response.json();
-  console.log(data);
   if (data.length > 0) {
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].computerIds.length; i++) {
