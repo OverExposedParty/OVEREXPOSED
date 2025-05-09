@@ -112,7 +112,7 @@ async function UserHasPassed(instruction) {
   
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  if(deviceId == parsedInstructions.devideId){
+  if(deviceId == parsedInstructions.deviceId){
       instruction ="DISPLAY_PUBLIC_CARD";
       questionCardIndex++;
       currentPartyData.currentCardIndex = questionCardIndex;
