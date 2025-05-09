@@ -186,13 +186,13 @@ function parseInstructionWithReasonAndDeviceID(input) {
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
   let instruction = "";
-    const index = currentPartyData.computerIds.indexOf(deviceId);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
   const currentPartyData = existingData[0];
+  const index = currentPartyData.computerIds.indexOf(deviceId);
   currentPartyData.usersLastPing[index] = Date.now();
   if (includeUsername) {
     instruction = string + ":" + currentPartyData.usernames[currentPartyData.playerTurn];
