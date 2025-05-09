@@ -22,10 +22,22 @@ async function NextUserTurn() {
     waitingForPlayerContainer.classList.add('active');
   }
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
+
+  let currentUsersReady = 0
   for (let i = 0; i < icons.length; i++) {
     if (currentPartyData.usersReady[i] == true) {
       icons[i].classList.remove('yes');
+      currentPartyData.usersReady[i] = false;
+      currentUsersReady++
     }
+  }
+  if (currentUsersReady > 0) {
+    await updateOnlineParty({
+      partyId: partyCode,
+      usersReady: currentPartyData.usersReady,
+      lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
+    });
   }
 }
 
@@ -37,8 +49,6 @@ async function NextQuestion() {
   }
   const currentPartyData = existingData[0];
   const index = currentPartyData.computerIds.indexOf(deviceId);
-  //waitingForPlayerContainer.classList.remove('active');
-  //gameContainerPrivate.classList.remove('active');
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
   if (currentPartyData.usersReady[index] == false) {
     if (!gameContainerPublic.classList.contains('active')) {
