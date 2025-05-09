@@ -155,6 +155,7 @@ function DisplayPunishmentToUser(instruction) {
 }
 
 async function PunishmentOffer(instruction) {
+  let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.reason == "PASS") {
     const existingData = await getExistingPartyData(partyCode);
     if (!existingData || existingData.length === 0) {
@@ -164,8 +165,6 @@ async function PunishmentOffer(instruction) {
     const currentPartyData = existingData[0];
     const index = currentPartyData.computerIds.indexOf(deviceId);
     const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
-
-    let parsedInstructions = parseInstructionWithDeviceID(instruction)
 
     if (parsedInstructions.deviceId == deviceId) {
       completePunishmentContainer.classList.remove('active');

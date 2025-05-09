@@ -213,15 +213,6 @@ async function setPageforUser() {
   }
 }
 
-completePunishmentButtonConfirm.addEventListener('click', () => {
-  waitingForConfirmPunishmentIconContainer.querySelector(`#${deviceId}`).classList.add('yes');
-});
-
-completePunishmentButtonPass.addEventListener('click', () => {
-  waitingForConfirmPunishmentIconContainer.querySelector(`#${deviceId}`).classList.add('no');
-});
-
-
 function parseGameSettings(settingsString) {
   if (!settingsString) return [];
   return settingsString.split(',').filter(Boolean);
