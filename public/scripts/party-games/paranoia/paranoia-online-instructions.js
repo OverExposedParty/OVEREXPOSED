@@ -187,7 +187,7 @@ async function UserHasPassed(instruction) {
     playerHasPassedText.textContent = "punishment has been forfeited";
   }
 
-  await new Promise(resolve => setTimeout(resolve, 250));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
   if (deviceId == parsedInstructions.deviceId) {
     instruction = "DISPLAY_PUBLIC_CARD";

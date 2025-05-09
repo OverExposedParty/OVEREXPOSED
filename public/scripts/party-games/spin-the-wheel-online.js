@@ -172,5 +172,6 @@ events.addListener("spinEnd", async (sector) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     SendInstruction("DISPLAY_PUNISHMENT_TO_USER:"+deviceId);
+    spinDisabled = false;
     drinkWheelContainer.classList.remove('active');
 });
