@@ -74,9 +74,11 @@ confirmPunishmentButton.addEventListener('click', () => {
 });
 
 completePunishmentButtonPass.addEventListener('click', () => {
+    completePunishmentContainer.classList.remove('active');
     SendInstruction("PUNISHMENT_OFFER:PASS:"+deviceId);
 });
 completePunishmentButtonConfirm.addEventListener('click', () => {
+    completePunishmentContainer.classList.remove('active');
     SendInstruction("PUNISHMENT_OFFER:CONFIRM:"+deviceId);
 });
 

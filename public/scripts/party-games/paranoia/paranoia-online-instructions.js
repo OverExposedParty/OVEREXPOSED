@@ -163,11 +163,8 @@ async function PunishmentOffer(instruction) {
       return;
     }
     const currentPartyData = existingData[0];
-    const index = currentPartyData.computerIds.indexOf(deviceId);
-    const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
 
     if (parsedInstructions.deviceId == deviceId) {
-      completePunishmentContainer.classList.remove('active');
       SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:");
     }
   }
@@ -175,7 +172,7 @@ async function PunishmentOffer(instruction) {
     for (let i = 0; i < currentPartyData.usersReady.length; i++) {
       currentPartyData.usersReady[i] = false;
     }
-    completePunishmentContainer.classList.remove('active');
+    const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
     icons[index].classList.add('yes');
     waitingForConfirmPunishmentContainer.classList.add('active');
     SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
