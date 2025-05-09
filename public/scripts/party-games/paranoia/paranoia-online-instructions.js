@@ -205,13 +205,14 @@ async function HasUserDonePunishment(instruction) {
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.deviceId != deviceId) {
     waitingForConfirmPunishmentContainer.classList.remove('active');
-    waitingForPlayerContainer.classList.remove('active');
     confirmPunishmentContainer.classList.add('active');
     console.log("device not match");
   }
   else {
     waitingForConfirmPunishmentContainer.classList.add('active');
-      console.log("device match");
+    waitingForPlayerContainer.classList.remove('active');
+    confirmPunishmentContainer.classList.remove('active');
+    console.log("device match");
   }
   console.log("parsedInstructions.deviceId: "+parsedInstructions.deviceId);
   console.log("deviceId: "+deviceId);
