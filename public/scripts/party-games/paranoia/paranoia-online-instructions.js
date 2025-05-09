@@ -97,32 +97,7 @@ async function NextQuestion() {
   }
 }
 
-async function UserHasPassed(instruction) {
 
-  let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction)
-  playerHasPassedContainer.classList.add('active');
-  waitingForPlayerContainer.classList.remove('active');
-  playerHasPassedTitle.textContent = parsedInstructions.username + " has passed";
-  if (parsedInstructions.reason == "USER_CALLED_WRONG_FACE") {
-    playerHasPassedText.textContent = "unsuccessful coin flip";
-  }
-  else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
-    playerHasPassedText.textContent = "punishment has been forfeited";
-  }
-  
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  if(deviceId == parsedInstructions.deviceId){
-      instruction ="DISPLAY_PUBLIC_CARD";
-      questionCardIndex++;
-      currentPartyData.currentCardIndex = questionCardIndex;
-      currentPartyData.playerTurn++;
-      if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
-        currentPartyData.playerTurn = 0;
-      }
-      SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
-  }
-}
 
 async function WaitingForPlayer(instruction) {
   let parsedInstructions = parseInstruction(instruction)
@@ -178,7 +153,7 @@ async function PunishmentOffer(instruction) {
     const currentPartyData = existingData[0];
   if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
-      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:"+parsedInstructions.deviceId);
+      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:"+parsedInstructions.deviceId,true);
     }
   }
   else if (parsedInstructions.reason == "CONFIRM") {
@@ -189,6 +164,32 @@ async function PunishmentOffer(instruction) {
     icons[index].classList.add('yes');
     waitingForConfirmPunishmentContainer.classList.add('active');
     SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
+  }
+}
+
+async function UserHasPassed(instruction) {
+  let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction)
+  playerHasPassedContainer.classList.add('active');
+  waitingForPlayerContainer.classList.remove('active');
+  playerHasPassedTitle.textContent = parsedInstructions.username + " has passed";
+  if (parsedInstructions.reason == "USER_CALLED_WRONG_FACE") {
+    playerHasPassedText.textContent = "unsuccessful coin flip";
+  }
+  else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
+    playerHasPassedText.textContent = "punishment has been forfeited";
+  }
+  
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  if(deviceId == parsedInstructions.deviceId){
+      instruction ="DISPLAY_PUBLIC_CARD";
+      questionCardIndex++;
+      currentPartyData.currentCardIndex = questionCardIndex;
+      currentPartyData.playerTurn++;
+      if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
+        currentPartyData.playerTurn = 0;
+      }
+      SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
   }
 }
 
