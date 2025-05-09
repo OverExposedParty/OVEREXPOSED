@@ -92,7 +92,8 @@ function updateOnlineParty({
   lastPinged,
   usersLastPing,
   playerTurn,
-  shuffleSeed
+  shuffleSeed,
+  currentCardIndex,
 }) {
   const payload = {
     partyId, // Required
@@ -107,7 +108,8 @@ function updateOnlineParty({
     ...(lastPinged !== undefined && { lastPinged }),
     ...(usersLastPing !== undefined && { usersLastPing }),
     ...(playerTurn !== undefined && { playerTurn }),
-    ...(shuffleSeed !== undefined && { shuffleSeed })
+    ...(shuffleSeed !== undefined && { shuffleSeed }),
+    ...(currentCardIndex !== undefined && { currentCardIndex })
   };
   return fetch(`/api/party-games?partyCode=${partyId}`, {
     method: 'POST',
