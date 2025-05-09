@@ -45,8 +45,7 @@ async function NextQuestion() {
         totalUsersReady++;
       }
     }
-    console.log("currentPartyData.computerIds.length: " + currentPartyData.computerIds.length);
-    console.log("totalUsersReady: " + totalUsersReady);
+
     currentPartyData.usersLastPing[index] = Date.now();
 
     if (totalUsersReady == currentPartyData.computerIds.length) {
@@ -58,7 +57,7 @@ async function NextQuestion() {
         usersLastPing: currentPartyData.usersLastPing,
       });
     }
-    else {
+    else if(!gameContainerPublic.classList.contains('active')) {
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: currentPartyData.usersReady,
