@@ -53,14 +53,17 @@ async function tossCoinFunction() {
             
         }
         else{
-            instruction ="DISPLAY_PUBLIC_CARD";
-            questionCardIndex++;
-            currentPartyData.currentCardIndex = questionCardIndex;
-            currentPartyData.playerTurn++;
-            if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
-              currentPartyData.playerTurn = 0;
-            }
-            SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
+            instruction ="USER_HAS_PASSED:USER_CALLED_WRONG_FACE:"; //instruction ="NEXT_USER_TURN";
+            SendInstruction(instruction,true);
+            setTimeout(() => {
+                instruction ="NEXT_USER_TURN";
+                currentPartyData.currentCardIndex++;
+                currentPartyData.playerTurn++;
+                if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
+                    currentPartyData.playerTurn = 0;
+                }
+                SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
+            }, 2500);
             
         }
     }, 2500);

@@ -68,7 +68,9 @@ async function NextQuestion() {
       for (let i = 0; i < currentPartyData.usersReady.length; i++) {
         currentPartyData.usersReady[i] = false;
       }
-      currentPartyData.currentCardIndex++;
+      if(deviceId == currentPartyData.computerIds[0]){
+        currentPartyData.currentCardIndex++;
+      }
       console.log(currentPartyData.currentCardIndex);
       await updateOnlineParty({
         partyId: partyCode,
