@@ -59,6 +59,7 @@ async function NextQuestion() {
         currentPartyData.usersReady[i] = false;
       }
       currentPartyData.currentCardIndex++;
+      console.log(currentPartyData.currentCardIndex);
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: currentPartyData.usersReady,
