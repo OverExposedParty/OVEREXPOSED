@@ -202,12 +202,12 @@ async function UserHasPassed(instruction) {
 }
 
 async function HasUserDonePunishment(instruction) {
-    let parsedInstructions = parseInstructionWithDeviceID(instruction)
+  let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.deviceId != deviceId) {
-    confirmPunishmentContainer.classList.add('active');
+    //waitingForConfirmPunishmentContainer.classList.add('active');
   }
-  else{
-    waitingForConfirmPunishmentContainer.classList.add('active');
+  else {
+    confirmPunishmentContainer.classList.add('active');
   }
 }
 async function ChosePunishment(instruction) {
