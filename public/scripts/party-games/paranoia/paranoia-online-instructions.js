@@ -202,17 +202,19 @@ async function UserHasPassed(instruction) {
 }
 
 async function HasUserDonePunishment(instruction) {
-  console.log("parsedInstructions.deviceId: "+parsedInstructions.deviceId);
-  console.log("deviceId: "+deviceId);
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.deviceId != deviceId) {
     waitingForConfirmPunishmentContainer.classList.remove('active');
     waitingForPlayerContainer.classList.remove('active');
     confirmPunishmentContainer.classList.add('active');
+    console.log("device not match");
   }
   else {
     waitingForConfirmPunishmentContainer.classList.add('active');
+      console.log("device match");
   }
+  console.log("parsedInstructions.deviceId: "+parsedInstructions.deviceId);
+  console.log("deviceId: "+deviceId);
 }
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
