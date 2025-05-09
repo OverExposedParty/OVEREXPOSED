@@ -192,7 +192,6 @@ function parseInstructionWithReasonAndDeviceID(input) {
 }
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
-  console.log("🧪 Instruction Received:", data[0].userInstructions);
   let instruction = "";
   console.log("currentPlayerTurn: " + currentPlayerTurn);
   console.log("questionIndex: " + questionIndex);
@@ -202,6 +201,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
     return;
   }
   const currentPartyData = existingData[0];
+  console.log("🧪 Instruction Received:", currentPartyData.userInstructions);
   if (includeUsername) {
     instruction = string + ":" + currentPartyData.usernames[currentPartyData.playerTurn];
   }
