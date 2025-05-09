@@ -225,12 +225,12 @@ async function removeUserFromParty(partyId, computerIdToRemove) {
   const res = await fetch(`/api/party-games?partyCode=${partyId}`);
   const data = await res.json();
   const allUsersReady = data[0].usersReady.every(userReady => userReady === true);
-  if (data[0].computerIds.length >= 1) {
+  if (data[0].computerIds.length === 0) {
     deleteParty();
-  }
-  else {
+  } else {
     updateStartGameButton(allUsersReady);
   }
+  
 }
 
 // When a party update is received
@@ -277,9 +277,7 @@ socket.on("party-updated", async (change) => {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
         }
-        await updateOnlineParty({
-          userInstructions: "",
-        });
+        await updateOnlineParty({ partyId, userInstructions: "" });
       }
       }
       //Game Settings page
