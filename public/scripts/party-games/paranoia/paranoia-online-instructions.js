@@ -32,6 +32,7 @@ async function NextQuestion() {
   const index = currentPartyData.computerIds.indexOf(deviceId);
   console.log("currentPartyData.usersReady[index]: " + currentPartyData.usersReady[index]);
   waitingForPlayerContainer.classList.remove('active');
+  gameContainerPrivate.classList.remove('active');
   if (currentPartyData.usersReady[index] == false) {
     currentPartyData.usersReady[index] = true;
     nextQuestionContainer.classList.add('active');
