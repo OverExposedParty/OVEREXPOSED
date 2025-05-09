@@ -186,12 +186,14 @@ function parseInstructionWithReasonAndDeviceID(input) {
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
   let instruction = "";
+    const index = currentPartyData.computerIds.indexOf(deviceId);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
   const currentPartyData = existingData[0];
+  currentPartyData.usersLastPing[index] = Date.now();
   if (includeUsername) {
     instruction = string + ":" + currentPartyData.usernames[currentPartyData.playerTurn];
   }
@@ -204,6 +206,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
       partyId: partyCode,
       userInstructions: instruction,
       lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
     });
   }
   else if (questionIndex == null) {
@@ -211,6 +214,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
       partyId: partyCode,
       userInstructions: instruction,
       lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
       playerTurn: currentPlayerTurn,
     });
   }
@@ -219,6 +223,7 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
       partyId: partyCode,
       userInstructions: instruction,
       lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
       playerTurn: currentPlayerTurn,
       currentCardIndex: questionIndex
     });

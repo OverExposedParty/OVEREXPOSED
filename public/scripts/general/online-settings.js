@@ -118,7 +118,7 @@ function updateOnlineParty({
   })
     .then(res => res.json())
     .then(data => {
-      console.log('✅ Saved/Updated party:', data);
+      //console.log('✅ Saved/Updated party:', data);
       return data;
     })
     .catch(err => {
@@ -271,7 +271,7 @@ socket.on("party-updated", async (change) => {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
         }
-        await updateOnlineParty({ partyId: partyCode, userInstructions: "" });
+        //await updateOnlineParty({ partyId: partyCode, userInstructions: "" });
       }
       }
       //Game Settings page
