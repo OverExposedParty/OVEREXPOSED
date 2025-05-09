@@ -108,7 +108,6 @@ function updateTextContainer(text, cardType, punishment) {
 
   const textContainerPrivate = document.querySelector('#private-view .text-container');
   const textContainerPublic = document.querySelector('#public-view .text-container');
-  console.log(textContainerPrivate);
   // Update the innerHTML to include the question text and optionally the punishment
   textContainerPrivate.textContent = text;
   textContainerPublic.textContent = text;
