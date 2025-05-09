@@ -151,6 +151,7 @@ async function PunishmentOffer(instruction) {
     return;
   }
   const currentPartyData = existingData[0];
+  
   if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
       SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + parsedInstructions.deviceId, true);
@@ -160,6 +161,7 @@ async function PunishmentOffer(instruction) {
     for (let i = 0; i < currentPartyData.usersReady.length; i++) {
       currentPartyData.usersReady[i] = false;
     }
+    const index = currentPartyData.computerIds.indexOf(deviceId);
     const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
     icons[index].classList.add('yes');
     waitingForConfirmPunishmentContainer.classList.add('active');
