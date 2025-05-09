@@ -61,7 +61,6 @@ function hashString(str) {
 }
 
 const deviceId = generateDeviceFingerprint().trim();
-console.log('deviceID:', `'${deviceId}'`); // Logs with quotes to verify spacing
 
 
 function generatePartyCode() {
@@ -153,9 +152,6 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
 
     // Ensure usersReady stays in sync by appending to it only
     const updatedUsersReady = [...usersReady, newUserReady];
-
-    console.log('Updated data:', { updatedComputerIds, updatedUsernames, updatedUsersReady });
-
     return updateOnlineParty({
       partyId,
       computerIds: updatedComputerIds,
@@ -182,9 +178,7 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
     if (!existingData || existingData.length === 0) {
       throw new Error('No party data found.');
     }
-    console.log("partyCode: " + partyId);
     const currentPartyData = existingData[0]; // Access the actual party data object
-    console.log("currentPartyData: " + existingData[0].partyId);
     const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
 
     // Step 2: Find index of the given computerId (device ID)

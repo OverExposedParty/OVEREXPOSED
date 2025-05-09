@@ -30,7 +30,6 @@ async function NextQuestion() {
   }
   const currentPartyData = existingData[0];
   const index = currentPartyData.computerIds.indexOf(deviceId);
-  console.log("currentPartyData.usersReady[index]: " + currentPartyData.usersReady[index]);
   waitingForPlayerContainer.classList.remove('active');
   gameContainerPrivate.classList.remove('active');
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
@@ -43,8 +42,6 @@ async function NextQuestion() {
         totalUsersReady++;
       }
     }
-    console.log("totalUsersReady: " + totalUsersReady);
-    console.log("currentPartyData.computerIds.length: " + currentPartyData.computerIds.length);
     if (totalUsersReady == currentPartyData.computerIds.length) {
       await updateOnlineParty({
         partyId: partyCode,
@@ -112,9 +109,6 @@ function ChoosingPunishment(instruction) {
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
   const selectedDeviceId = await GetSelectedPlayerTurnID()
-  console.log("deviceId: " + deviceId);
-  console.log("parsedInstructions.deviceId: " + parsedInstructions.deviceId);
-  console.log("parsedInstructions.reason: " + parsedInstructions.reason);
   if (deviceId == parsedInstructions.deviceId) {
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
       pickHeadsOrTailsContainer.classList.add('active');
@@ -125,7 +119,6 @@ async function ChosePunishment(instruction) {
     else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
       completePunishmentContainer.classList.add('active');
     }
-    console.log("what the helly");
   }
   else {
     waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
@@ -193,8 +186,6 @@ function parseInstructionWithReasonAndDeviceID(input) {
 
 async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null) {
   let instruction = "";
-  console.log("currentPlayerTurn: " + currentPlayerTurn);
-  console.log("questionIndex: " + questionIndex);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
