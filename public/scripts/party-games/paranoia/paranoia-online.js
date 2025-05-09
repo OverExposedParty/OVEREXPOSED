@@ -72,11 +72,6 @@ confirmPunishmentButton.addEventListener('click', () => {
   }
 });
 
-completePunishmentButtonConfirm.addEventListener('click', () => {
-  completePunishmentContainer.classList.remove('active');
-  confirmPunishmentContainer.classList.add('active');
-});
-
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
   pickHeadsOrTailsContainer.classList.remove('active');
   coinFlipContainer.classList.add('active');
@@ -173,8 +168,8 @@ async function initialisePage() {
       });
       console.log(data[0].computerIds.length);
       for (let i = 0; i < data[0].computerIds.length; i++) {
-        confirmPunishmentUserIconContainer.appendChild(createUserIcon(data[0].computerIds));
-        nextQuestionSectionContainer.appendChild(createUserIcon(data[0].computerIds));
+        confirmPunishmentUserIconContainer.appendChild(createUserIcon(data[0].computerIds[i]));
+        nextQuestionSectionContainer.appendChild(createUserIcon(data[0].computerIds[i]));
       }
       let removeUsersReady = data[0].usersReady;
 
