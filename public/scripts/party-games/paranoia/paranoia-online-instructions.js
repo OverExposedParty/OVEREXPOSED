@@ -33,8 +33,10 @@ async function NextQuestion() {
   //waitingForPlayerContainer.classList.remove('active');
   //gameContainerPrivate.classList.remove('active');
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
-  if (currentPartyData.usersReady[index] == false && gameContainerPublic.classList.contains('active')) {
-    currentPartyData.usersReady[index] = true;
+  if (currentPartyData.usersReady[index] == false) {
+    if(!gameContainerPublic.classList.contains('active')){
+      currentPartyData.usersReady[index] = true;
+    }
     nextQuestionContainer.classList.add('active');
     let totalUsersReady = 0;
     for (let i = 0; i < icons.length; i++) {
