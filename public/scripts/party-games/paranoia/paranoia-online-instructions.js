@@ -201,14 +201,13 @@ async function SendInstruction(string, includeUsername = false, currentPlayerTur
     return;
   }
   const currentPartyData = existingData[0];
-  console.log("🧪 Instruction Received:", currentPartyData.userInstructions);
   if (includeUsername) {
     instruction = string + ":" + currentPartyData.usernames[currentPartyData.playerTurn];
   }
   else {
     instruction = string;
   }
-
+  console.log("🧪 Instruction Received:", instruction);
   if (questionIndex == null && currentPlayerTurn == null) {
     await updateOnlineParty({
       partyId: partyCode,
