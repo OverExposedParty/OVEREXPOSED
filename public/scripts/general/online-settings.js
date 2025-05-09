@@ -277,7 +277,7 @@ socket.on("party-updated", async (change) => {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
         }
-        await updateOnlineParty({ partyId, userInstructions: "" });
+        await updateOnlineParty({ partyId: partyCode, userInstructions: "" });
       }
       }
       //Game Settings page
