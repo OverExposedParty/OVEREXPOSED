@@ -33,34 +33,32 @@ async function NextQuestion() {
   console.log("currentPartyData.usersReady[index]: " + currentPartyData.usersReady[index]);
   waitingForPlayerContainer.classList.remove('active');
   gameContainerPrivate.classList.remove('active');
-  if (currentPartyData.usersReady[index] == false) {
-    currentPartyData.usersReady[index] = true;
-    nextQuestionContainer.classList.add('active');
-    const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
-    let totalUsersReady = 0;
-    for (let i = 0; i < icons.length; i++) {
-      if (currentPartyData.usersReady[i] == true) {
-        icons[i].classList.add('yes');
-        totalUsersReady++;
-      }
+  currentPartyData.usersReady[index] = true;
+  nextQuestionContainer.classList.add('active');
+  const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
+  let totalUsersReady = 0;
+  for (let i = 0; i < icons.length; i++) {
+    if (currentPartyData.usersReady[i] == true) {
+      icons[i].classList.add('yes');
+      totalUsersReady++;
     }
-    console.log("totalUsersReady: " + totalUsersReady);
-    console.log("currentPartyData.computerIds.length: " + currentPartyData.computerIds.length);
-    if (totalUsersReady == currentPartyData.computerIds.length) {
-      await updateOnlineParty({
-        partyId: partyCode,
-        usersReady: currentPartyData.usersReady,
-        userInstructions: "NEXT_USER_TURN",
-        lastPinged: Date.now(),
-      });
-    }
-    else {
-      await updateOnlineParty({
-        partyId: partyCode,
-        usersReady: currentPartyData.usersReady,
-        lastPinged: Date.now(),
-      });
-    }
+  }
+  console.log("totalUsersReady: " + totalUsersReady);
+  console.log("currentPartyData.computerIds.length: " + currentPartyData.computerIds.length);
+  if (totalUsersReady == currentPartyData.computerIds.length) {
+    await updateOnlineParty({
+      partyId: partyCode,
+      usersReady: currentPartyData.usersReady,
+      userInstructions: "NEXT_USER_TURN",
+      lastPinged: Date.now(),
+    });
+  }
+  else {
+    await updateOnlineParty({
+      partyId: partyCode,
+      usersReady: currentPartyData.usersReady,
+      lastPinged: Date.now(),
+    });
   }
 }
 
