@@ -164,7 +164,6 @@ async function PunishmentOffer(instruction) {
     const index = currentPartyData.computerIds.indexOf(deviceId);
     const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
     icons[index].classList.add('yes');
-    waitingForConfirmPunishmentContainer.classList.add('active');
     SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId);
   }
 }
