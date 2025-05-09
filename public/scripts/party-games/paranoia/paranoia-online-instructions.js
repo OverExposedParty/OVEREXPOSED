@@ -21,6 +21,12 @@ async function NextUserTurn() {
     waitingForPlayerText.textContent = "Reading Card...";
     waitingForPlayerContainer.classList.add('active');
   }
+  const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
+  for (let i = 0; i < icons.length; i++) {
+    if (currentPartyData.usersReady[i] == true) {
+      icons[i].classList.add('yes');
+    }
+  }
 }
 
 async function NextQuestion() {
@@ -35,7 +41,7 @@ async function NextQuestion() {
   //gameContainerPrivate.classList.remove('active');
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
   if (currentPartyData.usersReady[index] == false) {
-    if(!gameContainerPublic.classList.contains('active')){
+    if (!gameContainerPublic.classList.contains('active')) {
       currentPartyData.usersReady[index] = true;
     }
     nextQuestionContainer.classList.add('active');
@@ -49,7 +55,7 @@ async function NextQuestion() {
     currentPartyData.usersLastPing[index] = Date.now();
 
     if (totalUsersReady == currentPartyData.computerIds.length) {
-      for(let i = 0;i<currentPartyData.usersReady.length;i++){
+      for (let i = 0; i < currentPartyData.usersReady.length; i++) {
         currentPartyData.usersReady[i] = false;
       }
       await updateOnlineParty({
@@ -60,7 +66,7 @@ async function NextQuestion() {
         usersLastPing: currentPartyData.usersLastPing,
       });
     }
-    else if(!gameContainerPublic.classList.contains('active')) {
+    else if (!gameContainerPublic.classList.contains('active')) {
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: currentPartyData.usersReady,
