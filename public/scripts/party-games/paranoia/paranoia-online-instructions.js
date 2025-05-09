@@ -145,15 +145,15 @@ function DisplayPunishmentToUser(instruction) {
 
 async function PunishmentOffer(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
-      const existingData = await getExistingPartyData(partyCode);
-    if (!existingData || existingData.length === 0) {
-      console.warn('No party data found.');
-      return;
-    }
-    const currentPartyData = existingData[0];
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
   if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
-      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:"+parsedInstructions.deviceId,true);
+      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + parsedInstructions.deviceId, true);
     }
   }
   else if (parsedInstructions.reason == "CONFIRM") {
@@ -169,6 +169,14 @@ async function PunishmentOffer(instruction) {
 
 async function UserHasPassed(instruction) {
   let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction)
+
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+
   playerHasPassedContainer.classList.add('active');
   waitingForPlayerContainer.classList.remove('active');
   playerHasPassedTitle.textContent = parsedInstructions.username + " has passed";
@@ -178,18 +186,17 @@ async function UserHasPassed(instruction) {
   else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
     playerHasPassedText.textContent = "punishment has been forfeited";
   }
-  
-  await new Promise(resolve => setTimeout(resolve, 1000));
 
-  if(deviceId == parsedInstructions.deviceId){
-      instruction ="DISPLAY_PUBLIC_CARD";
-      questionCardIndex++;
-      currentPartyData.currentCardIndex = questionCardIndex;
-      currentPartyData.playerTurn++;
-      if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
-        currentPartyData.playerTurn = 0;
-      }
-      SendInstruction(instruction, true, currentPartyData.playerTurn, questionCardIndex);
+  await new Promise(resolve => setTimeout(resolve, 250));
+
+  if (deviceId == parsedInstructions.deviceId) {
+    instruction = "DISPLAY_PUBLIC_CARD";
+    currentPartyData.currentCardIndex++;
+    currentPartyData.playerTurn++;
+    if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
+      currentPartyData.playerTurn = 0;
+    }
+    SendInstruction(instruction, true, currentPartyData.playerTurn, currentPartyData.currentCardIndex);
   }
 }
 
