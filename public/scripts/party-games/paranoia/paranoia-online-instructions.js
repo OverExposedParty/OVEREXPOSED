@@ -151,7 +151,7 @@ async function PunishmentOffer(instruction) {
     return;
   }
   const currentPartyData = existingData[0];
-  
+
   if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
       SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + parsedInstructions.deviceId, true);
@@ -203,7 +203,11 @@ async function UserHasPassed(instruction) {
 }
 
 async function HasUserDonePunishment(instruction) {
+    let parsedInstructions = parseInstructionWithDeviceID(instruction)
   if (parsedInstructions.deviceId != deviceId) {
+    confirmPunishmentContainer.classList.add('active');
+  }
+  else{
     waitingForConfirmPunishmentContainer.classList.add('active');
   }
 }
