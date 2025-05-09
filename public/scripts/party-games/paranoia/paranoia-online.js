@@ -76,7 +76,7 @@ confirmPunishmentButton.addEventListener('click', () => {
 completePunishmentButtonPass.addEventListener('click', () => {
     SendInstruction("PUNISHMENT_OFFER:PASS:"+deviceId);
 });
-completePunishmentButtonPass.addEventListener('click', () => {
+completePunishmentButtonConfirm.addEventListener('click', () => {
     SendInstruction("PUNISHMENT_OFFER:CONFIRM:"+deviceId);
 });
 
