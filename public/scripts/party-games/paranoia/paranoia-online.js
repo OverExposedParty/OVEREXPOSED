@@ -97,7 +97,11 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
 });
 
 selectPunishmentButtonYes.addEventListener('click', () => {
-  
+  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:YES:"+deviceId);
+});
+
+selectPunishmentButtonNo.addEventListener('click', () => {
+  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:NO:"+deviceId);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {

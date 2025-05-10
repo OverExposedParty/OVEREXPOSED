@@ -275,7 +275,13 @@ async function AnswerToUserDonePunishment(instruction) {
   const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
   const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
   if (currentPartyData.usersReady[index] == false) {
-    icons[index].classList.add('yes');
+    if(parsedInstructions.reason == "YES"){
+      icons[index].classList.add('yes');
+    }
+    else if(parsedInstructions.reason == "NO"){
+      icons[index].classList.add('no');
+    }
+
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
 
