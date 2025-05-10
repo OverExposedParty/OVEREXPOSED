@@ -28,12 +28,14 @@ const gameContainerPrivate = document.querySelector('#private-view.card-containe
 
 const selectUserButtonContainer = document.getElementById('select-user-container').querySelector('.selected-user-container .button-container');
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
+const confirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
+const confirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
+
 const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-container');
 
 const selectPunishmentContainer = document.getElementById('select-punishment-container')
 const selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
-const selectPunishmentButtonYes = selectPunishmentContainer.querySelector('.selected-user-container .button-container button #yes');
-const selectPunishmentButtonNo = selectPunishmentContainer.querySelector('.selected-user-container .button-container button #no');
+
 
 const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
@@ -96,11 +98,11 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
   isHeads = false;
 });
 
-selectPunishmentButtonYes.addEventListener('click', () => {
+confirmPunishmentButtonYes.addEventListener('click', () => {
   SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:YES:"+deviceId);
 });
 
-selectPunishmentButtonNo.addEventListener('click', () => {
+confirmPunishmentButtonNo.addEventListener('click', () => {
   SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:NO:"+deviceId);
 });
 
