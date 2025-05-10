@@ -32,8 +32,8 @@ const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-c
 
 const selectPunishmentContainer = document.getElementById('select-punishment-container')
 const selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
-const selectPunishmentButtonYes = selectPunishmentContainer.querySelector('.selected-user-container .button-container #yes');
-const selectPunishmentButtonNo = selectPunishmentContainer.querySelector('.selected-user-container .button-container #no');
+const selectPunishmentButtonYes = selectPunishmentContainer.querySelector('.selected-user-container .button-container button #yes');
+const selectPunishmentButtonNo = selectPunishmentContainer.querySelector('.selected-user-container .button-container button #no');
 
 const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
 
