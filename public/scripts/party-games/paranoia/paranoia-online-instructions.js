@@ -217,10 +217,12 @@ async function HasUserDonePunishment(instruction) {
   const currentPartyData = existingData[0];
 
   const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
-  if (parsedInstructions.deviceId != deviceId && !confirmPunishmentContainer.classList.contains('active')) {
-    waitingForConfirmPunishmentContainer.classList.remove('active');
-    confirmPunishmentContainer.classList.add('active');
-    console.log("device not match");
+  if (parsedInstructions.deviceId != deviceId) {
+    if (!confirmPunishmentContainer.classList.contains('active')) {
+      waitingForConfirmPunishmentContainer.classList.remove('active');
+      confirmPunishmentContainer.classList.add('active');
+      console.log("device not match");
+    }
   }
   else if (!waitingForConfirmPunishmentContainer.classList.contains('active')) {
     waitingForConfirmPunishmentContainer.classList.add('active');
@@ -248,7 +250,8 @@ async function ChosePunishment(instruction) {
     else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
       drinkWheelContainer.classList.add('active');
     }
-    else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
+    else if (parsedInstructions.reason == "PARANOIA_TAKE_TWO_SHOT") {
+      punishmentText.textContent = "In order to find out the question you have to take two shot.";
       completePunishmentContainer.classList.add('active');
     }
   }
@@ -262,7 +265,7 @@ async function ChosePunishment(instruction) {
       waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Spinning drink wheel...";
     }
-    else if (parsedInstructions.reason == "PARANOIA_TAKE_A_SHOT") {
+    else if (parsedInstructions.reason == "PARANOIA_TAKE_TWO_SHOT") {
       waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Reading punishment...";
     }
@@ -329,7 +332,7 @@ async function AnswerToUserDonePunishment(instruction) {
       currentPartyData.usersReady[i] = false;
       icons[i].classList.remove('yes');
       icons[i].classList.remove('no');
-      }
+    }
     await updateOnlineParty({
       partyId: partyCode,
       lastPinged: Date.now(),

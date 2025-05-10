@@ -72,8 +72,8 @@ confirmPunishmentButton.addEventListener('click', () => {
   else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-drink-wheel') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:"+deviceId, false);
   }
-  else if (selectPunishmentContainer.getAttribute('id') == 'take-a-shot') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:"+deviceId, false);
+  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-take-two-shots') {
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_TWO_SHOT:"+deviceId, false);
   }
 });
 

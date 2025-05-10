@@ -167,10 +167,15 @@ events.addListener("spinEnd", async (sector) => {
 
     const existingData = await getExistingPartyData(partyCode);
     const currentPartyData = existingData[0] || {};
-    punishmentText.textContent = "In order to find out the question you have to take " + spinEl.textContent;
+    if(spinEl.textContent == "Down it"){
+        punishmentText.textContent = "In order to find out the question you have to down your drink.";
+    }
+    else{
+        punishmentText.textContent = "In order to find out the question you have to take " + spinEl.textContent;
+    }
+
 
     await new Promise(resolve => setTimeout(resolve, 500));
-
     SendInstruction("DISPLAY_PUNISHMENT_TO_USER:"+deviceId);
     spinDisabled = false;
     drinkWheelContainer.classList.remove('active');

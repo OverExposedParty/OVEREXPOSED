@@ -1,4 +1,4 @@
-const enterUserNameContainer = document.getElementById('enter-username');
+const enterUsernameContainer = document.getElementById('enter-username');
 const waitingForLeaderContainer = document.getElementById('waiting-for-leader');
 const partyDoesNotExistContainer = document.getElementById('party-does-not-exist');
 const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
@@ -7,6 +7,7 @@ const partyUsernameInput = document.getElementById('party-username');
 const partyUsernameInputSet = document.getElementById('party-username-waiting');
 
 const buttonSubmitUsername = document.getElementById('submit-username');
+
 
 const gamemodeColors = {
     "Truth Or Dare": "#66CCFF",
@@ -32,9 +33,9 @@ async function checkPartyExists() {
             document.documentElement.style.setProperty('--primarypagecolour', color);
         }
         if (data[0].isPlaying === false) {
-            enterUserNameContainer.classList.add('active')
+            enterUsernameContainer.classList.add('active')
+            addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
             if (data[0].computerIds.includes(deviceId)) {
-                console.log("boooom: " + deviceId);
                 await UpdateUserPartyData({
                     partyId: partyCode,  // make sure this variable is defined
                     computerId: deviceId,  // or just `deviceId`
@@ -47,17 +48,19 @@ async function checkPartyExists() {
                 addUserToParty({
                     partyId: partyCode,
                     newComputerId: deviceId,
-                    newUsername: 'Player ' + data[0].usernames.length + 1,
+                    newUsername: 'Player ' + (data[0].usernames.length + 1),
                     newUserReady: false
                 });
             }
-            console.log("DEVICE_ID: " + deviceId);
+            
         }
         else {
             partySessionInProgressContainer.classList.add('active')
+            addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
         }
     } else {
         partyDoesNotExistContainer.classList.add('active')
+        addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
     }
 }
 async function getPartyData() {

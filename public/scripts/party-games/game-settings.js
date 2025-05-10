@@ -1,4 +1,4 @@
-let gamemodeSettings = "";
+let gamemodeSettings = "paranoia-take-two-shots,";
 let gamemodeSelectedPacks = "";
 
 
@@ -249,6 +249,15 @@ onlineButton.addEventListener('click', () => {
         enterUsernameContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
         overlay.classList.add('active');
+
+        packsContainer.classList.remove('active');
+        packsSettingsContainerButton.classList.remove('active');
+
+        gameSettingsContainer.classList.remove('active');
+        gameSettingsContainerButton.classList.remove('active')
+
+        onlineSettingsContainerButton.classList.add('active');
+        onlineSettingsContainer.classList.add('active');
     }
     else {
         onlineSettingsContainerButton.classList.add('disabled');
