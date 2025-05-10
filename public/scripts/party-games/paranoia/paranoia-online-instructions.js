@@ -207,6 +207,14 @@ async function UserHasPassed(instruction) {
 
 async function HasUserDonePunishment(instruction) {
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+
+  const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
   if (parsedInstructions.deviceId != deviceId) {
     waitingForConfirmPunishmentContainer.classList.remove('active');
     confirmPunishmentContainer.classList.add('active');
@@ -214,9 +222,18 @@ async function HasUserDonePunishment(instruction) {
   }
   else {
     waitingForConfirmPunishmentContainer.classList.add('active');
+    currentPartyData.usersReady[index] = true;
+    currentPartyData.usersLastPing[index] = Date.now();
     waitingForPlayerContainer.classList.remove('active');
     confirmPunishmentContainer.classList.remove('active');
     console.log("device match");
+
+    await updateOnlineParty({
+      partyId: partyCode,
+      lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
+      usersReady: currentPartyData.usersReady,
+    });
   }
   console.log("parsedInstructions.deviceId: " + parsedInstructions.deviceId);
   console.log("deviceId: " + deviceId);
@@ -275,10 +292,10 @@ async function AnswerToUserDonePunishment(instruction) {
   const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
   const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
   if (currentPartyData.usersReady[index] == false) {
-    if(parsedInstructions.reason == "YES"){
+    if (parsedInstructions.reason == "YES") {
       icons[index].classList.add('yes');
     }
-    else if(parsedInstructions.reason == "NO"){
+    else if (parsedInstructions.reason == "NO") {
       icons[index].classList.add('no');
     }
 
@@ -308,15 +325,13 @@ async function AnswerToUserDonePunishment(instruction) {
         SendInstruction("USER_HAS_PASSED:USER_DIDNT_DO_PUNISHMENT:" + parsedInstructions.deviceId, true);
       }
     }
-    else {
-      await updateOnlineParty({
-        partyId: partyCode,
-        userInstructions: instruction,
-        lastPinged: Date.now(),
-        usersLastPing: currentPartyData.usersLastPing,
-        usersReady: currentPartyData.usersReady,
-      });
-    }
+    await updateOnlineParty({
+      partyId: partyCode,
+      userInstructions: instruction,
+      lastPinged: Date.now(),
+      usersLastPing: currentPartyData.usersLastPing,
+      usersReady: currentPartyData.usersReady,
+    });
   }
 }
 
