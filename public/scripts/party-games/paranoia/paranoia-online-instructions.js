@@ -344,6 +344,7 @@ function DisplayPublicCard() {
   playerHasPassedContainer.classList.remove('active');
   nextQuestionContainer.classList.remove('active');
   waitingForPlayerContainer.classList.remove('active');
+  waitingForConfirmPunishmentContainer.classList.remove('active');
 
   gameContainerPublic.classList.add('active');
 }

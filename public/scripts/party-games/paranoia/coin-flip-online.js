@@ -59,7 +59,7 @@ async function tossCoinFunction() {
                 instruction ="NEXT_USER_TURN";
                 currentPartyData.currentCardIndex++;
                 currentPartyData.playerTurn++;
-                if(currentPartyData.playerTurn > currentPartyData.computerIds.length){
+                if(currentPartyData.playerTurn >= currentPartyData.computerIds.length){
                     currentPartyData.playerTurn = 0;
                 }
                 SendInstruction(instruction,false,currentPartyData.playerTurn,currentPartyData.currentCardIndex);
