@@ -332,7 +332,6 @@ async function AnswerToUserDonePunishment(instruction) {
       }
     await updateOnlineParty({
       partyId: partyCode,
-      userInstructions: instruction,
       lastPinged: Date.now(),
       usersLastPing: currentPartyData.usersLastPing,
       usersReady: currentPartyData.usersReady,
