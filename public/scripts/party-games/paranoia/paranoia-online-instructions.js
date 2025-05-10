@@ -158,14 +158,16 @@ async function PunishmentOffer(instruction) {
     }
   }
   else if (parsedInstructions.reason == "CONFIRM") {
-    for (let i = 0; i < currentPartyData.usersReady.length; i++) {
-      currentPartyData.usersReady[i] = false;
+    if (deviceId == parsedInstructions.deviceId) {
+      for (let i = 0; i < currentPartyData.usersReady.length; i++) {
+        currentPartyData.usersReady[i] = false;
+      }
+      const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
+      const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
+      icons[index].classList.add('yes');
+      currentPartyData.usersReady[index] = true;
+      SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId, false, null, null, currentPartyData.usersReady);
     }
-    const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
-    const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
-    icons[index].classList.add('yes');
-    currentPartyData.usersReady[index] = true;
-    SendInstruction("HAS_USER_DONE_PUNISHMENT:" + deviceId, false, null, null, currentPartyData.usersReady);
   }
 }
 
@@ -220,7 +222,7 @@ async function HasUserDonePunishment(instruction) {
     confirmPunishmentContainer.classList.add('active');
     console.log("device not match");
   }
-  else if(!waitingForConfirmPunishmentContainer.classList.contains('active')){
+  else if (!waitingForConfirmPunishmentContainer.classList.contains('active')) {
     waitingForConfirmPunishmentContainer.classList.add('active');
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
@@ -307,7 +309,8 @@ async function AnswerToUserDonePunishment(instruction) {
         totalUsersReady++;
       }
     }
-    if (totalUsersReady == currentPartyData.usersReady.length) {
+    console.log("totalUsersReady: " + totalUsersReady);
+    if (totalUsersReady == currentPartyData.usersReady.length - 1) {
       const yesIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("yes")).length;
       const noIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("no")).length;
 
