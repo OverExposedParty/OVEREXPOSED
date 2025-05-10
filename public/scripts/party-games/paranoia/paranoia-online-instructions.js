@@ -290,7 +290,7 @@ async function AnswerToUserDonePunishment(instruction) {
   }
   const currentPartyData = existingData[0];
 
-  const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
+  const index = currentPartyData.computerIds.indexOf(deviceId);
   const icons = waitingForConfirmPunishmentIconContainer.querySelectorAll('.icon');
   if (currentPartyData.usersReady[index] == false) {
     if (parsedInstructions.reason == "YES") {
@@ -299,7 +299,6 @@ async function AnswerToUserDonePunishment(instruction) {
     else if (parsedInstructions.reason == "NO") {
       icons[index].classList.add('no');
     }
-
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
 
@@ -309,8 +308,7 @@ async function AnswerToUserDonePunishment(instruction) {
         totalUsersReady++;
       }
     }
-    console.log("totalUsersReady: " + totalUsersReady);
-    if (totalUsersReady == currentPartyData.usersReady.length - 1) {
+    if (totalUsersReady == currentPartyData.usersReady.length) {
       const yesIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("yes")).length;
       const noIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("no")).length;
 
