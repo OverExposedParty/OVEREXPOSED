@@ -215,19 +215,18 @@ async function HasUserDonePunishment(instruction) {
   const currentPartyData = existingData[0];
 
   const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
-  if (parsedInstructions.deviceId != deviceId) {
+  if (parsedInstructions.deviceId != deviceId && !confirmPunishmentContainer.classList.contains('active')) {
     waitingForConfirmPunishmentContainer.classList.remove('active');
     confirmPunishmentContainer.classList.add('active');
     console.log("device not match");
   }
-  else {
+  else if(!waitingForConfirmPunishmentContainer.classList.contains('active')){
     waitingForConfirmPunishmentContainer.classList.add('active');
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
     waitingForPlayerContainer.classList.remove('active');
     confirmPunishmentContainer.classList.remove('active');
     console.log("device match");
-
     await updateOnlineParty({
       partyId: partyCode,
       lastPinged: Date.now(),
