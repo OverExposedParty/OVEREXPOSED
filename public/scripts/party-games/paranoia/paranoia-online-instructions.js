@@ -325,6 +325,11 @@ async function AnswerToUserDonePunishment(instruction) {
         SendInstruction("USER_HAS_PASSED:USER_DIDNT_DO_PUNISHMENT:" + parsedInstructions.deviceId, true);
       }
     }
+    for (let i = 0; i < icons.length; i++) {
+      currentPartyData.usersReady[i] = false;
+      icons[i].classList.remove('yes');
+      icons[i].classList.remove('no');
+      }
     await updateOnlineParty({
       partyId: partyCode,
       userInstructions: instruction,
