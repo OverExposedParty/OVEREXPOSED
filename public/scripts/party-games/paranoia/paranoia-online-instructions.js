@@ -366,7 +366,7 @@ function parseInstructionWithReason_DeviceIdAndUserName(input) {
   };
 }
 
-async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null, updateUsersReady = nul) {
+async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null, updateUsersReady = null) {
   let instruction = "";
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
