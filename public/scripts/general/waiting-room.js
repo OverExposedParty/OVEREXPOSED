@@ -3,6 +3,7 @@ const waitingForLeaderContainer = document.getElementById('waiting-for-leader');
 const partyDoesNotExistContainer = document.getElementById('party-does-not-exist');
 const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
 const userKickedContainer = document.getElementById('user-kicked');
+const partyFullContainer = document.getElementById('party-full');
 
 const partyUsernameInput = document.getElementById('party-username');
 const partyUsernameInputSet = document.getElementById('party-username-waiting');
@@ -43,26 +44,30 @@ async function checkPartyExists() {
             document.documentElement.style.setProperty('--primarypagecolour', color);
         }
         if (data[0].isPlaying === false) {
-            enterUsernameContainer.classList.add('active')
-            addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
-            if (data[0].computerIds.includes(deviceId)) {
-                await UpdateUserPartyData({
-                    partyId: partyCode,  // make sure this variable is defined
-                    computerId: deviceId,  // or just `deviceId`
-                    newUsername: "NewName", // keeps usersReady unchanged
-                    newUserReady: false
-                });
-                console.log("partyCode: " + partyCode);
+            if (data[0].computerIds.length >= 8) {
+                partyFullContainer.classList.add('active');
             }
             else {
-                addUserToParty({
-                    partyId: partyCode,
-                    newComputerId: deviceId,
-                    newUsername: 'Player ' + (data[0].usernames.length + 1),
-                    newUserReady: false
-                });
+                enterUsernameContainer.classList.add('active')
+                addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
+                if (data[0].computerIds.includes(deviceId)) {
+                    await UpdateUserPartyData({
+                        partyId: partyCode,
+                        computerId: deviceId,
+                        newUsername: "NewName",
+                        newUserReady: false
+                    });
+                    console.log("partyCode: " + partyCode);
+                }
+                else {
+                    addUserToParty({
+                        partyId: partyCode,
+                        newComputerId: deviceId,
+                        newUsername: 'Player ' + (data[0].usernames.length + 1),
+                        newUserReady: false
+                    });
+                }
             }
-            
         }
         else {
             partySessionInProgressContainer.classList.add('active')
@@ -117,7 +122,7 @@ if (partyCode) {
     socket.emit("join-party", partyCode);
 }
 
-function KickUser(){
+function KickUser() {
     enterUsernameContainer.classList.remove('active')
     userKickedContainer.classList.add('active')
 }
