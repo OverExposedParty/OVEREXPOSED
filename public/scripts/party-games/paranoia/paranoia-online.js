@@ -8,7 +8,7 @@ const waitingForConfirmPunishmentContainer = document.getElementById('waiting-fo
 const waitingForConfirmPunishmentIconContainer = waitingForConfirmPunishmentContainer.querySelector('.content-container .user-confirmed-section');
 
 const nextQuestionContainer = document.getElementById('next-question-container')
-const nextQuestionSectionContainer = document.getElementById('next-question-container').querySelector('.content-container .user-confirmed-section');
+const nextQuestionSectionContainer = nextQuestionContainer.querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
 const selectUserContainerQuestionText = selectUserContainer.querySelector('.content-container h2');;
@@ -27,6 +27,7 @@ const gameContainerPublic = document.querySelector('#public-view.card-container'
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
 
 const selectUserButtonContainer = document.getElementById('select-user-container').querySelector('.selected-user-container .button-container');
+
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
 const confirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
 const confirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
@@ -46,6 +47,23 @@ const confirmPunishmentButton = document.getElementById('select-punishment-conta
 const completePunishmentContainer = document.getElementById('complete-punishment-container');
 const completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
 const completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container #pass');
+
+const gamneContainers = [
+  waitingForConfirmPunishmentContainer,
+  nextQuestionContainer,
+  selectUserContainer,
+  waitingForPlayerContainer,
+  playerHasPassedContainer,
+  gameContainerPublic,
+  gameContainerPublic,
+  selectUserButtonContainer,
+  confirmPunishmentContainer,
+  pickHeadsOrTailsContainer,
+  selectPunishmentContainer,
+  completePunishmentContainer,
+  drinkWheelContainer,
+  coinFlipContainer,
+];
 
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
@@ -256,3 +274,13 @@ function createUserIcon(id) {
   icon.textContent = 'O';
   return icon;
 }
+
+window.addEventListener('beforeunload', () => {
+  if (!partyCode) return;
+
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  deleteParty();
+});

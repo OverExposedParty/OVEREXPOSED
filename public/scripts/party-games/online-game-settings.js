@@ -18,8 +18,10 @@ function createUserIcon(userId, username, checked = false) {
   closeBtn.className = 'close-btn';
   closeBtn.textContent = '×';
   closeBtn.addEventListener('click', () => {
-    removeUserFromParty(partyCode, userIcon.getAttribute('data-user-id'));
-    userIcon.remove(); // Remove the user icon when clicked
+    if (userIcon.getAttribute('data-user-id') != deviceId) {
+      removeUserFromParty(partyCode, userIcon.getAttribute('data-user-id'));
+      userIcon.remove(); // Remove the user icon when clicked
+    }
   });
 
   // Do NOT add a click listener to checkmark — it is purely visual now
@@ -41,10 +43,10 @@ function editUserIcon(userId, newUsername, userReady) {
     }
 
     const checkbox = userIcon.querySelector('.checkmark');
-    if(userReady){
+    if (userReady) {
       checkbox.classList.add('checked');
     }
-    else{
+    else {
       checkbox.classList.remove('checked');
     }
   } else {
@@ -67,11 +69,11 @@ function UpdateUserIcons(partyData) {
   const userIconDivs = document.querySelectorAll('.user-icon');
   for (let i = 0; i < partyData.computerIds.length; i++) {
     const userIconDiv = document.querySelector(`.user-icon[data-user-id="${partyData.computerIds[i]}"]`);
-    if(!userIconDiv){
-      createUserIcon(partyData.computerIds[i], partyData.usernames[i]) 
+    if (!userIconDiv) {
+      createUserIcon(partyData.computerIds[i], partyData.usernames[i])
     }
-    else{
-      editUserIcon(partyData.computerIds[i], partyData.usernames[i], partyData.usersReady[i]) 
+    else {
+      editUserIcon(partyData.computerIds[i], partyData.usernames[i], partyData.usersReady[i])
     }
   }
   for (let i = 0; i < userIconDivs.length; i++) {
@@ -82,7 +84,7 @@ function UpdateUserIcons(partyData) {
   userCount.textContent = "(" + partyData.computerIds.length + "/8)";
 }
 function checkForGameSettingsUpdates(data) {
-    UpdateUserIcons(data);
+  UpdateUserIcons(data);
 }
 
 window.addEventListener('beforeunload', () => {

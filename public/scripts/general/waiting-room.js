@@ -17,6 +17,15 @@ const gamemodeColors = {
     "Most Likely To": "#FFEE66",
 };
 
+const gamneContainers = [
+    enterUsernameContainer,
+    waitingForLeaderContainer,
+    partyDoesNotExistContainer,
+    partySessionInProgressContainer,
+    userKickedContainer
+];
+
+
 const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash

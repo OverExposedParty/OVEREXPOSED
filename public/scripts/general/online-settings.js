@@ -1,3 +1,4 @@
+const partyDisbandedContainer = document.getElementById('party-disbanded');
 let hostedParty = false;
 let waitingForHost = false;
 
@@ -221,21 +222,10 @@ async function removeUserFromParty(partyId, computerIdToRemove) {
   const res = await fetch(`/api/party-games?partyCode=${partyId}`);
   const data = await res.json();
   const allUsersReady = data[0].usersReady.every(userReady => userReady === true);
-  if (data[0].computerIds.length === 0) {
+  if (data[0].computerIds.length == 1) {
     deleteParty();
   } else {
     updateStartGameButton(allUsersReady);
-    await updateOnlineParty({
-      partyId,
-      computerIds: data[0].computerIds,
-      usernames: data[0].usernames,
-      usersReady: data[0].usersReady,
-      gamemode: data[0].gamemode,
-      isPlaying: data[0].isPlaying,
-      lastPinged: Date.now(),
-      usersLastPing: data[0].usersLastPing,
-      shuffleSeed: data[0].shuffleSeed
-    });
   }
 }
 
@@ -244,8 +234,10 @@ socket.on("party-updated", async (change) => {
   if (partyCode) {
     const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await res.json();
-    if (!data || data.length === 0) return;
-
+    if (!data || data.length === 0){
+      PartyDisbanded();
+      return;
+    } 
     const latestPing = data[0].lastPinged;
     if (lastKnownPing && new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
       console.log('🟢 Party data changed!');
@@ -440,5 +432,10 @@ async function userPingToParty(deviceId, partyId) {
 
 function formatPackName(name) {
   return name.toLowerCase().replace(/\s+/g, '-');
+}
+
+function PartyDisbanded(){
+  gamneContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
+  partyDisbandedContainer.classList.add('active');
 }
 
