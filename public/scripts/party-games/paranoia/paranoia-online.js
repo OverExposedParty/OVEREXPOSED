@@ -1,4 +1,5 @@
 let isHeads = false;
+let hostDeviceId = "";
 
 const url = window.location.href;
 const segments = url.split('/');
@@ -178,6 +179,7 @@ async function initialisePage() {
   const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
   const data = await response.json();
   if (data.length > 0) {
+    hostDeviceId = data[0].computerIds[0];
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].computerIds.length; i++) {
         if (data[0].computerIds[i] != deviceId) {
@@ -275,12 +277,7 @@ function createUserIcon(id) {
   return icon;
 }
 
-window.addEventListener('beforeunload', () => {
-  if (!partyCode) return;
-
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
+window.addEventListener('beforeunload', function () {
+  if(loadingPage || hostDeviceId != deviceId) return;
   deleteParty();
 });

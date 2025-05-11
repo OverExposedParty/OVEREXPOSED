@@ -87,12 +87,7 @@ function checkForGameSettingsUpdates(data) {
   UpdateUserIcons(data);
 }
 
-window.addEventListener('beforeunload', () => {
-  if (!partyCode) return;
-
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
+window.addEventListener('beforeunload', function () {
+  if(loadingPage) return;
   deleteParty();
 });

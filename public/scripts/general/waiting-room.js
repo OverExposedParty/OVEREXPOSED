@@ -17,7 +17,6 @@ const gamemodeColors = {
     "Never Have I Ever": "#FF9266",
     "Most Likely To": "#FFEE66",
 };
-
 const gameContainers = [
     enterUsernameContainer,
     waitingForLeaderContainer,
@@ -43,10 +42,12 @@ async function checkPartyExists() {
         if (color) {
             document.documentElement.style.setProperty('--primarypagecolour', color);
         }
+        changeFavicon(data[0].gamemode);
         if (data[0].isPlaying === false) {
             if (data[0].computerIds.length >= 8) {
                 if (data[0].computerIds.includes(deviceId)) {
                     enterUsernameContainer.classList.add('active')
+                    addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
                     await UpdateUserPartyData({
                         partyId: partyCode,
                         computerId: deviceId,
@@ -55,8 +56,10 @@ async function checkPartyExists() {
                     });
                     console.log("partyCode: " + partyCode);
                 }
-                else{
+                else {
                     partyFullContainer.classList.add('active');
+                    addElementIfNotExists(permanantElementClassArray, partyFullContainer);
+                    document.title = "WAITING ROOM | ERROR";
                 }
             }
             else {
@@ -83,10 +86,12 @@ async function checkPartyExists() {
         }
         else {
             partySessionInProgressContainer.classList.add('active')
+            document.title = "WAITING ROOM | ERROR";
             addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
         }
     } else {
         partyDoesNotExistContainer.classList.add('active')
+        document.title = "WAITING ROOM | ERROR";
         addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
     }
 }
@@ -138,3 +143,27 @@ function KickUser() {
     enterUsernameContainer.classList.remove('active')
     userKickedContainer.classList.add('active')
 }
+
+function changeFavicon(gamemodeType) {
+    const sizes = ['16x16', '32x32', '96x96', '180x180'];
+
+    const gamemodeFolderPath = {
+    "Truth Or Dare": "party-games",
+    "Paranoia": "paranoia",
+    "Never Have I Ever": "never-have-i-ever",
+    "Most Likely To": "most-likely-to",
+};
+
+    const faviconLinks = document.querySelectorAll('link[rel="icon"]');
+
+    faviconLinks.forEach((favicon, i) => {
+        const size = sizes[i % sizes.length];
+        favicon.href = `/images/icons/${gamemodeFolderPath[gamemodeType]}/favicons/favicon-${size}.png`;
+
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/${gamemodeFolderPath[gamemodeType]}/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/${gamemodeFolderPath[gamemodeType]}/tik-tok-icon.svg)`);
+        document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/${gamemodeFolderPath[gamemodeType]}/instagram-icon.svg)`);
+
+    });
+}
+

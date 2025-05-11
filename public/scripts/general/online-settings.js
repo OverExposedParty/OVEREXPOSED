@@ -1,6 +1,8 @@
 const partyDisbandedContainer = document.getElementById('party-disbanded');
+
 let hostedParty = false;
 let waitingForHost = false;
+let loadingPage = false
 
 const { protocol, hostname } = window.location;
 let socket;
@@ -288,7 +290,6 @@ socket.on("party-updated", async (change) => {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
         }
-        //await updateOnlineParty({ partyId: partyCode, userInstructions: "" });
       }
     }
     //Game Settings page
@@ -335,45 +336,15 @@ async function checkAndDeleteEmptyParty(partyId) {
   }
 }
 
-async function deleteParty() {
-  try {
-    const existingData = await getExistingPartyData(partyCode);
-    if (!existingData || existingData.length === 0) {
-      console.warn('No party data found.');
-      return;
-    }
-    for (let i = 0; i < existingData[0].computerIds.length; i++) {
-      deleteUserIcon(existingData[0].computerIds[i]);
-    }
-    const res = await fetch(`/api/party-games?partyCode=${partyCode}`, {
-      method: 'DELETE',
-    });
+function deleteParty() {
+  if (!partyCode) return;
 
-    const currentPartyData = existingData[0];
-    if (currentPartyData.isPlaying == true) {
-      return;
-    }
+  const payload = JSON.stringify({ partyCode });
+  const blob = new Blob([payload], { type: 'application/json' });
 
-    if (!res.ok) {
-      throw new Error('Failed to delete party');
-    }
-    if (hostedParty) {
-      gameSettingsContainer.classList.add('active');
-      gameSettingsContainerButton.classList.add('active');
-      onlineSettingsContainerButton.classList.remove('active');
-      onlineSettingsContainer.classList.remove('active');
-      onlineSettingsContainerButton.classList.add('disabled');
-      onlineButton.classList.remove('active');
-    }
-    // Optionally, clear the party code from the session or app state if needed
-    console.log(`Party with code ${partyCode} deleted successfully`);
-
-    // Emit the delete event via socket
-    socket.emit('delete-party', partyCode);
-  } catch (err) {
-    console.error('❌ Error deleting party:', err);
-  }
+  navigator.sendBeacon('/api/party-games/delete', blob);
 }
+
 
 async function setIsPlayingForParty(partyId, newIsPlayingValue) {
   try {
@@ -435,9 +406,10 @@ function formatPackName(name) {
 }
 
 function PartyDisbanded() {
-  if (gameContainers) {
-    gameContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
-    partyDisbandedContainer.classList.add('active');
-  }
+  try {
+    if (gameContainers) {
+      gameContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
+      partyDisbandedContainer.classList.add('active');
+    }
+  } catch (e) { }
 }
-

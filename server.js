@@ -192,6 +192,29 @@ app.delete('/api/party-games', async (req, res) => {
   }
 });
 
+app.post('/api/party-games/delete', async (req, res) => {
+  const { partyCode } = req.body;
+
+  if (!partyCode) {
+    return res.status(400).json({ error: 'Party code is required' });
+  }
+
+  try {
+    const deletedParty = await OnlineParty.findOneAndDelete({ partyId: partyCode });
+
+    if (!deletedParty) {
+      return res.status(404).json({ error: 'Party game not found' });
+    }
+
+    console.log(`✅ Party ${partyCode} deleted via sendBeacon`);
+    res.json({ message: 'Party game deleted successfully', deletedParty });
+  } catch (err) {
+    console.error('❌ Error deleting party game on unload:', err);
+    res.status(500).json({ error: 'Failed to delete party game' });
+  }
+});
+
+
 app.post('/api/party-games/remove-user', async (req, res) => {
   try {
     const { partyId, computerIdToRemove } = req.body;

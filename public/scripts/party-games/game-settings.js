@@ -199,9 +199,6 @@ document.querySelectorAll('button:not(.settings-button):not(.start-game-button)'
                         }
                     }
                 }
-                console.log("gamemodeSettings: " + gamemodeSettings);
-                console.log("gamemodeSelectedPacks: " + gamemodeSelectedPacks);
-                console.log("partyCode: " +partyCode);
                 updateOnlineParty({
                     partyId: partyCode,
                     gameSettings: gamemodeSettings,
@@ -244,6 +241,7 @@ onlineButton.addEventListener('click', () => {
             playerTurn: 0,
             shuffleSeed: newShuffleSeed
         });
+        document.querySelectorAll(".user-icon").forEach(el => el.remove());
         createUserIcon(deviceId, "Player 1", true);
         inputPartyCode.value = "https://overexposed.app/" + partyCode;
 
@@ -344,6 +342,7 @@ enterUsernameButton.addEventListener('click', async function () {
 
 function startOnlineGame() {
     setIsPlayingForParty(partyCode, true)
+    loadingPage = true;
     transitionSplashScreen(removeSettingsExtensionFromCurrentURL() + "/" + partyCode, `/images/splash-screens/${startGameButton.id}.png`);
 }
 resizePage();

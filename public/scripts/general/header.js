@@ -157,7 +157,6 @@ window.onload = function() {
             transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
         });
     }
-    console.log(whatIsOverexposedLink);
 }, 500);
 };
 
@@ -286,7 +285,6 @@ function toggleSettings() {
 }
 
 function toggleOverlay(bool) {
-    console.log(permanantElementClassArray);
     if(bool === true){
         overlay.classList.add('active');
     }
