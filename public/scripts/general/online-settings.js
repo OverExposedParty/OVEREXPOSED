@@ -234,10 +234,10 @@ socket.on("party-updated", async (change) => {
   if (partyCode) {
     const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
     const data = await res.json();
-    if (!data || data.length === 0){
+    if (!data || data.length === 0) {
       PartyDisbanded();
       return;
-    } 
+    }
     const latestPing = data[0].lastPinged;
     if (lastKnownPing && new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
       console.log('🟢 Party data changed!');
@@ -296,8 +296,8 @@ socket.on("party-updated", async (change) => {
       if (hostedParty) {
         checkForGameSettingsUpdates(data[0]);
       }
-      else if(waitingForHost){
-        if(data[0].computerIds.indexOf(deviceId) == -1){
+      else if (waitingForHost) {
+        if (data[0].computerIds.indexOf(deviceId) == -1) {
           KickUser();
         }
       }
@@ -434,8 +434,10 @@ function formatPackName(name) {
   return name.toLowerCase().replace(/\s+/g, '-');
 }
 
-function PartyDisbanded(){
-  gamneContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
-  partyDisbandedContainer.classList.add('active');
+function PartyDisbanded() {
+  if (gameContainers) {
+    gameContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
+    partyDisbandedContainer.classList.add('active');
+  }
 }
 

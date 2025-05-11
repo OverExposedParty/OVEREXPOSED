@@ -48,7 +48,7 @@ const completePunishmentContainer = document.getElementById('complete-punishment
 const completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
 const completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container #pass');
 
-const gamneContainers = [
+const gameContainers = [
   waitingForConfirmPunishmentContainer,
   nextQuestionContainer,
   selectUserContainer,

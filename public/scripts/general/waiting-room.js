@@ -17,7 +17,7 @@ const gamemodeColors = {
     "Most Likely To": "#FFEE66",
 };
 
-const gamneContainers = [
+const gameContainers = [
     enterUsernameContainer,
     waitingForLeaderContainer,
     partyDoesNotExistContainer,
