@@ -45,7 +45,19 @@ async function checkPartyExists() {
         }
         if (data[0].isPlaying === false) {
             if (data[0].computerIds.length >= 8) {
-                partyFullContainer.classList.add('active');
+                if (data[0].computerIds.includes(deviceId)) {
+                    enterUsernameContainer.classList.add('active')
+                    await UpdateUserPartyData({
+                        partyId: partyCode,
+                        computerId: deviceId,
+                        newUsername: "Player" + data[0].computerIds.indexOf(deviceId),
+                        newUserReady: false
+                    });
+                    console.log("partyCode: " + partyCode);
+                }
+                else{
+                    partyFullContainer.classList.add('active');
+                }
             }
             else {
                 enterUsernameContainer.classList.add('active')
