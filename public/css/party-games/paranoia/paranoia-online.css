@@ -59,7 +59,7 @@
     position: absolute;
     bottom: 2.5%;
     right: 5%;
-    font-size: 0.75rem;
+    font-size: clamp(0.75rem, 1vw, 1rem);
     color: var(--primarypagecolour);
     font-family: LemonMilk;
     text-align: right;
@@ -133,7 +133,7 @@
 .user-confirmed-section .icon {
     font-family: LemonMilk;
     font-weight: bold;
-    font-size: 2vw;
+    font-size: 1.5vw;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -265,16 +265,15 @@
 }
 
 .selected-user-container.very-small {
-  align-items: flex-start;
+    align-items: flex-start;
 }
 
-
+/* Mobile and potrait windows */
 @media (orientation: portrait) {
     .button-container button {
         width: 100%;
         font-size: 1.5vh;
     }
-
     .regular-button-container button {
         font-size: 100%;
     }
@@ -285,5 +284,13 @@
 
     .content-container h1 {
         font-size: 8vw;
+    }
+
+    .content-container h2 {
+        font-size: 5,5vw;
+    }
+
+    .user-confirmed-section .icon {
+        font-size: 2vh;
     }
 }

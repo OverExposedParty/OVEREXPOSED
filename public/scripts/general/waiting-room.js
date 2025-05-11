@@ -85,7 +85,7 @@ buttonSubmitUsername.addEventListener('click', async function () {
 
     // Check if the username is already taken
     if (!usernames.includes(username)) {
-        enterUserNameContainer.classList.remove('active');
+        enterUsernameContainer.classList.remove('active');
         partyUsernameInputSet.value = username;
         waitingForLeaderContainer.classList.add('active');
 
