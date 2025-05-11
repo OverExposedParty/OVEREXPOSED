@@ -2,6 +2,7 @@ const enterUsernameContainer = document.getElementById('enter-username');
 const waitingForLeaderContainer = document.getElementById('waiting-for-leader');
 const partyDoesNotExistContainer = document.getElementById('party-does-not-exist');
 const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
+const userKickedContainer = document.getElementById('user-kicked');
 
 const partyUsernameInput = document.getElementById('party-username');
 const partyUsernameInputSet = document.getElementById('party-username-waiting');
@@ -107,4 +108,7 @@ if (partyCode) {
     socket.emit("join-party", partyCode);
 }
 
-  
+function KickUser(){
+    enterUsernameContainer.classList.remove('active')
+    userKickedContainer.classList.add('active')
+}

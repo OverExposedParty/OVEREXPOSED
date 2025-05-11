@@ -110,7 +110,7 @@
 .content-container,
 .button-container {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     width: 80%;
@@ -192,7 +192,12 @@
 
 .button-container button {
     width: 100%;
-    font-size: 1.5vw;
+    font-size: 1vw;
+    box-sizing: border-box;
+}
+
+.button-container.overflow button  {
+    width: 48%;
 }
 
 .button-container button.active {
@@ -231,7 +236,7 @@
 
 .select-button-container {
     position: absolute;
-    bottom: 25%;
+    bottom: 15%;
     left: 0;
     width: 100%;
     display: flex;

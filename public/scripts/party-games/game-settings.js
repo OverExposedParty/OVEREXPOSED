@@ -23,11 +23,12 @@ const enterUsernameButton = enterUsernameContainer.querySelector('.waiting-butto
 const partyUsernameInput = document.getElementById('party-username');
 
 
-const packsSettingsContainerButton = document.getElementById('packs-settings')
-const gameSettingsContainerButton = document.getElementById('game-settings')
-const onlineSettingsContainerButton = document.getElementById('online-settings')
+const packsSettingsContainerButton = document.getElementById('packs-settings');
+const gameSettingsContainerButton = document.getElementById('game-settings');
+const onlineSettingsContainerButton = document.getElementById('online-settings');
 
-const inputPartyCode = document.getElementById('party-code')
+const inputPartyCode = document.getElementById('party-code');
+const userCount = document.querySelector('.user-count');
 
 const settingsButtons = document.querySelectorAll('.button-container button');
 

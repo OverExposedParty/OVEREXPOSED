@@ -225,8 +225,18 @@ async function removeUserFromParty(partyId, computerIdToRemove) {
     deleteParty();
   } else {
     updateStartGameButton(allUsersReady);
+    await updateOnlineParty({
+      partyId,
+      computerIds: data[0].computerIds,
+      usernames: data[0].usernames,
+      usersReady: data[0].usersReady,
+      gamemode: data[0].gamemode,
+      isPlaying: data[0].isPlaying,
+      lastPinged: Date.now(),
+      usersLastPing: data[0].usersLastPing,
+      shuffleSeed: data[0].shuffleSeed
+    });
   }
-
 }
 
 // When a party update is received
@@ -293,6 +303,11 @@ socket.on("party-updated", async (change) => {
     else {
       if (hostedParty) {
         checkForGameSettingsUpdates(data[0]);
+      }
+      else if(waitingForHost){
+        if(data[0].computerIds.indexOf(deviceId) == -1){
+          KickUser();
+        }
       }
       // Handle update (refresh UI, show message, etc.)
     }

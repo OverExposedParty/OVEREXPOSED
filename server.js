@@ -200,34 +200,51 @@ app.post('/api/party-games/remove-user', async (req, res) => {
       return res.status(400).json({ error: 'partyId and computerIdToRemove are required' });
     }
 
-    // Assuming 'usersReady' is a boolean, so you can't pull by deviceId directly
-    const updatedParty = await OnlineParty.findOneAndUpdate(
-      { partyId },
-      {
-        $pull: {
-          computerIds: computerIdToRemove,    // Removes the computerId
-          usernames: { deviceId: computerIdToRemove } // Removes the username entry by deviceId
-        },
-        $set: {
-          // Optional: Set usersReady to false for that computerId
-          // You could alternatively use $pull to remove usersReady but it would require a different structure
-          // Example: You could store deviceId with usersReady: [{ deviceId: String, ready: Boolean }]
-          usersReady: false 
-        }
-      },
-      { new: true }
-    );
+    // Step 1: Get party as plain object (not a Mongoose doc)
+    const party = await OnlineParty.findOne({ partyId }).lean();
 
-    if (!updatedParty) {
+    if (!party) {
       return res.status(404).json({ error: 'Party not found' });
     }
 
-    res.json({ message: 'User removed from party', updatedParty });
+    const index = party.computerIds.indexOf(computerIdToRemove);
+    if (index === -1) {
+      return res.status(400).json({ error: 'Computer ID not found in party' });
+    }
+
+    // Step 2: Remove the index from parallel arrays
+    const updatedComputerIds = [...party.computerIds];
+    const updatedUsernames = [...party.usernames];
+    const updatedUsersReady = [...party.usersReady];
+    const updatedUsersLastPing = [...party.usersLastPing];
+
+    updatedComputerIds.splice(index, 1);
+    updatedUsernames.splice(index, 1);
+    updatedUsersReady.splice(index, 1);
+    updatedUsersLastPing.splice(index, 1);
+
+    // Step 3: Only update fields you want. Do not touch required ones like userInstructions.
+    await OnlineParty.updateOne(
+      { partyId },
+      {
+        $set: {
+          computerIds: updatedComputerIds,
+          usernames: updatedUsernames,
+          usersReady: updatedUsersReady,
+          usersLastPing: updatedUsersLastPing
+        }
+      }
+    );
+
+    res.json({ message: 'User removed successfully' });
+
   } catch (err) {
     console.error('❌ Error removing user from party:', err);
-    res.status(500).json({ error: 'Failed to remove user from party' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
 
 // Add security headers using helmet
 app.use(helmet());

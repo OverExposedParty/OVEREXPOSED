@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-    content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
+        content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
              script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
     <title>MOST LIEKLY TO SETTINGS</title>
 
@@ -128,9 +128,10 @@
                     <div class="button-container">
                         <button data-key="most-likely-to-drink-wheel" data-primary-color="var(--primarypagecolour)"
                             data-secondary-color="#B9AA42" class="game-settings-pack-nsfw"
-                            data-description="The Drinking Wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink.">Drink Wheel</button>
-                        <button data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="#B9AA42" class="game-settings-pack-sfw disabled" id="button-online">Online</button>
+                            data-description="The Drinking Wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink.">Drink
+                            Wheel</button>
+                        <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
+                            class="game-settings-pack-sfw disabled" id="button-online">Online</button>
                     </div>
                     <div class="container-description">
                         <h2></h2>
@@ -146,10 +147,13 @@
             <div class="online-settings-container">
                 <div class="container">
                     <div class="container-section" id="party-code-container">
-                        <input type="text" id="party-code" name="codeInput" value="https://overexposed.app/most-likely-to/settings/" readonly>
+                        <input type="text" id="party-code" name="codeInput" value="" readonly>
                     </div>
                     <div class="container-section" id="users">
-                    </div>                    
+                    </div>
+                    <div class="user-count">
+                        (0/8)
+                    </div>
                 </div>
             </div>
         </div>

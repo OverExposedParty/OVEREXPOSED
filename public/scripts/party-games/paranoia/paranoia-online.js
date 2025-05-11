@@ -182,6 +182,9 @@ async function initialisePage() {
           selectUserButtonContainer.setAttribute('selected-id', button.getAttribute('id'));
         });
       });
+      if(selectUserButtonContainer.length > 4){
+        selectUserButtonContainer.classList.add('overflow');
+      }
 
       selectPunishmentButtons.forEach(button => {
         button.addEventListener('click', () => {

@@ -79,6 +79,7 @@ function UpdateUserIcons(partyData) {
       deleteUserIcon(partyData.computerIds[i])
     }
   }
+  userCount.textContent = "(" + partyData.computerIds.length + "/8)";
 }
 function checkForGameSettingsUpdates(data) {
     UpdateUserIcons(data);
