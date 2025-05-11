@@ -220,6 +220,7 @@ async function HasUserDonePunishment(instruction) {
   if (parsedInstructions.deviceId != deviceId) {
     if (!confirmPunishmentContainer.classList.contains('active')) {
       waitingForConfirmPunishmentContainer.classList.remove('active');
+      waitingForPlayerContainer.classList.remove('active');
       confirmPunishmentContainer.classList.add('active');
       console.log("device not match");
     }
