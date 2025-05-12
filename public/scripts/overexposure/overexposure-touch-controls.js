@@ -109,9 +109,9 @@ function detectTouchScreen() {
 wrapper.addEventListener("touchend", function (event) {
     let currentTime = new Date().getTime();
     let tapLength = currentTime - lastTap;
-    if (tapLength < 20 && tapLength > 0) { // 300ms threshold for double tap
+
         handleDoubleClick(event);
-    }
+
     lastTap = currentTime;
 });
 
