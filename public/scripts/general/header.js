@@ -298,6 +298,11 @@ function toggleOverlay(bool) {
         }
         removeAllElements(settingsElementClassArray);
         removeAllElements(elementClassArray);
+
+        //temp fix
+        document.querySelectorAll('.floating-button').forEach(el => {
+            el.classList.remove('touchhover');
+        });
     }
 }
 

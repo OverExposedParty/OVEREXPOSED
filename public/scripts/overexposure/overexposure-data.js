@@ -339,9 +339,6 @@ function createFloatingButton(event = null, row, draft = false) {
         touchStartTime = Date.now();
         singleTouchPosition.x = cameraPosition.x;
         singleTouchPosition.y = cameraPosition.y;
-        setTimeout(() => {
-            button.classList.add('touchhover');
-        }, touchDuration);
     });
     button.addEventListener("touchmove", () => {
         const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
@@ -356,7 +353,7 @@ function createFloatingButton(event = null, row, draft = false) {
         button.classList.remove('touchhover');
         const touch = event.touches[0] || event.changedTouches[0];
         const touchRadius = calculateTouchDistance(cameraPosition, singleTouchPosition);
-        if (touchRadius < maxTouchRadius && touchHeldDuration >= touchDuration) {
+        if (touchRadius < maxTouchRadius) {
             selectCard(button, false);
         }
     });
@@ -573,6 +570,7 @@ function selectCard(button, draft) {
     overlay.classList.add("active");
     addElementIfNotExists(elementClassArray, overexposureContainer);
     playSoundEffect('containerOpen');
+    button.classList.add('touchhover');
 }
 
 exitMenuYes.addEventListener("click", ExitMenuButtonYes);
@@ -626,18 +624,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function cleanOverexposureUrl() {
     const currentUrl = window.location.pathname;
     const basePath = "/overexposure";
-    const overexposureIndex = currentUrl.indexOf(basePath);
-
-    if (overexposureIndex !== -1) {
-        const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
-        history.pushState(null, "", newUrl);
-    }
-}
-
-function cleanOverexposureUrl() {
-    const currentUrl = window.location.pathname;
-    const basePath = "/overexposure";
-
     const overexposureIndex = currentUrl.indexOf(basePath);
 
     if (overexposureIndex !== -1) {

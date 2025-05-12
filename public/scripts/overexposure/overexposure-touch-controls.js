@@ -1,6 +1,6 @@
 let lastTap = 0;
-const maxTouchRadius = 50;
-let singleTouchPosition = {x: 0,y: 0};
+const maxTouchRadius = 20;
+let singleTouchPosition = { x: 0, y: 0 };
 let count = 0;
 let intervalId = null;
 let touchStartTime = null;
@@ -109,9 +109,9 @@ function detectTouchScreen() {
 wrapper.addEventListener("touchend", function (event) {
     let currentTime = new Date().getTime();
     let tapLength = currentTime - lastTap;
-
+    if (tapLength < 300 && tapLength > 0) { // 300ms threshold for double tap
         handleDoubleClick(event);
-
+    }
     lastTap = currentTime;
 });
 

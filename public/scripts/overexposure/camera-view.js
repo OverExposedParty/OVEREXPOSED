@@ -69,7 +69,7 @@ let touchStartX = 0;
 let touchStartY = 0;
 let isTouchDragging = false;
 
-container.addEventListener('touchstart', (event) => {
+window.addEventListener('touchstart', (event) => {
     if (event.touches.length === 1) { // One finger swipe
         enableTouchControls();
         isTouchDragging = true;
@@ -78,14 +78,14 @@ container.addEventListener('touchstart', (event) => {
     }
 });
 
-container.addEventListener('touchmove', (event) => {
+window.addEventListener('touchmove', (event) => {
     if (isTouchDragging) {
         cameraPosition.x = event.touches[0].clientX - touchStartX;
         cameraPosition.y = event.touches[0].clientY - touchStartY;
     }
 });
 
-container.addEventListener('touchend', () => {
+window.addEventListener('touchend', () => {
     isTouchDragging = false;
 });
 
