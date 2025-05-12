@@ -7,9 +7,11 @@ let offsetX = ((window.innerWidth - getComputedStyle(document.documentElement).g
 let offsetY = ((window.innerHeight - getComputedStyle(document.documentElement).getPropertyValue('--canvasHeight').trim().replace('px', '')) / 2);
 let targetX = offsetX;
 let targetY = offsetY;
-let baseScale = 1; // Base scale factor
+let baseScale = 1;
 let targetScale = baseScale;
-let zoomSpeed = 0.05; // Speed of zooming
+let zoomSpeed = 0.05; 
+let lastTouchMoveTime = 0;
+const throttleDelay = 30; // Milliseconds
 
 // Touchscreen pinch-to-zoom logic
 let initialDistance = null;
@@ -148,21 +150,24 @@ container.addEventListener("touchstart", (event) => {
 });
 
 container.addEventListener("touchmove", (event) => {
+    const currentTime = Date.now();
+    if (currentTime - lastTouchMoveTime < throttleDelay) {
+        return; // Skip this move event to prevent jitter
+    }
+    lastTouchMoveTime = currentTime;
     event.preventDefault();
+
     if (event.touches.length === 2) {
         const currentDistance = getDistance(event.touches[0], event.touches[1]);
         const scaleFactor = currentDistance / initialDistance;
-
         targetScale = Math.max(minScale, initialScale * scaleFactor);
 
-        // Apply smooth zoom animation
         gsap.to(container, {
             scale: targetScale,
-            duration: 1.5,
-            ease: "power2.out"
+            duration: 0.3,  // Faster transition for a smoother zoom
+            ease: "power1.out"  // Use a lighter easing function
         });
     }
-
 
     if (isTouchDragging) {
         let midPoint;
@@ -174,6 +179,13 @@ container.addEventListener("touchmove", (event) => {
 
         cameraPosition.x = midPoint.x - touchStartX;
         cameraPosition.y = midPoint.y - touchStartY;
+
+        gsap.to(container, {
+            x: cameraPosition.x,
+            y: cameraPosition.y,
+            duration: 0.3,
+            ease: "power2.out"
+        });
     }
 });
 
