@@ -230,6 +230,10 @@
     gap: 0;
 }
 
+.selected-user-container.very-small.center {
+    justify-content: center;
+}
+
 .selected-user-container.very-small .content-container {
     margin: 1vh auto;
 }
