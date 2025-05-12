@@ -1,5 +1,6 @@
 const container = document.getElementById("floating-container");
 const wrapper = document.getElementById("wrapper");
+
 let isDragging = false;
 let isTouchActive = false;
 let startX, startY;
@@ -16,7 +17,6 @@ const throttleDelay = 30; // Milliseconds
 // Touchscreen pinch-to-zoom logic
 let initialDistance = null;
 let initialScale = baseScale;
-
 
 // Store the position of the container in an object
 const cameraPosition = {
@@ -127,6 +127,7 @@ document.addEventListener('wheel', (event) => {
     });
 });
 
+// Touchscreen pinch-to-zoom logic
 container.addEventListener("touchstart", (event) => {
     enableTouchControls();
     event.preventDefault();
@@ -189,11 +190,13 @@ container.addEventListener("touchmove", (event) => {
     }
 });
 
+// Utility functions for touch events
 function getDistance(touch1, touch2) {
     const dx = touch2.clientX - touch1.clientX;
     const dy = touch2.clientY - touch1.clientY;
     return Math.sqrt(dx * dx + dy * dy);
 }
+
 function getMiddlePoint(touches) {
     let sumX = 0, sumY = 0;
     for (let i = 0; i < touches.length; i++) {
