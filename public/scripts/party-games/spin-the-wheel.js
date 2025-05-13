@@ -25,14 +25,14 @@ if (spinWheelEnabled) {
             spinButton.classList.add('active');
             playSoundEffect('containerOpen');
             if (!overlay.classList.contains('active')) {
-                overlay.classList.add('active');
+                toggleOverlay(true);
             }
         }
         else {
             spinContainer.classList.remove('active');
             playSoundEffect('containerClose');
             if (findActiveElementsWithClasses(classArray).length == 0) {
-                overlay.classList.remove('active');
+                toggleOverlay(false);
             }
         }
     }

@@ -443,7 +443,7 @@ submitPostYes.addEventListener("click", async () => {
 
         try {
             const response = await saveDataToMongoDB(draftData);
-            overlay.classList.remove('active');
+            toggleOverlay(false);
             overexposureContainer.classList.remove('active');
             console.log("Draft data saved successfully:", response);
             playSoundEffect('postUploaded');
@@ -499,7 +499,7 @@ const observer = new MutationObserver((mutationsList) => {
                 const draftButtons = document.querySelectorAll(".floating-button.draft");
                 if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
                     if (draftButtons.length > 0) {
-                        overlay.classList.add('active');
+                        toggleOverlay(true);
                         overexposureContainer.classList.add('active');
                         addElementIfNotExists(elementClassArray, overexposureContainer);
                         if (elementExists(popUpClassArray,postIncompleteContainer)) {

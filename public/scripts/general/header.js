@@ -1,6 +1,6 @@
 let selectedButton;
 let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-
+const backButton = document.querySelector(".back-button");
 const containerTitle = document.querySelector('#container-title');
 
 const rotateMessage = document.querySelector('#landscape-message');
@@ -35,7 +35,7 @@ const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
 let audioContext;
-let soundBuffers = {}; 
+let soundBuffers = {};
 
 const audioBuffers = {};
 
@@ -101,63 +101,63 @@ async function playSoundEffect(soundKey) {
 
 class LocalStorageObserver {
     constructor() {
-      this.listeners = [];
-      this.originalSetItem = localStorage.setItem;
-      this.originalGetItem = localStorage.getItem;
-  
-      localStorage.setItem = (key, value) => {
-        const oldValue = this.originalGetItem.call(localStorage, key);
-        this.originalSetItem.call(localStorage, key, value);
-        this.notifyListeners(key, oldValue, value);
-      };
+        this.listeners = [];
+        this.originalSetItem = localStorage.setItem;
+        this.originalGetItem = localStorage.getItem;
+
+        localStorage.setItem = (key, value) => {
+            const oldValue = this.originalGetItem.call(localStorage, key);
+            this.originalSetItem.call(localStorage, key, value);
+            this.notifyListeners(key, oldValue, value);
+        };
     }
-  
+
     addListener(callback) {
-      this.listeners.push(callback);
+        this.listeners.push(callback);
     }
 
     notifyListeners(key, oldValue, newValue) {
-      this.listeners.forEach((listener) => {
-        listener(key, oldValue, newValue);
-      });
+        this.listeners.forEach((listener) => {
+            listener(key, oldValue, newValue);
+        });
     }
-  }
+}
 
-window.onload = function() {
+window.onload = function () {
     setTimeout(() => {
-    let logoContainer = document.querySelector('.logo-container');
-    let partyGamesLink = document.getElementById('party-games-link');
-    let overexposureLink = document.getElementById('overexposure-link');
-    let insightsLink = document.getElementById('insights-link');
-    let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+        let logoContainer = document.querySelector('.logo-container');
+        let partyGamesLink = document.getElementById('party-games-link');
+        let overexposureLink = document.getElementById('overexposure-link');
+        let insightsLink = document.getElementById('insights-link');
+        let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
 
-    if (logoContainer) {
-        logoContainer.addEventListener('click', function() {
-            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-        });
-    }
-    
-    if (partyGamesLink) {
-        partyGamesLink.addEventListener('click', function() {
-            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-        });
-    }
-    if (overexposureLink) {
-        overexposureLink.addEventListener('click', function() {
-            transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
-        });
-    }
-    if (insightsLink) {
-        insightsLink.addEventListener('click', function() {
-            transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
-        });
-    }
-    if (whatIsOverexposedLink) {
-        whatIsOverexposedLink.addEventListener('click', function() {
-            transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
-        });
-    }
-}, 500);
+        if (logoContainer) {
+            logoContainer.addEventListener('click', function () {
+                transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+            });
+        }
+
+        if (partyGamesLink) {
+            partyGamesLink.addEventListener('click', function () {
+                transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+            });
+        }
+        if (overexposureLink) {
+            overexposureLink.addEventListener('click', function () {
+                transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
+            });
+        }
+        if (insightsLink) {
+            insightsLink.addEventListener('click', function () {
+                transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
+            });
+        }
+        if (whatIsOverexposedLink) {
+            whatIsOverexposedLink.addEventListener('click', function () {
+                transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
+            });
+        }
+    }, 500);
 };
 
 
@@ -186,10 +186,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         settingsSoundCheckbox.addEventListener('change', function () {
             localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
-            if(settingsSoundCheckbox.checked){
+            if (settingsSoundCheckbox.checked) {
                 playSoundEffect('sliderEnabled');
             }
-            else{
+            else {
                 playSoundEffect('sliderDisabled');
             }
         });
@@ -202,10 +202,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         nsfwCheckbox.addEventListener('change', function () {
             localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
-            if(nsfwCheckbox.checked){
+            if (nsfwCheckbox.checked) {
                 playSoundEffect('sliderEnabled');
             }
-            else{
+            else {
                 playSoundEffect('sliderDisabled');
             }
         });
@@ -251,48 +251,51 @@ landscapeMessage.appendChild(rotateIcon);
 
 document.body.appendChild(landscapeMessage);
 
-function toggleClass(selectedClass,classArray) {
+function toggleClass(selectedClass, classArray) {
     selectedClass.classList.toggle('active');
-    if(selectedClass.classList.contains('active')){
-        if(classArray == settingsElementClassArray){
+    if (selectedClass.classList.contains('active')) {
+        if (classArray == settingsElementClassArray) {
             removeAllElements(classArray);
         }
         addElementIfNotExists(classArray, selectedClass);
         playSoundEffect('containerOpen');
     }
-    else{
+    else {
         removeElementIfExists(classArray, selectedClass);
         playSoundEffect('containerClose');
     }
 
     if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0) {
-        overlay.classList.remove('active');
+        toggleOverlay(false);
     }
-    else{
-        if(!(overlay.classList.contains('active'))){
+    else {
+        if (!(overlay.classList.contains('active'))) {
             toggleOverlay(true);
         }
     }
 }
 function toggleHelp() {
-    toggleClass(helpContainer,settingsElementClassArray);
+    toggleClass(helpContainer, settingsElementClassArray);
 }
 function toggleExtraMenu() {
-    toggleClass(extraMenuContainer,settingsElementClassArray);
+    toggleClass(extraMenuContainer, settingsElementClassArray);
 }
 function toggleSettings() {
-    toggleClass(settingsBox,settingsElementClassArray);
+    toggleClass(settingsBox, settingsElementClassArray);
 }
 
 function toggleOverlay(bool) {
-    if(bool === true){
+    if (bool === true) {
         overlay.classList.add('active');
+        if (backButton) {
+            backButton.classList.add('inactive');
+        }
     }
-    else{
-        if(popUpClassArray.length > 0){
+    else {
+        if (popUpClassArray.length > 0) {
             removeAllElements(popUpClassArray)
         }
-        else if(permanantElementClassArray.length == 0){
+        else if (permanantElementClassArray.length == 0) {
             overlay.classList.remove('active');
             playSoundEffect('containerClose');
         }
@@ -303,6 +306,9 @@ function toggleOverlay(bool) {
         document.querySelectorAll('.floating-button').forEach(el => {
             el.classList.remove('touchhover');
         });
+        if (backButton) {
+            backButton.classList.remove('inactive');
+        }
     }
 }
 
@@ -331,7 +337,7 @@ waitForElementWithTimeout('.extra-menu-icon', (extraMenuIcon) => {
 }, 15000);
 
 waitForElementWithTimeout('#settings-box', (element) => {
-     settingsBox = element;
+    settingsBox = element;
 }, 10000);
 
 waitForElementWithTimeout('header', (element) => {
@@ -349,7 +355,7 @@ function waitForButtons(selector, callback) {
         const buttons = document.querySelectorAll(selector);
         if (buttons.length > 0) {
             observer.disconnect();
-            callback(buttons); 
+            callback(buttons);
         }
     });
 
@@ -396,7 +402,7 @@ window.addEventListener('load', async function () {
     const container = document.getElementById("splash-screen-container");
     const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
 
-    
+
     setTimeout(function () {
         container.classList.add('center');
     }, 50);
@@ -496,7 +502,7 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
                 obs.disconnect(); // Stop observing once found
             }
         });
-    
+
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
@@ -515,9 +521,9 @@ waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
 
-function transitionSplashScreen(link,splashScreen) {
+function transitionSplashScreen(link, splashScreen) {
     const container = document.createElement('div');
-    container.className = 'splash-screen-container down'; 
+    container.className = 'splash-screen-container down';
     const img = document.createElement('img');
     img.src = splashScreen;
     container.appendChild(img);

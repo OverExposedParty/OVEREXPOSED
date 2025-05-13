@@ -11,7 +11,6 @@ const warningStartButton = document.querySelector('.start-game-warning-button');
 const nsfwButtons = document.querySelectorAll('.pack-nsfw');
 const gameSettingsNsfwButtons = document.querySelectorAll('.game-settings-pack-nsfw');
 
-const backButton = document.querySelector('.back-button');
 const onlineButton = document.getElementById('button-online');
 
 const packsContainer = document.querySelector('.packs-container');
@@ -247,7 +246,7 @@ onlineButton.addEventListener('click', () => {
 
         enterUsernameContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
-        overlay.classList.add('active');
+        toggleOverlay(true);
 
         packsContainer.classList.remove('active');
         packsSettingsContainerButton.classList.remove('active');
@@ -275,7 +274,7 @@ startGameButton.addEventListener('click', () => {
     if (nsfwPacksActive) {
         addElementIfNotExists(elementClassArray, warningBox);
         warningBox.classList.add('active');
-        overlay.classList.add('active');
+        toggleOverlay(true);
         playSoundEffect('containerOpen');
     } else {
         if (partyCode) {
@@ -337,7 +336,7 @@ enterUsernameButton.addEventListener('click', async function () {
     });
     enterUsernameContainer.classList.remove('active');
     removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
-    overlay.classList.remove('active');
+    toggleOverlay(false);
 });
 
 function startOnlineGame() {

@@ -136,13 +136,13 @@ function toggleQuestionZoomedContainer() {
         playSoundEffect('containerOpen');
         questionZoomedContainerText.textContent = mainImageContainerText.textContent;
         if (!overlay.classList.contains('active')) {
-            overlay.classList.add('active');
+            toggleOverlay(true);
         }
     }
     else {
         questionZoomedContainer.classList.remove('active');
         if (findActiveElementsWithClasses(classArray).length == 0) {
-            overlay.classList.remove('active');
+            toggleOverlay(false);
         }
     }
 }

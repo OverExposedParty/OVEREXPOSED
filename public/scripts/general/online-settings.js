@@ -341,7 +341,7 @@ function deleteParty() {
 
   const payload = JSON.stringify({ partyCode });
   const blob = new Blob([payload], { type: 'application/json' });
-
+  partyCode = null;
   navigator.sendBeacon('/api/party-games/delete', blob);
 }
 

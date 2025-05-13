@@ -369,6 +369,10 @@ input:checked+.slider:before {
     border-color: var(--primarypagecolour);
 }
 
+.back-button.inactive {
+    display: none;
+}
+
 /* Help Container */
 .help-container {
     position: fixed;
