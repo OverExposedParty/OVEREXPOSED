@@ -567,7 +567,7 @@ function selectCard(button, draft) {
         setOverexposureContainerToEditor(false);
     }
 
-    overlay.classList.add("active");
+    toggleOverlay(true);
     addElementIfNotExists(elementClassArray, overexposureContainer);
     playSoundEffect('containerOpen');
     button.classList.add('touchhover');
