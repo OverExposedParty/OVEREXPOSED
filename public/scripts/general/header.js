@@ -210,6 +210,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }, 15000);
+
+    waitForElementWithTimeout('#settings-card-bounds', (cardBoundsCheckbox) => {
+        if (localStorage.getItem('settings-card-bounds') === 'true') {
+            cardBoundsCheckbox.checked = true;
+        }
+
+        cardBoundsCheckbox.addEventListener('change', function () {
+            localStorage.setItem('settings-card-bounds', cardBoundsCheckbox.checked);
+            if (cardBoundsCheckbox.checked) {
+                playSoundEffect('sliderEnabled');
+            }
+            else {
+                playSoundEffect('sliderDisabled');
+            }
+        });
+    }, 15000);
 });
 
 // Create the help container

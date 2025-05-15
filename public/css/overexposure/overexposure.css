@@ -52,6 +52,10 @@ highlight {
     position: absolute;
     z-index:1;
 }
+.no-place.visible,
+.safe-zone.visible{
+    background-color:#41414159;
+}
 
 .floating-container {
     position: absolute;

@@ -41,17 +41,17 @@ const storageObserver = new LocalStorageObserver();
 const { protocol, hostname } = window.location;
 let socket;
 if (hostname === 'overexposed.app') {
-     socket = io(`${protocol}//${hostname}`);
+    socket = io(`${protocol}//${hostname}`);
 } else {
-     socket = io(`${protocol}//${hostname}:3000`);
+    socket = io(`${protocol}//${hostname}:3000`);
 }
 
 socket.on('connect', () => {
-  console.log('Socket connected successfully');
+    console.log('Socket connected successfully');
 });
 
 socket.on('connect_error', (err) => {
-  console.error('Socket connection error:', err);
+    console.error('Socket connection error:', err);
 });
 
 storageObserver.addListener((key, oldValue, newValue) => {
@@ -177,7 +177,7 @@ function displayFloatingText(message, x, y) {
     }, 700);
 }
 
-function showFloatingText(event,message) {
+function showFloatingText(event, message) {
     playSoundEffect('cardCannotBePlacedHere');
     if (isTouchActive) {
         const touch = event.touches[0] || event.changedTouches[0];
@@ -220,7 +220,7 @@ async function fetchConfessions() {
                 confession.y
             ], false);
         });
-
+        CardBoundsToggle(cardBoundsCheckbox.checked);
         if (!idFound) {
             console.log(`ID ${idFromURL} not found`);
             cleanOverexposureUrl();
@@ -242,7 +242,7 @@ async function updateConfessions() {
 
         // Get all existing floating buttons
         const floatingButtons = document.querySelectorAll('.floating-button');
-        
+
         // Iterate through the confessions
         data.forEach(confession => {
             let isNewConfession = true;
@@ -298,6 +298,7 @@ function createFloatingButton(event = null, row, draft = false) {
     const noPlaceDiv = document.createElement("div");
     noPlaceDiv.classList.add("no-place");
     noPlaceDiv.appendChild(button);
+    noPlaceDiv.setAttribute("data-id", id);
     floatingContainer.appendChild(noPlaceDiv);
 
     button.appendChild(img);
@@ -324,14 +325,14 @@ function createFloatingButton(event = null, row, draft = false) {
         }
     );
     if (getOverlappingDiv(noPlaceDiv, document.querySelectorAll(".no-place")) !== null) {
-        showFloatingText(event,"Card cannot be placed here");
+        showFloatingText(event, "Card cannot be placed here");
         button.remove();
         noPlaceDiv.remove();
         return;
     }
 
     button.addEventListener("click", () => {
-        if(isTouchActive) {return;}
+        if (isTouchActive) { return; }
         selectCard(button, false)
     });
 
@@ -374,12 +375,12 @@ function placeCard(event, positionX, positionY) {
     const bool = localStorage.getItem('settings-nsfw');
 
     if (bool === 'false') {
-        showFloatingText(event,"Enable NSFW in settings");
+        showFloatingText(event, "Enable NSFW in settings");
         return;
     }
 
     if (safeZone && safeZone.contains(event.target) || (floatingContainer && !floatingContainer.contains(event.target))) {
-        showFloatingText(event,"Card cannot be placed here");
+        showFloatingText(event, "Card cannot be placed here");
         return;
     }
 
@@ -387,6 +388,7 @@ function placeCard(event, positionX, positionY) {
     titleTextInput.value = "";
 
     createFloatingButton(event, ["New Title", "Type here...", new Date().toISOString().replace(/[-:T.]/g, '').split('Z')[0], formatDate(Date.now()), positionX.toString(), positionY.toString()], true);
+    CardBoundsToggle(cardBoundsCheckbox.checked);
 }
 
 function setOverexposureContainerToEditor(isActive) {
@@ -408,12 +410,12 @@ publishButton.addEventListener("click", async () => {
     if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
         playSoundEffect('postIncomplete');
         postIncompleteContainer.classList.add('active');
-        addElementIfNotExists(popUpClassArray, postIncompleteContainer); 
+        addElementIfNotExists(popUpClassArray, postIncompleteContainer);
         playSoundEffect('containerClose');
     }
     else {
         areYouSurePostContainer.classList.add('active');
-        addElementIfNotExists(popUpClassArray, areYouSurePostContainer); 
+        addElementIfNotExists(popUpClassArray, areYouSurePostContainer);
     }
 });
 submitPostYes.addEventListener("click", async () => {
@@ -422,7 +424,7 @@ submitPostYes.addEventListener("click", async () => {
     const draftButtons = document.querySelectorAll(".floating-button.draft");
     if (draftButtons.length > 0) {
         uploadingPostContainer.classList.add("active");
-        addElementIfNotExists(popUpClassArray, uploadingPostContainer); 
+        addElementIfNotExists(popUpClassArray, uploadingPostContainer);
         intervalId = setInterval(updateEllipses, 400);
         const draftData = [];
         draftButtons.forEach(button => {
@@ -456,7 +458,7 @@ submitPostYes.addEventListener("click", async () => {
             playSoundEffect('postIncomplete');
         }
         uploadingPostContainer.classList.remove("active");
-        addElementIfNotExists(popUpClassArray, uploadingPostContainer); 
+        addElementIfNotExists(popUpClassArray, uploadingPostContainer);
     }
 });
 submitPostNo.addEventListener("click", async () => {
@@ -502,12 +504,12 @@ const observer = new MutationObserver((mutationsList) => {
                         toggleOverlay(true);
                         overexposureContainer.classList.add('active');
                         addElementIfNotExists(elementClassArray, overexposureContainer);
-                        if (elementExists(popUpClassArray,postIncompleteContainer)) {
+                        if (elementExists(popUpClassArray, postIncompleteContainer)) {
                             postIncompleteContainer.classList.remove('active');
                         }
                         else if (!(areYouSurePostContainer.classList.contains('active'))) {
                             exitMenuContainer.classList.add('active');
-                            addElementIfNotExists(popUpClassArray, exitMenuContainer); 
+                            addElementIfNotExists(popUpClassArray, exitMenuContainer);
                         }
                         else {
                             areYouSurePostContainer.classList.remove('active');
@@ -544,7 +546,7 @@ function selectCard(button, draft) {
 
     const bool = localStorage.getItem('settings-nsfw');
 
-    if(button.querySelector('img').classList.contains("disabled")){
+    if (button.querySelector('img').classList.contains("disabled")) {
         displayFloatingText("Enable NSFW in settings", centerX, centerY);
         return;
     }
@@ -562,6 +564,7 @@ function selectCard(button, draft) {
 
     if (draft) {
         setOverexposureContainerToEditor(true);
+
     }
     else {
         setOverexposureContainerToEditor(false);
@@ -677,7 +680,7 @@ function SetNSFW() {
             document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/overexposure/instagram-icon.svg)`);
         });
     }
-    else{
+    else {
         enableNSFWContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enableNSFWContainer);
         document.documentElement.style.setProperty('--primarypagecolour', '#999999');
@@ -693,6 +696,25 @@ function SetNSFW() {
             document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/grey/rotate-phone-icon.svg)`);
             document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/grey/tik-tok-icon.svg)`);
             document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/grey/instagram-icon.svg)`);
+        });
+    }
+}
+
+function CardBoundsToggle(bool) {
+    if (bool == true) {
+        safeZone.classList.add('visible');
+        document.querySelectorAll('.floating-button').forEach(button => {
+            const buttonId = button.getAttribute("data-id");
+            const noPlace = document.querySelector(`.no-place[data-id="${buttonId}"]`);
+            noPlace.classList.add('visible');
+        });
+    }
+    else {
+        safeZone.classList.remove('visible');
+        document.querySelectorAll('.floating-button').forEach(button => {
+            const buttonId = button.getAttribute("data-id");
+            const noPlace = document.querySelector(`.no-place[data-id="${buttonId}"]`);
+            noPlace.classList.remove('visible');
         });
     }
 }
