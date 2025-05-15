@@ -30,12 +30,3 @@ cardBoundsOption.appendChild(cardBoundsToggleSwitch);
 // Append the new setting to the settings content container
 const cardBoundsSettingsContent = document.querySelector('.settings-content');
 cardBoundsSettingsContent.appendChild(cardBoundsOption);
-
-cardBoundsCheckbox.addEventListener('change', function () {
-    if (cardBoundsCheckbox.checked) {
-        CardBoundsToggle(true);
-    }
-    else {
-        CardBoundsToggle(false);
-    }
-});

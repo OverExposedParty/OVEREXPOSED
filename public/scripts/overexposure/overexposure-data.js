@@ -718,3 +718,12 @@ function CardBoundsToggle(bool) {
         });
     }
 }
+
+cardBoundsCheckbox.addEventListener('change', function () {
+    if (cardBoundsCheckbox.checked) {
+        CardBoundsToggle(true);
+    }
+    else {
+        CardBoundsToggle(false);
+    }
+});
