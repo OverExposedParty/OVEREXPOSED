@@ -275,6 +275,24 @@ socket.on("confessions-updated", async (change) => {
     updateConfessions();
 });
 
+function CreateTempNoPlaceDiv(xPosition, yPosition) {
+    const noPlaceDiv = document.createElement("div");
+    noPlaceDiv.classList.add("no-place");
+    floatingContainer.appendChild(noPlaceDiv);
+
+    noPlaceDiv.style.left = `${parseFloat(xPosition) - cardWidthValue / 4}px`;
+    noPlaceDiv.style.top = `${parseFloat(yPosition) - cardWidthValue / 4}px`;
+    noPlaceDiv.classList.add('visible');
+
+    setTimeout(() => {
+    noPlaceDiv.classList.add('fade-out');
+    setTimeout(() => {
+        if (noPlaceDiv.parentNode) noPlaceDiv.remove();
+    }, 300);
+}, 300);
+
+}
+
 function createFloatingButton(event = null, row, draft = false) {
     const idFromURL = getIDFromURL();
     const [title = "New Title", text = "Type here...", id = new Date().toISOString(), date = Date.now(), xPosition = "0", yPosition = "0"] = row;
@@ -325,6 +343,7 @@ function createFloatingButton(event = null, row, draft = false) {
         }
     );
     if (getOverlappingDiv(noPlaceDiv, document.querySelectorAll(".no-place")) !== null) {
+        CreateTempNoPlaceDiv(xPosition, yPosition);
         showFloatingText(event, "Card cannot be placed here");
         button.remove();
         noPlaceDiv.remove();

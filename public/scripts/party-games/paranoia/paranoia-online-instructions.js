@@ -1,3 +1,25 @@
+async function setPageforUser() {
+  const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
+  const data = await response.json();
+
+  const existingData = await getExistingPartyData(partyCode);
+  if (!existingData || existingData.length === 0) {
+    console.warn('No party data found.');
+    return;
+  }
+  const currentPartyData = existingData[0];
+
+  waitingForPlayerTitle.textContent = "Waiting for " + currentPartyData.usernames[currentPartyData.playerTurn]
+  waitingForPlayerText.textContent = "Reading Card...";
+
+  if (data[0].computerIds[data[0].playerTurn] == deviceId) {
+    setActiveContainers(gameContainerPrivate);
+  }
+  else {
+    setActiveContainers(waitingForPlayerContainer);
+  }
+}
+
 async function NextUserTurn() {
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
@@ -9,17 +31,14 @@ async function NextUserTurn() {
   const selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
 
-  playerHasPassedContainer.classList.remove('active');
-  nextQuestionContainer.classList.remove('active');
-
   if (await GetSelectedPlayerTurnID() == deviceId) {
     waitingForPlayerContainer.classList.remove('active');
-    gameContainerPrivate.classList.add('active');
+    setActiveContainers(gameContainerPrivate);
   }
   else {
     waitingForPlayerTitle.textContent = "Waiting for " + currentPartyData.usernames[currentPartyData.playerTurn]
     waitingForPlayerText.textContent = "Reading Card...";
-    waitingForPlayerContainer.classList.add('active');
+    setActiveContainers(waitingForPlayerContainer);
   }
   const icons = nextQuestionSectionContainer.querySelectorAll('.icon');
 
@@ -54,14 +73,15 @@ async function NextQuestion() {
     if (!gameContainerPublic.classList.contains('active')) {
       currentPartyData.usersReady[index] = true;
     }
-    nextQuestionContainer.classList.add('active');
+    setActiveContainers(nextQuestionContainer);
     let totalUsersReady = 0;
     for (let i = 0; i < icons.length; i++) {
       if (currentPartyData.usersReady[i] == true) {
         totalUsersReady++;
       }
     }
-
+    console.log("totalUsersReady: " + totalUsersReady);
+    
     currentPartyData.usersLastPing[index] = Date.now();
 
     if (totalUsersReady == currentPartyData.computerIds.length) {
@@ -80,6 +100,8 @@ async function NextQuestion() {
         usersLastPing: currentPartyData.usersLastPing,
         currentCardIndex: currentPartyData.currentCardIndex,
       });
+      console.log(currentPartyData.usersReady[0]); //debug
+      console.log(currentPartyData.usersReady[1]); //debug 
     }
     else if (!gameContainerPublic.classList.contains('active')) {
       await updateOnlineParty({
@@ -101,48 +123,52 @@ async function NextQuestion() {
 
 async function WaitingForPlayer(instruction) {
   let parsedInstructions = parseInstruction(instruction)
+
+  if (await GetSelectedPlayerTurnID() === deviceId) {
+    if (parsedInstructions.reason != "READING_CARD") {
+      setActiveContainers(selectUserContainer);
+    }
+  }
+  else {
+    setActiveContainers(waitingForPlayerContainer);
+  }
+
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
+
   if (parsedInstructions.reason == "CHOOSE_PLAYER") {
     waitingForPlayerText.textContent = "Choosing Player...";
-    if (await GetSelectedPlayerTurnID() === deviceId) {
-      gameContainerPrivate.classList.remove('active');
-      selectUserContainer.classList.add('active');
-    }
-    else {
-      selectUserContainer.classList.remove('active');
-      waitingForPlayerContainer.classList.add('active');
-
-    }
+  }
+  else if (parsedInstructions.reason == "READING_CARD") {
+    waitingForPlayerText.textContent = "Reading Card...";
   }
 }
 
 function ChoosingPunishment(instruction) {
-  selectUserContainer.classList.remove('active');
+  console.log("ahhhhh");
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
   waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
   waitingForPlayerText.textContent = "Choosing Punishment...";
   if (parsedInstructions.deviceId == deviceId) {
-    waitingForPlayerContainer.classList.remove('active');
-    selectPunishmentContainer.classList.add('active');
+    setActiveContainers(selectPunishmentContainer);
   }
   else {
-    selectUserContainer.classList.remove('active');
-    waitingForPlayerContainer.classList.add('active');
+    setActiveContainers(waitingForPlayerContainer);
   }
 }
 
 function DisplayPunishmentToUser(instruction) {
-  selectUserContainer.classList.remove('active');
   let parsedInstructions = parseInstructionWithDeviceID(instruction)
   waitingForPlayerText.textContent = "Showing player punishment...";
   if (parsedInstructions.deviceId == deviceId) {
-    completePunishmentContainer.classList.add('active');
+    setActiveContainers(completePunishmentContainer);
   }
   else {
-    waitingForPlayerContainer.classList.add('active');
+    setActiveContainers(waitingForPlayerContainer);
   }
 }
 
+
+//add container 
 async function PunishmentOffer(instruction) {
   let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
   const existingData = await getExistingPartyData(partyCode);
@@ -181,8 +207,8 @@ async function UserHasPassed(instruction) {
   }
   const currentPartyData = existingData[0];
 
-  playerHasPassedContainer.classList.add('active');
-  waitingForPlayerContainer.classList.remove('active');
+  setActiveContainers(playerHasPassedContainer);
+
   playerHasPassedTitle.textContent = parsedInstructions.username + " has passed";
   if (parsedInstructions.reason == "USER_CALLED_WRONG_FACE") {
     playerHasPassedText.textContent = "unsuccessful coin flip";
@@ -219,19 +245,14 @@ async function HasUserDonePunishment(instruction) {
   const index = currentPartyData.computerIds.indexOf(parsedInstructions.deviceId);
   if (parsedInstructions.deviceId != deviceId) {
     if (!confirmPunishmentContainer.classList.contains('active')) {
-      waitingForConfirmPunishmentContainer.classList.remove('active');
-      waitingForPlayerContainer.classList.remove('active');
-      confirmPunishmentContainer.classList.add('active');
-      console.log("device not match");
+      setActiveContainers(confirmPunishmentContainer);
     }
   }
   else if (!waitingForConfirmPunishmentContainer.classList.contains('active')) {
-    waitingForConfirmPunishmentContainer.classList.add('active');
+    setActiveContainers(waitingForConfirmPunishmentContainer);
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
-    waitingForPlayerContainer.classList.remove('active');
-    confirmPunishmentContainer.classList.remove('active');
-    console.log("device match");
+
     await updateOnlineParty({
       partyId: partyCode,
       lastPinged: Date.now(),
@@ -242,49 +263,48 @@ async function HasUserDonePunishment(instruction) {
   console.log("parsedInstructions.deviceId: " + parsedInstructions.deviceId);
   console.log("deviceId: " + deviceId);
 }
+
 async function ChosePunishment(instruction) {
-  let parsedInstructions = parseInstructionWithReasonAndDeviceID(instruction)
+  let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction)
   if (deviceId == parsedInstructions.deviceId) {
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
-      pickHeadsOrTailsContainer.classList.add('active');
+      setActiveContainers(pickHeadsOrTailsContainer);
     }
     else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
-      drinkWheelContainer.classList.add('active');
+      setActiveContainers(drinkWheelContainer);
     }
     else if (parsedInstructions.reason == "PARANOIA_TAKE_TWO_SHOT") {
       punishmentText.textContent = "In order to find out the question you have to take two shot.";
-      completePunishmentContainer.classList.add('active');
+      setActiveContainers(completePunishmentContainer);
     }
   }
   else {
     waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
     if (parsedInstructions.reason == "PARANOIA_COIN_FLIP") {
-      waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Calling coin flip...";
     }
     else if (parsedInstructions.reason == "PARANOIA_DRINK_WHEEL") {
-      waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Spinning drink wheel...";
     }
     else if (parsedInstructions.reason == "PARANOIA_TAKE_TWO_SHOT") {
-      waitingForPlayerContainer.classList.add('active');
       waitingForPlayerText.textContent = "Reading punishment...";
     }
+    setActiveContainers(waitingForPlayerContainer);
   }
 }
 function UserSelectedForPunishment(instruction) {
   let parsedInstructions = parseInstructionWithDeviceID(instruction);
   if (parsedInstructions.deviceId == deviceId) {
-    selectPunishmentContainer.classList.add('active');
-    waitingForPlayerContainer.classList.remove('active');
+    setActiveContainers(selectPunishmentContainer);
   }
   else {
-    waitingForPlayerContainer.classList.add('active');
     waitingForPlayerTitle.textContent = "Waiting for " + GetUsername(parsedInstructions.deviceId);
     waitingForPlayerText.textContent = "Choosing Punishment...";
+    setActiveContainers(waitingForPlayerContainer);
   }
 }
 
+//add container
 async function AnswerToUserDonePunishment(instruction) {
   let parsedInstructions = parseInstructionWithDeviceID(instruction);
   const existingData = await getExistingPartyData(partyCode);
@@ -306,12 +326,8 @@ async function AnswerToUserDonePunishment(instruction) {
     currentPartyData.usersReady[index] = true;
     currentPartyData.usersLastPing[index] = Date.now();
 
-    let totalUsersReady = 0;
-    for (let i = 0; i < icons.length; i++) {
-      if (currentPartyData.usersReady[i] == true) {
-        totalUsersReady++;
-      }
-    }
+    let totalUsersReady = currentPartyData.usersReady.filter(ready => ready).length;
+
     if (totalUsersReady == currentPartyData.usersReady.length) {
       const yesIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("yes")).length;
       const noIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("no")).length;
@@ -344,13 +360,7 @@ async function AnswerToUserDonePunishment(instruction) {
 }
 
 function DisplayPublicCard() {
-  confirmPunishmentContainer.classList.remove('active');
-  playerHasPassedContainer.classList.remove('active');
-  nextQuestionContainer.classList.remove('active');
-  waitingForPlayerContainer.classList.remove('active');
-  waitingForConfirmPunishmentContainer.classList.remove('active');
-
-  gameContainerPublic.classList.add('active');
+  setActiveContainers(gameContainerPublic);
 }
 
 function parseInstruction(input) {

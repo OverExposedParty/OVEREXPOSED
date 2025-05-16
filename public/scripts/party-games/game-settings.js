@@ -242,7 +242,8 @@ onlineButton.addEventListener('click', () => {
         });
         document.querySelectorAll(".user-icon").forEach(el => el.remove());
         createUserIcon(deviceId, "Player 1", true);
-        inputPartyCode.value = "https://overexposed.app/" + partyCode;
+        //inputPartyCode.value = "https://overexposed.app/" + partyCode;
+        inputPartyCode.value = "192.168.0.51:3000/" + partyCode;
 
         enterUsernameContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);

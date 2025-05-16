@@ -55,7 +55,7 @@ const gameContainers = [
   selectUserContainer,
   waitingForPlayerContainer,
   playerHasPassedContainer,
-  gameContainerPublic,
+  gameContainerPrivate,
   gameContainerPublic,
   selectUserButtonContainer,
   confirmPunishmentContainer,
@@ -66,6 +66,19 @@ const gameContainers = [
   coinFlipContainer,
 ];
 
+function setActiveContainers(...activeContainers) {
+  const uniqueActiveContainers = new Set(activeContainers);
+
+  gameContainers.forEach(container => {
+    if (uniqueActiveContainers.has(container)) {
+      container.classList.add('active');
+    } else {
+      container.classList.remove('active');
+    }
+  });
+  console.log("ahhhhhh");
+}
+
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
@@ -75,34 +88,33 @@ buttonChoosePlayer.addEventListener('click', async () => {
 });
 
 buttonNextQuestion.addEventListener('click', () => {
-  gameContainerPublic.classList.remove('active');
   SendInstruction("NEXT_QUESTION");
 });
 
 confirmPlayerButton.addEventListener('click', () => {
-  SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), false);
+  SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
   selectPunishmentContainer.classList.remove('active');
   if (selectPunishmentContainer.getAttribute('id') == 'paranoia-coin-flip') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:"+deviceId, false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:" + deviceId, true);
   }
   else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-drink-wheel') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:"+deviceId, false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:" + deviceId, true);
   }
   else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-take-two-shots') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_TWO_SHOT:"+deviceId, false);
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_TWO_SHOT:" + deviceId, true);
   }
 });
 
 completePunishmentButtonPass.addEventListener('click', () => {
-    completePunishmentContainer.classList.remove('active');
-    SendInstruction("PUNISHMENT_OFFER:PASS:"+deviceId);
+  completePunishmentContainer.classList.remove('active');
+  SendInstruction("PUNISHMENT_OFFER:PASS:" + deviceId);
 });
 completePunishmentButtonConfirm.addEventListener('click', () => {
-    completePunishmentContainer.classList.remove('active');
-    SendInstruction("PUNISHMENT_OFFER:CONFIRM:"+deviceId);
+  completePunishmentContainer.classList.remove('active');
+  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + deviceId);
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
@@ -118,11 +130,11 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
 });
 
 confirmPunishmentButtonYes.addEventListener('click', () => {
-  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:YES:"+deviceId);
+  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:YES:" + deviceId);
 });
 
 confirmPunishmentButtonNo.addEventListener('click', () => {
-  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:NO:"+deviceId);
+  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:NO:" + deviceId);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -137,7 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const selectedQuestionObj = getNextQuestion();
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
-  setPageforUser();
 });
 
 function updateTextContainer(text, cardType, punishment) {
@@ -148,8 +159,6 @@ function updateTextContainer(text, cardType, punishment) {
   textContainerPrivate.textContent = text;
   textContainerPublic.textContent = text;
   selectUserContainerQuestionText.textContent = text;
-
-  
 
   const searchPackName = cardType.toLowerCase();
 
@@ -181,6 +190,10 @@ async function initialisePage() {
   if (data.length > 0) {
     hostDeviceId = data[0].computerIds[0];
     if (data[0].isPlaying === true) {
+      if(deviceId == hostDeviceId){
+          const index = data[0].computerIds.indexOf(deviceId);
+          SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
+      }
       for (let i = 0; i < data[0].computerIds.length; i++) {
         if (data[0].computerIds[i] != deviceId) {
           const userButton = createUserButton(data[0].computerIds[i], data[0].usernames[i]);
@@ -202,7 +215,7 @@ async function initialisePage() {
           selectUserButtonContainer.setAttribute('selected-id', button.getAttribute('id'));
         });
       });
-      if(selectUserButtonContainer.length > 4){
+      if (selectUserButtonContainer.length > 4) {
         selectUserButtonContainer.classList.add('overflow');
       }
 
@@ -225,28 +238,13 @@ async function initialisePage() {
           removeUsersReady[key] = false;
         }
       }
-
+      FetchInstructions();
       await updateOnlineParty({
         partyId: partyCode,
         usersReady: removeUsersReady,
         lastPinged: Date.now(),
       });
     }
-    else {
-    }
-  } else {
-  }
-}
-
-async function setPageforUser() {
-  const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
-  const data = await response.json();
-
-  if (data[0].computerIds[data[0].playerTurn] == deviceId) {
-    gameContainerPrivate.classList.add('active');
-  }
-  else {
-    waitingForPlayerContainer.classList.add('active');
   }
 }
 
@@ -278,6 +276,55 @@ function createUserIcon(id) {
 }
 
 window.addEventListener('beforeunload', function () {
-  if(loadingPage || hostDeviceId != deviceId) return;
+  if (loadingPage || hostDeviceId != deviceId) return;
   deleteParty();
 });
+
+async function FetchInstructions() {
+  console.log("bnowwww");
+  const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
+  const data = await res.json();
+  if (!data || data.length === 0) {
+    PartyDisbanded();
+    return;
+  }
+  if(data[0].userInstructions == ""){
+    setPageforUser();
+  }
+  else if (data[0].userInstructions.includes("DISPLAY_PUBLIC_CARD")) {
+    DisplayPublicCard();
+  }
+  else if (data[0].userInstructions == "NEXT_USER_TURN") {
+    NextUserTurn();
+  }
+  else if (data[0].userInstructions == "NEXT_QUESTION") {
+    NextQuestion();
+  }
+  else if (data[0].userInstructions.includes("USER_HAS_PASSED")) {
+    UserHasPassed(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
+    UserSelectedForPunishment(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
+    WaitingForPlayer(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
+    ChoosingPunishment(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
+    PunishmentOffer(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
+    HasUserDonePunishment(data[0].userInstructions);
+  }
+  else if (data[0].userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
+    AnswerToUserDonePunishment(data[0].userInstructions);
+  }
+}

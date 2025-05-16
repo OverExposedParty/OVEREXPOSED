@@ -246,50 +246,15 @@ socket.on("party-updated", async (change) => {
       userPingToParty(deviceId, partyCode);
       //Paranoia Page
       if (data[0].isPlaying) {
-        if (data[0].userInstructions.includes("DISPLAY_PUBLIC_CARD")) {
-          DisplayPublicCard();
-        }
-        else if (data[0].userInstructions == "NEXT_USER_TURN") {
-          NextUserTurn();
-        }
-        else if (data[0].userInstructions == "NEXT_QUESTION") {
-          NextQuestion();
-        }
-        else if (data[0].userInstructions.includes("USER_HAS_PASSED")) {
-          UserHasPassed(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
-          UserSelectedForPunishment(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
-          WaitingForPlayer(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-          ChosePunishment(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-          ChoosingPunishment(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-          DisplayPunishmentToUser(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
-          PunishmentOffer(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
-          HasUserDonePunishment(data[0].userInstructions);
-        }
-        else if (data[0].userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
-          AnswerToUserDonePunishment(data[0].userInstructions);
-        }
-
-        else if (waitingForHost) {
+         if (waitingForHost) {
           if (hostname === 'overexposed.app') {
             transitionSplashScreen(`${protocol}//${hostname}` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           } else {
             transitionSplashScreen(`${protocol}//${hostname}:3000` + "/" + data[0].gamemode + "/" + partyCode, `/images/splash-screens/${formatPackName(data[0].gamemode)}.png`);
           }
+          return;
         }
+        FetchInstructions();
       }
     }
     //Game Settings page

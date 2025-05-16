@@ -51,7 +51,13 @@ highlight {
     aspect-ratio: var(--cardRatio);
     position: absolute;
     z-index:1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
+.no-place.fade-out {
+    opacity: 0;
+}
+
 .no-place.visible,
 .safe-zone.visible{
     background-color:#41414159;
