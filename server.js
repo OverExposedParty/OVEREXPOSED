@@ -137,7 +137,7 @@ app.get('/api/party-games', async (req, res) => {
 
 app.post('/api/party-games', async (req, res) => {
   try {
-    const { partyId, computerIds, gamemode, usernames, gameSettings, selectedPacks, usersReady, userInstructions, isPlaying, lastPinged, usersLastPing, playerTurn, shuffleSeed, currentCardIndex } = req.body;
+    const { partyId, computerIds, gamemode, usernames, gameSettings, selectedPacks, usersReady, usersConfirmation, userInstructions, isPlaying, lastPinged, usersLastPing, playerTurn, shuffleSeed, currentCardIndex } = req.body;
 
     // Find and update the existing party game document by partyId, or create a new one if none exists
     const updatedParty = await OnlineParty.findOneAndUpdate(
@@ -149,6 +149,7 @@ app.post('/api/party-games', async (req, res) => {
         gameSettings,
         selectedPacks,
         usersReady,
+        usersConfirmation,
         userInstructions,
         isPlaying,
         lastPinged,
@@ -239,11 +240,13 @@ app.post('/api/party-games/remove-user', async (req, res) => {
     const updatedComputerIds = [...party.computerIds];
     const updatedUsernames = [...party.usernames];
     const updatedUsersReady = [...party.usersReady];
+    const updatedUsersConfirmation = [...party.usersConfirmation];
     const updatedUsersLastPing = [...party.usersLastPing];
 
     updatedComputerIds.splice(index, 1);
     updatedUsernames.splice(index, 1);
     updatedUsersReady.splice(index, 1);
+    updatedUsersConfirmation.splice(index, 1);
     updatedUsersLastPing.splice(index, 1);
 
     // Step 3: Only update fields you want. Do not touch required ones like userInstructions.
@@ -254,6 +257,7 @@ app.post('/api/party-games/remove-user', async (req, res) => {
           computerIds: updatedComputerIds,
           usernames: updatedUsernames,
           usersReady: updatedUsersReady,
+          usersConfirmation: updatedUsersConfirmation,
           usersLastPing: updatedUsersLastPing
         }
       }

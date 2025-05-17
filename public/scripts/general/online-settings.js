@@ -90,6 +90,7 @@ function updateOnlineParty({
   gameSettings,
   selectedPacks,
   usersReady,
+  usersConfirmation,
   userInstructions,
   isPlaying,
   lastPinged,
@@ -106,6 +107,7 @@ function updateOnlineParty({
     ...(gameSettings !== undefined && { gameSettings }),
     ...(selectedPacks !== undefined && { selectedPacks }),
     ...(usersReady !== undefined && { usersReady }),
+    ...(usersConfirmation !== undefined && { usersConfirmation }),
     ...(userInstructions !== undefined && { userInstructions }),
     ...(isPlaying !== undefined && { isPlaying }),
     ...(lastPinged !== undefined && { lastPinged }),
@@ -132,12 +134,12 @@ function updateOnlineParty({
     });
 }
 
-async function addUserToParty({ partyId, newComputerId, newUsername, newUserReady }) {
+async function addUserToParty({ partyId, newComputerId, newUsername, newUserReady, newUserConfirmation }) {
   try {
     const existingData = await getExistingPartyData(partyId);
     const currentPartyData = existingData[0] || {};
 
-    const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
+    const { computerIds = [], usernames = [], usersReady = [], usersConfirmation = [] } = currentPartyData;
 
     // Check if user already exists (based on device ID)
     const existingIndex = computerIds.indexOf(newComputerId);
@@ -149,19 +151,20 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
         computerId: newComputerId,
         newUsername,
         newUserReady,
+        usersConfirmation
       });
     }
 
     const updatedComputerIds = [...computerIds, newComputerId];
     const updatedUsernames = [...usernames, newUsername];
-
-    // Ensure usersReady stays in sync by appending to it only
     const updatedUsersReady = [...usersReady, newUserReady];
+    const updatedUserConfirmation = [...usersConfirmation, newUserConfirmation];
     return updateOnlineParty({
       partyId,
       computerIds: updatedComputerIds,
       usernames: updatedUsernames,
       usersReady: updatedUsersReady,
+      usersConfirmation: updatedUserConfirmation,
       gamemode: currentPartyData.gamemode || 'Truth Or Dare',
       isPlaying: currentPartyData.isPlaying || false,
       lastPinged: Date.now(),
@@ -174,7 +177,7 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserRead
 }
 
 
-async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserReady }) {
+async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserReady, newUserConfirmation }) {
   try {
     // Step 1: Fetch existing party data
     const existingData = await getExistingPartyData(partyId);
@@ -184,7 +187,7 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
       throw new Error('No party data found.');
     }
     const currentPartyData = existingData[0]; // Access the actual party data object
-    const { computerIds = [], usernames = [], usersReady = [] } = currentPartyData;
+    const { computerIds = [], usernames = [], usersReady = [], usersConfirmation = [] } = currentPartyData;
 
     // Step 2: Find index of the given computerId (device ID)
     const index = computerIds.indexOf(computerId);
@@ -196,6 +199,7 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
     // Step 3: Update values at the found index
     if (newUsername !== undefined) usernames[index] = newUsername;
     if (newUserReady !== undefined) usersReady[index] = newUserReady;
+    if (newUserConfirmation !== undefined) usersConfirmation[index] = newUserConfirmation;
 
     // Step 4: Send updated data back to the server
     return updateOnlineParty({
@@ -203,6 +207,7 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserRe
       computerIds,
       usernames,
       usersReady,
+      usersConfirmation,
       gamemode: currentPartyData.gamemode || 'default',
       isPlaying: currentPartyData.isPlaying || false,
       lastPinged: Date.now(),

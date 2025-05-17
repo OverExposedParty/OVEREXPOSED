@@ -169,11 +169,12 @@ events.addListener("spinEnd", async (sector) => {
     const currentPartyData = existingData[0] || {};
     if(spinEl.textContent == "Down it"){
         punishmentText.textContent = "In order to find out the question you have to down your drink.";
+        completePunishmentContainer.setAttribute("punishment-type","down-drink")
     }
     else{
         punishmentText.textContent = "In order to find out the question you have to take " + spinEl.textContent;
+        completePunishmentContainer.setAttribute("punishment-type",spinEl.textContent.replace(/\s+/g, '-'))
     }
-
 
     await new Promise(resolve => setTimeout(resolve, 500));
     SendInstruction("DISPLAY_PUNISHMENT_TO_USER:"+deviceId);

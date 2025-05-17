@@ -1,4 +1,4 @@
-let gamemodeSettings = "paranoia-take-two-shots,";
+let gamemodeSettings = "paranoia-take-a-shot,";
 let gamemodeSelectedPacks = "";
 
 
@@ -234,6 +234,7 @@ onlineButton.addEventListener('click', () => {
             gameSettings: gamemodeSettings,
             selectedPacks: gamemodeSelectedPacks,
             usersReady: [false],
+            usersConfirmation: [false],
             userInstructions: "",
             isPlaying: false,
             lastPinged: Date.now(),

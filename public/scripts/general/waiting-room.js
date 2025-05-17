@@ -52,7 +52,8 @@ async function checkPartyExists() {
                         partyId: partyCode,
                         computerId: deviceId,
                         newUsername: "Player" + data[0].computerIds.indexOf(deviceId),
-                        newUserReady: false
+                        newUserReady: false,
+                        newUserConfirmation: false
                     });
                     console.log("partyCode: " + partyCode);
                 }
@@ -70,7 +71,8 @@ async function checkPartyExists() {
                         partyId: partyCode,
                         computerId: deviceId,
                         newUsername: "NewName",
-                        newUserReady: false
+                        newUserReady: false,
+                        newUserConfirmation: false
                     });
                     console.log("partyCode: " + partyCode);
                 }
@@ -79,7 +81,8 @@ async function checkPartyExists() {
                         partyId: partyCode,
                         newComputerId: deviceId,
                         newUsername: 'Player ' + (data[0].usernames.length + 1),
-                        newUserReady: false
+                        newUserReady: false,
+                        newUserConfirmation: false
                     });
                 }
             }

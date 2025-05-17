@@ -8,6 +8,7 @@ const OnlinePartySchema = new mongoose.Schema({
   gameSettings: { type: String, required: true },
   selectedPacks: { type: String, required: true },
   usersReady: { type: [Boolean], required: true },
+  usersConfirmation: { type: [Boolean], required: true },
   userInstructions: { type: String, required: true },
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },

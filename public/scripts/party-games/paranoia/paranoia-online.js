@@ -30,6 +30,7 @@ const gameContainerPrivate = document.querySelector('#private-view.card-containe
 const selectUserButtonContainer = document.getElementById('select-user-container').querySelector('.selected-user-container .button-container');
 
 const confirmPunishmentContainer = document.getElementById('confirm-punishment-container');
+const confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
 const confirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
 const confirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
 
@@ -76,7 +77,6 @@ function setActiveContainers(...activeContainers) {
       container.classList.remove('active');
     }
   });
-  console.log("ahhhhhh");
 }
 
 const punishmentText = document
@@ -88,7 +88,8 @@ buttonChoosePlayer.addEventListener('click', async () => {
 });
 
 buttonNextQuestion.addEventListener('click', () => {
-  SendInstruction("NEXT_QUESTION");
+  gameContainerPublic.classList.remove('active');
+  SetUserConfirmation(deviceId, true, "QUESTION");
 });
 
 confirmPlayerButton.addEventListener('click', () => {
@@ -103,18 +104,19 @@ confirmPunishmentButton.addEventListener('click', () => {
   else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-drink-wheel') {
     SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:" + deviceId, true);
   }
-  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-take-two-shots') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_TWO_SHOT:" + deviceId, true);
+  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-take-a-shot') {
+    completePunishmentContainer.setAttribute("punishment-type","take-a-shot")
+    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:" + deviceId, true);
   }
 });
 
 completePunishmentButtonPass.addEventListener('click', () => {
   completePunishmentContainer.classList.remove('active');
-  SendInstruction("PUNISHMENT_OFFER:PASS:" + deviceId);
+  SendInstruction("PUNISHMENT_OFFER:PASS:" + ":" + deviceId);
 });
 completePunishmentButtonConfirm.addEventListener('click', () => {
   completePunishmentContainer.classList.remove('active');
-  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + deviceId);
+  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + completePunishmentContainer.getAttribute("punishment-type").toUpperCase().replace(/-/g, '_') +":" + deviceId);
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
@@ -130,11 +132,11 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
 });
 
 confirmPunishmentButtonYes.addEventListener('click', () => {
-  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:YES:" + deviceId);
+  SetUserConfirmation(deviceId, true, "PUNISHMENT");
 });
 
 confirmPunishmentButtonNo.addEventListener('click', () => {
-  SendInstruction("ANSWER_TO_USER_DONE_PUNISHMENT:NO:" + deviceId);
+  SetUserConfirmation(deviceId, false, "PUNISHMENT");
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
