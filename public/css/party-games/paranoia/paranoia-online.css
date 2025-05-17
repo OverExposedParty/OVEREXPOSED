@@ -196,7 +196,7 @@
     box-sizing: border-box;
 }
 
-.button-container.overflow button  {
+.button-container.overflow button {
     width: 48%;
 }
 
@@ -283,6 +283,7 @@
         width: 100%;
         font-size: 1.5vh;
     }
+
     .regular-button-container button {
         font-size: 100%;
     }
@@ -292,14 +293,18 @@
     }
 
     .content-container h1 {
-        font-size: 8vw;
+        font-size: 200%;
     }
 
     .content-container h2 {
-        font-size: 5,5vw;
+        font-size: 5, 5vw;
     }
 
     .user-confirmed-section .icon {
         font-size: 2vh;
+    }
+
+    .selected-user-container.very-small {
+        height: 25%;
     }
 }
