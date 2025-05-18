@@ -194,6 +194,7 @@ async function initialisePage() {
     if (data[0].isPlaying === true) {
       if(deviceId == hostDeviceId){
           const index = data[0].computerIds.indexOf(deviceId);
+          console.log("mustarddddd");
           SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
       }
       for (let i = 0; i < data[0].computerIds.length; i++) {
