@@ -5,7 +5,7 @@ const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
-const waitingForConfirmPunishmentContainer = document.getElementById('waiting-for-confirm-punishment-contaier')
+const waitingForConfirmPunishmentContainer = document.getElementById('waiting-for-confirm-punishment-container')
 const waitingForConfirmPunishmentIconContainer = waitingForConfirmPunishmentContainer.querySelector('.content-container .user-confirmed-section');
 
 const nextQuestionContainer = document.getElementById('next-question-container')
