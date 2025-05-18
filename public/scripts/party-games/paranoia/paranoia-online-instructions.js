@@ -124,6 +124,9 @@ async function WaitingForPlayer(instruction) {
     if (parsedInstructions.reason != "READING_CARD") {
       setActiveContainers(selectUserContainer);
     }
+    else{
+      setActiveContainers(gameContainerPublic);
+    }
   }
   else {
     setActiveContainers(waitingForPlayerContainer);
