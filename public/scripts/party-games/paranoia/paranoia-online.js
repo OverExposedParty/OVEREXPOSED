@@ -93,7 +93,9 @@ buttonNextQuestion.addEventListener('click', () => {
 });
 
 confirmPlayerButton.addEventListener('click', () => {
-  SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
+  if(selectUserButtonContainer.getAttribute('selected-id') != ""){
+      SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
+  }
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
