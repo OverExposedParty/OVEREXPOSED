@@ -151,6 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const selectedQuestionObj = getNextQuestion();
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
+  initialisePage();
 });
 
 function updateTextContainer(text, cardType, punishment) {
@@ -184,7 +185,6 @@ function updateTextContainer(text, cardType, punishment) {
   document.querySelector('#public-view .card-type-text').textContent = cardType;
   document.querySelector('#private-view .card-type-text').textContent = cardType;
 }
-initialisePage();
 
 async function initialisePage() {
   const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
@@ -194,7 +194,6 @@ async function initialisePage() {
     if (data[0].isPlaying === true) {
       if(deviceId == hostDeviceId){
           const index = data[0].computerIds.indexOf(deviceId);
-          console.log("mustarddddd");
           SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
       }
       for (let i = 0; i < data[0].computerIds.length; i++) {
