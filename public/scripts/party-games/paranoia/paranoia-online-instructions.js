@@ -125,7 +125,7 @@ async function WaitingForPlayer(instruction) {
       setActiveContainers(selectUserContainer);
     }
     else{
-      setActiveContainers(gameContainerPublic);
+      setActiveContainers(gameContainerPrivate);
     }
   }
   else {
