@@ -2,6 +2,7 @@
     position: fixed;
     top: 0;
     width: 100vw;
+    margin-top: var(--headerheight);
     height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
     display: flex;
     flex-direction: column;
@@ -215,7 +216,6 @@
     background-color: var(--secondarybackgroundcolour);
     position: relative;
     overflow: hidden;
-    margin-top: 10vh;
 }
 
 .selected-user-container.small {

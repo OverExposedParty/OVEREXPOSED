@@ -30,7 +30,7 @@ async function NextUserTurn() {
 
   const selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
   updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType);
-
+  //console.log("GetSelectedPlayerTurnID: " + GetSelectedPlayerTurnID());
   if (await GetSelectedPlayerTurnID() == deviceId) {
     setActiveContainers(gameContainerPrivate);
   }
@@ -124,7 +124,7 @@ async function WaitingForPlayer(instruction) {
     if (parsedInstructions.reason != "READING_CARD") {
       setActiveContainers(selectUserContainer);
     }
-    else{
+    else {
       setActiveContainers(gameContainerPrivate);
     }
   }
@@ -186,7 +186,7 @@ async function PunishmentOffer(instruction) {
 
   if (parsedInstructions.reason == "PASS") {
     if (parsedInstructions.deviceId == deviceId) {
-      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + parsedInstructions.deviceId, true);
+      SendInstruction("USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + deviceId, true);
     }
   }
   else if (parsedInstructions.reason == "CONFIRM") {
@@ -199,7 +199,7 @@ async function PunishmentOffer(instruction) {
       icons[index].classList.add('yes');
       currentPartyData.usersReady[index] = true;
       currentPartyData.usersConfirmation[index] = true;
-      SendInstruction("HAS_USER_DONE_PUNISHMENT:"+parsedInstructions.secondReason + ":" + deviceId, false, null, null, currentPartyData.usersReady);
+      SendInstruction("HAS_USER_DONE_PUNISHMENT:" + parsedInstructions.secondReason + ":" + deviceId, false, null, null, currentPartyData.usersReady);
     }
   }
 }
@@ -230,13 +230,13 @@ async function UserHasPassed(instruction) {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   if (deviceId == parsedInstructions.deviceId) {
-    instruction = "DISPLAY_PUBLIC_CARD";
+    instruction = "NEXT_USER_TURN";
     currentPartyData.currentCardIndex++;
     currentPartyData.playerTurn++;
     if (currentPartyData.playerTurn >= currentPartyData.computerIds.length) {
       currentPartyData.playerTurn = 0;
     }
-    SendInstruction(instruction, true, currentPartyData.playerTurn, currentPartyData.currentCardIndex);
+    SendInstruction(instruction, false, currentPartyData.playerTurn, currentPartyData.currentCardIndex);
   }
 }
 
@@ -253,13 +253,13 @@ async function HasUserDonePunishment(instruction) {
 
   if (parsedInstructions.deviceId != deviceId) {
     if (!confirmPunishmentContainer.classList.contains('active')) {
-      if(parsedInstructions.reason == "TAKE_A_SHOT"){
+      if (parsedInstructions.reason == "TAKE_A_SHOT") {
         confirmPunishmentText.textContent = "Has " + currentPartyData.usernames[index] + " taken their shot";
       }
-      else if(parsedInstructions.reason == "DOWN_DRINK"){
+      else if (parsedInstructions.reason == "DOWN_DRINK") {
         confirmPunishmentText.textContent = "Has " + currentPartyData.usernames[index] + " downed their drink";
       }
-      else if(parsedInstructions.reason.includes("SIP")){
+      else if (parsedInstructions.reason.includes("SIP")) {
         confirmPunishmentText.textContent = "Has " + currentPartyData.usernames[index] + " taken " + parsedInstructions.reason.replace("_", " "); + ".";
       }
       setActiveContainers(confirmPunishmentContainer);
@@ -283,7 +283,7 @@ async function HasUserDonePunishment(instruction) {
 
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction)
-    const existingData = await getExistingPartyData(partyCode);
+  const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
@@ -331,7 +331,7 @@ function UserSelectedForPunishment(instruction) {
 
 //add container
 async function AnswerToUserDonePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction);
+  let parsedInstructions = parseInstructionWithReason_DeviceIdAndUserName(instruction);
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
@@ -356,12 +356,14 @@ async function AnswerToUserDonePunishment(instruction) {
     }
     currentPartyData.usersLastPing[index] = Date.now();
 
-    let totalUsersConfirmation = currentPartyData.usersConfirmation.filter(confirmation => confirmation).length;
-    if (totalUsersConfirmation == currentPartyData.usersConfirmation.length) {
-      const yesIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("yes")).length;
-      const noIconsCount = Array.from(icons).filter(icon => icon.textContent.trim().toLowerCase().includes("no")).length;
+    let totalUsersConfirmation = currentPartyData.usersReady.filter(confirmation => confirmation).length;
+    if (totalUsersConfirmation == currentPartyData.usersReady.length) {
+      const yesIconsCount = Array.from(icons).filter(icon => icon.classList.contains("yes")).length;
+      const noIconsCount = Array.from(icons).filter(icon => icon.classList.contains("no")).length;
 
-      if (yesIconsCount >= noIconsCount) {
+      console.log("yesIconsCount: " + yesIconsCount);
+      console.log("noIconsCount: " + noIconsCount);
+      if (noIconsCount < yesIconsCount) {
         currentPartyData.currentCardIndex++;
         if (parsedInstructions.reason == "QUESTION") {
           instruction = "NEXT_USER_TURN";
@@ -416,161 +418,5 @@ async function DisplayPublicCard() {
     lastPinged: Date.now(),
     usersLastPing: currentPartyData.usersLastPing,
     userInstructions: "NEXT_QUESTION"
-  });
-}
-
-function parseInstruction(input) {
-  const [instruction, reason, username] = input.split(":");
-  return {
-    instruction,
-    reason,
-    username
-  };
-}
-
-function parseInstructionWithDeviceID(input) {
-  const [instruction, deviceId, username] = input.split(":");
-  return {
-    instruction,
-    deviceId,
-    username
-  };
-}
-
-function parseInstructionWithReasonAndDeviceID(input) {
-  const [instruction, reason, deviceId] = input.split(":");
-  return {
-    instruction,
-    reason,
-    deviceId
-  };
-}
-
-function parseInstructionWithTwoReasonsAndDeviceID(input) {
-  const [instruction, reason, secondReason, deviceId] = input.split(":");
-  return {
-    instruction,
-    reason,
-    secondReason,
-    deviceId
-  };
-}
-
-function parseInstructionWithReason_DeviceIdAndUserName(input) {
-  const [instruction, reason, deviceId, username] = input.split(":");
-  return {
-    instruction,
-    reason,
-    deviceId,
-    username
-  };
-}
-
-async function SendInstruction(string, includeUsername = false, currentPlayerTurn = null, questionIndex = null, updateUsersReady = null) {
-  let instruction = "";
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-  const index = currentPartyData.computerIds.indexOf(deviceId);
-  currentPartyData.usersLastPing[index] = Date.now();
-  if (includeUsername) {
-    instruction = string + ":" + currentPartyData.usernames[currentPartyData.playerTurn];
-  }
-  else {
-    instruction = string;
-  }
-  console.log("🧪 Instruction Received:", instruction);
-  if (questionIndex == null && currentPlayerTurn == null && currentPlayerTurn != null) {
-    await updateOnlineParty({
-      partyId: partyCode,
-      userInstructions: instruction,
-      lastPinged: Date.now(),
-      usersLastPing: currentPartyData.usersLastPing,
-      usersReady: updateUsersReady,
-    });
-  }
-  else if (questionIndex == null && currentPlayerTurn == null) {
-    await updateOnlineParty({
-      partyId: partyCode,
-      userInstructions: instruction,
-      lastPinged: Date.now(),
-      usersLastPing: currentPartyData.usersLastPing,
-    });
-  }
-  else if (questionIndex == null) {
-    await updateOnlineParty({
-      partyId: partyCode,
-      userInstructions: instruction,
-      lastPinged: Date.now(),
-      usersLastPing: currentPartyData.usersLastPing,
-      playerTurn: currentPlayerTurn,
-    });
-  }
-  else {
-    await updateOnlineParty({
-      partyId: partyCode,
-      userInstructions: instruction,
-      lastPinged: Date.now(),
-      usersLastPing: currentPartyData.usersLastPing,
-      playerTurn: currentPlayerTurn,
-      currentCardIndex: questionIndex
-    });
-  }
-}
-
-async function GetUsername(computerId) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-
-  const index = currentPartyData.computerIds.indexOf(computerId);
-  return currentPartyData.usernames[index];
-}
-
-async function GetUserID(username) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-
-  const index = currentPartyData.usernames.indexOf(username);
-  return currentPartyData.computerIds[index];
-}
-
-async function GetSelectedPlayerTurnID() {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-  return currentPartyData.computerIds[currentPartyData.playerTurn];
-}
-
-async function SetUserConfirmation(selectedDeviceId, bool, type = null) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-  const index = currentPartyData.computerIds.indexOf(selectedDeviceId);
-  currentPartyData.usersReady[index] = true
-  currentPartyData.usersConfirmation[index] = bool;
-  await updateOnlineParty({
-    partyId: partyCode,
-    usersReady: currentPartyData.usersReady,
-    usersConfirmation: currentPartyData.usersConfirmation,
-    lastPinged: Date.now(),
-    usersLastPing: currentPartyData.usersLastPing,
-    userInstructions: "ANSWER_TO_USER_DONE_PUNISHMENT:" + type
   });
 }

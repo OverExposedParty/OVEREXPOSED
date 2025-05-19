@@ -89,26 +89,28 @@ buttonChoosePlayer.addEventListener('click', async () => {
 
 buttonNextQuestion.addEventListener('click', () => {
   gameContainerPublic.classList.remove('active');
-  SetUserConfirmation(deviceId, true, "QUESTION");
+  SetUserConfirmation(deviceId, true, "QUESTION", true);
 });
 
 confirmPlayerButton.addEventListener('click', () => {
-  if(selectUserButtonContainer.getAttribute('selected-id') != ""){
-      SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
+  if (selectUserButtonContainer.getAttribute('selected-id') != "") {
+    SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
   }
 });
 
 confirmPunishmentButton.addEventListener('click', () => {
-  selectPunishmentContainer.classList.remove('active');
-  if (selectPunishmentContainer.getAttribute('id') == 'paranoia-coin-flip') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:" + deviceId, true);
-  }
-  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-drink-wheel') {
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:" + deviceId, true);
-  }
-  else if (selectPunishmentContainer.getAttribute('id') == 'paranoia-take-a-shot') {
-    completePunishmentContainer.setAttribute("punishment-type","take-a-shot")
-    SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:" + deviceId, true);
+  if (selectPunishmentContainer.getAttribute('select-id')) {
+    selectPunishmentContainer.classList.remove('active');
+    if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-coin-flip') {
+      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:" + deviceId, true);
+    }
+    else if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-drink-wheel') {
+      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:" + deviceId, true);
+    }
+    else if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-take-a-shot') {
+      completePunishmentContainer.setAttribute("punishment-type", "take-a-shot")
+      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:" + deviceId, true);
+    }
   }
 });
 
@@ -118,7 +120,7 @@ completePunishmentButtonPass.addEventListener('click', () => {
 });
 completePunishmentButtonConfirm.addEventListener('click', () => {
   completePunishmentContainer.classList.remove('active');
-  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + completePunishmentContainer.getAttribute("punishment-type").toUpperCase().replace(/-/g, '_') +":" + deviceId);
+  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + completePunishmentContainer.getAttribute("punishment-type").toUpperCase().replace(/-/g, '_') + ":" + deviceId);
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
@@ -134,11 +136,11 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
 });
 
 confirmPunishmentButtonYes.addEventListener('click', () => {
-  SetUserConfirmation(deviceId, true, "PUNISHMENT");
+  SetUserConfirmation(deviceId, true, "PUNISHMENT", true);
 });
 
 confirmPunishmentButtonNo.addEventListener('click', () => {
-  SetUserConfirmation(deviceId, false, "PUNISHMENT");
+  SetUserConfirmation(deviceId, false, "PUNISHMENT", true);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -194,9 +196,9 @@ async function initialisePage() {
   if (data.length > 0) {
     hostDeviceId = data[0].computerIds[0];
     if (data[0].isPlaying === true) {
-      if(deviceId == hostDeviceId){
-          const index = data[0].computerIds.indexOf(deviceId);
-          SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
+      if (deviceId == hostDeviceId) {
+        const index = data[0].computerIds.indexOf(deviceId);
+        SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
       }
       for (let i = 0; i < data[0].computerIds.length; i++) {
         if (data[0].computerIds[i] != deviceId) {
@@ -226,7 +228,7 @@ async function initialisePage() {
       selectPunishmentButtons.forEach(button => {
         button.addEventListener('click', () => {
           selectPunishmentButtons.forEach(btn => btn.classList.remove('active'));
-          selectPunishmentContainer.setAttribute('id', button.getAttribute('id'))
+          selectPunishmentContainer.setAttribute('select-id', button.getAttribute('id'))
           button.classList.add('active');
         });
       });
@@ -292,7 +294,7 @@ async function FetchInstructions() {
     PartyDisbanded();
     return;
   }
-  if(data[0].userInstructions == ""){
+  if (data[0].userInstructions == "") {
     setPageforUser();
   }
   else if (data[0].userInstructions.includes("DISPLAY_PUBLIC_CARD")) {
