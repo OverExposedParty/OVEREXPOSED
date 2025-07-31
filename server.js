@@ -645,39 +645,71 @@ app.get('/most-likely-to/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) 
 });
 
 app.get('/mafia/settings', (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html')); //const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-settings-page.html');
-  //console.log(`Attempting to serve file from: ${filePath}`);
-  //res.sendFile(filePath);
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-settings-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
 });
 
 app.get('/mafia/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html')); //const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-online-page.html');
-  //console.log(`Attempting to serve file from: ${filePath}`);
-  //res.sendFile(filePath);
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-online-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
 });
 
 app.get('/overexposure', (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', 'pages', '404.html')); //const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
-  //console.log(`Attempting to serve file from: ${filePath}`);
-  //res.sendFile(filePath);
+  const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
 });
 
 app.get('/overexposure/:timestamp', (req, res) => {
-  //const timestamp = req.params.timestamp; // This will capture the dynamic timestamp part
-  //const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
+  const timestamp = req.params.timestamp; // This will capture the dynamic timestamp part
+  const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
   // Your logic for handling the request
   res.sendFile(filePath);
 });
 
+/*
+app.get('/insights', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+//Blogs
+app.get('/insights/final-year-stress', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/insights/new-years-eve-party', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'nye-party.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/insights/break-the-ice-not-hearts', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+app.get('/insights/valentines-day', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+*/
+
 app.get('/waiting-room', (req, res) => {
-  //const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
-  //console.log(`Attempting to serve file from: ${filePath}`);
-  //res.sendFile(filePath);
+  const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
 });
 
 app.get('/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
-  //const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
-  //res.sendFile(filePath);
+  const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
+  res.sendFile(filePath);
 });
 
 
