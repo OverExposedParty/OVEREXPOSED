@@ -15,6 +15,9 @@
     <link rel="preload" href="/images/splash-screens/paranoia.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
     <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
@@ -30,7 +33,7 @@
     <style>
         @media (max-width: 768px) and (orientation: landscape) {
 
-            .spin-the-wheel-container,
+            .gamemode-popup-container,
             .coin-flip-container {
                 display: none !important;
             }
@@ -56,7 +59,7 @@
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
     <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
 
-    <div class="spin-the-wheel-container " id="spin-the-wheel-container">
+    <div class="gamemode-popup-container " id="spin-the-wheel-container">
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -102,6 +105,7 @@
 </body>
 
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
 
 <script>
     const gamemode = "paranoia";

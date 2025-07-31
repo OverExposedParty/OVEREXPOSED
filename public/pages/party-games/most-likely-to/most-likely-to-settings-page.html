@@ -12,10 +12,14 @@
     <link rel="preload" href="/images/splash-screens/most-likely-to-settings.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
     <link rel="stylesheet" href="/css/party-games/gamemode-settings-page-styles.css">
     <link rel="stylesheet" href="/css/general/warning-message-style.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/general/waiting-room.css">
+    <link rel="stylesheet" href="/css/party-games/online-error.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/most-likely-to/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/most-likely-to/favicons/favicon-32x32.png">
@@ -72,50 +76,68 @@
 
     <button class="back-button">back</button>
 
+    <div class="error-container">
+        <div class="error-box " id="error-username-empty">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username cant be empty</div>
+        </div>
+        <div class="error-box " id="error-username-taken">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username is already taken</div>
+        </div>
+        <div class="error-box " id="error-username-invalid">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username contains invalid characters</div>
+        </div>
+        <div class="error-box " id="error-not-enough-players">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Insufficient players</div>
+        </div>
+
+        <div class="error-box " id="error-no-packs-selected">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- No packs selected</div>
+        </div>
+    </div>
+
     <div class="main-container">
-        <div class="game-settings-button-container">
-            <button id="packs-settings" class="settings-button active">Packs</button>
-            <button id="game-settings" class="settings-button">Game Settings</button>
-            <button id="online-settings" class="settings-button disabled">Online</button>
+        <div class="game-settings-tab-container">
+            <button id="packs-settings" class="settings-tab active">Packs</button>
+            <button id="game-settings" class="settings-tab">Game Settings</button>
+            <button id="online-settings" class="settings-tab disabled">Online</button>
         </div>
         <div class="packs-container active">
             <div class="header-container">
                 <h2>Most Likely To Packs</h2>
             </div>
             <div class="packs-content-container ">
-                <div class="container">
-                    <div class="button-container">
-                        <button data-key="most-likely-to-calm-and-casual" class="pack-sfw"
-                            data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="var(--secondarypagecolour)"
-                            data-description="A wholesome mix of fun, everyday scenarios and dream-big moments—from going viral to starting a podcast. Light, playful, and perfect for spotting hidden talents and quirks in your group.">CALM
-                            AND CASUAL !</button>
-                        <button data-key="most-likely-to-mild-mischief" class="pack-sfw"
-                            data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="var(--secondarypagecolour)"
-                            data-description="A playful mix of harmless chaos, awkward moments, and everyday slip-ups. Expect accidental texts, lost phones, weird crushes, and low-stakes mayhem that'll make everyone laugh and point fingers.">MILD
-                            MISCHIEF
-                            !!</button>
-                        <button data-key="most-likely-to-unsolicited-strays" class="pack-sfw"
-                            data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="var(--secondarypagecolour)" data-description="A chaotic blend of risky romance, bad decisions, and wild what-ifs. Think ex texts, secret hookups, late-night confessions, and moments you’d never want on record.
+                <div class="button-container">
+                    <button data-key="most-likely-to-calm-and-casual" class="pack sfw"
+                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
+                        data-description="A wholesome mix of fun, everyday scenarios and dream-big moments—from going viral to starting a podcast. Light, playful, and perfect for spotting hidden talents and quirks in your group.">CALM
+                        AND CASUAL !</button>
+                    <button data-key="most-likely-to-mild-mischief" class="pack sfw"
+                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
+                        data-description="A playful mix of harmless chaos, awkward moments, and everyday slip-ups. Expect accidental texts, lost phones, weird crushes, and low-stakes mayhem that'll make everyone laugh and point fingers.">MILD
+                        MISCHIEF
+                        !!</button>
+                    <button data-key="most-likely-to-unsolicited-strays" class="pack sfw"
+                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
+                        data-description="A chaotic blend of risky romance, bad decisions, and wild what-ifs. Think ex texts, secret hookups, late-night confessions, and moments you’d never want on record.
                             ">UNSOLICITED
-                            STRAYS !!!</button>
-                        <button data-key="most-likely-to-open-season" class="pack-nsfw"
-                            data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="var(--secondarypagecolour)"
-                            data-description="No rules, no regrets. A shameless deep dive into hookups, betrayals, dirty secrets, and moments you hope never see daylight.">OPEN
-                            SEASON
-                            !!!!</button>
-                        <button data-key="most-likely-to-unfiltered-assaults" class="pack-nsfw"
-                            data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="var(--secondarypagecolour)"
-                            data-description="Brace yourself. This pack pulls no punches—raw, explicit, and offensively honest. Not for the faint of heart or the easily offended.">UNFILTERED
-                            ASSAULTS !!!!!</button>
-                    </div>
-                    <div class="container-description">
-                        <h2></h2>
-                    </div>
+                        STRAYS !!!</button>
+                    <button data-key="most-likely-to-open-season" class="pack nsfw"
+                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
+                        data-description="No rules, no regrets. A shameless deep dive into hookups, betrayals, dirty secrets, and moments you hope never see daylight.">OPEN
+                        SEASON
+                        !!!!</button>
+                    <button data-key="most-likely-to-unfiltered-assaults" class="pack nsfw"
+                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
+                        data-description="Brace yourself. This pack pulls no punches—raw, explicit, and offensively honest. Not for the faint of heart or the easily offended.">UNFILTERED
+                        ASSAULTS !!!!!</button>
+                </div>
+                <div class="container-description">
+                    <h2></h2>
                 </div>
             </div>
         </div>
@@ -124,18 +146,16 @@
                 <h2>Game Settings</h2>
             </div>
             <div class="game-settings-container">
-                <div class="container">
-                    <div class="button-container">
-                        <button data-key="most-likely-to-drink-wheel" data-primary-color="var(--primarypagecolour)"
-                            data-secondary-color="#B9AA42" class="game-settings-pack-nsfw"
-                            data-description="The Drinking Wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink.">Drink
-                            Wheel</button>
-                        <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
-                            class="game-settings-pack-sfw disabled" id="button-online">Online</button>
-                    </div>
-                    <div class="container-description">
-                        <h2></h2>
-                    </div>
+                <div class="button-container">
+                    <button data-key="most-likely-to-drink-wheel" data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="#B9AA42" class="game-settings-pack nsfw"
+                        data-description="The Drinking Wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink.">Drink
+                        Wheel</button>
+                    <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
+                        class="game-settings-pack nsfw " id="button-online">Online</button>
+                </div>
+                <div class="container-description">
+                    <h2></h2>
                 </div>
             </div>
         </div>
@@ -145,15 +165,13 @@
                 <h2>Online</h2>
             </div>
             <div class="online-settings-container">
-                <div class="container">
-                    <div class="container-section" id="party-code-container">
-                        <input type="text" id="party-code" name="codeInput" value="" readonly>
-                    </div>
-                    <div class="container-section" id="users">
-                    </div>
-                    <div class="user-count">
-                        (0/8)
-                    </div>
+                <div class="container-section" id="party-code-container">
+                    <input type="text" id="party-code" name="codeInput" value="" readonly>
+                </div>
+                <div class="container-section" id="users">
+                </div>
+                <div class="user-count">
+                    (0/8)
                 </div>
             </div>
         </div>
@@ -163,15 +181,21 @@
 
     <div class="waiting-container " id="enter-username">
         <h2>Enter a username</h2>
-        <input type="text" id="party-username" name="codeInput" placeholder="username">
+        <div class="input-container">
+            <input type="text" id="party-username" name="codeInput" placeholder="username" autocomplete="off">
+            <span class="input-count">16</span>
+        </div>
         <div class="waiting-button-container">
-            <button id="submit-username">ENTER</button>
+            <button class="disabled" id="submit-username">SUBMIT</button>
         </div>
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
 <script>
     const partyGameMode = 'Most Likely To'
+    const sessionPartyType = "party-game-most-likely-to";
+    const minPlayerCount = 3;
     document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B9AA42');
 
@@ -195,9 +219,10 @@
 
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/general/online-settings.js"></script>
-<script src="/scripts/party-games/online-game-settings.js"></script>
-<script src="/scripts/party-games/game-settings.js"></script>
-
+<script src="/scripts/party-games/online/online-username.js"></script>
+<script src="/scripts/party-games/online/online-settings.js"></script>
+<script src="/scripts/party-games/online/online-game-settings.js"></script>
+<script src="/scripts/party-games/general/game-settings/game-settings.js"></script>
+<script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>
 
 </html>

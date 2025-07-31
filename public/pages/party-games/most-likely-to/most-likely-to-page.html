@@ -14,6 +14,9 @@
     <link rel="preload" href="/images/splash-screens/most-likely-to.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
     <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
@@ -27,7 +30,7 @@
 
     <style>
         @media (max-width: 768px) and (orientation: landscape) {
-            .spin-the-wheel-container {
+            .gamemode-popup-container {
                 display: none !important;
             }
         }
@@ -49,7 +52,7 @@
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
     <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
 
-    <div class="spin-the-wheel-container" id="spin-the-wheel-container">
+    <div class="gamemode-popup-container" id="spin-the-wheel-container">
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -68,7 +71,7 @@
     <div class="container">
         <div class="content">
             <div class="gamemode-text-container">
-                <img class="gamemode-text-svg" src="/images/party-games/most-likely-to/mlt-text.svg">
+                <img class="gamemode-text-svg" src="/images/party-games/most-likely-to/most-likely-to-text.svg">
             </div>
             <div class="main-image-container">
                 <img src="/images/blank-cards/most-likely-to-blank-card.svg" alt="Most Likely To Blank Card"
@@ -90,6 +93,7 @@
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
 <script>
     const gamemode = "most-likely-to";
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");

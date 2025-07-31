@@ -120,21 +120,32 @@ function shuffleQuestions(seed = null) {
     }
 }
 
-function getNextQuestion(index = null) {
+function getNextQuestion(index = null, type = null, seed = null) {
     let selectedQuestion;
     let cardType;
+    let filteredQuestions = allQuestions;
+    if(type !== null){
+        let stringType = "";
+        if(type == 0){
+            stringType = "truth";
+        }
+        else if(type == 1){
+            stringType = "dare";
+        }
+        filteredQuestions = allQuestions.filter(q => q["question-type"] === stringType);
+    }
     if(index == null){
-        if (currentQuestionIndex >= allQuestions.length) {
+        if (currentQuestionIndex >= filteredQuestions.length) {
             shuffleQuestions();
             currentQuestionIndex = 0;
         }
-        selectedQuestion = allQuestions[currentQuestionIndex];
+        selectedQuestion = filteredQuestions[currentQuestionIndex];
         cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
     
         currentQuestionIndex++;
     }
     else{
-        selectedQuestion = allQuestions[index];
+        selectedQuestion = filteredQuestions[index];
         cardType = questionPackMap[index] || 'Unknown Pack';
     }
     return { question: selectedQuestion['question'], cardType: cardType };

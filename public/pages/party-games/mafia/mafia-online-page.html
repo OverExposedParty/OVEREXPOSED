@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js https://cdn.jsdelivr.net/npm/chart.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://cdn.jsdelivr.net/npm/chart.js https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2 https://overexposed.app:3000 'unsafe-inline';">
+
+    <title>MAFIA</title>
+
+    <link rel="preload" href="/images/splash-screens/mafia.png" as="image">
+
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
+    <link rel="stylesheet" href="/css/party-games/side-buttons.css">
+    <link rel="stylesheet" href="/css/general/rotate-device.css">
+    <link rel="stylesheet" href="/css/party-games/online.css">
+    <link rel="stylesheet" href="/css/party-games/mafia/mafia-gamemode.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/mafia/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/mafia/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/mafia/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/mafia/favicons/favicon-180x180.png">
+
+</head>
+<script src="/scripts/general/header-html.js"></script>
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/mafia.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/mafia.png"
+            alt="Splash Screen"></div>
+
+    <div id="header-placeholder"></div>
+
+
+    <div class="main-container">
+        <div class="timer-wrapper " id="display-day-timer">
+            <img class="timer-label" src="/images/party-games/mafia/disucssion-text.svg">
+
+            <div class="timer-container ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+                <div class="timer-number">10</div>
+            </div>
+        </div>
+
+        <div class="selected-user-container " id="display-role-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h1>You are Mafia</h1>
+            </div>
+            <div class="content-container">
+                <h2>Work with your fellow Mafia members to eliminate the Town. Choose your targets wisely and avoid
+                    suspicion.</h2>
+            </div>
+        </div>
+
+        <div class="selected-user-container " id="select-user-day-phase-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h1>VOTE WHO YOU WANT TO ELIMINATE</h1>
+            </div>
+            <div class="button-container" selected-id="">
+            </div>
+            <div class="select-button-container">
+                <button class="select-button">Confirm</button>
+            </div>
+        </div>
+
+        <div class="selected-user-container " id="select-user-night-phase-container">
+            <div class="timer-wrapper small">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h1>NIGHT HAS FALLEN</h1>
+            </div>
+            <div class="content-container">
+                <h2>CHOOSE A PLAYER TO KILL.</h2>
+            </div>
+            <div class="button-container" selected-id="">
+            </div>
+            <div class="select-button-container">
+                <button class="select-button">Confirm</button>
+            </div>
+        </div>
+
+        <div class="selected-user-container " id="select-civilian-watch-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h1>CIVILIAN WATCH</h1>
+            </div>
+            <div class="content-container">
+                <h2>[plot story]</h2>
+            </div>
+            <div class="button-container" selected-id="">
+                <button id="0"></button>
+                <button id="1"></button>
+                <button id="2"></button>
+                <button id="leave">Go Home</button>
+            </div>
+            <div class="select-button-container">
+                <button class="select-button">Confirm</button>
+            </div>
+        </div>
+
+        <div class="selected-user-container center " id="select-civilian-watch-response-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h2>The town have spoken. Player1 has been kicked</h2>
+            </div>
+        </div>
+
+
+        <div class="selected-user-container center " id="display-town-vote-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h2>The town have spoken. Player1 has been kicked</h2>
+            </div>
+        </div>
+
+        <div class="selected-user-container center " id="display-player-killed-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h2>The town have kicked Player1</h2>
+            </div>
+        </div>
+
+        <div class="selected-user-container center " id="display-game-over-container">
+            <div class="content-container">
+                <h1>MAFIA WIN</h1>
+            </div>
+            <div class="content-container">
+                <h2>MAFIA HAVE OUTLASTED THE TOWN</h2>
+            </div>
+        </div>
+
+        <div class="selected-user-container center " id="party-disbanded-container">
+            <div class="content-container">
+                <h2>Party disbanded</h2>
+            </div>
+        </div>
+
+        <div class="selected-user-container " id="waiting-for-players-container">
+            <div class="timer-wrapper small ">
+                <div class="timer">
+                    <div class="mask"></div>
+                </div>
+            </div>
+            <div class="content-container">
+                <h2>Waiting for Players</h2>
+            </div>
+        </div>
+
+    </div>
+    <div class="side-buttons disabled">
+        <img src="/images/party-games/mafia/role-button.svg" alt="Role Icon" class="side-button" id="role-button">
+    </div>
+</body>
+
+<div class="selected-user-container pop-up" id="pop-up-role-container">
+    <div class="content-container">
+        <h1>You are Mafia</h1>
+    </div>
+    <div class="content-container">
+        <h2>Work with your fellow Mafia members to eliminate the Town. Choose your targets wisely and avoid
+            suspicion.</h2>
+    </div>
+</div>
+
+<script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
+<script>
+    const gamemode = "mafia";
+    const sessionPartyType = "party-game-mafia"
+    const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    document.documentElement.style.setProperty('--primarypagecolour', '#A9323A');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#7A252C');
+
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
+</script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/party-games/online/online-settings.js"></script>
+<script src="/scripts/party-games/online/party-games-online-instructions.js"></script>
+<script src="/scripts/party-games/mafia/mafia-dialogue.js"></script>
+<script src="/scripts/party-games/mafia/mafia-civilian-watch.js"></script>
+<script src="/scripts/party-games/mafia/mafia-online-instructions.js"></script>
+<script src="/scripts/party-games/mafia/mafia-online.js"></script>

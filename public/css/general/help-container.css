@@ -1,0 +1,105 @@
+.help-icon img {
+    height: auto;
+    width: 50%;
+}
+
+.help-icon {
+    cursor: pointer;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.header .icon-container.help-icon {
+    right: calc(var(--headerheight)*1.5);
+}
+
+/* Help Container */
+.help-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55vh;
+    height: auto;
+    padding: 2%;
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    text-align: center;
+    font-family: LemonMilk;
+    border-radius: 25px;
+    max-width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.help-container.active {
+    display: block;
+}
+
+.help-title {
+    color: var(--primarypagecolour);
+    font-size: 200%;
+    margin: 2.5% 0%;
+}
+
+.help-text {
+    color: var(--primarypagecolour);
+    font-size: 100%;
+    margin: 5% 0;
+}
+
+.help-text highlight {
+    color: var(--backgroundcolour);
+    background-color: var(--primarypagecolour);
+    padding: 0 2.5% 0 2.5%;
+    border-radius: 25px;
+}
+
+.help-text highlight.NSFW {
+    color: var(--backgroundcolour);
+    background-color: var(--warningcolour);
+}
+
+@media (orientation: portrait) {
+    .help-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 55vh;
+        height: auto;
+        padding: 2%;
+        border-radius: 25px;
+        max-width: 80vw;
+    }
+
+    .help-text {
+        font-size: 80%;
+        margin: 5% 0;
+    }
+
+    .help-icon img {
+        height: auto;
+        width: 60%;
+    }
+
+    .header .icon-container.help-icon {
+        right: calc(calc(var(--headerheight)/4)*3);
+        /* Align it to the far right of the screen */
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .help-container{
+        display: none !important;
+    }
+}

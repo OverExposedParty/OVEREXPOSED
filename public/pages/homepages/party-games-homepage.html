@@ -17,16 +17,19 @@
 
     <title>PARTY GAMES</title>
 
-    <link rel="preload" href="/images/splash-screens/party-games.png" as="image">
+    <link rel="preload" href="/images/splash-screens/overexposed.png" as="image">
 
-    <link rel="stylesheet" href="/css/homepages/party-games-homepage.css">
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/party-games/favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/party-games/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/party-games/favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/party-games/favicons/favicon-180x180.png">
+    <link rel="stylesheet" href="/css/homepages/party-games-homepage.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
 
     <meta name="robots" content="index, follow">
     <meta name="description"
@@ -37,8 +40,8 @@
     <meta property="og:title" content="Party Games Online - Play for Free | OVEREXPOSED">
     <meta property="og:description"
         content="Get the party started with OVEREXPOSED! Play fun and interactive games like Truth or Dare, Never Have I Ever, and more – all online and free.">
-    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/party-games/og-image.jpg">
-    <meta property="og:url" content="https://overexposed.app/party-games">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/overexposed/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/">
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary_large_image">
@@ -46,8 +49,8 @@
     <meta name="twitter:description"
         content="Looking for the best party games? Play Truth or Dare, Never Have I Ever, Most Likely To, and more for free on OVEREXPOSED!">
     <meta name="twitter:image"
-        content="https://overexposed.app/images/icons/overexposed/meta/party-games/twitter-image.jpg">
-    <link rel="canonical" href="https://overexposed.app/party-games">
+        content="https://overexposed.app/images/icons/overexposed/meta/overexposed/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/">
 
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -76,12 +79,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/party-games.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/party-games.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
-
-    <button class="back-button">HOME</button>
 
     <h1 class="container-title" id="container-title">Party Games</h1>
     <div class="party-games-container">
@@ -129,13 +130,14 @@
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
 <script defer>
-    document.documentElement.style.setProperty('--primarypagecolour', '#FAFAFA');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#D6CFC9');
+    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/party-games/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/party-games/tik-tok-icon.svg)');
-    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/party-games/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposed/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/overexposed/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/overexposed/instagram-icon.svg)');
 
     helpTitle.textContent = 'PARTY GAMES';
 
@@ -163,7 +165,7 @@
                         transitionSplashScreen('most-likely-to/settings', "/images/splash-screens/most-likely-to-settings.png")
                         break;
                     case 4:
-                        //window.location.href = 'coming-soon-settings';
+                        //transitionSplashScreen('mafia/settings', "/images/splash-screens/mafia-settings.png")
                         break;
                     case 5:
                         //window.location.href = 'coming-soon-settings';
@@ -203,7 +205,7 @@
 
     function changeHeaderColor(index) {
         const colors = ['#66CCFF', '#9D8AFF', '#FF9266', '#FFEE66', '#999999', '#999999'];
-        const secondaryColors = ['#427BB9', '#7F71B2', '#B96542', '#B9AA42', '#666666', '#666666'];
+        const secondaryColors = ['#427BB9', '#7F71B2', '#B96542', '#B9AA42', '#666666 ', '#666666'];
         selectedColor = colors[index % colors.length];
         selectedSecondaryColor = secondaryColors[index % secondaryColors.length];
 

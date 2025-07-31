@@ -5,9 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WAITING ROOM</title>
+
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
     <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/general/waiting-room.css">
+    <link rel="stylesheet" href="/css/party-games/online-error.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
@@ -43,20 +48,40 @@
 
     <div id="header-placeholder"></div>
 
+    <div class="error-container">
+        <div class="error-box " id="error-username-empty">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username cant be empty</div>
+        </div>
+        <div class="error-box " id="error-username-taken">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username is already taken</div>
+        </div>
+        <div class="error-box " id="error-username-invalid">
+            <button class="drawer-button"> &lt; </button>
+            <div class="error-text">- Username contains invalid characters</div>
+        </div>
+    </div>
+
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="./images/icons/overexposed/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
     <div class="waiting-container " id="enter-username">
         <h2>Enter a username</h2>
-        <input type="text" id="party-username" name="codeInput" placeholder="username">
+        <div class="input-container">
+            <input type="text" id="party-username" name="codeInput" placeholder="username" autocomplete="off">
+            <span class="input-count">16</span>
+        </div>
         <div class="waiting-button-container">
-            <button id="submit-username">SUBMIT</button>
+            <button class="disabled" id="submit-username">SUBMIT</button>
         </div>
     </div>
     <div class="waiting-container " id="waiting-for-leader">
         <h2>Waiting for Party leader</h2>
-        <input type="text" id="party-username-waiting" name="codeInput" value="username" readonly>
+        <div class="input-container">
+            <input type="text" id="party-username-waiting" name="codeInput" value="username" readonly>
+        </div>
     </div>
     <div class="waiting-container" id="party-does-not-exist">
         <h2>Party does not exist</h2>
@@ -83,6 +108,10 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 </script>
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
+
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/general/online-settings.js"></script>
-<script src="/scripts/general/waiting-room.js"></script>
+<script src="/scripts/party-games/online/online-username.js"></script>
+<script src="/scripts/party-games/online/online-settings.js"></script> 
+<script src="/scripts/party-games/waiting-room/waiting-room.js"></script>
+<script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>

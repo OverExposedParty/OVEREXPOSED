@@ -55,12 +55,9 @@
 
 .logo-container {
     display: flex;
-    /* Use flexbox layout */
     height: var(--headerheight);
     justify-content: center;
-    /* Center horizontally */
     align-items: center;
-    /* Center vertically */
     text-align: center;
     margin: auto;
     cursor: pointer;
@@ -76,23 +73,10 @@
     width: calc(var(--headerheight)*1.5);
     justify-content: center;
     position: absolute;
-    /* Use absolute positioning */
-}
-
-.header .icon-container.settings-icon {
-    right: 0;
-    /* Align it to the far right of the screen */
-
 }
 
 .header .icon-container.extra-menu-icon {
     left: 0;
-    /* Align it to the far right of the screen */
-}
-
-.header .icon-container.help-icon {
-    right: calc(var(--headerheight)*1.5);
-    /* Align it to the far right of the screen */
 }
 
 .header .logo {
@@ -102,9 +86,7 @@
 }
 
 
-.settings-icon,
-.extra-menu-icon,
-.help-icon {
+.extra-menu-icon {
     cursor: pointer;
     position: absolute;
     height: 100%;
@@ -114,9 +96,7 @@
     text-align: center;
 }
 
-.settings-icon img,
-.extra-menu-icon img,
-.help-icon img {
+.extra-menu-icon img {
     height: auto;
     width: 50%;
 }
@@ -202,97 +182,6 @@ body {
     min-width: auto;
 }
 
-.settings-box {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    min-width: 300px;
-    height: auto;
-    padding: 20px;
-    background-color: var(--backgroundcolour);
-    border: 6px solid var(--backgroundcolour);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    display: none;
-    z-index: 1001;
-    text-align: center;
-    font-family: LemonMilk;
-    border-radius: 40px;
-}
-
-.settings-box.active {
-    display: block;
-}
-
-.settings-box h2,
-.settings-box label {
-    color: var(--primarypagecolour);
-    transition: color 0.2s ease;
-}
-
-.settings-option {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: 1.5vh 0;
-    height: 3.5vh;
-}
-
-.settings-option label {
-    font-size: 20px;
-    font-family: LemonMilk;
-    margin-right: 10px;
-}
-
-.toggle-switch {
-    position: absolute;
-    right: 10px;
-    width: 6vh;
-    height: 3.5vh;
-    margin-right: 10px;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #545454;
-    transition: background-color 0.2s ease;
-    border-radius: 3vh;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 2.5vh;
-    width: 2.5vh;
-    left: 0.25vh;
-    bottom: 0.25vh;
-    background-color: white;
-    transition: transform 0.2s ease;
-    border-radius: 50%;
-}
-
-.settings-box #settings-title {
-    font-size: 30px;
-}
-
-.settings-box .settings-content {
-    height: auto;
-}
-
-input:checked+.slider {
-    background-color: var(--primarypagecolour);
-}
-
-input:checked+.slider:before {
-    transform: translateX(2.5vh);
-}
-
 .social-media-container {
     display: flex;
     position: absolute;
@@ -373,58 +262,6 @@ input:checked+.slider:before {
     display: none;
 }
 
-/* Help Container */
-.help-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 55vh;
-    height: auto;
-    padding: 2%;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
-    text-align: center;
-    font-family: LemonMilk;
-    border-radius: 25px;
-    max-width: 60vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    display: none;
-}
-
-.help-container.active {
-    display: block;
-}
-
-.help-title {
-    color: var(--primarypagecolour);
-    font-size: 200%;
-    margin: 2.5% 0%;
-}
-
-.help-text {
-    color: var(--primarypagecolour);
-    font-size: 100%;
-    margin: 5% 0;
-}
-
-.help-text highlight {
-    color: var(--backgroundcolour);
-    background-color: var(--primarypagecolour);
-    padding: 0 2.5% 0 2.5%;
-    border-radius: 25px;
-}
-
-.help-text highlight.NSFW {
-    color: var(--backgroundcolour);
-    background-color: var(--warningcolour);
-}
-
 .overlay-text {
     position: absolute;
     bottom: -1.5%;
@@ -437,23 +274,6 @@ input:checked+.slider:before {
 }
 
 @media (orientation: portrait) {
-    .help-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 55vh;
-        height: auto;
-        padding: 2%;
-        border-radius: 25px;
-        max-width: 80vw;
-    }
-
-    .help-text {
-        font-size: 80%;
-        margin: 5% 0;
-    }
-
     .social-media-container {
         display: flex;
         /* Use flexbox for layout */
@@ -490,9 +310,7 @@ input:checked+.slider:before {
         width: calc(var(--headerheight));
     }
 
-    .settings-icon img,
-    .extra-menu-icon img,
-    .help-icon img {
+    .extra-menu-icon img {
         height: auto;
         width: 60%;
     }
@@ -500,40 +318,6 @@ input:checked+.slider:before {
     .header .icon-container.help-icon {
         right: calc(calc(var(--headerheight)/4)*3);
         /* Align it to the far right of the screen */
-    }
-
-    /* Settings */
-    .settings-box {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px;
-        border: var(--bordersize) solid var(--backgroundcolour);
-        display: none;
-        z-index: 1005;
-        text-align: center;
-        font-family: LemonMilk;
-        border-radius: 40px;
-        min-width: 200px;
-
-    }
-
-    .settings-box #settings-title {
-        font-size: 20px;
-    }
-
-    .settings-option {
-        position: relative;
-        display: flex;
-        align-items: center;
-        margin: 1.5vh 0;
-        height: 3.5vh;
-    }
-
-    .settings-option label {
-        font-size: 20px;
-        font-family: LemonMilk;
-        margin-right: 10px;
     }
 }
 
@@ -607,10 +391,7 @@ input:checked+.slider:before {
     }
 
     .overlay,
-    .settings-box,
-    .help-container,
-    .extra-menu-container,
-    .help-container{
+    .extra-menu-container{
         display: none !important;
     }
 }

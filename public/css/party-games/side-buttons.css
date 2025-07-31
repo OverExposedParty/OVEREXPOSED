@@ -1,0 +1,54 @@
+.side-buttons {
+    height: auto;
+    width: auto;
+    right: 10px;
+    top: calc(var(--headerheight)/2);
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(50%);
+    position: fixed;
+    display: flex;
+    gap: 5px;
+    z-index: 100;
+}
+
+.side-buttons.disabled {
+    display: none;
+}
+
+.side-buttons.single {
+    height: auto;
+    width: auto;
+    right: 1.5%;
+    bottom: 5%;
+    position: fixed;
+    display: flex;
+    gap: 5px;
+}
+
+.side-button {
+    cursor: pointer;
+    width: 7.5vh;
+    height: 7.5vh;
+    z-index: 100;
+    padding: 0.5vh;
+    transition: width 0.3s, height 0.3s, padding 0.3s;
+}
+
+.side-button.active {
+    width: 8.5vh;
+    height: 8.5vh;
+    padding: 0;
+}
+
+.side-button:hover {
+    width: 8.5vh;
+    height: 8.5vh;
+    padding: 0;
+}
+
+.side-button.disabled {
+    color: #6e6e6e;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

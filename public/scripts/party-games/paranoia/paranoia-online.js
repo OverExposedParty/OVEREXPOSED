@@ -5,14 +5,11 @@ const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
-const waitingForConfirmPunishmentContainer = document.getElementById('waiting-for-confirm-punishment-container')
-const waitingForConfirmPunishmentIconContainer = waitingForConfirmPunishmentContainer.querySelector('.content-container .user-confirmed-section');
-
-const nextQuestionContainer = document.getElementById('next-question-container')
-const nextQuestionSectionContainer = nextQuestionContainer.querySelector('.content-container .user-confirmed-section');
+const waitingForPlayersContainer = document.getElementById('waiting-for-confirm-punishment-container')
+const waitingForPlayersIconContainer = waitingForPlayersContainer.querySelector('.content-container .user-confirmed-section');
 
 const selectUserContainer = document.getElementById('select-user-container');
-const selectUserContainerQuestionText = selectUserContainer.querySelector('.content-container h2');;
+const selectUserContainerQuestionText = selectUserContainer.querySelector('.content-container h2');
 
 const confirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
 
@@ -39,8 +36,8 @@ const pickHeadsOrTailsContainer = document.getElementById('heads-or-tails-pick-c
 const selectPunishmentContainer = document.getElementById('select-punishment-container')
 const selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
 
-
-const drinkWheelContainer = document.querySelector('.spin-the-wheel-container');
+const drinkingWheelContainer = document.querySelector('#spin-the-wheel-container');
+const coinTossContainer = document.querySelector('#coin-flip-container');
 
 const buttonChoosePlayer = document.getElementById('button-choose-player');
 const buttonNextQuestion = document.getElementById('button-next-question');
@@ -50,9 +47,8 @@ const completePunishmentContainer = document.getElementById('complete-punishment
 const completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
 const completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container #pass');
 
-const gameContainers = [
-  waitingForConfirmPunishmentContainer,
-  nextQuestionContainer,
+gameContainers.push(
+  waitingForPlayersContainer,
   selectUserContainer,
   waitingForPlayerContainer,
   playerHasPassedContainer,
@@ -63,13 +59,17 @@ const gameContainers = [
   pickHeadsOrTailsContainer,
   selectPunishmentContainer,
   completePunishmentContainer,
-  drinkWheelContainer,
-  coinFlipContainer,
-];
+  drinkingWheelContainer,
+  coinTossContainer,
+);
 
 function setActiveContainers(...activeContainers) {
-  const uniqueActiveContainers = new Set(activeContainers);
+  if (activeContainers == null || activeContainers.length === 0) {
+    gameContainers.forEach(container => container.classList.remove('active'));
+    return;
+  }
 
+  const uniqueActiveContainers = new Set(activeContainers);
   gameContainers.forEach(container => {
     if (uniqueActiveContainers.has(container)) {
       container.classList.add('active');
@@ -79,48 +79,82 @@ function setActiveContainers(...activeContainers) {
   });
 }
 
+
 const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
 buttonChoosePlayer.addEventListener('click', async () => {
-  SendInstruction("WAITING_FOR_PLAYER:CHOOSE_PLAYER", true);
-  // When player presses choose player in private card section 
+  await SendInstruction({
+    instruction: "WAITING_FOR_PLAYER:CHOOSE_PLAYER",
+  });
 });
 
-buttonNextQuestion.addEventListener('click', () => {
+buttonNextQuestion.addEventListener('click', async () => {
   gameContainerPublic.classList.remove('active');
-  SetUserConfirmation(deviceId, true, "QUESTION", true);
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: true,
+    reason: "QUESTION",
+  });
 });
 
-confirmPlayerButton.addEventListener('click', () => {
+confirmPlayerButton.addEventListener('click', async () => {
   if (selectUserButtonContainer.getAttribute('selected-id') != "") {
-    SendInstruction("CHOOSING_PUNISHMENT:" + selectUserButtonContainer.getAttribute('selected-id'), true);
+    await SetVote({
+      option: selectUserButtonContainer.getAttribute('selected-id'),
+      sendInstruction: "CHOOSING_PUNISHMENT"
+    });
+    const selectUserButtons = document.getElementById('select-user-container').querySelectorAll('.selected-user-container .button-container button');
+    selectUserButtons.forEach(button => {
+      button.classList.remove('active');
+    });
+    selectUserButtonContainer.getAttribute('selected-id') != ""
   }
 });
-
-confirmPunishmentButton.addEventListener('click', () => {
+confirmPunishmentButton.addEventListener('click', async () => {
   if (selectPunishmentContainer.getAttribute('select-id')) {
     selectPunishmentContainer.classList.remove('active');
     if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-coin-flip') {
-      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP:" + deviceId, true);
+      await SendInstruction({
+        instruction: "CHOSE_PUNISHMENT:PARANOIA_COIN_FLIP"
+      });
     }
     else if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-drink-wheel') {
-      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL:" + deviceId, true);
+      await SendInstruction({
+        instruction: "CHOSE_PUNISHMENT:PARANOIA_DRINK_WHEEL"
+      });
     }
-    else if (selectPunishmentContainer.getAttribute('select-id') == 'paranoia-take-a-shot') {
+    else if (selectPunishmentContainer.getAttribute('select-id') == 'take-a-shot') {
       completePunishmentContainer.setAttribute("punishment-type", "take-a-shot")
-      SendInstruction("CHOSE_PUNISHMENT:PARANOIA_TAKE_A_SHOT:" + deviceId, true);
+      await SendInstruction({
+        instruction: "CHOSE_PUNISHMENT:TAKE_A_SHOT"
+      });
     }
+    const selectPunishmentButtons = document.getElementById('select-punishment-container').querySelectorAll('.selected-user-container .button-container button');
+    selectPunishmentButtons.forEach(button => {
+      button.classList.remove('active');
+    });
+    selectPunishmentContainer.setAttribute('select-id', "");
   }
 });
 
-completePunishmentButtonPass.addEventListener('click', () => {
+completePunishmentButtonPass.addEventListener('click', async () => {
   completePunishmentContainer.classList.remove('active');
-  SendInstruction("PUNISHMENT_OFFER:PASS:" + ":" + deviceId);
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: false,
+    reason: "PASS",
+    userInstruction: "PUNISHMENT_OFFER"
+  });
 });
-completePunishmentButtonConfirm.addEventListener('click', () => {
+completePunishmentButtonConfirm.addEventListener('click', async () => {
   completePunishmentContainer.classList.remove('active');
-  SendInstruction("PUNISHMENT_OFFER:CONFIRM:" + completePunishmentContainer.getAttribute("punishment-type").toUpperCase().replace(/-/g, '_') + ":" + deviceId);
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: true,
+    reason: "CONFIRM:" + completePunishmentContainer.getAttribute("punishment-type").toUpperCase().replace(/-/g, '_'),
+    userInstruction: "PUNISHMENT_OFFER"
+  });
 });
 
 document.querySelector('#heads-or-tails-pick-container .select-button-container #heads').addEventListener('click', () => {
@@ -135,12 +169,23 @@ document.querySelector('#heads-or-tails-pick-container .select-button-container 
   isHeads = false;
 });
 
-confirmPunishmentButtonYes.addEventListener('click', () => {
-  SetUserConfirmation(deviceId, true, "PUNISHMENT", true);
+confirmPunishmentButtonYes.addEventListener('click', async () => {
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: true,
+    reason: "PUNISHMENT:",
+    userInstruction: "ANSWER_TO_USER_DONE_PUNISHMENT"
+  });
 });
 
-confirmPunishmentButtonNo.addEventListener('click', () => {
-  SetUserConfirmation(deviceId, false, "PUNISHMENT", true);
+confirmPunishmentButtonNo.addEventListener('click', async () => {
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: false,
+    reason: "PUNISHMENT:",
+    userInstruction: "ANSWER_TO_USER_DONE_PUNISHMENT"
+  });
+
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -191,24 +236,27 @@ function updateTextContainer(text, cardType, punishment) {
 }
 
 async function initialisePage() {
-  const response = await fetch(`/api/party-games?partyCode=${partyCode}`);
+  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
   if (data.length > 0) {
-    hostDeviceId = data[0].computerIds[0];
+    joinParty(partyCode);
+    hostDeviceId = data[0].players[0].computerId;
     if (data[0].isPlaying === true) {
-      if (deviceId == hostDeviceId) {
-        const index = data[0].computerIds.indexOf(deviceId);
-        SendInstruction("WAITING_FOR_PLAYER:READING_CARD:" + data[0].usernames[index]);
-      }
-      for (let i = 0; i < data[0].computerIds.length; i++) {
-        if (data[0].computerIds[i] != deviceId) {
-          const userButton = createUserButton(data[0].computerIds[i], data[0].usernames[i]);
+      for (let i = 0; i < data[0].players.length; i++) {
+        if (data[0].players[i].computerId != deviceId) {
+          const userButton = createUserButton(data[0].players[i].computerId, data[0].players[i].username);
           selectUserButtonContainer.appendChild(userButton);
         }
       }
       const partyGamemodeSettings = parseGameSettings(data[0].gameSettings)
       for (let i = 0; i < partyGamemodeSettings.length; i++) {
-        const settingsButton = createUserButton(partyGamemodeSettings[i], formatDashedString(partyGamemodeSettings[i]));
+        let settingsButton;
+        if (partyGamemodeSettings[i] == "take-a-shot") {
+          settingsButton = createUserButton(partyGamemodeSettings[i], partyGamemodeSettings[i].replace(/-/g, " "));
+        }
+        else {
+          settingsButton = createUserButton(partyGamemodeSettings[i], formatDashedString(partyGamemodeSettings[i], data[0].gamemode));
+        }
         selectPunishmentButtonContainer.appendChild(settingsButton);
       }
       const selectUserButtons = document.getElementById('select-user-container').querySelectorAll('.selected-user-container .button-container button');
@@ -232,63 +280,23 @@ async function initialisePage() {
           button.classList.add('active');
         });
       });
-      console.log(data[0].computerIds.length);
-      for (let i = 0; i < data[0].computerIds.length; i++) {
-        waitingForConfirmPunishmentIconContainer.appendChild(createUserIcon(data[0].computerIds[i]));
-        nextQuestionSectionContainer.appendChild(createUserIcon(data[0].computerIds[i]));
+      for (let i = 0; i < data[0].players.length; i++) {
+        waitingForPlayersIconContainer.appendChild(createUserIcon(data[0].players[0].computerId));
       }
-      let removeUsersReady = data[0].usersReady;
-
-      for (let key in removeUsersReady) {
-        if (typeof removeUsersReady[key] === 'boolean') {
-          removeUsersReady[key] = false;
-        }
+      if (deviceId == hostDeviceId) {
+        await SendInstruction({
+          instruction: "WAITING_FOR_PLAYER:READING_CARD",
+          updateUsersReady: false,
+          updateUsersConfirmation: false,
+          fetchInstruction: true
+        });
       }
-      FetchInstructions();
-      await updateOnlineParty({
-        partyId: partyCode,
-        usersReady: removeUsersReady,
-        lastPinged: Date.now(),
-      });
     }
   }
 }
 
-function parseGameSettings(settingsString) {
-  if (!settingsString) return [];
-  return settingsString.split(',').filter(Boolean);
-}
-
-function formatDashedString(input) {
-  const words = input.split('-').slice(1); // Remove the first word
-  return words
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
-
-function createUserButton(id, text) {
-  const button = document.createElement("button");
-  button.id = id;
-  button.textContent = text;
-  return button;
-}
-
-function createUserIcon(id) {
-  const icon = document.createElement('div');
-  icon.id = id;
-  icon.classList.add('icon');
-  icon.textContent = 'O';
-  return icon;
-}
-
-window.addEventListener('beforeunload', function () {
-  if (loadingPage || hostDeviceId != deviceId) return;
-  deleteParty();
-});
-
 async function FetchInstructions() {
-  console.log("bnowwww");
-  const res = await fetch(`/api/party-games?partyCode=${partyCode}`);
+  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await res.json();
   if (!data || data.length === 0) {
     PartyDisbanded();
@@ -319,7 +327,7 @@ async function FetchInstructions() {
     ChosePunishment(data[0].userInstructions);
   }
   else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(data[0].userInstructions);
+    ChoosingPunishment();
   }
   else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
     DisplayPunishmentToUser(data[0].userInstructions);

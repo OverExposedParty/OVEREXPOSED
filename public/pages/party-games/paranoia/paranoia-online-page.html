@@ -8,8 +8,12 @@
         content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
     <title>PARANOIA</title>
     <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/settings.css">
+    <link rel="stylesheet" href="/css/general/help-container.css">
+
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
     <link rel="stylesheet" href="/css/general/rotate-device.css">
-    <link rel="stylesheet" href="/css/party-games/paranoia/paranoia-online.css">
+    <link rel="stylesheet" href="/css/party-games/online.css">
 
     <link rel="stylesheet" href="/css/party-games/coin-flip.css">
     <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
@@ -28,7 +32,7 @@
     <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png"
             alt="Splash Screen"></div>
 
-    <div class="spin-the-wheel-container " id="spin-the-wheel-container">
+    <div class="gamemode-popup-container " id="spin-the-wheel-container">
         <div id="spin_the_wheel">
             <canvas id="wheel" width="300" height="300"></canvas>
             <div id="spin">SPIN</div>
@@ -132,7 +136,7 @@
             </div>
         </div>
 
-        <div class="selected-user-container very-small " id="heads-or-tails-pick-container">
+        <div class="selected-user-container " id="heads-or-tails-pick-container">
             <div class="content-container">
                 <h1>Pick a side</h1>
             </div>
@@ -142,7 +146,7 @@
             </div>
         </div>
 
-        <div class="selected-user-container very-small " id="next-question-container">
+        <div class="selected-user-container " id="next-question-container">
             <div class="content-container">
                 <h2>Next question</h2>
             </div>
@@ -152,7 +156,7 @@
             </div>
         </div>
 
-        <div class="selected-user-container very-small " id="waiting-for-confirm-punishment-container">
+        <div class="selected-user-container  " id="waiting-for-confirm-punishment-container">
             <div class="content-container">
                 <h2>Waiting for players</h2>
             </div>
@@ -162,7 +166,7 @@
             </div>
         </div>
 
-        <div class="selected-user-container very-small " id="waiting-for-player">
+        <div class="selected-user-container " id="waiting-for-player">
             <div class="content-container">
                 <h2>Waiting for Player1</h2>
             </div>
@@ -171,7 +175,7 @@
             </div>
         </div>
 
-        <div class="selected-user-container very-small " id="player-has-passed">
+        <div class="selected-user-container " id="player-has-passed">
             <div class="content-container">
                 <h2>Player1 has passed</h2>
             </div>
@@ -179,7 +183,7 @@
                 <p>Called wrong coin face</p>
             </div>
         </div>
-        <div class="selected-user-container very-small center " id="party-disbanded">
+        <div class="selected-user-container center " id="party-disbanded-container">
             <div class="content-container">
                 <h2>Party disbanded</h2>
             </div>
@@ -187,8 +191,10 @@
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/sound.js" ></script>
 <script>
     const gamemode = "paranoia";
+    const sessionPartyType = "party-game-paranoia";
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
@@ -198,10 +204,10 @@
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/general/online-settings.js"></script>
+<script src="/scripts/party-games/online/online-settings.js"></script> 
 <script src="/scripts/party-games/general/load-questions.js"></script>
-<script src="/scripts/party-games/general/online-instructions.js"></script>
+<script src="/scripts/party-games/online/party-games-online-instructions.js"></script>
 <script src="/scripts/party-games/paranoia/paranoia-online-instructions.js"></script>
 <script src="/scripts/party-games/paranoia/paranoia-online.js"></script>
-<script src="/scripts/party-games/spin-the-wheel-online.js"></script>
-<script src="/scripts/party-games/paranoia/coin-flip-online.js"></script>
+<script src="/scripts/party-games/online/spin-the-wheel-online.js"></script>
+<script src="/scripts/party-games/online/paranoia/coin-flip-online.js"></script>

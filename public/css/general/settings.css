@@ -1,0 +1,157 @@
+.header .icon-container.settings-icon {
+    right: 0;
+}
+
+.settings-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    min-width: 300px;
+    height: auto;
+    padding: 20px;
+    background-color: var(--backgroundcolour);
+    border: 6px solid var(--backgroundcolour);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1001;
+    text-align: center;
+    font-family: LemonMilk;
+    border-radius: 40px;
+}
+
+.settings-icon {
+    cursor: pointer;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.settings-icon img {
+    height: auto;
+    width: 50%;
+}
+
+.settings-box.active {
+    display: block;
+}
+
+.settings-box h2,
+.settings-box label {
+    color: var(--primarypagecolour);
+    transition: color 0.2s ease;
+}
+
+.settings-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 1.5vh 0;
+    height: 3.5vh;
+}
+
+.settings-option label {
+    font-size: 20px;
+    font-family: LemonMilk;
+    margin-right: 10px;
+}
+
+.toggle-switch {
+    position: absolute;
+    right: 10px;
+    width: 6vh;
+    height: 3.5vh;
+    margin-right: 10px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #545454;
+    transition: background-color 0.2s ease;
+    border-radius: 3vh;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 2.5vh;
+    width: 2.5vh;
+    left: 0.25vh;
+    bottom: 0.25vh;
+    background-color: white;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+}
+
+.settings-box #settings-title {
+    font-size: 30px;
+}
+
+.settings-box .settings-content {
+    height: auto;
+}
+
+input:checked+.slider {
+    background-color: var(--primarypagecolour);
+}
+
+input:checked+.slider:before {
+    transform: translateX(2.5vh);
+}
+
+@media (orientation: portrait) {
+
+    .settings-icon img {
+        height: auto;
+        width: 60%;
+    }
+
+
+    .settings-box {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border: var(--bordersize) solid var(--backgroundcolour);
+        display: none;
+        z-index: 1005;
+        text-align: center;
+        font-family: LemonMilk;
+        border-radius: 40px;
+        min-width: 200px;
+
+    }
+
+    .settings-box #settings-title {
+        font-size: 20px;
+    }
+
+    .settings-option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin: 1.5vh 0;
+        height: 3.5vh;
+    }
+
+    .settings-option label {
+        font-size: 20px;
+        font-family: LemonMilk;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .settings-box{
+        display: none !important;
+    }
+}

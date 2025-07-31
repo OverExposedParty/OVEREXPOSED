@@ -38,6 +38,7 @@ body {
     justify-content: space-around;
     height: auto;
     width: auto;
+    max-width: 300px;
     /* Content width will adjust based on main image width */
     max-height: auto;
 }
@@ -66,17 +67,6 @@ body {
     width: 100%;
     /* Set a fixed width or use a percentage */
     height: auto;
-}
-
-
-.text-container {
-    position: absolute;
-    bottom: 10px;
-    color: var(--primarypagecolour);
-    font-size: 2rem;
-    text-align: center;
-    font-weight: bold;
-    font-family: LemonMilk;
 }
 
 .card-type-text {
@@ -125,19 +115,16 @@ body {
     box-sizing: border-box;
 }
 
-
-
 .question-text {
-    font-size: 40%;
+    font-size: 16px;
     margin-bottom: 3.5%;
-    padding: 0 7.5%;
+    padding: 0%;
 }
 
 .punishment-text {
     font-size: 35%;
     color: #ff5f5f;
 }
-
 
 .button-container button {
     font-family: LemonMilk;
@@ -253,17 +240,39 @@ body {
     padding: 5%;
 }
 
+.gamemode-popup-container {
+    background-color: var(--backgroundcolour);
+    height: 350px;
+    width: 350px;
+    border: var(--bordersize) solid var(--primarypagecolour);
+    border-radius: 25px;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 900;
+    display: none;
+}
+
+.gamemode-popup-container.active {
+    display: flex;
+}
+
 @media (orientation: portrait) {
 
     .gamemode-text-container,
     .main-image-container,
     .button-container {
-         /* width: 300px; */
+        /* width: 300px; */
         max-width: 60vw;
     }
+
     .gamemode-text-svg {
-        width: 100%; 
-        height: auto; /* Maintain the aspect ratio */
+        width: 100%;
+        height: auto;
+        /* Maintain the aspect ratio */
     }
 
     .text-container {
