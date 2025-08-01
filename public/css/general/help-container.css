@@ -23,14 +23,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 55vh;
-    padding: 2%;
+    padding: 20px;
     background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--backgroundcolour);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     font-family: LemonMilk;
     border-radius: 25px;
-    max-width: 60vw;
+    min-width: 260px;
+    min-height: 200px;
     display: none;
     flex-direction: row;
     align-items: center;
@@ -51,7 +52,7 @@
 }
 
 .help-arrow {
-    font-size: 16px;
+    font-size: 24px;
     color: var(--primarypagecolour);
     cursor: pointer;
     padding: 0 1rem;
@@ -75,7 +76,7 @@
 
 .help-title {
     color: var(--primarypagecolour);
-    font-size: 20px;
+    font-size: 24px;
     margin: 2.5% 0%;
 }
 
@@ -113,7 +114,6 @@
         transform: translate(-50%, -50%);
         width: 55vh;
         height: auto;
-        padding: 2%;
         border-radius: 25px;
         max-width: 80vw;
     }
