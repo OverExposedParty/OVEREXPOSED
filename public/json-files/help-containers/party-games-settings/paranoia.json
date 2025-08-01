@@ -1,0 +1,43 @@
+[
+    {
+        "title": "GAME SETTINGS",
+        "text": "Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.<br><br> Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to enable <highlight class='NSFW'>NSFW</highlight> mode to access them (this can be found in the settings)."
+    },
+    {
+        "title": "DRINK WHEEL",
+        "text": "Enable the <highlight>Drink Wheel</highlight> to add a fun twist to your drinking game! The wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink."
+    },
+    {
+        "title": "LUCKY COIN FLIP",
+        "text": "If you are chose flip a coin and call it - guess right, and you get to see the question. Guess wrong, and never know."
+    },
+    {
+        "title": "PACK: FRIENDLY FEARS <highlight>!</highlight>",
+        "text": "A fun-filled pack that uncovers who’s most likely to do the unexpected! With questions that highlight your friends' hidden talents, quirks, and surprising traits, you'll be laughing and guessing who’s secretly capable of the wildest things."
+    }
+    ,
+    {
+        "title": "PACK: SHADY SHENANIGANS <highlight>!!</highlight>",
+        "text": "A mischievous pack that reveals the secrets your friends are hiding! From embarrassing hobbies to questionable decisions, this set uncovers who’s most likely to pull off the sneakiest stunts and keeps everyone on their toes with outrageous revelations."
+    }
+    ,
+    {
+        "title": "PACK: SUBTLE SHOTS <highlight>!!!</highlight>",
+        "text": "A revealing pack that brings out the juiciest secrets and hidden truths. From messy relationships to unexpected confessions, this set uncovers who’s most likely to be caught in lies, secrets, and moments of weakness, all while keeping things as subtle as possible."
+    }
+    ,
+    {
+        "title": "PACK: HIDDEN AGENDAS <highlight class='NSFW'>!!!!</highlight>",
+        "text": "This pack dives into the deepest, darkest corners of what people might be hiding. From secret crushes to manipulative behaviors, it reveals who’s got a hidden agenda, who’s playing games, and who might just be out to deceive, all in a playful and subtly revealing way."
+    }
+    ,
+    {
+        "title": "PACK: BEHIND CLOSED DOORS <highlight class='NSFW'>!!!!!</highlight>",
+        "text": "This pack takes you to the world behind closed doors where hidden desires, controversial habits, and taboo topics come to light. Get ready to explore the more private side of people’s relationships, fantasies, and secrets, with questions that delve into the unspoken and sometimes scandalous."
+    }
+    ,
+    {
+        "title": "ONLINE MODE",
+        "text": "COMING SOON"
+    }
+]

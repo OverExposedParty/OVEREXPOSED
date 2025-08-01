@@ -119,31 +119,20 @@
             <div class="packs-content-container">
                 <div class="button-container">
                     <button data-key="never-have-i-ever-simple-admissions" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        data-description="This pack is all about light-hearted confessions and simple yet revealing moments from your past. It's perfect for sharing those small but funny experiences, from embarrassing encounters to bucket-list adventures, and everything in between. Get ready for a fun, no-pressure session of “Never Have I Ever” that’ll spark laughter and maybe even a few unexpected admissions!">SIMPLE
-                        ADMISSIONS !</button>
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">SIMPLE ADMISSIONS !</button>
                     <button data-key="never-have-i-ever-rising-suspicions" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        data-description="This pack will have everyone questioning who's really hiding secrets! It's full of questions that explore the more mischievous and suspicious moments from your past. Whether it’s a shady situation, a close call, or something you’ve done that you hope no one ever finds out, this game will bring out the most unexpected confessions. Get ready for laughs, jaw-dropping stories, and maybe even some shocking revelations.">RISING
-                        SUSPICIONS !!</button>
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">RISING SUSPICIONS !!</button>
                     <button data-key="never-have-i-ever-digging-deeper" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        data-description="This pack pulls no punches. It's all about personal confessions, complicated relationships, emotional slip-ups, and the messy parts of life we usually keep quiet. From heartbreaks and hidden regrets to impulsive choices and raw truths, these questions are designed to spark deeper conversations and unexpected vulnerability. Brace yourself—things might get real.">DIGGING
-                        DEEPER
-                        !!!</button>
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">DIGGING DEEPER !!!</button>
                     <button data-key="never-have-i-ever-verbal-diarrhea" class="pack nsfw"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        data-description="Unfiltered. Unapologetic. Unholy. This pack is not for the faint of heart—it’s where wild nights, chaotic choices, and scandalous hookups take center stage. Expect oversharing, jaw-drops, and more than a few “I can’t believe they said that” moments. If you're ready to spill the messiest tea, this is your battlefield.">VERBAL
-                        DIARRHEA
-                        !!!!</button>
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">VERBAL DIARRHEA !!!!</button>
                     <button data-key="never-have-i-ever-raw-and-unfiltered" class="pack nsfw"
-                        data-primary-color="var(--primarypagecolour)" data-secondary-color="var(--secondarypagecolour)"
-                        data-description="This is the no-holds-barred, X-rated zone. Explicit, daring, and downright filthy—this pack dives deep into your most NSFW stories, taboos, and unspoken kinks. Nothing is too wild, too dirty, or too intimate. If you blush easily, skip this one. If not… welcome to the deep end.">RAW
-                        AND UNFILTERED
-                        !!!!!</button>
-                </div>
-                <div class="container-description">
-                    <h2></h2>
+                        data-primary-color="var(--primarypagecolour)"
+                        data-secondary-color="var(--secondarypagecolour)">RAWAND UNFILTERED !!!!!</button>
                 </div>
             </div>
         </div>
@@ -154,15 +143,10 @@
             <div class="game-settings-container">
                 <div class="button-container">
                     <button data-key="never-have-i-ever-odd-man-out" data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack nsfw"
-                        data-description="Spin the wheel and complete the challenge it lands on to reveal your question. No task, no question—no excuses.">Odd
-                        Man
-                        Out</button>
+                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack nsfw">
+                        Odd Man Out</button>
                     <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
-                        class="game-settings-pack nsfw " id="button-online">Online</button>
-                </div>
-                <div class="container-description">
-                    <h2></h2>
+                        class="game-settings-pack disabled" id="button-online">Online</button>
                 </div>
             </div>
         </div>
@@ -197,34 +181,22 @@
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
+<script src="/scripts/general/sound.js"></script>
 
 <script>
-    const partyGameMode = 'Never Have I Ever'
-    const sessionPartyType = "party-game-never-have-i-ever";
+    const partyGameMode = 'never-have-i-ever';
+    const helpContainerFile = "party-games-settings/" + partyGameMode + '.json';
+    const sessionPartyType = "party-game-" + partyGameMode;
     const minPlayerCount = 2;
+
     document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
-
-    //Header & Settings
-    document.addEventListener('DOMContentLoaded', function () {
-        helpTitle.textContent = 'GAME SETTINGS';
-        helpText.innerHTML = `
-    Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
-    <br><br>
-    Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to enable 
-    <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
-    <br><br>
-    Enable <highlight>Odd Man Out</highlight> to add drinking forfeits! This feature also requires 
-    <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
-`;
-    });
-
 </script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-username.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>

@@ -139,11 +139,7 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/overexposed/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/overexposed/instagram-icon.svg)');
 
-    helpTitle.textContent = 'PARTY GAMES';
-
-    helpText.innerHTML = `
-    Welcome to <highlight>OVEREXPOSED</highlight> Your ultimate online destination for classic party games!!!
-`;
+    const helpContainerFile = "homepage.json";
 
     //HomePage
     const cards = document.querySelectorAll('.grid-item .card');
@@ -219,5 +215,5 @@
 
 
 </script>
-
+<script src="/scripts/general/help-container.js"></script>
 </html>

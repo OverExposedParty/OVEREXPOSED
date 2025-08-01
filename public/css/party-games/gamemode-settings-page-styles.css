@@ -90,7 +90,7 @@ body {
 .packs-content-container,
 .game-settings-container,
 .online-settings-container {
-    height: 50vh;
+    height: 100%;
     padding: 0;
     overflow-y: auto;
     display: flex;
@@ -265,27 +265,6 @@ body {
     font-size: 16px;
 }
 
-.container-description {
-    bottom: 0;
-    width: 100%;
-    display: none;
-    color: var(--primarypagecolour);
-    padding: 1vh 0;
-    position: absolute;
-    height: 30%;
-    overflow-y: auto;
-}
-
-.container-description.active {
-    display: flex;
-}
-
-.container-description h2 {
-    font-size: 20px;
-    text-align: center;
-    padding: 0 10px;
-}
-
 .button-container button:not(.start-game-button) {
     background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--backgroundcolour);
@@ -385,39 +364,18 @@ button.disabled {
 }
 
 @media (orientation: portrait) {
-
-    .packs-header,
-    .settings-header {
-        font-size: 4.5vw;
-    }
-
     .packs-content-container,
     .game-settings-container {
-        margin: 1.5vh 0 0 0;
         align-items: center;
-        height: 50vh;
+        height: 100%;
     }
 
     .button-container {
         margin: 0 auto;
         display: block;
         width: 100%;
-        height: 70%;
+        height: 100%;
         scroll-snap-type: y mandatory;
-    }
-
-    .container-description {
-        bottom: 0;
-        width: 100%;
-        display: none;
-        color: var(--primarypagecolour);
-        position: absolute;
-        height: 25%;
-    }
-
-    .container-description h2 {
-        font-size: 16px;
-        padding: 0 10px;
     }
 
     .button-container button {

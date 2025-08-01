@@ -140,7 +140,10 @@
     </div>
 </body>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+<script src="/scripts/general/header.js"></script>
 <script>
+    const helpContainerFile = 'what-is-overexposed.json';
+
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
     //Header & Settings
@@ -161,8 +164,6 @@
         '/images/what-is-overexposed/front/paranoia.svg',
         '/images/what-is-overexposed/front/never-have-i-ever.svg',
         '/images/what-is-overexposed/front/most-likely-to.svg',
-        '/images/what-is-overexposed/front/insights.svg',
-        '/images/what-is-overexposed/front/overexposure.svg'
 
 
     ];
@@ -174,8 +175,6 @@
         '/images/what-is-overexposed/back/paranoia.svg',
         '/images/what-is-overexposed/back/never-have-i-ever.svg',
         '/images/what-is-overexposed/back/most-likely-to.svg',
-        '/images/what-is-overexposed/back/insights.svg',
-        '/images/what-is-overexposed/back/overexposure.svg'
     ];
 
     const card = document.querySelector('.card');
@@ -374,8 +373,7 @@
 
 </script>
 
-
-<script src="/scripts/general/header.js"></script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="/scripts/general/sound.js" ></script>
 
 </html>

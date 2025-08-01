@@ -180,6 +180,7 @@
 <script>
     const gamemode = "most-likely-to";
     const sessionPartyType = "party-game-most-likely-to";
+    const helpContainerFile = "party-games-online/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B9AA42');
@@ -188,6 +189,7 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/most-likely-to/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
 </script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>

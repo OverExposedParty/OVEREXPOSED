@@ -195,6 +195,7 @@
 <script>
     const gamemode = "paranoia";
     const sessionPartyType = "party-game-paranoia";
+    const helpContainerFile = "party-games/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
@@ -203,6 +204,7 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 </script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script> 
 <script src="/scripts/party-games/general/load-questions.js"></script>

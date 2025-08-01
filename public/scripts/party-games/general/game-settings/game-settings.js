@@ -31,12 +31,6 @@ const userCount = document.querySelector('.user-count');
 
 const settingsButtons = document.querySelectorAll('.button-container button');
 
-const gameSettingsDescriptionContainer = document.querySelector('.settings-container .container-description');
-const packsDescriptionContainer = document.querySelector('.packs-container .container-description');
-
-const gameSettingsDescription = document.querySelector('.settings-container .container-description h2');
-const packsDescription = document.querySelector('.packs-container .container-description h2');
-
 function updateStartGameButton(allUsersReady) {
 
     if (typeof allUsersReady !== 'undefined') {
@@ -311,25 +305,6 @@ warningStartButton.addEventListener('click', () => {
     else {
         transitionSplashScreen(removeSettingsExtensionFromCurrentURL(), `/images/splash-screens/${startGameButton.id}.png`);
     }
-});
-
-settingsButtons.forEach(button => {
-    button.addEventListener('mouseenter', () => {
-        if (packsContainer.classList.contains('active')) {
-            packsDescription.textContent = button.getAttribute('data-description');
-        }
-        else if (gameSettingsContainer.classList.contains('active')) {
-            gameSettingsDescription.textContent = button.getAttribute('data-description');
-        }
-    });
-    button.addEventListener('mouseleave', () => {
-        if (packsContainer.classList.contains('active')) {
-            packsDescription.textContent = "";
-        }
-        else if (gameSettingsContainer.classList.contains('active')) {
-            gameSettingsDescription.textContent = "";
-        }
-    });
 });
 
 function removeSettingsExtensionFromCurrentURL() {

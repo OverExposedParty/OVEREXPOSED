@@ -154,41 +154,21 @@
 
 <script>
     const gamemode = "truth-or-dare";
+    const helpContainerFile = "party-games/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     const spinWheelEnabled = localStorage.getItem('truth-or-dare-drink-wheel') === 'true';
-
     if (!spinWheelEnabled) {
         document.getElementById('spin-button').remove();
     }
+
+        document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 </script>
 <script src="/scripts/party-games/general/load-questions.js"></script>
 <script src="/scripts/party-games/general/party-games.js"></script>
 <script src="/scripts/party-games/truth-or-dare/get-next-question.js"></script>
-
-<script>
-    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
-
-    //Truth Or Dare Page
-    document.addEventListener('DOMContentLoaded', async () => {
-        helpTitle.textContent = 'HOW TO PLAY';
-
-        helpText.innerHTML = `
-    You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare</highlight>.
-    <br><br>
-    <highlight>Truth</highlight> may reveal personal details or secrets.
-    <br><br>
-    <highlight>Dare</highlight> will require you to perform an action.
-    <br><br>
-    Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
-    <highlight>Drinking Punishments</highlight> where failing results in a drinking consequence.
-`;
-    });
-
-</script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="/scripts/party-games/spin-the-wheel.js"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-
-
 </html>

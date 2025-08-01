@@ -256,30 +256,18 @@
 
 <script>
     const partyGameMode = 'Mafia'
-    const sessionPartyType = "party-game-mafia"
+    const sessionPartyType = "party-game-mafia";
+    const helpContainerFile = "party-games-settings/" + partyGameMode.toLowerCase().replace(/\s+/g, '-') + '.json';
+    const minPlayerCount = 5;
+    
     document.documentElement.style.setProperty('--primarypagecolour', '#A9323A');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7A252C');
 
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
-
-    //Header & Settings
-    document.addEventListener('DOMContentLoaded', function () {
-        helpTitle.textContent = 'GAME SETTINGS';
-
-        helpText.innerHTML = `
-    Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.
-    <br><br>
-    Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to 
-    enable <highlight class="NSFW">NSFW</highlight> mode to access them (this can be found in the settings).
-    <br><br>
-    Enable <highlight>Drinking Punishments</highlight> to add drinking forfeits! This feature also requires 
-    <highlight class="NSFW">NSFW</highlight> mode to be enabled in your settings.
-`;
-    });
-
 </script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-username.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>

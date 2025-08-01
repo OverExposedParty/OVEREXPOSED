@@ -33,6 +33,7 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
+
 class LocalStorageObserver {
     constructor() {
         this.listeners = [];
@@ -162,22 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 15000);
 });
 
-// Create the help container
-let helpContainer = document.createElement('div');
-helpContainer.className = 'help-container';
-helpContainer.id = 'help-container';
-
-// Create the button element
-let helpTitle = document.createElement('h2');
-helpTitle.className = 'help-title';
-helpTitle.textContent = '';
-helpContainer.appendChild(helpTitle);
-
-let helpText = document.createElement('p');
-helpText.className = 'help-text';
-
-helpContainer.appendChild(helpText);
-document.body.appendChild(helpContainer);
 
 const overlay = document.createElement('div');
 overlay.classList.add('overlay');

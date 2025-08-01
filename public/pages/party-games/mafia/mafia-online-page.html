@@ -202,6 +202,7 @@
 <script src="/scripts/general/sound.js" ></script>
 <script>
     const gamemode = "mafia";
+    const helpContainerFile = "party-games/" + gamemode + '.json';
     const sessionPartyType = "party-game-mafia"
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#A9323A');
@@ -211,6 +212,7 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
 </script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>
 <script src="/scripts/party-games/online/party-games-online-instructions.js"></script>

@@ -49,8 +49,10 @@
 <script src="/scripts/general/header-html.js"></script>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img
+            src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
 
     <div class="gamemode-popup-container" id="spin-the-wheel-container">
         <div id="spin_the_wheel">
@@ -93,43 +95,28 @@
     </div>
 </body>
 <script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
+<script src="/scripts/general/sound.js"></script>
 <script>
     const gamemode = "most-likely-to";
+    const helpContainerFile = "party-games/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     const spinWheelEnabled = localStorage.getItem('most-likely-to-drink-wheel') === 'true';
     if (!spinWheelEnabled) {
         document.getElementById('spin-button').remove();
     }
-</script>
-<script src="/scripts/party-games/general/load-questions.js"></script>
-<script src="/scripts/party-games/general/party-games.js"></script>
-<script src="/scripts/party-games/general/get-next-question.js"></script>
-<script>
+
     document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B9AA42');
 
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/most-likely-to/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/most-likely-to/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
-
-    //Header & Settings
-    document.addEventListener('DOMContentLoaded', async () => {
-
-        helpTitle.textContent = 'HOW TO PLAY';
-
-        helpText.innerHTML = `
-            You'll be given a question. As a group decided who's most likely to perform or relate to the question best'.
-            <br><br>
-            Whoever the group votes as the person has to perform a punishment.
-            <br><br>
-            Toggle <highlight class="NSFW">NSFW</highlight> mode and activate 
-            <br><highlight>Drink Wheel</highlight>, where the person chosen must spin the wheel and perform the punishment given.
-            `;
-    });
-
 </script>
+<script src="/scripts/party-games/general/load-questions.js"></script>
+<script src="/scripts/party-games/general/party-games.js"></script>
+<script src="/scripts/party-games/general/get-next-question.js"></script>
+<script src="/scripts/general/help-container.js"></script>
 <script src="/scripts/party-games/spin-the-wheel.js"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 
