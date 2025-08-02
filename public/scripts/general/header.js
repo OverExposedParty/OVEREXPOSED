@@ -491,3 +491,16 @@ function updateVh() {
 
 window.addEventListener('load', updateVh);
 window.addEventListener('resize', updateVh);
+
+  let lastInputType = '';
+
+  function setInputType(type) {
+    if (lastInputType === type) return;
+    lastInputType = type;
+
+    document.body.classList.remove('using-touch', 'using-mouse');
+    document.body.classList.add(`using-${type}`);
+  }
+
+  window.addEventListener('touchstart', () => setInputType('touch'), true);
+  window.addEventListener('mousemove', () => setInputType('mouse'), true);
