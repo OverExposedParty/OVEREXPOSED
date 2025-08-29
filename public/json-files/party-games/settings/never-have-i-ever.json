@@ -12,7 +12,7 @@
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "sfw",
-            "settings-active": true
+            "settings-active": false
         }
     ]
 }
