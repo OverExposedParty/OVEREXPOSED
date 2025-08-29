@@ -2,10 +2,10 @@ let gamemodeSettings;
 let gamemodeSelectedPacks = "";
 let allUsersReady = undefined;
 
-if(partyGameMode == "never-have-i-ever") {
+if (partyGameMode == "never-have-i-ever") {
     gamemodeSettings = "take-a-sip,";
 }
-else{
+else {
     gamemodeSettings = "take-a-shot,";
 }
 
@@ -177,16 +177,18 @@ function SetGameSettingsButtons() {
             }
         });
     });
-    onlineButton.addEventListener('click', async () => {
-        if (onlineButton.classList.contains('active')) {
-            userCustomisationIcon.classList.remove('disabled');
-            await ToggleOnlineMode(true);
-        }
-        else {
-            userCustomisationIcon.classList.add('disabled');
-            await ToggleOnlineMode(false);
-        }
-    });
+    if (onlineButton) {
+        onlineButton.addEventListener('click', async () => {
+            if (onlineButton.classList.contains('active')) {
+                userCustomisationIcon.classList.remove('disabled');
+                await ToggleOnlineMode(true);
+            }
+            else {
+                userCustomisationIcon.classList.add('disabled');
+                await ToggleOnlineMode(false);
+            }
+        });
+    }
 }
 
 backButton.addEventListener('click', () => {

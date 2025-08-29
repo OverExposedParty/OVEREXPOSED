@@ -281,13 +281,16 @@ button.disabled {
 }
 
 @media (orientation: portrait) {
+    .main-settings-container {
+        height: 55vh;
+    }
 
     .packs-container,
     .settings-container,
     .online-game-settings-container {
         width: 90vw;
         max-width: 1280px;
-        height: 70vh;
+        height: 100%;
     }
 
     .start-game-button {
