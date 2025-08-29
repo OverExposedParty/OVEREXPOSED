@@ -214,7 +214,7 @@ function changeFavicon(gamemode) {
 function SetGamemodeContainer() {
   UpdateGamemodeContainer()
   onlineSettingTab.classList.remove('disabled');
-  inputPartyCode.value = `http://localhost:3000/${partyCode}`;
+  inputPartyCode.value = `http://overexposed.app/${partyCode}`;
 
 }
 

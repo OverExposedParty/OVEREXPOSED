@@ -391,7 +391,7 @@ function StartOnlineSession() {
     document.querySelectorAll(".user-icon").forEach(el => el.remove());
     createUserIcon(deviceId, "Player 1", true);
     //inputPartyCode.value = "https://overexposed.app/" + partyCode;
-    inputPartyCode.value = "http://localhost:3000/" + partyCode;
+    inputPartyCode.value = "http://overexposed.app/" + partyCode;
 
     enterUsernameContainer.classList.add('active');
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
