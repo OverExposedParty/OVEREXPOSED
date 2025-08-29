@@ -290,7 +290,7 @@ button.disabled {
     .online-game-settings-container {
         width: 90vw;
         max-width: 1280px;
-        height: 100%;
+        height: 70%;
     }
 
     .start-game-button {
