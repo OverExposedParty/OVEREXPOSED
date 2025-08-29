@@ -17,7 +17,7 @@
 }
 
 @font-face {
-    src: url('./fonts/LemonMilk/LEMONMILK-Medium.otf');
+    src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
     font-family: LemonMilk;
 }
 

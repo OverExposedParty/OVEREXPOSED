@@ -1,0 +1,54 @@
+{
+    "most-likely-to-packs": [
+        {
+            "pack-name": "calm-and-casual",
+            "pack-path": "/json-files/party-games/questions/most-likely-to/calm-and-casual.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 1,
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "mild-mischief",
+            "pack-path": "/json-files/party-games/questions/most-likely-to/mild-mischief.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 2,
+            "pack-restriction": "sfw",
+            "pack-active": true 
+        },
+        {
+            "pack-name": "unsolicited-strays",
+            "pack-path": "/json-files/party-games/questions/most-likely-to/unsolicited-strays.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 3,
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "open-season",
+            "pack-path": "/json-files/party-games/questions/most-likely-to/open-season.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 4,
+            "pack-restriction": "nsfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "unfiltered-assaults",
+            "pack-path": "/json-files/party-games/questions/most-likely-to/unfiltered-assaults.json",
+            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 5,
+            "pack-restriction": "nsfw",
+            "pack-active": true
+        }
+    ]
+}

@@ -14,14 +14,6 @@
     <link rel="preload" href="/images/splash-screens/paranoia-settings.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-
-    <link rel="stylesheet" href="/css/party-games/gamemode-settings-page-styles.css">
-    <link rel="stylesheet" href="/css/general/warning-message-style.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
-    <link rel="stylesheet" href="/css/general/waiting-room.css">
-    <link rel="stylesheet" href="/css/party-games/online-error.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/paranoia/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/paranoia/favicons/favicon-32x32.png">
@@ -60,15 +52,22 @@
     gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
-<script src="/scripts/general/header-html.js"></script>
-
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
             src="/images/splash-screens/paranoia-settings.png" alt="Splash Screen"></div>
     <div class="splash-screen-container" id="splash-screen-container"><img
             src="/images/splash-screens/paranoia-settings.png" alt="Splash Screen"></div>
 
+    <div class="chat-box">
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+        </div>
+        <div class="chat-messages">
+        </div>
+    </div>
+
     <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
 
     <div class="warning-box" id="warning-box">
         <h2 id="warning-title" class="warning-title">NSFW</h2>
@@ -79,114 +78,22 @@
 
     <button class="back-button">back</button>
 
-    <div class="error-container">
-        <div class="error-box " id="error-username-empty">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username cant be empty</div>
-        </div>
-
-        <div class="error-box " id="error-username-taken">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username is already taken</div>
-        </div>
-
-        <div class="error-box " id="error-username-invalid">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username contains invalid characters</div>
-        </div>
-
-        <div class="error-box " id="error-not-enough-players">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Insufficient players</div>
-        </div>
-
-        <div class="error-box " id="error-no-packs-selected">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- No packs selected</div>
-        </div>
-    </div>
+    <div class="error-container username gamemode-settings" id="placeholder-error-container"></div>
 
     <div class="main-container">
-        <div class="game-settings-tab-container">
-            <button id="packs-settings" class="settings-tab active">Packs</button>
-            <button id="game-settings" class="settings-tab">Game Settings</button>
-            <button id="online-settings" class="settings-tab disabled">Online</button>
-        </div>
-        <div class="packs-container active">
-            <div class="header-container">
-                <h2 class="packs-header">Paranoia Packs</h2>
+        <div class=main-settings-container>
+            <div class="game-settings-tab-container">
+                <button id="packs-settings" class="settings-tab active">Packs</button>
+                <button id="game-settings" class="settings-tab">Game Settings</button>
+                <button id="online-settings" class="settings-tab disabled">Online</button>
             </div>
-            <div class="packs-content-container">
-                <div class="button-container">
-                    <button data-key="paranoia-friendly-fears" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">FRIENDLY FEARS !</button>
-                    <button data-key="paranoia-shady-shenanigans" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">SHADY SHENANIGANS !!</button>
-                    <button data-key="paranoia-subtle-shots" class="pack sfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">SUBTLE SHOTS !!!</button>
-                    <button data-key="paranoia-hidden-agendas" class="pack nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">HIDDEN AGENDAS !!!!</button>
-                    <button data-key="paranoia-behind-closed-doors" class="pack nsfw"
-                        data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)">BEHIND CLOSED DOORS !!!!!</button>
-                </div>
-            </div>
-        </div>
-        <div class="settings-container">
-            <div class="header-container">
-                <h2 class="settings-header">Game Settings</h2>
-            </div>
-            <div class="game-settings-container">
-                <div class="button-container">
-                    <button data-key="paranoia-drink-wheel" data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack nsfw">
-                        Drink Wheel</button>
-                    <button data-key="paranoia-coin-flip" data-primary-color="var(--primarypagecolour)"
-                        data-secondary-color="var(--secondarypagecolour)" class="game-settings-pack nsfw">
-                        Lucky Coin Flip</button>
-                    <button data-primary-color="var(--primarypagecolour)" data-secondary-color="#B9AA42"
-                        class="game-settings-pack disabled" id="button-online">Online</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="online-game-settings-container">
-            <div class="header-container">
-                <h2>Online</h2>
-            </div>
-            <div class="online-settings-container">
-                <div class="container-section" id="party-code-container">
-                    <input type="text" id="party-code" name="codeInput" value="" readonly>
-                </div>
-                <div class="container-section" id="users">
-                </div>
-                <div class="user-count">
-                    (0/8)
-                </div>
-            </div>
-        </div>
-
-        <button class="start-game-button" id="paranoia">Start Game</button>
-    </div>
-
-    <div class="waiting-container " id="enter-username">
-        <h2>Enter a username</h2>
-        <div class="input-container">
-            <input type="text" id="party-username" name="codeInput" placeholder="username" autocomplete="off">
-            <span class="input-count">16</span>
-        </div>
-        <div class="waiting-button-container">
-            <button class="disabled" id="submit-username">SUBMIT</button>
+            <div id="gamemode-settings-placeholder" data-template="paranoia"></div>
+            <button class="start-game-button" id="paranoia">Start Game</button>
         </div>
     </div>
+
+    <div id="enter-username-placeholder"></div>
 </body>
-
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js"></script>
 
 <script>
     const partyGameMode = 'paranoia';
@@ -200,14 +107,17 @@
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
-
 </script>
-<script src="/scripts/general/help-container.js"></script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/html-templates/online/enter-username-template.js" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" defer></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" defer></script>
+
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/party-games/online/online-username.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>
 <script src="/scripts/party-games/online/online-game-settings.js"></script>
-<script src="/scripts/party-games/general/game-settings/game-settings.js"></script>
-<script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>
+<script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
 
+<script src="/scripts/party-games/general/chat-log.js"></script>
 </html>

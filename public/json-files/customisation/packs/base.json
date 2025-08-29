@@ -1,0 +1,160 @@
+{
+    "customisation-base": [
+        {
+            "id": "A000",
+            "name": "OVEREXPOSED BLUE",
+            "file-path": "/images/user-customisation/colour/base/overexposed-blue.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A001",
+            "name": "PARANOIA PURPLE",
+            "file-path": "/images/user-customisation/colour/base/paranoia-purple.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A002",
+            "name": "NHIE ORANGE",
+            "file-path": "/images/user-customisation/colour/base/nhie-orange.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A003",
+            "name": "MLT YELLOW",
+            "file-path": "/images/user-customisation/colour/base/mlt-yellow.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A004",
+            "name": "MAFIA MAROON",
+            "file-path": "/images/user-customisation/colour/base/mafia-maroon.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A100",
+            "name": "BUZZ CUT",
+            "file-path": "/images/user-customisation/head-slot/base/buzz-cut.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A101",
+            "name": "PIGTAIL BRAIDS",
+            "file-path": "/images/user-customisation/head-slot/base/pigtail-braids.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A102",
+            "name": "HEAD BAND",
+            "file-path": "/images/user-customisation/head-slot/base/head-band.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A103",
+            "name": "HEAD BANDAGE",
+            "file-path": "/images/user-customisation/head-slot/base/head-bandage.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A104",
+            "name": "NAPPY HEAD",
+            "file-path": "/images/user-customisation/head-slot/base/nappy-head.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A105",
+            "name": "CARDBOARD BOX",
+            "file-path": "/images/user-customisation/head-slot/base/cardboard-box.svg",
+            "slot": "head-slot"
+        },
+                {
+            "id": "A106",
+            "name": "POST-IT NOTE",
+            "file-path": "/images/user-customisation/head-slot/base/post-it-note.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "A200",
+            "name": "LINE EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/line-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A201",
+            "name": "DOT EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/dot-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A202",
+            "name": "CROSSED OUT EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/crossed-out-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A203",
+            "name": "WIDE EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/wide-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A204",
+            "name": "GLASSES",
+            "file-path": "/images/user-customisation/eyes-slot/base/glasses.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A205",
+            "name": "SWIRLY EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/swirly-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A206",
+            "name": "PUPPY EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base/puppy-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "A300",
+            "name": "LINE SMILE",
+            "file-path": "/images/user-customisation/mouth-slot/base/line-smile.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A301",
+            "name": "LINE FROWN",
+            "file-path": "/images/user-customisation/mouth-slot/base/line-frown.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A302",
+            "name": "LINE STRAIGHT",
+            "file-path": "/images/user-customisation/mouth-slot/base/line-straight.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A303",
+            "name": "LINE SQUIGGLY",
+            "file-path": "/images/user-customisation/mouth-slot/base/line-squiggly.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A304",
+            "name": "HOLE MOUTH",
+            "file-path": "/images/user-customisation/mouth-slot/base/hole.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A305",
+            "name": "TWO TEETH",
+            "file-path": "/images/user-customisation/mouth-slot/base/two-teeth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "A306",
+            "name": "TONGUE OUT",
+            "file-path": "/images/user-customisation/mouth-slot/base/tongue-out.svg",
+            "slot": "mouth-slot"
+        }
+    ]
+}

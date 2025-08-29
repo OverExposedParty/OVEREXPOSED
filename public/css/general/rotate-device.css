@@ -5,6 +5,7 @@
 .landscape-message {
     position: fixed;
     left: 0;
+    top:0;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -16,6 +17,11 @@
     font-family: LemonMilk;
     display: none;
     color:var(--primarypagecolour);
+        background-image: url('/images/background-tile.png');
+    background-size: 384px 414px;
+    background-position: top left;
+    background-repeat: repeat;
+    background-color: var(--secondarybackgroundcolour);
 }
 
 .rotate-icon {
@@ -58,7 +64,7 @@
 }
 
 
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 900px) and (orientation: landscape) {
     .landscape-message {
         display: flex;
     }

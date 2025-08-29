@@ -11,6 +11,22 @@ body {
     src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
 }
 
+/* Buttons */
+button,
+.button {
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+button.disabled {
+    background-color: #333333 !important;
+    color: #666666 !important;
+    border-color: #333333 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* Home Button */
 .home-button {
     position: absolute;
     top: calc(var(--headerheight) + 20px);
@@ -23,26 +39,28 @@ body {
     border-radius: 50px;
     background-color: var(--secondarybackgroundcolour);
     color: var(--primarypagecolour);
-    cursor: pointer;
     text-align: center;
     z-index: 600;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.button {
-    transition: background-color 0.3s, color 0.3s;
 }
 
 .main-container {
     position: fixed;
-    top: 0;
     width: 100vw;
+    top: var(--headerheight);
     height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
-    margin-top: 15vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    align-items: center;
     z-index: 100;
+}
+
+/* Main Containers */
+.main-settings-container {
+    width: auto;
+    height: 70vh;
+    position: fixed;
 }
 
 .packs-container,
@@ -53,7 +71,7 @@ body {
     border-radius: 10px;
     width: 90vw;
     max-width: 1280px;
-    height: 70%;
+    height: 100%;
     background-color: var(--secondarybackgroundcolour);
     position: relative;
 }
@@ -66,16 +84,14 @@ body {
     padding: 0;
 }
 
-
-
+/* Headers */
 .header-container {
     display: flex;
-    padding: 10px 0;
-    height: auto;
-    width: 100%;
     justify-content: center;
     align-items: center;
+    padding: 10px 0;
     margin: 15px 0;
+    width: 100%;
 }
 
 .header-container h2 {
@@ -87,10 +103,11 @@ body {
     margin: 0;
 }
 
+/* Content Containers */
 .packs-content-container,
 .game-settings-container,
 .online-settings-container {
-    height: 100%;
+    height: 60vh;
     padding: 0;
     overflow-y: auto;
     display: flex;
@@ -102,16 +119,32 @@ body {
     flex-direction: column;
 }
 
+/* Game Settings Tabs */
 .game-settings-tab-container {
     display: grid;
     grid-auto-flow: column;
     justify-content: left;
     align-items: center;
-    width: 80%;
+    width: 100%;
     max-width: 1280px;
     margin: 0 auto;
 }
 
+.game-settings-tab-container button {
+    font-family: LemonMilk;
+    padding: 5px 20px;
+    background-color: var(--secondarybackgroundcolour);
+    color: #999999;
+    border: none;
+    border-radius: 10px 10px 0 0;
+}
+
+.game-settings-tab-container button.active {
+    background-color: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+}
+
+/* Button Containers */
 .button-container {
     display: flex;
     flex-wrap: wrap;
@@ -129,143 +162,15 @@ body {
     min-width: 120px;
     border-radius: 50px;
     text-align: center;
-    cursor: pointer;
     white-space: nowrap;
-    width: auto;
-    height: auto;
-    transition: background-color 0.3s, color 0.3s;
 }
 
-
-.container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+[data-template="waiting-room"] .button-container button {
+    cursor: none;
+    pointer-events: none;
 }
 
-.container-section {
-    position: relative;
-    width: 80%;
-    display: flex;
-    color: var(--primarypagecolour);
-    justify-content: left;
-    align-items: center;
-    margin: 0;
-    padding: 1vh 10%;
-    gap: 15px 5px;
-}
-
-.container-section input {
-    width: 100%;
-    font-size: 2.5vh;
-
-    color: var(--primarypagecolour);
-    background-color: var(--backgroundcolour);
-    border-color: var(--backgroundcolour);
-
-    outline: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-
-    user-select: text;
-    pointer-events: auto;
-    pointer-events: auto;
-}
-
-.container-section .user-icon {
-    position: relative;
-    font-family: LemonMilk;
-    font-size: 1vw;
-    padding: 10px 20px;
-    min-width: 120px;
-    border-radius: 50px;
-    text-align: center;
-    white-space: nowrap;
-    box-sizing: border-box;
-    width: auto;
-    box-shadow: none;
-    transition: background-color 0.3s, color 0.3s;
-
-    background-color: var(--backgroundcolour);
-    border-color: var(--backgroundcolour);
-    color: var(--primarypagecolour);
-
-    padding-right: 25px;
-}
-
-.user-icon {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-}
-
-.user-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-family: LemonMilk;
-    font-size: 1vw;
-    padding: 10px 20px;
-    min-width: 120px;
-    border-radius: 50px;
-    cursor: pointer;
-    white-space: nowrap;
-    box-sizing: border-box;
-    background-color: var(--backgroundcolour);
-    color: var(--primarypagecolour);
-    border: none;
-    position: relative;
-    width: auto;
-}
-
-.checkmark {
-    width: 16px;
-    height: 16px;
-    border: 0px solid #333;
-    /* Adjust border color as needed */
-    border-radius: 4px;
-    display: inline-block;
-    margin-right: 10px;
-    position: relative;
-    cursor: default;
-}
-
-/* The checked state styling */
-.checkmark.checked {
-    background-color: var(--primarypagecolour);
-}
-
-/* Adding a checkmark symbol when checked */
-.checkmark.checked::before {
-    content: '✔';
-    position: absolute;
-    top: 0;
-    left: 3px;
-    font-size: 12px;
-    /* Adjust the size of the checkmark */
-    color: var(--backgroundcolour);
-}
-
-.button-text {
-    flex-grow: 1;
-    text-align: left;
-}
-
-.close-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-weight: bold;
-    cursor: pointer;
-    color: red;
-    font-size: 16px;
-}
-
-.button-container button:not(.start-game-button) {
+.button-container button {
     background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--backgroundcolour);
     color: #999999;
@@ -277,33 +182,24 @@ body {
     color: var(--backgroundcolour);
 }
 
-button.disabled {
-    background-color: #333333 !important;
-    color: #666666 !important;
-    border-color: #333333 !important;
-    cursor: not-allowed !important;
-    pointer-events: none !important;
-}
-
+/* Start Game Button */
 .start-game-button {
     display: flex;
     justify-content: center;
     font-family: LemonMilk;
-    font-size: 2.5vh;
+    font-size: 16px;
     padding: 10px 20px;
     width: 60vw;
     max-width: 300px;
-    margin: 2.5vh auto 0;
-    background-color: var(--backgroundcolour);
-    border: var(--bordersize) solid var(--backgroundcolour);
+    margin: 1.5vh auto 0;
+    background-color: var(--secondarybackgroundcolour);
+    border: var(--bordersize) solid var(--secondarybackgroundcolour);
     border-radius: 50px;
     color: var(--primarypagecolour);
-    cursor: pointer;
     text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
     text-decoration: none;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 .start-game-button:active {
@@ -312,21 +208,40 @@ button.disabled {
     border-color: var(--primarypagecolour);
 }
 
-.game-settings-tab-container button {
-    font-family: LemonMilk;
-    padding: 5px 20px;
-    background-color: var(--secondarybackgroundcolour);
-    color: #999999;
+/* Generic Container */
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.container-section {
+    position: relative;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    color: var(--primarypagecolour);
+    justify-content: left;
+    align-items: flex-start;
+    margin: 0;
+    padding: 1vh 10%;
+    gap: 15px 5px;
+}
+
+
+.container-section input {
+    width: 100%;
+    font-size: 2.5vh;
+    color: var(--primarypagecolour);
+    background-color: var(--backgroundcolour);
     border: none;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    user-select: text;
+    pointer-events: auto;
 }
 
-.game-settings-tab-container button.active {
-    background-color: var(--primarypagecolour);
-    color: var(--secondarybackgroundcolour);
-}
-
+/* Misc */
 .user-count {
     color: var(--primarypagecolour);
     position: absolute;
@@ -339,36 +254,49 @@ button.disabled {
     gap: 2.5%;
 }
 
-body.using-mouse .button-container button:not(.disabled):hover {
-    background-color: var(--secondarypagecolour);
-    border-color: var(--secondarypagecolour);
-    color: #999999;
-}
-
-body.using-mouse .button-container button.active:not(.disabled):hover {
-    background-color: var(--secondarypagecolour);
-    border-color: var(--secondarypagecolour);
-    color: var(--backgroundcolour);
-}
-
-body.using-mouse .start-game-button:hover {
-    background-color: var(--primarypagecolour);
-    color: var(--secondarybackgroundcolour);
-    border-color: var(--primarypagecolour);
-}
-
-body.using-mouse .element:hover {
+.element:hover {
     background-color: initial;
     color: initial;
     border-color: initial;
 }
 
+@media (orientation: landscape) {
+    [data-template]:not([data-template="waiting-room"]) .button-container button:not(.disabled):hover {
+        background-color: var(--secondarypagecolour);
+        border-color: var(--secondarypagecolour);
+        color: #999999;
+    }
+
+    [data-template]:not([data-template="waiting-room"]) .button-container.gamemode-settings button.active:not(.disabled):hover {
+        background-color: var(--secondarypagecolour);
+        border-color: var(--secondarypagecolour);
+        color: var(--backgroundcolour);
+    }
+
+    .start-game-button:hover {
+        background-color: var(--primarypagecolour);
+        color: var(--secondarybackgroundcolour);
+        border-color: var(--primarypagecolour);
+    }
+}
+
 @media (orientation: portrait) {
 
-    .packs-content-container,
-    .game-settings-container {
-        align-items: center;
-        height: 100%;
+    .packs-container,
+    .settings-container,
+    .online-game-settings-container {
+        width: 90vw;
+        max-width: 1280px;
+        height: 70vh;
+    }
+
+    .start-game-button {
+        width: 90vw;
+        max-width: 1280px;
+    }
+
+    .game-settings-tab-container {
+        width: 90vw;
     }
 
     .button-container {
@@ -386,7 +314,6 @@ body.using-mouse .element:hover {
         scroll-snap-align: start;
         box-sizing: border-box;
     }
-
 
     .container-section .user-icon {
         font-size: 1vh;

@@ -2,7 +2,6 @@ let audioContext;
 let soundBuffers = {};
 
 const audioBuffers = {};
-
 async function loadSoundEffects() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -41,14 +40,22 @@ async function loadSoundEffects() {
     }
 }
 
+window.addEventListener('load', async function () {
+    await loadSoundEffects();
+});
+
 async function playSoundEffect(soundKey) {
+    if(audioContext === undefined) {
+        console.warn("Audio context is not initialized.");
+        return;
+    }
     const bool = localStorage.getItem('settings-sound');
     if (bool === 'false') {
         return;
     }
 
     if (audioContext.state === "suspended") {
-        await audioContext.resume(); // Resume if it's blocked
+        await audioContext.resume();
     }
 
     const buffer = soundBuffers[soundKey];

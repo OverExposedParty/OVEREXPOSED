@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const playerSchema = new mongoose.Schema({
   username: { type: String, required: true },
   computerId: { type: String, required: true },
+  userIcon: { type: String, required: true },
   isReady: { type: Boolean, default: false },
   hasConfirmed: { type: Boolean, default: false },
   lastPing: { type: Date, default: Date.now },
   role: { type: String, default: 'N/A' },
   status: { type: String, enum: ['dead', 'alive'], default: 'alive' },
   vote: { type: String, default: 'N/A' },
+  socketId: { type: String, default: null }
 }, { _id: false });
 
 

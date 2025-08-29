@@ -12,11 +12,8 @@
     <link rel="preload" href="/images/splash-screens/mafia.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
 
     <link rel="stylesheet" href="/css/party-games/side-buttons.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/party-games/online.css">
     <link rel="stylesheet" href="/css/party-games/mafia/mafia-gamemode.css">
 
@@ -26,7 +23,6 @@
     <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/mafia/favicons/favicon-180x180.png">
 
 </head>
-<script src="/scripts/general/header-html.js"></script>
 
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
@@ -197,9 +193,6 @@
             suspicion.</h2>
     </div>
 </div>
-
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
 <script>
     const gamemode = "mafia";
     const helpContainerFile = "party-games/" + gamemode + '.json';
@@ -211,8 +204,13 @@
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
+
+    window.addEventListener('load', () => {
+        fetchHelpContainer(helpContainerFile);
+    })
 </script>
-<script src="/scripts/general/help-container.js"></script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>
 <script src="/scripts/party-games/online/party-games-online-instructions.js"></script>

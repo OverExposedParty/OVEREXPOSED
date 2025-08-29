@@ -1,0 +1,54 @@
+{
+    "truth-or-dare-packs": [
+        {
+            "pack-name": "ice-breaker",
+            "pack-path": "/json-files/party-games/questions/truth-or-dare/ice-breaker.json",
+            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 1,
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "cheeky-confessions",
+            "pack-path": "/json-files/party-games/questions/truth-or-dare/cheeky-confessions.json",
+            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 2,
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "troubled-teens",
+            "pack-path": "/json-files/party-games/questions/truth-or-dare/troubled-teens.json",
+            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 3,
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "adult-confessions",
+            "pack-path": "/json-files/party-games/questions/truth-or-dare/adult-confessions.json",
+            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 4,
+            "pack-restriction": "nsfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "risky-revelations",
+            "pack-path": "/json-files/party-games/questions/truth-or-dare/risky-revelations.json",
+            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": 5,
+            "pack-restriction": "nsfw",
+            "pack-active": true
+        }
+    ]
+}

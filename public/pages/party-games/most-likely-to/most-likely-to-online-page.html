@@ -11,22 +11,18 @@
 
     <link rel="preload" href="/images/splash-screens/most-likely-to.png" as="image">
 
+    <link rel="stylesheet" href="/css/general/online/user-customisation-icon.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode/online/results-chart.css">
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-    
-    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
-    <link rel="stylesheet" href="/css/party-games/online.css">
 
-    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
+    <link rel="stylesheet" href="/css/party-games/online.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/most-likely-to/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/most-likely-to/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/most-likely-to/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/most-likely-to/favicons/favicon-180x180.png">
 </head>
-<script src="/scripts/general/header-html.js"></script>
 
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
@@ -34,149 +30,36 @@
     <div class="splash-screen-container" id="splash-screen-container"><img
             src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
 
-    <div class="gamemode-popup-container " id="spin-the-wheel-container">
-        <div id="spin_the_wheel">
-            <canvas id="wheel" width="300" height="300"></canvas>
-            <div id="spin">SPIN</div>
+    <div class="chat-box">
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+        </div>
+        <div class="chat-messages">
         </div>
     </div>
 
+    <div id="placeholder-gamemode-addons-container" data-online="true"></div>
+
     <div id="header-placeholder"></div>
 
-    <div class="card-container " id="public-view">
-        <div class="content">
-            <div class="gamemode-text-container">
-                <img class="gamemode-text-svg" src="/images/party-games/most-likely-to/most-likely-to-text.svg">
-            </div>
-            <div class="main-image-container">
-                <img src="/images/blank-cards/most-likely-to-blank-card.svg" alt="Most Likely To Blank Card"
-                    class="main-image">
-                <div class="text-container">If you could switch lives with anyone for a day, who would it be and why?
+    <div id="placeholder-card-container" data-gamemode="most-likely-to" data-online="true">
+        <div class="card-container " id="private-view">
+            <div class="content">
+                <div class="regular-button-container">
+                    <button id="button-choose-player" class="question-button">Choose Player</button>
                 </div>
-                <div class="card-type-text">card type</div>
-            </div>
-            <div class="regular-button-container">
-                <button id="button-choose-player" class="question-button">Choose Player</button>
             </div>
         </div>
     </div>
 
 
     <div class="main-container">
-        <div class="selected-user-container " id="select-user-container">
-            <div class="content-container">
-                <h1>MOST LIKELY TO</h1>
-            </div>
-            <div class="content-container">
-                <h2>If you could switch lives with anyone for a day, who would it be and why?</h2>
-            </div>
-            <div class="button-container" selected-id="">
-            </div>
-            <div class="select-button-container">
-                <button class="select-button">Confirm</button>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="select-number-container">
-            <div class="content-container">
-                <h2>Pick a number</h2>
-            </div>
-            <div class="button-container" selected-id="">
-            </div>
-            <div class="select-button-container">
-                <button class="select-button">Confirm</button>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="select-punishment-container">
-            <div class="content-container">
-                <h1>You've Been Selected</h1>
-            </div>
-            <div class="content-container">
-                <p>Pick a forfeit to find out the question</p>
-            </div>
-            <div class="button-container">
-            </div>
-            <div class="select-button-container">
-                <button class="select-button">Confirm</button>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="complete-punishment-container">
-            <div class="content-container">
-                <h1>Punishment</h1>
-            </div>
-            <div class="content-container">
-                <h2 id="punishment-text">In order to find out the question you have to take a shot.</h2>
-            </div>
-            <div class="select-button-container">
-                <button class="select-button" id="pass">Confirm</button>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="confirm-punishment-container">
-            <div class="content-container">
-                <h1>Punishment done</h1>
-            </div>
-            <div class="content-container">
-                <h2>Did Player1 taken their 2 shots.</h2>
-            </div>
-            <div class="select-button-container">
-                <button class="select-button" id="yes">Yes</button>
-                <button class="select-button" id="no">No</button>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="next-question-container">
-            <div class="content-container">
-                <h2>Next question</h2>
-            </div>
-            <div class="content-container">
-                <div class="user-confirmed-section">
-                </div>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="waiting-for-confirm-punishment-container">
-            <div class="content-container">
-                <h2>Waiting for players</h2>
-            </div>
-            <div class="content-container">
-                <div class="user-confirmed-section">
-                </div>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="waiting-for-player">
-            <div class="content-container">
-                <h2>Waiting for Player1</h2>
-            </div>
-            <div class="content-container">
-                <p>Reading Card...</p>
-            </div>
-        </div>
-
-        <div class="selected-user-container " id="player-has-passed">
-            <div class="content-container">
-                <h2>Player1 has passed</h2>
-            </div>
-            <div class="content-container">
-                <p>Called wrong coin face</p>
-            </div>
-        </div>
-        <div class="selected-user-container center " id="party-disbanded-container">
-            <div class="content-container">
-                <h2>Party disbanded</h2>
-            </div>
-        </div>
-
-        <div class="gamemode-popup-container " id="results-container">
-            <canvas id="resultsChart" width="300" height="300"></canvas>
+        <div id="placeholder-selected-user-container" data-template="most-likely-to"></div>
+        <div class="gamemode-popup-container active" id="results-container">
+            <div id="tableWrapper"></div>
         </div>
     </div>
 </body>
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
 <script>
     const gamemode = "most-likely-to";
     const sessionPartyType = "party-game-most-likely-to";
@@ -189,13 +72,21 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/most-likely-to/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
 </script>
-<script src="/scripts/general/help-container.js"></script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/general/online/user-customisation-icon.js"></script>
+<script src="/scripts/html-templates/online/selected-user-containers-template.js"></script>
+<script src="/scripts/html-templates/online/card-container-template.js"></script>
+<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
+
+
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-<script src="/scripts/party-games/online/online-settings.js"></script> 
+<script src="/scripts/party-games/online/online-settings.js"></script>
 <script src="/scripts/party-games/general/load-questions.js"></script>
-<script src="/scripts/party-games/online/party-games-online-instructions.js"></script>
-<script src="/scripts/party-games/most-likely-to/most-likely-to-online-instructions.js"></script>
-<script src="/scripts/party-games/most-likely-to/most-likely-to-online.js"></script>
-<script src="/scripts/party-games/online/spin-the-wheel-online.js"></script>
+
+<script src="/scripts/party-games/gamemode/online/general/party-games-online-instructions.js"></script>
+<script src="/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online-instructions.js"></script>
+<script src="/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js" defer></script>
+
+<script src="/scripts/party-games/general/chat-log.js"></script>
+
+</html>

@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const PlayerSchema = new mongoose.Schema({
   computerId: { type: String, required: true },
   username: { type: String, required: true },
+  userIcon: { type: String, required: true },
   isReady: { type: Boolean, default: false },
   hasConfirmed: { type: Boolean, default: false },
-  lastPing: { type: Date, default: Date.now }
+  lastPing: { type: Date, default: Date.now },
+  socketId: { type: String, default: null }
 }, { _id: false });
 
 const PartyGameSchema = new mongoose.Schema({

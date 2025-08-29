@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 550">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #333132;
+      }
+    </style>
+  </defs>
+  <g id="Background">
+    <rect class="cls-1" width="450" height="550"/>
+  </g>
+  <g id="Mouth-Slot">
+    <path class="cls-2" d="M290.78,381.54c-8.62,2.56-9.44-4.7-14.22-8.95-20.91-18.61-70.09-16.02-94.07-4.45-7.62,3.68-21.88,18.63-28.45,10.99-6.78-7.88,3.98-13.97,9.66-17.92,30.6-21.24,88.55-25.53,119.22-2.9,5.55,4.1,20.84,19.37,7.85,23.23Z"/>
+  </g>
+</svg>

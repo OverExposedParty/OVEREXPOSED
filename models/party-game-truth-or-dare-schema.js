@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const PlayerSchema = new mongoose.Schema({
   computerId: { type: String, required: true },
   username: { type: String, required: true },
+  userIcon: { type: String, required: true },
   isReady: { type: Boolean, default: false },
   hasConfirmed: { type: Boolean, default: false },
-  lastPing: { type: Date, default: Date.now }
+  lastPing: { type: Date, default: Date.now },
+  socketId: { type: String, default: null }
 }, { _id: false });
 
 const partyGameTruthOrDareSchema = new mongoose.Schema({
@@ -20,6 +22,7 @@ const partyGameTruthOrDareSchema = new mongoose.Schema({
   shuffleSeed: { type: Number, required: true },
   currentCardIndex: { type: Number, default: 0 },
   currentCardSecondIndex: { type: Number, default: 0 },
+  questionType: { type: String, enum: ["truth", "dare"] },
   players: { type: [PlayerSchema], default: [] }
 });
 

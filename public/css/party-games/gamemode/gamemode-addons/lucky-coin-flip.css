@@ -1,0 +1,93 @@
+.lucky-coin-flip-container {
+    background-color: var(--backgroundcolour);
+    height: 350px;
+    width: 350px;
+    border-radius: 50px;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 900;
+    display: none;
+    flex-direction: column;
+  }
+  .lucky-coin-flip-container.active {
+    display: flex;
+  }
+  
+  .lucky-coin-flip-container button {
+    padding-top: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+
+  .coin-container {
+    border-radius: 20px;
+    box-shadow: 0 10px 20px
+        rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    text-align: center;
+    animation: fadeIn 1s ease;
+    width: 80%;
+    max-width: 500px;
+    perspective: 1000px;
+}
+
+.coin {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 20px
+        rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s
+        ease-in-out;
+    margin: 0 auto;
+    backface-visibility: hidden;
+}
+
+.coin:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s
+        ease-in-out;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.coin.flip {
+    animation: spin 1s
+        cubic-bezier(0.4, 2.5, 0.6, 0.5);
+}
+
+.coin img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: rotateY(0deg);
+}
+
+.coin-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px
+        rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s
+        ease-in-out;
+}
+
+.coin-container:hover {
+    transform: scale(1.02);
+}

@@ -14,12 +14,8 @@
     <link rel="preload" href="/images/splash-screens/never-have-i-ever.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-
+    <link rel="stylesheet" href="/css/party-games/side-buttons.css">
     <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
-    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -29,13 +25,6 @@
     <link rel="icon" type="image/png" sizes="167x180"
         href="/images/icons/never-have-i-ever/favicons/favicon-180x180.png">
 
-    <style>
-        @media (max-width: 768px) and (orientation: landscape) {
-            .gamemode-popup-container {
-                display: none !important;
-            }
-        }
-    </style>
 </head>
 <script>
     document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/never-have-i-ever.png')");
@@ -50,20 +39,13 @@
     gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
-<script src="/scripts/general/header-html.js"></script>
-
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
             src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen"></div>
     <div class="splash-screen-container" id="splash-screen-container"><img
             src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen"></div>
 
-    <div class="gamemode-popup-container" id="spin-the-wheel-container">
-        <div id="spin_the_wheel">
-            <canvas id="wheel" width="300" height="300"></canvas>
-            <div id="spin">SPIN</div>
-        </div>
-    </div>
+    <div id="placeholder-gamemode-addons-container" data-online="false" data-gamemode="never-have-i-ever"></div>
 
     <div class="question-zoomed-container">
         <img src="/images/blank-cards/never-have-i-ever-blank-card.svg">
@@ -74,34 +56,22 @@
 
     <button class="back-button">BACK</button>
 
-    <div class="container">
-        <div class="content">
-            <div class="gamemode-text-container">
-                <img class="gamemode-text-svg" src="/images/party-games/never-have-i-ever/never-have-i-ever-text.svg">
-            </div>
-            <div class="main-image-container">
-                <img src="/images/blank-cards/never-have-i-ever-blank-card.svg" alt="Never Have I Ever Blank Card"
-                    class="main-image">
-                <div class="text-container">
-                    Never Have I Ever
+    <div id="placeholder-card-container" data-gamemode="never-have-i-ever" data-online="false">
+        <div class="card-container active" id="public-view">
+            <div class="content">
+                <div class="regular-button-container">
+                    <button id="question-button" class="question-button">Next Question</button>
                 </div>
-                <div class="card-type-text">card type</div>
-            </div>
-            <div class="button-container">
-                <button id="question-button" class="question-button">Next Question</button>
             </div>
         </div>
     </div>
+
     <div class="side-buttons">
         <img src="/images/icons/never-have-i-ever/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
         <img src="/images/icons/never-have-i-ever/odd-man-out-icon.svg" alt="Odd Man Out Icon" class="side-button"
             id="odd-man-out-button">
     </div>
 </body>
-
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js"></script>
-
 <script>
     const gamemode = "never-have-i-ever";
     const helpContainerFile = "party-games/" + gamemode + '.json';
@@ -120,10 +90,13 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
 </script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/html-templates/online/card-container-template.js"></script>
+<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
+
 <script src="/scripts/party-games/general/load-questions.js"></script>
 <script src="/scripts/party-games/general/party-games.js"></script>
 <script src="/scripts/party-games/general/get-next-question.js"></script>
-<script src="/scripts/general/help-container.js"></script>
-<script src="/scripts/party-games/never-have-i-ever/odd-man-out.js"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+
 </html>

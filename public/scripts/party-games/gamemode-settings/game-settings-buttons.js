@@ -1,0 +1,108 @@
+let nsfwButtons = [];
+let onlingSettingsButtons = [];
+let gameSettingsNsfwButtons = [];
+
+let packButtons = [];
+let settingsButtons = [];
+let onlineButton;
+
+let fetchedPacks = false;
+let fetchedSettings = false;
+
+const packsSettingsTab = document.getElementById('packs-settings');
+const gameSettingsTab = document.getElementById('game-settings');
+const onlineSettingTab = document.getElementById('online-settings');
+
+fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
+    .then(response => response.json())
+    .then(data => {
+        data[`${partyGameMode}-packs`].forEach(pack => {
+            if (pack["pack-active"]) {
+                const button = document.createElement("button");
+                button.dataset.key = `${partyGameMode}-${pack["pack-name"]}`;
+                button.className = `pack ${pack["pack-restriction"]}`;
+                button.dataset.primaryColor = pack["pack-colour"];
+                button.dataset.secondaryColor = pack["pack-secondary-colour"];
+                button.textContent = pack["pack-name"]
+                    .replace(/-/g, " ")
+                    .replace(/\b\w/g, c => c.toUpperCase())
+                    + " " + "!".repeat(pack["pack-difficulty"] || 0);
+                packsContainer.querySelector('.button-container').appendChild(button);
+                if (pack["pack-restriction"] === "nsfw") nsfwButtons.push(button);
+                packButtons.push(button);
+            }
+        });
+        fetchedPacks = true;
+
+        // Return the next fetch so it can be chained
+        return fetch(`/json-files/party-games/settings/${partyGameMode}.json`);
+    })
+    .then(response => response.json())
+    .then(data => {
+        data[`${partyGameMode}-settings`].forEach(setting => {
+            if (setting["settings-active"]) {
+                if (!(setting["settings-name"] === "online" && placeholderGamemodeSettings.dataset.template.includes('waiting-room'))) {
+                    const button = document.createElement("button");
+                    button.className = `game-settings-pack ${setting["settings-restriction"]}`;
+                    button.dataset.primaryColor = setting["settings-colour"];
+                    button.dataset.secondaryColor = setting["settings-secondary-colour"];
+                    button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+                    settingsContainer.querySelector('.button-container').appendChild(button);
+
+                    if (setting["settings-restriction"] === "nsfw") gameSettingsNsfwButtons.push(button);
+                    if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
+                    if (setting["settings-name"] === "online") {
+                        button.id = "button-online";
+                        onlineButton = button;
+                    } else {
+                        button.dataset.key = `${partyGameMode}-${setting["settings-name"]}`;
+                        settingsButtons.push(button);
+                    }
+                }
+            }
+        });
+
+        fetchedSettings = true;
+        if (fetchedPacks && fetchedSettings) {
+            SetGamemodeContainer();
+        }
+    })
+    .catch(error => console.error('Error loading JSON:', error));
+
+
+packsSettingsTab.addEventListener('click', () => {
+    if (!(packsSettingsTab.classList.contains('active'))) {
+        packsContainer.classList.add('active');
+        packsSettingsTab.classList.add('active');
+
+        settingsContainer.classList.remove('active');
+        gameSettingsTab.classList.remove('active');
+
+        onlineSettingTab.classList.remove('active');
+        onlineSettingsContainer.classList.remove('active');
+    }
+});
+gameSettingsTab.addEventListener('click', () => {
+    if (!(gameSettingsTab.classList.contains('active'))) {
+        packsContainer.classList.remove('active');
+        packsSettingsTab.classList.remove('active');
+
+        settingsContainer.classList.add('active');
+        gameSettingsTab.classList.add('active');
+
+        onlineSettingTab.classList.remove('active');
+        onlineSettingsContainer.classList.remove('active');
+    }
+});
+onlineSettingTab.addEventListener('click', () => {
+    if (!(onlineSettingsContainer.classList.contains('active'))) {
+        packsContainer.classList.remove('active');
+        packsSettingsTab.classList.remove('active');
+
+        settingsContainer.classList.remove('active');
+        gameSettingsTab.classList.remove('active')
+
+        onlineSettingTab.classList.add('active');
+        onlineSettingsContainer.classList.add('active');
+    }
+});

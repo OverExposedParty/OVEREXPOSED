@@ -1,0 +1,25 @@
+{
+    "paranoia-settings": [
+        {
+            "settings-name": "drink-wheel",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true
+        },
+        {
+            "settings-name": "lucky-coin-flip",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true
+        },
+        {
+            "settings-name": "online",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "sfw",
+            "settings-active": true
+        }
+    ]
+}

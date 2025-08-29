@@ -1,0 +1,15 @@
+[
+    {
+        "pack-name": "blank",
+        "pack-status": "active",
+        "pack-description": "Nothingness.",
+        "pack-path": "/json-files/customisation/packs/blank.json"
+    },
+    {
+        "pack-name": "base",
+        "pack-status": "active",
+        "pack-description": "Base customisation pack containing the default character customisation options.",
+        "pack-path": "/json-files/customisation/packs/base.json"
+    }
+
+]

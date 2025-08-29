@@ -1,0 +1,68 @@
+.vote-results-table {
+  border-collapse: collapse;
+}
+
+.vote-icon-cell {
+  padding: 4px 8px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+.vote-colon-cell {
+  font-weight: bold;
+  padding: 0 6px;
+  vertical-align: middle;
+  color:var(--primarypagecolour);
+}
+
+.vote-votes-cell {
+  padding: 4px 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.vote-results-table {
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.vote-x-axis-label {
+  font-family: 'LemonMilk';
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 8px;
+}
+
+.vote-votes-cell {
+  padding: 4px 8px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  align-items: flex-end; /* icons sit on “x-axis” */
+}
+
+.vote-results-xaxis {
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%; /* full container width */
+  table-layout: fixed; /* important: fixes column widths */
+}
+
+.vote-results-xaxis .vote-x-axis-label {
+  font-family: 'LemonMilk';
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 8px;
+  width: 50%; /* each column gets half width */
+}
+
+.vote-results-xaxis .vote-votes-cell {
+  padding: 4px 8px;
+  display: flex;
+  justify-content: center; /* center icons horizontally */
+  gap: 4px;
+  align-items: flex-end; /* align icons to bottom like a bar chart */
+  width: 50%; /* each column fixed width */
+}

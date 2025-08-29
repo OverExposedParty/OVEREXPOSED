@@ -5,7 +5,7 @@ let cardPackMap = []; // Maps cards to their respective packs
 
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     try {
-        const packsResponse = await fetch(`/json-files/${gamemode}-packs.json`);
+        const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
         if (!packsResponse.ok) {
             console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
             return;
@@ -20,7 +20,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             // Use localStorage to determine which packs to fetch
             filesToFetch = packs
                 .filter(pack => {
-                    const key = `${gamemode}-${pack["pack-name"].toLowerCase().replace(/\s+/g, '-')}`;
+                    const key = `${gamemode}-${pack["pack-name"]}`;
                     return localStorage.getItem(key) === 'true';
                 })
                 .map(pack => pack["pack-path"]);
@@ -30,7 +30,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
 
             filesToFetch = packs
                 .filter(pack => {
-                    const key = `${gamemode}-${pack["pack-name"].toLowerCase().replace(/\s+/g, '-')}`;
+                    const key = `${gamemode}-${pack["pack-name"]}`;
                     return fetchPackList.includes(key);
                 })
                 .map(pack => pack["pack-path"]);
@@ -67,21 +67,21 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
         });
 
         packs.forEach(pack => {
-            const packName = pack["pack-name"];
+            const packName = pack["pack-name"].replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
             const packCard = pack["pack-card"];
             const packColour = pack["pack-colour"];
             cardPackMap.push({ packName, packCard, packColour });
         });
-        if(gamemode == "Truth Or Dare"){
+        if (gamemode == "Truth Or Dare") {
             if (localStorage.getItem(`${gamemode}-punishment`)) {
                 allQuestions.push("punishment");
             }
         }
         if (allQuestions.length > 0) {
-            if(seedShuffle){
+            if (seedShuffle) {
                 shuffleQuestions(seedShuffle);
             }
-            else{
+            else {
                 shuffleQuestions();
             }
             console.log(allQuestions);
@@ -105,7 +105,7 @@ function shuffleQuestions(seed = null) {
         let c = 12345;
         let state = seed ? seed : Math.floor(Math.random() * m);
 
-        return function() {
+        return function () {
             state = (a * state + c) % m;
             return state / m;
         };
@@ -120,33 +120,28 @@ function shuffleQuestions(seed = null) {
     }
 }
 
-function getNextQuestion(index = null, type = null, seed = null) {
+function getNextQuestion(index = null, questionType = null, seed = null) {
     let selectedQuestion;
     let cardType;
     let filteredQuestions = allQuestions;
-    if(type !== null){
-        let stringType = "";
-        if(type == 0){
-            stringType = "truth";
-        }
-        else if(type == 1){
-            stringType = "dare";
-        }
-        filteredQuestions = allQuestions.filter(q => q["question-type"] === stringType);
+    if (questionType !== null) {
+        filteredQuestions = allQuestions.filter(q => q["question-type"] === questionType);
     }
-    if(index == null){
+    if (index == null) {
         if (currentQuestionIndex >= filteredQuestions.length) {
             shuffleQuestions();
             currentQuestionIndex = 0;
         }
         selectedQuestion = filteredQuestions[currentQuestionIndex];
         cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
-    
+
         currentQuestionIndex++;
     }
-    else{
+    else {
         selectedQuestion = filteredQuestions[index];
         cardType = questionPackMap[index] || 'Unknown Pack';
     }
+
+
     return { question: selectedQuestion['question'], cardType: cardType };
 }

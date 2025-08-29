@@ -15,13 +15,8 @@
     <link rel="preload" href="/images/splash-screens/paranoia.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-
+    <link rel="stylesheet" href="/css/party-games/side-buttons.css">
     <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
-    <link rel="stylesheet" href="/css/party-games/spin-the-wheel.css">
-    <link rel="stylesheet" href="/css/party-games/coin-flip.css">
 
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
@@ -29,16 +24,6 @@
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/paranoia/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/paranoia/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/paranoia/favicons/favicon-180x180.png">
-
-    <style>
-        @media (max-width: 768px) and (orientation: landscape) {
-
-            .gamemode-popup-container,
-            .coin-flip-container {
-                display: none !important;
-            }
-        }
-    </style>
 </head>
 <script>
     document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/paranoia.png')");
@@ -53,24 +38,14 @@
     gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
-<script src="/scripts/general/header-html.js"></script>
-
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/paranoia.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/paranoia.png"
+            alt="Splash Screen"></div>
 
-    <div class="gamemode-popup-container " id="spin-the-wheel-container">
-        <div id="spin_the_wheel">
-            <canvas id="wheel" width="300" height="300"></canvas>
-            <div id="spin">SPIN</div>
-        </div>
-    </div>
+    <div id="placeholder-gamemode-addons-container" data-online="false" data-gamemode="paranoia"></div>
 
-    <div class="coin-flip-container" id="coin-flip-container">
-        <button id="coin-button">
-            <div class="coin" id="coin"><img src="/images/icons/paranoia/heads-icon.svg"></div>
-        </button>
-    </div>
 
     <div class="question-zoomed-container">
         <img src="/images/blank-cards/paranoia-blank-card.svg">
@@ -81,18 +56,12 @@
 
     <button class="back-button">BACK</button>
 
-    <div class="container">
-        <div class="content">
-            <div class="gamemode-text-container">
-                <img class="gamemode-text-svg" src="/images/party-games/paranoia/paranoia-text.svg">
-            </div>
-            <div class="main-image-container">
-                <img src="/images/blank-cards/paranoia-blank-card.svg" alt="Paranoia Blank Card" class="main-image">
-                <div class="text-container">Paranoia</div>
-                <div class="card-type-text">card type</div>
-            </div>
-            <div class="button-container">
-                <button id="question-button" class="question-button">Next Question</button>
+    <div id="placeholder-card-container" data-gamemode="paranoia" data-online="false">
+        <div class="card-container active" id="public-view">
+            <div class="content">
+                <div class="regular-button-container">
+                    <button id="question-button" class="question-button">Next Question</button>
+                </div>
             </div>
         </div>
     </div>
@@ -103,24 +72,10 @@
         <img src="/images/icons/paranoia/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
     </div>
 </body>
-
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
-
 <script>
     const gamemode = "paranoia";
     const helpContainerFile = "party-games/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-
-    const spinWheelEnabled = localStorage.getItem('paranoia-drink-wheel') === 'true';
-    const coinFlipEnabled = localStorage.getItem('paranoia-coin-flip') === 'true';
-
-    if (!spinWheelEnabled) {
-        document.getElementById('spin-button').remove();
-    }
-    if (!coinFlipEnabled) {
-        document.getElementById('coin-flip-button').remove();
-    }
 
     document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
@@ -129,11 +84,12 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 </script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/html-templates/online/card-container-template.js"></script>
+<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
+
 <script src="/scripts/party-games/general/load-questions.js"></script>
 <script src="/scripts/party-games/general/party-games.js"></script>
-<script src="/scripts/party-games/general/get-next-question.js"></script>
-<script src="/scripts/general/help-container.js"></script>
-<script src="/scripts/party-games/spin-the-wheel.js"></script>
-<script src="/scripts/party-games/paranoia/coin-flip.js"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+
 </html>

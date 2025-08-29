@@ -7,26 +7,12 @@
     <title>WAITING ROOM</title>
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/general/waiting-room.css">
-    <link rel="stylesheet" href="/css/party-games/online-error.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
-
-    <style>
-        @media (max-width: 768px) and (orientation: landscape) {
-            .waiting-container {
-                display: none !important;
-            }
-        }
-    </style>
-
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFD5EBXYE5"></script>
@@ -38,80 +24,81 @@
     gtag('config', 'G-ZFD5EBXYE5');
 </script>
 
-<script src="/scripts/general/header-html.js"></script>
-
 <body>
     <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png"
             alt="Splash Screen" loading="eager"></div>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
             src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager"></div>
 
-    <div id="header-placeholder"></div>
+    <div class="chat-box">
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+        </div>
+        <div class="chat-messages">
+        </div>
+    </div>
 
-    <div class="error-container">
-        <div class="error-box " id="error-username-empty">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username cant be empty</div>
-        </div>
-        <div class="error-box " id="error-username-taken">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username is already taken</div>
-        </div>
-        <div class="error-box " id="error-username-invalid">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username contains invalid characters</div>
-        </div>
+    <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder" class="waiting-room"></div>
+
+    <div class="error-container username gamemode-settings mafia-gamemode-settings " id="placeholder-error-container">
     </div>
 
     <div class="landscape-message">
         Please rotate your phone to continue
         <img src="./images/icons/overexposed/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
     </div>
-    <div class="waiting-container " id="enter-username">
-        <h2>Enter a username</h2>
-        <div class="input-container">
-            <input type="text" id="party-username" name="codeInput" placeholder="username" autocomplete="off">
-            <span class="input-count">16</span>
+
+    <div class="main-container">
+        <div class="waiting-room-container">
+            <div class="game-settings-tab-container">
+                <button id="packs-settings" class="settings-tab active">Packs</button>
+                <button id="game-settings" class="settings-tab">Game Settings</button>
+                <button id="online-settings" class="settings-tab disabled">Online</button>
+            </div>
+            <div id="gamemode-settings-placeholder" data-template="waiting-room"></div>
+            <button class="ready-up-button" id="waiting-room">READY</button>
         </div>
-        <div class="waiting-button-container">
-            <button class="disabled" id="submit-username">SUBMIT</button>
+
+        <div id="enter-username-placeholder" data-template="waiting-room"></div>
+
+        <div class="waiting-container" id="party-does-not-exist">
+            <h2>Party does not exist</h2>
+        </div>
+
+        <div class="waiting-container" id="party-session-in-progress">
+            <h2>Party is already in progress</h2>
+        </div>
+
+        <div class="waiting-container" id="user-kicked">
+            <h2>You've been kicked</h2>
+        </div>
+
+        <div class="waiting-container" id="party-disbanded-container">
+            <h2>Party Has Been disbanded</h2>
+        </div>
+
+        <div class="waiting-container" id="party-full">
+            <h2>Party is full</h2>
         </div>
     </div>
-    <div class="waiting-container " id="waiting-for-leader">
-        <h2>Waiting for Party leader</h2>
-        <div class="input-container">
-            <input type="text" id="party-username-waiting" name="codeInput" value="username" readonly>
-        </div>
-    </div>
-    <div class="waiting-container" id="party-does-not-exist">
-        <h2>Party does not exist</h2>
-    </div>
-
-    <div class="waiting-container" id="party-session-in-progress">
-        <h2>Party is already in progress</h2>
-    </div>
-
-    <div class="waiting-container" id="user-kicked">
-        <h2>You've been kicked</h2>
-    </div>
-
-    <div class="waiting-container" id="party-disbanded">
-        <h2>Party Has Been disbanded</h2>
-    </div>
-
-    <div class="waiting-container" id="party-full">
-        <h2>Party is full</h2>
-    </div>
+    <div id="enter-username-placeholder" data-template="waiting-room"></div>
 </body>
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 </script>
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
-<script src="/scripts/general/help-container.js"></script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/party-games/online/online-username.js"></script>
-<script src="/scripts/party-games/online/online-settings.js"></script> 
-<script src="/scripts/party-games/waiting-room/waiting-room.js"></script>
-<script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>
+<script src="/scripts/party-games/online/online-settings.js"></script>
+
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/html-templates/online/enter-username-template.js"></script>
+<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" defer></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" defer></script>
+
+<script src="/scripts/party-games/waiting-room/waiting-room.js" defer></script>
+<script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
+<script src="/scripts/party-games/general/chat-log.js"></script>
+
+</html>

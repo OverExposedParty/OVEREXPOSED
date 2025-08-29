@@ -1,30 +1,32 @@
 let selectedButton;
 let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+
+const rootStyles = getComputedStyle(document.documentElement);
+const primaryColour = rootStyles.getPropertyValue('--primarypagecolour').trim();
+const secondaryColour = rootStyles.getPropertyValue('--secondarypagecolour').trim();
+const backgroundColour = rootStyles.getPropertyValue('--backgroundcolour').trim();
+const secondaryBackgroundColour = rootStyles.getPropertyValue('--secondarybackgroundcolour').trim();
+const warningColour = rootStyles.getPropertyValue('--warningcolour').trim();
+
 const backButton = document.querySelector(".back-button");
 const containerTitle = document.querySelector('#container-title');
 
-const rotateMessage = document.querySelector('#landscape-message');
-
-let extraMenuContainer = document.querySelector('.extra-menu-container');
-let tiktokIcon = document.getElementById('tik-tok-icon');
-let instagramIcon = document.getElementById('instagram-icon');
+const extraMenuContainer = document.querySelector('.extra-menu-container');
+const tiktokIcon = document.getElementById('tik-tok-icon');
+const instagramIcon = document.getElementById('instagram-icon');
 
 
-let header = document.querySelector('#header');
-const settingsIcon = document.querySelector('.settings-icon');
-const helpIcon = document.querySelector('.help-icon');
-const extraMenuIcon = document.querySelector('.extra-menu-icon');
+const header = document.querySelector('#header');
+const settingsIcon = document.querySelector('#settings-icon');
+const helpIcon = document.querySelector('#help-icon');
+const extraMenuIcon = document.querySelector('#extra-menu-icon');
 
-
+const settingsBox = document.querySelector('#settings-box');
 const settingsBoxLabels = document.querySelectorAll('#settings-box label');
 const settingsBoxTitle = document.querySelector('#settings-title');
-let settingsBox = document.querySelector('#settings-box');
 
 const settingsSoundCheckbox = document.getElementById('settings-sound');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
-
-const spinContainer = document.querySelector('.spin-the-wheel-container');
-const coinFlipContainer = document.getElementById('coin-flip-container');
 
 const questionZoomedContainer = document.querySelector('.question-zoomed-container');
 const questionZoomedContainerText = document.querySelector('.question-zoomed-container h2');
@@ -32,6 +34,11 @@ const questionZoomedContainerPunishmentText = document.querySelector('.question-
 
 const subscriberFormBox = document.getElementById('subscriber-form-box');
 const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
+
+let elementClassArray = [];
+let popUpClassArray = [];
+let settingsElementClassArray = [];
+let permanantElementClassArray = [];
 
 
 class LocalStorageObserver {
@@ -59,40 +66,39 @@ class LocalStorageObserver {
 }
 
 window.onload = function () {
-    setTimeout(() => {
-        let logoContainer = document.querySelector('.logo-container');
-        let partyGamesLink = document.getElementById('party-games-link');
-        let overexposureLink = document.getElementById('overexposure-link');
-        let insightsLink = document.getElementById('insights-link');
-        let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
 
-        if (logoContainer) {
-            logoContainer.addEventListener('click', function () {
-                transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-            });
-        }
+    let logoContainer = document.querySelector('.logo-container');
+    let partyGamesLink = document.getElementById('party-games-link');
+    let overexposureLink = document.getElementById('overexposure-link');
+    let insightsLink = document.getElementById('insights-link');
+    let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
 
-        if (partyGamesLink) {
-            partyGamesLink.addEventListener('click', function () {
-                transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-            });
-        }
-        if (overexposureLink) {
-            overexposureLink.addEventListener('click', function () {
-                transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
-            });
-        }
-        if (insightsLink) {
-            insightsLink.addEventListener('click', function () {
-                transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
-            });
-        }
-        if (whatIsOverexposedLink) {
-            whatIsOverexposedLink.addEventListener('click', function () {
-                transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
-            });
-        }
-    }, 500);
+    if (logoContainer) {
+        logoContainer.addEventListener('click', function () {
+            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+        });
+    }
+
+    if (partyGamesLink) {
+        partyGamesLink.addEventListener('click', function () {
+            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+        });
+    }
+    if (overexposureLink) {
+        overexposureLink.addEventListener('click', function () {
+            transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
+        });
+    }
+    if (insightsLink) {
+        insightsLink.addEventListener('click', function () {
+            transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
+        });
+    }
+    if (whatIsOverexposedLink) {
+        whatIsOverexposedLink.addEventListener('click', function () {
+            transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
+        });
+    }
 };
 
 
@@ -106,47 +112,38 @@ document.addEventListener('DOMContentLoaded', function () {
     const soundSetting = document.getElementById('settings-sound');
     const nsfwSetting = document.getElementById('settings-nsfw');
 
-    waitForElementWithTimeout('#tiktok-link', (element) => {
-        element.href = tiktokUrl;
-    }, 15000);
+    instagramLink.href = instagramUrl;
+    tiktokLink.href = tiktokUrl;
 
-    waitForElementWithTimeout('#instagram-link', (element) => {
-        element.href = instagramUrl;
-    }, 15000);
+    if (localStorage.getItem('settings-sound') === 'true') {
+        settingsSoundCheckbox.checked = true;
+    }
 
-    waitForElementWithTimeout('#settings-sound', (settingsSoundCheckbox) => {
-        if (localStorage.getItem('settings-sound') === 'true') {
-            settingsSoundCheckbox.checked = true;
+    settingsSoundCheckbox.addEventListener('change', function () {
+        localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
+        if (settingsSoundCheckbox.checked) {
+            playSoundEffect('sliderEnabled');
         }
-
-        settingsSoundCheckbox.addEventListener('change', function () {
-            localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
-            if (settingsSoundCheckbox.checked) {
-                playSoundEffect('sliderEnabled');
-            }
-            else {
-                playSoundEffect('sliderDisabled');
-            }
-        });
-    }, 15000);
-
-    waitForElementWithTimeout('#settings-nsfw', (nsfwCheckbox) => {
-        if (localStorage.getItem('settings-nsfw') === 'true') {
-            nsfwCheckbox.checked = true;
+        else {
+            playSoundEffect('sliderDisabled');
         }
+    });
 
-        nsfwCheckbox.addEventListener('change', function () {
-            localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
-            if (nsfwCheckbox.checked) {
-                playSoundEffect('sliderEnabled');
-            }
-            else {
-                playSoundEffect('sliderDisabled');
-            }
-        });
-    }, 15000);
+    if (localStorage.getItem('settings-nsfw') === 'true') {
+        nsfwCheckbox.checked = true;
+    }
 
-    waitForElementWithTimeout('#settings-card-bounds', (cardBoundsCheckbox) => {
+    nsfwCheckbox.addEventListener('change', function () {
+        localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
+        if (nsfwCheckbox.checked) {
+            playSoundEffect('sliderEnabled');
+        }
+        else {
+            playSoundEffect('sliderDisabled');
+        }
+    });
+    if (document.querySelector('#card-bounds-checkbox')) {
+
         if (localStorage.getItem('settings-card-bounds') === 'true') {
             cardBoundsCheckbox.checked = true;
         }
@@ -160,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 playSoundEffect('sliderDisabled');
             }
         });
-    }, 15000);
+    }
 });
 
 
@@ -169,22 +166,6 @@ overlay.classList.add('overlay');
 overlay.id = 'overlay';
 overlay.innerHTML = '<p class="overlay-text">Tap empty area to close</p>';
 document.body.appendChild(overlay);
-
-
-// Rotate Icon
-const landscapeMessage = document.createElement('div');
-landscapeMessage.classList.add('landscape-message');
-
-const messageText = document.createTextNode('Please rotate your phone to continue');
-
-let rotateIcon = document.createElement('div');
-rotateIcon.setAttribute('id', 'rotate-icon');
-rotateIcon.classList.add('rotate-icon');
-
-landscapeMessage.appendChild(messageText);
-landscapeMessage.appendChild(rotateIcon);
-
-document.body.appendChild(landscapeMessage);
 
 function toggleClass(selectedClass, classArray) {
     selectedClass.classList.toggle('active');
@@ -209,14 +190,14 @@ function toggleClass(selectedClass, classArray) {
         }
     }
 }
-function toggleHelp() {
-    toggleClass(helpContainer, settingsElementClassArray);
-}
 function toggleExtraMenu() {
     toggleClass(extraMenuContainer, settingsElementClassArray);
 }
 function toggleSettings() {
     toggleClass(settingsBox, settingsElementClassArray);
+}
+function toggleHelp() {
+    toggleClass(helpContainer, settingsElementClassArray);
 }
 
 function toggleOverlay(bool) {
@@ -244,6 +225,9 @@ function toggleOverlay(bool) {
         if (backButton) {
             backButton.classList.remove('inactive');
         }
+        document.querySelectorAll('.side-buttons .side-button').forEach(sideButton => {
+            sideButton.classList.remove('active');
+        });
     }
 }
 
@@ -255,34 +239,10 @@ function setActiveClass(selectedElements, keepActive) {
     });
 }
 
-waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
-    settingsIcon.addEventListener('click', toggleSettings);
-}, 15000);
-
-waitForElementWithTimeout('.help-icon', (helpIcon) => {
-    helpIcon.addEventListener('click', toggleHelp);
-}, 15000);
-
-waitForElementWithTimeout('#overlay', (overlay) => {
-    overlay.addEventListener('click', () => toggleOverlay(false));
-}, 15000);
-
-waitForElementWithTimeout('.extra-menu-icon', (extraMenuIcon) => {
-    extraMenuIcon.addEventListener('click', toggleExtraMenu);
-}, 15000);
-
-waitForElementWithTimeout('#settings-box', (element) => {
-    settingsBox = element;
-}, 10000);
-
-waitForElementWithTimeout('header', (element) => {
-    header = element;
-}, 10000);
-
-waitForElementWithTimeout('.extra-menu-container', (element) => {
-    extraMenuContainer = element;
-}, 10000);
-
+settingsIcon.addEventListener('click', toggleSettings);
+helpIcon.addEventListener('click', toggleHelp);
+overlay.addEventListener('click', () => toggleOverlay(false));
+extraMenuIcon.addEventListener('click', toggleExtraMenu);
 
 
 function waitForButtons(selector, callback) {
@@ -332,34 +292,31 @@ function handleTTSButtons(buttons) {
 
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
-window.addEventListener('load', async function () {
-
+function initSplashScreen() {
     const container = document.getElementById("splash-screen-container");
     const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
 
+    setTimeout(() => container.classList.add('center'), 50);
 
-    setTimeout(function () {
-        container.classList.add('center');
-    }, 50);
-    await loadSoundEffects();
-    setTimeout(function () {
+    setTimeout(() => {
         container.classList.remove('center');
-        staticSplashScreenContainer.remove();
+        staticSplashScreenContainer?.remove();
         container.classList.add('down');
         playSoundEffect('splashScreenDown');
     }, 300);
 
-    setTimeout(function () {
+    setTimeout(() => {
         container.remove();
-        heading.remove();
+        heading?.remove();
     }, 1000);
-});
+}
 
-let classArray = ['help-container', 'extra-menu-container', 'settings-box', 'spin-the-wheel-container', 'coin-flip-container', 'question-zoomed-container', 'overexposure-container'];
-let elementClassArray = [];
-let popUpClassArray = [];
-let settingsElementClassArray = [];
-let permanantElementClassArray = [];
+if (document.readyState === "complete") {
+    // Page is already fully loaded
+    initSplashScreen();
+} else {
+    window.addEventListener("load", initSplashScreen);
+}
 
 function addElementIfNotExists(array, element) {
     if (!array.includes(element)) {
@@ -468,7 +425,7 @@ function transitionSplashScreen(link, splashScreen) {
         container.classList.remove('down');
         container.classList.add('center');
         playSoundEffect('splashScreenUp');
-    }, 100); // Slight delay to ensure CSS applies
+    }, 500); // Slight delay to ensure CSS applies
 
     // Listen for transition end
     container.addEventListener('transitionend', function onTransitionEnd(event) {
@@ -491,16 +448,3 @@ function updateVh() {
 
 window.addEventListener('load', updateVh);
 window.addEventListener('resize', updateVh);
-
-  let lastInputType = '';
-
-  function setInputType(type) {
-    if (lastInputType === type) return;
-    lastInputType = type;
-
-    document.body.classList.remove('using-touch', 'using-mouse');
-    document.body.classList.add(`using-${type}`);
-  }
-
-  window.addEventListener('touchstart', () => setInputType('touch'), true);
-  window.addEventListener('mousemove', () => setInputType('mouse'), true);

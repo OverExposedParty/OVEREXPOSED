@@ -1,0 +1,18 @@
+{
+    "never-have-i-ever-settings": [
+        {
+            "settings-name": "odd-man-out",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true
+        },
+        {
+            "settings-name": "online",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "sfw",
+            "settings-active": true
+        }
+    ]
+}

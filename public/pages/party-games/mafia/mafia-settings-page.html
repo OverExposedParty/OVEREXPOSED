@@ -14,13 +14,9 @@
     <link rel="preload" href="/images/splash-screens/paranoia-settings.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-    
+
     <link rel="stylesheet" href="/css/party-games/gamemode-settings-page-styles.css">
     <link rel="stylesheet" href="/css/party-games/mafia-gamemode-settings.css">
-    <link rel="stylesheet" href="/css/general/warning-message-style.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
     <link rel="stylesheet" href="/css/general/waiting-room.css">
     <link rel="stylesheet" href="/css/party-games/online-error.css">
 
@@ -60,9 +56,6 @@
 
     gtag('config', 'G-ZFD5EBXYE5');
 </script>
-
-<script src="/scripts/general/header-html.js"></script>
-
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static"><img
             src="/images/splash-screens/mafia-settings.png" alt="Splash Screen"></div>
@@ -70,35 +63,11 @@
             src="/images/splash-screens/mafia-settings.png" alt="Splash Screen"></div>
 
     <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
 
     <button class="back-button">back</button>
 
-    <div class="error-container">
-        <div class="error-box " id="error-username-empty">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username cant be empty</div>
-        </div>
-        <div class="error-box " id="error-username-taken">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username is already taken</div>
-        </div>
-        <div class="error-box " id="error-username-invalid">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Username contains invalid characters</div>
-        </div>
-        <div class="error-box " id="error-mafia-none">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Add a mafia</div>
-        </div>
-        <div class="error-box " id="error-mafia-count">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Reduce the number of mafia</div>
-        </div>
-        <div class="error-box " id="error-not-enough-players">
-            <button class="drawer-button"> &lt; </button>
-            <div class="error-text">- Insufficient players</div>
-        </div>
-    </div>
+    <div class="error-container username mafia-gamemode-settings" id="gamemode-settings-error-container"></div>
 
     <div class="main-container">
         <div class="game-settings-tab-container">
@@ -239,27 +208,14 @@
         <button class="start-game-button" id="mafia">Start Game</button>
     </div>
 
-    <div class="waiting-container " id="enter-username">
-        <h2>Enter a username</h2>
-        <div class="input-container">
-            <input type="text" id="party-username" name="codeInput" placeholder="username" autocomplete="off">
-            <span class="input-count">16</span>
-        </div>
-        <div class="waiting-button-container">
-            <button class="disabled" id="submit-username">SUBMIT</button>
-        </div>
-    </div>
+    <div id="enter-username-placeholder"></div>
 </body>
-
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
-
 <script>
     const partyGameMode = 'Mafia'
     const sessionPartyType = "party-game-mafia";
     const helpContainerFile = "party-games-settings/" + partyGameMode.toLowerCase().replace(/\s+/g, '-') + '.json';
     const minPlayerCount = 5;
-    
+
     document.documentElement.style.setProperty('--primarypagecolour', '#A9323A');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7A252C');
 
@@ -267,12 +223,15 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
 </script>
-<script src="/scripts/general/help-container.js"></script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/html-templates/online/enter-username-template.js" defer></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" defer></script>
+
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/party-games/online/online-username.js"></script>
 <script src="/scripts/party-games/online/online-settings.js"></script>
 <script src="/scripts/party-games/online/online-game-settings.js"></script>
 <script src="/scripts/party-games/mafia/mafia-game-settings.js"></script>
 <script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>
-
 </html>

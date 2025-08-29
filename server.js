@@ -18,21 +18,14 @@ const server = http.createServer(app);
 const io = socketIo(server);
 const mongoose = require('mongoose');
 
-function notifyPartyUpdate(partyCode, partyData) {
-  io.to(partyCode).emit("party-updated", partyData);
-}
-
-function updatePartyData(partyCode, newPartyData) {
-  notifyPartyUpdate(partyCode, newPartyData);
-}
-
 const Confession = require('./models/confessions');
 const partyGameTruthOrDareSchema = require('./models/party-game-truth-or-dare-schema');
 const partyGameParanoiaSchema = require('./models/party-game-paranoia-schema');
 const partyGameNeverHaveIEverSchema = require('./models/party-game-never-have-i-ever-schema');
 const partyGameMostLikelyToSchema = require('./models/party-game-most-likely-to-schema');
 const partyGameMafiaSchema = require('./models/party-game-mafia-schema');
-const onlineWaitingRoom = require('./models/waiting-room-schema');
+const partyGameChatLogSchema = require('./models/party-game-chat-log-schema');
+const waitingRoomSchema = require('./models/waiting-room-schema');
 
 Confession.watch()
   .on('change', (change) => {
@@ -140,18 +133,17 @@ io.on('connection', (socket) => {
       }
     }
   });
-
-
 });
 
 // === WATCH DATABASE CHANGES ===
 async function startChangeStreams() {
   const waitingRoomDB = overexposureDb.collection('waiting-room');
-  const partyGameTruthOrDareDB = overexposureDb.collection('party-games');
-  const partyGameParanoiaDB = overexposureDb.collection('party-games');
-  const partyGameNeverHaveIEverDB = overexposureDb.collection('party-games');
-  const partyGameMostLikelyToDB = overexposureDb.collection('party-games');
-  const partyGameMafiaDB = overexposureDb.collection('party-games-mafia');
+  const partyGameTruthOrDareDB = overexposureDb.collection('party-game-truth-or-dare');
+  const partyGameParanoiaDB = overexposureDb.collection('party-game-paranoia');
+  const partyGameNeverHaveIEverDB = overexposureDb.collection('party-game-never-have-i-ever');
+  const partyGameMostLikelyToDB = overexposureDb.collection('party-game-most-likely-to');
+  const partyGameMafiaDB = overexposureDb.collection('party-game-mafia');
+  const partyGameChatLogDB = overexposureDb.collection('party-game-chat-log');
 
   // Helper function
   const watchCollection = (collection, label) => {
@@ -167,11 +159,55 @@ async function startChangeStreams() {
           console.warn(`⚠️ ${label} change missing partyCode`);
           return;
         }
-        io.to(partyCode).emit('party-updated', change);
+        io.to(partyCode).emit('party-updated', {
+          type: change.operationType,           // "update" || "delete"
+          emittedPartyCode: change.fullDocument || null,   // latest party data
+          documentKey: change.documentKey,      // useful for deletes
+        });
         console.log(`🔄 ${label} change sent to ${partyCode}`);
       })
       .on('error', (err) => {
         console.error(`❌ ${label} stream error:`, err);
+      });
+  };
+
+  const watchChatLog = (collection) => {
+    console.log('👁 Watching chat-log collection:', collection.collectionName);
+
+    collection.watch([], { fullDocument: 'updateLookup' })
+      .on('change', (change) => {
+        let partyCode = change.fullDocument?.partyId;
+
+        // Handle deletes where fullDocument is null
+        if (!partyCode && change.operationType === 'delete') {
+          // If you store partyId in _id or another field, extract it here
+          // Otherwise, you might need a separate mapping
+          console.warn('⚠️ chat-log delete missing partyId');
+          return;
+        }
+
+        // Only send updates/inserts
+        if (['insert', 'update'].includes(change.operationType)) {
+          io.to(partyCode).emit('chat-updated', {
+            type: change.operationType,
+            chatLog: change.fullDocument, // entire document including chat array
+            documentKey: change.documentKey,
+          });
+          console.log(`💬 chat-log ${change.operationType} sent to ${partyCode}`);
+        }
+
+        // Handle deletes
+        if (change.operationType === 'delete') {
+          io.to(partyCode).emit('chat-updated', {
+            type: 'delete',
+            chatLog: null,
+            documentKey: change.documentKey,
+          });
+          console.log(`❌ chat-log delete sent to ${partyCode}`);
+        }
+      })
+      .on('error', (err) => {
+        console.error('❌ chat-log stream error:', err);
       });
   };
 
@@ -180,6 +216,7 @@ async function startChangeStreams() {
   watchCollection(partyGameNeverHaveIEverDB, 'party-game-never-have-i-ever');
   watchCollection(partyGameMostLikelyToDB, 'party-game-most-likely-to');
   watchCollection(partyGameMafiaDB, 'party-game-mafia');
+  watchChatLog(partyGameChatLogDB);
   watchCollection(waitingRoomDB, 'waiting-room');
 }
 
@@ -217,18 +254,21 @@ app.post('/api/confessions', async (req, res) => {
 //WAITING ROOM
 createUpsertPartyHandler({
   route: '/api/waiting-room',
-  model: onlineWaitingRoom,
+  model: waitingRoomSchema,
   logLabel: 'Waiting room',
   fields: [
     'gamemode',
     'isPlaying',
     'lastPinged',
-    'players'
+    'players',
+    'gameSettings',
+    'selectedPacks',
+    'selectedRoles',
   ]
 });
 createPartyGetHandler({
   route: '/api/waiting-room',
-  model: onlineWaitingRoom,
+  model: waitingRoomSchema,
   logLabel: 'Waiting room'
 });
 
@@ -248,7 +288,8 @@ const partyGameRoutes = [
       'playerTurn',
       'shuffleSeed',
       'currentCardIndex',
-      'currentCardSecondIndex'
+      'currentCardSecondIndex',
+      'questionType'
     ],
     partyGameLogLabel: 'Party Game Truth Or Dare'
   },
@@ -335,20 +376,28 @@ partyGameRoutes.forEach(({ route, partyGameModel, partyGameLogLabel, partyGameFi
   createDeleteHandler({
     route: `/api/${route}/delete`,
     mainModel: partyGameModel,
-    waitingRoomModel: onlineWaitingRoom,
+    waitingRoomModel: waitingRoomSchema,
     logLabel: partyGameLogLabel,
   });
 
   createDeleteQueryHandler({
     route: `/api/${route}`,
     mainModel: partyGameModel,
-    waitingRoomModel: onlineWaitingRoom,
+    waitingRoomModel: waitingRoomSchema,
     logLabel: partyGameLogLabel,
   });
 
   createRemoveUserHandler({
     route: `/api/${route}/remove-user`,
-    model: partyGameModel,
+    mainModel: partyGameModel,
+    waitingRoomModel: waitingRoomSchema,
+    logLabel: partyGameLogLabel,
+  });
+
+  createDisconnectUserHandler({
+    route: `/api/${route}/disconnect-user`,
+    mainModel: partyGameModel,
+    waitingRoomModel: waitingRoomSchema,
     logLabel: partyGameLogLabel,
   });
 
@@ -435,38 +484,6 @@ function createDeleteQueryHandler({ route, mainModel, waitingRoomModel, logLabel
   });
 }
 
-function createRemoveUserHandler({ route, model, logLabel }) {
-  app.post(route, async (req, res) => {
-    try {
-      const { partyId, computerIdToRemove } = req.body;
-
-      if (!partyId || !computerIdToRemove) {
-        return res.status(400).json({ error: 'partyId and computerIdToRemove are required' });
-      }
-
-      const session = await model.findOne({ partyId });
-
-      if (!session) {
-        return res.status(404).json({ error: `${logLabel} not found` });
-      }
-
-      const originalCount = session.players.length;
-      session.players = session.players.filter(player => player.computerId !== computerIdToRemove);
-
-      if (session.players.length === originalCount) {
-        return res.status(400).json({ error: 'Computer ID not found in session' });
-      }
-
-      await session.save();
-
-      res.json({ message: 'User removed successfully' });
-    } catch (err) {
-      console.error(`❌ Error removing user from ${logLabel.toLowerCase()}:`, err);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-}
-
 function createUpsertPartyHandler({ route, model, logLabel, fields }) {
   app.post(route, async (req, res) => {
     try {
@@ -500,6 +517,129 @@ function createUpsertPartyHandler({ route, model, logLabel, fields }) {
     }
   });
 }
+function createRemoveUserHandler({ route, mainModel, waitingRoomModel, logLabel }) {
+  app.post(route, async (req, res) => {
+    try {
+      let body = req.body;
+
+      // Handle beacon (string) vs normal fetch (object)
+      if (typeof body === "string") {
+        try {
+          body = JSON.parse(body);
+        } catch (e) {
+          return res.status(400).json({ error: "Invalid JSON from beacon" });
+        }
+      }
+
+      const { partyId, computerIdToRemove } = body;
+
+      if (!partyId || !computerIdToRemove) {
+        return res.status(400).json({ error: 'partyId and computerIdToRemove are required' });
+      }
+
+      // --- Remove from session ---
+      const session = await mainModel.findOne({ partyId: partyId });
+      if (!session) {
+        return res.status(404).json({ error: `${logLabel} not found` });
+      }
+
+      const originalCount = session.players.length;
+      session.players = session.players.filter(player => player.computerId !== computerIdToRemove);
+
+      if (session.players.length === originalCount) {
+        return res.status(400).json({ error: 'Computer ID not found in session' });
+      }
+
+      await session.save();
+
+      // --- Remove from waiting room (if exists) ---
+      const waitingRoom = await waitingRoomModel.findOne({ partyId: partyId });
+      if (waitingRoom) {
+        const originalWaitingCount = waitingRoom.players.length;
+        waitingRoom.players = waitingRoom.players.filter(
+          player => player.computerId !== computerIdToRemove
+        );
+
+        if (waitingRoom.players.length !== originalWaitingCount) {
+          await waitingRoom.save();
+        }
+      }
+
+      res.json({ message: 'User removed successfully from session and waiting room (if present)' });
+    } catch (err) {
+      console.error(`❌ Error removing user from ${logLabel.toLowerCase()}:`, err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+}
+
+function createDisconnectUserHandler({ route, mainModel, waitingRoomModel, logLabel }) {
+  app.post(route, async (req, res) => {
+    try {
+      let body = req.body;
+
+      // Handle beacon (string) vs normal fetch (object)
+      if (typeof body === "string") {
+        try {
+          body = JSON.parse(body);
+        } catch (e) {
+          return res.status(400).json({ error: "Invalid JSON from beacon" });
+        }
+      }
+
+      const { partyId, computerId, partyCode } = body;
+      const actualPartyId = partyId || partyCode;
+
+      if (!actualPartyId || !computerId) {
+        return res.status(400).json({ error: 'partyId and computerId are required' });
+      }
+
+      // --- Update main session ---
+      const session = await mainModel.findOne({ partyId: actualPartyId });
+      if (!session) {
+        return res.status(404).json({ error: `${logLabel} not found` });
+      }
+
+      const player = session.players.find(p => p.computerId === computerId);
+      if (!player) {
+        return res.status(400).json({ error: 'Computer ID not found in session' });
+      }
+
+      player.socketId = "DISCONNECTED";
+      player.lastPing = new Date();
+      session.lastPinged = new Date();
+      await session.save();
+
+      // --- Update waiting room if exists ---
+      const waitingRoomSession = await waitingRoomModel.findOne({ partyId: actualPartyId });
+      if (waitingRoomSession) {
+        const waitingPlayer = waitingRoomSession.players.find(p => p.computerId === computerId);
+        if (waitingPlayer) {
+          waitingPlayer.socketId = "DISCONNECTED";
+          waitingPlayer.lastPing = new Date();
+          waitingRoomSession.lastPinged = new Date();
+          await waitingRoomSession.save();
+        }
+      }
+
+      // --- Update chat log if exists ---
+      const chatLogSession = await partyGameChatLogSchema.findOne({ partyId: actualPartyId });
+      if (chatLogSession) {
+        chatLogSession.chat.push({
+          username: '[CONSOLE]',
+          message: `${player.username} has been disconnected.`,
+          eventType: 'disconnect'
+        });
+        await chatLogSession.save();
+      }
+
+      res.json({ message: 'Socket ID reset successfully in session and waiting room (if present)' });
+    } catch (err) {
+      console.error(`❌ Error resetting socket ID for ${logLabel.toLowerCase()}:`, err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+}
 
 function createPartyGetHandler({ route, model, logLabel }) {
   app.get(route, async (req, res) => {
@@ -516,6 +656,55 @@ function createPartyGetHandler({ route, model, logLabel }) {
   });
 }
 
+app.post('/api/chat/:partyId', async (req, res) => {
+  const { partyId } = req.params;
+  const { username, message, eventType } = req.body;
+
+  try {
+    await partyGameChatLogSchema.updateOne(
+      { partyId },
+      {
+        $push: { chat: { username, message, eventType } },
+        $set: { lastPinged: new Date() }
+      },
+      { upsert: true }
+    );
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/chat/:partyId', async (req, res) => {
+  const { partyId } = req.params;
+
+  try {
+    const chatLog = await partyGameChatLogSchema.findOne({ partyId });
+    res.json(chatLog || { chat: [] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE chat log for a specific party
+app.delete('/api/chat/:partyId', async (req, res) => {
+  const { partyId } = req.params;
+
+  try {
+    const result = await partyGameChatLogSchema.deleteOne({ partyId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ success: false, message: 'Chat not found' });
+    }
+
+    res.status(200).json({ success: true, message: `Chat for party ${partyId} deleted` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // Add security headers using helmet
 app.use(helmet());
@@ -722,7 +911,11 @@ app.use((req, res) => {
   await connectDatabases();
   await startChangeStreams();
 
-  server.listen(PORT, () => {
-    console.log(`🚀 Server listening on port ${PORT}`);
-  });
+  //server.listen(PORT, () => {
+    //console.log(`🚀 Server listening on port ${PORT}`);
+  //});
+
+  server.listen(3000, "0.0.0.0", () => {
+  console.log("Server running at http://192.168.0.51:3000");
+});
 })();

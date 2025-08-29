@@ -1,0 +1,28 @@
+{
+    "customisation-blank": [
+        {
+            "id": "0000",
+            "name": "BLANK COLOUR",
+            "file-path": "/images/user-customisation/colour/blank/blank-colour.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "0100",
+            "name": "NO HEAD SLOT",
+            "file-path": "/images/user-customisation/head-slot/blank/no-head-slot.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "0200",
+            "name": "NO EYES SLOT",
+            "file-path": "/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "0300",
+            "name": "NO MOUTH SLOT",
+            "file-path": "/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg",
+            "slot": "mouth-slot"
+        }
+    ]
+}
