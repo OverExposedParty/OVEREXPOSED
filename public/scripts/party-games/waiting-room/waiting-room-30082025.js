@@ -152,13 +152,15 @@ async function checkPartyExists() {
           });
         }
       }
-          joinParty(partyCode);
+      joinParty(partyCode);
     } else {
       setActiveContainers(partySessionInProgressContainer);
       document.title = "WAITING ROOM | ERROR";
       addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
     }
-    fetchHelpContainer(helpContainerFile);
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchHelpContainer(helpContainerFile);
+    });
   } else {
     setActiveContainers(partyDoesNotExistContainer);
     gamemodeSettingsContainer.classList.remove('active');

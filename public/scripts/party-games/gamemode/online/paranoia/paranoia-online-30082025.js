@@ -182,6 +182,7 @@ async function initialisePage() {
     }
     joinParty(partyCode);
     data[0].players[index].socketId = socket.id
+    console.log("Socket ID set to: " + data[0].players[index].socketId);
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].players.length; i++) {
         if (data[0].players[i].computerId != deviceId) {
