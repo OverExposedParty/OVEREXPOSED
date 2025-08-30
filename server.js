@@ -911,11 +911,8 @@ app.use((req, res) => {
   await connectDatabases();
   await startChangeStreams();
 
-  //server.listen(PORT, () => {
-    //console.log(`🚀 Server listening on port ${PORT}`);
-  //});
+  server.listen(PORT, () => {
+    console.log(`🚀 Server listening on port ${PORT}`);
+  });
 
-  server.listen(3000, "0.0.0.0", () => {
-  console.log("Server running at http://192.168.0.51:3000");
-});
 })();
