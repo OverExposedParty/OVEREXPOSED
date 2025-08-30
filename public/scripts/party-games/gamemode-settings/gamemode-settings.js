@@ -18,6 +18,18 @@ const warningStartButton = document.querySelector('.start-game-warning-button');
 const inputPartyCode = document.getElementById('party-code');
 
 document.addEventListener('DOMContentLoaded', () => {
+    const storageObserver = new LocalStorageObserver();
+    storageObserver.addListener((key, oldValue, newValue) => {
+        if (key === 'settings-nsfw') {
+            console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+            if (oldValue !== newValue) {
+                eighteenPlusEnabled = newValue;
+                SetGamemodeButtons();
+                console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+            }
+        }
+    });
+
     fetchHelpContainer(helpContainerFile);
 });
 
@@ -38,20 +50,6 @@ function updateStartGameButton(allUsersReady) {
     startGameButton.classList.toggle('disabled', !anyActive);
     startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
 }
-
-const storageObserver = new LocalStorageObserver();
-
-// Add a listener to observe changes to 'settings-nsfw'
-storageObserver.addListener((key, oldValue, newValue) => {
-    if (key === 'settings-nsfw') {
-        console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
-        if (oldValue !== newValue) {
-            eighteenPlusEnabled = newValue;
-            SetGamemodeButtons();
-            console.log(`Value changed! Now NSFW is set to: ${newValue}`);
-        }
-    }
-});
 
 function SetGamemodeButtons() {
     if (eighteenPlusEnabled) {
