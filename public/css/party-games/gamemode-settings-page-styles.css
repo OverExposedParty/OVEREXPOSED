@@ -200,7 +200,16 @@ button.disabled {
     white-space: nowrap;
     box-sizing: border-box;
     text-decoration: none;
+
+    /* 🔧 make sure it's always visible */
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    /* ensure above scrollable content */
 }
+
 
 .start-game-button:active {
     background-color: var(--primarypagecolour);
@@ -281,21 +290,13 @@ button.disabled {
 }
 
 @media (orientation: portrait) {
-    .main-settings-container {
-        height: 55vh;
-    }
 
     .packs-container,
     .settings-container,
     .online-game-settings-container {
         width: 90vw;
         max-width: 1280px;
-        height: 70%;
-    }
-
-    .start-game-button {
-        width: 90vw;
-        max-width: 1280px;
+        height: 70vh;
     }
 
     .game-settings-tab-container {
@@ -320,5 +321,12 @@ button.disabled {
 
     .container-section .user-icon {
         font-size: 1vh;
+    }
+
+    .start-game-button {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

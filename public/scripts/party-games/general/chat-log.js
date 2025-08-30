@@ -121,13 +121,17 @@ function GetCommand(message) {
                 if (cmd.action?.toLowerCase() === "delete") {
                     DeleteParty();
                     if (typeof hostedParty !== "undefined") {
-                        onlineButton.classList.remove('active');
+                        if (onlineButton) {
+                            onlineButton.classList.remove('active');
+                        }
                         await ToggleOnlineMode(false);
                     }
                 }
                 else if (cmd.action?.toLowerCase() === "create") {
                     if (typeof hostedParty !== "undefined") {
-                        onlineButton.classList.add('active');
+                        if (onlineButton) {
+                            onlineButton.classList.add('active');
+                        }
                         await ToggleOnlineMode(true);
                     } else {
                         CreateChatMessage("[CONSOLE]", "UNABLE TO CREATE PARTY. YOU ARE NOT IN GAMEMODE SETTINGS ROOM", "error", Date.now());
