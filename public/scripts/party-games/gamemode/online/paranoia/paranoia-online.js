@@ -180,8 +180,8 @@ async function initialisePage() {
         eventType: "connect"
       });
     }
-    data[0].players[index].socketId = socket.id
     joinParty(partyCode);
+    data[0].players[index].socketId = socket.id
     if (data[0].isPlaying === true) {
       for (let i = 0; i < data[0].players.length; i++) {
         if (data[0].players[i].computerId != deviceId) {
