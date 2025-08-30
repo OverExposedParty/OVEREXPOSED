@@ -13,11 +13,14 @@ let onlineUsername = 'N/A';
 const { protocol, hostname } = window.location;
 let socket;
 
-if (hostname === 'overexposed.app') {
-  socket = io(`${protocol}//${hostname}`);
-} else {
-  socket = io(`${protocol}//${hostname}:3000`);
-}
+//if (hostname === 'overexposed.app') {
+//  socket = io(`${protocol}//${hostname}`);
+//} else {
+//  socket = io(`${protocol}//${hostname}:3000`);
+//}
+
+socket = io(); 
+
 
 socket.on('connect', () => {
   console.log('Socket connected successfully');
