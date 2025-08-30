@@ -58,6 +58,7 @@ async function SetPageSettings() {
   const currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
+  console.log("Loaded JSON files");
   await initialisePage();
 }
 

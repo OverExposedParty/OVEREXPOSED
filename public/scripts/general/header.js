@@ -8,6 +8,11 @@ const backgroundColour = rootStyles.getPropertyValue('--backgroundcolour').trim(
 const secondaryBackgroundColour = rootStyles.getPropertyValue('--secondarybackgroundcolour').trim();
 const warningColour = rootStyles.getPropertyValue('--warningcolour').trim();
 
+let previousPage = {
+    link: "/",
+    splashScreen: "/images/splash-screens/overexposed.png"
+};
+
 const backButton = document.querySelector(".back-button");
 const containerTitle = document.querySelector('#container-title');
 
@@ -66,7 +71,11 @@ class LocalStorageObserver {
 }
 
 window.onload = function () {
-
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            transitionSplashScreen(previousPage.link, previousPage.splashScreen)
+        });
+    }
     let logoContainer = document.querySelector('.logo-container');
     let partyGamesLink = document.getElementById('party-games-link');
     let overexposureLink = document.getElementById('overexposure-link');

@@ -29,11 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
-        });
-    }
     fetchHelpContainer(helpContainerFile);
 });
 

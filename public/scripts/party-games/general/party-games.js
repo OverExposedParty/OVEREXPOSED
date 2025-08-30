@@ -60,10 +60,6 @@ function vibrateOnClick() {
     }
 }
 
-document.querySelector('.back-button').addEventListener('click', () => {
-    transitionSplashScreen(addSettingsExtensionToCurrentURL(), `/images/splash-screens/${gamemode}-settings.png`);
-});
-
 document.addEventListener('DOMContentLoaded', async () => {
     const sideButtonsContainer = document.querySelector('.side-buttons');
     const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
@@ -158,6 +154,10 @@ function addSettingsExtensionToCurrentURL() {
     return currentURL;
 }
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', function () {
     fetchHelpContainer(helpContainerFile);
-})
+    previousPage = {
+        link: addSettingsExtensionToCurrentURL(),
+        splashScreen: `/images/splash-screens/${gamemode}-settings.png`
+    };
+});
