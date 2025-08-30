@@ -17,7 +17,9 @@ const warningStartButton = document.querySelector('.start-game-warning-button');
 
 const inputPartyCode = document.getElementById('party-code');
 
-window.addEventListener('load', fetchHelpContainer(helpContainerFile));
+document.addEventListener('DOMContentLoaded', () => {
+    fetchHelpContainer(helpContainerFile);
+});
 
 function updateStartGameButton(allUsersReady) {
     if (typeof allUsersReady !== 'undefined') {
