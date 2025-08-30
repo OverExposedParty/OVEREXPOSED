@@ -127,8 +127,7 @@ usercustomisationSaveButton.addEventListener('click', async () => {
     await UpdateUserPartyData({
       partyId: partyCode,
       computerId: deviceId,
-      newUserIcon: customisationString,
-      newsocketId: socket.id
+      newUserIcon: customisationString
     });
     if (placeholderUserCustomisation.classList.contains('waiting-room')) {
       gamemodeSettingsContainer.classList.add('active');

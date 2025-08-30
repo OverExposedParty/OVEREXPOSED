@@ -29,7 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
+        });
+    }
     fetchHelpContainer(helpContainerFile);
 });
 
@@ -190,10 +194,6 @@ function SetGameSettingsButtons() {
         });
     }
 }
-
-backButton.addEventListener('click', () => {
-    transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
-});
 
 
 inputPartyCode.addEventListener('click', () => {

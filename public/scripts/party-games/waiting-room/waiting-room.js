@@ -137,7 +137,8 @@ async function checkPartyExists() {
             computerId: deviceId,
             newUsername: "-",
             newUserReady: false,
-            newUserConfirmation: false
+            newUserConfirmation: false,
+            newUserSocketId: socket.id
           });
           console.log("partyCode: " + partyCode);
         }
@@ -147,6 +148,7 @@ async function checkPartyExists() {
             newComputerId: deviceId,
             newUsername: "-",
             newUserIcon: "0000:0100:0200:0300",
+            newUserSocketId: socket.id
           });
         }
       }

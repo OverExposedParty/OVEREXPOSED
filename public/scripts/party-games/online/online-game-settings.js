@@ -13,7 +13,7 @@ async function ToggleOnlineMode(toggle) {
       isReady: true,
       hasConfirmed: false,
       lastPing: new Date(),
-      socketId: null
+      socketId: socket.id
     }];
 
     await updateOnlineParty({
