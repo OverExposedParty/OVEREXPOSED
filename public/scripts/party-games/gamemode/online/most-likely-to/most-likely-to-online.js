@@ -86,11 +86,11 @@ async function SetPageSettings() {
     });
   });
 
-  selectPunishmentConfirmPunishmentButtonYes.addEventListener('click', () => {
+  ConfirmPunishmentButtonYes.addEventListener('click', () => {
     SetUserConfirmation(deviceId, true, "PUNISHMENT", true);
   });
 
-  selectPunishmentConfirmPunishmentButtonNo.addEventListener('click', () => {
+  confirmPunishmentButtonNo.addEventListener('click', () => {
     SetUserConfirmation(deviceId, false, "PUNISHMENT", true);
   });
 

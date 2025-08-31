@@ -3,36 +3,28 @@ const ConfirmPunishmentGamemodes = ["paranoia", "most-likely-to"];
 
 const placeHolderSelectedUser = document.getElementById('placeholder-selected-user-container');
 
-//Party Games General
 let waitingForPlayerContainer, waitingForPlayerTitle, waitingForPlayerText;
 let waitingForPlayersContainer, waitingForPlayersIconContainer;
 
-let selectPunishmentContainer, selectPunishmentButtonContainer, selectPunishmentConfirmPunishmentButton; //rename selectPunishmentConfirmPunishmentButton
+let selectPunishmentContainer, selectPunishmentButtonContainer, selectPunishmentConfirmPunishmentButton;
 let playerHasPassedContainer, playerHasPassedTitle, playerHasPassedText;
 
-//Party Games Player Selection
 let selectUserContainer, selectUserTitle, selectUserQuestionText, selectUserButtonContainer, selectUserConfirmPlayerButton;
 
-//TRUTH OR DARE
 let selectQuestionTypeContainer, selectQuestionTypeContainerQuestionText, selectQuestionTypeButtonContainer, selectQuestionTypeButtonTruth, selectQuestionTypeButtonDare;
 let answerQuestionContainer, answerQuestionContainerQuestionText, answerQuestionAnswer, answerQuestionSubmitButton;
 let completPromptContainer, completePromptText, completePromptCompleted;
 
 let completePunishmentContainer, completePunishmentText, completePunishmentButtonConfirm, completePunishmentButtonPass;
 
-//PARANOIA
-let confirmPunishmentContainer, confirmPunishmentText, selectPunishmentConfirmPunishmentButtonYes, selectPunishmentConfirmPunishmentButtonNo;
+let confirmPunishmentContainer, confirmPunishmentText, ConfirmPunishmentButtonYes, confirmPunishmentButtonNo;
 let pickHeadsOrTailsContainer;
 
-//NEVER HAVE I EVER
 let selectOptionContainer, selectOptionQuestionText, selectOptionButtonContainer, selectOptionConfirmButtonYes, selectOptionConfirmButtonNo;
 
-//MOST LIKELY TO
 let selectNumberContainer, selectNumberQuestionText, selectNumberButtonContainer, confirmNumberButton;
-const cssFilesSelectUserContainers = [
 
-];
-
+const cssFilesSelectUserContainers = [];
 cssFilesSelectUserContainers.forEach(href => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -40,25 +32,23 @@ cssFilesSelectUserContainers.forEach(href => {
     document.head.appendChild(link);
 });
 
-fetch('/html-templates/online/party-games/selected-user-containers/party-games-template.html')
-    .then(response => response.text())
-    .then(data => {
-        return new Promise(resolve => {
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            requestAnimationFrame(() => {
-                resolve();
-            });
-        });
-    })
-    .then(() => {
+async function loadTemplatesAndScripts() {
+    try {
+        // Load base template
+        const baseResponse = await fetch('/html-templates/online/party-games/selected-user-containers/party-games-template.html');
+        const baseData = await baseResponse.text();
+        placeHolderSelectedUser.insertAdjacentHTML('beforeend', baseData);
+        await new Promise(requestAnimationFrame);
+
+        // Initialize base containers
         waitingForPlayerContainer = placeHolderSelectedUser.querySelector('#waiting-for-player-container');
-        waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
-        waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p')
+        waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2');
+        waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p');
 
         waitingForPlayersContainer = placeHolderSelectedUser.querySelector('#waiting-for-players-container');
         waitingForPlayersIconContainer = waitingForPlayersContainer.querySelector('.content-container .user-confirmed-section');
 
-        selectPunishmentContainer = placeHolderSelectedUser.querySelector('#select-punishment-container')
+        selectPunishmentContainer = placeHolderSelectedUser.querySelector('#select-punishment-container');
         selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
         selectPunishmentConfirmPunishmentButton = selectPunishmentContainer.querySelector('.select-button-container button');
 
@@ -70,12 +60,7 @@ fetch('/html-templates/online/party-games/selected-user-containers/party-games-t
         completePunishmentText = completePunishmentContainer.querySelector('.content-container #punishment-text');
         completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
 
-        //const enterUsernameScript = document.createElement('script');
-        //enterUsernameScript.src = '/scripts/party-games/online/enter-username.js';
-        //enterUsernameScript.defer = true;
-        //document.body.appendChild(enterUsernameScript);
-    })
-    .then(() => {
+        // Push base containers
         gameContainers.push(
             waitingForPlayerContainer,
             waitingForPlayersContainer,
@@ -83,28 +68,16 @@ fetch('/html-templates/online/party-games/selected-user-containers/party-games-t
             playerHasPassedContainer,
             completePunishmentContainer
         );
-    })
-    .then(async () => {
-        console.log("Loading online script for " + placeHolderSelectedUser.dataset.template);
-        await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
-        await loadScript(`/scripts/html-templates/online/card-container-template.js`);
-    })
-    .catch(error => console.error('Error loading header:', error));
 
+        const template = placeHolderSelectedUser.dataset.template;
 
-if (placeHolderSelectedUser.dataset.template === 'truth-or-dare') {
-    fetch('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
+        // Load template-specific HTML
+        if (template === 'truth-or-dare') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
             answerQuestionContainer = placeHolderSelectedUser.querySelector('#answer-question-container');
             answerQuestionContainerQuestionText = answerQuestionContainer.querySelector('.content-container h2');
             answerQuestionAnswer = answerQuestionContainer.querySelector('textarea');
@@ -119,149 +92,96 @@ if (placeHolderSelectedUser.dataset.template === 'truth-or-dare') {
             selectQuestionTypeButtonContainer = selectQuestionTypeContainer.querySelector('.select-button-container');
             selectQuestionTypeButtonTruth = selectQuestionTypeButtonContainer.querySelector('#truth');
             selectQuestionTypeButtonDare = selectQuestionTypeButtonContainer.querySelector('#dare');
-        })
-        .then(() => {
-            gameContainers.push(
-                answerQuestionContainer,
-                completPromptContainer,
-                selectQuestionTypeContainer
-            );
-        });
-}
 
-if (placeHolderSelectedUser.dataset.template === 'paranoia') {
-    fetch('/html-templates/online/party-games/selected-user-containers/paranoia-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
+            gameContainers.push(answerQuestionContainer, completPromptContainer, selectQuestionTypeContainer);
+        }
+
+        if (template === 'paranoia') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/paranoia-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
             pickHeadsOrTailsContainer = placeHolderSelectedUser.querySelector('#heads-or-tails-pick-container');
 
-            completePunishmentContainer = document.querySelector('#complete-punishment-container');
             const punishmentPassButton = document.createElement("button");
             punishmentPassButton.className = "select-button";
             punishmentPassButton.id = "pass";
             punishmentPassButton.textContent = "Pass";
             completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container').appendChild(punishmentPassButton);
-        })
-        .then(() => {
-            gameContainers.push(
-                pickHeadsOrTailsContainer,
-                completePunishmentContainer
-            );
-        });
-}
 
-if (placeHolderSelectedUser.dataset.template === 'never-have-i-ever') {
-    fetch('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
+            gameContainers.push(pickHeadsOrTailsContainer, completePunishmentContainer);
+        }
+
+        if (template === 'never-have-i-ever') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
             selectOptionContainer = document.getElementById('select-option-container');
             selectOptionQuestionText = selectOptionContainer.querySelector('.content-container h2');
             selectOptionButtonContainer = selectOptionContainer.querySelector('.select-button-container');
             selectOptionConfirmButtonYes = selectOptionButtonContainer.querySelector('#yes');
             selectOptionConfirmButtonNo = selectOptionButtonContainer.querySelector('#no');
 
+            gameContainers.push(selectOptionContainer);
+        }
 
-        })
-        .then(() => {
-            gameContainers.push(
-                selectOptionContainer
-            );
-        });
-}
-
-if (placeHolderSelectedUser.dataset.template === 'most-likely-to') {
-    fetch('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
+        if (template === 'most-likely-to') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
 
             selectNumberContainer = document.querySelector('#select-number-container');
             selectNumberQuestionText = selectNumberContainer.querySelector('.content-container h2');
             selectNumberButtonContainer = selectNumberContainer.querySelector('.selected-user-container .button-container');
             confirmNumberButton = selectNumberContainer.querySelector('.select-button-container button');
 
+            gameContainers.push(selectNumberContainer);
+        }
 
-        })
-        .then(() => {
-            gameContainers.push(
-                selectNumberContainer
-            );
-        });
-}
+        // Player selection template
+        if (playerSelectionGamemodes.includes(template)) {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/general/player-selection-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
 
-if (playerSelectionGamemodes.includes(placeHolderSelectedUser.dataset.template)) {
-    fetch('/html-templates/online/party-games/selected-user-containers/general/player-selection-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
             selectUserContainer = placeHolderSelectedUser.querySelector('#select-user-container');
             selectUserTitle = selectUserContainer.querySelector('.content-container h1');
             selectUserQuestionText = selectUserContainer.querySelector('.content-container h2');
             selectUserButtonContainer = selectUserContainer.querySelector('.button-container');
             selectUserConfirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
-        })
-        .then(() => {
-            gameContainers.push(
-                selectUserContainer
-            );
-        });
-}
 
-if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template)) {
-    fetch('/html-templates/online/party-games/selected-user-containers/general/confirm-punishment-template.html')
-        .then(response => response.text())
-        .then(data => {
-            return new Promise(resolve => {
-                placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-                // Wait until next frame so elements are rendered
-                requestAnimationFrame(() => {
-                    resolve();
-                });
-            });
-        })
-        .then(() => {
+            gameContainers.push(selectUserContainer);
+        }
+
+        // Confirm punishment template
+        if (ConfirmPunishmentGamemodes.includes(template)) {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/general/confirm-punishment-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
             confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
             confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
-            selectPunishmentConfirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
-            selectPunishmentConfirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
-        })
-        .then(() => {
-            gameContainers.push(
-                confirmPunishmentContainer
-            );
-        });
+            ConfirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
+            confirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
+
+            gameContainers.push(confirmPunishmentContainer);
+        }
+
+        // Finally, load scripts last
+        console.log("Loading online script for " + template);
+        await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
+        await loadScript(`/scripts/html-templates/online/card-container-template.js`);
+
+    } catch (error) {
+        console.error('Error loading templates or scripts:', error);
+    }
 }
+
+// Start loading
+loadTemplatesAndScripts();

@@ -105,14 +105,14 @@ async function SetPageSettings() {
     pickedHeads = false;
   });
 
-  selectPunishmentConfirmPunishmentButtonYes.addEventListener('click', async () => {
+  ConfirmPunishmentButtonYes.addEventListener('click', async () => {
     await SetUserConfirmation({
       selectedDeviceId: deviceId,
       option: true
     });
   });
 
-  selectPunishmentConfirmPunishmentButtonNo.addEventListener('click', async () => {
+  confirmPunishmentButtonNo.addEventListener('click', async () => {
     await SetUserConfirmation({
       selectedDeviceId: deviceId,
       option: false
