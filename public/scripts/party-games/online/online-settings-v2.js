@@ -256,7 +256,6 @@ function updateOnlineParty({
   const isPartyGameParanoia = partyType === "party-game-paranoia";
   const isPartyGameMostLikelyTo = partyType === "party-game-most-likely-to";
   const isPartyGameNeverHaveIEver = partyType === "party-game-never-have-i-ever";
-
   const payload = {
     partyId,
     ...(isPartyGame && {
@@ -286,6 +285,8 @@ function updateOnlineParty({
     }),
   };
 
+  console.log("Updating party:", payload);
+  
   postToBothEndpoints(
     payload,
     `/api/${partyType}?partyCode=${partyId}`,
