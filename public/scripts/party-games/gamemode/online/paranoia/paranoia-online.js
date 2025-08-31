@@ -44,7 +44,7 @@ async function SetPageSettings() {
       selectUserButtonContainer.getAttribute('selected-id') != ""
     }
   });
-  confirmPunishmentButton.addEventListener('click', async () => {
+  selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
       selectPunishmentContainer.classList.remove('active');
       if (selectPunishmentContainer.getAttribute('select-id') == 'lucky-coin-flip') {
@@ -105,14 +105,14 @@ async function SetPageSettings() {
     pickedHeads = false;
   });
 
-  confirmPunishmentButtonYes.addEventListener('click', async () => {
+  selectPunishmentConfirmPunishmentButtonYes.addEventListener('click', async () => {
     await SetUserConfirmation({
       selectedDeviceId: deviceId,
       option: true
     });
   });
 
-  confirmPunishmentButtonNo.addEventListener('click', async () => {
+  selectPunishmentConfirmPunishmentButtonNo.addEventListener('click', async () => {
     await SetUserConfirmation({
       selectedDeviceId: deviceId,
       option: false

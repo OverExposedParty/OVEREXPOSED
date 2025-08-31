@@ -52,7 +52,7 @@ async function SetPageSettings() {
       selectNumberContainer.getAttribute('selected-id') != ""
     }
   });
-  confirmPunishmentButton.addEventListener('click', async () => {
+  selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
       selectPunishmentContainer.classList.remove('active');
       if (selectPunishmentContainer.getAttribute('select-id') == 'most-likely-to-drink-wheel') {
@@ -86,11 +86,11 @@ async function SetPageSettings() {
     });
   });
 
-  confirmPunishmentButtonYes.addEventListener('click', () => {
+  selectPunishmentConfirmPunishmentButtonYes.addEventListener('click', () => {
     SetUserConfirmation(deviceId, true, "PUNISHMENT", true);
   });
 
-  confirmPunishmentButtonNo.addEventListener('click', () => {
+  selectPunishmentConfirmPunishmentButtonNo.addEventListener('click', () => {
     SetUserConfirmation(deviceId, false, "PUNISHMENT", true);
   });
 

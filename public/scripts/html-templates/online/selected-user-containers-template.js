@@ -7,7 +7,7 @@ const placeHolderSelectedUser = document.getElementById('placeholder-selected-us
 let waitingForPlayerContainer, waitingForPlayerTitle, waitingForPlayerText;
 let waitingForPlayersContainer, waitingForPlayersIconContainer;
 
-let selectPunishmentContainer, selectPunishmentButtonContainer, confirmPunishmentButton; //rename confirmPunishmentButton
+let selectPunishmentContainer, selectPunishmentButtonContainer, selectPunishmentConfirmPunishmentButton; //rename selectPunishmentConfirmPunishmentButton
 let playerHasPassedContainer, playerHasPassedTitle, playerHasPassedText;
 
 //Party Games Player Selection
@@ -21,7 +21,7 @@ let completPromptContainer, completePromptText, completePromptCompleted;
 let completePunishmentContainer, completePunishmentText, completePunishmentButtonConfirm, completePunishmentButtonPass;
 
 //PARANOIA
-let confirmPunishmentContainer, confirmPunishmentText, confirmPunishmentButtonYes, confirmPunishmentButtonNo;
+let confirmPunishmentContainer, confirmPunishmentText, selectPunishmentConfirmPunishmentButtonYes, selectPunishmentConfirmPunishmentButtonNo;
 let pickHeadsOrTailsContainer;
 
 //NEVER HAVE I EVER
@@ -51,40 +51,38 @@ fetch('/html-templates/online/party-games/selected-user-containers/party-games-t
         });
     })
     .then(() => {
-        document.addEventListener('DOMContentLoaded', () => {
-            waitingForPlayerContainer = placeHolderSelectedUser.querySelector('#waiting-for-player-container');
-            waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
-            waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p')
+        waitingForPlayerContainer = placeHolderSelectedUser.querySelector('#waiting-for-player-container');
+        waitingForPlayerTitle = waitingForPlayerContainer.querySelector('.content-container h2')
+        waitingForPlayerText = waitingForPlayerContainer.querySelector('.content-container p')
 
-            waitingForPlayersContainer = placeHolderSelectedUser.querySelector('#waiting-for-players-container');
-            waitingForPlayersIconContainer = waitingForPlayersContainer.querySelector('.content-container .user-confirmed-section');
+        waitingForPlayersContainer = placeHolderSelectedUser.querySelector('#waiting-for-players-container');
+        waitingForPlayersIconContainer = waitingForPlayersContainer.querySelector('.content-container .user-confirmed-section');
 
-            selectPunishmentContainer = placeHolderSelectedUser.querySelector('#select-punishment-container')
-            selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
-            confirmPunishmentButton = selectPunishmentContainer.querySelector('.select-button-container button');
+        selectPunishmentContainer = placeHolderSelectedUser.querySelector('#select-punishment-container')
+        selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
+        selectPunishmentConfirmPunishmentButton = selectPunishmentContainer.querySelector('.select-button-container button');
 
-            playerHasPassedContainer = placeHolderSelectedUser.querySelector('#player-has-passed');
-            playerHasPassedTitle = playerHasPassedContainer.querySelector('.content-container h2');
-            playerHasPassedText = playerHasPassedContainer.querySelector('.content-container p');
+        playerHasPassedContainer = placeHolderSelectedUser.querySelector('#player-has-passed');
+        playerHasPassedTitle = playerHasPassedContainer.querySelector('.content-container h2');
+        playerHasPassedText = playerHasPassedContainer.querySelector('.content-container p');
 
-            completePunishmentContainer = placeHolderSelectedUser.querySelector('#complete-punishment-container');
-            completePunishmentText = completePunishmentContainer.querySelector('.content-container #punishment-text');
-            completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
+        completePunishmentContainer = placeHolderSelectedUser.querySelector('#complete-punishment-container');
+        completePunishmentText = completePunishmentContainer.querySelector('.content-container #punishment-text');
+        completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
 
-
-            gameContainers.push(
-                waitingForPlayerContainer,
-                waitingForPlayersContainer,
-                selectPunishmentContainer,
-                playerHasPassedContainer,
-                completePunishmentContainer
-            );
-
-            //const enterUsernameScript = document.createElement('script');
-            //enterUsernameScript.src = '/scripts/party-games/online/enter-username.js';
-            //enterUsernameScript.defer = true;
-            //document.body.appendChild(enterUsernameScript);
-        });
+        //const enterUsernameScript = document.createElement('script');
+        //enterUsernameScript.src = '/scripts/party-games/online/enter-username.js';
+        //enterUsernameScript.defer = true;
+        //document.body.appendChild(enterUsernameScript);
+    })
+    .then(() => {
+        gameContainers.push(
+            waitingForPlayerContainer,
+            waitingForPlayersContainer,
+            selectPunishmentContainer,
+            playerHasPassedContainer,
+            completePunishmentContainer
+        );
     })
     .then(async () => {
         console.log("Loading online script for " + placeHolderSelectedUser.dataset.template);
@@ -107,28 +105,27 @@ if (placeHolderSelectedUser.dataset.template === 'truth-or-dare') {
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                answerQuestionContainer = placeHolderSelectedUser.querySelector('#answer-question-container');
-                answerQuestionContainerQuestionText = answerQuestionContainer.querySelector('.content-container h2');
-                answerQuestionAnswer = answerQuestionContainer.querySelector('textarea');
-                answerQuestionSubmitButton = answerQuestionContainer.querySelector("#submit");
+            answerQuestionContainer = placeHolderSelectedUser.querySelector('#answer-question-container');
+            answerQuestionContainerQuestionText = answerQuestionContainer.querySelector('.content-container h2');
+            answerQuestionAnswer = answerQuestionContainer.querySelector('textarea');
+            answerQuestionSubmitButton = answerQuestionContainer.querySelector("#submit");
 
-                completPromptContainer = placeHolderSelectedUser.querySelector('#complete-prompt-container');
-                completePromptText = completPromptContainer.querySelector('.content-container h2');
-                completePromptCompleted = completPromptContainer.querySelector('.select-button-container #completed');
+            completPromptContainer = placeHolderSelectedUser.querySelector('#complete-prompt-container');
+            completePromptText = completPromptContainer.querySelector('.content-container h2');
+            completePromptCompleted = completPromptContainer.querySelector('.select-button-container #completed');
 
-                selectQuestionTypeContainer = placeHolderSelectedUser.querySelector('#select-question-type-container');
-                selectQuestionTypeContainerQuestionText = selectQuestionTypeContainer.querySelector('.content-container h1');
-                selectQuestionTypeButtonContainer = selectQuestionTypeContainer.querySelector('.select-button-container');
-                selectQuestionTypeButtonTruth = selectQuestionTypeButtonContainer.querySelector('#truth');
-                selectQuestionTypeButtonDare = selectQuestionTypeButtonContainer.querySelector('#dare');
-
-                gameContainers.push(
-                    answerQuestionContainer,
-                    completPromptContainer,
-                    selectQuestionTypeContainer
-                );
-            });
+            selectQuestionTypeContainer = placeHolderSelectedUser.querySelector('#select-question-type-container');
+            selectQuestionTypeContainerQuestionText = selectQuestionTypeContainer.querySelector('.content-container h1');
+            selectQuestionTypeButtonContainer = selectQuestionTypeContainer.querySelector('.select-button-container');
+            selectQuestionTypeButtonTruth = selectQuestionTypeButtonContainer.querySelector('#truth');
+            selectQuestionTypeButtonDare = selectQuestionTypeButtonContainer.querySelector('#dare');
+        })
+        .then(() => {
+            gameContainers.push(
+                answerQuestionContainer,
+                completPromptContainer,
+                selectQuestionTypeContainer
+            );
         });
 }
 
@@ -145,22 +142,20 @@ if (placeHolderSelectedUser.dataset.template === 'paranoia') {
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                pickHeadsOrTailsContainer = placeHolderSelectedUser.querySelector('#heads-or-tails-pick-container');
+            pickHeadsOrTailsContainer = placeHolderSelectedUser.querySelector('#heads-or-tails-pick-container');
 
-                completePunishmentContainer = document.querySelector('#complete-punishment-container');
-                const punishmentPassButton = document.createElement("button");
-                punishmentPassButton.className = "select-button";
-                punishmentPassButton.id = "pass";
-                punishmentPassButton.textContent = "Pass";
-                completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container').appendChild(punishmentPassButton);
-
-                gameContainers.push(
-                    pickHeadsOrTailsContainer,
-                    completePunishmentContainer
-                );
-
-            });
+            completePunishmentContainer = document.querySelector('#complete-punishment-container');
+            const punishmentPassButton = document.createElement("button");
+            punishmentPassButton.className = "select-button";
+            punishmentPassButton.id = "pass";
+            punishmentPassButton.textContent = "Pass";
+            completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container').appendChild(punishmentPassButton);
+        })
+        .then(() => {
+            gameContainers.push(
+                pickHeadsOrTailsContainer,
+                completePunishmentContainer
+            );
         });
 }
 
@@ -177,18 +172,18 @@ if (placeHolderSelectedUser.dataset.template === 'never-have-i-ever') {
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                selectOptionContainer = document.getElementById('select-option-container');
-                selectOptionQuestionText = selectOptionContainer.querySelector('.content-container h2');
-                selectOptionButtonContainer = selectOptionContainer.querySelector('.select-button-container');
-                selectOptionConfirmButtonYes = selectOptionButtonContainer.querySelector('#yes');
-                selectOptionConfirmButtonNo = selectOptionButtonContainer.querySelector('#no');
+            selectOptionContainer = document.getElementById('select-option-container');
+            selectOptionQuestionText = selectOptionContainer.querySelector('.content-container h2');
+            selectOptionButtonContainer = selectOptionContainer.querySelector('.select-button-container');
+            selectOptionConfirmButtonYes = selectOptionButtonContainer.querySelector('#yes');
+            selectOptionConfirmButtonNo = selectOptionButtonContainer.querySelector('#no');
 
-                gameContainers.push(
-                    selectOptionContainer
-                );
 
-            });
+        })
+        .then(() => {
+            gameContainers.push(
+                selectOptionContainer
+            );
         });
 }
 
@@ -205,16 +200,18 @@ if (placeHolderSelectedUser.dataset.template === 'most-likely-to') {
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                selectNumberContainer = document.querySelector('#select-number-container');
-                selectNumberQuestionText = selectNumberContainer.querySelector('.content-container h2');
-                selectNumberButtonContainer = selectNumberContainer.querySelector('.selected-user-container .button-container');
-                confirmNumberButton = selectNumberContainer.querySelector('.select-button-container button');
 
-                gameContainers.push(
-                    selectNumberContainer
-                );
-            });
+            selectNumberContainer = document.querySelector('#select-number-container');
+            selectNumberQuestionText = selectNumberContainer.querySelector('.content-container h2');
+            selectNumberButtonContainer = selectNumberContainer.querySelector('.selected-user-container .button-container');
+            confirmNumberButton = selectNumberContainer.querySelector('.select-button-container button');
+
+
+        })
+        .then(() => {
+            gameContainers.push(
+                selectNumberContainer
+            );
         });
 }
 
@@ -231,17 +228,16 @@ if (playerSelectionGamemodes.includes(placeHolderSelectedUser.dataset.template))
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                selectUserContainer = placeHolderSelectedUser.querySelector('#select-user-container');
-                selectUserTitle = selectUserContainer.querySelector('.content-container h1');
-                selectUserQuestionText = selectUserContainer.querySelector('.content-container h2');
-                selectUserButtonContainer = selectUserContainer.querySelector('.button-container');
-                selectUserConfirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
-
-                gameContainers.push(
-                    selectUserContainer
-                );
-            });
+            selectUserContainer = placeHolderSelectedUser.querySelector('#select-user-container');
+            selectUserTitle = selectUserContainer.querySelector('.content-container h1');
+            selectUserQuestionText = selectUserContainer.querySelector('.content-container h2');
+            selectUserButtonContainer = selectUserContainer.querySelector('.button-container');
+            selectUserConfirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
+        })
+        .then(() => {
+            gameContainers.push(
+                selectUserContainer
+            );
         });
 }
 
@@ -258,15 +254,14 @@ if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template
             });
         })
         .then(() => {
-            document.addEventListener('DOMContentLoaded', () => {
-                confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
-                confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
-                confirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
-                confirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
-
-                gameContainers.push(
-                    confirmPunishmentContainer
-                );
-            });
+            confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
+            confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
+            selectPunishmentConfirmPunishmentButtonYes = confirmPunishmentContainer.querySelector('#yes');
+            selectPunishmentConfirmPunishmentButtonNo = confirmPunishmentContainer.querySelector('#no');
+        })
+        .then(() => {
+            gameContainers.push(
+                confirmPunishmentContainer
+            );
         });
 }

@@ -22,7 +22,7 @@ gameContainers.push(
 let textBoxSetting = false;
 
 async function SetPageSettings() {
-  confirmPunishmentButton.addEventListener('click', async () => {
+  selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
       selectPunishmentContainer.classList.remove('active');
       if (selectPunishmentContainer.getAttribute('select-id') == 'truth-or-dare-drink-wheel') {
