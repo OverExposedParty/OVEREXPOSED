@@ -127,7 +127,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             if (cardContainerPublic != null) {
                 gameContainerPublicText = cardContainerPublic.querySelector('.content .main-image-container .text-container');
                 gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
@@ -137,7 +137,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
                 gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
             }
             if (placeholderCardContainer?.dataset.online === "true") {
-                SetPageSettings();
+                await SetPageSettings();
             }
         });
     })
