@@ -159,7 +159,6 @@ async function initialisePage() {
       });
     }
   }
-  await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
   await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
   if (deviceId == hostDeviceId && data[0].userInstructions == "") {
     await SendInstruction({

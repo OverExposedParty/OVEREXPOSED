@@ -86,7 +86,13 @@ fetch('/html-templates/online/party-games/selected-user-containers/party-games-t
             //document.body.appendChild(enterUsernameScript);
         });
     })
+    .then(async () => {
+        console.log("Loading online script for " + placeHolderSelectedUser.dataset.template);
+        await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
+        await loadScript(`/scripts/html-templates/online/card-container-template.js`);
+    })
     .catch(error => console.error('Error loading header:', error));
+
 
 if (placeHolderSelectedUser.dataset.template === 'truth-or-dare') {
     fetch('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html')
@@ -251,7 +257,7 @@ if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template
                 });
             });
         })
-        .then( async () => {
+        .then(() => {
             document.addEventListener('DOMContentLoaded', () => {
                 confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
                 confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
@@ -262,6 +268,5 @@ if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template
                     confirmPunishmentContainer
                 );
             });
-            await loadScript(`/scripts/html-templates/online/card-container-template.js?`);
         });
 }

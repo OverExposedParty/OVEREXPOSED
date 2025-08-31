@@ -80,15 +80,6 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             cardContainerDualStack.insertAdjacentHTML('afterbegin', withDualStackHTML);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (cardContainerPublic != null) {
-                gameContainerPublicTitle = cardContainerPublic.querySelector('.content .gamemode-text-svg');
-            }
-            if (cardContainerAnswer != null) {
-                gameContainerAnswerTitle = cardContainerAnswer.querySelector('.content .gamemode-text-svg');
-            }
-        });
-
         return fetch('/html-templates/party-games/card-container/gamemode-text-container.html');
     })
 
@@ -127,16 +118,26 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (cardContainerPublic != null) {
-                gameContainerPublicText = cardContainerPublic.querySelector('.content .main-image-container .text-container');
-                gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
-            }
-            if (cardContainerAnswer != null) {
-                gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
-                gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
-            }
-        });
+        if (cardContainerPublic != null) {
+            gameContainerPublicTitle = cardContainerPublic.querySelector('.content .gamemode-text-svg');
+            gameContainerPublicText = cardContainerPublic.querySelector('.content .main-image-container .text-container');
+            gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
+        }
+        if (cardContainerAnswer != null) {
+            gameContainerAnswerTitle = cardContainerAnswer.querySelector('.content .gamemode-text-svg');
+            gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
+            gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
+        }
+        if (cardContainerPrivate != null) {
+            gameContainerPrivateTitle = cardContainerPrivate.querySelector('.content .gamemode-text-svg');
+            gameContainerPrivateText = cardContainerPrivate.querySelector('.content .main-image-container .text-container');
+            gameContainerPrivateCardType = cardContainerPrivate.querySelector('.content .main-image-container .card-type-text');
+        }
+        if (cardContainerDualStack != null) {
+            gameContainerDualStackTitle = cardContainerDualStack.querySelector('.content .gamemode-text-svg');
+            gameContainerDualStackText = cardContainerDualStack.querySelector('.content .main-image-container .text-container');
+            gameContainerDualStackCardType = cardContainerDualStack.querySelector('.content .main-image-container .card-type-text');
+        }
 
         (async () => {
             if (placeholderCardContainer?.dataset.online === "true") {
