@@ -285,8 +285,6 @@ function updateOnlineParty({
     }),
   };
 
-  console.log("Updating party:", payload);
-  
   postToBothEndpoints(
     payload,
     `/api/${partyType}?partyCode=${partyId}`,
