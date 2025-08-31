@@ -136,11 +136,14 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
                 gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
                 gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
             }
+        });
+
+        async () => {
             if (placeholderCardContainer?.dataset.online === "true") {
                 await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
                 await SetPageSettings();
             }
-        });
+        }
     })
     .then(() => {
         // load game scripts here
