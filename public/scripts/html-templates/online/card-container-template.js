@@ -137,6 +137,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
                 gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
             }
             if (placeholderCardContainer?.dataset.online === "true") {
+                await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
                 await SetPageSettings();
             }
         });
