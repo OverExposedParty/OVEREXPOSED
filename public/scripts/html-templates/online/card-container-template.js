@@ -140,7 +140,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
 
         (async () => {
             if (placeholderCardContainer?.dataset.online === "true") {
-                await loadScript(`scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
+                await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
                 await SetPageSettings();
             }
         })();
