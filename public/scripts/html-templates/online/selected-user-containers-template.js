@@ -251,7 +251,7 @@ if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template
                 });
             });
         })
-        .then(() => {
+        .then( async () => {
             document.addEventListener('DOMContentLoaded', () => {
                 confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
                 confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');
@@ -262,5 +262,6 @@ if (ConfirmPunishmentGamemodes.includes(placeHolderSelectedUser.dataset.template
                     confirmPunishmentContainer
                 );
             });
+            await loadScript(`/scripts/html-templates/online/card-container-template.js?`);
         });
 }
