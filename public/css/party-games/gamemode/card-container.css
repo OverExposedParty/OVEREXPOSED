@@ -214,9 +214,9 @@
 
 @media (orientation: portrait) {
     .content {
-        height: 75vh;
+        height: 70vh;
         width: auto;
-        max-width: 260px;
+        max-width: 60vw;
         max-height: auto;
     }
 }
