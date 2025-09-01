@@ -12,7 +12,6 @@ app.use(express.json()); // This will allow Express to parse incoming JSON
 
 require('dotenv').config();
 
-
 const socketIo = require('socket.io'); // Import socket.io
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -857,38 +856,6 @@ app.get('/overexposure/:timestamp', (req, res) => {
   // Your logic for handling the request
   res.sendFile(filePath);
 });
-
-/*
-app.get('/insights', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blog-landing-page.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-
-//Blogs
-app.get('/insights/final-year-stress', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'final-year-stress.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-
-app.get('/insights/new-years-eve-party', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'nye-party.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-
-app.get('/insights/break-the-ice-not-hearts', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-app.get('/insights/valentines-day', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'pages', 'blog-section', 'blogs', 'break-the-ice-not-hearts.html');
-  console.log(`Attempting to serve file from: ${filePath}`);
-  res.sendFile(filePath);
-});
-*/
 
 app.get('/waiting-room', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');

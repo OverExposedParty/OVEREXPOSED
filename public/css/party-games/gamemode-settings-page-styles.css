@@ -192,22 +192,14 @@ button.disabled {
     width: 60vw;
     max-width: 300px;
     margin: 1.5vh auto 0;
-    background-color: var(--secondarybackgroundcolour);
-    border: var(--bordersize) solid var(--secondarybackgroundcolour);
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
     border-radius: 50px;
     color: var(--primarypagecolour);
     text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
     text-decoration: none;
-
-    /* 🔧 make sure it's always visible */
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 200;
-    /* ensure above scrollable content */
 }
 
 

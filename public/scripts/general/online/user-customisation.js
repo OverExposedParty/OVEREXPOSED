@@ -139,6 +139,15 @@ function toggleUserCustomisation() {
   toggleClass(userCustomisationContainer, settingsElementClassArray);
 }
 
+function toggleUserCustomisationIcon(bool) {
+  if (bool === true) {
+    userCustomisationIcon.classList.remove('disabled');
+  }
+  else {
+    userCustomisationIcon.classList.add('disabled');
+  }
+}
+
 if (rightHeaderContainer) {
   userCustomisationIcon = document.createElement('div');
   userCustomisationIcon.classList.add('icon-container');

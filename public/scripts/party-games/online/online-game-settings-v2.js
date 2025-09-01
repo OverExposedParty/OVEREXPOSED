@@ -58,6 +58,7 @@ async function ToggleOnlineMode(toggle) {
       eventType: "connect"
     });
     DisplayChatLogs();
+    toggleUserCustomisationIcon(true);
   }
   else {
     inputPartyCode.value = "";
@@ -76,6 +77,7 @@ async function ToggleOnlineMode(toggle) {
     updateStartGameButton(true);
     await DeletePartyChat()
     DeleteParty();
+    toggleUserCustomisationIcon(false);
   }
 }
 
