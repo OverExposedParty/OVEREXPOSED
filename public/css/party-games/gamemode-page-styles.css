@@ -31,19 +31,6 @@ body {
     /* Pushes it down */
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    height: auto;
-    width: 300px;
-    max-width: 75vw;
-
-    /* Content width will adjust based on main image width */
-    max-height: auto;
-}
-
 .question-zoomed-container {
     width: 300px;
     position: absolute;
