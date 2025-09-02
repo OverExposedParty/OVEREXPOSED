@@ -324,4 +324,8 @@ button.disabled {
         left: 50%;
         transform: translateX(-50%);
     }
+
+    .main-container {
+        top: 10vh;
+    }
 }
