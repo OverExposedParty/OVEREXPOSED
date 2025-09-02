@@ -202,7 +202,6 @@ button.disabled {
     text-decoration: none;
 }
 
-
 .start-game-button:active {
     background-color: var(--primarypagecolour);
     color: var(--primarypagecolour);
@@ -283,12 +282,16 @@ button.disabled {
 
 @media (orientation: portrait) {
 
+    .header-container h2 {
+        font-size: 24px;
+    }
+
     .packs-container,
     .settings-container,
     .online-game-settings-container {
         width: 90vw;
         max-width: 1280px;
-        height: 70vh;
+        height: 60vh;
     }
 
     .game-settings-tab-container {

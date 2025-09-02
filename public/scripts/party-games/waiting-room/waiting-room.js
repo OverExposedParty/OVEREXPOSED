@@ -89,7 +89,6 @@ async function checkPartyExists() {
   const response = await fetch(`/api/waiting-room?partyCode=${partyCode}`);
   const data = await response.json();
   if (data.length > 0) {
-
     const partyData = data[0];
     partyGameMode = partyData.gamemode;
     minPlayerCount = gameModeMinPlayerMap[partyGameMode];
@@ -165,11 +164,6 @@ async function checkPartyExists() {
     setActiveContainers(partyDoesNotExistContainer);
     gamemodeSettingsContainer.classList.remove('active');
     document.title = "WAITING ROOM | PARTY DOES NOT EXIST";
-
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchHelpContainer(helpContainerFile);
-    });
-
     addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
   }
 }

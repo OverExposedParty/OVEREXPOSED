@@ -57,5 +57,19 @@ fetch('/html-templates/gamemode-settings.html')
     onlineSettingsContainer = document.querySelector('.online-game-settings-container');
 
     userCount = document.querySelector('.user-count');
+  }).then(() => {
+    const storageObserver = new LocalStorageObserver();
+    storageObserver.addListener((key, oldValue, newValue) => {
+      if (key === 'settings-nsfw') {
+        console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+        if (oldValue !== newValue) {
+          eighteenPlusEnabled = newValue;
+          SetGamemodeButtons();
+          console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+        }
+      }
+    });
+    const helpContainerFile = "party-games-settings/" + placeholderGamemodeSettings.dataset.template + '.json';
+    fetchHelpContainer(helpContainerFile);
   })
   .catch(error => console.error('Error loading user customization:', error));

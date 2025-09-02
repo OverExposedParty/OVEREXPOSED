@@ -760,3 +760,11 @@ async function DeletePartyChat() {
     console.error('Error deleting chat:', err);
   }
 }
+
+async function CheckGamePage() {
+  if (document.getElementById('placeholder-selected-user-container')) {
+    await loadScript('/scripts/html-templates/online/selected-user-containers-template.js');
+  }
+}
+
+CheckGamePage();

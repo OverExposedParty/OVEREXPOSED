@@ -121,7 +121,7 @@ function GetCommand(message) {
                 if (cmd.action?.toLowerCase() === "delete") {
                     DeleteParty();
                     if (typeof hostedParty !== "undefined") {
-                        if (onlineButton) {
+                        if (typeof onlineButton !== 'undefined') {
                             onlineButton.classList.remove('active');
                         }
                         await ToggleOnlineMode(false);
