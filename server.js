@@ -753,11 +753,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'party-games-homepage.html'));
-});
-
-app.get('/what-is-overexposed', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pages', 'what-is-overexposed', 'what-is-overexposed.html'));
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html')); 
 });
 
 app.get('/truth-or-dare/settings', (req, res) => {
@@ -868,6 +864,17 @@ app.get('/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/terms-and-privacy', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'other', 'terms-and-privacy.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/faqs', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'other', 'frequently-asked-questions.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
 
 // Handle 404 (Page Not Found)
 app.use((req, res) => {

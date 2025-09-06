@@ -12,6 +12,25 @@ cssFilesHeader.forEach(href => {
   document.head.appendChild(link);
 });
 
+function LoadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+function waitForFunction(name, callback) {
+  const interval = setInterval(() => {
+    if (typeof window[name] === "function") {
+      clearInterval(interval);
+      callback();
+    }
+  }, 50); // check every 50ms
+}
+
 fetch('/html-templates/header.html')
   .then(response => response.text())
   .then(data => {
@@ -25,10 +44,14 @@ fetch('/html-templates/header.html')
       headerScript.src = '/scripts/general/header.js';
       document.body.appendChild(headerScript);
 
-      const helpScript = document.createElement('script');
-      helpScript.src = '/scripts/general/help-container.js';
-      helpScript.id = 'help-script';
-      document.body.appendChild(helpScript);
+      const helpContainerScript = document.createElement('script');
+      helpContainerScript.src = '/scripts/general/help-container.js';
+      helpContainerScript.id = 'help-script';
+      document.body.appendChild(helpContainerScript);
+
+      const googleAnalyticsScript = document.createElement('script');
+      googleAnalyticsScript.src = '/scripts/html-templates/general/google-analytics.js';
+      document.body.appendChild(googleAnalyticsScript);
     };
 
     const rotateDeviceScript = document.createElement('script');
@@ -39,13 +62,3 @@ fetch('/html-templates/header.html')
     document.body.appendChild(soundScript);
   })
   .catch(error => console.error('Error loading header:', error));
-
-  function loadScript(src) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.body.appendChild(script);
-    });
-}

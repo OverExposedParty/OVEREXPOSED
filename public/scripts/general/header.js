@@ -70,104 +70,94 @@ class LocalStorageObserver {
     }
 }
 
-window.onload = function () {
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            transitionSplashScreen(previousPage.link, previousPage.splashScreen)
-        });
-    }
-    let logoContainer = document.querySelector('.logo-container');
-    let partyGamesLink = document.getElementById('party-games-link');
-    let overexposureLink = document.getElementById('overexposure-link');
-    let insightsLink = document.getElementById('insights-link');
-    let whatIsOverexposedLink = document.getElementById('what-is-overexposed-link');
+if (backButton) {
+    backButton.addEventListener('click', () => {
+        transitionSplashScreen(previousPage.link, previousPage.splashScreen)
+    });
+}
+let logoContainer = document.querySelector('.logo-container');
+let partyGamesLink = document.getElementById('party-games-link');
+let termsAndPrivacyLink = document.getElementById('terms-and-privacy-link');
+let frequentlyAskedQuestionsLink = document.getElementById('frequently-asked-questions-link');
 
-    if (logoContainer) {
-        logoContainer.addEventListener('click', function () {
-            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-        });
-    }
+if (logoContainer) {
+    logoContainer.addEventListener('click', function () {
+        transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+    });
+}
 
-    if (partyGamesLink) {
-        partyGamesLink.addEventListener('click', function () {
-            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-        });
-    }
-    if (overexposureLink) {
-        overexposureLink.addEventListener('click', function () {
-            transitionSplashScreen('/overexposure', '/images/splash-screens/overexposure.png');
-        });
-    }
-    if (insightsLink) {
-        insightsLink.addEventListener('click', function () {
-            transitionSplashScreen('/insights', '/images/splash-screens/insights.png');
-        });
-    }
-    if (whatIsOverexposedLink) {
-        whatIsOverexposedLink.addEventListener('click', function () {
-            transitionSplashScreen('/what-is-overexposed', '/images/splash-screens/what-is-overexposed.png');
-        });
-    }
-};
-
+if (partyGamesLink) {
+    partyGamesLink.addEventListener('click', function () {
+        transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+    });
+}
+if (termsAndPrivacyLink) {
+    termsAndPrivacyLink.addEventListener('click', function () {
+        transitionSplashScreen('/terms-and-privacy', '/images/splash-screens/terms-and-privacy.png');
+    });
+}
+if (frequentlyAskedQuestionsLink) {
+    frequentlyAskedQuestionsLink.addEventListener('click', function () {
+        transitionSplashScreen('/faqs', '/images/splash-screens/frequently-asked-questions.png');
+    });
+}
 
 // Declare the variable with the desired URL
 const instagramUrl = "https://www.instagram.com/oe.app/";
 const tiktokUrl = "https://www.tiktok.com/@overexposed.app";
 
-document.addEventListener('DOMContentLoaded', function () {
-    const instagramLink = document.getElementById('instagram-link');
-    const tiktokLink = document.getElementById('tiktok-link');
-    const soundSetting = document.getElementById('settings-sound');
-    const nsfwSetting = document.getElementById('settings-nsfw');
+const instagramLink = document.getElementById('instagram-link');
+const tiktokLink = document.getElementById('tiktok-link');
+const soundSetting = document.getElementById('settings-sound');
+const nsfwSetting = document.getElementById('settings-nsfw');
 
-    instagramLink.href = instagramUrl;
-    tiktokLink.href = tiktokUrl;
+instagramLink.href = instagramUrl;
+tiktokLink.href = tiktokUrl;
 
-    if (localStorage.getItem('settings-sound') === 'true') {
-        settingsSoundCheckbox.checked = true;
+if (localStorage.getItem('settings-sound') === 'true') {
+    settingsSoundCheckbox.checked = true;
+}
+
+settingsSoundCheckbox.addEventListener('change', function () {
+    localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
+    if (settingsSoundCheckbox.checked) {
+        playSoundEffect('sliderEnabled');
     }
-
-    settingsSoundCheckbox.addEventListener('change', function () {
-        localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
-        if (settingsSoundCheckbox.checked) {
-            playSoundEffect('sliderEnabled');
-        }
-        else {
-            playSoundEffect('sliderDisabled');
-        }
-    });
-
-    if (localStorage.getItem('settings-nsfw') === 'true') {
-        nsfwCheckbox.checked = true;
-    }
-
-    nsfwCheckbox.addEventListener('change', function () {
-        localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
-        if (nsfwCheckbox.checked) {
-            playSoundEffect('sliderEnabled');
-        }
-        else {
-            playSoundEffect('sliderDisabled');
-        }
-    });
-    if (document.querySelector('#card-bounds-checkbox')) {
-
-        if (localStorage.getItem('settings-card-bounds') === 'true') {
-            cardBoundsCheckbox.checked = true;
-        }
-
-        cardBoundsCheckbox.addEventListener('change', function () {
-            localStorage.setItem('settings-card-bounds', cardBoundsCheckbox.checked);
-            if (cardBoundsCheckbox.checked) {
-                playSoundEffect('sliderEnabled');
-            }
-            else {
-                playSoundEffect('sliderDisabled');
-            }
-        });
+    else {
+        playSoundEffect('sliderDisabled');
     }
 });
+
+if (localStorage.getItem('settings-nsfw') === 'true') {
+    nsfwCheckbox.checked = true;
+}
+
+nsfwCheckbox.addEventListener('change', function () {
+    localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);
+    if (nsfwCheckbox.checked) {
+        playSoundEffect('sliderEnabled');
+    }
+    else {
+        playSoundEffect('sliderDisabled');
+    }
+});
+if (document.querySelector('#card-bounds-checkbox')) {
+
+    if (localStorage.getItem('settings-card-bounds') === 'true') {
+        cardBoundsCheckbox.checked = true;
+    }
+
+    cardBoundsCheckbox.addEventListener('change', function () {
+        localStorage.setItem('settings-card-bounds', cardBoundsCheckbox.checked);
+        if (cardBoundsCheckbox.checked) {
+            playSoundEffect('sliderEnabled');
+        }
+        else {
+            playSoundEffect('sliderDisabled');
+        }
+    });
+}
+
 
 
 const overlay = document.createElement('div');
@@ -445,6 +435,10 @@ function transitionSplashScreen(link, splashScreen) {
     });
 }
 
+if (!localStorage.getItem('cookie-consent')) {
+    LoadScript('/scripts/other/cookie-consent.js');
+}
+
 // Page Load Transition
 const heading = document.createElement('div');
 heading.classList.add('loading-screen');
@@ -453,6 +447,10 @@ heading.classList.add('loading-screen');
 function updateVh() {
     let vh = window.innerHeight * 0.01; // Get 1% of the viewport height
     document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the value in CSS
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 window.addEventListener('load', updateVh);

@@ -1,0 +1,112 @@
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: auto;
+    background-color: var(--backgroundcolour);
+    display: flex;
+    flex-wrap: wrap;
+    /* allow wrapping */
+    align-items: flex-start;
+    /* fixed 'top' to valid flex value */
+    z-index: 1000;
+    opacity: 0.95;
+}
+
+
+
+.cookie-container h2,
+.cookie-container p {
+    padding: 0 1vh;
+    color: var(--primarypagecolour);
+    text-align: left;
+}
+
+.cookie-banner button#accept-cookies{
+    background-color: var(--primarypagecolour);
+}
+
+.cookie-banner button#decline-cookies{
+    background-color: var(--secondarypagecolour);
+}
+
+@media (orientation: landscape) {
+    .cookie-container.cookie-header {
+        flex: 1 1 100%;
+        text-align: center;
+        margin: 1vh 0;
+    }
+
+    .cookie-container.cookie-content {
+        flex: 0 0 75%;
+        max-width: 75%;
+        margin: 1vh 0;
+    }
+
+    .cookie-button-container {
+        flex: 1;
+        max-width: 25%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin: 1vh 0;
+    }
+
+    .cookie-banner button {
+        all: unset;
+        flex: 1;
+        font-size: 12px;
+        cursor: pointer;
+        color: var(--backgroundcolour);
+        background-color: var(--primarypagecolour);
+        height: 5vh;
+        text-align: center;
+        border-radius: 6px;
+        margin: 0 1vh;
+        transition: font-size 0.2s ease;
+    }
+    .cookie-banner button:hover {
+        font-size: 14px;
+    }
+    .cookie-container p {
+        font-size: 12px;
+    }
+    .cookie-container h2 {
+        font-size: 16px;
+    }
+}
+
+@media (orientation: portrait) {
+    .cookie-banner {
+        height: auto;
+        border-radius: 5px 5px 0 0;
+        flex-direction: column;
+    }
+
+    .cookie-container {
+        width: 100%;
+        margin: 1vh 0;
+    }
+
+    .cookie-container p {
+        font-size: 12px;
+    }
+
+    .cookie-button-container {
+        width: 100%;
+    }
+
+    .cookie-banner button {
+        all: unset;
+        font-size: 18px;
+        cursor: pointer;
+        color: var(--backgroundcolour);
+        width: 100%;
+        height: 7.5vh;
+        text-align: center;
+        transition: font-size 0.2s ease;
+    }
+    .cookie-banner button:hover {
+        font-size: 20px;
+    }
+}

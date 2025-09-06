@@ -2,5 +2,21 @@
     {
         "title": "PARTY GAMES",
         "text": "Welcome to <highlight>OVEREXPOSED</highlight> Your ultimate online destination for classic party games!!!"
+    },
+    {
+        "title": "TRUTH OR DARE",
+        "text": "<highlight>Truth or Dare</highlight> is a classic game that has been enjoyed for generations. Crank up the fun with wild prompts and tough choices. Either spill your secrets or complete the dare…fail, and a punishment awaits!"
+    },
+    {
+        "title": "PARANOIA",
+        "text": "<highlight>Paranoia</highlight>, a suspense-filled party game where secret questions & bold choices keep everyone on edge. Choose someone for the mystery prompt, and watch them decide if they’ll face a punishment to uncover it or stay paranoid!"
+    },
+    {
+        "title": "NEVER HAVE I EVER",
+        "text": "<highlight>Never Have I Ever</highlight>, a fun twist on the classic game. Never Have I Ever brings classic chaos to the party. Read out a question to the group…if anyone’s guilty, they take a punishment. Throw in the 'put a finger down' rule for extra fun!"
+    },
+    {
+        "title": "MOST LIKELY TO",
+        "text": "<highlight>Most Likely To</highlight> is all about calling out your mates! Read a question or let TTS do it, then the group votes on who’s most likely to fit the prompt…whoever gets picked faces the punishment!"
     }
 ]

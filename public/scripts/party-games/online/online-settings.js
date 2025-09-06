@@ -1,6 +1,3 @@
-
-let partyDisbandedContainer = document.getElementById('party-disbanded-container');
-
 let gameContainers = [];
 let hostedParty = false;
 let waitingForHost = false;
@@ -588,8 +585,7 @@ function formatPackName(name) {
 function PartyDisbanded() {
   try {
     if (gameContainers) {
-      gameContainers.forEach(gameContainer => gameContainer.classList.remove('active'));
-      partyDisbandedContainer.classList.add('active');
+      setActiveContainers(partyDisbandedContainer);
       CreateChatMessage("[CONSOLE]", "PARTY HAS BEEN DISBANDED.", "disconnect", Date.now());
     }
   } catch (e) { }
@@ -763,7 +759,7 @@ async function DeletePartyChat() {
 
 async function CheckGamePage() {
   if (document.getElementById('placeholder-selected-user-container')) {
-    await loadScript('/scripts/html-templates/online/selected-user-containers-template.js');
+    await LoadScript('/scripts/html-templates/online/selected-user-containers-template.js');
   }
 }
 

@@ -157,8 +157,8 @@ async function checkPartyExists() {
       document.title = "WAITING ROOM | ERROR";
       addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
     }
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchHelpContainer(helpContainerFile);
+    waitForFunction("FetchHelpContainer", () => {
+      FetchHelpContainer(helpContainerFile);
     });
   } else {
     setActiveContainers(partyDoesNotExistContainer);

@@ -1,0 +1,96 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    top: calc(var(--headerheight) + 5vh);
+    z-index: 100;
+    height: auto;
+    width: 90vw;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.main-container .heading,
+.main-container .section-container {
+    color: var(--primarypagecolour);
+    width: 100%;
+    background-color: var(--backgroundcolour)
+}
+
+
+.main-container .heading,
+.main-container .sub-heading {
+    border-radius: 50px;
+}
+
+.main-container .heading {
+    margin-bottom: 10px;
+}
+
+.main-container .heading h1 {
+    text-align: center;
+    font-size: 24px;
+    padding: 15px;
+}
+
+.main-container .heading h1 .lower-case {
+    font-size: 18px;
+}
+
+.main-container .sub-heading h2 {
+    text-align: left;
+    font-size: 16px;
+}
+
+.main-container .sub-heading {
+    margin: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-container .sub-heading .drop-down {
+    all: unset;
+    position: relative;
+    margin-left: auto;
+    font-size: 24px;
+    cursor: pointer;
+    top: 4px;
+}
+
+.main-container .sub-heading .drop-down.active {
+    transform: rotate(180deg);
+    top: -8px;
+}
+
+.main-container .section-container {
+    border-radius: 20px;
+    flex-direction: row;
+    margin: 5px 0;
+}
+
+.main-container .section-container .text-container {
+    height: 0;
+    overflow: hidden;
+    margin: 0 20px;
+    transition: height 0.5s ease;
+}
+
+.main-container .section-container .text-container p {
+    font-size: 12px;
+}
+
+.main-container .section-container .text-container.active p {
+    margin-bottom: 20px;
+}
+
+.main-container .section-container .text-container p a {
+    color: var(--primarypagecolour);
+}
+
+.main-container .section-container .text-container p a:hover {
+    color: var(--secondarypagecolour);
+}

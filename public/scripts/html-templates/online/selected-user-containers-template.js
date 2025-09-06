@@ -24,6 +24,8 @@ let selectOptionContainer, selectOptionQuestionText, selectOptionButtonContainer
 
 let selectNumberContainer, selectNumberQuestionText, selectNumberButtonContainer, confirmNumberButton;
 
+let partyDisbandedContainer;
+
 const cssFilesSelectUserContainers = [];
 cssFilesSelectUserContainers.forEach(href => {
     const link = document.createElement('link');
@@ -59,6 +61,7 @@ async function loadTemplatesAndScripts() {
         completePunishmentContainer = placeHolderSelectedUser.querySelector('#complete-punishment-container');
         completePunishmentText = completePunishmentContainer.querySelector('.content-container #punishment-text');
         completePunishmentButtonConfirm = completePunishmentContainer.querySelector('.select-button-container #confirm');
+        partyDisbandedContainer = document.getElementById('party-disbanded-container');
 
         // Push base containers
         gameContainers.push(
@@ -66,7 +69,8 @@ async function loadTemplatesAndScripts() {
             waitingForPlayersContainer,
             selectPunishmentContainer,
             playerHasPassedContainer,
-            completePunishmentContainer
+            completePunishmentContainer,
+            partyDisbandedContainer
         );
 
         const template = placeHolderSelectedUser.dataset.template;
@@ -175,8 +179,8 @@ async function loadTemplatesAndScripts() {
 
         // Finally, load scripts last
         console.log("Loading online script for " + template);
-        await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
-        await loadScript(`/scripts/html-templates/online/card-container-template.js`);
+        await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
+        await LoadScript(`/scripts/html-templates/online/card-container-template.js`);
 
     } catch (error) {
         console.error('Error loading templates or scripts:', error);

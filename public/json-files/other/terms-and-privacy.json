@@ -1,0 +1,32 @@
+[
+  {
+    "sectionID": "terms-of-service",
+    "subHeading": "Terms of Service",
+    "text": "OverExposed is an online platform offering classic party games such as Truth or Dare, Never Have I Ever, Most Likely To, and Paranoia.<br>&nbsp;&nbsp;• By using this website, you agree to do so responsibly and only for personal, non-commercial purposes.<br>&nbsp;&nbsp;• You may not attempt to hack, disrupt, or misuse the platform in any way.<br>&nbsp;&nbsp;• OverExposed reserves the right to update these Terms at any time. Continued use of the website after changes means you accept the updated Terms."
+  },
+  {
+    "sectionID": "privacy-policy",
+    "subHeading": "Privacy Policy",
+    "text": "OverExposed values your privacy.<br>&nbsp;&nbsp;• We do not require accounts or collect personal information to use the site.<br>&nbsp;&nbsp;• The site may use your browser’s local storage to remember game settings, text-to-speech preferences, and selected packs.<br>&nbsp;&nbsp;• We use Google Analytics to understand how visitors use the site. This helps us improve game content and features.<br>&nbsp;&nbsp;&nbsp;&nbsp;• Google Analytics collects non-identifiable information, such as pages visited, time spent on the site, and device/browser type.<br>&nbsp;&nbsp;&nbsp;&nbsp;• This information is aggregated and cannot be used to personally identify you.<br>&nbsp;&nbsp;&nbsp;&nbsp;• You can learn more about how Google collects and processes data by visiting Google’s Privacy & Terms.<br>&nbsp;&nbsp;• Your information will never be sold or shared with third parties, except as required by law."
+  },
+  {
+    "sectionID": "cookies",
+    "subHeading": "Cookies",
+    "text": "OverExposed uses cookies and local storage to improve your experience.<br><br>&nbsp;&nbsp;• We use Google Analytics to understand how visitors interact with the site. This helps us analyze traffic, improve content, and enhance features.<br>&nbsp;&nbsp;• Google Analytics collects non-identifiable information such as pages visited, time spent on the site, and device/browser type.<br>&nbsp;&nbsp;• This information is aggregated and cannot be used to personally identify you.<br>&nbsp;&nbsp;• We also use your browser’s local storage to remember preferences such as game settings, text-to-speech options, and selected packs, so you don’t have to reconfigure them each visit.<br><br>You can disable cookies in your browser settings at any time, but some features may not function as intended."
+  },
+  {
+    "sectionID": "age-nsfw-warning",
+    "subHeading": "Age & NSFW Warning",
+    "text": "OverExposed is designed for a variety of social settings.<br>&nbsp;&nbsp;• We advise that users be at least 13 years old to use the site.<br>&nbsp;&nbsp;• Some packs contain NSFW (Not Safe For Work) content intended for adults.<br>&nbsp;&nbsp;• You must be 18 years or older to access NSFW content.<br>&nbsp;&nbsp;• Minors may only use the site with non-NSFW packs.<br>&nbsp;&nbsp;• It is your responsibility to ensure that you and those around you are comfortable with the chosen content."
+  },
+  {
+    "sectionID": "disclaimer",
+    "subHeading": "Disclaimer",
+    "text": "OverExposed is provided for entertainment purposes only.<br>&nbsp;&nbsp;• We are not responsible for any consequences, disputes, or outcomes that result from playing the games.<br>&nbsp;&nbsp;• Participation is voluntary, and you may skip any question, dare, or prompt if you feel uncomfortable.<br>&nbsp;&nbsp;• Use of the site is entirely at your own risk."
+  },
+  {
+    "sectionID": "contact",
+    "subHeading": "Contact",
+    "text": "For legal questions, copyright concerns, or privacy requests, you can reach us at:<br>&nbsp;&nbsp;• Email: <a href='mailto:overexposedgame@gmail.com'>overexposedgame@gmail.com</a><br>&nbsp;&nbsp;• Instagram: <a href='https://www.instagram.com/oe.app' target='_blank'>@oe.app</a>"
+  }
+]

@@ -50,17 +50,3 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
-
-@media (orientation: portrait) {
-    .side-buttons {
-        width: auto;
-        height: auto;
-        right: 2%;
-    }
-
-    .side-button,
-    .tts-button {
-        width: 6vh;
-        height: 6vh;
-    }
-}

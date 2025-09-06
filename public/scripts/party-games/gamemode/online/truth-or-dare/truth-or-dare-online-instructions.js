@@ -8,8 +8,7 @@ async function DisplaySelectQuestionType() {
       userCustomisationString: currentPlayer.userIcon
     });
     setActiveContainers(selectQuestionTypeContainer);
-  } else {
-    console.log("currentPlayer.username", currentPlayer.username);
+  } else {  
     SetWaitingForPlayer({
       waitingForRoomTitle: "Waiting for " + currentPlayer.username,
       waitingForRoomText: "Selecting Truth or Dare...",

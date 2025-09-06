@@ -17,7 +17,7 @@
     display: none;
     z-index: 1001;
     text-align: center;
-    font-family: LemonMilk;
+    
     border-radius: 40px;
 }
 
@@ -56,7 +56,7 @@
 
 .settings-option label {
     font-size: 20px;
-    font-family: LemonMilk;
+    
     margin-right: 10px;
 }
 
@@ -125,7 +125,7 @@ input:checked+.slider:before {
         display: none;
         z-index: 1005;
         text-align: center;
-        font-family: LemonMilk;
+        
         border-radius: 40px;
         min-width: 200px;
 
@@ -145,7 +145,7 @@ input:checked+.slider:before {
 
     .settings-option label {
         font-size: 20px;
-        font-family: LemonMilk;
+        
         margin-right: 10px;
     }
 }

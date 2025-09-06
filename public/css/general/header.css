@@ -1,3 +1,23 @@
+@font-face {
+    font-family: "LemonMilk";
+    src: url("/fonts/LemonMilk/LEMONMILK-Medium.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body, html * {
+    margin: 0;
+    padding: 0;
+    font-family: "LemonMilk", Arial, sans-serif ;
+}
+
+a{
+    color: var(--primarypagecolour);
+}
+a:hover{
+    color: var(--secondarypagecolour);
+}
+
 :root {
     --primarypagecolour: #9D8AFF;
     --secondarypagecolour: #7F71B2;
@@ -34,11 +54,6 @@
     background-color: transparent;
 }
 
-@font-face {
-    src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
-    font-family: LemonMilk;
-}
-
 .header {
     width: 100%;
     height: var(--headerheight);
@@ -47,7 +62,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: LemonMilk;
+    
     position: fixed;
     transition: background-color 0.2s ease;
     z-index: 1000;
@@ -182,7 +197,7 @@ body {
     background-color: var(--backgroundcolour);
     font-size: 250%;
     text-align: center;
-    font-family: LemonMilk;
+    
     color: var(--primarypagecolour);
     padding-top: 10vh;
     padding-bottom: 5vh;
@@ -194,7 +209,7 @@ body {
     height: 15%;
     background-color: var(--backgroundcolour);
     font-size: 200%;
-    font-family: LemonMilk;
+    
     color: var(--primarypagecolour);
     outline: none;
     border: 0;
@@ -275,7 +290,7 @@ body {
     border-radius: 50px;
     margin: 0 10px;
     width: 10vh;
-    font-family: LemonMilk;
+    
     z-index: 300;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -292,7 +307,7 @@ body {
 
 .overlay-text {
     position: absolute;
-    bottom: -1.5%;
+    bottom: 5px;
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--primarypagecolour);

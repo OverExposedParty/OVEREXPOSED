@@ -18,7 +18,7 @@
 
 @font-face {
     src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
-    font-family: LemonMilk;
+    
 }
 
 .toggle-switch input {
@@ -31,7 +31,7 @@
     color: var(--primarypagecolour);
     text-align: center;
     margin-top: 10vh;
-    font-family: LemonMilk;
+    
     font-size: 50px;
 }
 

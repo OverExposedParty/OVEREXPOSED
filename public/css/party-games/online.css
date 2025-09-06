@@ -44,7 +44,7 @@
 }
 
 .user-confirmed-section .icon {
-    font-family: LemonMilk;
+    
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -64,7 +64,7 @@
 .content-container h1,
 .content-container h2,
 .content-container p {
-    font-family: LemonMilk;
+    
     text-align: center;
     color: var(--primarypagecolour);
 }
@@ -88,14 +88,14 @@
     border: 0;
     outline: none;
     resize: none;
-    font-family: LemonMilk;
+    
     font-size: 16px;
     color: var(--primarypagecolour);
     padding: 2.5%;
 }
 
 .main-container button {
-    font-family: LemonMilk;
+    
     padding: 10px 20px;
     min-width: 120px;
     border-radius: 50px;
@@ -190,7 +190,7 @@
 
 
 .select-button {
-    font-family: LemonMilk;
+    
     font-size: 1vw;
     padding: 10px 20px;
     border-radius: 50px;

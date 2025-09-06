@@ -54,7 +54,7 @@
     background-color: var(--secondarybackgroundcolour);
     border: 4px solid var(--primarypagecolour);
     color: var(--primarypagecolour);
-    font-family: LemonMilk;
+    
     border-left: none;
     /* Prevent double border between button and text */
     padding: 8px 15px;

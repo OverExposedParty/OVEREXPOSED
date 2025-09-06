@@ -40,8 +40,10 @@ async function loadSoundEffects() {
     }
 }
 
-window.addEventListener('load', async function () {
-    await loadSoundEffects();
+
+
+waitForFunction("loadSoundEffects", async () => {
+  await loadSoundEffects();
 });
 
 async function playSoundEffect(soundKey) {

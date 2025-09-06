@@ -26,7 +26,7 @@
 }
 
 .mafia-option-container .mafia-increment-container {
-    font-family: LemonMilk;
+    
     padding: 10px 20px;
     min-width: 120px;
     border-radius: 50px;
@@ -72,7 +72,7 @@
 
 .count-display {
     color: white;
-    font-family: LemonMilk;
+    
     font-size: 1.25rem;
     padding: 0 10px;
     min-width: 20px;
@@ -81,7 +81,7 @@
 
 .role-name {
     color: white;
-    font-family: LemonMilk;
+    
     font-size: 18px;
 }
 
@@ -225,7 +225,7 @@
     background-color: var(--secondaryCivilianColour);
     padding: 10px 20px;
     border-radius: 50px;
-    font-family: LemonMilk;
+    
     font-size: 1vw;
     color: var(--backgroundcolour);
     width: max-content;
@@ -234,7 +234,7 @@
 
 button.game-settings-option {
     all: unset;
-    font-family: LemonMilk;
+    
     font-size: 18px;
     padding: 10px 20px;
     min-width: 120px;
@@ -258,7 +258,7 @@ button.game-settings-option.active {
 }
 
 .mafia-subheader{
-    font-family: LemonMilk;
+    
     font-size: 32px;
     color: var(--primarypagecolour);
     padding: 10px 20px;

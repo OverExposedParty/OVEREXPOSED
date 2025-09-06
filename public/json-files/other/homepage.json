@@ -1,0 +1,46 @@
+[
+    {
+        "gamemodeID": "truth-or-dare",
+        "gamemodeName": "Truth or Dare",
+        "gamemodeCardImageFront": "/images/card-titles/front/truth-or-dare.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/truth-or-dare.svg",
+        "gamemodeDescription": "The classic party game where players choose between answering a question truth",
+        "gamemodePrimaryColour": "#66CCFF",
+        "gamemodeSecondaryColour": "#427BB9",
+        "gamemodeLink": "/truth-or-dare/settings",
+        "gamemodeTextUpdates": "Online coming soon"
+    },
+    {
+        "gamemodeID": "paranoia",
+        "gamemodeName": "Paranoia",
+        "gamemodeCardImageFront": "/images/card-titles/front/paranoia.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/paranoia.svg",
+        "gamemodeDescription": "A suspenseful game where players answer questions about each other, but only the chosen player hears the question",
+        "gamemodePrimaryColour": "#9D8AFF",
+        "gamemodeSecondaryColour": "#7F71B2",
+        "gamemodeLink": "/paranoia/settings",
+        "gamemodeTextUpdates": "Online coming soon"
+    },
+    {
+        "gamemodeID": "never-have-i-ever",
+        "gamemodeName": "Never Have I Ever",
+        "gamemodeCardImageFront": "/images/card-titles/front/never-have-i-ever.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/never-have-i-ever.svg",
+        "gamemodeDescription": "A fun icebreaker game where players reveal things they've never done",
+        "gamemodePrimaryColour": "#FF9266",
+        "gamemodeSecondaryColour": "#B96542",
+        "gamemodeLink": "/never-have-i-ever/settings",
+        "gamemodeTextUpdates": "Online coming soon"
+    },
+    {
+        "gamemodeID": "most-likely-to",
+        "gamemodeName": "Most Likely To",
+        "gamemodeCardImageFront": "/images/card-titles/front/most-likely-to.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/most-likely-to.svg",
+        "gamemodeDescription": "A hilarious game where players vote on who is most likely to do a certain action",
+        "gamemodePrimaryColour": "#FFEE66",
+        "gamemodeSecondaryColour": "#B9AA42",
+        "gamemodeLink": "/most-likely-to/settings",
+        "gamemodeTextUpdates": "Online coming soon"
+    }
+]

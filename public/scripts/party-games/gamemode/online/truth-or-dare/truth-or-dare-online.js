@@ -159,7 +159,7 @@ async function initialisePage() {
       });
     }
   }
-  await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
+  await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
   if (deviceId == hostDeviceId && data[0].userInstructions == "") {
     await SendInstruction({
       instruction: "DISPLAY_SELECT_QUESTION_TYPE",

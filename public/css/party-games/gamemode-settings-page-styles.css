@@ -1,14 +1,10 @@
-html,
-body {
-    margin: 0;
-    padding: 0;
-    font-family: LemonMilk;
-    overflow: hidden;
+* {
+    user-select: none;
 }
 
-@font-face {
-    font-family: LemonMilk;
-    src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf');
+html,
+body {
+    overflow: hidden;
 }
 
 /* Buttons */
@@ -31,7 +27,6 @@ button.disabled {
     position: absolute;
     top: calc(var(--headerheight) + 20px);
     left: 5px;
-    font-family: LemonMilk;
     font-size: 1.5vh;
     padding: 5px 10px;
     width: 10vh;
@@ -95,7 +90,6 @@ button.disabled {
 }
 
 .header-container h2 {
-    font-family: LemonMilk;
     font-size: 32px;
     color: var(--primarypagecolour);
     text-align: center;
@@ -131,7 +125,6 @@ button.disabled {
 }
 
 .game-settings-tab-container button {
-    font-family: LemonMilk;
     padding: 5px 20px;
     background-color: var(--secondarybackgroundcolour);
     color: #999999;
@@ -156,7 +149,6 @@ button.disabled {
 }
 
 .button-container button {
-    font-family: LemonMilk;
     font-size: 16px;
     padding: 10px 20px;
     min-width: 120px;
@@ -186,7 +178,6 @@ button.disabled {
 .start-game-button {
     display: flex;
     justify-content: center;
-    font-family: LemonMilk;
     font-size: 16px;
     padding: 10px 20px;
     width: 60vw;

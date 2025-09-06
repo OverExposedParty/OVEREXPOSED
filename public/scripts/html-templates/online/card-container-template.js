@@ -122,26 +122,38 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerPublicTitle = cardContainerPublic.querySelector('.content .gamemode-text-svg');
             gameContainerPublicText = cardContainerPublic.querySelector('.content .main-image-container .text-container');
             gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
+
+            gameContainerPublicText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            gameContainerPublicCardType.textContent = '';
         }
         if (cardContainerAnswer != null) {
             gameContainerAnswerTitle = cardContainerAnswer.querySelector('.content .gamemode-text-svg');
             gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
             gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
+
+            gameContainerAnswerText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            gameContainerAnswerCardType.textContent = '';
         }
         if (cardContainerPrivate != null) {
             gameContainerPrivateTitle = cardContainerPrivate.querySelector('.content .gamemode-text-svg');
             gameContainerPrivateText = cardContainerPrivate.querySelector('.content .main-image-container .text-container');
             gameContainerPrivateCardType = cardContainerPrivate.querySelector('.content .main-image-container .card-type-text');
+
+            gameContainerPrivateText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            gameContainerPrivateCardType.textContent = '';
         }
         if (cardContainerDualStack != null) {
             gameContainerDualStackTitle = cardContainerDualStack.querySelector('.content .gamemode-text-svg');
             gameContainerDualStackText = cardContainerDualStack.querySelector('.content .main-image-container .text-container');
             gameContainerDualStackCardType = cardContainerDualStack.querySelector('.content .main-image-container .card-type-text');
+
+            gameContainerDualStackText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            gameContainerDualStackCardType.textContent = '';
         }
 
         (async () => {
             if (placeholderCardContainer?.dataset.online === "true") {
-                await loadScript(`${window.location.origin}/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
+                await LoadScript(`${window.location.origin}/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
                 await SetPageSettings();
             }
         })();

@@ -14,6 +14,7 @@ cssFilesErrorContainer.forEach(href => {
     link.href = href;
     document.head.appendChild(link);
 });
+
 if (placeholderErrorContainer.classList.contains('gamemode-settings')) {
     fetch('/html-templates/error-boxes/gamemode-settings.html')
         .then(response => response.text())

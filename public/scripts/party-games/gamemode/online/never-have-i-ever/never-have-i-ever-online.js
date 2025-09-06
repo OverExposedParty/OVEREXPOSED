@@ -116,8 +116,8 @@ async function initialisePage() {
           AddGamemodeContainers(formatDashedString({ input: partyGamemodeSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
         }
       }
-      await loadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
-      await loadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
+      await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
+      await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
       if (deviceId == hostDeviceId && data[0].userInstructions == "") {
         await SendInstruction({
           instruction: "DISPLAY_PRIVATE_CARD",

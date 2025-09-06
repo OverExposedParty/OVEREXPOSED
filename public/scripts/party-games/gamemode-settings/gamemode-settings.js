@@ -181,9 +181,9 @@ inputPartyCode.addEventListener('click', () => {
 });
 
 startGameButton.addEventListener('click', () => {
-    const nsfwPacksActive = Array.from(packButtons).some(button => button.classList.contains('active') && button.classList.contains('pack-nsfw'));
-
-    if (nsfwPacksActive) {
+    const nsfwPacksActive = Array.from(nsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
+    const nsfwGameSettingsActive = Array.from(gameSettingsNsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
+    if (nsfwPacksActive || nsfwGameSettingsActive) {
         addElementIfNotExists(elementClassArray, warningBox);
         warningBox.classList.add('active');
         toggleOverlay(true);

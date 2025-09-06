@@ -70,6 +70,8 @@ fetch('/html-templates/gamemode-settings.html')
       }
     });
     const helpContainerFile = "party-games-settings/" + placeholderGamemodeSettings.dataset.template + '.json';
-    fetchHelpContainer(helpContainerFile);
+    waitForFunction("FetchHelpContainer", () => {
+      FetchHelpContainer(helpContainerFile);
+    });
   })
   .catch(error => console.error('Error loading user customization:', error));

@@ -14,7 +14,7 @@
     align-items: center;
     font-size: 20px;
     z-index: 1000;
-    font-family: LemonMilk;
+    
     display: none;
     color:var(--primarypagecolour);
         background-image: url('/images/background-tile.png');

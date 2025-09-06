@@ -11,7 +11,7 @@ let currentHelpIndex = 0;
 // Function to fetch a help container JSON file and update UI
 
 // Update help container with content
-function fetchHelpContainer(helpContainerFile) {
+function FetchHelpContainer(helpContainerFile) {
   fetch(`/json-files/help-containers/${helpContainerFile}`)
     .then(res => {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);

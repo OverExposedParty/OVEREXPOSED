@@ -38,7 +38,6 @@
     /* Slight offset from the right */
     font-size: 0.75rem;
     color: var(--primarypagecolour);
-    font-family: LemonMilk;
     text-align: right;
     padding: 5px 10px;
     border-radius: 5px;
@@ -63,7 +62,6 @@
     bottom: 10px;
     color: var(--primarypagecolour);
     font-size: 12px;
-    font-family: LemonMilk;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -79,8 +77,12 @@
 
 .question-text {
     font-size: 16px;
-    padding: 0%;
 }
+
+.question-text.placeholder {
+    font-size: 24px;
+}
+
 
 .punishment-text {
     font-size: 35%;
@@ -88,7 +90,6 @@
 }
 
 .content .button-container button {
-    font-family: LemonMilk;
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
     flex: 1 1 auto;
@@ -101,7 +102,7 @@
     cursor: pointer;
     border-radius: 50px;
     text-align: center;
-    font-family: LemonMilk;
+    
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -168,14 +169,14 @@
     right: 5%;
     font-size: clamp(0.75rem, 1vw, 1rem);
     color: var(--primarypagecolour);
-    font-family: LemonMilk;
+    
     text-align: right;
     padding: 5px 10px;
     border-radius: 5px;
 }
 
 .regular-button-container button {
-    font-family: LemonMilk;
+    
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
     flex: 1 1 auto;
@@ -186,7 +187,7 @@
     padding: 3% 5%;
     border-radius: 50px;
     text-align: center;
-    font-family: LemonMilk;
+    
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -197,7 +198,6 @@
 .regular-button-container h2 {
     font-size: 18px;
     color: var(--primarypagecolour);
-    font-family: LemonMilk;
     display: flex;
     text-align: center;
 }

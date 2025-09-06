@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PARTY GAMES</title>
+
+  <link rel="stylesheet" href="/css/general/header.css">
+  <link rel="stylesheet" href="/css/homepages/homepage.css">
+  <link rel="stylesheet" href="/css/general/cookie-banner.css">
+
+  <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/overexposed/favicons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/overexposed/favicons/favicon-180x180.png">
+</head>
+
+<body>
+  <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png"
+      alt="Splash Screen" loading="eager"></div>
+  <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+      src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager"></div>
+
+  <div id="header-placeholder"></div>
+
+  <div class="landscape-message">
+    Please rotate your phone to continue
+    <img src="./images/icons/overexposed/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+  </div>
+
+  <div class="main-container" data-template="homepage">
+    <div class="menu-wrapper">
+      <button class="arrow-btn arrow-left">&#60;</button>
+
+      <div class="card-column-wrapper">
+        <div class="gamemode-info-container">
+          Online Mode Enabled
+        </div>
+
+        <!-- Cards will be injected here -->
+        <div class="selected-card-container" id="cards-container"></div>
+
+        <!-- Carousel will be injected here -->
+        <div class="carousel-container" id="carousel-container"></div>
+      </div>
+
+      <button class="arrow-btn arrow-right">&#62;</button>
+    </div>
+  </div>
+</body>
+<script>
+  document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+  document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+</script>
+<script src="/scripts/html-templates/html-template-header.js"></script>
+<script src="/scripts/party-games/homepage/homepage.js" defer></script>
+
+</html>

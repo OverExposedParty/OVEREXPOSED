@@ -154,10 +154,12 @@ function addSettingsExtensionToCurrentURL() {
     return currentURL;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    fetchHelpContainer(helpContainerFile);
+window.onload = () => {
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    });
     previousPage = {
         link: addSettingsExtensionToCurrentURL(),
         splashScreen: `/images/splash-screens/${gamemode}-settings.png`
     };
-});
+};

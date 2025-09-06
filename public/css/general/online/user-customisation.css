@@ -8,7 +8,7 @@
   transform: translate(-50%, -50%);
   gap: 1rem;
   padding: 1rem;
-  font-family: LemonMilk;
+  
   background-color: var(--backgroundcolour);
   border: var(--bordersize) solid var(--primarypagecolour);
   border-radius: 25px;
@@ -135,7 +135,7 @@
   cursor: pointer;
   font-size: 100%;
   text-decoration: none;
-  font-family: LemonMilk;
+  
   width: 80%;
   transition: background-color 0.3s ease;
 }
