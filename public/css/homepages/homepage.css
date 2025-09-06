@@ -8,7 +8,7 @@
     align-items: center;
     position: relative;
     top: var(--headerheight);
-    height: calc(100vh - var(--headerheight));
+    height: calc(100dvh - var(--headerheight));
     width: 100vw;
     margin-bottom: 20px;
 }
