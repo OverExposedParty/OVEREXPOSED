@@ -35,7 +35,7 @@ async function ToggleOnlineMode(toggle) {
       checked: true
     });
     //inputPartyCode.value = "https://overexposed.app/" + partyCode;
-    inputPartyCode.value = "http://overexposed.app/" + partyCode;
+    inputPartyCode.value = "https://overexposed.app/" + partyCode;
 
     enterUsernameContainer.classList.add('active');
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
