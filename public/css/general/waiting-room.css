@@ -8,7 +8,7 @@
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     z-index: 800;
     text-align: center;
-    
+
     border: var(--bordersize) solid var(--primarypagecolour);
     border-radius: 25px;
     flex-direction: column;
@@ -17,7 +17,7 @@
     color: var(--primarypagecolour);
     display: none;
 
-    width:90vw;
+    width: 90vw;
     max-width: 500px;
     min-width: 300px;
 }
@@ -25,9 +25,10 @@
 .waiting-container.active {
     display: flex;
 }
+
 .waiting-container.overlay-container {
-    top:50vh;
-    left:50vw;
+    top: 50vh;
+    left: 50vw;
     transform: translate(-50%, -50%);
     position: fixed;
 }
@@ -50,7 +51,7 @@
     font-size: 100%;
     transition: background-color 0.3s ease;
     text-decoration: none;
-    
+
     width: 25%;
 }
 
@@ -67,6 +68,7 @@
     gap: 10px;
     width: 100%;
 }
+
 .waiting-button-container button.disabled {
     background-color: #333333 !important;
     color: #666666 !important;
@@ -76,8 +78,10 @@
 }
 
 .waiting-container .input-container {
-    position: relative; /* Needed for absolute positioning of input-count */
-    width: 60%; /* Adjusted to match the input */
+    position: relative;
+    /* Needed for absolute positioning of input-count */
+    width: 60%;
+    /* Adjusted to match the input */
     height: 30px;
     margin-bottom: 2vh;
 }
@@ -85,14 +89,15 @@
 .waiting-container .input-container input {
     width: 100%;
     height: 100%;
-    
+
     color: var(--primarypagecolour);
     background-color: var(--backgroundcolour);
     outline: none;
     border: none;
     box-shadow: none;
     text-align: center;
-    padding-right: 5px; /* Space for the count */
+    padding-right: 5px;
+    /* Space for the count */
 }
 
 .waiting-container .input-count {
@@ -102,7 +107,7 @@
     bottom: 0;
     display: flex;
     align-items: center;
-    
+
     color: var(--primarypagecolour);
     pointer-events: none;
 }
@@ -113,14 +118,9 @@
     position: fixed;
     display: none;
 }
+
 .waiting-room-container.active {
     display: inline-block;
-}
-
-.start-game-button.ready-up:hover {
-    background-color: var(--primarypagecolour);
-    color: var(--secondarybackgroundcolour);
-    border-color: var(--primarypagecolour);
 }
 
 .start-game-button.ready-up.active {
@@ -129,6 +129,13 @@
     border-color: var(--primarypagecolour);
 }
 
+@media (orientation: landscape) {
+    .start-game-button.ready-up:hover {
+        background-color: var(--secondarypagecolour);
+        border-color: var(--secondarypagecolour);
+        color: #999999;
+    }
+}
 
 @media (orientation: portrait) {
     .waiting-container button {
