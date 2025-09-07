@@ -231,7 +231,7 @@ function updateOnlineParty({
   partyId,
   players,
   gamemode,
-  gameSettings,
+  gameRules,
   selectedPacks,
   userInstructions,
   isPlaying,
@@ -258,7 +258,7 @@ function updateOnlineParty({
     ...(isPartyGame && {
       ...(players !== undefined && { players }),
       ...(gamemode !== undefined && { gamemode }),
-      ...(gameSettings !== undefined && { gameSettings }),
+      ...(gameRules !== undefined && { gameRules }),
       ...(userInstructions !== undefined && { userInstructions }),
       ...(isPlaying !== undefined && { isPlaying }),
       ...(lastPinged !== undefined && { lastPinged }),

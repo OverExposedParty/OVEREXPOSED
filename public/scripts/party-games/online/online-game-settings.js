@@ -3,7 +3,7 @@ let partyUserCount = 0;
 
 async function ToggleOnlineMode(toggle) {
   if (toggle == true) {
-    onlineSettingTab.classList.remove('disabled');
+    onlineSettingsTab.classList.remove('disabled');
     const newShuffleSeed = Math.floor(Math.random() * 256);  // Random number between 0 and 255
     partyCode = generatePartyCode();
     const players = [{
@@ -20,7 +20,7 @@ async function ToggleOnlineMode(toggle) {
       partyId: partyCode,
       players,
       gamemode: partyGameMode,
-      gameSettings: gamemodeSettings,
+      gameRules: gamemodeSettings,
       selectedPacks: gamemodeSelectedPacks,
       userInstructions: "",
       isPlaying: false,
@@ -44,10 +44,10 @@ async function ToggleOnlineMode(toggle) {
     packsContainer.classList.remove('active');
     packsSettingsTab.classList.remove('active');
 
-    settingsContainer.classList.remove('active');
-    gameSettingsTab.classList.remove('active')
+    rulesContainer.classList.remove('active');
+    rulesSettingsTab.classList.remove('active')
 
-    onlineSettingTab.classList.add('active');
+    onlineSettingsTab.classList.add('active');
     onlineSettingsContainer.classList.add('active');
     SetGamemodeButtons();
     updateStartGameButton(false);
@@ -63,15 +63,15 @@ async function ToggleOnlineMode(toggle) {
   else {
     inputPartyCode.value = "";
 
-    onlineSettingTab.classList.add('disabled');
-    onlineSettingTab.classList.remove('active');
+    onlineSettingsTab.classList.add('disabled');
+    onlineSettingsTab.classList.remove('active');
     onlineSettingsContainer.classList.remove('active');
 
     packsContainer.classList.remove('active');
     packsSettingsTab.classList.remove('active');
 
-    settingsContainer.classList.add('active');
-    gameSettingsTab.classList.add('active')
+    rulesContainer.classList.add('active');
+    rulesSettingsTab.classList.add('active')
 
     SetGamemodeButtons();
     updateStartGameButton(true);

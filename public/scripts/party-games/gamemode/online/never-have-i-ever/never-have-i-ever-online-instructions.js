@@ -244,7 +244,7 @@ async function ChosePunishment(instruction) {
     if (currentPartyData.players[0].computerId === deviceId) {
       await new Promise(resolve => setTimeout(resolve, 5000));
       let punishmentInstruction;
-      if ((haveVoteCount === 1 || haveNotVoteCount === 1) && currentPartyData.gameSettings.includes('odd-man-out')) {
+      if ((haveVoteCount === 1 || haveNotVoteCount === 1) && currentPartyData.gameRules.includes('odd-man-out')) {
         punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT:";
       }
       else {

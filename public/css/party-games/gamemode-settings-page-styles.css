@@ -42,7 +42,7 @@ button.disabled {
     position: fixed;
     width: 100vw;
     top: var(--headerheight);
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    height: calc(100dvh - var(--headerheight));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -54,12 +54,12 @@ button.disabled {
 /* Main Containers */
 .main-settings-container {
     width: auto;
-    height: 70vh;
+    height: 70dvh;
     position: fixed;
 }
 
 .packs-container,
-.settings-container,
+.rules-settings-container,
 .online-game-settings-container {
     display: none;
     flex-direction: column;
@@ -69,10 +69,28 @@ button.disabled {
     height: 100%;
     background-color: var(--secondarybackgroundcolour);
     position: relative;
+    height: 100%;
 }
 
+#gamemode-settings-placeholder {
+    height: 100%;
+}
+
+/* Content Containers */
+.packs-content-container,
+.rules-content-container,
+.online-settings-container {
+    height: 100%;
+    padding: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
 .packs-container.active,
-.settings-container.active,
+.rules-settings-container.active,
 .online-game-settings-container.active {
     display: flex;
     margin: 0 auto;
@@ -97,24 +115,13 @@ button.disabled {
     margin: 0;
 }
 
-/* Content Containers */
-.packs-content-container,
-.game-settings-container,
-.online-settings-container {
-    height: 60vh;
-    padding: 0;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 
 .online-settings-container {
     flex-direction: column;
 }
 
 /* Game Settings Tabs */
-.game-settings-tab-container {
+.settings-tab-container {
     display: grid;
     grid-auto-flow: column;
     justify-content: left;
@@ -124,7 +131,7 @@ button.disabled {
     margin: 0 auto;
 }
 
-.game-settings-tab-container button {
+.settings-tab-container button {
     padding: 5px 20px;
     background-color: var(--secondarybackgroundcolour);
     color: #999999;
@@ -132,7 +139,7 @@ button.disabled {
     border-radius: 10px 10px 0 0;
 }
 
-.game-settings-tab-container button.active {
+.settings-tab-container button.active {
     background-color: var(--primarypagecolour);
     color: var(--secondarybackgroundcolour);
 }
@@ -272,20 +279,23 @@ button.disabled {
 }
 
 @media (orientation: portrait) {
+    .main-settings-container {
+        height: 70dvh;
+    }
 
     .header-container h2 {
         font-size: 24px;
     }
 
     .packs-container,
-    .settings-container,
+    .rules-settings-container,
     .online-game-settings-container {
         width: 90vw;
         max-width: 1280px;
-        height: 60vh;
+        height: 70dvh;
     }
 
-    .game-settings-tab-container {
+    .settings-tab-container {
         width: 90vw;
     }
 
@@ -314,9 +324,5 @@ button.disabled {
         bottom: 10px;
         left: 50%;
         transform: translateX(-50%);
-    }
-
-    .main-container {
-        top: 10vh;
     }
 }

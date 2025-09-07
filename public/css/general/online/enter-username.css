@@ -28,6 +28,9 @@
     z-index: 500;
 }
 
+.enter-username-container h2 {
+    margin: 20px 0;
+}
 .enter-username-container button {
     background-color: #101010;
     color: var(--primarypagecolour);
@@ -54,6 +57,7 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
+    margin: 20px 0;
 }
 .enter-username-button-container button.disabled {
     background-color: #333333 !important;
@@ -67,7 +71,6 @@
     position: relative; /* Needed for absolute positioning of input-count */
     width: 60%; /* Adjusted to match the input */
     height: 30px;
-    margin-bottom: 2vh;
 }
 
 .enter-username-container .input-container input {

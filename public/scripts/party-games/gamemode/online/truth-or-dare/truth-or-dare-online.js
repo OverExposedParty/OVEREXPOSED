@@ -132,19 +132,19 @@ async function initialisePage() {
     data[0].players[index].socketId = socket.id
     joinParty(partyCode);
     if (data[0].isPlaying === true) {
-      const partyGamemodeSettings = parseGameSettings(data[0].gameSettings)
-      for (let i = 0; i < partyGamemodeSettings.length; i++) {
+      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
-        if (partyGamemodeSettings[i] == "take-a-shot") {
-          settingsButton = createUserButton(partyGamemodeSettings[i], partyGamemodeSettings[i].replace(/-/g, " "));
+        if (partyRulesSettings[i] == "take-a-shot") {
+          settingsButton = createUserButton(partyRulesSettings[i], partyRulesSettings[i].replace(/-/g, " "));
           selectPunishmentButtonContainer.appendChild(settingsButton);
         }
-        else if (partyGamemodeSettings[i] == "truth-or-dare-text-box") {
+        else if (partyRulesSettings[i] == "truth-or-dare-text-box") {
           textBoxSetting = true;
         }
         else {
-          AddGamemodeContainers(formatDashedString({ input: partyGamemodeSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
-          settingsButton = createUserButton(partyGamemodeSettings[i], formatDashedString({ input: partyGamemodeSettings[i], gamemode: data[0].gamemode }));
+          AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
+          settingsButton = createUserButton(partyRulesSettings[i], formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode }));
           selectPunishmentButtonContainer.appendChild(settingsButton);
         }
       }

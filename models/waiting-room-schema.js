@@ -16,7 +16,7 @@ const WaitingRoomSchema = new mongoose.Schema({
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },
   players: { type: [playerSchema], required: true },
-  gameSettings: { type: String, required: true },
+  gameRules: { type: String, required: true },
   selectedPacks: { type: String, required: false },
   selectedRoles: { type: String, required: false }
 }, {

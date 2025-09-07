@@ -4,72 +4,13 @@ const userKickedContainer = document.getElementById('user-kicked');
 const partyFullContainer = document.getElementById('party-full');
 
 const gamemodeSettingsContainer = document.querySelector('.waiting-room-container');
-const readyButton = document.querySelector('.ready-up-button');
+const readyButton = document.querySelector('.start-game-button');
 
 let inputPartyCode;
 let sessionPartyType;
 let partyGameMode;
 let helpContainerFile = "waiting-room-error.json";
 let minPlayerCount;
-
-const partyGamesSettings = {
-  "truth-or-dare": {
-    minPlayers: 2,
-    maxPlayers: 20,
-    gameModeColours: {
-      primary: "#FF4B5C",
-      secondary: "#FF9A9E"
-    }
-  },
-  "paranoia": {
-    minPlayers: 3,
-    maxPlayers: 15,
-    gameModeColours: {
-      primary: "#6C5CE7",
-      secondary: "#A29BFE"
-    }
-  },
-  "most-likely-to": {
-    minPlayers: 3,
-    maxPlayers: 20,
-    gameModeColours: {
-      primary: "#00CEC9",
-      secondary: "#81ECEC"
-    }
-  },
-  "never-have-i-ever": {
-    minPlayers: 2,
-    maxPlayers: 20,
-    gameModeColours: {
-      primary: "#FABE58",
-      secondary: "#FDEAA8"
-    }
-  }
-};
-
-const gamemodeColors = {
-  "truth-or-dare": "#66CCFF",
-  "paranoia": "#9D8AFF",
-  "never-have-i-ever": "#FF9266",
-  "most-likely-to": "#FFEE66",
-  "mafia": "#A9323A",
-};
-
-const gameModeMap = {
-  "truth-or-dare": "party-game-truth-or-dare",
-  "paranoia": "party-game-paranoia",
-  "never-have-i-ever": "party-game-never-have-i-ever",
-  "most-likely-to": "party-game-most-likely-to",
-  "mafia": "party-game-mafia",
-};
-
-const gameModeMinPlayerMap = {
-  "truth-or-dare": 2,
-  "paranoia": 3,
-  "never-have-i-ever": 2,
-  "most-likely-to": 3,
-  "mafia": 5,
-};
 
 gameContainers.push(
   partyDoesNotExistContainer,
@@ -91,14 +32,14 @@ async function checkPartyExists() {
   if (data.length > 0) {
     const partyData = data[0];
     partyGameMode = partyData.gamemode;
-    minPlayerCount = gameModeMinPlayerMap[partyGameMode];
-    const color = gamemodeColors[partyGameMode];
+    maxPlayerCount = partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
     helpContainerFile = "party-games/" + partyGameMode + '.json';
     CreateGameSettingsButtonsScript();
     inputPartyCode = document.getElementById('party-code');
-    if (color) {
-      sessionPartyType = gameModeMap[partyGameMode] || "party-game";
-      document.documentElement.style.setProperty('--primarypagecolour', color);
+    if (partyGameMode) {
+      sessionPartyType = partyGamesInformation[partyGameMode].partyType;
+      document.documentElement.style.setProperty('--primarypagecolour', partyGamesInformation[partyGameMode].gamemodeColours.primary);
+      document.documentElement.style.setProperty('--secondarypagecolour', partyGamesInformation[partyGameMode].gamemodeColours.secondary);
       changeFavicon(partyGameMode);
     }
     if (partyData.isPlaying === false) {
@@ -211,7 +152,7 @@ function changeFavicon(gamemode) {
 
 function SetGamemodeContainer() {
   UpdateGamemodeContainer()
-  onlineSettingTab.classList.remove('disabled');
+  onlineSettingsTab.classList.remove('disabled');
   inputPartyCode.value = `https://overexposed.app/${partyCode}`;
 
 }
@@ -241,8 +182,8 @@ async function UpdateGamemodeContainer() {
   });
 
 
-  settingsContainer.querySelectorAll('button').forEach(button => {
-    button.classList.toggle('active', currentPartyData.gameSettings?.includes(button.dataset.key));
+  rulesContainer.querySelectorAll('button').forEach(button => {
+    button.classList.toggle('active', currentPartyData.gameRules?.includes(button.dataset.key));
   });
 }
 

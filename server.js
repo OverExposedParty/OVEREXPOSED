@@ -260,7 +260,7 @@ createUpsertPartyHandler({
     'isPlaying',
     'lastPinged',
     'players',
-    'gameSettings',
+    'gameRules',
     'selectedPacks',
     'selectedRoles',
   ]
@@ -279,7 +279,7 @@ const partyGameRoutes = [
     partyGameFields: [
       'players',
       'gamemode',
-      'gameSettings',
+      'gameRules',
       'selectedPacks',
       'userInstructions',
       'isPlaying',
@@ -298,7 +298,7 @@ const partyGameRoutes = [
     partyGameFields: [
       'players',
       'gamemode',
-      'gameSettings',
+      'gameRules',
       'selectedPacks',
       'userInstructions',
       'isPlaying',
@@ -315,7 +315,7 @@ const partyGameRoutes = [
     partyGameFields: [
       'players',
       'gamemode',
-      'gameSettings',
+      'gameRules',
       'selectedPacks',
       'userInstructions',
       'isPlaying',
@@ -332,7 +332,7 @@ const partyGameRoutes = [
     partyGameFields: [
       'players',
       'gamemode',
-      'gameSettings',
+      'gameRules',
       'selectedPacks',
       'userInstructions',
       'isPlaying',
@@ -349,7 +349,7 @@ const partyGameRoutes = [
     partyGameFields: [
       'players',
       'gamemode',
-      'gameSettings',
+      'gameRules',
       'selectedRoles',
       'userInstructions',
       'isPlaying',

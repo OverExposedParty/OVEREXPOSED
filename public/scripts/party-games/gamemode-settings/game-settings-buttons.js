@@ -1,6 +1,6 @@
 let nsfwButtons = [];
 let onlingSettingsButtons = [];
-let gameSettingsNsfwButtons = [];
+let gameRulesNsfwButtons = [];
 
 let packButtons = [];
 let settingsButtons = [];
@@ -10,8 +10,8 @@ let fetchedPacks = false;
 let fetchedSettings = false;
 
 const packsSettingsTab = document.getElementById('packs-settings');
-const gameSettingsTab = document.getElementById('game-settings');
-const onlineSettingTab = document.getElementById('online-settings');
+const rulesSettingsTab = document.getElementById('rules-settings');
+const onlineSettingsTab = document.getElementById('online-settings');
 
 fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
     .then(response => response.json())
@@ -47,9 +47,9 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     button.dataset.primaryColor = setting["settings-colour"];
                     button.dataset.secondaryColor = setting["settings-secondary-colour"];
                     button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-                    settingsContainer.querySelector('.button-container').appendChild(button);
+                    rulesContainer.querySelector('.button-container').appendChild(button);
 
-                    if (setting["settings-restriction"] === "nsfw") gameSettingsNsfwButtons.push(button);
+                    if (setting["settings-restriction"] === "nsfw") gameRulesNsfwButtons.push(button);
                     if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
                     if (setting["settings-name"] === "online") {
                         button.id = "button-online";
@@ -75,34 +75,34 @@ packsSettingsTab.addEventListener('click', () => {
         packsContainer.classList.add('active');
         packsSettingsTab.classList.add('active');
 
-        settingsContainer.classList.remove('active');
-        gameSettingsTab.classList.remove('active');
+        rulesContainer.classList.remove('active');
+        rulesSettingsTab.classList.remove('active');
 
-        onlineSettingTab.classList.remove('active');
+        onlineSettingsTab.classList.remove('active');
         onlineSettingsContainer.classList.remove('active');
     }
 });
-gameSettingsTab.addEventListener('click', () => {
-    if (!(gameSettingsTab.classList.contains('active'))) {
+rulesSettingsTab.addEventListener('click', () => {
+    if (!(rulesSettingsTab.classList.contains('active'))) {
         packsContainer.classList.remove('active');
         packsSettingsTab.classList.remove('active');
 
-        settingsContainer.classList.add('active');
-        gameSettingsTab.classList.add('active');
+        rulesContainer.classList.add('active');
+        rulesSettingsTab.classList.add('active');
 
-        onlineSettingTab.classList.remove('active');
+        onlineSettingsTab.classList.remove('active');
         onlineSettingsContainer.classList.remove('active');
     }
 });
-onlineSettingTab.addEventListener('click', () => {
+onlineSettingsTab.addEventListener('click', () => {
     if (!(onlineSettingsContainer.classList.contains('active'))) {
         packsContainer.classList.remove('active');
         packsSettingsTab.classList.remove('active');
 
-        settingsContainer.classList.remove('active');
-        gameSettingsTab.classList.remove('active')
+        rulesContainer.classList.remove('active');
+        rulesSettingsTab.classList.remove('active')
 
-        onlineSettingTab.classList.add('active');
+        onlineSettingsTab.classList.add('active');
         onlineSettingsContainer.classList.add('active');
     }
 });

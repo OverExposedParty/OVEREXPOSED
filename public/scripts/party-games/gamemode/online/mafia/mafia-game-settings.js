@@ -165,7 +165,7 @@ packsSettingsTab.addEventListener('click', () => {
         gameSettingsContainer.classList.remove('active');
         gameSettingsTab.classList.remove('active');
 
-        onlineSettingTab.classList.remove('active');
+        onlineSettingsTab.classList.remove('active');
         onlineSettingsContainer.classList.remove('active');
     }
 });
@@ -177,11 +177,11 @@ gameSettingsTab.addEventListener('click', () => {
         gameSettingsContainer.classList.add('active');
         gameSettingsTab.classList.add('active');
 
-        onlineSettingTab.classList.remove('active');
+        onlineSettingsTab.classList.remove('active');
         onlineSettingsContainer.classList.remove('active');
     }
 });
-onlineSettingTab.addEventListener('click', () => {
+onlineSettingsTab.addEventListener('click', () => {
     if (!(onlineSettingsContainer.classList.contains('active'))) {
         packsContainer.classList.remove('active');
         packsSettingsTab.classList.remove('active');
@@ -189,7 +189,7 @@ onlineSettingTab.addEventListener('click', () => {
         gameSettingsContainer.classList.remove('active');
         gameSettingsTab.classList.remove('active')
 
-        onlineSettingTab.classList.add('active');
+        onlineSettingsTab.classList.add('active');
         onlineSettingsContainer.classList.add('active');
     }
 });
@@ -359,7 +359,7 @@ function resizePage() {
 }
 
 function StartOnlineSession() {
-    onlineSettingTab.classList.remove('disabled');
+    onlineSettingsTab.classList.remove('disabled');
     partyCode = generatePartyCode();
     joinParty(partyCode);
 
@@ -403,7 +403,7 @@ function StartOnlineSession() {
     gameSettingsContainer.classList.remove('active');
     gameSettingsTab.classList.remove('active')
 
-    onlineSettingTab.classList.add('active');
+    onlineSettingsTab.classList.add('active');
     onlineSettingsContainer.classList.add('active');
 }
 

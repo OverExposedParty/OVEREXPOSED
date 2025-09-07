@@ -14,7 +14,7 @@ const PlayerSchema = new mongoose.Schema({
 const partyGameParanoiaSchema = new mongoose.Schema({
   partyId: { type: String, required: true },
   gamemode: { type: String, required: true },
-  gameSettings: { type: String, required: true },
+  gameRules: { type: String, required: true },
   selectedPacks: { type: String, required: true },
   userInstructions: { type: String},
   isPlaying: { type: Boolean, required: true },

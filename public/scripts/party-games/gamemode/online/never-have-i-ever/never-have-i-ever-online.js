@@ -109,11 +109,11 @@ async function initialisePage() {
     data[0].players[index].socketId = socket.id
     joinParty(partyCode);
     if (data[0].isPlaying === true) {
-      const partyGamemodeSettings = parseGameSettings(data[0].gameSettings)
-      for (let i = 0; i < partyGamemodeSettings.length; i++) {
+      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
-        if (!(partyGamemodeSettings[i] == "take-a-sip")) {
-          AddGamemodeContainers(formatDashedString({ input: partyGamemodeSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
+        if (!(partyRulesSettings[i] == "take-a-sip")) {
+          AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
         }
       }
       await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);

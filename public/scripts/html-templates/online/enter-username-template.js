@@ -6,7 +6,7 @@ let waitingForLeaderContainer;
 const usernameMaxLength = 16;
 
 const cssFilesEnterUsername = [
-    '/css/online/enter-username.css'
+    '/css/general/online/enter-username.css'
 ];
 
 cssFilesEnterUsername.forEach(href => {

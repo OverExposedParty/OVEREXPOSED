@@ -13,19 +13,11 @@ const playerSchema = new mongoose.Schema({
   socketId: { type: String, default: null }
 }, { _id: false });
 
-
-const chatMessageSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  message: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now }
-}, { _id: false });
-
-
 const partyGameMafiaSchema = new mongoose.Schema({
   partyId: { type: String, required: true, unique: true },
 
   gamemode: { type: String, required: true },
-  gameSettings: { type: String, required: true },
+  gameRules: { type: String, required: true },
   selectedRoles: { type: String, required: true },
 
   isPlaying: { type: Boolean, required: true },
@@ -35,9 +27,6 @@ const partyGameMafiaSchema = new mongoose.Schema({
 
   userInstructions: { type: String },
   phase: { type: String, default: "lobby" },
-
-  generalChat: { type: [chatMessageSchema], default: [] },
-  mafiaChat: { type: [chatMessageSchema], default: [] },
 
   timer: { type: Date, default: null},
   shuffleSeed: { type: Number, required: true }

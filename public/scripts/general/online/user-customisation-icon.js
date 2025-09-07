@@ -251,7 +251,7 @@ function UpdateUserIcons(partyData) {
   //else{
   //  onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
   //}
-  userCount.textContent = `(${partyData.players.length}/8)`;
+  userCount.textContent = `(${partyData.players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
 }
 
 function parseCustomisationString(customisationString) {

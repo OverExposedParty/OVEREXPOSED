@@ -20,10 +20,8 @@ body {
     align-items: center;
     width: 100vw;
     box-sizing: border-box;
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
-    /* Subtracts header height */
+    height: calc(100dvh - var(--headerheight));
     margin-top: var(--headerheight);
-    /* Pushes it down */
 }
 
 .question-zoomed-container {

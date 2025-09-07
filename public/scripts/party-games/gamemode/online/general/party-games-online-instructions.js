@@ -227,7 +227,7 @@ function createUserButton(id, text) {
   return button;
 }
 
-function parseGameSettings(settingsString) {
+function parseGameRules(settingsString) {
   if (!settingsString) return [];
   return settingsString.split(',').filter(Boolean);
 }

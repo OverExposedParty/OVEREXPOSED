@@ -46,7 +46,7 @@ function SetGamemodeButtons() {
                 localStorage.setItem(key, 'false');
             }
         });
-        gameSettingsNsfwButtons.forEach(button => {
+        gameRulesNsfwButtons.forEach(button => {
             button.disabled = false;
             button.classList.remove('disabled');
 
@@ -65,7 +65,7 @@ function SetGamemodeButtons() {
             const key = button.getAttribute('data-key');
             localStorage.setItem(key, 'false');
         });
-        gameSettingsNsfwButtons.forEach(button => {
+        gameRulesNsfwButtons.forEach(button => {
             button.disabled = true;
             button.classList.add('disabled');
             button.classList.remove('active');
@@ -94,7 +94,7 @@ function SetGameSettingsButtons() {
 
         if (key && savedState === 'true') {
             button.classList.add('active');
-            if (button.closest('.game-settings-container')) {
+            if (button.closest('.rules-settings-container')) {
                 if (!button.classList.contains('online')) {
                     gamemodeSettings += key + ',';
                 }
@@ -105,7 +105,7 @@ function SetGameSettingsButtons() {
             if (partyCode) {
                 updateOnlineParty({
                     partyId,
-                    gameSettings: gamemodeSettings,
+                    gameRules: gamemodeSettings,
                     selectedPacks: gamemodeSelectedPacks,
                     lastPinged: new Date(),
                 });
@@ -123,7 +123,7 @@ function SetGameSettingsButtons() {
                 if (button.getAttribute('data-key')) {
                     localStorage.setItem(key, isActive ? 'true' : 'false');
                     if (isActive) {
-                        if (button.closest('.game-settings-container')) {
+                        if (button.closest('.rules-settings-container')) {
                             gamemodeSettings += key + ',';
                         }
                         else if (button.closest('.packs-content-container')) {
@@ -131,7 +131,7 @@ function SetGameSettingsButtons() {
                         }
                     }
                     else {
-                        if (button.closest('.game-settings-container')) {
+                        if (button.closest('.rules-settings-container')) {
                             if (gamemodeSettings.includes(key + ',')) {
                                 gamemodeSettings = gamemodeSettings.replace(key + ',', '');
                             }
@@ -145,7 +145,7 @@ function SetGameSettingsButtons() {
                     if (partyCode) {
                         updateOnlineParty({
                             partyId: partyCode,
-                            gameSettings: gamemodeSettings,
+                            gameRules: gamemodeSettings,
                             selectedPacks: gamemodeSelectedPacks,
                             lastPinged: new Date(),
                         });
@@ -182,8 +182,8 @@ inputPartyCode.addEventListener('click', () => {
 
 startGameButton.addEventListener('click', () => {
     const nsfwPacksActive = Array.from(nsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
-    const nsfwGameSettingsActive = Array.from(gameSettingsNsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
-    if (nsfwPacksActive || nsfwGameSettingsActive) {
+    const nsfwgameRulesActive = Array.from(gameRulesNsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
+    if (nsfwPacksActive || nsfwgameRulesActive) {
         addElementIfNotExists(elementClassArray, warningBox);
         warningBox.classList.add('active');
         toggleOverlay(true);

@@ -1,6 +1,64 @@
+const partyGamesInformation = {
+  "truth-or-dare": {
+    partyType: "party-game-truth-or-dare",
+    playerCountRestrictions: {
+      minPlayers: 2,
+      maxPlayers: 20
+    },
+    gamemodeColours: {
+      primary: "#66CCFF",
+      secondary: "#427BB9"
+    }
+  },
+  "paranoia": {
+    partyType: "party-game-paranoia",
+    playerCountRestrictions: {
+      minPlayers: 3,
+      maxPlayers: 15
+    },
+    gamemodeColours: {
+      primary: "#9D8AFF",
+      secondary: "#7F71B2"
+    }
+  },
+  "never-have-i-ever": {
+    partyType: "party-game-never-have-i-ever",
+    playerCountRestrictions: {
+      minPlayers: 2,
+      maxPlayers: 20
+    },
+    gamemodeColours: {
+      primary: "#FF9266",
+      secondary: "#B96542"
+    }
+  },
+  "most-likely-to": {
+    partyType: "party-game-most-likely-to",
+    playerCountRestrictions: {
+      minPlayers: 3,
+      maxPlayers: 20
+    },
+    gamemodeColours: {
+      primary: "#FFEE66",
+      secondary: "#B9AA42"
+    }
+  },
+  "mafia": {
+    partyType: "party-game-mafia",
+    playerCountRestrictions: {
+      minPlayers: 5,
+      maxPlayers: 20
+    },
+    gamemodeColours: {
+      primary: "#A9323A",
+      secondary: "#FFEE66"
+    }
+  }
+};
+
 let userCount = document.querySelector('.user-count');
 
-let packsContainer, settingsContainer, onlineSettingsContainer;
+let packsContainer, rulesContainer, onlineSettingsContainer;
 const placeholderGamemodeSettings = document.getElementById('gamemode-settings-placeholder');
 const cssFilesGamemodeSettings = [
   '/css/party-games/gamemode-settings-page-styles.css',
@@ -53,25 +111,27 @@ fetch('/html-templates/gamemode-settings.html')
     }
 
     packsContainer = document.querySelector('.packs-container');
-    settingsContainer = document.querySelector('.settings-container');
+    rulesContainer = document.querySelector('.rules-settings-container');
     onlineSettingsContainer = document.querySelector('.online-game-settings-container');
 
     userCount = document.querySelector('.user-count');
+
   }).then(() => {
-    const storageObserver = new LocalStorageObserver();
-    storageObserver.addListener((key, oldValue, newValue) => {
-      if (key === 'settings-nsfw') {
-        console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
-        if (oldValue !== newValue) {
-          eighteenPlusEnabled = newValue;
-          SetGamemodeButtons();
-          console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+    if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
+      const storageObserver = new LocalStorageObserver();
+      storageObserver.addListener((key, oldValue, newValue) => {
+        if (key === 'settings-nsfw') {
+          console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+          if (oldValue !== newValue) {
+            eighteenPlusEnabled = newValue;
+            SetGamemodeButtons();
+            console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+          }
         }
-      }
-    });
-    const helpContainerFile = "party-games-settings/" + placeholderGamemodeSettings.dataset.template + '.json';
-    waitForFunction("FetchHelpContainer", () => {
-      FetchHelpContainer(helpContainerFile);
-    });
-  })
-  .catch(error => console.error('Error loading user customization:', error));
+      });
+      const helpContainerFile = "party-games-settings/" + placeholderGamemodeSettings.dataset.template + '.json';
+      waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+      })
+    }
+  });
