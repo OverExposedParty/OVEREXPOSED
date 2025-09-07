@@ -64,7 +64,7 @@
 .content-container h1,
 .content-container h2,
 .content-container p {
-    
+    margin: 20px 0;
     text-align: center;
     color: var(--primarypagecolour);
 }

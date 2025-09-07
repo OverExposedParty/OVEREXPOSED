@@ -133,7 +133,7 @@ function GetCommand(message) {
                         CreateChatMessage("[CONSOLE]", "UNABLE TO CREATE PARTY. NO PACKS SELECTED", "error", Date.now());
                         return;
                     }
-                    if (typeof hostedParty !== "undefined") {
+                    if (hostedParty == true) {
                         if (onlineButton) {
                             onlineButton.classList.add('active');
                         }
