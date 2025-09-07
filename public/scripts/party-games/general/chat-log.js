@@ -128,6 +128,11 @@ function GetCommand(message) {
                     }
                 }
                 else if (cmd.action?.toLowerCase() === "create") {
+
+                    if((Array.from(packButtons).filter(button => button.classList.contains('active'))).length === 0) {
+                        CreateChatMessage("[CONSOLE]", "UNABLE TO CREATE PARTY. NO PACKS SELECTED", "error", Date.now());
+                        return;
+                    }
                     if (typeof hostedParty !== "undefined") {
                         if (onlineButton) {
                             onlineButton.classList.add('active');
