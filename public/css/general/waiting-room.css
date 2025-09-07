@@ -117,6 +117,19 @@
     display: inline-block;
 }
 
+.start-game-button.ready-up:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+    border-color: var(--primarypagecolour);
+}
+
+.start-game-button.ready-up.active {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
+}
+
+
 @media (orientation: portrait) {
     .waiting-container button {
         padding: 5px 10px;
