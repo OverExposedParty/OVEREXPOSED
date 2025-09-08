@@ -71,10 +71,6 @@
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
-
-    window.addEventListener('load', () => {
-        FetchHelpContainer(helpContainerFile);
-    })
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js"></script>
@@ -83,4 +79,9 @@
 <script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
 <script src="/scripts/party-games/general/load-questions.js"></script>
 <script src="/scripts/party-games/general/chat-log.js"></script>
+<script>
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    })
+</script>
 </html>

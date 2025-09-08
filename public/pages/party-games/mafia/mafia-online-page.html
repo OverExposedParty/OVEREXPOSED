@@ -205,10 +205,6 @@
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
-
-    window.addEventListener('load', () => {
-        FetchHelpContainer(helpContainerFile);
-    })
 </script>
 <script src="/scripts/html-templates/html-template-header.js"></script>
 
@@ -219,3 +215,9 @@
 <script src="/scripts/party-games/mafia/mafia-civilian-watch.js"></script>
 <script src="/scripts/party-games/mafia/mafia-online-instructions.js"></script>
 <script src="/scripts/party-games/mafia/mafia-online.js"></script>
+<script>
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    })
+</script>
+</html>

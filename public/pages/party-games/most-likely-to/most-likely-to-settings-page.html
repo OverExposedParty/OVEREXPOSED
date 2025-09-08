@@ -95,10 +95,6 @@
     document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/most-likely-to/rotate-phone-icon.svg)`);
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/most-likely-to/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
-
-    window.addEventListener('load', () => {
-        FetchHelpContainer(helpContainerFile);
-    })
 </script>
 
 <script src="/scripts/html-templates/html-template-header.js"></script>
@@ -113,4 +109,9 @@
 <script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
 
 <script src="/scripts/party-games/general/chat-log.js"></script>
+<script>
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    })
+</script>
 </html>

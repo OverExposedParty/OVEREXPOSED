@@ -54,7 +54,9 @@ async function SetPageSettings() {
     currentPartyData.questionType = "truth";
     await SendInstruction({
       partyData: currentPartyData,
-      instruction: "DISPLAY_PUBLIC_CARD"
+      instruction: "DISPLAY_PUBLIC_CARD",
+      updateUsersReady: false,
+      updateUsersConfirmation: false
     });
   });
 
@@ -64,7 +66,9 @@ async function SetPageSettings() {
     currentPartyData.questionType = "dare";
     await SendInstruction({
       partyData: currentPartyData,
-      instruction: "DISPLAY_PUBLIC_CARD"
+      instruction: "DISPLAY_PUBLIC_CARD",
+      updateUsersReady: false,
+      updateUsersConfirmation: false
     });
   });
 

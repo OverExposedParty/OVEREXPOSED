@@ -75,10 +75,6 @@
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
-    window.addEventListener('load', () => {
-        FetchHelpContainer(helpContainerFile);
-    })
-
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js"></script>
@@ -87,4 +83,9 @@
 <script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
 <script src="/scripts/party-games/general/load-questions.js"></script>
 <script src="/scripts/party-games/general/chat-log.js"></script>
+<script>
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    })
+</script>
 </html>

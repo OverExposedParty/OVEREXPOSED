@@ -26,7 +26,7 @@
         "gamemodeName": "Never Have I Ever",
         "gamemodeCardImageFront": "/images/card-titles/front/never-have-i-ever.svg",
         "gamemodeCardImageBack": "/images/card-titles/back/never-have-i-ever.svg",
-        "gamemodeDescription": "A fun icebreaker game where players reveal things they've never done",
+        "gamemodeDescription": "A fun ice breaker game where players reveal things they've never done",
         "gamemodePrimaryColour": "#FF9266",
         "gamemodeSecondaryColour": "#B96542",
         "gamemodeLink": "/never-have-i-ever/settings",
