@@ -63,6 +63,7 @@ async function SendInstruction({
     lastPinged: Date.now(),
     playerTurn: currentPartyData.playerTurn,
     currentCardIndex: currentPartyData.currentCardIndex,
+    currentCardSecondIndex: currentPartyData.currentCardSecondIndex,
     timer: currentPartyData.timer,
     questionType: currentPartyData.questionType
   });
@@ -337,7 +338,6 @@ function DisplayCard(card, questionObject) {
   cardText.textContent = questionObject.question;
 
   const searchPackName = (questionObject.cardType).toLowerCase();
-
   // Find the matching pack based on the cardType
   const matchedPack = cardPackMap.find(pack => {
     const packNameLower = pack.packName.toLowerCase();

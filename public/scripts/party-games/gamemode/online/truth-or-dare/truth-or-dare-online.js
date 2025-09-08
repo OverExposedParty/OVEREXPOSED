@@ -208,6 +208,7 @@ async function FetchInstructions() {
   else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
     DisplayPunishmentToUser(data[0].userInstructions);
   }
+    console.log(`FETCHING ${data[0].userInstructions}`);
 }
 
 function GetQuestion({ cardTitle, currentPartyData }) {
