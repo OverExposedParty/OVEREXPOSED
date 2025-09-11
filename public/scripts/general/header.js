@@ -31,31 +31,6 @@ let popUpClassArray = [];
 let settingsElementClassArray = [];
 let permanantElementClassArray = [];
 
-
-class LocalStorageObserver {
-    constructor() {
-        this.listeners = [];
-        this.originalSetItem = localStorage.setItem;
-        this.originalGetItem = localStorage.getItem;
-
-        localStorage.setItem = (key, value) => {
-            const oldValue = this.originalGetItem.call(localStorage, key);
-            this.originalSetItem.call(localStorage, key, value);
-            this.notifyListeners(key, oldValue, value);
-        };
-    }
-
-    addListener(callback) {
-        this.listeners.push(callback);
-    }
-
-    notifyListeners(key, oldValue, newValue) {
-        this.listeners.forEach((listener) => {
-            listener(key, oldValue, newValue);
-        });
-    }
-}
-
 let logoContainer = document.querySelector('.logo-container');
 let partyGamesLink = document.getElementById('party-games-link');
 let termsAndPrivacyLink = document.getElementById('terms-and-privacy-link');

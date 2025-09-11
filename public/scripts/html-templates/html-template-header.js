@@ -31,6 +31,30 @@ function waitForFunction(name, callback) {
   }, 50); // check every 50ms
 }
 
+class LocalStorageObserver {
+    constructor() {
+        this.listeners = [];
+        this.originalSetItem = localStorage.setItem;
+        this.originalGetItem = localStorage.getItem;
+
+        localStorage.setItem = (key, value) => {
+            const oldValue = this.originalGetItem.call(localStorage, key);
+            this.originalSetItem.call(localStorage, key, value);
+            this.notifyListeners(key, oldValue, value);
+        };
+    }
+
+    addListener(callback) {
+        this.listeners.push(callback);
+    }
+
+    notifyListeners(key, oldValue, newValue) {
+        this.listeners.forEach((listener) => {
+            listener(key, oldValue, newValue);
+        });
+    }
+}
+
 fetch('/html-templates/header.html')
   .then(response => response.text())
   .then(data => {
