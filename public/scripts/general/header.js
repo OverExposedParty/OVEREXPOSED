@@ -1,5 +1,4 @@
 let selectedButton;
-let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
 
 const rootStyles = getComputedStyle(document.documentElement);
 const primaryColour = rootStyles.getPropertyValue('--primarypagecolour').trim();
@@ -8,18 +7,12 @@ const backgroundColour = rootStyles.getPropertyValue('--backgroundcolour').trim(
 const secondaryBackgroundColour = rootStyles.getPropertyValue('--secondarybackgroundcolour').trim();
 const warningColour = rootStyles.getPropertyValue('--warningcolour').trim();
 
-let previousPage = {
-    link: "/",
-    splashScreen: "/images/splash-screens/overexposed.png"
-};
-
 const backButton = document.querySelector(".back-button");
 const containerTitle = document.querySelector('#container-title');
 
 const extraMenuContainer = document.querySelector('.extra-menu-container');
 const tiktokIcon = document.getElementById('tik-tok-icon');
 const instagramIcon = document.getElementById('instagram-icon');
-
 
 const header = document.querySelector('#header');
 const settingsIcon = document.querySelector('#settings-icon');
@@ -32,13 +25,6 @@ const settingsBoxTitle = document.querySelector('#settings-title');
 
 const settingsSoundCheckbox = document.getElementById('settings-sound');
 const nsfwCheckbox = document.getElementById('settings-nsfw');
-
-const questionZoomedContainer = document.querySelector('.question-zoomed-container');
-const questionZoomedContainerText = document.querySelector('.question-zoomed-container h2');
-const questionZoomedContainerPunishmentText = document.querySelector('.question-zoomed-container h3');
-
-const subscriberFormBox = document.getElementById('subscriber-form-box');
-const subscriberFormBoxSuccess = document.getElementById('subscriber-form-box-success');
 
 let elementClassArray = [];
 let popUpClassArray = [];
@@ -70,39 +56,11 @@ class LocalStorageObserver {
     }
 }
 
-if (backButton) {
-    backButton.addEventListener('click', () => {
-        transitionSplashScreen(previousPage.link, previousPage.splashScreen)
-    });
-}
 let logoContainer = document.querySelector('.logo-container');
 let partyGamesLink = document.getElementById('party-games-link');
 let termsAndPrivacyLink = document.getElementById('terms-and-privacy-link');
 let frequentlyAskedQuestionsLink = document.getElementById('frequently-asked-questions-link');
 
-if (logoContainer) {
-    logoContainer.addEventListener('click', function () {
-        transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-    });
-}
-
-if (partyGamesLink) {
-    partyGamesLink.addEventListener('click', function () {
-        transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
-    });
-}
-if (termsAndPrivacyLink) {
-    termsAndPrivacyLink.addEventListener('click', function () {
-        transitionSplashScreen('/terms-and-privacy', '/images/splash-screens/terms-and-privacy.png');
-    });
-}
-if (frequentlyAskedQuestionsLink) {
-    frequentlyAskedQuestionsLink.addEventListener('click', function () {
-        transitionSplashScreen('/faqs', '/images/splash-screens/frequently-asked-questions.png');
-    });
-}
-
-// Declare the variable with the desired URL
 const instagramUrl = "https://www.instagram.com/oe.app/";
 const tiktokUrl = "https://www.tiktok.com/@overexposed.app";
 
@@ -157,8 +115,6 @@ if (document.querySelector('#card-bounds-checkbox')) {
         }
     });
 }
-
-
 
 const overlay = document.createElement('div');
 overlay.classList.add('overlay');
@@ -291,32 +247,6 @@ function handleTTSButtons(buttons) {
 
 waitForButtons('.tts-voice-button', handleTTSButtons);
 
-function initSplashScreen() {
-    const container = document.getElementById("splash-screen-container");
-    const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
-
-    setTimeout(() => container.classList.add('center'), 50);
-
-    setTimeout(() => {
-        container.classList.remove('center');
-        staticSplashScreenContainer?.remove();
-        container.classList.add('down');
-        playSoundEffect('splashScreenDown');
-    }, 300);
-
-    setTimeout(() => {
-        container.remove();
-        heading?.remove();
-    }, 1000);
-}
-
-if (document.readyState === "complete") {
-    // Page is already fully loaded
-    initSplashScreen();
-} else {
-    window.addEventListener("load", initSplashScreen);
-}
-
 function addElementIfNotExists(array, element) {
     if (!array.includes(element)) {
         array.push(element);
@@ -412,36 +342,9 @@ waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
     settingsIcon.addEventListener('click', toggleSettings);
 }, 15000);
 
-function transitionSplashScreen(link, splashScreen) {
-    const container = document.createElement('div');
-    container.className = 'splash-screen-container down';
-    const img = document.createElement('img');
-    img.src = splashScreen;
-    container.appendChild(img);
-    document.body.appendChild(container);
-
-    setTimeout(() => {
-        container.classList.remove('down');
-        container.classList.add('center');
-        playSoundEffect('splashScreenUp');
-    }, 500); // Slight delay to ensure CSS applies
-
-    // Listen for transition end
-    container.addEventListener('transitionend', function onTransitionEnd(event) {
-        if (event.propertyName === 'top') { // Ensure we're detecting the correct transition
-            container.removeEventListener('transitionend', onTransitionEnd);
-            window.location.href = link;
-        }
-    });
-}
-
 if (!localStorage.getItem('cookie-consent')) {
     LoadScript('/scripts/other/cookie-consent.js');
 }
-
-// Page Load Transition
-const heading = document.createElement('div');
-heading.classList.add('loading-screen');
 
 //Make the Page size fit the page
 function updateVh() {
@@ -455,3 +358,7 @@ function delay(ms) {
 
 window.addEventListener('load', updateVh);
 window.addEventListener('resize', updateVh);
+
+(async () => {
+  await LoadScript('/scripts/general/splash-screen.js');
+})();

@@ -121,28 +121,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 const mainImageContainer = document.querySelector('.main-image-container');
 const mainImageContainerText = document.querySelector('.text-container')
 
-//mainImageContainer.addEventListener('click', toggleQuestionZoomedContainer);
-
-function toggleQuestionZoomedContainer() {
-    const questionZoomedContainerImg = document.querySelector('.question-zoomed-container img');
-    questionZoomedContainerImg.src = document.querySelector('.main-image-container img').src;
-    addElementIfNotExists(elementClassArray, questionZoomedContainer);
-    if (!questionZoomedContainer.classList.contains('active')) {
-        questionZoomedContainer.classList.add('active');
-        playSoundEffect('containerOpen');
-        questionZoomedContainerText.textContent = mainImageContainerText.textContent;
-        if (!overlay.classList.contains('active')) {
-            toggleOverlay(true);
-        }
-    }
-    else {
-        questionZoomedContainer.classList.remove('active');
-        if (findActiveElementsWithClasses(classArray).length == 0) {
-            toggleOverlay(false);
-        }
-    }
-}
-
 function addSettingsExtensionToCurrentURL() {
     const currentURL = window.location.href;
     if (!currentURL.endsWith('/settings')) {

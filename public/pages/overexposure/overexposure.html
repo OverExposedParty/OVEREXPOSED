@@ -197,7 +197,7 @@ Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, 
 `;
 
     //Header & Settings
-    selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
+    let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
     let isSpeaking = false;
 
     backButton.addEventListener('click', () => {

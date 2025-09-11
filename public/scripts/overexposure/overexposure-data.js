@@ -1,6 +1,3 @@
-const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0xDhIbJUMjnu2ZpxIVJwN9tgNjK_Sm9TJfNzH6wBfDKJXPZtV5B0D0GStZZdIUQhYyEdbet94Xbdm/pub?output=csv";
-const googleScriptSaveCardURL = "https://script.google.com/macros/s/AKfycbzdAGne-Sv4rhWuShx7HJ4ImHVRZ74ftMMGTwXJuq6C8PXR5qaNfuRu9y-LnnnYYeixlQ/exec";
-
 const canvasWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasWidth').trim(), 10);
 const canvasHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasHeight').trim(), 10);
 
@@ -285,11 +282,11 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
     noPlaceDiv.classList.add('visible');
 
     setTimeout(() => {
-    noPlaceDiv.classList.add('fade-out');
-    setTimeout(() => {
-        if (noPlaceDiv.parentNode) noPlaceDiv.remove();
+        noPlaceDiv.classList.add('fade-out');
+        setTimeout(() => {
+            if (noPlaceDiv.parentNode) noPlaceDiv.remove();
+        }, 300);
     }, 300);
-}, 300);
 
 }
 
@@ -745,4 +742,22 @@ cardBoundsCheckbox.addEventListener('change', function () {
     else {
         CardBoundsToggle(false);
     }
+});
+
+waitForFunction("loadSound", () => {
+    async function LoadOverexposureSounds() {
+        const overexposureSounds = {
+            cardCannotBePlacedHere: '/sounds/overexposure/card-cannot-be-place-here.wav',
+            postIncomplete: '/sounds/overexposure/post-incomplete.wav',
+            postUploaded: '/sounds/overexposure/post-uploaded.wav',
+        };
+
+        for (const [key, url] of Object.entries(overexposureSounds)) {
+            await loadSound(key, url);
+        }
+    }
+
+    (async () => {
+        await LoadOverexposureSounds();
+    })();
 });

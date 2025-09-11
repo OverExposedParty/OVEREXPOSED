@@ -89,3 +89,18 @@ async function tossCoinFunction() {
     }
 }
 
+waitForFunction("loadSound", () => {
+    async function LoadDrinkWheelSoundEffects() {
+        const soundEffects = {
+            coinFlip: '/sounds/party-games/coin-flip.wav'
+        };
+
+        for (const [key, url] of Object.entries(soundEffects)) {
+            await loadSound(key, url);
+        }
+    }
+
+    (async () => {
+        await LoadDrinkWheelSoundEffects();
+    })();
+});

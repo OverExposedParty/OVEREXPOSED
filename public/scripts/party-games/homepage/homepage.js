@@ -279,3 +279,18 @@ function changeFavicon(colour) {
 waitForFunction("FetchHelpContainer", () => {
     FetchHelpContainer(helpContainerFile);
 });
+waitForFunction("loadSound", () => {
+    async function LoadHomepageSoundEffects() {
+        const soundEffects = {
+            cardFlip: '/sounds/homepage/card-flip.wav',
+        };
+
+        for (const [key, url] of Object.entries(soundEffects)) {
+            await loadSound(key, url);
+        }
+    }
+
+    (async () => {
+        await LoadHomepageSoundEffects();
+    })();
+});

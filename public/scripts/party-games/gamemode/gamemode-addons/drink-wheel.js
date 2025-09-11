@@ -15,20 +15,20 @@ else {
 }
 
 if (typeof sectors === "undefined" || sectors === null) {
-  var sectors = [
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: secondaryColour, text: backgroundColour, label: "2 SIPS" },
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: secondaryColour, text: backgroundColour, label: "3 SIPS" },
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: secondaryColour, text: backgroundColour, label: "4 SIPS" },
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: secondaryColour, text: backgroundColour, label: "2 SIPS" },
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: secondaryColour, text: backgroundColour, label: "3 SIPS" },
-    { color: primaryColour, text: backgroundColour, label: "1 SIP" },
-    { color: backgroundColour, text: primaryColour, label: "DOWN IT" }
-  ];
+    var sectors = [
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: secondaryColour, text: backgroundColour, label: "2 SIPS" },
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: secondaryColour, text: backgroundColour, label: "3 SIPS" },
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: secondaryColour, text: backgroundColour, label: "4 SIPS" },
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: secondaryColour, text: backgroundColour, label: "2 SIPS" },
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: secondaryColour, text: backgroundColour, label: "3 SIPS" },
+        { color: primaryColour, text: backgroundColour, label: "1 SIP" },
+        { color: backgroundColour, text: primaryColour, label: "DOWN IT" }
+    ];
 }
 
 const events = {
@@ -175,3 +175,19 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
         spinning = false;
     });
 }
+
+waitForFunction("loadSound", () => {
+    async function LoadDrinkWheelSoundEffects() {
+        const soundEffects = {
+            wheelSpin: '/sounds/party-games/wheel-spin.wav'
+        };
+
+        for (const [key, url] of Object.entries(soundEffects)) {
+            await loadSound(key, url);
+        }
+    }
+
+    (async () => {
+        await LoadDrinkWheelSoundEffects();
+    })();
+});
