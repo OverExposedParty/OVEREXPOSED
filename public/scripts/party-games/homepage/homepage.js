@@ -288,6 +288,7 @@ waitForFunction("loadSound", () => {
         for (const [key, url] of Object.entries(soundEffects)) {
             await loadSound(key, url);
         }
+        SetScriptLoaded("/scripts/party-games/homepage/homepage.js")
     }
 
     (async () => {

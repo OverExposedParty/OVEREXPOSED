@@ -243,6 +243,7 @@ async function initialisePage() {
         FetchInstructions();
       }
       await AddUserIcons();
+      SetScriptLoaded('/scripts/party-games/online/online-settings.js');
     }
   }
 }

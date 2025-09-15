@@ -17,10 +17,13 @@
 
 
 <body>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposed.png"
-            alt="Splash Screen" loading="eager"></div>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
-            src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager"></div>
+  <div class="splash-screen-container-static" id="splash-screen-container-static">
+    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+  </div>
+  <div class="splash-screen-container waiting-room" id="splash-screen-container">
+    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+    <p></p>
+  </div>
 
     <div class="chat-box">
         <div class="chat-input">
@@ -80,13 +83,12 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/party-games/online/online-settings.js"></script>
-
-<script src="/scripts/html-templates/html-template-header.js"></script>
-<script src="/scripts/html-templates/online/enter-username-template.js"></script>
-<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" defer></script>
-<script src="/scripts/html-templates/online/html-template-user-customisation.js" defer></script>
-<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" defer></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false" defer></script>
 
 <script src="/scripts/party-games/waiting-room/waiting-room.js?30082025" defer></script>
 <script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>

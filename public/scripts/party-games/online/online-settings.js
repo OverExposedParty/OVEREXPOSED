@@ -1,4 +1,3 @@
-let gameContainers = [];
 let hostedParty = false;
 let waitingForHost = false;
 let loadingPage = false;
@@ -16,7 +15,7 @@ let socket;
 //  socket = io(`${protocol}//${hostname}:3000`);
 //}
 
-socket = io(); 
+socket = io();
 
 
 socket.on('connect', () => {
@@ -464,7 +463,7 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
           );
           return;
         }
-        if(isPlaying) {
+        if (isPlaying) {
           FetchInstructions();
         }
       }
@@ -760,6 +759,11 @@ async function DeletePartyChat() {
 async function CheckGamePage() {
   if (document.getElementById('placeholder-selected-user-container')) {
     await LoadScript('/scripts/html-templates/online/selected-user-containers-template.js');
+  }
+  else {
+    waitForFunction("SetScriptLoaded", () => {
+      SetScriptLoaded('/scripts/party-games/online/online-settings.js');
+    })
   }
 }
 

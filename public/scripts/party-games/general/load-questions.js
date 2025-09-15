@@ -91,8 +91,9 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             console.error('No questions available to shuffle.');
             window.location.href = addSettingsExtensionToCurrentURL();
         }
-
-    } catch (error) {
+        SetScriptLoaded('/scripts/party-games/general/load-questions.js');
+    }
+    catch (error) {
         console.error('Failed to load JSON files:', error);
     }
 }

@@ -7,9 +7,6 @@ let previousPage = {
 const heading = document.createElement('div');
 heading.classList.add('loading-screen');
 
-const splashScreenContainer = document.getElementById("splash-screen-container");
-const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
-
 if (backButton) {
     backButton.addEventListener('click', () => {
         transitionSplashScreen(previousPage.link, previousPage.splashScreen)
@@ -38,6 +35,12 @@ if (frequentlyAskedQuestionsLink) {
     });
 }
 
+if (oesCustomisationLink) {
+    oesCustomisationLink.addEventListener('click', function () {
+        transitionSplashScreen('/oes-customisation', '/images/splash-screens/oes-customisation.png');
+    });
+}
+
 function initSplashScreen() {
     setTimeout(() => splashScreenContainer.classList.add('center'), 50);
 
@@ -53,8 +56,6 @@ function initSplashScreen() {
         heading?.remove();
     }, 1000);
 }
-
-window.addEventListener("load", initSplashScreen);
 
 function transitionSplashScreen(link, splashScreen) {
     const container = document.createElement('div');
@@ -94,8 +95,8 @@ async function getRandomFact(key) {
 
     splashScreenContainerFact.textContent = categoryFacts[randomIndex];
     staticSplashScreenContainerFact.textContent = categoryFacts[randomIndex];
-
-
 }
+
+SetScriptLoaded("/scripts/html-templates/html-template-header.js");
 
 //getRandomFact("truth-or-dare");

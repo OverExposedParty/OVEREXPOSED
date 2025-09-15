@@ -96,5 +96,7 @@ fetch('/html-templates/online/enter-username.html')
                 buttonSubmitUsername.classList.add('disabled');
             }
         });
+    }).then(() => {
+        SetScriptLoaded('/scripts/html-templates/online/enter-username-template.js');
     })
     .catch(error => console.error('Error loading header:', error));

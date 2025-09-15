@@ -152,7 +152,6 @@ async function initialisePage() {
           selectPunishmentButtonContainer.appendChild(settingsButton);
         }
       }
-
       const selectPunishmentButtons = document.getElementById('select-punishment-container').querySelectorAll('.selected-user-container .button-container button');
       selectPunishmentButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -179,6 +178,7 @@ async function initialisePage() {
     });
   }
   await AddUserIcons();
+  SetScriptLoaded('/scripts/party-games/online/online-settings.js');
 }
 
 async function FetchInstructions() {

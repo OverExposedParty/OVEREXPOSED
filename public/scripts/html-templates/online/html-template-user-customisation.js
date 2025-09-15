@@ -5,6 +5,15 @@ let userCustomisationContainerSlotColour, userCustomisationContainerSlotHead, us
 let userCustomisationLabelColourSlot, userCustomisationLabelHeadSlot, userCustomisationLabelEyes, userCustomisationLabelMouth;
 let userCustomisationImageColourSlot, userCustomisationImageHeadSlot, userCustomisationImageEyes, userCustomisationImageMouth;
 
+const userCustomisationTasks = {
+  userIcons: {
+    taskCompleted: false
+  },
+  userCustomisation: {
+    taskCompleted: false
+  }
+};
+
 const cssFilesUserCustomisation = [
   '/css/general/online/user-customisation.css',
   '/css/general/online/user-customisation-icon.css'
@@ -16,6 +25,7 @@ cssFilesUserCustomisation.forEach(href => {
   link.href = href;
   document.head.appendChild(link);
 });
+
 fetch('/html-templates/user-customisation.html')
   .then(response => response.text())
   .then(data => {
@@ -50,11 +60,21 @@ fetch('/html-templates/user-customisation.html')
     const scriptUserCustomisationIcon = document.createElement('script');
     scriptUserCustomisationIcon.src = '/scripts/general/online/user-customisation-icon.js';
     document.body.appendChild(scriptUserCustomisationIcon);
-    // Manually load the script
+
     const scriptUserCustomisation = document.createElement('script');
     scriptUserCustomisation.src = '/scripts/general/online/user-customisation.js';
     scriptUserCustomisation.defer = true;
     document.body.appendChild(scriptUserCustomisation);
 
+  }).then(() => {
+    userCustomisationTasks.userCustomisation.taskCompleted = true;
+    CheckUserCustomisationLoaded();
   })
   .catch(error => console.error('Error loading user customization:', error));
+
+  function CheckUserCustomisationLoaded(){
+    const tasksCompleted = Object.values(userCustomisationTasks).every((task) => task.taskCompleted);
+    if(tasksCompleted){
+      SetScriptLoaded('/scripts/html-templates/online/html-template-user-customisation.js');
+    }
+  }

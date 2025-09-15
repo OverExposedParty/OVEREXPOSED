@@ -15,10 +15,13 @@
 </head>
 
 <body>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/frequently-asked-questions.png"
-            alt="Splash Screen" loading="eager"></div>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
-            src="/images/splash-screens/frequently-asked-questions.png" alt="Splash Screen" loading="eager"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/frequently-asked-questions.png" alt="Splash Screen" loading="eager">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/frequently-asked-questions.png" alt="Splash Screen" loading="eager">
+        <p></p>
+    </div>
 
     <div id="header-placeholder"></div>
 
@@ -41,7 +44,7 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/other/faqs/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/other/faqs/instagram-icon.svg)');
 </script>
-<script src="/scripts/html-templates/html-template-header.js"></script>
-<script src="/scripts/other/other-page-format.js" defer></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/other/other-page-format.js" data-loaded="false" defer></script>
 
 </html>

@@ -1,3 +1,8 @@
+const splashScreenContainer = document.getElementById("splash-screen-container");
+const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
+
+let gameContainers = [];
+
 const cssFilesHeader = [
   '/css/general/settings.css',
   '/css/general/help-container.css',
@@ -31,28 +36,41 @@ function waitForFunction(name, callback) {
   }, 50); // check every 50ms
 }
 
+function SetScriptLoaded(script) {
+  document.querySelector(`script[src="${script}"]`).setAttribute('data-loaded', 'true');
+  const dataLoadedScripts = document.querySelectorAll('[data-loaded]');
+  const dataLoadedScriptsLoaded = document.querySelectorAll('[data-loaded="true"]');
+  const isDataLoaded = Array.from(dataLoadedScripts).every(dataLoadedScript => dataLoadedScript.dataset.loaded === 'true');
+  splashScreenContainer.querySelector('p').textContent = `(${dataLoadedScriptsLoaded.length}/${dataLoadedScripts.length})`;
+  console.log(script);
+  if (isDataLoaded) {
+    initSplashScreen();
+  }
+  console.log(`(${dataLoadedScriptsLoaded.length}/${dataLoadedScripts.length}) scripts loaded`);
+}
+
 class LocalStorageObserver {
-    constructor() {
-        this.listeners = [];
-        this.originalSetItem = localStorage.setItem;
-        this.originalGetItem = localStorage.getItem;
+  constructor() {
+    this.listeners = [];
+    this.originalSetItem = localStorage.setItem;
+    this.originalGetItem = localStorage.getItem;
 
-        localStorage.setItem = (key, value) => {
-            const oldValue = this.originalGetItem.call(localStorage, key);
-            this.originalSetItem.call(localStorage, key, value);
-            this.notifyListeners(key, oldValue, value);
-        };
-    }
+    localStorage.setItem = (key, value) => {
+      const oldValue = this.originalGetItem.call(localStorage, key);
+      this.originalSetItem.call(localStorage, key, value);
+      this.notifyListeners(key, oldValue, value);
+    };
+  }
 
-    addListener(callback) {
-        this.listeners.push(callback);
-    }
+  addListener(callback) {
+    this.listeners.push(callback);
+  }
 
-    notifyListeners(key, oldValue, newValue) {
-        this.listeners.forEach((listener) => {
-            listener(key, oldValue, newValue);
-        });
-    }
+  notifyListeners(key, oldValue, newValue) {
+    this.listeners.forEach((listener) => {
+      listener(key, oldValue, newValue);
+    });
+  }
 }
 
 fetch('/html-templates/header.html')

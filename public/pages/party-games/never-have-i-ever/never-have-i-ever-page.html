@@ -32,10 +32,13 @@
 
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
-            src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img
-            src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/never-have-i-ever.png" alt="Splash Screen">
+        <p></p>
+    </div>
 
     <div id="placeholder-gamemode-addons-container" data-online="false" data-gamemode="never-have-i-ever"></div>
 
@@ -82,11 +85,11 @@
     document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
 </script>
-<script src="/scripts/html-templates/html-template-header.js"></script>
-<script src="/scripts/html-templates/online/card-container-template.js"></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/online/card-container-template.js" data-loaded="false" data-standalone="true"></script>
 <script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
 
-<script src="/scripts/party-games/general/load-questions.js"></script>
+<script src="/scripts/party-games/general/load-questions.js" data-loaded="false"></script>
 <script src="/scripts/party-games/general/party-games.js"></script>
 <script src="/scripts/party-games/general/get-next-question.js"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>

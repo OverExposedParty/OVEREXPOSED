@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
+             script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
+
+    <title>OEs CUSTOMISATION</title>
+
+    <link rel="preload" href="/images/splash-screens/oes-customisation.png" as="image">
+
+    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/other/settings-shell.css">
+    <link rel="stylesheet" href="/css/other/oes-customisation-page.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/other/oes-customisation/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/other/oes-customisation/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/other/oes-customisation/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/other/oes-customisation/favicons/favicon-180x180.png">
+</head>
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/oes-customisation.png" alt="Splash Screen">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/oes-customisation.png" alt="Splash Screen">
+        <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
+
+    <div class="main-container">
+        <div class="main-settings-container">
+            <div class="settings-tab-container">
+                <button id="packs-settings" class="settings-tab active">Packs</button>
+                <button id="oes-settings" class="settings-tab ">OEs</button>
+            </div>
+            <div id="gamemode-settings-placeholder" data-template="oes-customisation">
+                <div class="packs-container active">
+                    <div class="header-container">
+                        <h2>OEs Packs</h2>
+                    </div>
+                    <div class="packs-content-container">
+                        <div class="button-container">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oes-settings-container ">
+                    <div class="header-container">
+                        <h2>OEs IMAGES</h2>
+                    </div>
+                    <div class="oes-content-container">
+                        <div class="button-container">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <button class="back-button">BACK</button>
+</body>
+
+<script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#C29B50');
+
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/other/oes-customisation/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/other/oes-customisation/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/other/oes-customisation/instagram-icon.svg)');
+</script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false"
+    data-standalone="true" defer></script>
+<script src="/scripts/other/oes-customisation.js" data-loaded="false" defer></script>
+</html>

@@ -17,11 +17,12 @@
 </head>
 
 <body>
-  <div class="splash-screen-container" id="splash-screen-container">
-    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
-  </div>
   <div class="splash-screen-container-static" id="splash-screen-container-static">
     <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+  </div>
+  <div class="splash-screen-container" id="splash-screen-container">
+    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+    <p></p>
   </div>
 
   <div id="header-placeholder"></div>
@@ -55,7 +56,7 @@
   document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
   document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
 </script>
-<script src="/scripts/html-templates/html-template-header.js"></script>
-<script src="/scripts/party-games/homepage/homepage.js" defer></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/party-games/homepage/homepage.js" data-loaded="false" defer></script>
 
 </html>

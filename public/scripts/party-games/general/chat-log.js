@@ -120,16 +120,13 @@ function GetCommand(message) {
             run: async (cmd) => {
                 if (cmd.action?.toLowerCase() === "delete") {
                     DeleteParty();
-                    if (typeof hostedParty !== "undefined") {
-                        if (typeof onlineButton !== 'undefined') {
-                            onlineButton.classList.remove('active');
-                        }
+                    if (typeof onlineButton !== 'undefined') {
+                        onlineButton.classList.remove('active');
                         await ToggleOnlineMode(false);
                     }
                 }
                 else if (cmd.action?.toLowerCase() === "create") {
-
-                    if((Array.from(packButtons).filter(button => button.classList.contains('active'))).length === 0) {
+                    if ((Array.from(packButtons).filter(button => button.classList.contains('active'))).length === 0) {
                         CreateChatMessage("[CONSOLE]", "UNABLE TO CREATE PARTY. NO PACKS SELECTED", "error", Date.now());
                         return;
                     }

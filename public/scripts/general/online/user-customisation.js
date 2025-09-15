@@ -1,6 +1,8 @@
 const rightHeaderContainer = document.querySelector('.header-icon-container.row.right');
 let userCustomisationIcon;
 
+gameContainers = gameContainers || [];
+
 gameContainers.push(
   userCustomisationContainer
 );
@@ -164,7 +166,7 @@ if (rightHeaderContainer) {
     });
     toggleUserCustomisation();
   });
-  if(hostedParty) {
+  if(typeof hostedParty !== "undefined" && hostedParty) {
     userCustomisationIcon.classList.add('disabled');
   }
 }

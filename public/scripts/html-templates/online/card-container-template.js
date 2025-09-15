@@ -82,7 +82,6 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
 
         return fetch('/html-templates/party-games/card-container/gamemode-text-container.html');
     })
-
     .then(response => response.text())
     .then(html => {
         const parser = new DOMParser();
@@ -163,5 +162,9 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         // const scriptGamemodeOnline = document.createElement('script');
         // scriptGamemodeOnline.src = `/scripts/party-games/${cardContainerGamemode}/${cardContainerGamemode}-online.js`;
         // document.body.appendChild(scriptGamemodeOnline);
+    }).then(() => {
+        if (!document.querySelector('script[src="/scripts/html-templates/online/card-container-template.js"]:not([data-standalone="true"])')) {
+            SetScriptLoaded('/scripts/html-templates/online/card-container-template.js');
+        }
     })
     .catch(error => console.error('Error loading templates:', error));

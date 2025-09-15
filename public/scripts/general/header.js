@@ -34,6 +34,7 @@ let permanantElementClassArray = [];
 let logoContainer = document.querySelector('.logo-container');
 let partyGamesLink = document.getElementById('party-games-link');
 let termsAndPrivacyLink = document.getElementById('terms-and-privacy-link');
+let oesCustomisationLink = document.getElementById('oes-customisation-link');
 let frequentlyAskedQuestionsLink = document.getElementById('frequently-asked-questions-link');
 
 const instagramUrl = "https://www.instagram.com/oe.app/";

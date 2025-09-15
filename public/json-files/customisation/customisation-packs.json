@@ -3,13 +3,16 @@
         "pack-name": "blank",
         "pack-status": "active",
         "pack-description": "Nothingness.",
-        "pack-path": "/json-files/customisation/packs/blank.json"
+        "pack-path": "/json-files/customisation/packs/blank.json",
+        "pack-colour": "var(--primarypagecolour)",
+        "pack-secondary-colour": "var(--secondarypagecolour)"
     },
     {
         "pack-name": "base",
         "pack-status": "active",
         "pack-description": "Base customisation pack containing the default character customisation options.",
-        "pack-path": "/json-files/customisation/packs/base.json"
+        "pack-path": "/json-files/customisation/packs/base.json",
+        "pack-colour": "#66CCFF",
+        "pack-secondary-colour": "#427BB9"
     }
-
 ]

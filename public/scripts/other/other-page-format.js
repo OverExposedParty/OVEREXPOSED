@@ -16,6 +16,8 @@ fetch(`/json-files/other/${mainContainer.dataset.template}.json`)
         waitForFunction("FetchHelpContainer", () => {
             FetchHelpContainer(`other/${mainContainer.dataset.template}.json`);
         });
+    }).then(() => {
+        SetScriptLoaded('/scripts/other/other-page-format.js');
     });
 
 function CreateNewSection(container, section) {

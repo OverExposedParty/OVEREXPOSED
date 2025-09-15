@@ -25,10 +25,13 @@
 </head>
 
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
-            src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img
-            src="/images/splash-screens/most-likely-to.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/most-likely-to.png" alt="Splash Screen">
+        <p></p>
+    </div>
 
     <div class="chat-box">
         <div class="chat-input">
@@ -73,11 +76,11 @@
     document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js"></script>
-<script src="/scripts/general/online/user-customisation-icon.js"></script>
-<script src="/scripts/party-games/online/online-settings.js"></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/general/online/user-customisation-icon.js" data-loaded="false" data-standalone="true"></script>
+<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
 <script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
-<script src="/scripts/party-games/general/load-questions.js"></script>
+<script src="/scripts/party-games/general/load-questions.js" data-loaded="false"></script>
 <script src="/scripts/party-games/general/chat-log.js"></script>
 
 </html>

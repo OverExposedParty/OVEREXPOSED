@@ -710,16 +710,57 @@ app.use(helmet());
 
 // Customize specific headers
 app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.responsivevoice.org", "https://www.googletagmanager.com", "https://*.google-analytics.com", "https://cdnjs.cloudflare.com", "https://script.google.com", "https://script.googleusercontent.com", "https://unpkg.com/compromise", "https://cdn.socket.io/4.8.1/socket.io.min.js", "https://cdn.jsdelivr.net/npm/chart.js", "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2", "https://overexposed.app"],
-    objectSrc: ["'none'"],
-    connectSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com", "https://docs.google.com", "https://doc-0g-8s-sheets.googleusercontent.com", "https://script.google.com", "https://script.googleusercontent.com", "https://unpkg.com/compromise", "https://cdn.socket.io/4.8.1/socket.io.min.js", "https://cdn.jsdelivr.net/npm/chart.js", "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2", "https://overexposed.app"],
-    imgSrc: ["'self'", "https://www.google-analytics.com", "https://*.google-analytics.com"],
-    frameSrc: ["https://www.googletagmanager.com", "https://*.google-analytics.com", "https://script.google.com", "https://script.googleusercontent.com"],
-  }
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://code.responsivevoice.org",
+        "https://www.googletagmanager.com",
+        "https://*.google-analytics.com",
+        "https://cdnjs.cloudflare.com",
+        "https://script.google.com",
+        "https://script.googleusercontent.com",
+        "https://unpkg.com/compromise",
+        "https://cdn.socket.io/*",
+        "https://cdn.jsdelivr.net/npm/chart.js",
+        "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2",
+        "https://overexposed.app"
+      ],
+      objectSrc: ["'none'"],
+      connectSrc: [
+        "'self'",
+        "https://overexposed.app:3000",
+        "https://www.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://docs.google.com",
+        "https://doc-0g-8s-sheets.googleusercontent.com",
+        "https://script.google.com",
+        "https://script.googleusercontent.com",
+        "https://unpkg.com/compromise",
+        "https://cdn.socket.io",
+        "https://cdn.jsdelivr.net/npm/chart.js",
+        "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2",
+        "https://overexposed.app"
+      ],
+      imgSrc: [
+        "'self'",
+        "https://www.google-analytics.com",
+        "https://*.google-analytics.com"
+      ],
+      frameSrc: [
+        "https://www.googletagmanager.com",
+        "https://*.google-analytics.com",
+        "https://script.google.com",
+        "https://script.googleusercontent.com"
+      ]
+    }
+  })
+);
+
+
 
 app.use(helmet.frameguard({ action: 'sameorigin' }));
 app.use(helmet.noSniff());
@@ -872,6 +913,12 @@ app.get('/terms-and-privacy', (req, res) => {
 
 app.get('/faqs', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'frequently-asked-questions.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/oes-customisation', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'other', 'oes-customisation.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });

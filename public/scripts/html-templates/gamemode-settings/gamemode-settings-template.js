@@ -62,6 +62,7 @@ let packsContainer, rulesContainer, onlineSettingsContainer;
 const placeholderGamemodeSettings = document.getElementById('gamemode-settings-placeholder');
 const cssFilesGamemodeSettings = [
   '/css/party-games/gamemode-settings-page-styles.css',
+  '/css/other/settings-shell.css',
   '/css/party-games/online-error.css'
 ];
 
@@ -134,4 +135,6 @@ fetch('/html-templates/gamemode-settings.html')
         FetchHelpContainer(helpContainerFile);
       })
     }
+  }).then(() => {
+    SetScriptLoaded('/scripts/html-templates/gamemode-settings/gamemode-settings-template.js');
   });

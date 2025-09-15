@@ -51,6 +51,13 @@ async function loadActivePacks(masterJsonPath) {
         initialLoad: true
       });
     }
+    if (!document.querySelector('script[src="/scripts/general/online/user-customisation-icon.js"]:not([data-standalone="true"])')) {
+      SetScriptLoaded("/scripts/general/online/user-customisation-icon.js");
+    }
+    else{
+      userCustomisationTasks.userIcons.taskCompleted = true;
+      CheckUserCustomisationLoaded();
+    }
 
   } catch (error) {
     console.error("Failed to load packs:", error);
@@ -58,12 +65,12 @@ async function loadActivePacks(masterJsonPath) {
 }
 loadActivePacks('/json-files/customisation/customisation-packs.json');
 
-function createUserIconPartyGames({ container, userId, userCustomisationString, size = null}) {
+function createUserIconPartyGames({ container, userId, userCustomisationString, size = null }) {
   const userIcon = document.createElement('div');
   userIcon.className = 'icon';
   userIcon.setAttribute('data-user-id', userId);
 
-  if(size !== null) {
+  if (size !== null) {
     userIcon.classList.add(size);
   }
 
@@ -216,10 +223,10 @@ function UpdateUserIcons(partyData) {
     const userIconDiv = document.querySelector(`.user-icon[data-user-id="${player.computerId}"]`);
     if (!userIconDiv) {
       let newChecked;
-      if(player.computerId == deviceId){
+      if (player.computerId == deviceId) {
         newChecked = true
       }
-      else{
+      else {
         newChecked = false
       }
       createUserIcon({

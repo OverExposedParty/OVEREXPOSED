@@ -2,12 +2,7 @@ let spinButton;
 let coinFlipButton;
 
 const placeholderGamemodeAddons = document.getElementById('placeholder-gamemode-addons-container');
-
-const gamemodeAddonContains = [
-    'drink-wheel',
-    'lucky-coin-flip',
-    'odd-man-out'
-]
+const gamemodeAddonContains = ['drink-wheel','lucky-coin-flip','odd-man-out']
 if (placeholderGamemodeAddons.dataset.online === "false") {
     coinFlipButton = document.getElementById('coin-flip-button');
     const coinFlipEnabled = localStorage.getItem(`${placeholderGamemodeAddons.dataset.gamemode}-lucky-coin-flip`) === 'true';
