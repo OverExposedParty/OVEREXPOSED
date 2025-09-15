@@ -724,7 +724,7 @@ app.use(
         "https://script.google.com",
         "https://script.googleusercontent.com",
         "https://unpkg.com/compromise",
-        "https://cdn.socket.io/*",
+        "https://cdn.socket.io",
         "https://cdn.jsdelivr.net/npm/chart.js",
         "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2",
         "https://overexposed.app"
