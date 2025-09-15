@@ -10,6 +10,10 @@ const oesSettingsTab = document.getElementById('oes-settings');
 const packsContainer = document.querySelector('.packs-container');
 const oesContainer = document.querySelector('.oes-settings-container');
 
+if (localStorage.getItem('oes-base') === null) {
+  localStorage.setItem('oes-base', 'true');
+}
+
 function renderPacks(packs) {
     packs.forEach(pack => {
         const packName = pack["pack-name"];
@@ -164,6 +168,7 @@ oesSettingsTab.addEventListener('click', () => {
         oesSettingsTab.classList.add('active');
     }
 });
+
 waitForFunction("FetchHelpContainer", () => {
     FetchHelpContainer('other/oes-customisation.json');
 });
