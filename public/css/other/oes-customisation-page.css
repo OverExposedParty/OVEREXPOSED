@@ -56,7 +56,7 @@ h3.oes-name {
     padding: 0;
 }
 
-p.oes-id{
+p.oes-id {
     position: absolute;
     top: 0;
     right: 20%;
@@ -65,4 +65,43 @@ p.oes-id{
     text-align: right;
     margin: 0;
     padding: 0;
+}
+
+@media (orientation: portrait) {
+    .oes-image-container {
+        position: relative;
+        aspect-ratio: 7 / 11;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .oes-content-container .button-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
+}
+@media ((orientation: portrait) and (max-width: 300px)) {
+    .oes-content-container .button-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media ((orientation: portrait) and (min-width: 300px) and (max-width: 500px)) {
+    .oes-content-container .button-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media ((orientation: portrait) and (min-width: 500px) and (max-width: 700px)) {
+    .oes-content-container .button-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media ((orientation: portrait) and (min-width: 700px)) {
+    .oes-content-container .button-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
