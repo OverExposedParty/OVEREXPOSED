@@ -18,7 +18,6 @@ function renderPacks(packs) {
     packs.forEach(pack => {
         const packName = pack["pack-name"];
 
-        // Skip the blank pack entirely
         if (packName === "blank") return;
 
         if (pack["pack-status"] === "active") {
@@ -31,7 +30,6 @@ function renderPacks(packs) {
 
             packButtons.push(button);
 
-            // Restore state from localStorage on load
             const savedState = localStorage.getItem(`oes-${packName}`);
             if (savedState === "true") {
                 button.classList.add("active");
@@ -96,10 +94,9 @@ function renderOESOptions(packName, packColour, packSecondaryColour) {
             const key = `customisation-${packName}`;
             if (!data[key]) return;
 
-            // Prevent duplicates if already loaded
             if (oesButtons[packName]) return;
 
-            oesButtons[packName] = []; // create new entry
+            oesButtons[packName] = [];
 
             data[key].forEach(item => {
                 const button = document.createElement("div");
