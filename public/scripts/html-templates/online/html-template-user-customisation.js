@@ -37,6 +37,11 @@ fetch('/html-templates/user-customisation.html')
     });
   })
   .then(() => {
+    if (localStorage.getItem('customisation-base-active') === null) {
+      localStorage.setItem('customisation-base-active', true);
+    }
+  })
+  .then(() => {
     userCustomisationContainer = document.querySelector('.user-customisation-container');
 
     userCustomisationContainerSlotColour = userCustomisationContainer.querySelector('#colour');
@@ -72,9 +77,18 @@ fetch('/html-templates/user-customisation.html')
   })
   .catch(error => console.error('Error loading user customization:', error));
 
-  function CheckUserCustomisationLoaded(){
-    const tasksCompleted = Object.values(userCustomisationTasks).every((task) => task.taskCompleted);
-    if(tasksCompleted){
-      SetScriptLoaded('/scripts/html-templates/online/html-template-user-customisation.js');
-    }
+function CheckUserCustomisationLoaded() {
+  const tasksCompleted = Object.values(userCustomisationTasks).every((task) => task.taskCompleted);
+  if (tasksCompleted) {
+    SetScriptLoaded('/scripts/html-templates/online/html-template-user-customisation.js');
   }
+}
+
+function loadCustomisation() {
+  const saved = localStorage.getItem("user-customisation");
+  return saved ? JSON.parse(saved) : {};
+}
+
+function saveCustomisation(customisation) {
+  localStorage.setItem("user-customisation", JSON.stringify(customisation));
+}

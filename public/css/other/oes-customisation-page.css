@@ -43,6 +43,8 @@
     aspect-ratio: 7 / 11;
     width: 100px;
     border-radius: 10px;
+    pointer-events: none;
+    border: var(--bordersize) solid var(--secondarybackgroundcolour);
 }
 
 h3.oes-name {
@@ -67,18 +69,20 @@ p.oes-id {
     padding: 0;
 }
 
+.oes-content-container .button-container button.oes-option{
+    all: unset;
+    cursor: pointer;
+}
+
 @media (orientation: portrait) {
     .oes-image-container {
         position: relative;
         aspect-ratio: 7 / 11;
-        width: 100%;
-        border-radius: 10px;
+        width: 95%;
     }
 
     .oes-content-container .button-container {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
         width: 100%;
     }
 }
