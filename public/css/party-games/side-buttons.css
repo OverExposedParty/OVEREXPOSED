@@ -1,10 +1,10 @@
 .side-buttons {
     height: auto;
     width: auto;
-    right: 0.5%;
+    right: 2.5px;
     bottom: 50%;
     flex-direction: column;
-    align-items: center;
+    align-items: right;
     transform: translateY(50%);
     position: fixed;
     display: flex;
@@ -15,7 +15,6 @@
 .side-buttons.single {
     height: auto;
     width: auto;
-    right: 1.5%;
     bottom: 5%;
     position: fixed;
     display: flex;
@@ -56,19 +55,19 @@
 
     .side-button,
     .tts-button {
-        width: 5dvh;
-        height: 5dvh;
+        width: 6dvh;
+        height: 6dvh;
     }
 
     .side-button.active,
     .tts-button.active {
-        width: 5.5dvh;
-        height: 5.5dvh;
+        width: 6.5dvh;
+        height: 6.5dvh;
     }
 
     .tts-button:hover,
     .side-button:hover {
-        width: 5.5dvh;
-        height: 5.5dvh;
+        width: 6.5dvh;
+        height: 6.5dvh;
     }
 }
