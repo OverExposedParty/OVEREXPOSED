@@ -26,8 +26,20 @@
         },
         {
             "id": "A004",
-            "name": "MAFIA MAROON",
-            "file-path": "/images/user-customisation/colour/base/mafia-maroon.svg",
+            "name": "PUNCHY PINK",
+            "file-path": "/images/user-customisation/colour/base/punchy-pink.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A005",
+            "name": "HONEY HUE",
+            "file-path": "/images/user-customisation/colour/base/honey-hue.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "A006",
+            "name": "BUBBLY BLUE",
+            "file-path": "/images/user-customisation/colour/base/bubbly-blue.svg",
             "slot": "colour"
         },
         {
@@ -44,20 +56,20 @@
         },
         {
             "id": "A102",
-            "name": "HEAD BAND",
-            "file-path": "/images/user-customisation/head-slot/base/head-band.svg",
-            "slot": "head-slot"
-        },
-        {
-            "id": "A103",
             "name": "HEAD BANDAGE",
             "file-path": "/images/user-customisation/head-slot/base/head-bandage.svg",
             "slot": "head-slot"
         },
         {
+            "id": "A103",
+            "name": "HEAD BAND",
+            "file-path": "/images/user-customisation/head-slot/base/head-band.svg",
+            "slot": "head-slot"
+        },
+        {
             "id": "A104",
-            "name": "NAPPY HEAD",
-            "file-path": "/images/user-customisation/head-slot/base/nappy-head.svg",
+            "name": "HANDLE",
+            "file-path": "/images/user-customisation/head-slot/base/handle.svg",
             "slot": "head-slot"
         },
         {
@@ -66,7 +78,7 @@
             "file-path": "/images/user-customisation/head-slot/base/cardboard-box.svg",
             "slot": "head-slot"
         },
-                {
+        {
             "id": "A106",
             "name": "POST-IT NOTE",
             "file-path": "/images/user-customisation/head-slot/base/post-it-note.svg",

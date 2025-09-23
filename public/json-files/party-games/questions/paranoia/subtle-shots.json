@@ -1,235 +1,72 @@
 {
     "paranoia-subtle-shots": [
-        {
-            "question": "Who’s most likely to forget a friend's birthday?"
-        },
-        {
-            "question": "Who’s had the most awkward encounter with a crush?"
-        },
-        {
-            "question": "Who might be secretly talking behind someone’s back?"
-        },
-        {
-            "question": "Who’s most likely to have an embarrassing secret about their past?"
-        },
-        {
-            "question": "Who’s the messiest drunk?"
-        },
-        {
-            "question": "Who might secretly have a controversial obsession?"
-        },
-        {
-            "question": "Who’s most likely to shock everyone with a secret past?"
-        },
-        {
-            "question": "Who has the biggest ego?"
-        },
-        {
-            "question": "Who has the worst hygiene?"
-        },
-        {
-            "question": "Who’s most likely to steal from their parents?"
-        },
-        {
-            "question": "Who’s most likely to sleep with their boss?"
-        },
-        {
-            "question": "Who’s least likely to move on after a breakup?"
-        },
-        {
-            "question": "Who’s most likely to forgive a cheating partner?"
-        },
-        {
-            "question": "Who’s most likely to get ghosted?"
-        },
-        {
-            "question": "Who’s most likely to be friend-zoned after a bad kiss?"
-        },
-        {
-            "question": "Who’s most likely to be a “simp”?"
-        },
-        {
-            "question": "Most likely to fall in love with their best friend?"
-        },
-        {
-            "question": "Who’s most likely to have a sugar daddy/mommy?"
-        },
-        {
-            "question": "Who’d work out and go to work without showering?"
-        },
-        {
-            "question": "Most likely to go to prison for life—and why?"
-        },
-        {
-            "question": "Most likely to lie to a friend?"
-        },
-        {
-            "question": "Who’d wear revealing clothing on purpose?"
-        },
-        {
-            "question": "Who was the first to lose their virginity?"
-        },
-        {
-            "question": "Who’s the biggest lightweight?"
-        },
-        {
-            "question": "Who’s most likely to get their heart broken?"
-        },
-        {
-            "question": "Who’d jump from relationship to relationship?"
-        },
-        {
-            "question": "Who’s the biggest attention-seeker?"
-        },
-        {
-            "question": "Who’s most likely to fall in love with a friends-with-benefits?"
-        },
-        {
-            "question": "Who’s the group’s biggest problem-maker?"
-        },
-        {
-            "question": "Who’s the biggest flirt?"
-        },
-        {
-            "question": "Who’s most likely to break someone’s heart?"
-        },
-        {
-            "question": "Who’s most likely to do something illegal for fun?"
-        },
-        {
-            "question": "Who’s most likely to exaggerate achievements on their resume?"
-        },
-        {
-            "question": "Who’s most likely to get caught lying about their whereabouts?"
-        },
-        {
-            "question": "Who’s likely to have a hidden agenda when giving advice?"
-        },
-        {
-            "question": "Who might be hiding significant debt?"
-        },
-        {
-            "question": "Who’s most likely to keep old, embarrassing messages or emails?"
-        },
-        {
-            "question": "Who’s most likely to hide a major purchase from their partner?"
-        },
-        {
-            "question": "Who secretly envies someone else’s lifestyle?"
-        },
-        {
-            "question": "Who would make up an elaborate story to cover a minor mistake?"
-        },
-        {
-            "question": "Who’s most likely to lie about their social life?"
-        },
-        {
-            "question": "Who’s likely to have an unspoken rivalry with someone in the group?"
-        },
-        {
-            "question": "Who exaggerates accomplishments on social media?"
-        },
-        {
-            "question": "Who’s most likely to keep secrets from close friends?"
-        },
-        {
-            "question": "Who’s most likely to lie about past relationships?"
-        },
-        {
-            "question": "Who’s likely to hide past mistakes or regrets?"
-        },
-        {
-            "question": "Who has a secret crush on someone they shouldn’t?"
-        },
-        {
-            "question": "Who’s likely to have an unorthodox approach to dating?"
-        },
-        {
-            "question": "Who’s most likely to stay in a one-sided relationship?"
-        },
-        {
-            "question": "Who’s most likely to get canceled online?"
-        },
-        {
-            "question": "Who’s most likely to snitch on a friend?"
-        },
-        {
-            "question": "Who’s likely to be into witchcraft?"
-        },
-        {
-            "question": "Who’s secretly jealous of others' success?"
-        },
-        {
-            "question": "Who’s most likely to pretend to be more knowledgeable than they are?"
-        },
-        {
-            "question": "Who exaggerates stories to look better?"
-        },
-        {
-            "question": "Who might give backhanded compliments?"
-        },
-        {
-            "question": "Who’s most likely to feel upset when not in the spotlight?"
-        },
-        {
-            "question": "Who privately questions their values or beliefs?"
-        },
-        {
-            "question": "Who’s the most opinionated?"
-        },
-        {
-            "question": "Who would catfish someone?"
-        },
-        {
-            "question": "Who’s most likely to leave a friend with the bill?"
-        },
-        {
-            "question": "Who’s the cheapest person?"
-        },
-        {
-            "question": "Who has the worst game?"
-        },
-        {
-            "question": "Who’s the fakest person here?"
-        },
-        {
-            "question": "Who’d flirt with someone who’s taken?"
-        },
-        {
-            "question": "Who’s been involved in a love triangle?"
-        },
-        {
-            "question": "Who’s most likely to fall for a toxic relationship for the attraction?"
-        },
-        {
-            "question": "Who’s used fake accounts to flirt or stalk?"
-        },
-        {
-            "question": "Who’s trying to be someone they’re not?"
-        },
-        {
-            "question": "Who has the biggest ego here?"
-        },
-        {
-            "question": "Who might secretly keep tabs on an ex’s social media?"
-        },
-        {
-            "question": "Who’s most likely to hide a relationship from friends or family?"
-        },
-        {
-            "question": "Who’s fantasized about a teacher or professor?"
-        },
-        {
-            "question": "Who’s the smelliest?"
-        },
-        {
-            "question": "Who is the least attractive here?"
-        },
-        {
-            "question": "Who’s the worst at making decisions?"
-        },
-        {
-            "question": "Who’s a master manipulator?"
-        }
+        { "question": "Who’s most likely to forget a friend's birthday?" },
+        { "question": "Who do you think has had the most awkward encounter with a crush?" },
+        { "question": "If you had to guess, who might be secretly talking behind someone’s back?" },
+        { "question": "Who do you think is most likely to have an embarrassing secret about their past?" },
+        { "question": "Who do you think has the biggest ego?" },
+        { "question": "Who would jump from relationship to relationship?" },
+        { "question": "Who do you think has the worst hygiene?" },
+        { "question": "Who is the biggest flirt?" },
+        { "question": "Who is most likely to break someone’s heart?" },
+        { "question": "Who is most likely to fall for a toxic relationship because of physical attraction?" },
+        { "question": "Who would catfish someone?" },
+        { "question": "Who would most likely flirt with someone knowing they’re already taken?" },
+        { "question": "Who is most likely to go skinny dipping?" },
+        { "question": "Who is most likely to kiss more than one person in a night?" },
+        { "question": "Who do you think has gotten involved in a love triangle?" },
+        { "question": "Who is the biggest lightweight?" },
+        { "question": "Who is most likely to have their partner cheat on them and forgive them?" },
+        { "question": "Who has the worst game in the group?" },
+        { "question": "Who’s the most messy drunk?" },
+        { "question": "Who is most likely to fall in love with their best friend?" },
+        { "question": "Who is most likely to steal from their parents?" },
+        { "question": "Who is most likely not to move on after a breakup?" },
+        { "question": "Who is most likely to get ghosted?" },
+        { "question": "Who is most likely to be friend-zoned after a terrible kiss?" },
+        { "question": "Who is most likely to be a simp?" },
+        { "question": "Who would purposely wear revealing clothing?" },
+        { "question": "Most likely to become homeless?" },
+        { "question": "Who would work out and go to work without showering?" },
+        { "question": "Most likely to go to prison for life and why?" },
+        { "question": "Most likely to lie to their friend?" },
+        { "question": "Who’s most likely to get their heart broken?" },
+        { "question": "Who is the biggest attention seek?" },
+        { "question": "Who is the problem creator of the group?" },
+        { "question": "Who is most likely to do something illegal for fun?" },
+        { "question": "Who would be most likely to exaggerate their achievements on their resume?" },
+        { "question": "Who’s most likely to get caught in a lie about their whereabouts?" },
+        { "question": "Who is most likely to have a hidden agenda when giving advice?" },
+        { "question": "Who might be hiding a significant amount of debt?" },
+        { "question": "Who is most likely to have a stash of old, embarrassing messages or emails?" },
+        { "question": "Who’s most likely to hide a major purchase from their significant other?" },
+        { "question": "Who is most likely to secretly envy someone else’s lifestyle?" },
+        { "question": "Who is most likely to make up an elaborate story to cover up a minor mistake?" },
+        { "question": "Who is most likely to get caught in a lie about their social life?" },
+        { "question": "Who is most likely to have an unspoken rivalry with someone in the group?" },
+        { "question": "Who is most likely to exaggerate their accomplishments on social media?" },
+        { "question": "Who is most likely to keep a secret from their closest friends?" },
+        { "question": "Who is most likely to lie about their past relationships?" },
+        { "question": "Who is most likely to keep a secret about their past mistakes or regrets?" },
+        { "question": "Who is most likely to have sent or received explicit messages?" },
+        { "question": "Who is most likely to have a hidden crush on someone they shouldn't?" },
+        { "question": "Who is most likely to have a secretive or unorthodox approach to dating?" },
+        { "question": "Who is most likely to get bitched in a relationship?" },
+        { "question": "Who is most likely to get canceled online?" },
+        { "question": "Who is most likely to snitch on their friend?" },
+        { "question": "Who is most likely to be into witchcraft?" },
+        { "question": "Who might secretly be jealous of others’ success?" },
+        { "question": "Who might be pretending to be more knowledgeable than they really are?" },
+        { "question": "Who is most likely to over exaggerate stories to make themselves look better?" },
+        { "question": "Who might have a hidden agenda when giving compliments?" },
+        { "question": "Who is most likely to give compliments that are actually backhanded?" },
+        { "question": "Who might be secretly upset about not being in the spotlight?" },
+        { "question": "Who is most likely to question their own values or beliefs privately?" },
+        { "question": "Who is the most opinionated?" },
+        { "question": "Who is most likely to go streaking?" },
+        { "question": "Who is the fakest person in the room?" },
+        { "question": "Who do you think is most likely to have hooked up with someone way out of their league?" },
+        { "question": "Who has the biggest ego in the room?" },
+        { "question": "Who do you think has used fake social media accounts to flirt or stalk someone?" }
     ]
 }

@@ -27,6 +27,7 @@ async function loadSound(key, url) {
 }
 
 async function playSoundEffect(soundKey) {
+    console.log("🎵 Playing sound effect:", soundKey);
     if (!audioContext) {
         console.warn("Audio context is not initialized.");
         return;
@@ -60,12 +61,37 @@ async function LoadBasicSoundEffects() {
         splashScreenDown: '/sounds/header/splash-screen-down.wav',
         buttonClicked: '/sounds/header/button-click.wav',
         buttonDeselect: '/sounds/header/button-deselect.wav',
+        postUploaded: '/sounds/overexposure/post-uploaded.wav',
     };
 
     for (const [key, url] of Object.entries(soundEffects)) {
         await loadSound(key, url);
     }
 }
+
+document.addEventListener("click", function (event) {
+    if (event.target.tagName === "BUTTON") {
+        if (event.target.classList.contains('disabled')) return;
+
+        if (event.target.classList.contains('sound-save')) {
+            //playSoundEffect('postUploaded');
+            return;
+        };
+
+        if (event.target.classList.contains('sound-toggle')) {
+            if (event.target.classList.contains('active')) {
+                playSoundEffect('buttonClicked');
+            }
+            else {
+                playSoundEffect('buttonDeselect');
+            }
+            return;
+        }
+        else {
+            playSoundEffect('buttonClicked');
+        }
+    }
+});
 
 (async () => {
     await LoadBasicSoundEffects();

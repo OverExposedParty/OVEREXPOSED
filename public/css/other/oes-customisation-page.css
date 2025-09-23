@@ -61,8 +61,7 @@ h3.oes-name {
 p.oes-id {
     position: absolute;
     top: 0;
-    right: 20%;
-    transform: translateX(50%);
+    right: 2.5%;
     font-size: 10px;
     text-align: right;
     margin: 0;
@@ -74,11 +73,23 @@ p.oes-id {
     cursor: pointer;
 }
 
+button.oes-option .oes-image-container h3.oes-name,
+button.oes-option .oes-image-container p.oes-id {
+    color: #333333;
+}
+
+button.oes-option.active .oes-image-container h3.oes-name,
+button.oes-option.active .oes-image-container p.oes-id {
+    color: black;
+}
+
+
+
 @media (orientation: portrait) {
     .oes-image-container {
         position: relative;
         aspect-ratio: 7 / 11;
-        width: 95%;
+        width: 90%;
     }
 
     .oes-content-container .button-container {

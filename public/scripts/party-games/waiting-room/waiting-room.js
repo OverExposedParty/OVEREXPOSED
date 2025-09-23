@@ -179,6 +179,7 @@ async function UpdateGamemodeContainer() {
     } else {
       button.classList.remove('active');
     }
+    SetButtonStyle(button, false);
   });
 
 

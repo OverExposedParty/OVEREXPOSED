@@ -1,265 +1,97 @@
 {
     "paranoia-hidden-agendas": [
-        {
-            "question": "Who’s most likely to be secretly gay?"
-        },
-        {
-            "question": "Who’s most likely to own a brothel?"
-        },
-        {
-            "question": "Who’s most likely to be found at a gay bar?"
-        },
-        {
-            "question": "Who’s most likely to have never used a condom?"
-        },
-        {
-            "question": "Who’s most likely to kiss multiple people in one night?"
-        },
-        {
-            "question": "Who’s most likely to go streaking?"
-        },
-        {
-            "question": "Who might secretly be attracted to someone in this room?"
-        },
-        {
-            "question": "Who’s the worst in bed?"
-        },
-        {
-            "question": "Who might secretly follow adult film stars on social media?"
-        },
-        {
-            "question": "Most likely to choose video games over sex?"
-        },
-        {
-            "question": "Who’s most likely to be overheard by family having sex?"
-        },
-        {
-            "question": "Who’d hook up just to say they did?"
-        },
-        {
-            "question": "Who’s most likely to have sent or received explicit messages?"
-        },
-        {
-            "question": "Most likely to go skinny dipping?"
-        },
-        {
-            "question": "Who’s most likely to hook up with someone out of their league?"
-        },
-        {
-            "question": "Who probably has a foot fetish?"
-        },
-        {
-            "question": "Who would be likely to cheat on their partner?"
-        },
-        {
-            "question": "Who might lie about their body size?"
-        },
-        {
-            "question": "Who’s the fakest person here?"
-        },
-        {
-            "question": "Who’s most likely to get rejected on a night out?"
-        },
-        {
-            "question": "Who’s most likely to be a serial killer?"
-        },
-        {
-            "question": "Who might have had a one-night stand with someone famous?"
-        },
-        {
-            "question": "Who’s secretly addicted to porn?"
-        },
-        {
-            "question": "Who would have an affair with someone powerful?"
-        },
-        {
-            "question": "Who could be hiding a wild party secret?"
-        },
-        {
-            "question": "Who has a stash of risqué clothing?"
-        },
-        {
-            "question": "Who has the highest body count here?"
-        },
-        {
-            "question": "Who might lie about who they’ve slept with?"
-        },
-        {
-            "question": "Who would be submissive if they’re a guy and dominant if a woman?"
-        },
-        {
-            "question": "Who might go after a friend’s partner?"
-        },
-        {
-            "question": "Who is most likely to have a pregnancy scare?"
-        },
-        {
-            "question": "Who would start an OnlyFans account?"
-        },
-        {
-            "question": "Who’s more likely to steal from their partner?"
-        },
-        {
-            "question": "Who would ruin a friendship by sleeping with them?"
-        },
-        {
-            "question": "Who’s the rudest person here?"
-        },
-        {
-            "question": "Who’s most likely to get beaten up?"
-        },
-        {
-            "question": "Who’s most likely to become a drug addict?"
-        },
-        {
-            "question": "Who’s likely to sleep with their ex?"
-        },
-        {
-            "question": "Who would fart during sex?"
-        },
-        {
-            "question": "Who here has had the most sexual partners?"
-        },
-        {
-            "question": "Which two people here would you set up to date each other?"
-        },
-        {
-            "question": "Who would try to give themselves a blow job?"
-        },
-        {
-            "question": "Who’s most likely to become an alcoholic?"
-        },
-        {
-            "question": "Who’s most likely to stay a virgin for life?"
-        },
-        {
-            "question": "Who has the best body here?"
-        },
-        {
-            "question": "Who would become a stripper?"
-        },
-        {
-            "question": "Who’s most likely to be in an open relationship?"
-        },
-        {
-            "question": "Who would have a side chick?"
-        },
-        {
-            "question": "Who’s likely to date multiple people at once?"
-        },
-        {
-            "question": "Who’s most likely to grab a stranger’s ass?"
-        },
-        {
-            "question": "Who might have a partner fake an orgasm?"
-        },
-        {
-            "question": "Who’s most likely to buy a weird sex toy?"
-        },
-        {
-            "question": "Who might have a secret relationship or affair?"
-        },
-        {
-            "question": "Who is most likely to be racist?"
-        },
-        {
-            "question": "Who secretly subscribes to adult content?"
-        },
-        {
-            "question": "Who might have a hidden kink or fetish?"
-        },
-        {
-            "question": "Who could have had a one-night stand with someone famous?"
-        },
-        {
-            "question": "Who’s most likely to end up on a ‘Most Wanted’ list?"
-        },
-        {
-            "question": "Who’s likely to stay single for life?"
-        },
-        {
-            "question": "Who is most likely to get set up by someone of the opposite sex?"
-        },
-        {
-            "question": "Who would undermine their friend for personal gain?"
-        },
-        {
-            "question": "Who would get drunk and leave the club with a '1 out of 10'?"
-        },
-        {
-            "question": "Who has a hidden crush on someone here?"
-        },
-        {
-            "question": "Who overcompensates for insecurities?"
-        },
-        {
-            "question": "Who makes passive-aggressive comments about others’ work?"
-        },
-        {
-            "question": "Who might scam a friend?"
-        },
-        {
-            "question": "Who would win in a kissing contest?"
-        },
-        {
-            "question": "Who’s the worst at dating?"
-        },
-        {
-            "question": "Who struggles with commitment in relationships?"
-        },
-        {
-            "question": "Who would date someone just for looks?"
-        },
-        {
-            "question": "Who would hook up just to get back at an ex?"
-        },
-        {
-            "question": "Who would try a one-night stand in another country?"
-        },
-        {
-            "question": "Who has sexted someone they’ve never met?"
-        },
-        {
-            "question": "Who would start a long-distance relationship purely for sex?"
-        },
-        {
-            "question": "Who has the wildest sex stories?"
-        },
-        {
-            "question": "Who might have cheated on vacation?"
-        },
-        {
-            "question": "Who would join a webcam show?"
-        },
-        {
-            "question": "Who’s cheated in a long-term relationship?"
-        },
-        {
-            "question": "Who would seduce someone in power?"
-        },
-        {
-            "question": "Who’d hook up for a bet or dare?"
-        },
-        {
-            "question": "Who’s broken up with someone for being bad in bed?"
-        },
-        {
-            "question": "Who has lied about their body count to a partner?"
-        },
-        {
-            "question": "Who’s lied about being single to hook up?"
-        },
-        {
-            "question": "Who uses their sexuality to manipulate others?"
-        },
-        {
-            "question": "Who has the worst body here?"
-        },
-        {
-            "question": "Who’s most likely to try a 'friends with benefits' setup without telling the other person their intentions?"
-        },
-        {
-            "question": "Who’s most likely to fantasize about a celebrity during sex?"
-        }
+        { "question": "Who’s the least attractive person in this room?" },
+        { "question": "Who might be most likely to have a hidden attraction to someone here?" },
+        { "question": "Who here probably has a foot fetish?" },
+        { "question": "Who here would cheat on their partner?" },
+        { "question": "Who do you think lies about the size of their junk or chest size?" },
+        { "question": "Who is the fakest person in the room?" },
+        { "question": "Who’s most likely to get rejected on a night out?" },
+        { "question": "Who do you think is most likely to have had a one-night stand with someone famous?" },
+        { "question": "Who would try to give themselves a blow job?" },
+        { "question": "Who is most likely to have a gay or lesbian experience?" },
+        { "question": "Who is most likely to have never used a condom before?" },
+        { "question": "Who would be most willing to participate in a webcam show?" },
+        { "question": "Who might secretly follow adult film stars on social media?" },
+        { "question": "Who is most likely to be secretly gay?" },
+        { "question": "Who is most likely to be heard by a family having sex?" },
+        { "question": "Who is most likely to own a brothel?" },
+        { "question": "Who would hook up with someone just to say they did it?" },
+        { "question": "Who is most likely to be found at a gay bar?" },
+        { "question": "Who was the first to lose their virginity?" },
+        { "question": "Who is most likely to have a sugar daddy/mummy?" },
+        { "question": "Who is the most likely to hook up with their boss?" },
+        { "question": "Who might be hiding a secret past that could shock everyone?" },
+        { "question": "If someone had a hidden obsession with something controversial, who would it be?" },
+        { "question": "Who here has had the most sexual partners?" },
+        { "question": "Who’s most likely to be secretly addicted to porn?" },
+        { "question": "If someone had a hidden secret about a wild party or event, who would it be?" },
+        { "question": "Who might have a hidden stash of provocative or risqué clothing?" },
+        { "question": "Who is most likely to pick video games over sex?" },
+        { "question": "Who do you think has the highest body count in the room?" },
+        { "question": "Who in the room is most likely to lie about sleeping with someone?" },
+        { "question": "Who is most likely to be submissive if they’re a guy and dominant if they are a woman?" },
+        { "question": "Who is most likely to try and move to their friends' partner?" },
+        { "question": "Who is most likely to have a pregnancy scare?" },
+        { "question": "Who do you think has lied about being single just to hook up with someone?" },
+        { "question": "Who here is most likely to start an OnlyFans account?" },
+        { "question": "Who is the worst in bed?" },
+        { "question": "Who would be most likely to torture people for money?" },
+        { "question": "Who do you think is more likely to steal from their partner?" },
+        { "question": "Who is most likely to hook up with a neighbour?" },
+        { "question": "Who is most likely to ruin a friendship by sleeping with them?" },
+        { "question": "Who is the rudest person in the room?" },
+        { "question": "Most likely to get beaten up?" },
+        { "question": "Who is the smelliest in the group?" },
+        { "question": "Who is most likely to be a drug addict?" },
+        { "question": "Most likely to sleep with their ex?" },
+        { "question": "Most likely to fart during sex?" },
+        { "question": "Which two people would you set up to date each other (they can't be dating already)?" },
+        { "question": "Who is most likely to be an alcoholic?" },
+        { "question": "Who is most likely to be a virgin for the rest of their life?" },
+        { "question": "Who has the best body in the room?" },
+        { "question": "Who is most likely to become a stripper?" },
+        { "question": "Who is most likely to be in an open relationship?" },
+        { "question": "Who is most likely to have a side chick?" },
+        { "question": "Who is likely to date more than one person at the same time?" },
+        { "question": "Who is most likely to grab a stranger's ass?" },
+        { "question": "Who is most likely to have a sexual partner fake an orgasm?" },
+        { "question": "Who is most likely to buy a weird sex toy?" },
+        { "question": "Who’s most likely to have a secret relationship or affair?" },
+        { "question": "Who is most likely to be racist?" },
+        { "question": "Who might secretly have a subscription to adult content?" },
+        { "question": "Who is most likely to have a hidden kink or fetish they never talk about?" },
+        { "question": "Which person in this room is most likely to end up on a ‘Most Wanted’ list?" },
+        { "question": "Who is most likely to be alone for the rest of their life?" },
+        { "question": "Who is most likely to get set up by a person of the opposite sex?" },
+        { "question": "Who is most likely to dirty-mack their friend?" },
+        { "question": "Who is most likely to get drunk and leave the club with a 1 out of 10?" },
+        { "question": "Who is most likely to have a hidden crush on someone in this room?" },
+        { "question": "Who is most likely to overcompensate for their insecurities?" },
+        { "question": "Who is most likely to downplay others’ success to boost their own ego?" },
+        { "question": "Who is most likely to make passive-aggressive comments about others’ work?" },
+        { "question": "Who is a master manipulator?" },
+        { "question": "Who is more likely to scam a friend?" },
+        { "question": "Who would win in a kissing contest?" },
+        { "question": "Who's the worst at making decisions?" },
+        { "question": "Who’s the worst at dating?" },
+        { "question": "Who’s the worst at staying committed in a relationship?" },
+        { "question": "Who would date someone just for their physical appearance?" },
+        { "question": "Who would hook up with someone just to get back at an ex?" },
+        { "question": "Who would be most willing to try a one-night stand in another country?" },
+        { "question": "Who do you think has fantasized about hooking up with a teacher or professor?" },
+        { "question": "Who is most likely to have sexted with someone they’ve never met?" },
+        { "question": "Who is most likely to have hooked up with an ex despite being in a relationship?" },
+        { "question": "Who would be most likely to engage in a long-distance relationship solely for sex?" },
+        { "question": "Who do you think has the wildest sex stories?" },
+        { "question": "Who is most likely to have cheated on a partner while on vacation?" },
+        { "question": "Who is most likely to try and seduce a person in a higher position of power?" },
+        { "question": "Who is most likely to have had a partner with extreme sexual preferences?" },
+        { "question": "Who is most likely to have broken up with someone because they were bad in bed?" },
+        { "question": "Who is most likely to have faked an orgasm to get out of an awkward situation?" },
+        { "question": "Who is most likely to have lied about their body count to a partner?" },
+        { "question": "Who do you think would be most likely to hook up with their ex’s friend?" },
+        { "question": "Who has the worst body in the room?" },
+        { "question": "Who is most likely to fall in love with their friends with benefits?" }
     ]
 }

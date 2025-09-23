@@ -1,247 +1,89 @@
 {
     "paranoia-shady-shenanigans": [
-        {
-            "question": "Who’s most likely to start a cult?"
-        },
-        {
-            "question": "Who might have an embarrassing secret hobby?"
-        },
-        {
-            "question": "Who’s likely to say 'I love you' first?"
-        },
-        {
-            "question": "If someone had a secret identity, who would it be?"
-        },
-        {
-            "question": "Who’s most likely to hide a controversial opinion?"
-        },
-        {
-            "question": "Who would cry over small things?"
-        },
-        {
-            "question": "Who would fall for a crush?"
-        },
-        {
-            "question": "Who would create fake profiles to stalk someone?"
-        },
-        {
-            "question": "Who would lie about their age?"
-        },
-        {
-            "question": "Who’s the worst cook here?"
-        },
-        {
-            "question": "Who has the worst fashion sense?"
-        },
-        {
-            "question": "Who’s most likely to break someone’s heart?"
-        },
-        {
-            "question": "Who wouldn’t flush after using the toilet?"
-        },
-        {
-            "question": "Who wouldn’t wash their hands after using the toilet?"
-        },
-        {
-            "question": "Who would stalk their ex?"
-        },
-        {
-            "question": "Who’s most likely to laugh at serious moments?"
-        },
-        {
-            "question": "Who has the worst taste in music?"
-        },
-        {
-            "question": "Who would write love letters to their crush?"
-        },
-        {
-            "question": "Who gives the worst advice?"
-        },
-        {
-            "question": "Who’s most likely to cause a scene in public?"
-        },
-        {
-            "question": "Who’s most likely to get scared during a horror film?"
-        },
-        {
-            "question": "Who would pay for followers or likes on social media?"
-        },
-        {
-            "question": "Who’s most likely to steal something?"
-        },
-        {
-            "question": "Who’s most likely to beat someone up?"
-        },
-        {
-            "question": "Who’s always late?"
-        },
-        {
-            "question": "Who’s the worst at sports?"
-        },
-        {
-            "question": "Who would choose work over love?"
-        },
-        {
-            "question": "Who would jump between friend groups?"
-        },
-        {
-            "question": "Who would you avoid going on holiday with?"
-        },
-        {
-            "question": "Who’s the most aggressive in the room?"
-        },
-        {
-            "question": "Who’s most likely to make a scene at a family gathering?"
-        },
-        {
-            "question": "Who would pretend to be someone else online?"
-        },
-        {
-            "question": "Who would secretly join a sketchy money-making scheme?"
-        },
-        {
-            "question": "Who would spend a fortune on something useless?"
-        },
-        {
-            "question": "Who’s most likely to fall for a scam?"
-        },
-        {
-            "question": "Who’s most likely to keep a major life decision secret?"
-        },
-        {
-            "question": "Who would have a stash of embarrassing old photos?"
-        },
-        {
-            "question": "Who might hide a strange collection?"
-        },
-        {
-            "question": "Who has a hidden phobia?"
-        },
-        {
-            "question": "Who might have a secret plan for a dramatic life change?"
-        },
-        {
-            "question": "Who’s most likely to have a secret obsession with a celebrity?"
-        },
-        {
-            "question": "Who would hide an unconventional or controversial opinion?"
-        },
-        {
-            "question": "Who’s likely to keep a private diary or journal?"
-        },
-        {
-            "question": "Who might fart during a wedding speech and be noticed?"
-        },
-        {
-            "question": "Who secretly enjoys music they publicly dislike?"
-        },
-        {
-            "question": "Who would pretend to be someone else to fit in?"
-        },
-        {
-            "question": "Who might be keeping a health issue private?"
-        },
-        {
-            "question": "Who’s hiding a major career aspiration?"
-        },
-        {
-            "question": "Who’s obsessed with a TV show or movie in secret?"
-        },
-        {
-            "question": "Who’s likely to be in a hidden long-distance relationship?"
-        },
-        {
-            "question": "Who would keep a secret from family members?"
-        },
-        {
-            "question": "Who’s the least athletic here?"
-        },
-        {
-            "question": "Who might be mistaken for a celebrity?"
-        },
-        {
-            "question": "Who’s most likely to break the law?"
-        },
-        {
-            "question": "Who’s likely to get turned into a meme?"
-        },
-        {
-            "question": "Who’s involved in a secret school club or group?"
-        },
-        {
-            "question": "Who might secretly enjoy knitting?"
-        },
-        {
-            "question": "Who’d get caught sneaking into a movie or concert?"
-        },
-        {
-            "question": "Who’d cry at the end of a movie?"
-        },
-        {
-            "question": "Who’s the unluckiest in the group?"
-        },
-        {
-            "question": "Who’s always late?"
-        },
-        {
-            "question": "Who could fall asleep anywhere?"
-        },
-        {
-            "question": "Who’s most likely to spill a secret?"
-        },
-        {
-            "question": "Who’s the best liar here?"
-        },
-        {
-            "question": "Who gossips the most?"
-        },
-        {
-            "question": "Who cancels plans last minute?"
-        },
-        {
-            "question": "Who’s the biggest show-off?"
-        },
-        {
-            "question": "Who’s the worst dancer?"
-        },
-        {
-            "question": "Who has the most embarrassing playlists?"
-        },
-        {
-            "question": "Who’s most likely to trip over their own feet?"
-        },
-        {
-            "question": "Who still tells Dad jokes (and laughs)?"
-        },
-        {
-            "question": "Who’s likely to clog the toilet?"
-        },
-        {
-            "question": "Who would blame gas on someone else?"
-        },
-        {
-            "question": "Who’s most likely to have kids first?"
-        },
-        {
-            "question": "Who would eavesdrop on a conversation?"
-        },
-        {
-            "question": "Who’d cheat in a game?"
-        },
-        {
-            "question": "Who’d get lost even with GPS?"
-        },
-        {
-            "question": "Who’s the worst singer?"
-        },
-        {
-            "question": "Who’s the worst at saying what they mean?"
-        },
-        {
-            "question": "Who has the worst taste in music?"
-        },
-        {
-            "question": "Who has the worst fashion sense?"
-        }
+        { "question": "Who do you think would be the most likely to start a cult?" },
+        { "question": "Who do you think might have a secret hobby that they're embarrassed about?" },
+        { "question": "Who’s most likely to say “I love you” first?" },
+        { "question": "If someone had a secret identity, who would it be?" },
+        { "question": "Who do you think is most likely to be hiding a controversial opinion or belief?" },
+        { "question": "Who is most likely to cry over little things?" },
+        { "question": "Who is the cheapest person?" },
+        { "question": "Who is most likely to fart during a wedding speech and have everyone notice?" },
+        { "question": "Most likely to beat someone up?" },
+        { "question": "Who is most likely to fall in love with a crush?" },
+        { "question": "Who is trying to be somebody they are not?" },
+        { "question": "Who would create fake profiles to stalk people?" },
+        { "question": "Who would lie about their age?" },
+        { "question": "Who is the worst cook in the room?" },
+        { "question": "Who would leave another friend with the tab?" },
+        { "question": "Who has the worst fashion sense?" },
+        { "question": "Who is most likely to break someone's heart?" },
+        { "question": "Who is most likely to use the toilet without flushing?" },
+        { "question": "Who is most likely to use the toilet and not wash their hands?" },
+        { "question": "Who would stalk their ex?" },
+        { "question": "Who is most likely to laugh at serious moments?" },
+        { "question": "Who is most likely to cry over little matters?" },
+        { "question": "Who has the worst music taste?" },
+        { "question": "Who is most likely to write their crush love letters?" },
+        { "question": "Who gives the worst advice?" },
+        { "question": "Who is most likely to cause a scene in public?" },
+        { "question": "Most likely to get scared during a horror film?" },
+        { "question": "Most likely to pay for followers or likes on social media?" },
+        { "question": "Most likely to steal something?" },
+        { "question": "Who is the Worst at being on time?" },
+        { "question": "Who is the Worst at sports in general?" },
+        { "question": "Who is Most likely to choose work over love?" },
+        { "question": "Who would jump between friendship groups?" },
+        { "question": "Who would you not go on holiday with?" },
+        { "question": "Who’s the most aggressive in the room?" },
+        { "question": "Who's most likely to make a scene at a family gathering?" },
+        { "question": "Who is most likely to pretend to be someone they’re not online?" },
+        { "question": "Who do you think would secretly participate in a sketchy money-making scheme?" },
+        { "question": "Who is most likely to spend a fortune on something completely useless?" },
+        { "question": "Who’s most likely to fall for a scam?" },
+        { "question": "Who is most likely to keep a major life decision from everyone else?" },
+        { "question": "Who is most likely to have a secret stash of old, embarrassing photos?" },
+        { "question": "Who might be hiding a strange or unusual collection?" },
+        { "question": "Who is most likely to have a hidden phobia they never talk about?" },
+        { "question": "Who do you think might have a secret plan for a dramatic life change?" },
+        { "question": "Who’s most likely to have a secret obsession with a particular celebrity or public figure?" },
+        { "question": "Who is most likely to have an unconventional or controversial opinion they keep hidden?" },
+        { "question": "Who’s most likely to secretly keep a diary or journal that they never show anyone?" },
+        { "question": "Who might secretly enjoy a genre of music they publicly disdain?" },
+        { "question": "Who is most likely to pretend to be someone they’re not in order to fit in?" },
+        { "question": "Who is most likely to have an undisclosed health issue they’re keeping private?" },
+        { "question": "Who might be hiding a major career aspiration they haven’t revealed?" },
+        { "question": "Who is most likely to have a hidden obsession with a TV show or movie?" },
+        { "question": "Who is most likely to secretly be in a long-distance relationship?" },
+        { "question": "Who is most likely to keep a secret from their family members?" },
+        { "question": "Who is the least athletic in the room?" },
+        { "question": "Who here is most likely to be mistaken for a celebrity?" },
+        { "question": "Who in this room do you think is the most likely to break the law?" },
+        { "question": "Who is most likely to get turned into a meme?" },
+        { "question": "Who might secretly be involved in a school club or group no one knows about?" },
+        { "question": "Who might have a hidden hobby of knitting?" },
+        { "question": "Who is most likely to get caught trying to sneak into a movie or concert?" },
+        { "question": "Who is most likely to cry at the end of a movie?" },
+        { "question": "Who is the unluckiest person in the group?" },
+        { "question": "Who is always late?" },
+        { "question": "Who is most likely to fall asleep anywhere?" },
+        { "question": "Who is most likely to spill a secret?" },
+        { "question": "Who is the best liar in the group?" },
+        { "question": "Who gossips the most?" },
+        { "question": "Who is most likely to cancel plans at the last minute?" },
+        { "question": "Who is the biggest show-off?" },
+        { "question": "Who is the worst at dancing?" },
+        { "question": "Who has the most embarrassing Spotify playlists?" },
+        { "question": "Who is most likely to trip over their own feet?" },
+        { "question": "Who still tells Dad jokes (and laughs)?" },
+        { "question": "Who is most likely to clog the toilet?" },
+        { "question": "Who is most likely to blame passing gas on someone else?" },
+        { "question": "Who is most likely to have kids first?" },
+        { "question": "Who is most likely to eavesdrop on a conversation?" },
+        { "question": "Who is most likely to cheat during a game?" },
+        { "question": "Who is the most likely to get lost even with a GPS?" },
+        { "question": "Who’s the worst at singing?" },
+        { "question": "Who’s the worst at saying what they mean?" },
+        { "question": "Who has the worst music taste?" },
+        { "question": "Who has the worst fashion sense?" }
     ]
 }

@@ -23,6 +23,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                 button.className = `pack ${pack["pack-restriction"]}`;
                 button.dataset.primaryColor = pack["pack-colour"];
                 button.dataset.secondaryColor = pack["pack-secondary-colour"];
+                button.classList.add('sound-toggle');
                 button.textContent = pack["pack-name"]
                     .replace(/-/g, " ")
                     .replace(/\b\w/g, c => c.toUpperCase())
@@ -30,6 +31,16 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                 packsContainer.querySelector('.button-container').appendChild(button);
                 if (pack["pack-restriction"] === "nsfw") nsfwButtons.push(button);
                 packButtons.push(button);
+
+                if (window.innerWidth > window.innerHeight) {
+                    button.addEventListener('mouseenter', () => {
+                        SetButtonStyle(button, true);
+                    })
+
+                    button.addEventListener('mouseleave', () => {
+                        SetButtonStyle(button, false);
+                    })
+                }
             }
         });
         fetchedPacks = true;
@@ -46,6 +57,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     button.className = `game-settings-pack ${setting["settings-restriction"]}`;
                     button.dataset.primaryColor = setting["settings-colour"];
                     button.dataset.secondaryColor = setting["settings-secondary-colour"];
+                    button.classList.add('sound-toggle');
                     button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
                     rulesContainer.querySelector('.button-container').appendChild(button);
 
@@ -57,6 +69,15 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     } else {
                         button.dataset.key = `${partyGameMode}-${setting["settings-name"]}`;
                         settingsButtons.push(button);
+                    }
+                    if (window.innerWidth > window.innerHeight) {
+                        button.addEventListener('mouseenter', () => {
+                            SetButtonStyle(button, true);
+                        })
+
+                        button.addEventListener('mouseleave', () => {
+                            SetButtonStyle(button, false);
+                        })
                     }
                 }
             }
@@ -106,3 +127,24 @@ onlineSettingsTab.addEventListener('click', () => {
         onlineSettingsContainer.classList.add('active');
     }
 });
+
+function SetButtonStyle(button, isHovering) {
+    if (button.classList.contains('disabled')) return;
+    if (isHovering) {
+        button.style.backgroundColor = button.getAttribute('data-secondary-color');
+        button.style.borderColor = button.getAttribute('data-secondary-color');
+        button.style.color = '#999999';
+    }
+    else {
+        if (button.classList.contains('active')) {
+            button.style.backgroundColor = button.getAttribute('data-primary-color');
+            button.style.borderColor = button.getAttribute('data-primary-color');
+            button.style.color = 'var(--backgroundcolour)';
+        }
+        else {
+            button.style.backgroundColor = 'var(--backgroundcolour)';
+            button.style.borderColor = 'var(--backgroundcolour)';
+            button.style.color = '#999999';
+        }
+    }
+}

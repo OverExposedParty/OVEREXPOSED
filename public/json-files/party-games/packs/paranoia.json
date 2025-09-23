@@ -49,6 +49,16 @@
             "pack-difficulty": 5,
             "pack-restriction": "nsfw",
             "pack-active": true
+        },
+        {
+            "pack-name": "grave-danger",
+            "pack-path": "/json-files/party-games/questions/paranoia/grave-danger.json",
+            "pack-card": "/images/blank-cards/limited/grave-danger-blank-card.svg",
+            "pack-colour": "#8BA67B",
+            "pack-secondary-colour": "#3E4B36",
+            "pack-difficulty": 5,
+            "pack-restriction": "nsfw",
+            "pack-active": false
         }
     ]
 }

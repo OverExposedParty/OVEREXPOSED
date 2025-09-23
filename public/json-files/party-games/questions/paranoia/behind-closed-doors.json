@@ -1,136 +1,50 @@
 {
-    "paranoia-behind-closed-doors": [
-        {
-            "question": "Who’s most likely to be a cuck?"
-        },
-        {
-            "question": "Who’s likely to hook up with a neighbor?"
-        },
-        {
-            "question": "Who might hook up with their ex’s friend?"
-        },
-        {
-            "question": "Who’s most likely to have an STI or STD?"
-        },
-        {
-            "question": "Who has had a partner with extreme sexual preferences?"
-        },
-        {
-            "question": "Who’s most likely to have a same-sex experience?"
-        },
-        {
-            "question": "Who hooks up just for the story?"
-        },
-        {
-            "question": "Who downplays others’ success to feel superior?"
-        },
-        {
-            "question": "Who’s most likely to eat ass?"
-        },
-        {
-            "question": "Who’s likely to be abusive in a relationship?"
-        },
-        {
-            "question": "Who would sleep with everyone in the room?"
-        },
-        {
-            "question": "Who would have sex to feel better?"
-        },
-        {
-            "question": "Who’s most likely to get drunk and have a one-night stand?"
-        },
-        {
-            "question": "Who’s most likely to pay for sex?"
-        },
-        {
-            "question": "Who has a pee fetish?"
-        },
-        {
-            "question": "Who fakes an orgasm to escape awkward situations?"
-        },
-        {
-            "question": "Who would couple swing?"
-        },
-        {
-            "question": "Who’s most likely to prefer anal sex over traditional intercourse?"
-        },
-        {
-            "question": "Who’s likely to be into BDSM?"
-        },
-        {
-            "question": "Who might have experienced a sex worker?"
-        },
-        {
-            "question": "Who could secretly enjoy a specific type of erotic role-play?"
-        },
-        {
-            "question": "Who might torture someone for money?"
-        },
-        {
-            "question": "Who’s most likely to be a chronic masturbator?"
-        },
-        {
-            "question": "Who’s most likely to engage in intimate video chats with someone met online?"
-        },
-        {
-            "question": "Who’s most likely to cheat on their partner?"
-        },
-        {
-            "question": "Who might be addicted to sex?"
-        },
-        {
-            "question": "Who has a foot fetish?"
-        },
-        {
-            "question": "Who might be into phone sex or video chats?"
-        },
-        {
-            "question": "Who needs a nose job?"
-        },
-        {
-            "question": "Who might have a hidden kink or fetish?"
-        },
-        {
-            "question": "Who could be hiding a scandalous bedroom secret?"
-        },
-        {
-            "question": "Who’s most likely to have sex in a car?"
-        },
-        {
-            "question": "Who’s likely to have an affair with someone older?"
-        },
-        {
-            "question": "Who’s most likely to hook up with a friend's ex?"
-        },
-        {
-            "question": "Who would suggest an orgy or group sex first?"
-        },
-        {
-            "question": "Who’s gotten intimate in a forbidden setting?"
-        },
-        {
-            "question": "Who fantasizes about someone else’s partner?"
-        },
-        {
-            "question": "Who would get caught hooking up in a bathroom at a party?"
-        },
-        {
-            "question": "Who uses sex to avoid emotions?"
-        },
-        {
-            "question": "Who’s most likely to sleep with a friend's sibling?"
-        },
-        {
-            "question": "Who would join a “sugar baby” website?"
-        },
-        {
-            "question": "Who would go on a date just for free drinks or food?"
-        },
-        {
-            "question": "Who’s most likely to pretend they don’t remember a past hookup?"
-        },
-        {
-            "question": "Who would hook up with an ex while in a relationship?"
-        }
-    ]
+  "paranoia-behind-closed-doors": [
+    { "question": "Who’s most likely to be a cuck?" },
+    { "question": "Who’s most likely to have an sti or std?" },
+    { "question": "Who do you think is most likely to eat ass?" },
+    { "question": "Who is most likely to be abusive in a relationship?" },
+    { "question": "Who would have sex with everyone in the room?" },
+    { "question": "Who would sleep with someone to make themselves feel better?" },
+    { "question": "Most likely to get drunk and have a one-night stand?" },
+    { "question": "Most likely to pay a prostitute for s*x?" },
+    { "question": "Who would have a pee fetish?" },
+    { "question": "Who would couple swing?" },
+    { "question": "Who do you think is the most into anal?" },
+    { "question": "Who is most likely to be into BDSM?" },
+    { "question": "Who is most likely to have had an experience with a sex worker?" },
+    { "question": "Who might secretly be a fan of a specific type of erotic role-play?" },
+    { "question": "Who is most likely to be a chronic masturbater?" },
+    { "question": "Who is most likely to pay for sex?" },
+    { "question": "Who is most likely to have engaged in an intimate video chat with someone they met online?" },
+    { "question": "Who is most likely to cheat on their partner?" },
+    { "question": "Most likely to be addicted to sex?" },
+    { "question": "Who would have a foot fetish?" },
+    { "question": "Who might be secretly into phone sex or video chats?" },
+    { "question": "Who is in desperate need of a nose job?" },
+    { "question": "Who do you think might have a secret kink or fetish they keep hidden? What would it be?" },
+    { "question": "If someone were hiding a scandalous secret about their bedroom activities, who would it be and what?" },
+    { "question": "Who is most likely to have had sex in a car?" },
+    { "question": "Who is most likely to have an affair with someone older?" },
+    { "question": "Who is most likely to have hooked up with a friend's ex?" },
+    { "question": "Who would be the first to suggest an orgy or group sex?" },
+    { "question": "Who do you think has gotten intimate with someone in a forbidden or taboo setting?" },
+    { "question": "Who is most likely to fantasize about someone else's partner?" },
+    { "question": "Who would most likely get caught hooking up in a bathroom at a party?" },
+    { "question": "Who is most likely to have used sex as a way to avoid dealing with emotions?" },
+    { "question": "Who is most likely to have slept with a friend's sibling?" },
+    { "question": "Who’s most likely to be a serial killer?" },
+    { "question": "Who in this room is most likely to rob a bank and get away with it?" },
+    { "question": "Who is most likely to use their sexuality to manipulate someone?" },
+    { "question": "Who is most likely to have had a one-night stand with someone famous?" },
+    { "question": "Who is most likely to have hooked up with someone purely for the story?" },
+    { "question": "Who would be most likely to hook up with someone just for a bet or dare?" },
+    { "question": "Who is most likely to have cheated in a long-term relationship?" },
+    { "question": "Who is most likely to have a secret affair with someone in a position of power?" },
+    { "question": "Who is most likely to secretly record intimate moments?" },
+    { "question": "Who is most likely to lie about their age to hook up with someone?" },
+    { "question": "Who is most likely to get involved in a secret polyamorous relationship?" },
+    { "question": "Who is most likely to manipulate friends for personal gain?" },
+    { "question": "Who is most likely to betray someone for personal pleasure?" }
+  ]
 }

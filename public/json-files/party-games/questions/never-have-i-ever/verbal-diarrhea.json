@@ -9,11 +9,12 @@
     { "question": "Never have I ever had a friend with benefits." },
     { "question": "Never have I ever smoked weed." },
     { "question": "Never have I ever talked to family about my sex life." },
+    { "question": "Never have I ever gone commando in public." },
     { "question": "Never have I ever gone streaking." },
     { "question": "Never have I ever gone on a week-long bender." },
     { "question": "Never have I ever made out in public." },
     { "question": "Never have I ever kissed a friend's ex." },
-    { "question": "Never have I ever said 'I love you' without meaning it." },
+    { "question": "Never have I ever said \"I love you\" without meaning it." },
     { "question": "Never have I ever had a crush on someone much older." },
     { "question": "Never have I ever cheated on a partner." },
     { "question": "Never have I ever sent or received nudes." },
@@ -24,6 +25,7 @@
     { "question": "Never have I ever thought about getting back with an ex." },
     { "question": "Never have I ever flirted to get what I wanted." },
     { "question": "Never have I ever had a dirty dream about an unexpected person." },
+    { "question": "Never have I ever gone skinny dipping." },
     { "question": "Never have I ever fallen out of love." },
     { "question": "Never have I ever drunk-dialed my ex." },
     { "question": "Never have I ever bribed someone." },
@@ -61,9 +63,11 @@
     { "question": "Never have I ever bailed on a blind date." },
     { "question": "Never have I ever shoplifted something." },
     { "question": "Never have I ever trespassed." },
-    { "question": "Never have I ever been to a strip club." },
-    { "question": "Never have I ever had a crush on a friend’s parent." },
     { "question": "Never have I ever gotten a hickey or given one." },
-    { "question": "Never have I ever experimented with same-sex experiences." }
+    { "question": "Never have I ever experimented with same-sex experiences." },
+    { "question": "Never have I ever blacked out and not remembered what happened the night before." },
+    { "question": "Never have I ever stolen something while drunk." },
+    { "question": "Never have I ever run from the police." },
+    { "question": "Never have I ever gotten into a physical fight at a party." }
   ]
 }

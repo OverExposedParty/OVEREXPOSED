@@ -104,18 +104,6 @@
 }
 
 @media (orientation: landscape) {
-    [data-template]:not([data-template="waiting-room"]) .button-container button:not(.disabled):hover {
-        background-color: var(--secondarypagecolour);
-        border-color: var(--secondarypagecolour);
-        color: #999999;
-    }
-
-    [data-template]:not([data-template="waiting-room"]) .button-container.gamemode-settings button.active:not(.disabled):hover {
-        background-color: var(--secondarypagecolour);
-        border-color: var(--secondarypagecolour);
-        color: var(--backgroundcolour);
-    }
-
     .start-game-button:hover {
         background-color: var(--primarypagecolour);
         color: var(--secondarybackgroundcolour);

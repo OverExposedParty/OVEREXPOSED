@@ -1,163 +1,160 @@
 {
-    "paranoia-friendly-fears": [
-        {
-            "question": "If you had to swap lives with someone in this room, who would it be and why?"
-        },
-        {
-            "question": "Which person here do you think is most likely to have a hidden talent?"
-        },
-        {
-            "question": "Who is the most attractive person in this room?"
-        },
-        {
-            "question": "Who is the most considerate in the circle?"
-        },
-        {
-            "question": "Who is most likely to go fishing?"
-        },
-        {
-            "question": "Who is the funniest person in the group?"
-        },
-        {
-            "question": "Who do you think will be the most successful person in this room?"
-        },
-        {
-            "question": "Who is the best at winning debates?"
-        },
-        {
-            "question": "Who is most likely to survive a zombie apocalypse?"
-        },
-        {
-            "question": "Who is most likely to marry someone famous?"
-        },
-        {
-            "question": "Who is most likely to be hit on?"
-        },
-        {
-            "question": "Who is most likely to pee themselves in public?"
-        },
-        {
-            "question": "Who seems to have a solution for every problem?"
-        },
-        {
-            "question": "Who might have a hidden talent for something creative or artistic?"
-        },
-        {
-            "question": "Who might secretly be interested in an unusual or obscure sport?"
-        },
-        {
-            "question": "Who might have a secret hobby they’re passionate about but keep to themselves?"
-        },
-        {
-            "question": "Who is most likely to go out of their way to help a friend in need?"
-        },
-        {
-            "question": "Who might be secretly working on a charitable project or cause?"
-        },
-        {
-            "question": "Who is most likely to write or create something inspirational in secret?"
-        },
-        {
-            "question": "Who is most likely to keep a positive attitude even in tough situations?"
-        },
-        {
-            "question": "Who is most likely to surprise someone with a random act of kindness?"
-        },
-        {
-            "question": "Who is most likely to be a secret romantic at heart?"
-        },
-        {
-            "question": "Who is most likely to remember everyone’s birthdays and anniversaries?"
-        },
-        {
-            "question": "Who might secretly have a collection of heartfelt letters or notes from friends?"
-        },
-        {
-            "question": "Who is most likely to make everyone laugh with their sense of humor?"
-        },
-        {
-            "question": "Who is the go-to person for organizing group activities or trips?"
-        },
-        {
-            "question": "Who is most likely to find creative solutions to everyday problems?"
-        },
-        {
-            "question": "Who might have a hidden knack for decorating or styling spaces in a unique way?"
-        },
-        {
-            "question": "Who is most likely to win an Olympic gold medal?"
-        },
-        {
-            "question": "Who might have a hidden passion for writing or storytelling?"
-        },
-        {
-            "question": "If you had to pick someone here to be your personal bodyguard, who would it be?"
-        },
-        {
-            "question": "If everyone in this room was stranded on a deserted island, who would be the leader?"
-        },
-        {
-            "question": "If you had to pick someone here to be your partner in crime, who would it be?"
-        },
-        {
-            "question": "Who in this room is most likely to become a millionaire?"
-        },
-        {
-            "question": "Who in this room would most likely be a secret agent?"
-        },
-        {
-            "question": "Who in this room is most likely to start a new trend or fashion?"
-        },
-        {
-            "question": "Who here is most likely to win a Nobel Prize?"
-        },
-        {
-            "question": "Which person in this room is most likely to rob a bank and get away with it?"
-        },
-        {
-            "question": "Which person in this room is most likely to marry into royalty?"
-        },
-        {
-            "question": "Which person in this room would most likely join a reality survival show?"
-        },
-        {
-            "question": "Who in this room is most likely to become a best-selling author?"
-        },
-        {
-            "question": "Who in this room is most likely to become a private detective?"
-        },
-        {
-            "question": "Who here is most likely to win a game show?"
-        },
-        {
-            "question": "Who in this room is most likely to win an argument?"
-        },
-        {
-            "question": "If you were in a life-threatening situation, who in this room would you call for help?"
-        },
-        {
-            "question": "Who is most likely to be secretly good at chess?"
-        },
-        {
-            "question": "Who has the best sense of humor?"
-        },
-        {
-            "question": "Who is the “mum” or “dad” of the group?"
-        },
-        {
-            "question": "Who is the best friend in the group?"
-        },
-        {
-            "question": "Who is the most respectful?"
-        },
-        {
-            "question": "Who is the smartest person in the group?"
-        },
-        {
-            "question": "Who is the most organized person in the group?"
-        },
-        {
-            "question": "Who has the best game in the group?"
-        }
-    ]
+  "paranoia-friendly-fears": [
+    {
+      "question": "If you had to swap lives with someone in this room, who would it be and why?"
+    },
+    {
+      "question": "Which person here do you think is most likely to have a hidden talent?"
+    },
+    {
+      "question": "Who’s the most attractive person in this room?"
+    },
+    {
+      "question": "Who is the most considerate in the circle?"
+    },
+    {
+      "question": "Who is most likely to go fishing?"
+    },
+    {
+      "question": "Who might have a secret hobby that they’re passionate about but keep to themselves?"
+    },
+    {
+      "question": "Which person in this room is most likely to marry into royalty?"
+    },
+    {
+      "question": "Who is most likely to be hit on?"
+    },
+    {
+      "question": "Who might have a hidden passion for writing or storytelling?"
+    },
+    {
+      "question": "Who might secretly be working on a charitable project or cause?"
+    },
+    {
+      "question": "Who might secretly have a collection of heartfelt letters or notes from friends?"
+    },
+    {
+      "question": "Which person in this room would most likely join a reality survival show?"
+    },
+    {
+      "question": "Who is most likely to pee themselves in public?"
+    },
+    {
+      "question": "Who do you think will be the most successful person in the room?"
+    },
+    {
+      "question": "Who is the best at winning debates?"
+    },
+    {
+      "question": "Who is most likely to survive a zombie apocalypse?"
+    },
+    {
+      "question": "Who is the funniest in the group?"
+    },
+    {
+      "question": "Who is Most likely to marry someone famous?"
+    },
+    {
+      "question": "Who has the solution for every problem?"
+    },
+    {
+      "question": "Who might have a hidden talent for something creative or artistic?"
+    },
+    {
+      "question": "Who might secretly be interested in an unusual or obscure sport?"
+    },
+    {
+      "question": "Who is most likely to go out of their way to help a friend in need?"
+    },
+    {
+      "question": "Who is most likely to secretly write or create something inspirational?"
+    },
+    {
+      "question": "Who is most likely to keep a positive attitude even in tough situations?"
+    },
+    {
+      "question": "Who is most likely to surprise someone with a random act of kindness?"
+    },
+    {
+      "question": "Who is most likely to be a secret romantic at heart?"
+    },
+    {
+      "question": "Who is most likely to remember everyone's birthdays and anniversaries?"
+    },
+    {
+      "question": "Who is most likely to make everyone laugh with their sense of humor?"
+    },
+    {
+      "question": "Who is most likely to be the go-to person for organizing group activities or trips?"
+    },
+    {
+      "question": "Who is most likely to find creative solutions to everyday problems?"
+    },
+    {
+      "question": "Who might have a hidden knack for decorating or styling spaces in a unique way?"
+    },
+    {
+      "question": "Who is most likely to win an olympic gold medal?"
+    },
+    {
+      "question": "If you had to pick someone here to be your personal bodyguard, who would it be?"
+    },
+    {
+      "question": "If everyone in this room was stranded on a deserted island, who would be the leader?"
+    },
+    {
+      "question": "If you had to pick someone here to be your partner in crime, who would it be?"
+    },
+    {
+      "question": "Who in this room is most likely to become a millionaire?"
+    },
+    {
+      "question": "Who in this room would most likely be a secret agent?"
+    },
+    {
+      "question": "Who in this room is most likely to start a new trend or fashion?"
+    },
+    {
+      "question": "Who here is most likely to win a Nobel Prize?"
+    },
+    {
+      "question": "Who in this room is most likely to become a best-selling author?"
+    },
+    {
+      "question": "Who in this room is most likely to become a private detective?"
+    },
+    {
+      "question": "Who here is most likely to win a game show?"
+    },
+    {
+      "question": "Who in this room do you think is the most likely to win an argument?"
+    },
+    {
+      "question": "If you were in a life-threatening situation, who in this room would you call for help?"
+    },
+    {
+      "question": "Who is most likely to be secretly good at chess?"
+    },
+    {
+      "question": "Who has the best sense of humor?"
+    },
+    {
+      "question": "Who is the “mum” or “dad” of the group?"
+    },
+    {
+      "question": "Who is the best friend in the group?"
+    },
+    {
+      "question": "Who is the most respectful?"
+    },
+    {
+      "question": "Who is the smartest person in the group?"
+    },
+    {
+      "question": "Who is the most organized person in the group?"
+    },
+    {
+      "question": "Who has the best game in the group?"
+    }
+  ]
 }

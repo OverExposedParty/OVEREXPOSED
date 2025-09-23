@@ -1,0 +1,124 @@
+{
+    "customisation-engrave-danger": [
+        {
+            "id": "1000",
+            "name": "VAMPIRE SKIN",
+            "file-path": "/images/user-customisation/colour/engrave-danger/vampire-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "1001",
+            "name": "FRANKENSTEIN SKIN",
+            "file-path": "/images/user-customisation/colour/engrave-danger/frankenstein-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "1002",
+            "name": "PIRATE SKIN",
+            "file-path": "/images/user-customisation/colour/engrave-danger/pirate-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "1003",
+            "name": "ZOMBIE SKIN?",
+            "file-path": "/images/user-customisation/colour/engrave-danger/zombie-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "1004",
+            "name": "BAT SKIN",
+            "file-path": "/images/user-customisation/colour/engrave-danger/bat-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "1100",
+            "name": "VAMPIRE HAIR",
+            "file-path": "/images/user-customisation/head-slot/engrave-danger/vampire-hair.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "1101",
+            "name": "FRANKENSTEIN HAIR",
+            "file-path": "/images/user-customisation/head-slot/engrave-danger/frankenstein-hair.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "1102",
+            "name": "PIRATE HAT",
+            "file-path": "/images/user-customisation/head-slot/engrave-danger/pirate-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "1103",
+            "name": "PET WORM",
+            "file-path": "/images/user-customisation/head-slot/engrave-danger/pet-worm.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "1104",
+            "name": "BAT EARS",
+            "file-path": "/images/user-customisation/head-slot/engrave-danger/bat-ears.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "1200",
+            "name": "VAMPIRE EYES",
+            "file-path": "/images/user-customisation/eyes-slot/engrave-danger/vampire-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "1201",
+            "name": "FRANKENSTEIN EYES",
+            "file-path": "/images/user-customisation/eyes-slot/engrave-danger/frankenstein-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "1202",
+            "name": "EYE PATCH",
+            "file-path": "/images/user-customisation/eyes-slot/engrave-danger/eye-patch.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "1203",
+            "name": "ZOMBIE EYES?",
+            "file-path": "/images/user-customisation/eyes-slot/engrave-danger/zombie-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "1204",
+            "name": "BAT EYES",
+            "file-path": "/images/user-customisation/eyes-slot/engrave-danger/bat-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "1300",
+            "name": "VAMPIRE TEETH",
+            "file-path": "/images/user-customisation/mouth-slot/engrave-danger/vampire-teeth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "1301",
+            "name": "FRANKENSTEIN TEETH",
+            "file-path": "/images/user-customisation/mouth-slot/engrave-danger/frankenstein-teeth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "1302",
+            "name": "PIRATE MOUTH",
+            "file-path": "/images/user-customisation/mouth-slot/engrave-danger/pirate-mouth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "1303",
+            "name": "ZOMBIE TEETH?",
+            "file-path": "/images/user-customisation/mouth-slot/engrave-danger/zombie-teeth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "1304",
+            "name": "BAT TEETH",
+            "file-path": "/images/user-customisation/mouth-slot/engrave-danger/bat-teeth.svg",
+            "slot": "mouth-slot"
+        }
+    ]
+}

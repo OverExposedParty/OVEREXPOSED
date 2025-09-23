@@ -9,6 +9,7 @@
     position: fixed;
     display: flex;
     gap: 5px;
+    z-index: 300;
 }
 
 .side-buttons.single {
@@ -24,24 +25,24 @@
 .side-button,
 .tts-button {
     cursor: pointer;
-    width: 7.5vh;
-    height: 7.5vh;
+    width: 7.5dvh;
+    height: 7.5dvh;
     z-index: 100;
-    padding: 0.5vh;
+    padding: 0.5dvh;
     transition: width 0.3s, height 0.3s, padding 0.3s;
 }
 
 .side-button.active,
 .tts-button.active {
-    width: 8.5vh;
-    height: 8.5vh;
+    width: 8.5dvh;
+    height: 8.5dvh;
     padding: 0;
 }
 
 .tts-button:hover,
 .side-button:hover {
-    width: 8.5vh;
-    height: 8.5vh;
+    width: 8.5dvh;
+    height: 8.5dvh;
     padding: 0;
 }
 
@@ -49,4 +50,25 @@
     color: #6e6e6e;
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+@media (orientation: portrait) {
+
+    .side-button,
+    .tts-button {
+        width: 5dvh;
+        height: 5dvh;
+    }
+
+    .side-button.active,
+    .tts-button.active {
+        width: 5.5dvh;
+        height: 5.5dvh;
+    }
+
+    .tts-button:hover,
+    .side-button:hover {
+        width: 5.5dvh;
+        height: 5.5dvh;
+    }
 }

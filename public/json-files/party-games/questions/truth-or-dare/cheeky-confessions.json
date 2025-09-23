@@ -1,574 +1,524 @@
 {
-    "truth-or-dare-cheeky-confessions": [
-        {
-            "question-type": "truth",
-            "question": "Have you ever pretended to like something just to fit in? What was it?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most outrageous thing you’ve convinced someone to believe?",
-            "punishment": "Take 3 sips." 
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s a lie you’ve told to avoid an awkward confrontation?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s your most annoying habit?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most awkward thing you’ve ever said to a stranger?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve done just to fit in?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the weirdest thing you’ve done when you were alone?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most spontaneous decision you’ve ever made?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "If you could switch lives with anyone in this room for a week, who would it be and why?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the worst piece of advice you’ve ever received?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s a habit of yours that others might find strange or unappealing?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever pretended to be sick to get out of something? What happened?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve ever posted on social media?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the strangest dream you’ve ever had?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the weirdest compliment you’ve ever received?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing nickname you’ve ever been given?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the weirdest thing you’ve ever done in front of a mirror?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the longest you’ve ever gone without showering?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most expensive gift you’ve ever given to someone?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever broken something and lied about it to avoid trouble? What was it?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the silliest superstition you’ve ever believed in?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever snooped through someone’s belongings when they weren’t around?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever cried while watching a movie? What movie was it?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever cried while listening to a song? What song was it?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the worst gift you’ve ever received, and how did you react?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s something you did that you thought would get you in trouble but didn’t?",
-            "punishment": "Take 2 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s your most irrational fear?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing song you know all the lyrics to?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the longest you’ve gone without brushing your teeth?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the longest you’ve gone without speaking to someone you were upset with?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever forgotten someone’s name mid-conversation? How did you manage it?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve done when you thought no one was watching?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever done something strange while half asleep?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s your biggest pet peeve?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever had an embarrassing crush on a fictional character? Who was it?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve done while preparing for a date?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever felt envious of a friend? What made you feel that way?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most awkward thing you’ve had to explain to someone?",
-            "punishment": "Take 4 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing misunderstanding you’ve had with someone?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "What’s the weirdest thing you’ve done out of pure curiosity?",
-            "punishment": "Take 3 sips."
-        },
-        {
-            "question-type": "truth",
-            "question": "Have you ever walked into a room and immediately regretted it? Why?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve done when meeting someone new?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most cringe-worthy item you’ve had to return to a store?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the weirdest thing you’ve done in a bathroom?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing comment you’ve made on social media?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the strangest question someone’s asked you, leaving you speechless?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most ridiculous thing you’ve done just to prove a point?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most embarrassing thing you’ve said to someone without realizing they were right behind you?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the strangest thing you’ve ever done with a group of friends?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the weirdest thing you’ve done to avoid running into someone you know?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever told someone you were “fine” when you clearly weren’t? What happened next?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most ridiculous overreaction you’ve ever had?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever tried to befriend someone but it completely backfired? How did it go wrong?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most uncomfortable question someone’s asked you in public?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most awkward way you’ve ended a conversation?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the most cringe-worthy thing you’ve done to impress someone?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s one thing you only do when you’re by yourself?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s something you would do if you knew there would be no consequences?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever ghosted a friend? What led to it?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Who are you most envious of?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the biggest mistake you’ve ever made?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s something you pretend to like but secretly despise?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the weirdest name you’ve ever been called?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever re-gifted a present? What was it?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "If you could switch genders for a day, what’s the first thing you would do?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever been upset with a friend for posting an unflattering picture of you? What happened?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "When was the last time you had an embarrassing accident?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the grossest smell you secretly enjoy?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever experienced something you’d consider paranormal?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "When was the last time you shared a toothbrush with someone else?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the strangest thought you’ve had while sitting on the toilet?",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s the worst decision you’ve seen one of the other players make?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s something you’ve done that you’d normally judge someone else for?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "What’s something you feel ashamed of?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Who in this room do you think would be the first to die in a horror movie?",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Have you ever let someone else take the blame for something you did? What was it?",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "truth",
-            "question": "Share a habit or trait you’re embarrassed about.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Dance to a song chosen by the group for one minute.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Let the group style your hair and keep it that way for the rest of the game.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Do your best impression of someone in the room until someone guesses who it is.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Let someone write a funny message on your arm with a permanent marker.",
-            "punishment": "Take 5 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Wear socks on your hands for the next five rounds.",
-            "punishment": "Take 5 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Share the last photo you took on your phone with the group.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Wear a piece of clothing inside out for the next three rounds.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Let someone tickle you for 30 seconds.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Strut your best runway walk across the room.",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Wrap yourself in a blanket and wear it as a cape for the rest of the game.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Lip-sync enthusiastically to a song chosen by someone else.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "See how many marshmallows or grapes you can fit in your mouth at once.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Perform a freestyle rap or poem for the group.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Put on a sock puppet show for everyone.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Have a deep conversation with a piece of furniture.",
-            "punishment": ""
-          },
-          {
-            "question-type": "dare",
-            "question": "Avoid using the word “like” for the remainder of the game.",
-            "punishment": "Take a sip everytime you forget or take 4 sips now."
-          },
-          {
-            "question-type": "dare",
-            "question": "Sing all your responses for the next five rounds.",
-            "punishment": "Take a sip everytime you forget or take 4 sips now."
-          },
-          {
-            "question-type": "dare",
-            "question": "Hold a plank position for one minute.",
-            "punishment": "Take 2 sips if you fail or 4 sips now"
-          },
-          {
-            "question-type": "dare",
-            "question": "Tell each player who you think their celebrity look-alike is.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Act like a chicken until your next turn.",
-            "punishment": "Take a sip everytime you forget or take 3 sips now."
-          },
-          {
-            "question-type": "dare",
-            "question": "Imitate the way someone in the room walks.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Give someone a piggyback ride around the room.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Pretend to be someone else in the room for two minutes.",
-            "punishment": "Take a sip everytime you forget or take 3 sips now."
-          },
-          {
-            "question-type": "dare",
-            "question": "Stand on a chair and deliver a dramatic speech about something random.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Put whipped cream on your nose and try to lick it off.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Crack an egg on your head.",
-            "punishment": "Take 5 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Eat a leaf from a plant (make sure it's safe!).",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Fill your mouth with water and try not to laugh while the group attempts to make you laugh for 30 seconds.",
-            "punishment": "Take 2 sips if you fail or 4 sips now"
-          },
-          {
-            "question-type": "dare",
-            "question": "Let the group treat you like a pet for one minute.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Whisper a secret to the person on your right.",
-            "punishment": "Take 3 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Call a parent and ask for an outrageous amount of money.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Send an embarrassing selfie to the last person you texted.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Play footsie with the person sitting across from you.",
-            "punishment": "Take 2 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Record and post a TikTok dance chosen by the group.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Call the last person you texted and just “meow” into the phone.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Pretend to be the opposite sex for one round.",
-            "punishment": "Take 4 sips."
-          },
-          {
-            "question-type": "dare",
-            "question": "Read the last text message you sent out loud for everyone to hear.",
-            "punishment": "Take 4 sips."
-          }
-    ]
+  "truth-or-dare-cheeky-confessions": [
+    {
+      "question-type": "truth",
+      "question": "Have you ever pretended to like something just to fit in? What was it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most outrageous thing you’ve convinced someone to believe?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s a lie you’ve told to avoid an awkward confrontation?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s your most annoying habit?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most awkward thing you’ve ever said to a stranger?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve done just to fit in?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest thing you’ve done when you were alone?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most spontaneous decision you’ve ever made?"
+    },
+    {
+      "question-type": "truth",
+      "question": "If you could switch lives with anyone in this room for a week, who would it be?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the worst piece of advice you’ve ever received?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s a habit of yours that others might find strange or unappealing?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What was your biggest childhood fear?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What are you most proud of in your life?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most expensive gift you’ve ever given to someone?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever pretended to be sick to get out of something? What happened?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Who's your favorite person in your immediate family?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve ever posted on social media?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What was the greatest day of your life?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What's your least favorite school memory?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What is your most humbling experience?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing fashion choice you’ve made?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What's the most ridiculous thing you've spent too much money on?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the strangest dream you’ve ever had?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest compliment you’ve ever received?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing nickname you’ve ever been given?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest thing you’ve ever done in front of a mirror?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the longest you’ve ever gone without showering?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever broken something and lied about it to avoid trouble? What happened?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the silliest superstition you’ve ever believed in?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever snooped through someone’s belongings when they weren’t around?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever cried while watching a movie? Which movie was it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever cried while listening to a song? What song was it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the worst gift you’ve ever received, and how did you react?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s something you did that you thought would get you in trouble but didn’t?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s your most irrational fear?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing song you know all the lyrics to?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the longest you’ve gone without brushing your teeth?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the longest you’ve gone without speaking to someone you were upset with?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever forgotten someone’s name mid-conversation? How did you manage it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve done when you thought no one was watching?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever done something strange while half asleep?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s your biggest pet peeve?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever had an embarrassing crush on a fictional character? Who was it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve done while preparing for a date?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever felt envious of a friend? What made you feel that way?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most awkward thing you’ve had to explain to someone?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing misunderstanding you’ve had with someone?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest thing you’ve done out of pure curiosity?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever walked into a room and immediately regretted it? Why?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve done when meeting someone new?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most cringe-worthy item you’ve had to return to a store?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest thing you’ve done in a bathroom?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing comment you’ve made on social media?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the strangest question someone’s asked you, leaving you speechless?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most ridiculous thing you’ve done just to prove a point?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most embarrassing thing you’ve said to someone without realizing they were right behind you?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most awkward way you’ve met someone who’s now a close friend?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the strangest thing you’ve ever done with a group of friends?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest thing you’ve done to avoid running into someone you know?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever told someone you were “fine” when you clearly weren’t? What happened next?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s something that often overwhelms you?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most ridiculous overreaction you’ve ever had?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever tried to befriend someone but it completely backfired? How did it go wrong?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most uncomfortable question someone’s asked you in public?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most awkward way you’ve ended a conversation?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the most cringe-worthy thing you’ve done to impress someone?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s one thing you only do when you’re by yourself?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s something you would do if you knew there would be no consequences?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever ghosted a friend? What led to it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Who in this group would you want to swap lives with for a week?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s something you pretend to like but secretly despise?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the weirdest name you’ve ever been called?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever re-gifted a present? What was it?"
+    },
+    {
+      "question-type": "truth",
+      "question": "If you could switch genders for a day, what’s the first thing you would do?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever been upset with a friend for posting an unflattering picture of you? What happened?"
+    },
+    {
+      "question-type": "truth",
+      "question": "When was the last time you had an embarrassing accident?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the grossest smell you secretly enjoy?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the worst present you’ve ever received?"
+    },
+    {
+      "question-type": "truth",
+      "question": "When was the last time you shared a toothbrush with someone else?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the strangest thought you’ve had while sitting on the toilet?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s the worst decision you’ve seen one of the other players make?"
+    },
+    {
+      "question-type": "truth",
+      "question": "What’s something you’ve done that you’d normally judge someone else for?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Who in this room do you think would be the first to die in a horror movie?"
+    },
+    {
+      "question-type": "truth",
+      "question": "Have you ever let someone else take the blame for something you did? What was it?"
+    },
+    {
+      "question-type": "dare",
+      "question": "Dance to a song chosen by the group for one minute."
+    },
+    {
+      "question-type": "dare",
+      "question": "Let the group style your hair and keep it that way for the rest of the game."
+    },
+    {
+      "question-type": "dare",
+      "question": "Do your best impression of someone in the room until someone guesses who it is."
+    },
+    {
+      "question-type": "dare",
+      "question": "Share a habit or trait you’re embarrassed about."
+    },
+    {
+      "question-type": "dare",
+      "question": "Let someone write a funny message on your arm with a permanent marker."
+    },
+    {
+      "question-type": "dare",
+      "question": "Wear socks on your hands for the next five rounds."
+    },
+    {
+      "question-type": "dare",
+      "question": "Share the last photo you took on your phone with the group."
+    },
+    {
+      "question-type": "dare",
+      "question": "Wear a piece of clothing inside out for the next three rounds."
+    },
+    {
+      "question-type": "dare",
+      "question": "Let someone tickle you for 30 seconds."
+    },
+    {
+      "question-type": "dare",
+      "question": "Strut your best runway walk across the room."
+    },
+    {
+      "question-type": "dare",
+      "question": "Wrap yourself in a blanket and wear it as a cape for the rest of the game."
+    },
+    {
+      "question-type": "dare",
+      "question": "Lip-sync enthusiastically to a song chosen by someone else."
+    },
+    {
+      "question-type": "dare",
+      "question": "See how many marshmallows you can fit in your mouth at once."
+    },
+    {
+      "question-type": "dare",
+      "question": "Perform a freestyle rap or poem for the group."
+    },
+    {
+      "question-type": "dare",
+      "question": "Put on a sock puppet show for everyone."
+    },
+    {
+      "question-type": "dare",
+      "question": "Have a deep conversation with a piece of furniture."
+    },
+    {
+      "question-type": "dare",
+      "question": "Avoid using the word “like” for the remainder of the game."
+    },
+    {
+      "question-type": "dare",
+      "question": "Sing all your responses for the next five rounds."
+    },
+    {
+      "question-type": "dare",
+      "question": "Hold a plank position for one minute."
+    },
+    {
+      "question-type": "dare",
+      "question": "Tell each player who you think their celebrity look-alike is."
+    },
+    {
+      "question-type": "dare",
+      "question": "Act like a baby until your next turn."
+    },
+    {
+      "question-type": "dare",
+      "question": "Act like a chicken until your next turn."
+    },
+    {
+      "question-type": "dare",
+      "question": "Imitate the way someone in the room walks."
+    },
+    {
+      "question-type": "dare",
+      "question": "Give someone a piggyback ride around the room."
+    },
+    {
+      "question-type": "dare",
+      "question": "Pretend to be someone else in the room for five minutes."
+    },
+    {
+      "question-type": "dare",
+      "question": "Stand on a chair and deliver a dramatic speech about something random."
+    },
+    {
+      "question-type": "dare",
+      "question": "Put whipped cream on your nose and try to lick it off."
+    },
+    {
+      "question-type": "dare",
+      "question": "Share three honest things about yourself."
+    },
+    {
+      "question-type": "dare",
+      "question": "Reveal the most recent thing you searched for on Google."
+    },
+    {
+      "question-type": "dare",
+      "question": "Fill your mouth with water and try not to laugh while the group tries to make you chuckle."
+    },
+    {
+      "question-type": "dare",
+      "question": "Let the group treat you like a pet for one minute."
+    },
+    {
+      "question-type": "dare",
+      "question": "Whisper a secret to the person on your right."
+    },
+    {
+      "question-type": "dare",
+      "question": "Call your mom and ask for an outrageous amount of money."
+    },
+    {
+      "question-type": "dare",
+      "question": "Send an embarrassing selfie to the last person you texted."
+    },
+    {
+      "question-type": "dare",
+      "question": "Play footsie with the person sitting across from you."
+    },
+    {
+      "question-type": "dare",
+      "question": "Record and post a TikTok dance chosen by the group."
+    },
+    {
+      "question-type": "dare",
+      "question": "Call the last person you texted and just “meow” into the phone."
+    },
+    {
+      "question-type": "dare",
+      "question": "Pretend to be the opposite sex for the next ten minutes."
+    },
+    {
+      "question-type": "dare",
+      "question": "Read the last text message you sent out loud for everyone to hear."
+    },
+    {
+      "question-type": "dare",
+      "question": "Eat a surprise snack with your eyes closed (chosen by the group)."
+    },
+    {
+      "question-type": "dare",
+      "question": "Let someone give you a Chinese burn."
+    },
+    {
+      "question-type": "dare",
+      "question": "Eat a leaf from a plant (make sure it's safe!)."
+    },
+    {
+      "question-type": "dare",
+      "question": "Serenade the person to your right with a love song."
+    },
+    {
+      "question-type": "dare",
+      "question": "Give life advice to every player, one piece for each person."
+    },
+    {
+      "question-type": "dare",
+      "question": "Show everyone the contents of your bag or purse without hiding anything."
+    },
+    {
+      "question-type": "dare",
+      "question": "Sit in the corner of the room without speaking to anyone for the next three rounds."
+    }
+  ]
 }

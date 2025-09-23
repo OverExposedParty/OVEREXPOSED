@@ -159,6 +159,8 @@ async function loadTemplatesAndScripts() {
             selectUserButtonContainer = selectUserContainer.querySelector('.button-container');
             selectUserConfirmPlayerButton = selectUserContainer.querySelector('.select-button-container button');
 
+            selectUserTitle.textContent = template.replace('-', ' ');
+
             gameContainers.push(selectUserContainer);
         }
 

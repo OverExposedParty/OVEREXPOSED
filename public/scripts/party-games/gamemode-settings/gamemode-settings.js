@@ -94,6 +94,7 @@ function SetGameSettingsButtons() {
 
         if (key && savedState === 'true') {
             button.classList.add('active');
+            SetButtonStyle(button, false);
             if (button.closest('.rules-settings-container')) {
                 if (!button.classList.contains('online')) {
                     gamemodeSettings += key + ',';
@@ -120,6 +121,7 @@ function SetGameSettingsButtons() {
                 button.classList.toggle('active');
                 const key = button.getAttribute('data-key');
                 const isActive = button.classList.contains('active');
+                SetButtonStyle(button, false);
                 if (button.getAttribute('data-key')) {
                     localStorage.setItem(key, isActive ? 'true' : 'false');
                     if (isActive) {
@@ -151,12 +153,6 @@ function SetGameSettingsButtons() {
                         });
                     }
                     updateStartGameButton(allUsersReady);
-                }
-                if (isActive) {
-                    playSoundEffect('buttonDeselect');
-                }
-                else {
-                    playSoundEffect('buttonClicked');
                 }
             }
         });
