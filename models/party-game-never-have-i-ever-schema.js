@@ -8,7 +8,8 @@ const PlayerSchema = new mongoose.Schema({
   hasConfirmed: { type: Boolean, default: false },
   vote: { type: Boolean, default: null },
   lastPing: { type: Date, default: Date.now },
-  socketId: { type: String, default: null }
+  socketId: { type: String, default: null },
+  score: { type: Number, default: 0 }
 }, { _id: false });
 
 const partyGameNeverHaveIEverSchema = new mongoose.Schema({

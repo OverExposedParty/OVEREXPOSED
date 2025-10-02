@@ -3,6 +3,10 @@ let currentQuestionIndex = 0;
 let questionPackMap = []; // Maps questions to their respective packs
 let cardPackMap = []; // Maps cards to their respective packs
 
+let numberOfQuestions = 0;
+let numberOfTruthQuestions = 0;
+let numberOfDareQuestions = 0;
+
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     try {
         const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
@@ -87,10 +91,19 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             console.log(allQuestions);
             console.log(questionPackMap);
             console.log(cardPackMap);
+
+            numberOfTruthQuestions = allQuestions.filter(q => q["question-type"] === "truth").length;
+            numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
+
+            console.log(`Number of truth questions: ${numberOfTruthQuestions}`);
+            console.log(`Number of dare questions: ${numberOfDareQuestions}`);
+
         } else {
             console.error('No questions available to shuffle.');
             window.location.href = addSettingsExtensionToCurrentURL();
         }
+        numberOfQuestions = allQuestions.length;
+        console.log(`Loaded ${numberOfQuestions} questions`);
         SetScriptLoaded('/scripts/party-games/general/load-questions.js');
     }
     catch (error) {

@@ -7,7 +7,8 @@ const PlayerSchema = new mongoose.Schema({
   isReady: { type: Boolean, default: false },
   hasConfirmed: { type: Boolean, default: false },
   lastPing: { type: Date, default: Date.now },
-  socketId: { type: String, default: null }
+  socketId: { type: String, default: null },
+  score: { type: Number, default: 0 }
 }, { _id: false });
 
 const partyGameTruthOrDareSchema = new mongoose.Schema({

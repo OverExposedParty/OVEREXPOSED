@@ -30,6 +30,7 @@ async function NextUserTurn() {
 }
 
 async function NextQuestion() {
+  await UpdatePartyGameStatistics();
   const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const votedIndex = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
@@ -265,12 +266,11 @@ async function HasUserDonePunishment(instruction) {
 
       //await new Promise(resolve => setTimeout(resolve, 1500));
 
-
-
       const yesVoteCount = currentPartyData.players.filter(player => player.hasConfirmed === true).length;
       const noVoteCount = currentPartyData.players.filter(player => player.hasConfirmed === false).length;
 
       if (noVoteCount < yesVoteCount) {
+        currentPartyData.players[currentPartyData.playerTurn].score++;
         if (parsedInstructions.reason === "QUESTION") {
           ResetParanoiaQuestion({nextPlayer: true});
         } 
@@ -278,10 +278,6 @@ async function HasUserDonePunishment(instruction) {
           const hostId = currentPartyData.players[0].computerId;
 
           if (deviceId === hostId) {
-            for (let i = 0; i < currentPartyData.players.length; i++) {
-              currentPartyData.players[i].isReady = false;
-              currentPartyData.players[i].hasConfirmed = false;
-            }
             await SendInstruction({
               instruction: "NEXT_QUESTION",
               partyData: currentPartyData,

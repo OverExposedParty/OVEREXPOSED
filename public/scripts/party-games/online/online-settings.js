@@ -290,7 +290,7 @@ function updateOnlineParty({
 
 
 
-async function addUserToParty({ partyId, newComputerId, newUsername, newUserIcon, newUserReady = false, newUserConfirmation = false }) {
+async function addUserToParty({ partyId, newComputerId, newUsername, newUserIcon, newScore, newUserReady = false, newUserConfirmation = false }) {
   try {
     const existingData = await getExistingPartyData(partyId);
     const currentPartyData = existingData[0] || {};
@@ -308,6 +308,7 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserIcon
         computerId: newComputerId,
         newUsername,
         newUserIcon,
+        newScore,
         newUserReady,
         newUserConfirmation,
       });
@@ -322,6 +323,7 @@ async function addUserToParty({ partyId, newComputerId, newUsername, newUserIcon
       hasConfirmed: newUserConfirmation,
       lastPing: new Date(),
       socketId: null,
+      score: 0
     };
 
     const updatedPlayers = [...players, newPlayer];
@@ -353,7 +355,7 @@ async function UpdateUserReady({ partyId, computerId, newReady, newConfirmation 
   }
 }
 
-async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserIcon, newUserReady, newUserConfirmation, newUserSocketId }) {
+async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserIcon, newUserReady, newUserConfirmation, newScore, newUserSocketId }) {
   try {
     // Step 1: Fetch existing party data
     const existingData = await getExistingPartyData(partyId);
@@ -376,9 +378,9 @@ async function UpdateUserPartyData({ partyId, computerId, newUsername, newUserIc
     if (newUserIcon !== undefined) players[index].userIcon = newUserIcon;
     if (newUserReady !== undefined) players[index].isReady = newUserReady;
     if (newUserConfirmation !== undefined) players[index].hasConfirmed = newUserConfirmation;
+    if (newScore !== undefined) players[index].score = newScore;
     if (newUserSocketId !== undefined) players[index].socketId = newUserSocketId;
 
-    // Optional: update lastPing too if needed
     players[index].lastPing = new Date();
 
     // Step 4: Send updated data back to the server
@@ -584,7 +586,9 @@ function formatPackName(name) {
 function PartyDisbanded() {
   try {
     if (gameContainers) {
-      setActiveContainers(partyDisbandedContainer);
+      if (!partyGameStatisticsContainer.classList.contains('active')) {
+        setActiveContainers(partyDisbandedContainer);
+      }
       CreateChatMessage("[CONSOLE]", "PARTY HAS BEEN DISBANDED.", "disconnect", Date.now());
     }
   } catch (e) { }
@@ -766,5 +770,4 @@ async function CheckGamePage() {
     })
   }
 }
-
 CheckGamePage();

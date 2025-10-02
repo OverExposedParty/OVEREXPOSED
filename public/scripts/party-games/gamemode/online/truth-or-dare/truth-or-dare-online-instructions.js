@@ -1,7 +1,19 @@
 async function DisplaySelectQuestionType() {
   const currentPartyData = await GetCurrentPartyData();
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
+  await UpdatePartyGameStatistics();
   if (deviceId === currentPlayer.computerId) {
+    if(currentPartyData.currentCardIndex > numberOfTruthQuestions - 1){
+      selectQuestionTypeButtonTruth.classList.add('disabled');
+    }
+    if(currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1){
+      selectQuestionTypeButtonDare.classList.add('disabled');
+    }
+    if(currentPartyData.currentCardIndex > numberOfTruthQuestions - 1 && currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1){
+      SendInstruction({
+        instruction: "GAME_OVER"
+      });
+    }
     EditUserIconPartyGames({
       container: gameContainerAnswer,
       userId: currentPlayer.computerId,
@@ -268,7 +280,7 @@ async function DisplayCompleteQuestion() {
   }
 }
 
-async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true }) {
+async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incrementScore = 0}) {
   const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
@@ -285,11 +297,12 @@ async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true }) {
   const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed === true);
   if (allConfirmed) {
     //await new Promise(resolve => setTimeout(resolve, 1500));
-
+    currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
     for (let i = 0; i < currentPartyData.players.length; i++) {
       currentPartyData.players[i].isReady = false;
       currentPartyData.players[i].hasConfirmed = false;
     }
+
     if (nextPlayer) {
       currentPartyData.playerTurn = (currentPartyData.playerTurn + 1) % currentPartyData.players.length;
     }

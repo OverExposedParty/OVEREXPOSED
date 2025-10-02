@@ -5,6 +5,7 @@ async function SendInstruction({
   updateUsersVote = null,
   partyData = null,
   fetchInstruction = false,
+  isPlaying = true
 }) {
   let currentPartyData = partyData;
 
@@ -64,8 +65,10 @@ async function SendInstruction({
     playerTurn: currentPartyData.playerTurn,
     currentCardIndex: currentPartyData.currentCardIndex,
     currentCardSecondIndex: currentPartyData.currentCardSecondIndex,
+    score: currentPartyData.score,
     timer: currentPartyData.timer,
-    questionType: currentPartyData.questionType
+    questionType: currentPartyData.questionType,
+    isPlaying: isPlaying
   });
   if (fetchInstruction) {
     FetchInstructions();
@@ -191,12 +194,12 @@ function ClearIcons() {
   }
 }
 
-async function ResetQuestion({ currentPartyData, icons, instruction = "DISPLAY_PRIVATE_CARD" }) {
+async function ResetQuestion({ currentPartyData, icons, instruction = "DISPLAY_PRIVATE_CARD", incrementScore = 0 }) {
   const playerCount = currentPartyData.players.length;
 
   // Move to next card
   currentPartyData.currentCardIndex++;
-
+  currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
   // Reset each player's status and icon
   for (let i = 0; i < playerCount; i++) {
     currentPartyData.players[i].isReady = false;

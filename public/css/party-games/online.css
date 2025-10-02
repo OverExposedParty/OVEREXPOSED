@@ -44,7 +44,7 @@
 }
 
 .user-confirmed-section .icon {
-    
+
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -88,7 +88,7 @@
     border: 0;
     outline: none;
     resize: none;
-    
+
     font-size: 16px;
     color: var(--primarypagecolour);
     padding: 2.5%;
@@ -146,21 +146,23 @@
     height: auto;
     max-width: 500px;
     min-width: 300px;
-    width:90vw;
+    width: 90vw;
     background-color: var(--secondarybackgroundcolour);
     position: relative;
     overflow: hidden;
 }
+
 .selected-user-container.active {
     display: flex;
 }
 
 .selected-user-container.pop-up {
+    border: var(--bordersize) solid var(--secondarybackgroundcolour);
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 450;
+    z-index: 1001;
 }
 
 .selected-user-container.small {
@@ -189,7 +191,7 @@
 
 
 .select-button {
-    
+
     font-size: 1vw;
     padding: 10px 20px;
     border-radius: 50px;
@@ -219,6 +221,31 @@
     font-size: 35%;
     color: var(--secondarypagecolour);
 }
+
+button.party-game-statistics-button {
+    all: unset;
+    cursor: pointer;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 300;
+    transition: transform 0.5s ease;
+    transform-origin: center center;
+}
+
+button.party-game-statistics-button img {
+    width: 50px;
+    height: 50px;
+}
+
+button.party-game-statistics-button img:hover {
+    transform: scale(1.2);
+}
+
+#scoreboard-container {
+    color: var(--primarypagecolour);
+}
+
 
 /* Mobile and potrait windows */
 @media (orientation: portrait) {

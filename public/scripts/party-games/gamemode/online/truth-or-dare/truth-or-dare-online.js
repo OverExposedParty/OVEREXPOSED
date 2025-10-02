@@ -45,7 +45,7 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    await ResetTruthOrDareQuestion({force: true, nextPlayer: true});
+    await ResetTruthOrDareQuestion({ force: true, nextPlayer: true });
   });
 
   selectQuestionTypeButtonTruth.addEventListener('click', async () => {
@@ -102,7 +102,7 @@ async function SetPageSettings() {
   });
 
   completePromptCompleted.addEventListener('click', async () => {
-    await ResetTruthOrDareQuestion({ force: true, nextPlayer: true });
+    await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: 1 });
   })
 
   const existingData = await getExistingPartyData(partyCode);
@@ -212,7 +212,10 @@ async function FetchInstructions() {
   else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
     DisplayPunishmentToUser(data[0].userInstructions);
   }
-    console.log(`FETCHING ${data[0].userInstructions}`);
+  else if (data[0].userInstructions.includes("GAME_OVER")) {
+    SetPartyGameStatisticsGameOver();
+  }
+  console.log(`FETCHING ${data[0].userInstructions}`);
 }
 
 function GetQuestion({ cardTitle, currentPartyData }) {
