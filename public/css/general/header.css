@@ -284,14 +284,14 @@ body {
     z-index: 10000;
 }
 
-.splash-screen-container.waiting-room p{
+.splash-screen-container.waiting-room p {
     color: #66CCFF;
 }
 
 
 /* Extra Menu Container */
 .extra-menu-container {
-    height: calc(100vh - var(--headerheight));
+    height: calc(100dvh - var(--headerheight));
     margin-top: var(--headerheight);
     width: 30vw;
     background-color: var(--backgroundcolour);
@@ -393,10 +393,10 @@ body {
 @media (orientation: portrait) {
     :root {
         --bordersize: 4px;
-        --headerheight: 5vh;
+        --headerheight: 6dvh;
     }
 
-        .header-icon-container.row {
+    .header-icon-container.row {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -409,7 +409,7 @@ body {
     }
 
     .extra-menu-container {
-        width: 75vw;
+        width: 75dvw;
     }
 
     .extra-menu-title {
