@@ -22,6 +22,7 @@ const partyGameTruthOrDareSchema = require('./models/party-game-truth-or-dare-sc
 const partyGameParanoiaSchema = require('./models/party-game-paranoia-schema');
 const partyGameNeverHaveIEverSchema = require('./models/party-game-never-have-i-ever-schema');
 const partyGameMostLikelyToSchema = require('./models/party-game-most-likely-to-schema');
+const partyGameWouldYouRatherSchema = require('./models/party-game-would-you-rather-schema');
 const partyGameMafiaSchema = require('./models/party-game-mafia-schema');
 const partyGameChatLogSchema = require('./models/party-game-chat-log-schema');
 const waitingRoomSchema = require('./models/waiting-room-schema');
@@ -141,6 +142,7 @@ async function startChangeStreams() {
   const partyGameParanoiaDB = overexposureDb.collection('party-game-paranoia');
   const partyGameNeverHaveIEverDB = overexposureDb.collection('party-game-never-have-i-ever');
   const partyGameMostLikelyToDB = overexposureDb.collection('party-game-most-likely-to');
+  const partyGameWouldYouRatherDB = overexposureDb.collection('party-game-would-you-rather');
   const partyGameMafiaDB = overexposureDb.collection('party-game-mafia');
   const partyGameChatLogDB = overexposureDb.collection('party-game-chat-log');
 
@@ -214,6 +216,7 @@ async function startChangeStreams() {
   watchCollection(partyGameParanoiaDB, 'party-game-paranoia');
   watchCollection(partyGameNeverHaveIEverDB, 'party-game-never-have-i-ever');
   watchCollection(partyGameMostLikelyToDB, 'party-game-most-likely-to');
+  watchCollection(partyGameWouldYouRatherDB, 'party-game-would-you-rather');
   watchCollection(partyGameMafiaDB, 'party-game-mafia');
   watchChatLog(partyGameChatLogDB);
   watchCollection(waitingRoomDB, 'waiting-room');
@@ -342,6 +345,22 @@ const partyGameRoutes = [
       'currentCardIndex'
     ],
     partyGameLogLabel: 'Party Game Most Likely To'
+  },
+    {
+    route: 'party-game-would-you-rather',
+    partyGameModel: partyGameWouldYouRatherSchema,
+    partyGameFields: [
+      'players',
+      'gamemode',
+      'gameRules',
+      'selectedPacks',
+      'userInstructions',
+      'isPlaying',
+      'lastPinged',
+      'shuffleSeed',
+      'currentCardIndex'
+    ],
+    partyGameLogLabel: 'Party Game Never Have I Ever'
   },
   {
     route: 'party-game-mafia',
@@ -865,6 +884,24 @@ app.get('/most-likely-to', (req, res) => {
 
 app.get('/most-likely-to/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-online-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/would-you-rather', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/would-you-rather/settings', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-settings-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/would-you-rather/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });

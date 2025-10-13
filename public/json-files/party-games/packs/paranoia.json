@@ -6,7 +6,7 @@
             "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 1,
+            "pack-difficulty": "cheeky, funny, creative, deep",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -16,7 +16,7 @@
             "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 2,
+            "pack-difficulty": "cheeky, funny, brutal, chaotic",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -26,7 +26,7 @@
             "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 3,
+            "pack-difficulty": "brutal, funny, chaotic, cheeky",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -36,7 +36,7 @@
             "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 4,
+            "pack-difficulty": "naughty, chaotic, flirty",
             "pack-restriction": "nsfw",
             "pack-active": true
         },
@@ -46,7 +46,7 @@
             "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 5,
+            "pack-difficulty": "sexual, naughty, chaotic",
             "pack-restriction": "nsfw",
             "pack-active": true
         },
@@ -56,7 +56,7 @@
             "pack-card": "/images/blank-cards/limited/grave-danger-blank-card.svg",
             "pack-colour": "#8BA67B",
             "pack-secondary-colour": "#3E4B36",
-            "pack-difficulty": 5,
+            "pack-difficulty": "halloween, naughty, flirty",
             "pack-restriction": "nsfw",
             "pack-active": false
         }

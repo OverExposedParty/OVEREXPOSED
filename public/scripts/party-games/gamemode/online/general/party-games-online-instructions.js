@@ -199,7 +199,9 @@ async function ResetQuestion({ currentPartyData, icons, instruction = "DISPLAY_P
 
   // Move to next card
   currentPartyData.currentCardIndex++;
-  currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
+  if(currentPartyData.playerTurn !== undefined){
+      currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
+  }
   // Reset each player's status and icon
   for (let i = 0; i < playerCount; i++) {
     currentPartyData.players[i].isReady = false;

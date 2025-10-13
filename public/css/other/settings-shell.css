@@ -104,13 +104,27 @@ button.disabled {
     overflow-y: auto;
 }
 
-.button-container button {
+.waiting-room-container .button-container button,
+.main-settings-container .button-container button {
     font-size: 16px;
     padding: 10px 20px;
     min-width: 120px;
     border-radius: 50px;
     text-align: center;
     white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.waiting-room-container .button-container button .difficulty-icon,
+.main-settings-container .button-container button .difficulty-icon {
+    aspect-ratio: 1/1;
+    height: 25px;
+    object-fit: contain;
+    margin-left: 5px; /* optional extra spacing */
+    pointer-events: none; /* prevents accidental clicks on image */
 }
 
 .settings-tab-container {
@@ -134,6 +148,59 @@ button.disabled {
 .settings-tab-container button.active {
     background-color: var(--primarypagecolour);
     color: var(--secondarybackgroundcolour);
+}
+
+.increment-container {
+    padding: 10px 20px;
+    min-width: 120px;
+    border-radius: 50px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: auto;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: var(--backgroundcolour);
+    border-color: var(--backgroundcolour);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.increment-container.disabled {
+    display: none;
+}
+
+.count-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #222;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.count-btn {
+    width: 30px;
+    height: 30px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+    background-color: #444;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.count-btn.disabled {
+    background-color: #272727;
+}
+
+.count-display {
+    color: white;
+    
+    font-size: 1.25rem;
+    padding: 0 10px;
+    min-width: 20px;
+    text-align: center;
 }
 
 @media (orientation: portrait) {

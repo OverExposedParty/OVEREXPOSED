@@ -5,28 +5,32 @@
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
-            "settings-active": false
+            "settings-active": false,
+            "button-type": "toggle"
         },
         {
             "settings-name": "drink-wheel",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
-            "settings-active": true
+            "settings-active": true,
+            "button-type": "toggle"
         },
         {
             "settings-name": "text-box",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "online",
-            "settings-active": true
+            "settings-active": true,
+            "button-type": "toggle"
         },
         {
             "settings-name": "online",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "sfw",
-            "settings-active": true
+            "settings-active": true,
+            "button-type": "toggle"
         }
     ]
 }

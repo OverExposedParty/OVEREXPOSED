@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
+             script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
+
+
+    <title>MAFIA SETTINGS</title>
+
+    <link rel="preload" href="/images/splash-screens/paranoia-settings.png" as="image">
+
+    <link rel="stylesheet" href="/css/general/header.css">
+
+    <link rel="stylesheet" href="/css/party-games/gamemode-settings-page-styles.css">
+    <link rel="stylesheet" href="/css/party-games/mafia-gamemode-settings.css">
+    <link rel="stylesheet" href="/css/general/waiting-room.css">
+    <link rel="stylesheet" href="/css/party-games/online-error.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/mafia/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/mafia/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/mafia/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/mafia/favicons/favicon-180x180.png">
+
+    <meta name="description"
+        content="Play Mafia online with friends! OVEREXPOSED brings thrilling and mysterious questions that will keep the party going. Ready to test your friendships? Try it now!">
+    <meta name="keywords"
+        content="mafia game, online mafia, party games, free mafia game, fun games, drinking games, OVEREXPOSED, digital card game">
+    <meta name="author" content="OVEREXPOSED">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mafia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta property="og:description"
+        content="Uncover secrets and stir up excitement with OVEREXPOSED's Mafia game! A fun and suspenseful party game for friends, teens, and adults. Play online for free now!">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/paranoia/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/paranoia-settings">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mafia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Who’s got something to hide? Find out with OVEREXPOSED's Mafia game! Play online with friends for fun and shocking revelations!">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/meta/paranoia/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/paranoia-settings">
+
+</head>
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static"><img
+            src="/images/splash-screens/mafia-settings.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container" id="splash-screen-container"><img
+            src="/images/splash-screens/mafia-settings.png" alt="Splash Screen"></div>
+
+    <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
+
+    <button class="back-button">back</button>
+
+    <div class="error-container username mafia-gamemode-settings" id="gamemode-settings-error-container"></div>
+
+    <div class="main-container">
+        <div class="game-settings-tab-container">
+            <button id="packs-settings" class="settings-tab active">Mafia Roles</button>
+            <button id="game-settings" class="settings-tab">Game Settings</button>
+            <button id="online-settings" class="settings-tab">Online</button>
+        </div>
+        <div class="packs-container active">
+            <div class="header-container">
+                <h2 class="packs-header">Mafia Roles</h2>
+            </div>
+            <div class="packs-content-container">
+                <div class="button-container">
+                    <button data-key="mafia-godfather" class="role-mafioso" data-description="">GODFATHER</button>
+                    <button data-key="mafia-inspector" class="role-civilian" data-description="">INSPECTOR</button>
+                    <button data-key="mafia-mayor" class="role-civilian" data-description="">MAYOR</button>
+                    <button data-key="mafia-serial-killer" class="role-neutral" data-description="">SERIAL
+                        KILLER</button>
+                    <button data-key="mafia-lawyer" class="role-mafioso" data-description="">LAWYER</button>
+                </div>
+                <div class="container-description">
+                    <h2></h2>
+                </div>
+            </div>
+        </div>
+        <div class="settings-container">
+            <div class="game-settings-container">
+                <div class="mafia-settings-container">
+                    <div class="mafia-option-container">
+                        <div class="mafia-subheader mafia-roles">Mafia Roles</div>
+                        <div class="mafia-increment-container role mafioso " id="mafia-mafioso-settings" data-count="1"
+                            data-increment="1" data-count-min="0" data-count-max="5">
+                            <span class="role-name">MAFIOSO</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement ">-</button>
+                                <div class="count-display">1</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container role mafioso" id="mafia-godfather-settings" data-count="0"
+                            data-increment="1" data-count-min="0" data-count-max="1">
+                            <span class="role-name">GODFATHER</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement disabled">-</button>
+                                <div class="count-display">0</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container role civilian" id="mafia-inspector-settings"
+                            data-count="0" data-increment="1" data-count-min="0" data-count-max="1">
+                            <span class="role-name">INSPECTOR</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement disabled">-</button>
+                                <div class="count-display">0</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container role neutral" id="mafia-serial-killer-settings"
+                            data-count="0" data-increment="1" data-count-min="0" data-count-max="1">
+                            <span class="role-name">SERIAL KILLER</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement disabled">-</button>
+                                <div class="count-display">0</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container role neutral" id="mafia-lawyer-settings" data-count="0"
+                            data-increment="1" data-count-min="0" data-count-max="1">
+                            <span class="role-name">LAWYER</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement disabled">-</button>
+                                <div class="count-display">0</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container role civilian" id="mafia-mayor-settings" data-count="0"
+                            data-increment="1" data-count-min="0" data-count-max="1">
+                            <span class="role-name">MAYOR</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement disabled">-</button>
+                                <div class="count-display">0</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+                        <div class="mafia-subheader game-settings">GAME SETTINGS</div>
+
+                        <div class="mafia-increment-container setting" id="mafia-day-timer" data-count="60"
+                            data-increment="30" data-count-min="30" data-count-max="180">
+                            <span class="role-name">DAY TIMER</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement">-</button>
+                                <div class="count-display">60</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mafia-increment-container setting" id="mafia-night-timer" data-count="60"
+                            data-increment="30" data-count-min="30" data-count-max="180">
+                            <span class="role-name">NIGHT TIMER</span>
+                            <div class="role-count-wrapper">
+                                <button class="count-btn decrement">-</button>
+                                <div class="count-display">60</div>
+                                <button class="count-btn increment">+</button>
+                            </div>
+                        </div>
+
+                        <button class="game-settings-option" id="mafia-anonymous-vote">ANONYMOUS VOTE</button>
+                        <button class="game-settings-option" id="mafia-death-reveal">DEATH REVEAL</button>
+                    </div>
+                </div>
+                <div class="container-description">
+                    <h2></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="online-game-settings-container">
+            <div class="header-container">
+                <h2>Online</h2>
+            </div>
+            <div class="online-settings-container">
+                <div class="container-section" id="party-code-container">
+                    <input type="text" id="party-code" name="codeInput" value="" readonly>
+                </div>
+                <div class="container-section" id="users">
+                </div>
+                <div class="user-count">
+                    (0/8)
+                </div>
+            </div>
+        </div>
+
+        <button class="start-game-button" id="mafia">Start Game</button>
+    </div>
+
+    <div id="enter-username-placeholder"></div>
+</body>
+<script>
+    const partyGameMode = 'Mafia'
+    const sessionPartyType = "party-game-mafia";
+    const helpContainerFile = "party-games-settings/" + partyGameMode.toLowerCase().replace(/\s+/g, '-') + '.json';
+    const minPlayerCount = 5;
+
+    document.documentElement.style.setProperty('--primarypagecolour', '#A9323A');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#7A252C');
+
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
+</script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" defer></script>
+
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/party-games/online/online-username.js"></script>
+<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
+<script src="/scripts/party-games/online/online-game-settings.js"></script>
+<script src="/scripts/party-games/mafia/mafia-game-settings.js"></script>
+<script src="/scripts/party-games/general/game-settings/error-game-settings.js"></script>
+</html>

@@ -108,6 +108,8 @@ async function ChosePunishment(instruction) {
   const haveVoteCount = currentPartyData.players.filter(player => player.vote === true).length;
   const haveNotVoteCount = currentPartyData.players.filter(player => player.vote === false).length;
 
+  UpdatePartyGameStatistics();
+
   if (allConfirmed) {
     if (currentPartyData.players[0].computerId === deviceId) {
       await ResetQuestion({
@@ -117,7 +119,7 @@ async function ChosePunishment(instruction) {
     }
   }
   else if (parsedInstructions.reason === "TAKE_A_SIP") {
-    if (parsedInstructions.deviceId == "" && deviceId == hostDeviceId) {
+    if (currentPartyData.players.filter(player => player.vote === true).length === 0 && deviceId == hostDeviceId) {
       await ResetQuestion({
         currentPartyData: currentPartyData,
         icons: icons
@@ -250,11 +252,16 @@ async function ChosePunishment(instruction) {
       else {
         punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP:";
       }
-
+      for(let i = 0; i < currentPartyData.players.length; i++) {
+        if(currentPartyData.players[i].vote === true && !currentPartyData.players[i].sockedtId !== "DISCONNECTED") {
+          currentPartyData.players[i].score++;
+        }
+      }
       await SendInstruction({
         instruction: punishmentInstruction,
         updateUsersReady: false,
-        updateUsersConfirmation: false
+        updateUsersConfirmation: false,
+        partyData: currentPartyData
       });
     }
   }

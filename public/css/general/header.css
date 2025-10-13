@@ -188,97 +188,6 @@ body {
     overflow-y: hidden;
 }
 
-.extra-menu-container {
-    height: 100vh;
-    width: 30vw;
-    background-color: var(--backgroundcolour);
-    left: -100%;
-    position: fixed;
-    transition: left 0.7s ease;
-    z-index: 900;
-}
-
-.extra-menu-container.active {
-    left: 0;
-}
-
-.extra-menu-title {
-    background-color: var(--backgroundcolour);
-    font-size: 250%;
-    text-align: center;
-
-    color: var(--primarypagecolour);
-    padding-top: 10vh;
-    padding-bottom: 5vh;
-    margin: 0;
-}
-
-.extra-menu-button {
-    width: 100%;
-    height: 15%;
-    background-color: var(--backgroundcolour);
-    font-size: 24px;
-
-    color: var(--primarypagecolour);
-    outline: none;
-    border: 0;
-    transition: color 0.3s, background-color 0.3s, font-size 0.3s;
-}
-
-.extra-menu-button:hover {
-    background-color: var(--primarypagecolour);
-    color: var(--backgroundcolour);
-    font-size: 28px;
-}
-
-.social-media-container {
-    display: flex;
-    position: absolute;
-    outline: none;
-    border: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100px;
-    justify-content: left;
-}
-
-.social-media-image-container {
-    display: flex;
-    justify-content: center;
-    /* Center the content horizontally */
-    align-items: center;
-    /* Center the content vertically */
-    width: 25%;
-}
-
-.social-media-image {
-    transition: transform 0.3s;
-}
-
-.social-media-image:hover {
-    transform: scale(1.25);
-}
-
-.social-media-image.tiktok {
-    height: 5vh;
-    width: 5vh;
-    background-image: var(--tiktokicon);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 907;
-}
-
-.social-media-image.instagram {
-    height: 5vh;
-    width: 5vh;
-    background-image: var(--instagramicon);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 907;
-}
-
 .tts-voice-button.selected {
     border-color: var(--primarypagecolour);
     color: var(--primarypagecolour);
@@ -323,58 +232,6 @@ body {
     font-size: 15px;
     text-align: center;
     font-family: Arial, sans-serif;
-}
-
-@media (orientation: portrait) {
-    .header-icon-container.row {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        direction: rtl;
-        gap: 5px;
-    }
-
-    .social-media-container {
-        display: flex;
-    }
-
-    .extra-menu-container {
-        width: 75vw;
-        height: 100%;
-    }
-
-    .extra-menu-title {
-        font-size: 6vw;
-    }
-
-    .extra-menu-button {
-        font-size: 4vw;
-        height: 17.5%;
-    }
-
-    .extra-menu-button:hover {
-        font-size: 4.5vw;
-    }
-
-    .social-media-image-container {
-        width: 30%;
-    }
-
-    .social-media-image {
-        height: auto;
-        width: 7.5vw;
-    }
-
-    .extra-menu-icon img {
-        height: auto;
-        width: 60%;
-    }
-
-    .back-button {
-        top: calc(var(--headerheight) + 4dvh);
-        left: 5px;
-    }
-
 }
 
 .splash-screen-container,
@@ -432,10 +289,159 @@ body {
 }
 
 
+/* Extra Menu Container */
+.extra-menu-container {
+    height: calc(100vh - var(--headerheight));
+    margin-top: var(--headerheight);
+    width: 30vw;
+    background-color: var(--backgroundcolour);
+    left: -100%;
+    position: fixed;
+    transition: left 0.7s ease;
+    z-index: 900;
+}
+
+.extra-menu-container.active {
+    left: 0;
+}
+
+.extra-menu-title {
+    background-color: var(--backgroundcolour);
+    height: 20%;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primarypagecolour);
+    margin: 0;
+}
+
+.extra-menu-container .extra-menu-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 70%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.extra-menu-button {
+    flex: 1;
+    width: 100%;
+    background-color: var(--backgroundcolour);
+    font-size: 24px;
+    color: var(--primarypagecolour);
+    outline: none;
+    border: 0;
+    transition: color 0.3s, background-color 0.3s, font-size 0.3s;
+}
+
+.extra-menu-button:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    font-size: 28px;
+}
+
+.social-media-container {
+    display: flex;
+    position: absolute;
+    outline: none;
+    border: 0;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    justify-content: left;
+}
+
+.social-media-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+}
+
+.social-media-image {
+    transition: transform 0.3s;
+}
+
+.social-media-image:hover {
+    transform: scale(1.25);
+}
+
+.social-media-image.tiktok {
+    height: 5vh;
+    width: 5vh;
+    background-image: var(--tiktokicon);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 907;
+}
+
+.social-media-image.instagram {
+    height: 5vh;
+    width: 5vh;
+    background-image: var(--instagramicon);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 907;
+}
+
 @media (orientation: portrait) {
     :root {
         --bordersize: 4px;
         --headerheight: 5vh;
+    }
+
+        .header-icon-container.row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        direction: rtl;
+        gap: 5px;
+    }
+
+    .social-media-container {
+        display: flex;
+    }
+
+    .extra-menu-container {
+        width: 75vw;
+    }
+
+    .extra-menu-title {
+        font-size: 6vw;
+    }
+
+    .extra-menu-button {
+        font-size: 4vw;
+        height: 17.5%;
+    }
+
+    .extra-menu-button:hover {
+        font-size: 4.5vw;
+    }
+
+    .social-media-image-container {
+        width: 30%;
+    }
+
+    .social-media-image {
+        height: auto;
+        width: 7.5vw;
+    }
+
+    .extra-menu-icon img {
+        height: auto;
+        width: 60%;
+    }
+
+    .back-button {
+        top: calc(var(--headerheight) + 4dvh);
+        left: 5px;
     }
 
     .splash-screen-container img {

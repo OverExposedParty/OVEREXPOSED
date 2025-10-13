@@ -135,6 +135,7 @@ function changeFavicon(gamemode) {
     "paranoia": "paranoia",
     "never-have-i-ever": "never-have-i-ever",
     "most-likely-to": "most-likely-to",
+    "would-you-rather": "would-you-rather",
     "mafia": "mafia",
   };
 

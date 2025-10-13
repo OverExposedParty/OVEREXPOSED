@@ -43,6 +43,17 @@ const partyGamesInformation = {
       secondary: "#B9AA42"
     }
   },
+  "would-you-rather": {
+    partyType: "party-game-would-you-rather",
+    playerCountRestrictions: {
+      minPlayers: 3,
+      maxPlayers: 20
+    },
+    gamemodeColours: {
+      primary: "#7CFFB2",
+      secondary: "#55B97F"
+    }
+  },
   "mafia": {
     partyType: "party-game-mafia",
     playerCountRestrictions: {

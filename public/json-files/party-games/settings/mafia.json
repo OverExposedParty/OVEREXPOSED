@@ -1,0 +1,40 @@
+{
+    "mafia-settings": [
+        {
+            "settings-name": "day-timer",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "increment",
+            "button-initial-value": 60,
+            "button-increment-value": 30,
+            "button-minimum-value": 30,
+            "button-maximum-value": 180
+        },
+        {
+            "settings-name": "night-timer",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "increment"
+        },
+        {
+            "settings-name": "anonymous-vote",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "toggle"
+        },
+        {
+            "settings-name": "death-reveal",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "toggle"
+        }
+    ]
+}

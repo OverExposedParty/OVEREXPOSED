@@ -5,21 +5,24 @@
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
-            "settings-active": true
+            "settings-active": true,
+            "button-type": "toggle"
         },
         {
             "settings-name": "lucky-coin-flip",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
-            "settings-active": true
+            "settings-active": true,
+            "button-type": "toggle"
         },
         {
             "settings-name": "online",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "sfw",
-            "settings-active": false
+            "settings-active": false,
+            "button-type": "toggle"
         }
     ]
 }

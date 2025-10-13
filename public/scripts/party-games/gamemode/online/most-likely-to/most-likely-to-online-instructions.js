@@ -76,6 +76,7 @@ async function PunishmentOffer(instruction) {
 }
 
 async function ChoosingPunishment(instruction) {
+  UpdatePartyGameStatistics();
   let parsedInstructions = parseInstructionDeviceId(instruction);
   const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
@@ -211,6 +212,9 @@ async function DisplayVoteResults() {
       if (GetHighestVoted(currentPartyData).includes(currentPartyData.players[i].computerId)) {
         currentPartyData.players[i].isReady = false;
         currentPartyData.players[i].hasConfirmed = false;
+        //if(highestValue > 0) {
+          currentPartyData.players[i].score++;
+        //}
       }
       else {
         currentPartyData.players[i].isReady = true;
@@ -218,7 +222,6 @@ async function DisplayVoteResults() {
       }
     }
     ClearIcons();
-    console.log("highestValue: ", highestValue);
     if (highestValue < 0) {
       const updateInstruction = "TIE_BREAKER_PUNISHMENT_OFFER:" + GetHighestVoted(currentPartyData);
       await SendInstruction({
@@ -227,7 +230,6 @@ async function DisplayVoteResults() {
       });
     }
     else {
-      console.log("GetHighestVoted: ", GetHighestVoted(currentPartyData));
       await SendInstruction({
         instruction: "CHOOSING_PUNISHMENT:" + GetHighestVoted(currentPartyData),
         partyData: currentPartyData

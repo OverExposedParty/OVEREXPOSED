@@ -18,10 +18,23 @@ function FetchHelpContainer(helpContainerFile) {
       return res.json();
     })
     .then(data => {
+      const imgRegex = /\[IMG:(.*?)\s+ALT:(.*?)\]/g;
+      data = data.map(item => {
+        Object.keys(item).forEach(key => {
+          if (typeof item[key] === 'string') {
+            item[key] = item[key].replace(imgRegex, (match, src, alt) => {
+              src = src.trim();
+              alt = alt.trim();
+              return `<img src="${src}" alt="${alt}" />`;
+            });
+          }
+        });
+        return item;
+      });
+
       helpData = data;
       currentHelpIndex = 0;
 
-      // Disable arrows if only 1 page
       if (helpData.length === 1) {
         document.querySelectorAll('.help-arrow').forEach(arrow => {
           arrow.classList.add('disabled');

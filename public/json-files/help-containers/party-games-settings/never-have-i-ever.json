@@ -1,30 +1,26 @@
 [
     {
-        "title": "GAME SETTINGS",
-        "text": "Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.<br><br> Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to enable <highlight class='NSFW'>NSFW</highlight> mode to access them (this can be found in the settings)."
-    },
-    {
         "title": "ODD MAN OUT",
         "text": "The <highlight>ODD MAN OUT</highlight> must spin the wheel and do what it lands on! The wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink."
     },
     {
-        "title": "PACK: SIMPLE ADMISSIONS <highlight>!</highlight>",
+        "title": "PACK: SIMPLE ADMISSIONS <br>[IMG:/images/icons/difficulty/chill.svg ALT:Chill Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/deep.svg ALT:Deep Difficulty Icon]",
         "text": "This pack is all about light-hearted confessions and simple yet revealing moments from your past. It's perfect for sharing those small but funny experiences, from embarrassing encounters to bucket-list adventures, and everything in between. Get ready for a fun, no-pressure session of “Never Have I Ever” that’ll spark laughter and maybe even a few unexpected admissions!"
     },
     {
-        "title": "PACK: RISING SUSPICIONS <highlight>!!</highlight>",
+        "title": "PACK: RISING SUSPICIONS <br>[IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon][IMG:/images/icons/difficulty/chaotic.svg ALT:Chaotic Difficulty Icon][IMG:/images/icons/difficulty/brutal.svg ALT:Brutal Difficulty Icon]",
         "text": "This pack will have everyone questioning who's really hiding secrets! It's full of questions that explore the more mischievous and suspicious moments from your past. Whether it’s a shady situation, a close call, or something you’ve done that you hope no one ever finds out, this game will bring out the most unexpected confessions. Get ready for laughs, jaw-dropping stories, and maybe even some shocking revelations."
     },
     {
-        "title": "PACK: DIGGING DEEPER <highlight>!!!</highlight>",
+        "title": "PACK: DIGGING DEEPER <br>[IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/brutal.svg ALT:Brutal Difficulty Icon]",
         "text": "This pack pulls no punches. It's all about personal confessions, complicated relationships, emotional slip-ups, and the messy parts of life we usually keep quiet. From heartbreaks and hidden regrets to impulsive choices and raw truths, these questions are designed to spark deeper conversations and unexpected vulnerability. Brace yourself—things might get real."
     },
     {
-        "title": "PACK: VERBAL DIARRHEA <highlight class='NSFW'>!!!!</highlight>",
+        "title": "PACK: VERBAL DIARRHEA <br>[IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/chaotic.svg ALT:Chaotic Difficulty Icon][IMG:/images/icons/difficulty/brutal.svg ALT:Brutal Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
         "text": "Unfiltered. Unapologetic. Unholy. This pack is not for the faint of heart—it’s where wild nights, chaotic choices, and scandalous hookups take center stage. Expect oversharing, jaw-drops, and more than a few “I can’t believe they said that” moments. If you're ready to spill the messiest tea, this is your battlefield."
     },
     {
-        "title": "PACK: RAW AND UNFILTERED <highlight class='NSFW'>!!!!!</highlight>",
+        "title": "PACK: RAW AND UNFILTERED <br>[IMG:/images/icons/difficulty/sexual.svg ALT:Sexual Difficulty Icon][IMG:/images/icons/difficulty/chaotic.svg ALT:Chaotic Difficulty Icon][IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
         "text": "This is the no-holds-barred, X-rated zone. Explicit, daring, and downright filthy—this pack dives deep into your most NSFW stories, taboos, and unspoken kinks. Nothing is too wild, too dirty, or too intimate. If you blush easily, skip this one. If not… welcome to the deep end."
     },
     {

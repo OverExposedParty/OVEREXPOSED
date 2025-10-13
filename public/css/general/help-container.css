@@ -66,6 +66,26 @@
     font-size: 100%;
     margin: 5% 0;
 }
+.help-title img,
+.help-text img {
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+}
+
+.help-title img
+{
+    width: 40px;
+    height: 40px;
+    margin: 0 0.2em;
+}
+
+.help-text img
+{
+    width: 30px;
+    height: 30px;
+    margin: 0 0.2em;
+}
 
 .help-number-counter {
     color: var(--primarypagecolour);

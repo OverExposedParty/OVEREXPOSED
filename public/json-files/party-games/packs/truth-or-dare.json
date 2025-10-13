@@ -6,7 +6,7 @@
             "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 1,
+            "pack-difficulty": "chill, funny, creative, cheeky",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -16,7 +16,7 @@
             "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 2,
+            "pack-difficulty": "chill, flirty, cheeky, funny",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -26,7 +26,7 @@
             "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 3,
+            "pack-difficulty": "brutal, flirty, fiery, funny",
             "pack-restriction": "sfw",
             "pack-active": true
         },
@@ -36,7 +36,7 @@
             "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 4,
+            "pack-difficulty": "naughty, sexual, flirty",
             "pack-restriction": "nsfw",
             "pack-active": true
         },
@@ -46,7 +46,7 @@
             "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-difficulty": 5,
+            "pack-difficulty": "sexual, naughty, fiery",
             "pack-restriction": "nsfw",
             "pack-active": true
         }

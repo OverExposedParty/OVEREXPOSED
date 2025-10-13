@@ -20,7 +20,11 @@ let completePunishmentContainer, completePunishmentText, completePunishmentButto
 let confirmPunishmentContainer, confirmPunishmentText, ConfirmPunishmentButtonYes, confirmPunishmentButtonNo;
 let pickHeadsOrTailsContainer;
 
-let selectOptionContainer, selectOptionQuestionText, selectOptionButtonContainer, selectOptionConfirmButtonYes, selectOptionConfirmButtonNo;
+let selectOptionContainer, selectOptionQuestionText, selectOptionButtonContainer;
+let selectOptionQuestionTextA, selectOptionQuestionTextB;
+
+let selectOptionConfirmButtonYes, selectOptionConfirmButtonNo;
+let selectOptionConfirmButtonA, selectOptionConfirmButtonB;
 
 let selectNumberContainer, selectNumberQuestionText, selectNumberButtonContainer, confirmNumberButton;
 
@@ -144,6 +148,22 @@ async function loadTemplatesAndScripts() {
             confirmNumberButton = selectNumberContainer.querySelector('.select-button-container button');
 
             gameContainers.push(selectNumberContainer);
+        }
+
+        if (template === 'would-you-rather') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/would-you-rather-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
+            selectOptionContainer = document.getElementById('select-option-container');
+            selectOptionQuestionTextA = selectOptionContainer.querySelector('.content-container h2#a');
+            selectOptionQuestionTextB = selectOptionContainer.querySelector('.content-container h2#b');
+            selectOptionButtonContainer = selectOptionContainer.querySelector('.select-button-container');
+            selectOptionConfirmButtonA = selectOptionButtonContainer.querySelector('#a');
+            selectOptionConfirmButtonB = selectOptionButtonContainer.querySelector('#b');
+
+            gameContainers.push(selectOptionContainer);
         }
 
         // Player selection template

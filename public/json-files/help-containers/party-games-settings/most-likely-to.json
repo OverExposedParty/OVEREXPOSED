@@ -1,30 +1,26 @@
 [
     {
-        "title": "GAME SETTINGS",
-        "text": "Pack difficulty is rated on a scale from <highlight>!</highlight> to <highlight>!!!!!</highlight>.<br><br> Please note: any card packs rated <highlight>!!!!</highlight> or higher will require you to enable <highlight class='NSFW'>NSFW</highlight> mode to access them (this can be found in the settings)."
-    },
-    {
         "title": "DRINK WHEEL",
         "text": "Enable the <highlight>Drink Wheel</highlight> to add a fun twist to your drinking game! The wheel gives you a 50% chance of taking 1 sip, with smaller odds for 2, 3, or 4 sips — or even having to down your whole drink."
     },
     {
-        "title": "PACK: CALM AND CASUAL <highlight>!</highlight>",
+        "title": "PACK: CALM AND CASUAL <br>[IMG:/images/icons/difficulty/chill.svg ALT:Chill Difficulty Icon][IMG:/images/icons/difficulty/creative.svg ALT:Creative Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon][IMG:/images/icons/difficulty/deep.svg ALT:Deep Difficulty Icon]",
         "text": "A wholesome mix of fun, everyday scenarios and dream-big moments—from going viral to starting a podcast. Light, playful, and perfect for spotting hidden talents and quirks in your group."
     },
     {
-        "title": "PACK: MILD MISCHIEF <highlight>!!</highlight>",
+        "title": "PACK: MILD MISCHIEF <br>[IMG:/images/icons/difficulty/chill.svg ALT:Chill Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon]",
         "text": "A playful mix of harmless chaos, awkward moments, and everyday slip-ups. Expect accidental texts, lost phones, weird crushes, and low-stakes mayhem that'll make everyone laugh and point fingers."
     },
     {
-        "title": "PACK: UNSOLICITED STRAYS <highlight>!!!</highlight>",
+        "title": "PACK: UNSOLICITED STRAYS <br>[IMG:/images/icons/difficulty/chaotic.svg ALT:Chaotic Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon]",
         "text": "A chaotic blend of risky romance, bad decisions, and wild what-ifs. Think ex texts, secret hookups, late-night confessions, and moments you’d never want on record."
     },
     {
-        "title": "PACK: OPEN SEASON <highlight class='NSFW'>!!!!</highlight>",
+        "title": "PACK: OPEN SEASON <br>[IMG:/images/icons/difficulty/sexual.svg ALT:Sexual Difficulty Icon][IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/fiery.svg ALT:Fiery Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
         "text": "No rules, no regrets. A shameless deep dive into hookups, betrayals, dirty secrets, and moments you hope never see daylight."
     },
     {
-        "title": "PACK: UNFILITED ASSAULTS <highlight class='NSFW'>!!!!!</highlight>",
+        "title": "PACK: UNFILITED ASSAULTS <br>[IMG:/images/icons/difficulty/sexual.svg ALT:Sexual Difficulty Icon][IMG:/images/icons/difficulty/fiery.svg ALT:Fiery Difficulty Icon][IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
         "text": "Brace yourself. This pack pulls no punches—raw, explicit, and offensively honest. Not for the faint of heart or the easily offended."
     },
     {

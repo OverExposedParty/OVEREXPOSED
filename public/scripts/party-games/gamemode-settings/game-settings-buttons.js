@@ -26,10 +26,15 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                 button.classList.add('sound-toggle');
                 button.textContent = pack["pack-name"]
                     .replace(/-/g, " ")
-                    .replace(/\b\w/g, c => c.toUpperCase())
-                    + " " + "!".repeat(pack["pack-difficulty"] || 0);
+                    .replace(/\b\w/g, c => c.toUpperCase());
+                if (pack["pack-difficulty"]) {
+                    CreateDifficultyImages(button, pack["pack-difficulty"]);
+                }
                 packsContainer.querySelector('.button-container').appendChild(button);
-                if (pack["pack-restriction"] === "nsfw") nsfwButtons.push(button);
+                if (pack["pack-restriction"] === "nsfw") {
+                    nsfwButtons.push(button);
+                    button.appendChild(CreateDifficultyImage("nsfw"));
+                }
                 packButtons.push(button);
 
                 if (window.innerWidth > window.innerHeight) {
@@ -53,13 +58,88 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
         data[`${partyGameMode}-settings`].forEach(setting => {
             if (setting["settings-active"]) {
                 if (!(setting["settings-name"] === "online" && placeholderGamemodeSettings.dataset.template.includes('waiting-room'))) {
-                    const button = document.createElement("button");
-                    button.className = `game-settings-pack ${setting["settings-restriction"]}`;
-                    button.dataset.primaryColor = setting["settings-colour"];
-                    button.dataset.secondaryColor = setting["settings-secondary-colour"];
-                    button.classList.add('sound-toggle');
-                    button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-                    rulesContainer.querySelector('.button-container').appendChild(button);
+                    let button;
+                    if (setting["button-type"] === "toggle") {
+                        button = document.createElement("button");
+                        button.className = `game-settings-pack ${setting["settings-restriction"]}`;
+                        button.dataset.primaryColor = setting["settings-colour"];
+                        button.dataset.secondaryColor = setting["settings-secondary-colour"];
+                        button.classList.add('sound-toggle');
+                        button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+                        rulesContainer.querySelector('.button-container').appendChild(button);
+                    }
+                    else if (setting["button-type"] === "increment") {
+                        const container = document.createElement("div");
+                        container.className = "increment-container setting";
+                        container.id = setting["settings-name"];
+
+                        // Set data attributes (with sensible fallbacks)
+                        container.dataset.count = setting["button-initial-value"] || 60;
+                        container.dataset.increment = setting["button-increment-value"] || 30;
+                        container.dataset.countMin = setting["button-minimum-value"] || 30;
+                        container.dataset.countMax = setting["button-maximum-value"] || 180;
+
+                        // Label
+                        const label = document.createElement("span");
+                        label.className = "role-name";
+                        label.textContent = setting["settings-name"]
+                            .replace(/-/g, " ")
+                            .replace(/\b\w/g, c => c.toUpperCase());
+                        container.appendChild(label);
+
+                        // Count wrapper
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "count-wrapper";
+
+                        const decrementBtn = document.createElement("button");
+                        decrementBtn.className = "count-btn decrement";
+                        decrementBtn.textContent = "-";
+
+                        const countDisplay = document.createElement("div");
+                        countDisplay.className = "count-display";
+                        countDisplay.textContent = container.dataset.count;
+
+                        const incrementBtn = document.createElement("button");
+                        incrementBtn.className = "count-btn increment";
+                        incrementBtn.textContent = "+";
+
+                        wrapper.appendChild(decrementBtn);
+                        wrapper.appendChild(countDisplay);
+                        wrapper.appendChild(incrementBtn);
+                        container.appendChild(wrapper);
+
+                        // Append to container
+                        rulesContainer.querySelector('.button-container').appendChild(container);
+
+                        // Logic for increment/decrement
+                        incrementBtn.addEventListener("click", () => {
+                            let current = parseInt(container.dataset.count);
+                            const increment = parseInt(container.dataset.increment);
+                            const max = parseInt(container.dataset.countMax);
+
+                            if (current + increment <= max) {
+                                current += increment;
+                                container.dataset.count = current;
+                                countDisplay.textContent = current;
+                            }
+                        });
+
+                        decrementBtn.addEventListener("click", () => {
+                            let current = parseInt(container.dataset.count);
+                            const increment = parseInt(container.dataset.increment);
+                            const min = parseInt(container.dataset.countMin);
+
+                            if (current - increment >= min) {
+                                current -= increment;
+                                container.dataset.count = current;
+                                countDisplay.textContent = current;
+                            }
+                        });
+
+                        // Assign container as button reference for later tracking
+                        button = container;
+                    }
 
                     if (setting["settings-restriction"] === "nsfw") gameRulesNsfwButtons.push(button);
                     if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
@@ -147,4 +227,20 @@ function SetButtonStyle(button, isHovering) {
             button.style.color = '#999999';
         }
     }
+}
+
+function CreateDifficultyImage(image) {
+    const img = document.createElement('img');
+    img.src = `/images/icons/difficulty/${image}.svg`;
+    img.alt = 'Difficulty Icon';
+    img.className = 'difficulty-icon';
+    return img;
+}
+
+function CreateDifficultyImages(button, difficultyString) {
+    const images = difficultyString.split(', ');
+
+    images.forEach(image => {
+        button.appendChild(CreateDifficultyImage(image));
+    });
 }

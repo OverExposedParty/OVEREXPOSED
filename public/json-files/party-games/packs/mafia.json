@@ -1,0 +1,46 @@
+{
+    "mafia-packs": [
+        {
+            "pack-name": "mafioso",
+            "mafia-type": "mafioso",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        },
+        {
+            "pack-name": "inpsector",
+            "mafia-type": "civilian",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        },
+        {
+            "pack-name": "godfather",
+            "mafia-type": "mafioso",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        },
+        {
+            "pack-name": "mayor",
+            "mafia-type": "civilian",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        },
+        {
+            "pack-name": "serial-killer",
+            "mafia-type": "neautral",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        },
+        {
+            "pack-name": "lawyer",
+            "mafia-type": "neautral",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-active": true
+        }
+    ]
+}
