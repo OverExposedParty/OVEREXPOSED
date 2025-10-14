@@ -24,6 +24,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                 button.dataset.primaryColor = pack["pack-colour"];
                 button.dataset.secondaryColor = pack["pack-secondary-colour"];
                 button.classList.add('sound-toggle');
+                button.classList.add('button-toggle');
                 button.textContent = pack["pack-name"]
                     .replace(/-/g, " ")
                     .replace(/\b\w/g, c => c.toUpperCase());
@@ -65,14 +66,28 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         button.dataset.primaryColor = setting["settings-colour"];
                         button.dataset.secondaryColor = setting["settings-secondary-colour"];
                         button.classList.add('sound-toggle');
+                        button.classList.add('button-toggle');
                         button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
                         rulesContainer.querySelector('.button-container').appendChild(button);
+
+                        if (window.innerWidth > window.innerHeight) {
+                            button.addEventListener('mouseenter', () => {
+                                SetButtonStyle(button, true);
+                            })
+
+                            button.addEventListener('mouseleave', () => {
+                                SetButtonStyle(button, false);
+                            })
+                        }
                     }
                     else if (setting["button-type"] === "increment") {
                         const container = document.createElement("div");
+                        container.classList.add('button-increment');
                         container.className = "increment-container setting";
                         container.id = setting["settings-name"];
+                        container.dataset.primaryColor = setting["settings-colour"];
+                        container.dataset.secondaryColor = setting["settings-secondary-colour"];
 
                         // Set data attributes (with sensible fallbacks)
                         container.dataset.count = setting["button-initial-value"] || 60;
@@ -80,9 +95,10 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         container.dataset.countMin = setting["button-minimum-value"] || 30;
                         container.dataset.countMax = setting["button-maximum-value"] || 180;
 
+
                         // Label
                         const label = document.createElement("span");
-                        label.className = "role-name";
+                        label.className = "settings-name";
                         label.textContent = setting["settings-name"]
                             .replace(/-/g, " ")
                             .replace(/\b\w/g, c => c.toUpperCase());
@@ -103,6 +119,28 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         const incrementBtn = document.createElement("button");
                         incrementBtn.className = "count-btn increment";
                         incrementBtn.textContent = "+";
+                        if (setting["button-designation"] === "neautral") {
+                            label.style.color = 'var(--primarypagecolour)';
+
+                            wrapper.style.backgroundColor = 'var(--secondarypagecolour)';
+
+                            incrementBtn.style.backgroundColor = 'var(--primarypagecolour)';
+                            decrementBtn.style.backgroundColor = 'var(--primarypagecolour)';
+
+                            incrementBtn.style.borderColor = 'var(--primarypagecolour)';
+                            decrementBtn.style.borderColor = 'var(--primarypagecolour)';
+                        }
+                        else {
+                            label.style.color = container.dataset.primaryColor;
+
+                            wrapper.style.backgroundColor = container.dataset.secondaryColor;
+
+                            incrementBtn.style.backgroundColor = container.dataset.primaryColor;
+                            decrementBtn.style.backgroundColor = container.dataset.primaryColor;
+
+                            incrementBtn.style.borderColor = container.dataset.primaryColor;
+                            decrementBtn.style.borderColor = container.dataset.primaryColor;
+                        }
 
                         wrapper.appendChild(decrementBtn);
                         wrapper.appendChild(countDisplay);
@@ -149,15 +187,6 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     } else {
                         button.dataset.key = `${partyGameMode}-${setting["settings-name"]}`;
                         settingsButtons.push(button);
-                    }
-                    if (window.innerWidth > window.innerHeight) {
-                        button.addEventListener('mouseenter', () => {
-                            SetButtonStyle(button, true);
-                        })
-
-                        button.addEventListener('mouseleave', () => {
-                            SetButtonStyle(button, false);
-                        })
                     }
                 }
             }

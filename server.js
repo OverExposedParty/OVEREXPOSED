@@ -888,6 +888,12 @@ app.get('/most-likely-to/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) 
   res.sendFile(filePath);
 });
 
+app.get('/imposter/settings', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-settings-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
 app.get('/would-you-rather', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);

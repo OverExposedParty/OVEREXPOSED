@@ -82,7 +82,7 @@ button.disabled {
     pointer-events: none !important;
 }
 
-.button-container button {
+.button-container .button-toggle {
     background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--backgroundcolour);
     color: #999999;
@@ -104,27 +104,30 @@ button.disabled {
     overflow-y: auto;
 }
 
-.waiting-room-container .button-container button,
-.main-settings-container .button-container button {
+.oes-content-container .button-container .button-toggle,
+.waiting-room-container .button-container .button-toggle,
+.main-settings-container .button-container .button-toggle {
     font-size: 16px;
     padding: 10px 20px;
     min-width: 120px;
     border-radius: 50px;
     text-align: center;
     white-space: nowrap;
-
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.oes-content-container .button-container button .difficulty-icon,
 .waiting-room-container .button-container button .difficulty-icon,
 .main-settings-container .button-container button .difficulty-icon {
     aspect-ratio: 1/1;
     height: 25px;
     object-fit: contain;
-    margin-left: 5px; /* optional extra spacing */
-    pointer-events: none; /* prevents accidental clicks on image */
+    margin-left: 5px;
+    /* optional extra spacing */
+    pointer-events: none;
+    /* prevents accidental clicks on image */
 }
 
 .settings-tab-container {
@@ -152,12 +155,11 @@ button.disabled {
 
 .increment-container {
     padding: 10px 20px;
-    min-width: 120px;
     border-radius: 50px;
     cursor: pointer;
     white-space: nowrap;
     box-sizing: border-box;
-    width: auto;
+    width: fit-content;
     transition: background-color 0.3s, color 0.3s;
     background-color: var(--backgroundcolour);
     border-color: var(--backgroundcolour);
@@ -172,9 +174,9 @@ button.disabled {
 
 .count-wrapper {
     display: flex;
+    width: fit-content;
     align-items: center;
     background-color: #222;
-    padding: 5px;
     border-radius: 10px;
 }
 
@@ -183,8 +185,7 @@ button.disabled {
     height: 30px;
     font-weight: bold;
     font-size: 1rem;
-    color: white;
-    background-color: #444;
+    color:var(--backgroundcolour);
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -195,12 +196,17 @@ button.disabled {
 }
 
 .count-display {
-    color: white;
-    
+    color: var(--backgroundcolour);
+
     font-size: 1.25rem;
     padding: 0 10px;
     min-width: 20px;
     text-align: center;
+}
+
+.settings-name {
+    color: var(--primarypagecolour);
+    font-size: 18px;
 }
 
 @media (orientation: portrait) {
@@ -232,11 +238,25 @@ button.disabled {
         scroll-snap-type: y mandatory;
     }
 
-    .button-container button {
+    .waiting-room-container .button-container .button-toggle,
+    .main-settings-container .button-container .button-toggle {
         width: 90%;
         margin: 5px 5%;
         font-size: 16px;
         scroll-snap-align: start;
         box-sizing: border-box;
     }
+
+    .increment-container {
+        width: 90%;
+        margin: 5px 5%;
+        font-size: 16px;
+        scroll-snap-align: start;
+        box-sizing: border-box;
+    }
+
+    .count-wrapper {
+        margin-left: auto;
+    }
+
 }

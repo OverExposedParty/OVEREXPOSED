@@ -1,12 +1,39 @@
 {
     "mafia-settings": [
         {
-            "settings-name": "day-timer",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-name": "mafia-mafioso",
+            "settings-colour": "var(--mafiosoColour)",
+            "settings-secondary-colour": "var(--secondaryMafiosoColour)",
             "settings-restriction": "nsfw",
             "settings-active": true,
             "button-type": "increment",
+            "button-designation": "mafioso",
+            "button-initial-value": 1,
+            "button-increment-value": 1,
+            "button-minimum-value": 0,
+            "button-maximum-value": 15
+        },
+        {
+            "settings-name": "mafia-civilian",
+            "settings-colour": "var(--civilianColour)",
+            "settings-secondary-colour": "var(--secondaryCivilianColour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "increment",
+            "button-designation": "civilian",
+            "button-initial-value": 1,
+            "button-increment-value": 1,
+            "button-minimum-value": 0,
+            "button-maximum-value": 15
+        },
+        {
+            "settings-name": "day-timer",
+            "settings-colour": "var(--backgroundcolour)",
+            "settings-secondary-colour": "var(--secondarybackgroundcolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "increment",
+            "button-designation": "neautral",
             "button-initial-value": 60,
             "button-increment-value": 30,
             "button-minimum-value": 30,
@@ -14,11 +41,16 @@
         },
         {
             "settings-name": "night-timer",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-colour": "var(--backgroundcolour)",
+            "settings-secondary-colour": "var(--secondarybackgroundcolour)",
             "settings-restriction": "nsfw",
             "settings-active": true,
-            "button-type": "increment"
+            "button-type": "increment",
+            "button-designation": "neautral",
+            "button-initial-value": 60,
+            "button-increment-value": 30,
+            "button-minimum-value": 30,
+            "button-maximum-value": 180
         },
         {
             "settings-name": "anonymous-vote",

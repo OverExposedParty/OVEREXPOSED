@@ -88,7 +88,7 @@ function SetGamemodeButtons() {
     }
 }
 function SetGameSettingsButtons() {
-    placeholderGamemodeSettings.querySelectorAll('button').forEach(button => {
+    placeholderGamemodeSettings.querySelectorAll('.button-toggle').forEach(button => {
         const key = button.getAttribute('data-key');
         const savedState = localStorage.getItem(key);
 

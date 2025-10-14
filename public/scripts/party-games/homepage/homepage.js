@@ -33,6 +33,7 @@ async function loadGamemodes() {
         const root = document.documentElement;
 
         gamemodes.forEach(mode => {
+            if (!mode["gamemode-active"]) return;
             root.style.setProperty(`--${mode.gamemodeID}PrimaryColour`, mode.gamemodePrimaryColour);
             root.style.setProperty(`--${mode.gamemodeID}SecondaryColour`, mode.gamemodeSecondaryColour);
 

@@ -18,6 +18,7 @@ function renderPacks(packs) {
 
         if (pack["pack-status"] === "active") {
             const button = document.createElement("button");
+            button.classList.add("button-toggle");
             button.textContent = packName
                 .replace(/-/g, " ")
                 .replace(/\b\w/g, c => c.toUpperCase());

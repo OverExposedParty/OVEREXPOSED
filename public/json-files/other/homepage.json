@@ -8,7 +8,8 @@
         "gamemodePrimaryColour": "#66CCFF",
         "gamemodeSecondaryColour": "#427BB9",
         "gamemodeLink": "/truth-or-dare/settings",
-        "gamemodeTextUpdates": "Online mode out now"
+        "gamemodeTextUpdates": "Online mode out now",
+        "gamemode-active": true
     },
     {
         "gamemodeID": "paranoia",
@@ -19,7 +20,8 @@
         "gamemodePrimaryColour": "#9D8AFF",
         "gamemodeSecondaryColour": "#7F71B2",
         "gamemodeLink": "/paranoia/settings",
-        "gamemodeTextUpdates": "Online coming soon"
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": true
     },
     {
         "gamemodeID": "never-have-i-ever",
@@ -30,7 +32,8 @@
         "gamemodePrimaryColour": "#FF9266",
         "gamemodeSecondaryColour": "#B96542",
         "gamemodeLink": "/never-have-i-ever/settings",
-        "gamemodeTextUpdates": "Online coming soon"
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": true
     },
     {
         "gamemodeID": "most-likely-to",
@@ -41,6 +44,43 @@
         "gamemodePrimaryColour": "#FFEE66",
         "gamemodeSecondaryColour": "#B9AA42",
         "gamemodeLink": "/most-likely-to/settings",
-        "gamemodeTextUpdates": "Online coming soon"
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": true
+    },
+    {
+        "gamemodeID": "imposter",
+        "gamemodeName": "Imposter",
+        "gamemodeCardImageFront": "/images/card-titles/front/imposter.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/imposter.svg",
+        "gamemodeDescription": "A hilarious game where players vote on who is most likely to do a certain action",
+        "gamemodePrimaryColour": "#3DA7A1",
+        "gamemodeSecondaryColour": "#2A6E6A",
+        "gamemodeLink": "/imposter/settings",
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": false
+    },
+    {
+        "gamemodeID": "would-you-rather",
+        "gamemodeName": "Would You Rather",
+        "gamemodeCardImageFront": "/images/card-titles/front/would-you-rather.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/would-you-rather.svg",
+        "gamemodeDescription": "A hilarious game where players vote on who is most likely to do a certain action",
+        "gamemodePrimaryColour": "#7CFFB2",
+        "gamemodeSecondaryColour": "#55B97F",
+        "gamemodeLink": "/would-you-rather/settings",
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": false
+    },
+    {
+        "gamemodeID": "mafia",
+        "gamemodeName": "Mafia",
+        "gamemodeCardImageFront": "/images/card-titles/front/mafia.svg",
+        "gamemodeCardImageBack": "/images/card-titles/back/mafia.svg",
+        "gamemodeDescription": "A hilarious game where players vote on who is most likely to do a certain action",
+        "gamemodePrimaryColour": "#7D47A0",
+        "gamemodeSecondaryColour": "#582F74",
+        "gamemodeLink": "/mafia/settings",
+        "gamemodeTextUpdates": "Online coming soon",
+        "gamemode-active": false
     }
 ]

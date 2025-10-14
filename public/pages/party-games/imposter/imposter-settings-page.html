@@ -8,46 +8,48 @@
         content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
              script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
 
-    <title>MAFIA</title>
 
-    <link rel="preload" href="/images/splash-screens/mafia-settings.png" as="image">
+    <title>IMPOSTER SETTINGS</title>
+
+    <link rel="preload" href="/images/splash-screens/paranoia-settings.png" as="image">
 
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/party-games/mafia-gamemode-settings.css">
 
-    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/mafia/favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/mafia/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/mafia/favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/mafia/favicons/favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/paranoia/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/paranoia/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/paranoia/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/paranoia/favicons/favicon-180x180.png">
 
     <meta name="description"
-        content="Play Never Have I Ever online with friends! OVEREXPOSED offers wild, funny, and revealing questions that will spice up your party. Ready to confess? Try it now!">
+        content="Play Paranoia online with friends! OVEREXPOSED brings thrilling and mysterious questions that will keep the party going. Ready to test your friendships? Try it now!">
     <meta name="keywords"
-        content="never have i ever, online never have i ever, party games, free never have i ever game, fun games, drinking games, OVEREXPOSED, digital card game">
+        content="paranoia game, online paranoia, party games, free paranoia game, fun games, drinking games, OVEREXPOSED, digital card game">
     <meta name="author" content="OVEREXPOSED">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Never Have I Ever Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta property="og:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
     <meta property="og:description"
-        content="Spill your secrets and expose your friends with OVEREXPOSED's Never Have I Ever! Play online for free and find out who has the wildest stories!">
-    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/mafia/og-image.jpg">
-    <meta property="og:url" content="https://overexposed.app/mafia-settings">
+        content="Uncover secrets and stir up excitement with OVEREXPOSED's Paranoia game! A fun and suspenseful party game for friends, teens, and adults. Play online for free now!">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/paranoia/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/paranoia-settings">
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Never Have I Ever Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta name="twitter:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
     <meta name="twitter:description"
-        content="How wild are you? Play OVEREXPOSED's Never Have I Ever online with friends and uncover the craziest confessions!">
-    <meta name="twitter:image" content="https://overexposed.app/images/icons/overexposed/meta/mafia/twitter-image.jpg">
-    <link rel="canonical" href="https://overexposed.app/mafia-settings">
+        content="Who’s got something to hide? Find out with OVEREXPOSED's Paranoia game! Play online with friends for fun and shocking revelations!">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/meta/paranoia/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/paranoia-settings">
+
 </head>
 
 
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static">
-        <img src="/images/splash-screens/mafia-settings.png" alt="Splash Screen">
+        <img src="/images/splash-screens/paranoia-settings.png" alt="Splash Screen">
     </div>
     <div class="splash-screen-container" id="splash-screen-container">
-        <img src="/images/splash-screens/mafia-settings.png" alt="Splash Screen">
+        <img src="/images/splash-screens/paranoia-settings.png" alt="Splash Screen">
         <p></p>
     </div>
 
@@ -80,8 +82,8 @@
                 <button id="rules-settings" class="settings-tab">Rules</button>
                 <button id="online-settings" class="settings-tab disabled">Online</button>
             </div>
-            <div id="gamemode-settings-placeholder" data-template="mafia"></div>
-            <button class="start-game-button" id="mafia">Start Game</button>
+            <div id="gamemode-settings-placeholder" data-template="paranoia"></div>
+            <button class="start-game-button" id="paranoia">Start Game</button>
         </div>
     </div>
 
@@ -89,15 +91,16 @@
 </body>
 
 <script>
-    const partyGameMode = 'mafia';
+    const partyGameMode = 'paranoia';
     const sessionPartyType = "party-game-" + partyGameMode;
+    const minPlayerCount = 3;
 
-    document.documentElement.style.setProperty('--primarypagecolour', '#7D47A0');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#582F74');
+    document.documentElement.style.setProperty('--primarypagecolour', '#3DA7A1');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#2A6E6A');
 
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/mafia/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/mafia/tik-tok-icon.svg)');
-    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/mafia/instagram-icon.svg)');
+    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/paranoia/rotate-phone-icon.svg)`);
+    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/paranoia/tik-tok-icon.svg)');
+    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/paranoia/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
@@ -105,13 +108,11 @@
 
 <script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
 <script src="/scripts/html-templates/gamemode-settings/error-container-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false"
-    defer></script>
+<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false" defer></script>
 <script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false" defer></script>
 
 <script src="/scripts/party-games/online/online-game-settings.js"></script>
 <script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
 
 <script src="/scripts/party-games/general/chat-log.js"></script>
-
 </html>

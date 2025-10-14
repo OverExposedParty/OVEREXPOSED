@@ -17,7 +17,7 @@
     },
     {
         "pack-name": "engrave-danger",
-        "pack-status": "inactive",
+        "pack-status": "active",
         "pack-description": "Base customisation pack containing the default character customisation options.",
         "pack-path": "/json-files/customisation/packs/engrave-danger.json",
         "pack-colour": "#AA88F0",
