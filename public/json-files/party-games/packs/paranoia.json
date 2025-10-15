@@ -58,7 +58,7 @@
             "pack-secondary-colour": "#3E4B36",
             "pack-difficulty": "halloween, naughty, flirty",
             "pack-restriction": "nsfw",
-            "pack-active": false
+            "pack-active": true
         }
     ]
 }

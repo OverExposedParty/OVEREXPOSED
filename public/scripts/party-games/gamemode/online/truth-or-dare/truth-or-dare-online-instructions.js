@@ -1,5 +1,4 @@
 async function DisplaySelectQuestionType() {
-  const currentPartyData = await GetCurrentPartyData();
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
   await UpdatePartyGameStatistics();
   if (deviceId === currentPlayer.computerId) {
@@ -60,7 +59,6 @@ async function DisplayWaitingForPlayers(currentPartyData, index, confirmation = 
 
 async function ChoosingPunishment(instruction) {
   let parsedInstructions = parseInstructionDeviceId(instruction);
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
 
   if (index === -1) {
@@ -82,7 +80,6 @@ async function ChoosingPunishment(instruction) {
 }
 
 async function UserSelectedForPunishment(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
   let parsedInstructions = parseInstructionDeviceId(instruction);
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
   if (parsedInstructions.deviceId == deviceId) {
@@ -100,7 +97,6 @@ async function UserSelectedForPunishment(instruction) {
 
 async function DisplayPunishmentToUser(instruction) {
   let parsedInstructions = parseInstruction(instruction);
-  const currentPartyData = await GetCurrentPartyData();
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
 
   if (currentPlayer.computerId == deviceId) {
@@ -124,7 +120,6 @@ async function DisplayPunishmentToUser(instruction) {
 }
 
 async function DisplayPublicCard() {
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
   if (index === -1) {
@@ -160,7 +155,6 @@ async function DisplayPublicCard() {
 }
 
 async function DisplayAnswerCard(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
@@ -200,7 +194,6 @@ async function DisplayAnswerCard(instruction) {
 
 async function DisplayConfirmInput(instruction) {
   const parsedInstructions = parseInstruction(instruction);
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   const activePlayer = currentPartyData.players[index];
@@ -231,8 +224,6 @@ async function DisplayConfirmInput(instruction) {
 
 async function UserHasPassed(instruction) {
   let parsedInstructions = parseInstruction(instruction);
-
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
 
   playerHasPassedTitle.textContent = currentPartyData.players[index].username + " has passed";
@@ -255,7 +246,6 @@ async function UserHasPassed(instruction) {
 }
 
 async function DisplayCompleteQuestion() {
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
@@ -281,7 +271,6 @@ async function DisplayCompleteQuestion() {
 }
 
 async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incrementScore = 0}) {
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   if (!force) {

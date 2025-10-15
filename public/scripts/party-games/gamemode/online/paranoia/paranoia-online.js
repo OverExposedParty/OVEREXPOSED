@@ -82,7 +82,6 @@ async function SetPageSettings() {
     });
   });
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     const parsedInstructions = parseInstruction(currentPartyData.userInstructions);
     completePunishmentContainer.classList.remove('active');
     await SetUserConfirmation({
@@ -119,13 +118,12 @@ async function SetPageSettings() {
     });
 
   });
-
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
-  const currentPartyData = existingData[0];
+  currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
 
@@ -249,52 +247,50 @@ async function initialisePage() {
 }
 
 async function FetchInstructions() {
-  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await res.json();
-  if (!data || data.length === 0) {
+  currentPartyData = await GetCurrentPartyData();
+  if (currentPartyData == undefined || currentPartyData.length === 0) {
     PartyDisbanded();
     return;
   }
-  if (data[0].userInstructions.includes("DISPLAY_DUAL_STACK_CARD")) {
+  if (currentPartyData.userInstructions.includes("DISPLAY_DUAL_STACK_CARD")) {
     DisplayDualStackCard();
   }
-  else if (data[0].userInstructions == "NEXT_USER_TURN") {
+  else if (currentPartyData.userInstructions == "NEXT_USER_TURN") {
     NextUserTurn();
   }
-  else if (data[0].userInstructions == "NEXT_QUESTION") {
+  else if (currentPartyData.userInstructions == "NEXT_QUESTION") {
     NextQuestion();
   }
-  else if (data[0].userInstructions.includes("USER_HAS_PASSED")) {
-    UserHasPassed(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("USER_HAS_PASSED")) {
+    UserHasPassed(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
-    UserSelectedForPunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
+    UserSelectedForPunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
-    DisplayPrivateCard(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
+    DisplayPrivateCard(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
+  else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
     ChoosingPunishment();
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("PUNISHMENT_OFFER")) {
+    PunishmentOffer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
-    HasUserDonePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
+    HasUserDonePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
-    AnswerToUserDonePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
+    AnswerToUserDonePunishment(currentPartyData.userInstructions);
   }
 }
 
 async function AddUserIcons() {
-  const currentPartyData = await GetCurrentPartyData();
   if (currentPartyData) {
     for (let i = 0; i < currentPartyData.players.length; i++) {
       createUserIconPartyGames({

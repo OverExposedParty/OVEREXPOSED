@@ -7,7 +7,7 @@ async function SendInstruction({
   fetchInstruction = false,
   isPlaying = true
 }) {
-  let currentPartyData = partyData;
+  currentPartyData = partyData;
 
   if (partyData == null) {
     const existingData = await getExistingPartyData(partyCode);
@@ -102,32 +102,12 @@ function parseInstructionSecondReason(input) {
   };
 }
 
-
-async function GetUsername(selectedDeviceId) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-  const currentPartyData = existingData[0];
-
-  const player = currentPartyData.players.find(p => p.computerId === selectedDeviceId);
-  return player ? player.username : undefined;
-}
-
 async function SetUserConfirmation({
   selectedDeviceId,
   option,
   reason = null,
   userInstruction = null
 }) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-
-  const currentPartyData = existingData[0];
   const index = currentPartyData.players.findIndex(player => player.computerId === selectedDeviceId);
 
   if (index === -1) {
@@ -154,13 +134,6 @@ async function SetUserConfirmation({
 
 
 async function setUserBool(selectedDeviceId, userConfirmation = null, userReady = null, setInstruction = null) {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
-  }
-
-  const currentPartyData = existingData[0];
   const player = currentPartyData.players.find(p => p.computerId === selectedDeviceId);
 
   if (!player) {
@@ -362,7 +335,6 @@ function DisplayCard(card, questionObject) {
 
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
 
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
   console.log("parsedInstructions.deviceId", parsedInstructions.deviceId);

@@ -49,7 +49,6 @@ async function SetPageSettings() {
   });
 
   selectQuestionTypeButtonTruth.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     currentPartyData.currentCardIndex++;
     currentPartyData.questionType = "truth";
     await SendInstruction({
@@ -61,7 +60,6 @@ async function SetPageSettings() {
   });
 
   selectQuestionTypeButtonDare.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     currentPartyData.currentCardSecondIndex++;
     currentPartyData.questionType = "dare";
     await SendInstruction({
@@ -110,7 +108,7 @@ async function SetPageSettings() {
     console.warn('No party data found.');
     return;
   }
-  const currentPartyData = existingData[0];
+  currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
   console.log("initialisePage");
@@ -182,40 +180,39 @@ async function initialisePage() {
 }
 
 async function FetchInstructions() {
-  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await res.json();
-  if (!data || data.length === 0) {
+  currentPartyData = await GetCurrentPartyData();
+  if (currentPartyData == undefined || currentPartyData.length === 0) {
     PartyDisbanded();
     return;
   }
-  if (data[0].userInstructions.includes("DISPLAY_SELECT_QUESTION_TYPE")) {
+  if (currentPartyData.userInstructions.includes("DISPLAY_SELECT_QUESTION_TYPE")) {
     DisplaySelectQuestionType();
   }
-  else if (data[0].userInstructions.includes("DISPLAY_COMPLETE_QUESTION")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_COMPLETE_QUESTION")) {
     DisplayCompleteQuestion();
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUBLIC_CARD")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUBLIC_CARD")) {
     DisplayPublicCard();
   }
-  else if (data[0].userInstructions.includes("DISPLAY_ANSWER_CARD")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_ANSWER_CARD")) {
     DisplayAnswerCard(data[0].userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_CONFIRM_INPUT")) {
-    DisplayConfirmInput(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_CONFIRM_INPUT")) {
+    DisplayConfirmInput(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
+    ChoosingPunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("GAME_OVER")) {
+  else if (currentPartyData.userInstructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
   }
-  console.log(`FETCHING ${data[0].userInstructions}`);
+  console.log(`FETCHING ${currentPartyData.userInstructions}`);
 }
 
 function GetQuestion({ cardTitle, currentPartyData }) {
@@ -232,7 +229,6 @@ function GetQuestion({ cardTitle, currentPartyData }) {
 }
 
 async function AddUserIcons() {
-  const currentPartyData = await GetCurrentPartyData();
   if (currentPartyData) {
     for (let i = 0; i < currentPartyData.players.length; i++) {
       createUserIconPartyGames({

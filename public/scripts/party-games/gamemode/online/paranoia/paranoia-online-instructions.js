@@ -1,5 +1,4 @@
 async function NextUserTurn() {
-  const currentPartyData = await GetCurrentPartyData();
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
 
   if (currentPartyData.players[currentPartyData.playerTurn].computerId == deviceId) {
@@ -31,7 +30,6 @@ async function NextUserTurn() {
 
 async function NextQuestion() {
   await UpdatePartyGameStatistics();
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const votedIndex = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
@@ -93,7 +91,6 @@ async function NextQuestion() {
 
 async function DisplayPrivateCard(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
   currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
 
   if (currentPlayer.computerId == deviceId) {
@@ -126,7 +123,6 @@ async function DisplayPrivateCard(instruction) {
 }
 
 async function ChoosingPunishment() {
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   currentPlayer = currentPartyData.players[index];
 
@@ -145,7 +141,6 @@ async function ChoosingPunishment() {
 
 async function DisplayPunishmentToUser(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   console.log("parsedInstructions.reason: ", parsedInstructions.reason);
   if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
@@ -170,9 +165,7 @@ async function DisplayPunishmentToUser(instruction) {
 
 //add container 
 async function PunishmentOffer(instruction) {
-  let parsedInstructions = parseInstructionSecondReason(instruction)
-  const currentPartyData = await GetCurrentPartyData();
-
+  let parsedInstructions = parseInstructionSecondReason(instruction);
   if (parsedInstructions.reason == "PASS") {
     if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
       await SendInstruction({
@@ -203,7 +196,6 @@ async function PunishmentOffer(instruction) {
 
 async function UserHasPassed(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   setActiveContainers(playerHasPassedContainer);
   playerHasPassedTitle.textContent = currentPartyData.players[index].username + " has passed";
@@ -224,7 +216,6 @@ async function UserHasPassed(instruction) {
 
 async function HasUserDonePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   const currentIndex = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
@@ -308,8 +299,6 @@ async function HasUserDonePunishment(instruction) {
 
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction)
-  const currentPartyData = await GetCurrentPartyData();
-
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   currentPlayer = currentPartyData.players[index];
   if (deviceId == currentPartyData.players[currentPartyData.playerTurn].vote) {
@@ -345,7 +334,6 @@ async function ChosePunishment(instruction) {
 }
 
 async function UserSelectedForPunishment(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
   let parsedInstructions = parseInstructionDeviceId(instruction);
   const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
   if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
@@ -362,7 +350,6 @@ async function UserSelectedForPunishment(instruction) {
 }
 
 async function DisplayDualStackCard() {
-  const currentPartyData = await GetCurrentPartyData();
   await SendInstruction({
     instruction: "NEXT_QUESTION",
     partyData: currentPartyData,
@@ -373,7 +360,6 @@ async function DisplayDualStackCard() {
 }
 
 async function ResetParanoiaQuestion({ nextPlayer = true }) {
-  const currentPartyData = await GetCurrentPartyData();
   ClearIcons();
   if (deviceId == hostDeviceId) {
     currentPartyData.currentCardIndex++;

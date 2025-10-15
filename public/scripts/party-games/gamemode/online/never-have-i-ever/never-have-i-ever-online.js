@@ -16,11 +16,7 @@ gameContainers.push(
 );
 async function SetPageSettings() {
   buttonChooseOption.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    selectOptionQuestionText.textContent = selectedQuestionObj.question.replace("Never have I ever ", "");
-    setActiveContainers(selectOptionContainer);
-    setUserBool(deviceId, null, true)
+    await setUserBool(deviceId, null, true)
   });
 
   selectOptionConfirmButtonYes.addEventListener('click', async () => {
@@ -35,9 +31,8 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     let parsedInstructions = parseInstruction(currentPartyData.userInstructions);
-    if (parsedInstructions.instruction === "DISPLAY_PUNISHMENT_TO_USER") {
+    if (parsedInstructions.instruction.includes("DISPLAY_PUNISHMENT_TO_USER")) {
       const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
       await ResetQuestion({
         currentPartyData: currentPartyData,
@@ -92,7 +87,7 @@ function updateTextContainer(text, cardType) {
 async function initialisePage() {
   const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
-  const currentPartyData = data[0];
+  currentPartyData = data[0];
   if (data.length > 0) {
     isPlaying = true;
     const index = data[0].players.findIndex(player => player.computerId === deviceId);
@@ -141,39 +136,36 @@ async function initialisePage() {
 }
 
 async function FetchInstructions() {
-  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await res.json();
-  if (!data || data.length === 0) {
+  currentPartyData = await GetCurrentPartyData();
+  if (currentPartyData == undefined || currentPartyData.length === 0) {
     PartyDisbanded();
     return;
   }
 
-  if (data[0].userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
-    DisplayPrivateCard(data[0].userInstructions);
+  if (currentPartyData.userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
+    DisplayPrivateCard(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
     DisplayVoteResults();
   }
-  else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
-    WaitingForPlayer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("WAITING_FOR_PLAYER")) {
+    WaitingForPlayer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
+    ChoosingPunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("PUNISHMENT_OFFER")) {
+    PunishmentOffer(currentPartyData.userInstructions);
   }
 }
 
 async function AddUserIcons() {
-  const currentPartyData = await GetCurrentPartyData();
-  console.log(currentPartyData);
   if (currentPartyData) {
     for (let i = 0; i < currentPartyData.players.length; i++) {
       createUserIconPartyGames({
