@@ -9,7 +9,6 @@ const gameContainerPublicButtonContainer = gameContainerPublic.querySelector('.r
 const gameContainerPublicWaitingText = gameContainerPublicButtonContainer.querySelector('h2');
 const gameContainerPublicButtonAnswer = gameContainerPublicButtonContainer.querySelector('#answer');
 const gameContainerPublicButtonPass = gameContainerPublicButtonContainer.querySelector("#pass");
-
 const gameContainerAnswer = document.querySelector('#answer-view.card-container');
 const gameContainerAnswerButtonContainer = gameContainerAnswer.querySelector('.regular-button-container');
 const gameContainerAnswerButtonNextQuestion = gameContainerAnswerButtonContainer.querySelector("#next-question");
@@ -55,7 +54,8 @@ async function SetPageSettings() {
       partyData: currentPartyData,
       instruction: "DISPLAY_PUBLIC_CARD",
       updateUsersReady: false,
-      updateUsersConfirmation: false
+      updateUsersConfirmation: false,
+      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
     });
   });
 
@@ -66,14 +66,23 @@ async function SetPageSettings() {
       partyData: currentPartyData,
       instruction: "DISPLAY_PUBLIC_CARD",
       updateUsersReady: false,
-      updateUsersConfirmation: false
+      updateUsersConfirmation: false,
+      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
     });
   });
 
   gameContainerPublicButtonPass.addEventListener('click', async () => {
-    await SendInstruction({
-      instruction: "CHOOSING_PUNISHMENT:" + deviceId
-    });
+    if (selectPunishmentButtonContainer.childElementCount == 0) {
+      await SendInstruction({
+        instruction: "RESET_QUESTION"
+      });
+      return;
+    }
+    else {
+      await SendInstruction({
+        instruction: "CHOOSING_PUNISHMENT"
+      });
+    }
   });
 
   gameContainerPublicButtonAnswer.addEventListener('click', async () => {
@@ -102,6 +111,15 @@ async function SetPageSettings() {
   completePromptCompleted.addEventListener('click', async () => {
     await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: 1 });
   })
+
+  AddTimerToContainer(waitingForPlayerContainer);
+  AddTimerToContainer(selectUserContainer);
+  AddTimerToContainer(selectQuestionTypeContainer);
+  AddTimerToContainer(cardContainerPublic.querySelector('.main-image-container'));
+  AddTimerToContainer(selectPunishmentContainer);
+
+  console.log(cardContainerPublic);
+  console.log(cardContainerPublic.querySelector('.main-image-container'));
 
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
@@ -134,17 +152,17 @@ async function initialisePage() {
     data[0].players[index].socketId = socket.id
     joinParty(partyCode);
     if (data[0].isPlaying === true) {
-      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      partyRulesSettings = parseGameRules(data[0].gameRules)
       for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
-        if (partyRulesSettings[i] == "take-a-shot") {
-          settingsButton = createUserButton(partyRulesSettings[i], partyRulesSettings[i].replace(/-/g, " "));
+        if (partyRulesSettings[i].includes("take-a-shot")) {
+          settingsButton = createUserButton("take-a-shot", "Take A Shot");
           selectPunishmentButtonContainer.appendChild(settingsButton);
         }
         else if (partyRulesSettings[i] == "truth-or-dare-text-box") {
           textBoxSetting = true;
         }
-        else {
+        else if (!/\d/.test(partyRulesSettings[i])) {
           AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
           settingsButton = createUserButton(partyRulesSettings[i], formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode }));
           selectPunishmentButtonContainer.appendChild(settingsButton);
@@ -165,7 +183,8 @@ async function initialisePage() {
     await SendInstruction({
       instruction: "DISPLAY_SELECT_QUESTION_TYPE",
       updateUsersReady: false,
-      updateUsersConfirmation: false
+      updateUsersConfirmation: false,
+      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
     });
   }
   else {
@@ -175,7 +194,14 @@ async function initialisePage() {
       lastPinged: Date.now(),
     });
   }
+  SetPartyGameStatistics();
   await AddUserIcons();
+  EditUserIconPartyGames({
+    container: podiumThirdPlace,
+    userId: data[0].players[0].computerId,
+    userCustomisationString: data[0].players[0].userIcon
+  });
+  console.log("podiumThirdPlace:", podiumThirdPlace);
   SetScriptLoaded('/scripts/party-games/online/online-settings.js');
 }
 
@@ -185,6 +211,7 @@ async function FetchInstructions() {
     PartyDisbanded();
     return;
   }
+  await UpdatePartyGameStatistics();
   if (currentPartyData.userInstructions.includes("DISPLAY_SELECT_QUESTION_TYPE")) {
     DisplaySelectQuestionType();
   }
@@ -201,16 +228,27 @@ async function FetchInstructions() {
     DisplayConfirmInput(currentPartyData.userInstructions);
   }
   else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(currentPartyData.userInstructions);
+    ChosePunishment(currentPartyData.playerTurn);
   }
   else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(currentPartyData.userInstructions);
+    ChoosingPunishment();
   }
   else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
     DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
   else if (currentPartyData.userInstructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
+  }
+  else if (currentPartyData.userInstructions.includes("RESET_QUESTION")) {
+    if (currentPartyData.userInstructions.includes("TIMER_EXPIRED:2")) {
+      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: -2 });
+    }
+    else if (currentPartyData.userInstructions.includes("TIMER_EXPIRED")) {
+      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: -1 });
+    }
+    else {
+      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true });
+    }
   }
   console.log(`FETCHING ${currentPartyData.userInstructions}`);
 }
@@ -225,17 +263,5 @@ function GetQuestion({ cardTitle, currentPartyData }) {
   } else {
     console.warn("Unknown questionType:", currentPartyData.questionType);
     return;
-  }
-}
-
-async function AddUserIcons() {
-  if (currentPartyData) {
-    for (let i = 0; i < currentPartyData.players.length; i++) {
-      createUserIconPartyGames({
-        container: waitingForPlayersIconContainer,
-        userId: currentPartyData.players[i].computerId,
-        userCustomisationString: currentPartyData.players[i].userIcon
-      });
-    }
   }
 }

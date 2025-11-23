@@ -72,11 +72,11 @@
 }
 
 .layer-eyes-slot {
-  z-index: 1;
+  z-index: 2;
 }
 
 .layer-mouth-slot {
-  z-index: 2;
+  z-index: 1;
 }
 
 .layer-head-slot {

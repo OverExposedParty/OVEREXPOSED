@@ -1,0 +1,116 @@
+[
+  {
+    "title": "PICK TRUTH OR DARE <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/pick-truth-or-dare/container.svg",
+          "alt": "pick truth or dare container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/pick-truth-or-dare/instructions.svg",
+          "alt": "pick truth or dare instructions"
+        }
+      ]
+    }
+  },
+  {
+    "title": "ANSWER OR PASS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/answer-or-pass/container.svg",
+          "alt": "pick truth or dare container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/answer-or-pass/instructions.svg",
+          "alt": "pick truth or dare instructions"
+        }
+      ]
+    }
+  },
+  {
+    "title": "COMPLETE THE PROMPT [ANSWERED] <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/complete-the-prompt/container.svg",
+          "alt": "complete the prompt container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/complete-the-prompt/instructions.svg",
+          "alt": "complete the prompt instructions"
+        }
+      ]
+    }
+  },
+  {
+    "title": "SELECT A PUNISHMENT [PASSED] <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/select-a-punishment/container.svg",
+          "alt": "select a punishment container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/select-a-punishment/instructions.svg",
+          "alt": "select a punishment instructions"
+        }
+      ]
+    }
+  },
+  {
+    "title": "PERFORM PUNISHMENT [PASSED] <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/perform-punishment/container.svg",
+          "alt": "perform punishment container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/perform-punishment/instructions.svg",
+          "alt": "perform punishment instructions"
+        }
+      ]
+    }
+  },
+  {
+    "title": "WAITING FOR PLAYER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+    "text": {
+      "images": [
+        {
+          "src": "/images/help-container/backgrounds/truth-or-dare.jpg",
+          "alt": "truth or dare background"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/waiting-for-player/container.svg",
+          "alt": "waiting for player container"
+        },
+        {
+          "src": "/images/help-container/how-to-play/online/truth-or-dare/waiting-for-player/instructions.svg",
+          "alt": "waiting for player instructions"
+        }
+      ]
+    }
+  }
+]

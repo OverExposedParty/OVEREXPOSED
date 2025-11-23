@@ -67,14 +67,10 @@
 <script>
     const gamemode = "would-you-rather";
     const sessionPartyType = "party-game-would-you-rather";
-    const helpContainerFile = "party-games/" + gamemode + '.json';
+    const helpContainerFile = "party-games-online/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#7CFFB2');
     document.documentElement.style.setProperty('--secondarypagecolour', '#55B97F');
-
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/would-you-rather/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/would-you-rather/tik-tok-icon.svg)');
-    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/would-you-rather/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>

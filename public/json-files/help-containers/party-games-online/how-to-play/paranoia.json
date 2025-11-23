@@ -1,0 +1,173 @@
+[
+    {
+        "title": "READ QUESTION <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/read-question/container.svg",
+                    "alt": "read question container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/read-question/instructions.svg",
+                    "alt": "read question instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT PLAYER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/select-player/container.svg",
+                    "alt": "select player container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/select-player/instructions.svg",
+                    "alt": "select player instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "YOU'VE BEEN SELECTED <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/youve-been-selected/container.svg",
+                    "alt": "youve been selected container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/youve-been-selected/instructions.svg",
+                    "alt": "youve been selected instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "ACCEPT OR PASS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/accept-or-pass/container.svg",
+                    "alt": "accept or pass container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/accept-or-pass/instructions.svg",
+                    "alt": "accept or pass instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "HAS PLAYER DONE PUNISHMENT [ACCEPT]<br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/has-player-done-punishment/container.svg",
+                    "alt": "has player done punishment container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/has-player-done-punishment/instructions.svg",
+                    "alt": "has player done punishment instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "RREVEAL VOTE [ACCEPT] <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/reveal-vote/container.svg",
+                    "alt": "reveal vote container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/reveal-vote/instructions.svg",
+                    "alt": "reveal vote instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "PLAYER HAS PASSED [PASS] <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/player-has-passed/container.svg",
+                    "alt": "player has passed container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/player-has-passed/instructions.svg",
+                    "alt": "player has passed instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/waiting-for-player/container.svg",
+                    "alt": "waiting for player container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/waiting-for-player/instructions.svg",
+                    "alt": "waiting for player instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYERS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/paranoia.jpg",
+                    "alt": "paranoia background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/waiting-for-players/container.svg",
+                    "alt": "waiting for players container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/paranoia/waiting-for-players/instructions.svg",
+                    "alt": "waiting for players instructions"
+                }
+            ]
+        }
+    }
+]

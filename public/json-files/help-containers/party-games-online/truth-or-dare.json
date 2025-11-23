@@ -1,6 +1,5 @@
-[
-    {
-        "title": "HOW TO PLAY",
-        "text": "You'll be prompted to pick between <highlight>Truth</highlight> or <highlight>Dare</highlight>.<br><br> <highlight>Truth</highlight> may reveal personal details or secrets.<br><br> <highlight>Dare</highlight> will require you to perform an action."
-    }
-]
+{
+    "additional-help-containers": [
+        "party-games-online/how-to-play/truth-or-dare.json"
+    ]
+}

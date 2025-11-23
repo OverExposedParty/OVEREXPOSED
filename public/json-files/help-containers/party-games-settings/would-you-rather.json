@@ -1,0 +1,8 @@
+{
+    "additional-help-containers": [
+        "party-games-settings/general.json",
+        "party-games-online/how-to-play/would-you-rather.json",
+        "party-gamemodes-settings/would-you-rather.json"
+
+    ]
+}

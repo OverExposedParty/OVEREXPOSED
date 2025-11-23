@@ -1,0 +1,7 @@
+{
+    "additional-help-containers": [
+        "party-games-online/waiting-rooms/general.json",
+        "party-games-online/how-to-play/never-have-i-ever.json",
+        "party-gamemodes-settings/never-have-i-ever.json"
+    ]
+}

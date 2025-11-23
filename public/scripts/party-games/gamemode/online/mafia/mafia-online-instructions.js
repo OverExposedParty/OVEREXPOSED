@@ -1,75 +1,59 @@
-let timeout;
+const nightTimer = getIncrementContainerValue("night-timer") * 1000;
+const dayTimer = getIncrementContainerValue("day-timer") * 1000;
+
+const mafiaDisplayRoleTimer = 7500;
+const displayPlayerKilledTimer = 7500;
 
 async function DisplayRole() {
-  const currentPartyData = await GetCurrentPartyData();
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  startTimer({ timeLeft: delay / 1000, duration: mafiaDisplayRoleTimer / 1000, selectedTimer: displayRoleContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_NIGHT_PHASE", nextDelay: nightTimer })
+
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer(delay / 1000, mafiaDisplayRoleTimer / 1000, displayRoleTimerWrapper);
-
-  displayRoleHeader.textContent = currentPartyData.players[index].role;
-  displayRoleDescription.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
+  displayRoleTitle.textContent = currentPartyData.players[index].role;
+  displayRoleText.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
 
   popUpRoleHeader.textContent = currentPartyData.players[index].role;
   popUpRoleDescription.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
 
   setActiveContainers(displayRoleContainer);
-  if (deviceId == hostDeviceId) {
-    if (timeout?.cancel) {
-      timeout.cancel();
-    }
-    timeout = null;
-    timeout = createCancelableTimeout(delay);
-    try {
-      await timeout.promise;
-    } catch (err) {
-      if (err.message === 'Timeout canceled') {
-        return;
-      } else {
-        throw err;
-      }
-    }
-    const nightTimer = getGameSetting(currentPartyData.gameSettings, "mafia-night-timer") * 1000;
-    currentPartyData.timer = new Date(Date.now() + nightTimer);
-    await SendInstruction({
-      instruction: "DISPLAY_NIGHT_PHASE",
-      partyData: currentPartyData,
-    });
-  }
 }
 
 async function DisplayNightPhase() {
+  const delay = (new Date(currentPartyData.timer) - Date.now());
+  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: selectCivilianWatchContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: displayCivilianWatchResponseContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: selectUserNightPhaseContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_NIGHT_PHASE_PART_TWO", nextDelay: null });
+
   sideButtonsContainer.classList.remove('disabled');
-  const currentPartyData = await GetCurrentPartyData();
+
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  displayRoleHeader.textContent = currentPartyData.players[index].role;
-  displayRoleDescription.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
-  const nightTimerLength = getGameSetting(currentPartyData.gameSettings, "mafia-night-timer") * 1000;
-  const timeLeft = (new Date(currentPartyData.timer) - Date.now());
+  displayRoleTitle.textContent = currentPartyData.players[index].role;
+  displayRoleText.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
   console.log("role: ", currentPartyData.players[index].role);
   console.log("index: ", index);
   if (currentPartyData.players[index].role == "civilian") {
     if (!selectCivilianWatchContainer.classList.contains('active') && !displayCivilianWatchResponseContainer.classList.contains('active')) {
-      if (currentPartyData.players[index].hasConfirmed == false) {
-        startTimer(timeLeft / 1000, nightTimerLength / 1000, selectCivilianWatchTimerWrapper);
-        startTimer(timeLeft / 1000, nightTimerLength / 1000, displayCivilianWatchResponseTimerWrapper);
-        InitializeCivilianWatch();
+      if (currentPartyData.players[index].hasConfirmed === true) {
+        selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
+      } else if (currentPartyData.players[index].hasConfirmed === false) {
+        selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('disabled'));
       }
-      else {
-        startTimer(timeLeft / 1000, nightTimerLength / 1000, waitingForPlayersTimerWrapper);
-        setActiveContainers(waitingForPlayersContainers);
-      }
+
+      InitializeCivilianWatch();
     }
   }
   else {
-    startTimer(timeLeft / 1000, nightTimerLength / 1000, selectUserVoteNightTimerWrapper);
-    setActiveContainers(selectUserVoteNightContainer);
-    const civilianButtons = selectUserVoteNightSelectUserContainer.querySelectorAll('button');
+    setActiveContainers(selectUserNightPhaseContainer);
+    const civilianButtons = selectUserNightPhaseButtonContainer.querySelectorAll('button');
     if (currentPartyData.players[index].hasConfirmed == true) {
-      selectUserVoteNightConfirmButton.classList.add('disabled');
+      selectUserNightPhaseConfirmButton.classList.add('disabled');
     }
     else {
-      selectUserVoteNightConfirmButton.classList.remove('disabled');
+      selectUserNightPhaseConfirmButton.classList.remove('disabled');
     }
 
     civilianButtons.forEach(civilianButton => {
@@ -80,74 +64,54 @@ async function DisplayNightPhase() {
   if (deviceId == hostDeviceId) {
     const allVotesSubmitted = currentPartyData.players.every(player => player.hasConfirmed === true);
 
-    if (timeout?.cancel) {
-      timeout.cancel();
-      timeout = null;
-    }
-    if (!allVotesSubmitted) {
-      timeout = createCancelableTimeout(timeLeft);
-      try {
-        await timeout.promise;
-      } catch (err) {
-        if (err.message === 'Timeout canceled') {
-          return;
-        } else {
-          throw err;
-        }
-      }
-    }
-    currentPartyData.timer = new Date(Date.now() + displayPlayerKilledTimer);
-    currentPartyData.phase = "day";
-    const mafiaVote = await GetMafiaVote();
-    currentPartyData.players = ResetVotes(currentPartyData.players);
+    if (!allVotesSubmitted) return;
     await SendInstruction({
-      instruction: "DISPLAY_PLAYER_KILLED:" + mafiaVote,
+      instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
       partyData: currentPartyData,
     });
   }
 }
 
+async function DisplayNightPhasePartTwo() {
+  if (deviceId != hostDeviceId) return;
+  currentPartyData.phase = "day";
+  const mafiaVote = GetMafiaVote();
+  currentPartyData.players = ResetVotes(currentPartyData.players);
+  await SendInstruction({
+    instruction: "DISPLAY_PLAYER_KILLED:" + mafiaVote,
+    partyData: currentPartyData,
+    timer: new Date(Date.now() + displayPlayerKilledTimer),
+  });
+}
+
 async function DisplayPlayerKilled(instruction) {
+  const delay = (new Date(currentPartyData.timer) - Date.now());
+  startTimer({ timeLeft: delay / 1000, duration: displayPlayerKilledTimer / 1000, selectedTimer: displayPlayerKilledContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_PLAYER_KILLED_PART_TWO", nextDelay: null });
+
   const parsedInstructions = parseInstruction(instruction);
-  const currentPartyData = await GetCurrentPartyData();
+
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const rawDialogue = mafiaDialogueKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
   const playerKilledIndex = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.reason)
   let finalDialogue;
 
-  if (playerKilledIndex !== undefined) {
+  if (playerKilledIndex !== -1 || parsedInstructions.reason !== "") {
     const playerKilled = currentPartyData.players[playerKilledIndex].username;
-    finalDialogue = rawDialogue.replace("[Player Name]", playerKilled); //Get Player Killed
-    currentPartyData.players[playerKilledIndex].status = 'dead';
-    RemoveUserButton(selectUserVoteDaySelectUserContainer, currentPartyData.players[playerKilledIndex].computerId);
-    RemoveUserButton(selectUserVoteNightSelectUserContainer, currentPartyData.players[playerKilledIndex].computerId);
+    finalDialogue = rawDialogue.replace("[Player Name]", playerKilled);
+    //currentPartyData.players[playerKilledIndex].status = 'dead';
+    //RemoveUserButton(selectUserDayPhaseContainer, currentPartyData.players[playerKilledIndex].computerId);
+    //RemoveUserButton(selectUserNightPhaseContainer, currentPartyData.players[playerKilledIndex].computerId);
   }
   else {
     finalDialogue = mafiaDialogueNoKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
   }
   displayPlayerKilledText.textContent = finalDialogue;
-  const timeLeft = (new Date(currentPartyData.timer) - Date.now());
-  startTimer(timeLeft / 1000, displayPlayerKilledTimer / 1000, displayPlayerKilledTimerWrapper);
-
   setActiveContainers(displayPlayerKilledContainer);
+}
 
+async function DisplayPlayerKilledPartTwo() {
   if (deviceId == hostDeviceId) {
-    if (timeout?.cancel) {
-      timeout.cancel();
-    }
-    timeout = null;
-    timeout = createCancelableTimeout(timeLeft);
-    try {
-      await timeout.promise;
-    } catch (err) {
-      if (err.message === 'Timeout canceled') {
-        return;
-      } else {
-        throw err;
-      }
-    }
-    const dayTimer = getGameSetting(currentPartyData.gameSettings, "mafia-day-timer") * 1000;
-    currentPartyData.timer = new Date(Date.now() + dayTimer);
     currentPartyData.players = ResetVotes(currentPartyData.players);
     const checkGameOver = await CheckGameOver();
     if (checkGameOver != null) {
@@ -160,61 +124,32 @@ async function DisplayPlayerKilled(instruction) {
       await SendInstruction({
         instruction: "DISPLAY_DAY_PHASE_DISCUSSION",
         partyData: currentPartyData,
+        timer: new Date(Date.now() + dayTimer)
       });
     }
   }
 }
 
 async function DisplayDayPhaseDiscussion() {
-  const currentPartyData = await GetCurrentPartyData();
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-
-  const dayTimerLength = getGameSetting(currentPartyData.gameSettings, "mafia-day-timer") * 1000;
-  const timeLeft = (new Date(currentPartyData.timer) - Date.now());
-  startTimer(timeLeft / 1000, dayTimerLength / 1000, displayDayPhaseDiscussionContainer);
-  setActiveContainers(displayDayPhaseDiscussionContainer);
-
-  if (deviceId == hostDeviceId) {
-    if (timeout?.cancel) {
-      timeout.cancel();
-    }
-    timeout = null;
-
-    console.log("timeLeft: " + timeLeft);
-    timeout = createCancelableTimeout(timeLeft);
-    try {
-      await timeout.promise;
-    } catch (err) {
-      if (err.message === 'Timeout canceled') {
-        return;
-      } else {
-        throw err;
-      }
-    }
-    const dayTimer = getGameSetting(currentPartyData.gameSettings, "mafia-day-timer") * 1000;
-    currentPartyData.timer = new Date(Date.now() + dayTimer);
-    await SendInstruction({
-      instruction: "DISPLAY_DAY_PHASE_VOTE",
-      partyData: currentPartyData,
-    });
-  }
+  const delay = (new Date(currentPartyData.timer) - Date.now());
+  startTimer({ timeLeft: delay / 1000, duration: dayTimer / 1000, selectedTimer: displayDayTimerContainer });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_DAY_PHASE_VOTE", nextDelay: dayTimer });
+  setActiveContainers(displayDayTimerContainer);
 }
 
 async function DisplayDayPhaseVote() {
-  const currentPartyData = await GetCurrentPartyData();
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const delay = (new Date(currentPartyData.timer) - Date.now());
+  startTimer({ timeLeft: delay / 1000, duration: dayTimer / 1000, selectedTimer: selectUserDayPhaseContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO", nextDelay: dayTimer });
 
-  const dayTimerLength = getGameSetting(currentPartyData.gameSettings, "mafia-day-timer") * 1000;
-  const timeLeft = (new Date(currentPartyData.timer) - Date.now());
-  startTimer(timeLeft / 1000, dayTimerLength / 1000, selectUserVoteDayTimerWrapper, true);
-  startTimer(timeLeft / 1000, dayTimerLength / 1000, selectUserVoteDayTimerWrapper);
-  setActiveContainers(selectUserVoteDayContainer);
-  const usersButtons = selectUserVoteDaySelectUserContainer.querySelectorAll('button');
+  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  setActiveContainers(selectUserDayPhaseContainer);
+  const usersButtons = selectUserDayPhaseButtonContainer.querySelectorAll('button');
   if (currentPartyData.players[index].hasConfirmed == true) {
-    selectUserVoteDayConfirmButton.classList.add('disabled');
+    selectUserDayPhaseConfirmButton.classList.add('disabled');
   }
   else {
-    selectUserVoteDayConfirmButton.classList.remove('disabled');
+    selectUserDayPhaseConfirmButton.classList.remove('disabled');
   }
 
   usersButtons.forEach(usersButton => {
@@ -224,97 +159,75 @@ async function DisplayDayPhaseVote() {
 
   if (deviceId == hostDeviceId) {
     const allVotesSubmitted = currentPartyData.players.every(player => player.hasConfirmed === true);
-    if (timeout?.cancel) {
-      timeout.cancel();
-      timeout = null;
-    }
-
-    if (!allVotesSubmitted) {
-      timeout = createCancelableTimeout(timeLeft);
-      try {
-        await timeout.promise;
-      } catch (err) {
-        if (err.message === 'Timeout canceled') {
-          return;
-        } else {
-          throw err;
-        }
-      }
-    }
-
-    currentPartyData.timer = new Date(Date.now() + displayPlayerKilledTimer);
-    const townVote = await GetTownVote();
-    currentPartyData.players = ResetVotes(currentPartyData.players);
+    if (!allVotesSubmitted) return;
     await SendInstruction({
-      instruction: "DISPLAY_TOWN_VOTE:" + townVote,
+      instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
       partyData: currentPartyData,
     });
   }
 }
 
+async function DisplayDayPhaseVotePartTwo() {
+  if (deviceId != hostDeviceId) return;
+  const townVote = await GetTownVote();
+  currentPartyData.players = ResetVotes(currentPartyData.players);
+  await SendInstruction({
+    instruction: "DISPLAY_TOWN_VOTE:" + townVote,
+    partyData: currentPartyData,
+    timer: new Date(Date.now() + displayPlayerKilledTimer),
+  });
+}
+
 async function DisplayTownVote(instruction) {
+  const delay = (new Date(currentPartyData.timer) - Date.now());
+  startTimer({ timeLeft: delay / 1000, duration: displayPlayerKilledTimer / 1000, selectedTimer: displayTownVoteContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_TOWN_VOTE_PART_TWO", nextDelay: null });
+
   const parsedInstructions = parseInstruction(instruction);
-  const currentPartyData = await GetCurrentPartyData();
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const rawDialogue = mafiaDialogueTownVote[Math.floor(Math.random() * mafiaDialogueTownVote.length)];
   const playerVotedOutIndex = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.reason)
   if (playerVotedOutIndex == "") {
     const playerVotedOut = currentPartyData.players[playerVotedOutIndex].username;
     finalDialogue = rawDialogue.replace("[Player Name]", playerVotedOut); //Get Player Killed
-    currentPartyData.players[playerVotedOutIndex].status = 'dead';
-    RemoveUserButton(selectUserVoteDaySelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
-    RemoveUserButton(selectUserVoteNightSelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
+    //currentPartyData.players[playerVotedOutIndex].status = 'dead';
+    //RemoveUserButton(selectUserVoteDaySelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
+    //RemoveUserButton(selectUserVoteNightSelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
   }
   else {
     finalDialogue = mafiaDialogueTownNoVote[Math.floor(Math.random() * mafiaDialogueKill.length)];
   }
-  displayPlayerKilledText.textContent = finalDialogue;
-  const timeLeft = (new Date(currentPartyData.timer) - Date.now());
-  startTimer(timeLeft / 1000, displayPlayerKilledTimer / 1000, displayTownVoteTimerWrapper);
-  setActiveContainers(displayTownVoteContainer);
+  displayTownVoteText.textContent = finalDialogue;
 
-  if (deviceId == hostDeviceId) {
-    if (timeout?.cancel) {
-      timeout.cancel();
-    }
-    timeout = null;
-    timeout = createCancelableTimeout(timeLeft);
-    try {
-      await timeout.promise;
-    } catch (err) {
-      if (err.message === 'Timeout canceled') {
-        return;
-      } else {
-        throw err;
-      }
-    }
-    const nightTimer = getGameSetting(currentPartyData.gameSettings, "mafia-day-timer") * 1000;
-    currentPartyData.timer = new Date(Date.now() + nightTimer);
-    const checkGameOver = await CheckGameOver();
-    if (checkGameOver != null) {
-      await SendInstruction({
-        instruction: checkGameOver,
-        partyData: currentPartyData,
-      });
-    }
-    else {
-      await SendInstruction({
-        instruction: "DISPLAY_NIGHT_PHASE",
-        partyData: currentPartyData,
-      });
-    }
+  setActiveContainers(displayTownVoteContainer);
+}
+
+async function DisplayTownVotePartTwo() {
+  if (deviceId != hostDeviceId) return;
+  const checkGameOver = await CheckGameOver();
+  if (checkGameOver != null) {
+    await SendInstruction({
+      instruction: checkGameOver,
+      partyData: currentPartyData,
+    });
+  }
+  else {
+    await SendInstruction({
+      instruction: "DISPLAY_NIGHT_PHASE",
+      partyData: currentPartyData,
+      timer: new Date(Date.now() + nightTimer),
+    });
   }
 }
 
 async function DisplayGameOver(instruction) {
-  setActiveContainers(displayGameOverContainer);
   const parsedInstructions = parseInstruction(instruction);
   if (parsedInstructions.reason == "MAFIOSO") {
-    displayGameOverHeader.textContent = "MAFIA WIN";
+    displayGameOverTitle.textContent = "MAFIA WIN";
     displayGameOverText.textContent = "MAFIA HAVE OUTLASTED THE CIVILIANS";
   }
   else if (parsedInstructions.reason == "CIVILIAN") {
-    displayGameOverHeader.textContent = "CIVILIAN WIN";
+    displayGameOverTitle.textContent = "CIVILIAN WIN";
     displayGameOverText.textContent = "CIVILIAN HAVE OUTLASTED THE MAFIA";
   }
+  setActiveContainers(displayGameOverContainer);
 }

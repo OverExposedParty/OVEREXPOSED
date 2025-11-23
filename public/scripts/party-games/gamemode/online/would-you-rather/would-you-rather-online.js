@@ -16,7 +16,7 @@ gameContainers.push(
 );
 async function SetPageSettings() {
   buttonChooseOption.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
+    currentPartyData = await GetCurrentPartyData();
     selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
     const splitQuestion = SplitQuestion(selectedQuestionObj.question.replace("Would you rather ", ""))
     selectOptionQuestionTextA.textContent = "A: " + splitQuestion.a;
@@ -37,27 +37,31 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     let parsedInstructions = parseInstruction(currentPartyData.userInstructions);
     if (parsedInstructions.instruction === "DISPLAY_PUNISHMENT_TO_USER") {
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      await ResetQuestion({
-        currentPartyData: currentPartyData,
-        icons: icons
-      });
+      const aVoteCount = currentPartyData.players.filter(player => player.vote === "A").length;
+      const bVoteCount = currentPartyData.players.filter(player => player.vote === "B").length;
+      const winningVote = aVoteCount === bVoteCount ? null : aVoteCount > bVoteCount ? "A" : "B";
+      await SendInstruction({
+        instruction: "RESET_QUESTION:" + winningVote
+      })
     }
     else {
-      setUserBool(deviceId, true, true);
+      await setUserBool(deviceId, true, true);
     }
   });
 
+  AddTimerToContainer(selectOptionContainer);
+  AddTimerToContainer(cardContainerPrivate.querySelector('.main-image-container'));
+  AddTimerToContainer(waitingForPlayersContainer);
+  AddTimerToContainer(resultsChartContainer);
 
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
-  const currentPartyData = existingData[0];
+  currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
   console.log("Loaded JSON files");
@@ -94,7 +98,7 @@ function updateTextContainer(text, cardType) {
 async function initialisePage() {
   const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
-  const currentPartyData = data[0];
+  currentPartyData = data[0];
   if (data.length > 0) {
     isPlaying = true;
     const index = data[0].players.findIndex(player => player.computerId === deviceId);
@@ -111,21 +115,27 @@ async function initialisePage() {
     data[0].players[index].socketId = socket.id
     joinParty(partyCode);
     if (data[0].isPlaying === true) {
-      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      partyRulesSettings = parseGameRules(data[0].gameRules)
       for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
-        if (!(partyRulesSettings[i] == "take-a-sip")) {
+        if (partyRulesSettings[i].includes("drink-punishment")) {
+          settingsButton = createUserButton("take-a-shot", "Take A Shot");
+          selectPunishmentButtonContainer.appendChild(settingsButton);
+        }
+        else if (!/\d/.test(partyRulesSettings[i])) {
           AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
+          settingsButton = createUserButton(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }), formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode }));
+          selectPunishmentButtonContainer.appendChild(settingsButton);
         }
       }
-      await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
       await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
       if (deviceId == hostDeviceId && data[0].userInstructions == "") {
         await SendInstruction({
           instruction: "DISPLAY_PRIVATE_CARD",
           updateUsersReady: false,
           updateUsersConfirmation: false,
-          fetchInstruction: true
+          fetchInstruction: true,
+          timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
         });
       }
       else {
@@ -136,6 +146,7 @@ async function initialisePage() {
         });
         FetchInstructions();
       }
+      SetPartyGameStatistics();
       await AddUserIcons();
       SetScriptLoaded('/scripts/party-games/online/online-settings.js');
     }
@@ -143,46 +154,46 @@ async function initialisePage() {
 }
 
 async function FetchInstructions() {
-  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await res.json();
-  if (!data || data.length === 0) {
+  currentPartyData = await GetCurrentPartyData();
+  if (currentPartyData == undefined || currentPartyData.length === 0) {
     PartyDisbanded();
     return;
   }
-
-  if (data[0].userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
-    DisplayPrivateCard(data[0].userInstructions);
+  await UpdatePartyGameStatistics();
+  if (currentPartyData.userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
+    DisplayPrivateCard(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
     DisplayVoteResults();
   }
-  else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
-    WaitingForPlayer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("WAITING_FOR_PLAYER")) {
+    WaitingForPlayer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
+    ChoosingPunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("PUNISHMENT_OFFER")) {
+    PunishmentOffer(currentPartyData.userInstructions);
   }
-}
-
-async function AddUserIcons() {
-  const currentPartyData = await GetCurrentPartyData();
-  console.log(currentPartyData);
-  if (currentPartyData) {
-    for (let i = 0; i < currentPartyData.players.length; i++) {
-      createUserIconPartyGames({
-        container: waitingForPlayersIconContainer,
-        userId: currentPartyData.players[i].computerId,
-        userCustomisationString: currentPartyData.players[i].userIcon
-      });
+  else if (currentPartyData.userInstructions.includes("GAME_OVER")) {
+    SetPartyGameStatisticsGameOver();
+  }
+  else if (currentPartyData.userInstructions.includes("RESET_QUESTION")) {
+    if (hostDeviceId != deviceId) return;
+    const parsedInstructions = parseInstruction(currentPartyData.userInstructions)
+    if (parsedInstructions.reason == "A" || parsedInstructions.reason == "B") {
+      for (let i = 0; i < currentPartyData.players.length; i++) {
+        if (currentPartyData.players[i].vote == parsedInstructions.reason && !currentPartyData.players[i].sockedtId !== "DISCONNECTED") {
+          currentPartyData.players[i].score++;
+        }
+      }
     }
+    await ResetQuestion({ nextPlayer: true, timer: Date.now() + getIncrementContainerValue("time-limit") * 1000 });
   }
 }

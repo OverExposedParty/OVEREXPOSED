@@ -2,45 +2,52 @@
     "mafia-packs": [
         {
             "pack-name": "mafioso",
+            "pack-type": "role",
             "mafia-type": "mafioso",
             "pack-colour": "var(--mafiosoColour)",
             "pack-secondary-colour": "var(--secondaryMafiosoColour)",
             "pack-active": true
         },
         {
-            "pack-name": "inpsector",
+            "pack-name": "inspector",
+            "pack-type": "role",
             "mafia-type": "civilian",
             "pack-colour": "var(--civilianColour)",
             "pack-secondary-colour": "var(--secondaryCivilianColour)",
+            "settings-dependency": "mafia-inspector",
             "pack-active": true
         },
         {
             "pack-name": "godfather",
+            "pack-type": "role",
             "mafia-type": "mafioso",
             "pack-colour": "var(--mafiosoColour)",
             "pack-secondary-colour": "var(--secondaryMafiosoColour)",
-            "pack-active": true
+            "pack-active": false
         },
         {
             "pack-name": "mayor",
+            "pack-type": "role",
             "mafia-type": "civilian",
             "pack-colour": "var(--civilianColour)",
             "pack-secondary-colour": "var(--secondaryCivilianColour)",
-            "pack-active": true
+            "pack-active": false
         },
         {
             "pack-name": "serial-killer",
+            "pack-type": "role",
             "mafia-type": "neautral",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-active": true
+            "pack-active": false
         },
         {
             "pack-name": "lawyer",
+            "pack-type": "role",
             "mafia-type": "neautral",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",
-            "pack-active": true
+            "pack-active": false
         }
     ]
 }

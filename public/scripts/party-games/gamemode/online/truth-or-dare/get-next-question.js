@@ -23,10 +23,11 @@ function getNextQuestion(type) {
 
     // Check if there's a punishment key in the selected question
     const punishment = selectedQuestion["punishment"] ? selectedQuestion["punishment"] : null;
+    const questionAlternatives = selectedQuestion["question-alternatives"] ? selectedQuestion["question-alternatives"] : null;
 
     currentQuestionIndex++;
 
-    return { question: selectedQuestion['question'], cardType: cardType, punishment: punishment };
+    return { question: selectedQuestion['question'], cardType: cardType, punishment: punishment, questionAlternatives: questionAlternatives || [] };
 }
 function updateTruthOrDareText(type) {
     if (type == 'truth') {

@@ -35,9 +35,6 @@ a:hover {
     --bordersize: 5px;
     --headerheight: 5vh;
     --cardRatio: 1/1.64044950946;
-
-    --tiktokicon: url(/images/icons/overexposed/tik-tok-icon.svg);
-    --instagramicon: url(/images/icons/overexposed/instagram-icon.svg);
 }
 
 /* Customize the scrollbar */
@@ -60,6 +57,10 @@ a:hover {
 /* Scrollbar corner */
 ::-webkit-scrollbar-corner {
     background-color: transparent;
+}
+
+.svg-primary-fill {
+    fill: var(--primarypagecolour);
 }
 
 .header {
@@ -362,33 +363,30 @@ body {
     width: 25%;
 }
 
+.social-media-image-container a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
 .social-media-image {
     transition: transform 0.3s;
 }
 
-.social-media-image:hover {
-    transform: scale(1.25);
+.social-media-icon {
+    height: 75%;
+    width: auto;
+}
+.social-media-icon:hover {
+    transform: scale(1.1);
 }
 
-.social-media-image.tiktok {
-    height: 5vh;
-    width: 5vh;
-    background-image: var(--tiktokicon);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 907;
+.social-media-icon:hover .svg-primary-fill {
+    fill: var(--secondarypagecolour);
 }
 
-.social-media-image.instagram {
-    height: 5vh;
-    width: 5vh;
-    background-image: var(--instagramicon);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 907;
-}
 
 @media (orientation: portrait) {
     :root {

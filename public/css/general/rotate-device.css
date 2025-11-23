@@ -36,6 +36,20 @@
     background-position: center;
 }
 
+.rotate-icon .cls-1 {
+  fill: var(--primarypagecolour);
+}
+
+.rotate-icon .cls-2 {
+  fill: var(--secondarybackgroundcolour);
+  stroke: var(--primarypagecolour);
+  stroke-width: 43px;
+  stroke-miterlimit: 10;
+}
+
+
+
+
 @keyframes rotate-and-disappear {
     0% {
         transform: rotate(0deg);

@@ -1,6 +1,59 @@
 [
     {
-        "title": "OEs customisation",
-        "text": "<highlight>OEs</highlight> are in game icons used in your multiplayer sessions. this page allows you to enable and disable specific packs."
+        "title": "ACTYIVE OE PACKS <br>[IMG:/images/icons/settings-type/oes-customisation.svg ALT:OEs Customisation Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/oes-customisation.jpg",
+                    "alt": "OEs customisation background"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/active-oe-packs/container.svg",
+                    "alt": "OE packs container"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/active-oe-packs/instructions.svg",
+                    "alt": "OE packs instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DISABLE OEs <br>[IMG:/images/icons/settings-type/oes-customisation.svg ALT:OEs Customisation Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/oes-customisation.jpg",
+                    "alt": "OEs customisation background"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/disable-oes/container.svg",
+                    "alt": "disable OEs container"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/disable-oes/instructions.svg",
+                    "alt": "disable OEs instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "CUSTOMISE OEs <br>[IMG:/images/icons/settings-type/oes-customisation.svg ALT:OEs Customisation Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/oes-customisation.jpg",
+                    "alt": "OEs customisation background"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/customise-oe/container.svg",
+                    "alt": "customise OEs container"
+                },
+                {
+                    "src": "/images/help-container/oes-customisation/customise-oe/instructions.svg",
+                    "alt": "customise OEs instructions"
+                }
+            ]
+        }
     }
 ]

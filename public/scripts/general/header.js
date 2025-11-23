@@ -336,5 +336,5 @@ window.addEventListener('load', updateVh);
 window.addEventListener('resize', updateVh);
 
 (async () => {
-  await LoadScript('/scripts/general/splash-screen.js');
+    await LoadScript('/scripts/general/splash-screen.js');
 })();

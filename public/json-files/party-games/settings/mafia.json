@@ -1,10 +1,11 @@
 {
     "mafia-settings": [
         {
-            "settings-name": "mafia-mafioso",
+            "settings-name": "mafioso",
             "settings-colour": "var(--mafiosoColour)",
             "settings-secondary-colour": "var(--secondaryMafiosoColour)",
             "settings-restriction": "nsfw",
+            "settings-type": "role",
             "settings-active": true,
             "button-type": "increment",
             "button-designation": "mafioso",
@@ -14,10 +15,11 @@
             "button-maximum-value": 15
         },
         {
-            "settings-name": "mafia-civilian",
+            "settings-name": "inspector",
             "settings-colour": "var(--civilianColour)",
             "settings-secondary-colour": "var(--secondaryCivilianColour)",
             "settings-restriction": "nsfw",
+            "settings-type": "role",
             "settings-active": true,
             "button-type": "increment",
             "button-designation": "civilian",
@@ -31,32 +33,35 @@
             "settings-colour": "var(--backgroundcolour)",
             "settings-secondary-colour": "var(--secondarybackgroundcolour)",
             "settings-restriction": "nsfw",
+            "settings-type": "gamemode-settings",
             "settings-active": true,
             "button-type": "increment",
             "button-designation": "neautral",
             "button-initial-value": 60,
             "button-increment-value": 30,
             "button-minimum-value": 30,
-            "button-maximum-value": 180
+            "button-maximum-value": 600
         },
         {
             "settings-name": "night-timer",
             "settings-colour": "var(--backgroundcolour)",
             "settings-secondary-colour": "var(--secondarybackgroundcolour)",
             "settings-restriction": "nsfw",
+            "settings-type": "gamemode-settings",
             "settings-active": true,
             "button-type": "increment",
             "button-designation": "neautral",
             "button-initial-value": 60,
             "button-increment-value": 30,
             "button-minimum-value": 30,
-            "button-maximum-value": 180
+            "button-maximum-value": 600
         },
         {
             "settings-name": "anonymous-vote",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
+            "settings-type": "gamemode-settings",
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -65,7 +70,16 @@
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
+            "settings-type": "gamemode-settings",
             "settings-active": true,
+            "button-type": "toggle"
+        },
+        {
+            "settings-name": "online",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "sfw",
+            "settings-active": false,
             "button-type": "toggle"
         }
     ]

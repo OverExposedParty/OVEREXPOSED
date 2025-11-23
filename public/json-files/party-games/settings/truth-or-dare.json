@@ -1,11 +1,11 @@
 {
     "truth-or-dare-settings": [
         {
-            "settings-name": "drink-punishment",
+            "settings-name": "take-a-shot",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
             "settings-restriction": "nsfw",
-            "settings-active": false,
+            "settings-active": true,
             "button-type": "toggle"
         },
         {
@@ -31,6 +31,18 @@
             "settings-restriction": "sfw",
             "settings-active": true,
             "button-type": "toggle"
+        },
+        {
+            "settings-name": "time-limit",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "online",
+            "settings-active": true,
+            "button-type": "increment",
+            "button-initial-value": 60,
+            "button-increment-value": 30,
+            "button-minimum-value": 30,
+            "button-maximum-value": 150
         }
     ]
 }

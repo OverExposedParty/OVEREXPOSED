@@ -1,3 +1,7 @@
+let partyRulesSettings;
+
+const resultTimerDuration = 5000;
+
 async function SendInstruction({
   instruction = null,
   updateUsersReady = null,
@@ -5,7 +9,8 @@ async function SendInstruction({
   updateUsersVote = null,
   partyData = null,
   fetchInstruction = false,
-  isPlaying = true
+  isPlaying = true,
+  timer = null
 }) {
   currentPartyData = partyData;
 
@@ -46,8 +51,15 @@ async function SendInstruction({
 
   if (updateUsersVote !== null) {
     currentPartyData.players.forEach(player => {
-      player.hasConfirmed = updateUsersVote;
+      player.vote = updateUsersVote;
     });
+  }
+
+  if (timer !== null) {
+    currentPartyData.timer = timer;
+    if (timeout?.cancel) {
+      timeout.cancel();
+    }
   }
 
   // Use existing userInstructions if instruction param is null
@@ -68,7 +80,10 @@ async function SendInstruction({
     score: currentPartyData.score,
     timer: currentPartyData.timer,
     questionType: currentPartyData.questionType,
-    isPlaying: isPlaying
+    round: currentPartyData.round,
+    roundPlayerTurn: currentPartyData.roundPlayerTurn,
+    isPlaying: isPlaying,
+    vote: currentPartyData.vote
   });
   if (fetchInstruction) {
     FetchInstructions();
@@ -167,21 +182,32 @@ function ClearIcons() {
   }
 }
 
-async function ResetQuestion({ currentPartyData, icons, instruction = "DISPLAY_PRIVATE_CARD", incrementScore = 0 }) {
+async function ResetQuestion({ icons = null, instruction = "DISPLAY_PRIVATE_CARD", incrementScore = 0, timer = null, playerIndex = null }) {
+  if (hostDeviceId !== deviceId) return;
+  console.log(currentPartyData);
   const playerCount = currentPartyData.players.length;
 
   // Move to next card
   currentPartyData.currentCardIndex++;
-  if(currentPartyData.playerTurn !== undefined){
-      currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
+  if (currentPartyData.playerTurn !== undefined) {
+    currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
+  }
+  else if (playerIndex !== null) {
+    currentPartyData.players[playerIndex].score += incrementScore;
   }
   // Reset each player's status and icon
   for (let i = 0; i < playerCount; i++) {
     currentPartyData.players[i].isReady = false;
     currentPartyData.players[i].hasConfirmed = false;
+    currentPartyData.players[i].vote = null;
+    if (icons !== null) {
+      icons[i].classList.remove('yes');
+      icons[i].classList.remove('no');
+    }
+  }
 
-    icons[i].classList.remove('yes');
-    icons[i].classList.remove('no');
+  if (timer !== null) {
+    currentPartyData.timer = timer;
   }
 
   await updateOnlineParty({
@@ -189,7 +215,8 @@ async function ResetQuestion({ currentPartyData, icons, instruction = "DISPLAY_P
     players: currentPartyData.players,
     lastPinged: Date.now(),
     userInstructions: instruction,
-    currentCardIndex: currentPartyData.currentCardIndex
+    currentCardIndex: currentPartyData.currentCardIndex,
+    timer: currentPartyData.timer
   });
 }
 
@@ -204,11 +231,6 @@ function createUserButton(id, text) {
   button.id = id;
   button.textContent = text;
   return button;
-}
-
-function parseGameRules(settingsString) {
-  if (!settingsString) return [];
-  return settingsString.split(',').filter(Boolean);
 }
 
 function formatDashedString({ input, gamemode = null, seperator = ' ', uppercase = true }) {
@@ -321,7 +343,6 @@ function DisplayCard(card, questionObject) {
     const packNameLower = pack.packName.toLowerCase();
     return packNameLower === searchPackName;
   });
-
   if (matchedPack) {
     const imageUrl = matchedPack.packCard ? matchedPack.packCard : `/images/blank-cards/${gamemode}-blank-card.svg`;
     cardImage.src = imageUrl;
@@ -333,12 +354,35 @@ function DisplayCard(card, questionObject) {
   cardType.textContent = questionObject.cardType;
 }
 
-async function ChosePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
+async function ChoosingPunishment(index = null) {
+  timeout?.cancel();
+  stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
+  if (index === null) {
+    index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
+  }
+  currentPlayer = currentPartyData.players[index];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
-  console.log("parsedInstructions.deviceId", parsedInstructions.deviceId);
-  if (deviceId == parsedInstructions.deviceId) {
+  if (currentPartyData.players[index].computerId == deviceId) {
+    setActiveContainers(selectPunishmentContainer);
+  }
+  else {
+    SetWaitingForPlayer({
+      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomText: "Choosing Punishment...",
+      player: currentPlayer
+    });
+    setActiveContainers(waitingForPlayerContainer);
+  }
+}
+
+async function ChosePunishment(index = null) {
+  timeout?.cancel();
+  stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
+  let parsedInstructions = parseInstruction(currentPartyData.userInstructions)
+  if (index === null) {
+    index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
+  }
+  if (deviceId == currentPartyData.players[index].computerId) {
     if (parsedInstructions.reason == "DRINK_WHEEL") {
       setActiveContainers(drinkWheelContainer);
     }
@@ -367,4 +411,39 @@ async function ChosePunishment(instruction) {
     });
     setActiveContainers(waitingForPlayerContainer);
   }
+}
+
+function CheckSettingsExists(key) {
+  if (!Array.isArray(partyRulesSettings)) return false;
+  return partyRulesSettings.some(rule => rule.includes(key.toLowerCase()));
+}
+
+async function AddUserIcons() {
+  if (currentPartyData) {
+    for (let i = 0; i < currentPartyData.players.length; i++) {
+      createUserIconPartyGames({
+        container: waitingForPlayersIconContainer,
+        userId: currentPartyData.players[i].computerId,
+        userCustomisationString: currentPartyData.players[i].userIcon
+      });
+    }
+  }
+}
+
+function DisplayWaitingForPlayers(confirmation = true) {
+  index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+
+  for (let i = 0; i < currentPartyData.players.length; i++) {
+    const player = currentPartyData.players[i];
+    const check = confirmation ? player.hasConfirmed : player.isReady;
+
+    if (check === true) {
+      icons[i].classList.add('yes');
+    } else if (check === false) {
+      icons[i].classList.remove('yes');
+    }
+  }
+  currentPartyData.players[index].lastPing = Date.now();
+  setActiveContainers(waitingForPlayersContainer);
 }

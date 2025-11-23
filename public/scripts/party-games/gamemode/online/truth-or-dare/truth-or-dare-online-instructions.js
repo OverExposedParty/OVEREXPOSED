@@ -1,14 +1,23 @@
 async function DisplaySelectQuestionType() {
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectQuestionTypeContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper') });
+  if (selectPunishmentButtonContainer.childElementCount == 0) {
+    SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:TIME_EXPIRED", nextDelay: null })
+  }
+  else {
+    SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT", nextDelay: null })
+  }
+
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
-  await UpdatePartyGameStatistics();
   if (deviceId === currentPlayer.computerId) {
-    if(currentPartyData.currentCardIndex > numberOfTruthQuestions - 1){
+    if (currentPartyData.currentCardIndex > numberOfTruthQuestions - 1) {
       selectQuestionTypeButtonTruth.classList.add('disabled');
     }
-    if(currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1){
+    if (currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1) {
       selectQuestionTypeButtonDare.classList.add('disabled');
     }
-    if(currentPartyData.currentCardIndex > numberOfTruthQuestions - 1 && currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1){
+    if (currentPartyData.currentCardIndex > numberOfTruthQuestions - 1 && currentPartyData.currentCardSecondIndex > numberOfDareQuestions - 1) {
       SendInstruction({
         instruction: "GAME_OVER"
       });
@@ -19,7 +28,7 @@ async function DisplaySelectQuestionType() {
       userCustomisationString: currentPlayer.userIcon
     });
     setActiveContainers(selectQuestionTypeContainer);
-  } else {  
+  } else {
     SetWaitingForPlayer({
       waitingForRoomTitle: "Waiting for " + currentPlayer.username,
       waitingForRoomText: "Selecting Truth or Dare...",
@@ -29,44 +38,64 @@ async function DisplaySelectQuestionType() {
   }
 }
 
-async function DisplayWaitingForPlayers(currentPartyData, index, confirmation = true) {
-  setActiveContainers(waitingForPlayersContainer);
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-  let boolCheck;
-  if (confirmation === true) {
-    boolCheck = currentPartyData.players.map(player => player.hasConfirmed);
-  } else {
-    boolCheck = currentPartyData.players.map(player => player.isReady);
+async function DisplayPublicCard() {
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: gameContainerPublic.querySelector('.main-image-container').querySelector('.timer-wrapper') });
+  if (selectPunishmentButtonContainer.childElementCount == 0) {
+    SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:TIME_EXPIRED", nextDelay: null })
+  }
+  else {
+    SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT", nextDelay: null })
   }
 
-  for (let i = 0; i < boolCheck.length; i++) {
-    if (boolCheck[i] === true) {
-      icons[i]?.classList.add('yes');
-    } else {
-      icons[i]?.classList.remove('yes');
-    }
-  }
-
-  currentPartyData.players[index].lastPing = new Date();
-
-  await updateOnlineParty({
-    partyId: partyCode,
-    players: currentPartyData.players,
-    lastPinged: Date.now(),
-  });
-}
-
-async function ChoosingPunishment(instruction) {
-  let parsedInstructions = parseInstructionDeviceId(instruction);
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
-
+  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
   if (index === -1) {
-    console.error('Player not found:', parsedInstructions.deviceId);
+    console.warn("Device ID not found in players");
     return;
   }
 
-  if (parsedInstructions.deviceId === deviceId) {
+  selectedQuestionObj = GetQuestion({
+    cardTitle: gameContainerPublicTitle,
+    currentPartyData: currentPartyData
+  })
+
+  DisplayCard(gameContainerPublic, selectedQuestionObj);
+
+  if (!currentPlayer.isReady && !currentPlayer.hasConfirmed) {
+    EditUserIconPartyGames({
+      container: gameContainerPublic,
+      userId: currentPlayer.computerId,
+      userCustomisationString: currentPlayer.userIcon
+    });
+    setActiveContainers(gameContainerPublic);
+    if (deviceId === currentPlayer.computerId) {
+      gameContainerPublicButtonAnswer.classList.remove('disabled');
+      gameContainerPublicButtonPass.classList.remove('disabled');
+      gameContainerPublicWaitingText.classList.add('disabled');
+    } else {
+      gameContainerPublicWaitingText.textContent = `${currentPlayer.username} is choosing answer or pass`;
+      gameContainerPublicButtonAnswer.classList.add('disabled');
+      gameContainerPublicButtonPass.classList.add('disabled');
+      gameContainerPublicWaitingText.classList.remove('disabled');
+    }
+  }
+}
+
+async function ChoosingPunishment() {
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectPunishmentContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:TIME_EXPIRED:2", nextDelay: null })
+
+  const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].computerId);
+
+  if (index === -1) {
+    console.error('Player not found:', currentPartyData.players[currentPartyData.playerTurn].computerId);
+    return;
+  }
+
+  if (currentPartyData.players[currentPartyData.playerTurn].computerId === deviceId) {
     setActiveContainers(selectPunishmentContainer);
   }
   else {
@@ -116,41 +145,6 @@ async function DisplayPunishmentToUser(instruction) {
       player: currentPartyData.players[currentPartyData.playerTurn]
     });
     setActiveContainers(waitingForPlayerContainer);
-  }
-}
-
-async function DisplayPublicCard() {
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
-  if (index === -1) {
-    console.warn("Device ID not found in players");
-    return;
-  }
-
-  selectedQuestionObj = GetQuestion({
-    cardTitle: gameContainerPublicTitle,
-    currentPartyData: currentPartyData
-  })
-
-  DisplayCard(gameContainerPublic, selectedQuestionObj);
-
-  if (!currentPlayer.isReady && !currentPlayer.hasConfirmed) {
-    EditUserIconPartyGames({
-      container: gameContainerPublic,
-      userId: currentPlayer.computerId,
-      userCustomisationString: currentPlayer.userIcon
-    });
-    setActiveContainers(gameContainerPublic);
-    if (deviceId === currentPlayer.computerId) {
-      gameContainerPublicButtonAnswer.classList.remove('disabled');
-      gameContainerPublicButtonPass.classList.remove('disabled');
-      gameContainerPublicWaitingText.classList.add('disabled');
-    } else {
-      gameContainerPublicWaitingText.textContent = `${currentPlayer.username} is choosing answer or pass`;
-      gameContainerPublicButtonAnswer.classList.add('disabled');
-      gameContainerPublicButtonPass.classList.add('disabled');
-      gameContainerPublicWaitingText.classList.remove('disabled');
-    }
   }
 }
 
@@ -246,6 +240,8 @@ async function UserHasPassed(instruction) {
 }
 
 async function DisplayCompleteQuestion() {
+  timeout?.cancel();
+  stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
@@ -257,6 +253,7 @@ async function DisplayCompleteQuestion() {
 
 
   if (deviceId == currentPlayer.computerId) {
+    completePromptTitle.textContent = currentPartyData.questionType.toUpperCase();
     completePromptText.textContent = selectedQuestionObj.question;
     setActiveContainers(completPromptContainer);
   }
@@ -270,12 +267,12 @@ async function DisplayCompleteQuestion() {
   }
 }
 
-async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incrementScore = 0}) {
+async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incrementScore = 0 }) {
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   if (!force) {
     currentPartyData.players[index].hasConfirmed = true;
-    DisplayWaitingForPlayers(currentPartyData, index);
+    DisplayWaitingForPlayers();
   } else {
     for (let i = 0; i < currentPartyData.players.length; i++) {
       currentPartyData.players[i].isReady = true;
@@ -299,7 +296,8 @@ async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incr
     console.log(currentPartyData.playerTurn);
     await SendInstruction({
       instruction: "DISPLAY_SELECT_QUESTION_TYPE",
-      partyData: currentPartyData
+      partyData: currentPartyData,
+      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
     });
   } else {
     await SendInstruction({

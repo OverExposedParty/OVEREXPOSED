@@ -6,7 +6,7 @@ const PlayerSchema = new mongoose.Schema({
   userIcon: { type: String, required: true },
   isReady: { type: Boolean, default: false },
   hasConfirmed: { type: Boolean, default: false },
-  vote: { type: String, enum: ['A', 'B'], default: null },
+  vote: { type: String, default: null },
   lastPing: { type: Date, default: Date.now },
   socketId: { type: String, default: null },
   score: { type: Number, default: 0 }
@@ -20,8 +20,13 @@ const partyGameImposterSchema = new mongoose.Schema({
   userInstructions: { type: String },
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },
-  shuffleSeed: { type: Number, required: true },
+  playerTurn: { type: Number, required: true },
+  round: { type: Number, required: false, default: 0 },
+  roundPlayerTurn: { type: Number, required: false, default: 0 },
+  shuffleSeed: { type: Number },
   currentCardIndex: { type: Number, default: 0 },
+  alternativeQuestionIndex: { type: Number, default: 0 },
+  timer: { type: Date, default: null },
   players: { type: [PlayerSchema], default: [] }
 });
 

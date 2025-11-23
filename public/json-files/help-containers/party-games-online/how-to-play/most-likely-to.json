@@ -1,0 +1,154 @@
+[
+    {
+        "title": "READ QUESTION <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/read-question/container.svg",
+                    "alt": "read question container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/read-question/instructions.svg",
+                    "alt": "read question instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT PLAYER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/select-player/container.svg",
+                    "alt": "select player container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/select-player/instructions.svg",
+                    "alt": "select player instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DISPLAY RESULTS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/display-results/container.svg",
+                    "alt": "display results container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/display-results/instructions.svg",
+                    "alt": "display results instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "TIE BREAKER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/tie-breaker/container.svg",
+                    "alt": "Tie breaker container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/tie-breaker/instructions.svg",
+                    "alt": "Tie breaker instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "YOU'VE BEEN SELECTED <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/youve-been-selected/container.svg",
+                    "alt": "youve been selected container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/youve-been-selected/instructions.svg",
+                    "alt": "youve been selected instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "PUNISHMENT <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/punishment/container.svg",
+                    "alt": "punishment container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/punishment/instructions.svg",
+                    "alt": "punishment instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/waiting-for-player/container.svg",
+                    "alt": "waiting for player container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/waiting-for-player/instructions.svg",
+                    "alt": "waiting for player instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYERS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/most-likely-to.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/waiting-for-players/container.svg",
+                    "alt": "waiting for players container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/most-likely-to/waiting-for-players/instructions.svg",
+                    "alt": "waiting for players instructions"
+                }
+            ]
+        }
+    }
+]

@@ -1,0 +1,172 @@
+{
+    "customisation-base-too": [
+        {
+            "id": "B000",
+            "name": "IMPOSTER GREEN",
+            "file-path": "/images/user-customisation/colour/base-too/imposter-green.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B001",
+            "name": "WYR MINT",
+            "file-path": "/images/user-customisation/colour/base-too/wyr-mint.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B002",
+            "name": "CLOUD WHITE",
+            "file-path": "/images/user-customisation/colour/base-too/cloud-white.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B003",
+            "name": "ACNE",
+            "file-path": "/images/user-customisation/colour/base-too/acne.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B004",
+            "name": "DRIVE WAY",
+            "file-path": "/images/user-customisation/colour/base-too/drive-way.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B005",
+            "name": "FISH BOWL",
+            "file-path": "/images/user-customisation/colour/base-too/fish-bowl.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B006",
+            "name": "CLOCK",
+            "file-path": "/images/user-customisation/colour/base-too/clock.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "B100",
+            "name": "PAPER BAG",
+            "file-path": "/images/user-customisation/head-slot/base-too/paper-bag.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B101",
+            "name": "POT HAT",
+            "file-path": "/images/user-customisation/head-slot/base-too/pot-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B102",
+            "name": "BEANIE",
+            "file-path": "/images/user-customisation/head-slot/base-too/beanie.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B103",
+            "name": "REVIVE",
+            "file-path": "/images/user-customisation/head-slot/base-too/revive.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B104",
+            "name": "UFO",
+            "file-path": "/images/user-customisation/head-slot/base-too/ufo.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B105",
+            "name": "HOUSE",
+            "file-path": "/images/user-customisation/head-slot/base-too/house.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B106",
+            "name": "HARD HAT",
+            "file-path": "/images/user-customisation/head-slot/base-too/hard-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "B200",
+            "name": "STAR EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/star-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B201",
+            "name": "SKI GOGGLES",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/ski-goggles.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B202",
+            "name": "COMPUTER EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/computer-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B203",
+            "name": "TWO FACED",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/two-faced.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B204",
+            "name": "GLASSES NOSE DISGUISE",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/glasses-nose-disguise.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B205",
+            "name": "HEADLIGHTS",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/headlights.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B206",
+            "name": "BLACK EYES",
+            "file-path": "/images/user-customisation/eyes-slot/base-too/black-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "B300",
+            "name": "CENSORED BAR",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/censored-bar.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B301",
+            "name": "MOUTH ZIPPED",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/mouth-zipped.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B302",
+            "name": "COVID MASK",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/covid-mask.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B303",
+            "name": "DUMMY",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/dummy.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B304",
+            "name": "MUD DRAIN",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/mud-drain.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B305",
+            "name": "VOMIT",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/vomit.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "B305",
+            "name": "HOOVER MOUTH",
+            "file-path": "/images/user-customisation/mouth-slot/base-too/hoover-mouth.svg",
+            "slot": "mouth-slot"
+        }
+    ]
+}

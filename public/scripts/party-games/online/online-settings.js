@@ -239,12 +239,15 @@ function updateOnlineParty({
   shuffleSeed,
   currentCardIndex,
   currentCardSecondIndex,
+  alternativeQuestionIndex,
   questionType,
   selectedRoles,
   phase,
   generalChat,
   mafiaChat,
-  timer
+  timer,
+  round,
+  roundPlayerTurn
 }) {
   const isPartyGame = partyType?.startsWith("party-game-");
   const isPartyGameMafia = partyType === "party-game-mafia";
@@ -252,6 +255,8 @@ function updateOnlineParty({
   const isPartyGameParanoia = partyType === "party-game-paranoia";
   const isPartyGameMostLikelyTo = partyType === "party-game-most-likely-to";
   const isPartyGameNeverHaveIEver = partyType === "party-game-never-have-i-ever";
+  const isPartyGameImposter = partyType === "party-game-imposter";
+  const isPartyGameWouldYouRather = partyType === "party-game-would-you-rather";
   const payload = {
     partyId,
     ...(isPartyGame && {
@@ -261,9 +266,10 @@ function updateOnlineParty({
       ...(userInstructions !== undefined && { userInstructions }),
       ...(isPlaying !== undefined && { isPlaying }),
       ...(lastPinged !== undefined && { lastPinged }),
+      ...(timer !== undefined && { timer }),
+      ...(selectedPacks !== undefined && { selectedPacks }),
     }),
     ...(!isPartyGameMafia && {
-      ...(selectedPacks !== undefined && { selectedPacks }),
       ...(playerTurn !== undefined && { playerTurn }),
       ...(currentCardIndex !== undefined && { currentCardIndex }),
       ...(shuffleSeed !== undefined && { shuffleSeed }),
@@ -272,12 +278,19 @@ function updateOnlineParty({
       ...(currentCardSecondIndex !== undefined && { currentCardSecondIndex }),
       ...(questionType !== undefined && { questionType }),
     }),
+    ...(isPartyGameWouldYouRather && {
+      ...(currentCardSecondIndex !== undefined && { currentCardSecondIndex }),
+    }),
     ...(isPartyGameMafia && {
       ...(selectedRoles !== undefined && { selectedRoles }),
       ...(phase !== undefined && { phase }),
       ...(generalChat !== undefined && { generalChat }),
       ...(mafiaChat !== undefined && { mafiaChat }),
-      ...(timer !== undefined && { timer }),
+    }),
+    ...(isPartyGameImposter && {
+      ...(alternativeQuestionIndex !== undefined && { alternativeQuestionIndex }),
+      ...(round !== undefined && { round }),
+      ...(roundPlayerTurn !== undefined && { roundPlayerTurn }),
     }),
   };
 
@@ -444,6 +457,7 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
       if (playerIndex === -1) {
         KickUser();
       }
+      partyRulesSettings = parseGameRules(data[0].gameRules);
       checkForGameSettingsUpdates(data[0]);
       if (waitingForHost || hostedParty) {
         UpdateGamemodeContainer();
@@ -617,23 +631,6 @@ function postToBothEndpoints(payload, endpoint1, endpoint2) {
     });
 }
 
-function setActiveContainers(...activeContainers) {
-  if (activeContainers.length === 0) {
-    gameContainers.forEach(container => container.classList.remove('active'));
-    return;
-  }
-
-  const uniqueActiveContainers = new Set(activeContainers);
-
-  gameContainers.forEach(container => {
-    if (uniqueActiveContainers.has(container)) {
-      container.classList.add('active');
-    } else {
-      container.classList.remove('active');
-    }
-  });
-}
-
 // Handles removing user on page exit
 function removeUserOnExit() {
   if (!partyCode) return;
@@ -771,3 +768,22 @@ async function CheckGamePage() {
   }
 }
 CheckGamePage();
+
+function getIncrementContainerValue(key) {
+  if (!Array.isArray(partyRulesSettings)) return null;
+
+  const entry = partyRulesSettings.find(rule => {
+    const [ruleKey] = rule.split(':');
+    return ruleKey.includes(key);
+  });
+
+  if (!entry) return null;
+
+  const [, value] = entry.split(':');
+  return Number(value);
+}
+
+function parseGameRules(settingsString) {
+  if (!settingsString) return [];
+  return settingsString.split(',').filter(Boolean);
+}

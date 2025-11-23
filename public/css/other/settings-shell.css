@@ -88,6 +88,10 @@ button.disabled {
     color: #999999;
 }
 
+.button-container .button-toggle.inactive{
+    display: none !important;
+}
+
 .button-container button.active {
     background-color: var(--primarypagecolour);
     border-color: var(--primarypagecolour);
@@ -107,7 +111,6 @@ button.disabled {
 .oes-content-container .button-container .button-toggle,
 .waiting-room-container .button-container .button-toggle,
 .main-settings-container .button-container .button-toggle {
-    font-size: 16px;
     padding: 10px 20px;
     min-width: 120px;
     border-radius: 50px;
@@ -169,6 +172,14 @@ button.disabled {
 }
 
 .increment-container.disabled {
+    background-color: #333333 !important;
+    color: #666666 !important;
+    border-color: #333333 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.increment-container.inactive {
     display: none;
 }
 
@@ -180,33 +191,59 @@ button.disabled {
     border-radius: 10px;
 }
 
+.increment-container.disabled .count-wrapper {
+    background-color: #333333 !important;
+}
+
 .count-btn {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     font-weight: bold;
     font-size: 1rem;
-    color:var(--backgroundcolour);
+    color: var(--backgroundcolour);
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
 
-.count-btn.disabled {
-    background-color: #272727;
+.increment-container.disabled .count-btn {
+    background-color: #666666 !important;
+    border-color: #666666 !important;
+    color: #333333 !important;
 }
+
 
 .count-display {
     color: var(--backgroundcolour);
-
     font-size: 1.25rem;
     padding: 0 10px;
     min-width: 20px;
     text-align: center;
 }
 
-.settings-name {
+.increment-container.disabled .count-display{
+    background-color: var(--backgroundcolour);
+    color: #666666;
+}
+
+.increment-container.disabled .count-display {
+    color: #666666;
+}
+
+.oes-content-container .button-container .button-toggle,
+.waiting-room-container .button-container .button-toggle,
+.main-settings-container .button-container .button-toggle,
+.increment-container .settings-name {
+    font-size: 16px;
+}
+
+.increment-container .settings-name {
     color: var(--primarypagecolour);
-    font-size: 18px;
+}
+
+
+.increment-container.disabled .settings-name {
+    color: #666666 !important;
 }
 
 @media (orientation: portrait) {
@@ -239,7 +276,8 @@ button.disabled {
     }
 
     .waiting-room-container .button-container .button-toggle,
-    .main-settings-container .button-container .button-toggle {
+    .main-settings-container .button-container .button-toggle,
+    .oes-content-container .button-container .button-toggle {
         width: 90%;
         margin: 5px 5%;
         font-size: 16px;

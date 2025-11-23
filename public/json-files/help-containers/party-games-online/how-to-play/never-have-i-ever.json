@@ -1,0 +1,97 @@
+[
+    {
+        "title": "READ QUESTION <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/never-have-i-ever.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/read-question/container.svg",
+                    "alt": "read question container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/read-question/instructions.svg",
+                    "alt": "read question instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT VOTE <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/never-have-i-ever.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/select-vote/container.svg",
+                    "alt": "select vote container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/select-vote/instructions.svg",
+                    "alt": "select vote instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DISPLAY RESULTS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/never-have-i-ever.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/display-results/container.svg",
+                    "alt": "display results container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/display-results/instructions.svg",
+                    "alt": "display results instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "TAKE A SIP <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/never-have-i-ever.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/take-a-sip/container.svg",
+                    "alt": "take a sip container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/take-a-sip/instructions.svg",
+                    "alt": "take a sip instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYERS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/never-have-i-ever.jpg",
+                    "alt": "Never Have I Ever background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/waiting-for-players/container.svg",
+                    "alt": "waiting for players container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/never-have-i-ever/waiting-for-players/instructions.svg",
+                    "alt": "waiting for players instructions"
+                }
+            ]
+        }
+    }
+]

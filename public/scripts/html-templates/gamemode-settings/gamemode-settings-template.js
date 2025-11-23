@@ -43,6 +43,17 @@ const partyGamesInformation = {
       secondary: "#B9AA42"
     }
   },
+  "imposter": {
+    partyType: "party-game-imposter",
+    playerCountRestrictions: {
+      minPlayers: 3,
+      maxPlayers: 16
+    },
+    gamemodeColours: {
+      primary: "#3DA7A1",
+      secondary: "#2A6E6A"
+    }
+  },
   "would-you-rather": {
     partyType: "party-game-would-you-rather",
     playerCountRestrictions: {
@@ -61,8 +72,8 @@ const partyGamesInformation = {
       maxPlayers: 20
     },
     gamemodeColours: {
-      primary: "#A9323A",
-      secondary: "#FFEE66"
+      primary: "#9B56D3",
+      secondary: "#6D3C95"
     }
   }
 };

@@ -1,0 +1,7 @@
+{
+    "additional-help-containers": [
+        "party-games-online/waiting-rooms/general.json",
+        "party-games-online/how-to-play/imposter.json",
+        "party-gamemodes-settings/imposter.json"
+    ]
+}

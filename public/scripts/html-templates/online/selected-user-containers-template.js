@@ -1,4 +1,4 @@
-const playerSelectionGamemodes = ["paranoia", "most-likely-to", "never-have-i-ever"];
+const playerSelectionGamemodes = ["paranoia", "most-likely-to", "imposter",];
 const ConfirmPunishmentGamemodes = ["paranoia", "most-likely-to"];
 
 const placeHolderSelectedUser = document.getElementById('placeholder-selected-user-container');
@@ -6,14 +6,14 @@ const placeHolderSelectedUser = document.getElementById('placeholder-selected-us
 let waitingForPlayerContainer, waitingForPlayerTitle, waitingForPlayerText;
 let waitingForPlayersContainer, waitingForPlayersIconContainer;
 
-let selectPunishmentContainer, selectPunishmentButtonContainer, selectPunishmentConfirmPunishmentButton;
+let selectPunishmentContainer, selectPunishmentTitle, selectPunishmentText, selectPunishmentButtonContainer, selectPunishmentConfirmPunishmentButton;
 let playerHasPassedContainer, playerHasPassedTitle, playerHasPassedText;
 
 let selectUserContainer, selectUserTitle, selectUserQuestionText, selectUserButtonContainer, selectUserConfirmPlayerButton;
 
 let selectQuestionTypeContainer, selectQuestionTypeContainerQuestionText, selectQuestionTypeButtonContainer, selectQuestionTypeButtonTruth, selectQuestionTypeButtonDare;
 let answerQuestionContainer, answerQuestionContainerQuestionText, answerQuestionAnswer, answerQuestionSubmitButton;
-let completPromptContainer, completePromptText, completePromptCompleted;
+let completPromptContainer, completePromptTitle, completePromptText, completePromptCompleted;
 
 let completePunishmentContainer, completePunishmentText, completePunishmentButtonConfirm, completePunishmentButtonPass;
 
@@ -28,9 +28,25 @@ let selectOptionConfirmButtonA, selectOptionConfirmButtonB;
 
 let selectNumberContainer, selectNumberQuestionText, selectNumberButtonContainer, confirmNumberButton;
 
+//Imposter
+let displayStartTimerContainer, displayStartTimerText, displayStartButton;
+let displayUserAnswerContainer, displayUserAnswerText, displayUserAnswerButton;
+
+//Mafia
+let displayDayTimerContainer;
+let displayRoleContainer, displayRoleTitle, displayRoleText;
+let selectUserDayPhaseContainer, selectUserDayPhaseTitle, selectUserDayPhaseButtonContainer, selectUserDayPhaseConfirmButton;
+let selectUserNightPhaseContainer, selectUserNightPhaseTitle, selectUserNightPhaseText, selectUserNightPhaseButtonContainer, selectUserNightPhaseConfirmButton;
+let selectCivilianWatchContainer, selectCivilianWatchTitle, selectCivilianWatchText, selectCivilianWatchButtonContainer, selectCivilianWatchOptionButtons, selectCivilianWatchConfirmButton, selectCivilianWatchLeaveButton;
+let displayCivilianWatchResponseContainer, displayCivilianWatchResponseText;
+let displayTownVoteContainer, displayTownVoteText;
+let displayPlayerKilledContainer, displayPlayerKilledText;
+let displayGameOverContainer, displayGameOverTitle, displayGameOverText;
+
+//Party Game General
 let partyDisbandedContainer;
 
-const cssFilesSelectUserContainers = [];
+const cssFilesSelectUserContainers = ['/css/general/online/timer.css'];
 cssFilesSelectUserContainers.forEach(href => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -55,6 +71,8 @@ async function loadTemplatesAndScripts() {
         waitingForPlayersIconContainer = waitingForPlayersContainer.querySelector('.content-container .user-confirmed-section');
 
         selectPunishmentContainer = placeHolderSelectedUser.querySelector('#select-punishment-container');
+        selectPunishmentTitle = selectPunishmentContainer.querySelector('.content-container h1');
+        selectPunishmentText = selectPunishmentContainer.querySelector('.content-container p');
         selectPunishmentButtonContainer = selectPunishmentContainer.querySelector('.selected-user-container .button-container');
         selectPunishmentConfirmPunishmentButton = selectPunishmentContainer.querySelector('.select-button-container button');
 
@@ -79,6 +97,8 @@ async function loadTemplatesAndScripts() {
 
         const template = placeHolderSelectedUser.dataset.template;
 
+        await LoadScript(`/scripts/party-games/gamemode/online/general/party-timer.js`);
+
         // Load template-specific HTML
         if (template === 'truth-or-dare') {
             const response = await fetch('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html');
@@ -92,6 +112,7 @@ async function loadTemplatesAndScripts() {
             answerQuestionSubmitButton = answerQuestionContainer.querySelector("#submit");
 
             completPromptContainer = placeHolderSelectedUser.querySelector('#complete-prompt-container');
+            completePromptTitle = completPromptContainer.querySelector('.content-container h1');
             completePromptText = completPromptContainer.querySelector('.content-container h2');
             completePromptCompleted = completPromptContainer.querySelector('.select-button-container #completed');
 
@@ -104,7 +125,7 @@ async function loadTemplatesAndScripts() {
             gameContainers.push(answerQuestionContainer, completPromptContainer, selectQuestionTypeContainer);
         }
 
-        if (template === 'paranoia') {
+        else if (template === 'paranoia') {
             const response = await fetch('/html-templates/online/party-games/selected-user-containers/paranoia-template.html');
             const data = await response.text();
             placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
@@ -121,7 +142,7 @@ async function loadTemplatesAndScripts() {
             gameContainers.push(pickHeadsOrTailsContainer, completePunishmentContainer);
         }
 
-        if (template === 'never-have-i-ever') {
+        else if (template === 'never-have-i-ever') {
             const response = await fetch('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html');
             const data = await response.text();
             placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
@@ -136,7 +157,7 @@ async function loadTemplatesAndScripts() {
             gameContainers.push(selectOptionContainer);
         }
 
-        if (template === 'most-likely-to') {
+        else if (template === 'most-likely-to') {
             const response = await fetch('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html');
             const data = await response.text();
             placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
@@ -150,7 +171,7 @@ async function loadTemplatesAndScripts() {
             gameContainers.push(selectNumberContainer);
         }
 
-        if (template === 'would-you-rather') {
+        else if (template === 'would-you-rather') {
             const response = await fetch('/html-templates/online/party-games/selected-user-containers/would-you-rather-template.html');
             const data = await response.text();
             placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
@@ -164,6 +185,84 @@ async function loadTemplatesAndScripts() {
             selectOptionConfirmButtonB = selectOptionButtonContainer.querySelector('#b');
 
             gameContainers.push(selectOptionContainer);
+        }
+
+        else if (template === 'imposter') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/imposter-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
+            displayStartTimerContainer = document.getElementById('start-timer-container');
+            displayStartTimerText = displayStartTimerContainer.querySelector('.content-container h2');
+            displayStartButton = displayStartTimerContainer.querySelector('.select-button-container .select-button');
+
+            displayUserAnswerContainer = document.getElementById('display-user-answer-container');
+            displayUserAnswerText = displayUserAnswerContainer.querySelector('.content-container h2');
+            displayUserAnswerButton = displayUserAnswerContainer.querySelector('.select-button-container .select-button');
+            
+            gameContainers.push(
+                displayStartTimerContainer,
+                displayUserAnswerContainer
+            );
+        }
+
+        else if (template === 'mafia') {
+            const response = await fetch('/html-templates/online/party-games/selected-user-containers/mafia-template.html');
+            const data = await response.text();
+            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
+            await new Promise(requestAnimationFrame);
+
+            displayDayTimerContainer = placeHolderSelectedUser.querySelector('#display-day-timer-container');
+
+            displayRoleContainer = placeHolderSelectedUser.querySelector('#display-role-container');
+            displayRoleTitle = displayRoleContainer.querySelector('.content-container h1');
+            displayRoleText = displayRoleContainer.querySelector('.content-container h2');
+
+            selectUserDayPhaseContainer = placeHolderSelectedUser.querySelector('#select-user-day-phase-container');
+            selectUserDayPhaseTitle = selectUserDayPhaseContainer.querySelector('.content-container h1');
+            selectUserDayPhaseButtonContainer = selectUserDayPhaseContainer.querySelector('.button-container');
+            selectUserDayPhaseConfirmButton = selectUserDayPhaseContainer.querySelector('.select-button-container button');
+
+            selectUserNightPhaseContainer = placeHolderSelectedUser.querySelector('#select-user-night-phase-container');
+            selectUserNightPhaseTitle = selectUserNightPhaseContainer.querySelector('.content-container h1');
+            selectUserNightPhaseText = selectUserNightPhaseContainer.querySelector('.content-container h2');
+            selectUserNightPhaseButtonContainer = selectUserNightPhaseContainer.querySelector('.button-container');
+            selectUserNightPhaseConfirmButton = selectUserNightPhaseContainer.querySelector('.select-button-container button');
+
+            selectCivilianWatchContainer = placeHolderSelectedUser.querySelector('#select-civilian-watch-container');
+            selectCivilianWatchTitle = selectCivilianWatchContainer.querySelector('.content-container h1');
+            selectCivilianWatchText = selectCivilianWatchContainer.querySelector('.content-container h2');
+            selectCivilianWatchButtonContainer = selectCivilianWatchContainer.querySelector('.button-container');
+            selectCivilianWatchOptionButtons = selectCivilianWatchButtonContainer.querySelectorAll('button:not(#leave)');
+            selectCivilianWatchLeaveButton = selectCivilianWatchButtonContainer.querySelector('#leave');
+            selectCivilianWatchConfirmButton = selectCivilianWatchContainer.querySelector('.select-button-container .select-button');
+
+            displayCivilianWatchResponseContainer = document.querySelector('#select-civilian-watch-response-container');
+            displayCivilianWatchResponseText = displayCivilianWatchResponseContainer.querySelector('.content-container h2');
+
+            displayTownVoteContainer = placeHolderSelectedUser.querySelector('#display-town-vote-container');
+            displayTownVoteText = displayTownVoteContainer.querySelector('.content-container h2');
+
+            displayPlayerKilledContainer = placeHolderSelectedUser.querySelector('#display-player-killed-container');
+            displayPlayerKilledText = displayPlayerKilledContainer.querySelector('.content-container h2');
+
+            displayGameOverContainer = placeHolderSelectedUser.querySelector('#display-game-over-container');
+            displayGameOverTitle = displayGameOverContainer.querySelector('.content-container h1');
+            displayGameOverText = displayGameOverContainer.querySelector('.content-container h2');
+
+
+            gameContainers.push(
+                displayDayTimerContainer,
+                displayRoleContainer,
+                selectUserDayPhaseContainer,
+                selectUserNightPhaseContainer,
+                selectCivilianWatchContainer,
+                displayCivilianWatchResponseContainer,
+                displayTownVoteContainer,
+                displayPlayerKilledContainer,
+                displayGameOverContainer
+            );
         }
 
         // Player selection template
@@ -202,7 +301,16 @@ async function loadTemplatesAndScripts() {
         // Finally, load scripts last
         console.log("Loading online script for " + template);
         await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
-        await LoadScript(`/scripts/html-templates/online/card-container-template.js`);
+        if (placeHolderSelectedUser.dataset.template != 'mafia') {
+            await LoadScript(`/scripts/html-templates/online/card-container-template.js`);
+            await LoadScript(`/scripts/party-games/gamemode/online/general/party-game-statistics.js`);
+        }
+        else {
+            (async () => {
+                await LoadScript(`/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online.js?30082025`);
+                await SetPageSettings();
+            })();
+        }
 
     } catch (error) {
         console.error('Error loading templates or scripts:', error);

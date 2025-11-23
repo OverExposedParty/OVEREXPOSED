@@ -1,0 +1,135 @@
+[
+    {
+        "title": "READ WORD <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/read-word/container.svg",
+                    "alt": "read word container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/read-word/instructions.svg",
+                    "alt": "read word instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "EXPLAIN WORD <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/explain-word/container.svg",
+                    "alt": "explain word container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/explain-word/instructions.svg",
+                    "alt": "explain word instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT IMPOSTER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/select-imposter/container.svg",
+                    "alt": "select imposter container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/select-imposter/instructions.svg",
+                    "alt": "select imposter instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DISPLAY RESULTS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/display-results/container.svg",
+                    "alt": "display results container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/display-results/instructions.svg",
+                    "alt": "display results instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "REVEAL IMPOSTER <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/reveal-imposter/container.svg",
+                    "alt": "reveal imposter container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/reveal-imposter/instructions.svg",
+                    "alt": "reveal imposter instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT A PUNISHMENT <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/select-a-punishment/container.svg",
+                    "alt": "select a punishment container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/select-a-punishment/instructions.svg",
+                    "alt": "select a punishment instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "PUNISHMENT <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/imposter.jpg",
+                    "alt": "Imposter background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/punishment/container.svg",
+                    "alt": "punishment container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/imposter/punishment/instructions.svg",
+                    "alt": "punishment instructions"
+                }
+            ]
+        }
+    }
+]

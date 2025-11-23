@@ -15,19 +15,14 @@ const playerSchema = new mongoose.Schema({
 
 const partyGameMafiaSchema = new mongoose.Schema({
   partyId: { type: String, required: true, unique: true },
-
   gamemode: { type: String, required: true },
   gameRules: { type: String, required: true },
-  selectedRoles: { type: String, required: true },
-
+  selectedPacks: { type: String, required: true },
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },
-
   players: { type: [playerSchema], required: true },
-
   userInstructions: { type: String },
   phase: { type: String, default: "lobby" },
-
   timer: { type: Date, default: null},
   shuffleSeed: { type: Number, required: true }
 });

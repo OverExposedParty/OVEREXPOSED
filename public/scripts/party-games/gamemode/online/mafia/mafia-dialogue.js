@@ -1,6 +1,3 @@
-const mafiaDisplayRoleTimer = 7500;
-const displayPlayerKilledTimer = 7500;
-
 const mafiaDialogueKill = ["[Player Name] was found dead last night.", 
     "The sun rises... and [Player Name] didn’t make it.",
     "[Player Name] was killed during the night.",

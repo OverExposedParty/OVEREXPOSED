@@ -31,9 +31,10 @@ async function checkPartyExists() {
   const data = await response.json();
   if (data.length > 0) {
     const partyData = data[0];
+    partyRulesSettings = parseGameRules(data[0].gameRules);
     partyGameMode = partyData.gamemode;
     maxPlayerCount = partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
-    helpContainerFile = "party-games/" + partyGameMode + '.json';
+    helpContainerFile = "party-games-online/waiting-rooms/" + partyGameMode + '.json';
     CreateGameSettingsButtonsScript();
     inputPartyCode = document.getElementById('party-code');
     if (partyGameMode) {
@@ -144,16 +145,23 @@ function changeFavicon(gamemode) {
   faviconLinks.forEach((favicon, i) => {
     const size = sizes[i % sizes.length];
     favicon.href = `/images/icons/${gamemodeFolderPath[gamemode]}/favicons/favicon-${size}.png`;
-
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/${gamemodeFolderPath[gamemode]}/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/${gamemodeFolderPath[gamemode]}/tik-tok-icon.svg)`);
-    document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/${gamemodeFolderPath[gamemode]}/instagram-icon.svg)`);
   });
 }
 
 function SetGamemodeContainer() {
   UpdateGamemodeContainer()
   onlineSettingsTab.classList.remove('disabled');
+  rulesContainer.querySelectorAll('button').forEach(button => {
+    if (button.dataset.settingsRestriction == "offline") {
+      button.classList.add('inactive');
+    }
+  });
+  rulesContainer.querySelectorAll('.increment-container').forEach(button => {
+    console.log(button);
+    if (button.dataset.settingsRestriction == "offline") {
+      button.classList.add('inactive');
+    }
+  });
   inputPartyCode.value = `https://overexposed.app/${partyCode}`;
 
 }
@@ -177,13 +185,17 @@ async function UpdateGamemodeContainer() {
 
     if (inPacks || inRoles) {
       button.classList.add('active');
-    } else {
+    }
+    else {
       button.classList.remove('active');
     }
     SetButtonStyle(button, false);
   });
 
-
+  rulesContainer.querySelectorAll('.increment-container').forEach(button => {
+    button.dataset.count = getIncrementContainerValue(button.dataset.key, parseGameRules(currentPartyData.gameRules));
+    button.querySelector('.count-display').textContent = button.dataset.count;
+  });
   rulesContainer.querySelectorAll('button').forEach(button => {
     button.classList.toggle('active', currentPartyData.gameRules?.includes(button.dataset.key));
   });

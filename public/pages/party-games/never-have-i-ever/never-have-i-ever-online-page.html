@@ -67,14 +67,10 @@
 <script>
     const gamemode = "never-have-i-ever";
     const sessionPartyType = "party-game-never-have-i-ever";
-    const helpContainerFile = "party-games/" + gamemode + '.json';
+    const helpContainerFile = "party-games-online/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
-
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/never-have-i-ever/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/never-have-i-ever/tik-tok-icon.svg)');
-    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/never-have-i-ever/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>

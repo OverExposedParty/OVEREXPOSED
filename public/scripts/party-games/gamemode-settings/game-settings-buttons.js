@@ -1,5 +1,6 @@
 let nsfwButtons = [];
 let onlingSettingsButtons = [];
+let offlineSettingsButtons = [];
 let gameRulesNsfwButtons = [];
 
 let packButtons = [];
@@ -19,10 +20,15 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
         data[`${partyGameMode}-packs`].forEach(pack => {
             if (pack["pack-active"]) {
                 const button = document.createElement("button");
-                button.dataset.key = `${partyGameMode}-${pack["pack-name"]}`;
-                button.className = `pack ${pack["pack-restriction"]}`;
+                button.dataset.key = `pack-${partyGameMode}-${pack["pack-name"]}`;
+                if (pack["pack-restriction"]) {
+                    button.className = `pack ${pack["pack-restriction"]}`;
+                }
                 button.dataset.primaryColor = pack["pack-colour"];
                 button.dataset.secondaryColor = pack["pack-secondary-colour"];
+                if (pack["settings-dependency"]) {
+                    button.dataset.settingsDependency = pack["settings-dependency"];
+                }
                 button.classList.add('sound-toggle');
                 button.classList.add('button-toggle');
                 button.textContent = pack["pack-name"]
@@ -63,6 +69,12 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     if (setting["button-type"] === "toggle") {
                         button = document.createElement("button");
                         button.className = `game-settings-pack ${setting["settings-restriction"]}`;
+                        if (setting["settings-restriction"]) {
+                            button.dataset.settingsRestriction = setting["settings-restriction"];
+                        }
+                        if(setting["settings-required"]) {
+                            button.dataset.settingsRequired = setting["settings-required"];
+                        }
                         button.dataset.primaryColor = setting["settings-colour"];
                         button.dataset.secondaryColor = setting["settings-secondary-colour"];
                         button.classList.add('sound-toggle');
@@ -84,20 +96,22 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     else if (setting["button-type"] === "increment") {
                         const container = document.createElement("div");
                         container.classList.add('button-increment');
+                        if (setting["settings-restriction"]) {
+                            container.dataset.settingsRestriction = setting["settings-restriction"];
+                        }
                         container.className = "increment-container setting";
                         container.id = setting["settings-name"];
                         container.dataset.primaryColor = setting["settings-colour"];
                         container.dataset.secondaryColor = setting["settings-secondary-colour"];
 
                         // Set data attributes (with sensible fallbacks)
-                        container.dataset.count = setting["button-initial-value"] || 60;
-                        container.dataset.increment = setting["button-increment-value"] || 30;
-                        container.dataset.countMin = setting["button-minimum-value"] || 30;
-                        container.dataset.countMax = setting["button-maximum-value"] || 180;
-
+                        container.dataset.count = setting["button-initial-value"] ?? 60;
+                        container.dataset.increment = setting["button-increment-value"] ?? 30;
+                        container.dataset.countMin = setting["button-minimum-value"] ?? 30;
+                        container.dataset.countMax = setting["button-maximum-value"] ?? 180;
 
                         // Label
-                        const label = document.createElement("span");
+                        const label = document.createElement("label");
                         label.className = "settings-name";
                         label.textContent = setting["settings-name"]
                             .replace(/-/g, " ")
@@ -167,12 +181,15 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                             let current = parseInt(container.dataset.count);
                             const increment = parseInt(container.dataset.increment);
                             const min = parseInt(container.dataset.countMin);
-
+                            console.log("current: " + current);
+                            console.log("min: " + min);
+                            console.log("increment: " + increment);
                             if (current - increment >= min) {
                                 current -= increment;
                                 container.dataset.count = current;
                                 countDisplay.textContent = current;
                             }
+                            console.log("current: " + current);
                         });
 
                         // Assign container as button reference for later tracking
@@ -180,7 +197,9 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     }
 
                     if (setting["settings-restriction"] === "nsfw") gameRulesNsfwButtons.push(button);
-                    if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
+                    else if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
+                    else if (setting["settings-restriction"] === "offline") offlineSettingsButtons.push(button);
+
                     if (setting["settings-name"] === "online") {
                         button.id = "button-online";
                         onlineButton = button;

@@ -1,0 +1,7 @@
+{
+    "additional-help-containers": [
+        "party-games-online/waiting-rooms/general.json",
+        "party-games-online/how-to-play/most-likely-to.json",
+        "party-gamemodes-settings/most-likely-to.json"
+    ]
+}

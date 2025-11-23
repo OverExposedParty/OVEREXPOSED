@@ -64,7 +64,7 @@ body {
 
 .gamemode-popup-container {
     background-color: var(--backgroundcolour);
-    height: 350px;
+    height: auto;
     width: 350px;
     border: var(--bordersize) solid var(--primarypagecolour);
     border-radius: 25px;
@@ -76,10 +76,22 @@ body {
     transform: translate(-50%, -50%);
     z-index: 900;
     display: none;
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .gamemode-popup-container.active {
     display: flex;
+}
+
+.gamemode-popup-container h1 {
+    color: var(--primarypagecolour);
+    font-size: 1.5rem;
+    margin: 10px;
+    text-align: center;
 }
 
 #chartWrapper {

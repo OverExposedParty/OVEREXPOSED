@@ -22,10 +22,11 @@ const partyGameTruthOrDareSchema = require('./models/party-game-truth-or-dare-sc
 const partyGameParanoiaSchema = require('./models/party-game-paranoia-schema');
 const partyGameNeverHaveIEverSchema = require('./models/party-game-never-have-i-ever-schema');
 const partyGameMostLikelyToSchema = require('./models/party-game-most-likely-to-schema');
-const partyGameWouldYouRatherSchema = require('./models/party-game-imposter-schema');
+const partyGameWouldYouRatherSchema = require('./models/party-game-would-you-rather-schema');
 const partyGameMafiaSchema = require('./models/party-game-mafia-schema');
 const partyGameChatLogSchema = require('./models/party-game-chat-log-schema');
 const waitingRoomSchema = require('./models/waiting-room-schema');
+const partyGameImposterSchema = require('./models/party-game-imposter-schema');
 
 Confession.watch()
   .on('change', (change) => {
@@ -142,6 +143,7 @@ async function startChangeStreams() {
   const partyGameParanoiaDB = overexposureDb.collection('party-game-paranoia');
   const partyGameNeverHaveIEverDB = overexposureDb.collection('party-game-never-have-i-ever');
   const partyGameMostLikelyToDB = overexposureDb.collection('party-game-most-likely-to');
+  const partyGameImposterDB = overexposureDb.collection('party-game-imposter');
   const partyGameWouldYouRatherDB = overexposureDb.collection('party-game-would-you-rather');
   const partyGameMafiaDB = overexposureDb.collection('party-game-mafia');
   const partyGameChatLogDB = overexposureDb.collection('party-game-chat-log');
@@ -216,6 +218,7 @@ async function startChangeStreams() {
   watchCollection(partyGameParanoiaDB, 'party-game-paranoia');
   watchCollection(partyGameNeverHaveIEverDB, 'party-game-never-have-i-ever');
   watchCollection(partyGameMostLikelyToDB, 'party-game-most-likely-to');
+  watchCollection(partyGameImposterDB, 'party-game-imposter');
   watchCollection(partyGameWouldYouRatherDB, 'party-game-would-you-rather');
   watchCollection(partyGameMafiaDB, 'party-game-mafia');
   watchChatLog(partyGameChatLogDB);
@@ -291,7 +294,8 @@ const partyGameRoutes = [
       'shuffleSeed',
       'currentCardIndex',
       'currentCardSecondIndex',
-      'questionType'
+      'questionType',
+      'timer'
     ],
     partyGameLogLabel: 'Party Game Truth Or Dare'
   },
@@ -308,7 +312,8 @@ const partyGameRoutes = [
       'lastPinged',
       'playerTurn',
       'shuffleSeed',
-      'currentCardIndex'
+      'currentCardIndex',
+      'timer'
     ],
     partyGameLogLabel: 'Party Game Paranoia'
   },
@@ -325,7 +330,8 @@ const partyGameRoutes = [
       'lastPinged',
       'playerTurn',
       'shuffleSeed',
-      'currentCardIndex'
+      'currentCardIndex',
+      'timer'
     ],
     partyGameLogLabel: 'Party Game Never Have I Ever'
   },
@@ -342,11 +348,33 @@ const partyGameRoutes = [
       'lastPinged',
       'playerTurn',
       'shuffleSeed',
-      'currentCardIndex'
+      'currentCardIndex',
+      'timer'
     ],
     partyGameLogLabel: 'Party Game Most Likely To'
   },
     {
+    route: 'party-game-imposter',
+    partyGameModel: partyGameImposterSchema,
+    partyGameFields: [
+      'players',
+      'gamemode',
+      'gameRules',
+      'selectedPacks',
+      'userInstructions',
+      'isPlaying',
+      'lastPinged',
+      'shuffleSeed',
+      'currentCardIndex',
+      'alternativeQuestionIndex',
+      'playerTurn',
+      'round',
+      'roundPlayerTurn',
+      'timer'
+    ],
+    partyGameLogLabel: 'Party Game Imposter'
+  },
+  {
     route: 'party-game-would-you-rather',
     partyGameModel: partyGameWouldYouRatherSchema,
     partyGameFields: [
@@ -358,9 +386,10 @@ const partyGameRoutes = [
       'isPlaying',
       'lastPinged',
       'shuffleSeed',
-      'currentCardIndex'
+      'currentCardIndex',
+      'timer'
     ],
-    partyGameLogLabel: 'Party Game Never Have I Ever'
+    partyGameLogLabel: 'Party Game Would You Rather'
   },
   {
     route: 'party-game-mafia',
@@ -370,6 +399,7 @@ const partyGameRoutes = [
       'gamemode',
       'gameRules',
       'selectedRoles',
+      'selectedPacks',
       'userInstructions',
       'isPlaying',
       'phase',
@@ -813,7 +843,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html')); 
+  res.sendFile(path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html'));
 });
 
 app.get('/truth-or-dare/settings', (req, res) => {
@@ -894,6 +924,19 @@ app.get('/imposter/settings', (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/imposter', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+
+app.get('/imposter/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-online-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
 app.get('/would-you-rather', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
@@ -962,6 +1005,12 @@ app.get('/faqs', (req, res) => {
 
 app.get('/oes-customisation', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'oes-customisation.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
+app.get('/production-tools', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'other', 'production-tools.html');
   console.log(`Attempting to serve file from: ${filePath}`);
   res.sendFile(filePath);
 });

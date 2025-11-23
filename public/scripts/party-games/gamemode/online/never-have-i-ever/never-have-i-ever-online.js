@@ -4,7 +4,6 @@ const url = window.location.href;
 const segments = url.split('/');
 partyCode = segments.pop() || segments.pop(); // handle trailing slash
 
-
 const resultsChartContainer = document.getElementById('results-container');
 
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
@@ -16,7 +15,7 @@ gameContainers.push(
 );
 async function SetPageSettings() {
   buttonChooseOption.addEventListener('click', async () => {
-    await setUserBool(deviceId, null, true)
+    await setUserBool(deviceId, null, true);
   });
 
   selectOptionConfirmButtonYes.addEventListener('click', async () => {
@@ -35,8 +34,8 @@ async function SetPageSettings() {
     if (parsedInstructions.instruction.includes("DISPLAY_PUNISHMENT_TO_USER")) {
       const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
       await ResetQuestion({
-        currentPartyData: currentPartyData,
-        icons: icons
+        icons: icons,
+        timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
       });
     }
     else {
@@ -44,13 +43,17 @@ async function SetPageSettings() {
     }
   });
 
+  AddTimerToContainer(gameContainerPrivate.querySelector('.main-image-container'));
+  AddTimerToContainer(selectOptionContainer);
+  AddTimerToContainer(waitingForPlayersContainer);
+  AddTimerToContainer(resultsChartContainer);
 
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
-  const currentPartyData = existingData[0];
+  currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
   console.log("Loaded JSON files");
@@ -104,21 +107,21 @@ async function initialisePage() {
     data[0].players[index].socketId = socket.id
     joinParty(partyCode);
     if (data[0].isPlaying === true) {
-      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      partyRulesSettings = parseGameRules(data[0].gameRules)
       for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
         if (!(partyRulesSettings[i] == "take-a-sip")) {
           AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
         }
       }
-      await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
       await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
       if (deviceId == hostDeviceId && data[0].userInstructions == "") {
         await SendInstruction({
           instruction: "DISPLAY_PRIVATE_CARD",
           updateUsersReady: false,
           updateUsersConfirmation: false,
-          fetchInstruction: true
+          fetchInstruction: true,
+          timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
         });
       }
       else {
@@ -129,6 +132,7 @@ async function initialisePage() {
         });
         FetchInstructions();
       }
+      SetPartyGameStatistics();
       await AddUserIcons();
       SetScriptLoaded('/scripts/party-games/online/online-settings.js');
     }
@@ -141,7 +145,7 @@ async function FetchInstructions() {
     PartyDisbanded();
     return;
   }
-
+  await UpdatePartyGameStatistics();
   if (currentPartyData.userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
     DisplayPrivateCard(currentPartyData.userInstructions);
   }
@@ -163,16 +167,13 @@ async function FetchInstructions() {
   else if (currentPartyData.userInstructions.includes("PUNISHMENT_OFFER")) {
     PunishmentOffer(currentPartyData.userInstructions);
   }
-}
-
-async function AddUserIcons() {
-  if (currentPartyData) {
-    for (let i = 0; i < currentPartyData.players.length; i++) {
-      createUserIconPartyGames({
-        container: waitingForPlayersIconContainer,
-        userId: currentPartyData.players[i].computerId,
-        userCustomisationString: currentPartyData.players[i].userIcon
-      });
-    }
+  else if (currentPartyData.userInstructions.includes("GAME_OVER")) {
+    SetPartyGameStatisticsGameOver();
+  }
+  else if (currentPartyData.userInstructions.includes("RESET_QUESTION")) {
+    await ResetQuestion({
+      icons: icons,
+      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
+    });
   }
 }

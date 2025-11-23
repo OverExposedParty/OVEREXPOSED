@@ -212,7 +212,7 @@ if (rightHeaderContainer) {
 
 // Optional: Game settings updates
 function checkForGameSettingsUpdates(data) {
-  if (partyUserCount < minPlayerCount) {
+  if (partyUserCount < partyGamesInformation[partyGameMode].playerCountRestrictions.minPlayers) {
     //setError(errorNotEnoughPlayers, true);
   } else {
     setError(errorNotEnoughPlayers, false);

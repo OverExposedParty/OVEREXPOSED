@@ -16,14 +16,15 @@ const partyGameTruthOrDareSchema = new mongoose.Schema({
   gamemode: { type: String, required: true },
   gameRules: { type: String, required: true },
   selectedPacks: { type: String, required: true },
-  userInstructions: { type: String},
+  userInstructions: { type: String },
   isPlaying: { type: Boolean, required: true },
   lastPinged: { type: Date, default: Date.now },
   playerTurn: { type: Number, required: true },
   shuffleSeed: { type: Number, required: true },
   currentCardIndex: { type: Number, default: 0 },
   currentCardSecondIndex: { type: Number, default: 0 },
-  questionType: { type: String, enum: ["truth", "dare"] },
+  questionType: { type: String, enum: ["truth", "dare"], default: "truth" },
+  timer: { type: Date, default: null },
   players: { type: [PlayerSchema], default: [] }
 });
 

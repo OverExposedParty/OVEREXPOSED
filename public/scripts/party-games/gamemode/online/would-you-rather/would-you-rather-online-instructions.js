@@ -1,21 +1,75 @@
-function DisplayWaitingForPlayers(currentPartyData, index, confirmation = true) {
-  setActiveContainers(waitingForPlayersContainer);
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+async function DisplayPrivateCard() {
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectOptionContainer.querySelector('.timer-wrapper') });
+  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper') });
+  SetTimeOut({ delay: delay, instruction: "DISPLAY_VOTE_RESULTS", nextDelay: resultTimerDuration, newUserConfirmed: false, newUserReady: false });
 
-  for (let i = 0; i < currentPartyData.players.length; i++) {
-    const player = currentPartyData.players[i];
+  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const player = currentPartyData.players[index];
+  if (!player.isReady && !player.hasConfirmed) {
+    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+    DisplayCard(gameContainerPrivate, selectedQuestionObj);
+    setActiveContainers(gameContainerPrivate);
+  }
+  else if (player.isReady && !player.hasConfirmed) {
+    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+    const splitQuestion = SplitQuestion(selectedQuestionObj.question.replace("Would you rather ", ""));
+    selectOptionQuestionTextA.textContent = "A: " + splitQuestion.a;
+    selectOptionQuestionTextB.textContent = "B: " + splitQuestion.b;
+    setActiveContainers(selectOptionContainer);
+  }
+  else {
+    const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed === true);
 
-    const shouldHighlight = confirmation ? player.hasConfirmed : player.isReady;
-
-    if (shouldHighlight) {
-      icons[i].classList.add('yes');
-    } else {
-      icons[i].classList.remove('yes');
+    if (allConfirmed) {
+      if (deviceId === currentPartyData.players[0].computerId) {
+        await SendInstruction({
+          instruction: "DISPLAY_VOTE_RESULTS",
+          timer: Date.now() + resultTimerDuration,
+          updateUsersConfirmation: false,
+          updateUsersReady: false
+        });
+      }
+    }
+    else {
+      if (player.hasConfirmed) {
+        DisplayWaitingForPlayers();
+      }
     }
   }
-  currentPartyData.players[index].lastPing = Date.now();
 }
 
+async function DisplayVoteResults() {
+  const delay = new Date(currentPartyData.timer) - Date.now();
+  stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
+  startTimer({ timeLeft: delay / 1000, duration: resultTimerDuration / 1000, selectedTimer: resultsChartContainer.querySelector('.timer-wrapper') });
+
+  if (!resultsChartContainer.classList.contains('active')) {
+    GetVoteResults(currentPartyData);
+    setActiveContainers(resultsChartContainer);
+  }
+
+  const aVoteCount = currentPartyData.players.filter(player => player.vote === "A").length;
+  const bVoteCount = currentPartyData.players.filter(player => player.vote === "B").length;
+
+  let punishmentInstruction;
+  if (hostDeviceId === deviceId) {
+    if ((aVoteCount === 1 && (!(bVoteCount <= 1))) || (bVoteCount === 1 && (!(aVoteCount <= 1))) && currentPartyData.gameRules.includes('odd-man-out')) {
+      punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
+    }
+    else {
+      punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
+    }
+    if (CheckSettingsExists("drink-punishment")) {
+      SetTimeOut({ delay: delay, instruction: punishmentInstruction, nextDelay: null, newUserConfirmed: false, newUserReady: false });
+    }
+    else {
+      let winningVote = aVoteCount === bVoteCount ? null : aVoteCount > bVoteCount ? "A" : "B";
+      SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:" + winningVote, nextDelay: null, newUserConfirmed: false, newUserReady: false });
+    }
+  }
+}
 
 async function WaitingForPlayer(instruction) {
   let parsedInstructions = parseInstruction(instruction)
@@ -43,7 +97,6 @@ async function WaitingForPlayer(instruction) {
 }
 
 async function DisplayPunishmentToUser(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
   let parsedInstructions = parseInstruction(instruction)
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
   if (parsedInstructions.deviceId == deviceId) {
@@ -62,7 +115,6 @@ async function DisplayPunishmentToUser(instruction) {
 
 async function PunishmentOffer(instruction) {
   let parsedInstructions = parseInstructionSecondReason(instruction);
-  const currentPartyData = await GetCurrentPartyData();
 
   if (parsedInstructions.reason === "PASS") {
     if (parsedInstructions.deviceId === deviceId) {
@@ -73,7 +125,6 @@ async function PunishmentOffer(instruction) {
     }
   } else if (parsedInstructions.reason === "CONFIRM") {
     if (deviceId === parsedInstructions.deviceId) {
-      // Reset all isReady and hasConfirmed flags
       currentPartyData.players.forEach(player => {
         player.isReady = false;
         player.hasConfirmed = false;
@@ -99,7 +150,6 @@ async function PunishmentOffer(instruction) {
 
 async function ChosePunishment(instruction) {
   let parsedInstructions = parseInstruction(instruction);
-  const currentPartyData = await GetCurrentPartyData();
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
 
@@ -107,35 +157,43 @@ async function ChosePunishment(instruction) {
 
   const aVoteCount = currentPartyData.players.filter(player => player.vote === "A").length;
   const bVoteCount = currentPartyData.players.filter(player => player.vote === "B").length;
+  const nullVoteCount = currentPartyData.players.filter(player => player.vote === null).length;
 
   const currentVote = currentPartyData.players[index].vote;
 
   if (allConfirmed) {
     if (currentPartyData.players[0].computerId === deviceId) {
-      await ResetQuestion({
-        currentPartyData: currentPartyData,
-        icons: icons
-      });
+      const winningVote = aVoteCount === bVoteCount ? null : aVoteCount > bVoteCount ? "A" : "B";
+      await SendInstruction({
+        instruction: "RESET_QUESTION:" + winningVote
+      })
     }
   }
   else if (parsedInstructions.reason === "TAKE_A_SIP") {
-    if ((aVoteCount == bVoteCount || aVoteCount == 0 || bVoteCount == 0) && deviceId == hostDeviceId) {
-      await ResetQuestion({
-        currentPartyData: currentPartyData,
-        icons: icons
-      });
+    if ((aVoteCount == bVoteCount && nullVoteCount == 0) && deviceId == hostDeviceId) {
+      await SendInstruction({
+        instruction: "RESET_QUESTION"
+      })
+    }
+    else if (currentPartyData.players[index].vote == "A" && bVoteCount > aVoteCount || currentPartyData.players[index].vote == "B" && aVoteCount > bVoteCount || currentPartyData.players[index].vote == null) {
+      completePunishmentText.textContent = "Take a sip.";
+      completePunishmentContainer.setAttribute("punishment-type", parsedInstructions.reason);
+
+      if (!currentPartyData.players[index].hasConfirmed) {
+        setActiveContainers(completePunishmentContainer);
+      } else {
+        DisplayWaitingForPlayers();
+      }
     }
     else {
-      if (currentPartyData.players[index].vote == "A" && bVoteCount > aVoteCount || currentPartyData.players[index].vote == "B" && aVoteCount > bVoteCount) {
-
-        completePunishmentText.textContent = "Take a sip.";
-        completePunishmentContainer.setAttribute("punishment-type", parsedInstructions.reason);
-
-        if (!currentPartyData.players[index].hasConfirmed) {
-          setActiveContainers(completePunishmentContainer);
-        } else {
-          DisplayWaitingForPlayers(currentPartyData, index, true);
-        }
+      if (currentPartyData.players[index].hasConfirmed == false) {
+        SetUserConfirmation({
+          selectedDeviceId: deviceId,
+          option: true
+        })
+      }
+      else {
+        DisplayWaitingForPlayers();
       }
     }
   }
@@ -164,7 +222,6 @@ async function ChosePunishment(instruction) {
 }
 
 async function UserSelectedForPunishment(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
   let parsedInstructions = parseInstructionDeviceId(instruction);
   const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
   if (parsedInstructions.deviceId == deviceId) {
@@ -178,88 +235,23 @@ async function UserSelectedForPunishment(instruction) {
 }
 //add container
 async function AnswerToUserDonePunishment() {
-  const currentPartyData = await GetCurrentPartyData();
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
   const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
   if (currentPartyData.players[index].isReady === true) {
-    DisplayWaitingForPlayers(currentPartyData, index);
-
+    DisplayWaitingForPlayers();
     const allReady = currentPartyData.players.every(player => player.isReady === true);
 
     if (allReady) {
       if (deviceId === currentPartyData.players[0].computerId) {
-        await ResetQuestion({
-          currentPartyData: currentPartyData,
-          icons: icons
-        });
-      }
-    }
-  }
-}
-
-async function DisplayPrivateCard(instruction) {
-  const currentPartyData = await GetCurrentPartyData();
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const parsedInstructions = parseInstructionSecondReason(instruction);
-  const player = currentPartyData.players[index];
-  if (!player.isReady && !player.hasConfirmed) {
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    DisplayCard(gameContainerPrivate, selectedQuestionObj);
-    setActiveContainers(gameContainerPrivate);
-  }
-  else if (player.isReady && !player.hasConfirmed) {
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    const splitQuestion = SplitQuestion(selectedQuestionObj.question.replace("Would you rather ", ""));
-    selectOptionQuestionTextA.textContent = "A: " + splitQuestion.a;
-    selectOptionQuestionTextB.textContent = "B: " + splitQuestion.b;
-    setActiveContainers(selectOptionContainer);
-  }
-  else {
-    const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed === true);
-
-    if (allConfirmed) {
-      if (deviceId === currentPartyData.players[0].computerId) {
+        const aVoteCount = currentPartyData.players.filter(player => player.vote === "A").length;
+        const bVoteCount = currentPartyData.players.filter(player => player.vote === "B").length;
+        const winningVote = aVoteCount === bVoteCount ? null : aVoteCount > bVoteCount ? "A" : "B";
         await SendInstruction({
-          instruction: "DISPLAY_VOTE_RESULTS"
-        });
+          instruction: "RESET_QUESTION:" + winningVote
+        })
       }
     }
-    else {
-      if (player.hasConfirmed) {
-        DisplayWaitingForPlayers(currentPartyData, index);
-      }
-    }
-  }
-}
-
-async function DisplayVoteResults() {
-  const currentPartyData = await GetCurrentPartyData();
-
-  if (!resultsChartContainer.classList.contains('active')) {
-    GetVoteResults(currentPartyData);
-    setActiveContainers(resultsChartContainer);
-  }
-
-  const aVoteCount = currentPartyData.players.filter(player => player.vote === "A").length;
-  const bVoteCount = currentPartyData.players.filter(player => player.vote === "B").length;
-
-  if (currentPartyData.players[0].computerId === deviceId) {
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    let punishmentInstruction;
-    if ((aVoteCount === 1 || bVoteCount === 1) && currentPartyData.gameRules.includes('odd-man-out')) {
-      punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
-    }
-    else {
-      punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
-    }
-
-    await SendInstruction({
-      instruction: punishmentInstruction,
-      updateUsersReady: false,
-      updateUsersConfirmation: false
-    });
   }
 }
 
@@ -331,12 +323,9 @@ function GetVoteResults(currentPartyData) {
 }
 
 async function PartySkip() {
-  const currentPartyData = await GetCurrentPartyData();
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-  await ResetQuestion({
-    currentPartyData: currentPartyData,
-    icons: icons
-  });
+  await SendInstruction({
+    instruction: "RESET_QUESTION:"
+  })
 }
 
 function SplitQuestion(question) {

@@ -105,12 +105,13 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         cardContainerAnswer?.insertAdjacentHTML('afterbegin', updatedHTML);
 
         if (placeholderCardContainer?.dataset.online === "false") {
+
             if (cardContainerGamemode === 'truth-or-dare') {
                 const scriptGetNextQuestion = document.createElement('script');
                 scriptGetNextQuestion.src = `/scripts/party-games/gamemode/online/truth-or-dare/get-next-question.js`;
                 document.body.appendChild(scriptGetNextQuestion);
             }
-            else {
+            else if (cardContainerGamemode != 'imposter') {
                 const scriptGetNextQuestion = document.createElement('script');
                 scriptGetNextQuestion.src = `/scripts/party-games/general/get-next-question.js`;
                 document.body.appendChild(scriptGetNextQuestion);
@@ -123,6 +124,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
 
             gameContainerPublicText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            if (cardContainerPublic.getAttribute('data-text-size') === 'large') {
+                gameContainerPublicText.classList.add('large');
+            }
+
             gameContainerPublicCardType.textContent = '';
         }
         if (cardContainerAnswer != null) {
@@ -131,6 +136,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
 
             gameContainerAnswerText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            if (cardContainerAnswer.getAttribute('data-text-size') === 'large') {
+                gameContainerAnswerText.classList.add('large');
+            }
+
             gameContainerAnswerCardType.textContent = '';
         }
         if (cardContainerPrivate != null) {
@@ -139,6 +148,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerPrivateCardType = cardContainerPrivate.querySelector('.content .main-image-container .card-type-text');
 
             gameContainerPrivateText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            if (cardContainerPrivate.getAttribute('data-text-size') === 'large') {
+                gameContainerPrivateText.classList.add('large');
+            }
+
             gameContainerPrivateCardType.textContent = '';
         }
         if (cardContainerDualStack != null) {
@@ -147,22 +160,23 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerDualStackCardType = cardContainerDualStack.querySelector('.content .main-image-container .card-type-text');
 
             gameContainerDualStackText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            if (cardContainerDualStack.getAttribute('data-text-size') === 'large') {
+                gameContainerDualStackText.classList.add('large');
+            }
+
+
             gameContainerDualStackCardType.textContent = '';
         }
-
-        (async () => {
-            if (placeholderCardContainer?.dataset.online === "true") {
-                await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online.js?30082025`);
-                await LoadScript(`/scripts/party-games/gamemode/online/general/party-game-statistics.js`);
-                await SetPageSettings();
-            }
-        })();
     })
     .then(() => {
         // load game scripts here
         // const scriptGamemodeOnline = document.createElement('script');
         // scriptGamemodeOnline.src = `/scripts/party-games/${cardContainerGamemode}/${cardContainerGamemode}-online.js`;
         // document.body.appendChild(scriptGamemodeOnline);
+        (async () => {
+            await LoadScript(`/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online.js?30082025`);
+            await SetPageSettings();
+        })();
     }).then(() => {
         if (!document.querySelector('script[src="/scripts/html-templates/online/card-container-template.js"]:not([data-standalone="true"])')) {
             SetScriptLoaded('/scripts/html-templates/online/card-container-template.js');

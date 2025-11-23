@@ -1,0 +1,8 @@
+{
+    "additional-help-containers": [
+        "party-games-online/waiting-rooms/general.json",
+        "party-games-online/how-to-play/paranoia.json",
+        "party-games/addons/drink-wheel.json",
+        "party-gamemodes-settings/paranoia.json"
+    ]
+}

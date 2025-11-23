@@ -7,19 +7,6 @@ const maxNumOfDialogues = 3;
 
 let currentPhase = 0;
 
-const selectCivilianWatchContainer = document.getElementById('select-civilian-watch-container');
-const selectCivilianWatchHeader = selectCivilianWatchContainer.querySelector('.content-container h1');
-const selectCivilianWatchText = selectCivilianWatchContainer.querySelector('.content-container h2');
-const selectCivilianWatchOptionContainer = selectCivilianWatchContainer.querySelector('.button-container');
-const selectCivilianWatchOptionButtons = selectCivilianWatchOptionContainer.querySelectorAll('button:not(#leave)');
-const selectCivilianWatchTimerWrapper = selectCivilianWatchContainer.querySelector('.timer-wrapper')
-const selectCivilianWatchLeaveButton = selectCivilianWatchOptionContainer.querySelector('#leave');
-const selectCivilianWatchConfirmButton = selectCivilianWatchContainer.querySelector('.select-button-container .select-button')
-
-const displayCivilianWatchResponseContainer = document.getElementById('select-civilian-watch-response-container');
-const displayCivilianWatchResponseText = displayCivilianWatchResponseContainer.querySelector('.content-container h2');
-const displayCivilianWatchResponseTimerWrapper = displayCivilianWatchResponseContainer.querySelector('.timer-wrapper')
-
 gameContainers.push(selectCivilianWatchContainer, displayCivilianWatchResponseContainer);
 
 const dialogueDelay = 4000;
@@ -169,6 +156,7 @@ function selectOptions(source, randomIndexes) {
 }
 
 function InitializeCivilianWatch() {
+    selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('disabled'));
     currentPhase = 0;
     phaseOne = randomizePhase([phaseOptions[1], phaseOptions[1], phaseOptions[2]]);
     phaseTwo = randomizePhase([...phaseOptions]);
@@ -188,14 +176,30 @@ function InitializeCivilianWatch() {
 }
 
 function CivilianWatchContainerUpdate() {
+    if (!selectedMafiaPhaseDialogues[currentPhase] || !selectedMafiaPhaseDialogues[currentPhase][0]) {
+        console.warn("Dialogue not found for currentPhase:", currentPhase, selectedMafiaPhaseDialogues);
+        return;
+    }
+
     selectCivilianWatchText.textContent = selectedMafiaPhaseDialogues[currentPhase][0];
+
+    const currentPhaseOptions = selectedmafiaPhaseOptions[currentPhase];
+    if (!currentPhaseOptions) {
+        console.warn("Options not found for currentPhase:", currentPhase, selectedmafiaPhaseOptions);
+        return;
+    }
+
+    const optionKeys = Object.keys(currentPhaseOptions);
     for (let i = 0; i < selectCivilianWatchOptionButtons.length; i++) {
-        const currentPhaseOptions = selectedmafiaPhaseOptions[currentPhase];
-        const optionKeys = Object.keys(currentPhaseOptions);
         const optionKey = optionKeys[i];
-        selectCivilianWatchOptionButtons[i].textContent = optionKey;
+        if (optionKey) {
+            selectCivilianWatchOptionButtons[i].textContent = optionKey;
+        } else {
+            selectCivilianWatchOptionButtons[i].textContent = "";
+        }
     }
 }
+
 
 selectCivilianWatchOptionButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -209,63 +213,89 @@ selectCivilianWatchOptionButtons.forEach(button => {
 
 
 selectCivilianWatchConfirmButton.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
     let updatePartyData = false;
+
+    // Handle leave option
     if (selectCivilianWatchContainer.getAttribute('selected-id') == 'leave') {
+        selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
         currentPartyData.players[index].hasConfirmed = true;
+        currentPartyData.players[index].isReady = true;
         await SendInstruction({
             partyData: currentPartyData,
         });
         return;
     }
-    phase = getPhases();
 
+    // Prevent double clicks
+    selectCivilianWatchConfirmButton.disabled = true;
+
+    // Get current phase
+    phase = getPhases()[currentPhase];
+
+    // Get selected option index and option key
     const optionNumber = Number(selectCivilianWatchContainer.getAttribute('selected-id'));
+    const optionKey = selectCivilianWatchContainer.getAttribute('data-option');
 
-    const selectedOption = phaseOne[optionNumber];
-    displayCivilianWatchResponseText.textContent = selectedmafiaPhaseOptions[currentPhase][selectCivilianWatchContainer.getAttribute('data-option')][phase[currentPhase][optionNumber]];
+    // The selected outcome type ("success", "unclear", or "setback")
+    const selectedOption = phase[optionNumber];
 
-    selectCivilianWatchOptionButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            button.classList.remove('active');
-            selectCivilianWatchContainer.setAttribute('selected-id', "");
-        });
-    });
+    // Display the correct outcome text
+    displayCivilianWatchResponseText.textContent =
+        selectedmafiaPhaseOptions[currentPhase][optionKey][selectedOption];
+
+    // Clean up button states
+    selectCivilianWatchOptionButtons.forEach(btn => btn.classList.remove('active'));
     selectCivilianWatchLeaveButton.classList.remove('active');
-    
+
+    console.log("currentPhase:", currentPhase);
+    console.log("selectedOption:", selectedOption);
+
+    // Switch to response container
     setActiveContainers(displayCivilianWatchResponseContainer);
+
+    // Wait for the dialogue delay before continuing
     setTimeout(async () => {
         const currentPartyData = await GetCurrentPartyData();
-        console.log("selectedOption: ", selectedOption);
-        if (selectedOption == phaseOptions[2]) { //success
+
+        if (selectedOption === phaseOptions[2]) { // success
             currentPhase++;
-            CivilianWatchContainerUpdate();
-            setActiveContainers(selectCivilianWatchContainer);
+            console.log("Success! Moving to next phase:", currentPhase);
+
+            if (currentPhase < maxNumOfPhases) {
+                CivilianWatchContainerUpdate();
+                setActiveContainers(selectCivilianWatchContainer);
+            } else {
+                console.log("All phases complete.");
+                selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
+            }
+
+            selectCivilianWatchConfirmButton.disabled = false;
             return;
         }
-        else if (selectedOption == phaseOptions[1]) { //unclear
-            setActiveContainers(waitingForPlayersContainers);
+
+        if (selectedOption === phaseOptions[1] || selectedOption === phaseOptions[0]) { // unclear or setback
+            selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
             currentPartyData.players[index].hasConfirmed = true;
-            console.log("selectedOption: ", selectedOption);
             updatePartyData = true;
+            console.log("Updating party data due to:", selectedOption);
         }
-        else if (selectedOption == phaseOptions[0]) { //setback
-            setActiveContainers(waitingForPlayersContainers);
-            currentPartyData.players[index].hasConfirmed = true;
-            console.log("selectedOption: ", selectedOption);
-            updatePartyData = true;
-        }
+
         if (currentPhase > 2) {
-            setActiveContainers(waitingForPlayersContainers);
+            selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
         }
-        if (updatePartyData == true) {
+
+        if (updatePartyData) {
             await SendInstruction({
                 partyData: currentPartyData,
             });
         }
+
+        setActiveContainers(selectCivilianWatchContainer);
+        selectCivilianWatchConfirmButton.disabled = false;
     }, dialogueDelay);
 });
+
 
 selectCivilianWatchLeaveButton.addEventListener('click', () => {
     selectCivilianWatchOptionButtons.forEach(btn => btn.classList.remove('active'));

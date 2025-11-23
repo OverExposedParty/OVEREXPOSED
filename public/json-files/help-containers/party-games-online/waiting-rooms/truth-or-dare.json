@@ -1,0 +1,7 @@
+{
+    "additional-help-containers": [
+        "party-games-online/waiting-rooms/general.json",
+        "party-games-online/how-to-play/truth-or-dare.json",
+        "party-gamemodes-settings/truth-or-dare.json"
+    ]
+}

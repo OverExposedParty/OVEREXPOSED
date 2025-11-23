@@ -77,8 +77,8 @@
         "gamemodeCardImageFront": "/images/card-titles/front/mafia.svg",
         "gamemodeCardImageBack": "/images/card-titles/back/mafia.svg",
         "gamemodeDescription": "A hilarious game where players vote on who is most likely to do a certain action",
-        "gamemodePrimaryColour": "#7D47A0",
-        "gamemodeSecondaryColour": "#582F74",
+        "gamemodePrimaryColour": "#9B56D3",
+        "gamemodeSecondaryColour": "#6D3C95",
         "gamemodeLink": "/mafia/settings",
         "gamemodeTextUpdates": "Online coming soon",
         "gamemode-active": false

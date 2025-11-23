@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 471.82 349.54">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #202020;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <circle class="cls-1" cx="48" cy="48" r="48"/>
+      <rect class="cls-1" x="135.82" y="16" width="336" height="64" rx="32" ry="32"/>
+    </g>
+    <g>
+      <circle class="cls-1" cx="48" cy="174.77" r="48"/>
+      <rect class="cls-1" x="135.82" y="142.77" width="336" height="64" rx="32" ry="32"/>
+    </g>
+    <g>
+      <circle class="cls-1" cx="48" cy="301.54" r="48"/>
+      <rect class="cls-1" x="135.82" y="269.54" width="336" height="64" rx="32" ry="32"/>
+    </g>
+  </g>
+</svg>

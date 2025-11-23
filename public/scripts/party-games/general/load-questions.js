@@ -19,12 +19,11 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
         const packs = packsData[`${gamemode}-packs`];
 
         let filesToFetch = [];
-
         if (fetchPacks === null) {
             // Use localStorage to determine which packs to fetch
             filesToFetch = packs
                 .filter(pack => {
-                    const key = `${gamemode}-${pack["pack-name"]}`;
+                    const key = `pack-${gamemode}-${pack["pack-name"]}`;
                     return localStorage.getItem(key) === 'true';
                 })
                 .map(pack => pack["pack-path"]);
@@ -34,7 +33,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
 
             filesToFetch = packs
                 .filter(pack => {
-                    const key = `${gamemode}-${pack["pack-name"]}`;
+                    const key = `pack-${gamemode}-${pack["pack-name"]}`;
                     return fetchPackList.includes(key);
                 })
                 .map(pack => pack["pack-path"]);
@@ -76,11 +75,6 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             const packColour = pack["pack-colour"];
             cardPackMap.push({ packName, packCard, packColour });
         });
-        if (gamemode == "Truth Or Dare") {
-            if (localStorage.getItem(`${gamemode}-punishment`)) {
-                allQuestions.push("punishment");
-            }
-        }
         if (allQuestions.length > 0) {
             if (seedShuffle) {
                 shuffleQuestions(seedShuffle);
@@ -88,17 +82,11 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             else {
                 shuffleQuestions();
             }
-            console.log(allQuestions);
-            console.log(questionPackMap);
-            console.log(cardPackMap);
 
             numberOfTruthQuestions = allQuestions.filter(q => q["question-type"] === "truth").length;
             numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
-
-            console.log(`Number of truth questions: ${numberOfTruthQuestions}`);
-            console.log(`Number of dare questions: ${numberOfDareQuestions}`);
-
-        } else {
+        }
+        else {
             console.error('No questions available to shuffle.');
             window.location.href = addSettingsExtensionToCurrentURL();
         }
@@ -138,6 +126,7 @@ function getNextQuestion(index = null, questionType = null, seed = null) {
     let selectedQuestion;
     let cardType;
     let filteredQuestions = allQuestions;
+
     if (questionType !== null) {
         filteredQuestions = allQuestions.filter(q => q["question-type"] === questionType);
     }
@@ -157,5 +146,5 @@ function getNextQuestion(index = null, questionType = null, seed = null) {
     }
 
 
-    return { question: selectedQuestion['question'], cardType: cardType };
+    return { question: selectedQuestion['question'], cardType: cardType, punishment: selectedQuestion['punishment'] || null, questionAlternatives: selectedQuestion['question-alternatives'] || [] };
 }

@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  position: relative; /* Needed if you position child elements absolutely */
+  position: relative;
+  z-index: 301;
 }
 
 .timer-wrapper.active {
@@ -16,7 +17,7 @@
   right: 0.5rem;
   display: flex;
   height: 2.5rem;
-  gap: 0; /* Remove spacing if not needed in small version */
+  gap: 0;
 }
 
 .timer-label {

@@ -36,6 +36,23 @@ function waitForFunction(name, callback) {
   }, 50); // check every 50ms
 }
 
+function setActiveContainers(...activeContainers) {
+  if (activeContainers.length === 0) {
+    gameContainers.forEach(container => container.classList.remove('active'));
+    return;
+  }
+
+  const uniqueActiveContainers = new Set(activeContainers);
+
+  gameContainers.forEach(container => {
+    if (uniqueActiveContainers.has(container)) {
+      container.classList.add('active');
+    } else {
+      container.classList.remove('active');
+    }
+  });
+}
+
 function SetScriptLoaded(script) {
   document.querySelector(`script[src="${script}"]`).setAttribute('data-loaded', 'true');
   const dataLoadedScripts = document.querySelectorAll('[data-loaded]');

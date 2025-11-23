@@ -1,0 +1,97 @@
+[
+    {
+        "title": "READ QUESTION <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/would-you-rather.jpg",
+                    "alt": "Would You Rather background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/read-question/container.svg",
+                    "alt": "read question container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/read-question/instructions.svg",
+                    "alt": "read question instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "SELECT VOTE <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/would-you-rather.jpg",
+                    "alt": "Would You Rather background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/select-vote/container.svg",
+                    "alt": "select vote container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/select-vote/instructions.svg",
+                    "alt": "select vote instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DISPLAY RESULTS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/would-you-rather.jpg",
+                    "alt": "Would You Rather background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/display-results/container.svg",
+                    "alt": "display results container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/display-results/instructions.svg",
+                    "alt": "display results instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "TAKE A SIP <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/would-you-rather.jpg",
+                    "alt": "Would You Rather background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/take-a-sip/container.svg",
+                    "alt": "take a sip container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/take-a-sip/instructions.svg",
+                    "alt": "take a sip instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "WAITING FOR PLAYERS <br>[IMG:/images/icons/settings-type/gameplay.svg ALT:Gameplay Icon][IMG:/images/icons/settings-type/online.svg ALT:Online Icon]",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/would-you-rather.jpg",
+                    "alt": "Would You Rather background"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/waiting-for-players/container.svg",
+                    "alt": "waiting for players container"
+                },
+                {
+                    "src": "/images/help-container/how-to-play/online/would-you-rather/waiting-for-players/instructions.svg",
+                    "alt": "waiting for players instructions"
+                }
+            ]
+        }
+    }
+]

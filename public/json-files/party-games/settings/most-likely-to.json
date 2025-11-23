@@ -1,6 +1,14 @@
 {
     "most-likely-to-settings": [
         {
+            "settings-name": "take-a-shot",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "nsfw",
+            "settings-active": true,
+            "button-type": "toggle"
+        },
+        {
             "settings-name": "drink-wheel",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
@@ -15,6 +23,18 @@
             "settings-restriction": "sfw",
             "settings-active": false,
             "button-type": "toggle"
+        },
+        {
+            "settings-name": "time-limit",
+            "settings-colour": "var(--primarypagecolour)",
+            "settings-secondary-colour": "var(--secondarypagecolour)",
+            "settings-restriction": "online",
+            "settings-active": true,
+            "button-type": "increment",
+            "button-initial-value": 60,
+            "button-increment-value": 30,
+            "button-minimum-value": 30,
+            "button-maximum-value": 150
         }
     ]
 }

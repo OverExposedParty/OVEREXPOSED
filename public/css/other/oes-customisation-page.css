@@ -105,7 +105,7 @@ button.oes-option.active .oes-image-container p.oes-id {
 
 @media ((orientation: portrait) and (min-width: 300px) and (max-width: 500px)) {
     .oes-content-container .button-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 

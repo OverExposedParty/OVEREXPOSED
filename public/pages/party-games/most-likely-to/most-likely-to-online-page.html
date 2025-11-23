@@ -59,6 +59,7 @@
     <div class="main-container">
         <div id="placeholder-selected-user-container" data-template="most-likely-to"></div>
         <div class="gamemode-popup-container" id="results-container">
+            <h1>Results</h1>
             <div id="tableWrapper"></div>
         </div>
     </div>
@@ -70,10 +71,6 @@
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#FFEE66');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B9AA42');
-
-    document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/most-likely-to/rotate-phone-icon.svg)`);
-    document.documentElement.style.setProperty('--tiktokicon', 'url(/images/icons/most-likely-to/tik-tok-icon.svg)');
-    document.documentElement.style.setProperty('--instagramicon', 'url(/images/icons/most-likely-to/instagram-icon.svg)');
 </script>
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>

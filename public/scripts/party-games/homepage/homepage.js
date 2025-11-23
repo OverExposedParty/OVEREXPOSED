@@ -270,10 +270,6 @@ function changeFavicon(colour) {
     faviconLinks.forEach((favicon, i) => {
         const size = sizes[i % sizes.length];
         favicon.href = `/images/icons/${colour}/favicons/favicon-${size}.png`;
-
-        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/${colour}/rotate-phone-icon.svg)`);
-        document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/${colour}/tik-tok-icon.svg)`);
-        document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/${colour}/instagram-icon.svg)`);
     });
 }
 

@@ -23,6 +23,7 @@ const partyGameNeverHaveIEverSchema = new mongoose.Schema({
   playerTurn: { type: Number, required: true },
   shuffleSeed: { type: Number, required: true },
   currentCardIndex: { type: Number, default: 0 },
+  timer: { type: Date, default: null },
   players: { type: [PlayerSchema], default: [] }
 });
 

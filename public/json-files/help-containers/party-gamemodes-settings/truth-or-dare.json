@@ -1,0 +1,34 @@
+{
+    "items": [
+        {
+            "title": "PACK: ICE BREAKER <br>[IMG:/images/icons/difficulty/chill.svg ALT:Chill Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon][IMG:/images/icons/difficulty/creative.svg ALT:Creative Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon]",
+            "text": {
+                "paragraph": "<highlight>ICE BREAKER</highlight> is perfect for easing into the night and getting everyone to loosen up. Whether it’s embarrassing truths or goofy dares, this pack is your ultimate catalyst for hilarious, unexpected moments. You’ll laugh, you’ll cringe, and you’ll make memories you’ll never forget."
+            }
+        },
+        {
+            "title": "PACK: CHEEKY CONFESSIONS <br>[IMG:/images/icons/difficulty/chill.svg ALT:Chill Difficulty Icon][IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon][IMG:/images/icons/difficulty/cheeky.svg ALT:Cheeky Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon]",
+            "text": {
+                "paragraph": "Filled with juicy truths and hilarious dares that will have everyone spilling their most embarrassing secrets and doing outrageous challenges. From pretending to be sick to spilling the tea on your worst habits, this pack is perfect for those who love a bit of mischief and laughter. Get ready for awkward moments and embarrassing confessions."
+            }
+        },
+        {
+            "title": "PACK: TROUBLED TEENS <br>[IMG:/images/icons/difficulty/brutal.svg ALT:Brutal Difficulty Icon][IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon][IMG:/images/icons/difficulty/fiery.svg ALT:Fiery Difficulty Icon][IMG:/images/icons/difficulty/funny.svg ALT:Funny Difficulty Icon]",
+            "text": {
+                "paragraph": "Full of embarrassing moments, awkward confessions, and cringe-worthy dares, this game is guaranteed to bring laughter and unforgettable stories to the table. Perfect for a night of fun and surprises."
+            }
+        },
+        {
+            "title": "PACK: ADULT CONFESSIONS <br>[IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/sexual.svg ALT:Sexual Difficulty Icon][IMG:/images/icons/difficulty/flirty.svg ALT:Flirty Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
+            "text": {
+                "paragraph": "Full of raw and revealing truths, this game is all about opening up to your deepest secrets and most embarrassing moments. Brace yourself for confessions that will spark laughter, awkwardness, and plenty of jaw-dropping stories. Perfect for those who want to get real and let loose."
+            }
+        },
+        {
+            "title": "PACK: RISKY REVELATIONS <br>[IMG:/images/icons/difficulty/sexual.svg ALT:Sexual Difficulty Icon][IMG:/images/icons/difficulty/naughty.svg ALT:Naughty Difficulty Icon][IMG:/images/icons/difficulty/fiery.svg ALT:Fiery Difficulty Icon][IMG:/images/icons/difficulty/nsfw.svg ALT:NSFW Difficulty Icon]",
+            "text": {
+                "paragraph": "Uncover the wildest, most scandalous secrets with daring truths and bold dares. Push boundaries, confess intimate moments, and challenge your comfort zone. Perfect for spicing up any game with a little risk and a lot of fun!"
+            }
+        }
+    ]
+}

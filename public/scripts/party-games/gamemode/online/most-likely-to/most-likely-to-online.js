@@ -19,11 +19,7 @@ const punishmentText = document
 
 async function SetPageSettings() {
   buttonChoosePlayer.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    selectUserQuestionText.textContent = selectedQuestionObj.question.replace("Who's most likely to ", "")
-    setActiveContainers(selectUserContainer);
-    setUserBool(deviceId, null, true)
+    await setUserBool(deviceId, null, true)
   });
 
   selectUserConfirmPlayerButton.addEventListener('click', async () => {
@@ -75,7 +71,6 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const currentPartyData = await GetCurrentPartyData();
     const parsedInstructions = parseInstruction(currentPartyData.userInstructions);
     completePunishmentContainer.classList.remove('active');
     await SetUserConfirmation({
@@ -94,13 +89,20 @@ async function SetPageSettings() {
     SetUserConfirmation(deviceId, false, "PUNISHMENT", true);
   });
 
+  AddTimerToContainer(gameContainerPrivate.querySelector('.main-image-container'));
+  AddTimerToContainer(selectUserContainer);
+  AddTimerToContainer(waitingForPlayersContainer);
+  AddTimerToContainer(resultsChartContainer);
+  AddTimerToContainer(selectNumberContainer);
+  AddTimerToContainer(selectPunishmentContainer);
+  AddTimerToContainer(waitingForPlayerContainer);
 
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
     return;
   }
-  const currentPartyData = existingData[0];
+  currentPartyData = existingData[0];
 
   await loadJSONFiles(currentPartyData.selectedPacks, currentPartyData.shuffleSeed);
 
@@ -134,14 +136,14 @@ async function initialisePage() {
           selectUserButtonContainer.appendChild(userButton);
         }
       }
-      const partyRulesSettings = parseGameRules(data[0].gameRules)
+      partyRulesSettings = parseGameRules(data[0].gameRules)
       for (let i = 0; i < partyRulesSettings.length; i++) {
         let settingsButton;
-        if (partyRulesSettings[i] == "take-a-shot") {
-          settingsButton = createUserButton(partyRulesSettings[i], partyRulesSettings[i].replace(/-/g, " "));
+        if (partyRulesSettings[i].includes("take-a-shot")) {
+          settingsButton = createUserButton("take-a-shot", "Take A Shot");
           selectPunishmentButtonContainer.appendChild(settingsButton);
         }
-        else {
+        else if (!/\d/.test(partyRulesSettings[i])) {
           AddGamemodeContainers(formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode, seperator: '-', uppercase: false }));
           settingsButton = createUserButton(partyRulesSettings[i], formatDashedString({ input: partyRulesSettings[i], gamemode: data[0].gamemode }));
           selectPunishmentButtonContainer.appendChild(settingsButton);
@@ -168,14 +170,14 @@ async function initialisePage() {
           button.classList.add('active');
         });
       });
-      await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
       await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
       if (deviceId == hostDeviceId && data[0].userInstructions == "") {
         await SendInstruction({
           instruction: "DISPLAY_PRIVATE_CARD",
           updateUsersReady: false,
           updateUsersConfirmation: false,
-          fetchInstruction: true
+          fetchInstruction: true,
+          timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
         });
       }
       else {
@@ -186,6 +188,7 @@ async function initialisePage() {
         });
         FetchInstructions();
       }
+      SetPartyGameStatistics();
       await AddUserIcons();
       SetScriptLoaded('/scripts/party-games/online/online-settings.js');
     }
@@ -217,6 +220,7 @@ function GetVoteResults(currentPartyData) {
   table.classList.add("vote-results-table");
 
   currentPartyData.players.forEach((player, i) => {
+    if (values[i] === 0) return;
     const row = document.createElement("tr");
 
     // --- Player icon cell ---
@@ -302,42 +306,59 @@ function GetStringAtIndex(votedString, index) {
 
 
 async function FetchInstructions() {
-  const res = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await res.json();
-  if (!data || data.length === 0) {
+  currentPartyData = await GetCurrentPartyData();
+  if (currentPartyData == undefined || currentPartyData.length === 0) {
     PartyDisbanded();
     return;
   }
-
-  if (data[0].userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
+  await UpdatePartyGameStatistics();
+  if (currentPartyData.userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
     DisplayPrivateCard();
   }
-  else if (data[0].userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
+  else if (currentPartyData.userInstructions.includes("DISPLAY_VOTE_RESULTS")) {
     DisplayVoteResults();
   }
-  else if (data[0].userInstructions.includes("TIE_BREAKER_PUNISHMENT_OFFER")) {
-    TieBreakerPunishmentOffer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("TIE_BREAKER_PUNISHMENT_OFFER")) {
+    TieBreakerPunishmentOffer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("WAITING_FOR_PLAYER")) {
-    WaitingForPlayer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("WAITING_FOR_PLAYER")) {
+    WaitingForPlayer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOSE_PUNISHMENT")) {
+    ChosePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("CHOOSING_PUNISHMENT")) {
+    ChoosingPunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+    DisplayPunishmentToUser(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("PUNISHMENT_OFFER")) {
+    PunishmentOffer(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
-    HasUserDonePunishment(data[0].userInstructions);
+  else if (currentPartyData.userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
+    HasUserDonePunishment(currentPartyData.userInstructions);
   }
-  else if (data[0].userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
+  else if (currentPartyData.userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
     AnswerToUserDonePunishment();
+  }
+  else if (currentPartyData.userInstructions.includes("GAME_OVER")) {
+    SetPartyGameStatisticsGameOver();
+  }
+  else if (currentPartyData.userInstructions.includes("RESET_QUESTION")) {
+    if (currentPartyData.userInstructions.includes("PLAYER_TURN_PASSED")) {
+      let parsedInstructions = parseInstructionDeviceId(currentPartyData.userInstructions);
+      await ResetQuestion({
+        timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
+        playerIndex: currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.reason),
+        incrementScore: -2
+      });
+    }
+    else {
+      await ResetQuestion({
+        timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
+      });
+    }
   }
 }
 
@@ -389,16 +410,3 @@ names.forEach((name, i) => {
 });
 
 tableWrapper.appendChild(table);
-
-async function AddUserIcons() {
-  const currentPartyData = await GetCurrentPartyData();
-  if (currentPartyData) {
-    for (let i = 0; i < currentPartyData.players.length; i++) {
-      createUserIconPartyGames({
-        container: waitingForPlayersIconContainer,
-        userId: currentPartyData.players[i].computerId,
-        userCustomisationString: currentPartyData.players[i].userIcon
-      });
-    }
-  }
-}

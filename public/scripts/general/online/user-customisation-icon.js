@@ -54,7 +54,7 @@ async function loadActivePacks(masterJsonPath) {
     if (!document.querySelector('script[src="/scripts/general/online/user-customisation-icon.js"]:not([data-standalone="true"])')) {
       SetScriptLoaded("/scripts/general/online/user-customisation-icon.js");
     }
-    else{
+    else {
       userCustomisationTasks.userIcons.taskCompleted = true;
       CheckUserCustomisationLoaded();
     }
@@ -87,7 +87,9 @@ function createUserIconPartyGames({ container, userId, userCustomisationString, 
 }
 
 function EditUserIconPartyGames({ container, userId, userCustomisationString }) {
-  container.querySelector('.icon').setAttribute('data-user-id', userId);
+  if (container.querySelector('.icon')) {
+    container.querySelector('.icon').setAttribute('data-user-id', userId);
+  }
   const parsed = parseCustomisationString(userCustomisationString);
   const userCustomisation = {
     colour: getFilePathByCustomisationId(parsed.colour),
