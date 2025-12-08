@@ -186,7 +186,6 @@ async function ResetQuestion({ icons = null, instruction = "DISPLAY_PRIVATE_CARD
   if (hostDeviceId !== deviceId) return;
   console.log(currentPartyData);
   const playerCount = currentPartyData.players.length;
-
   // Move to next card
   currentPartyData.currentCardIndex++;
   if (currentPartyData.playerTurn !== undefined) {

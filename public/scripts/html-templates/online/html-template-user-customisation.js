@@ -1,6 +1,7 @@
 const placeholderUserCustomisation = document.getElementById('user-customisation-placeholder');
 
 let userCustomisationContainer;
+let usercustomisationSaveButton, userCustomisationRandomiseButton;
 let userCustomisationContainerSlotColour, userCustomisationContainerSlotHead, userCustomisationContainerSlotEyes, userCustomisationContainerSlotMouth;
 let userCustomisationLabelColourSlot, userCustomisationLabelHeadSlot, userCustomisationLabelEyes, userCustomisationLabelMouth;
 let userCustomisationImageColourSlot, userCustomisationImageHeadSlot, userCustomisationImageEyes, userCustomisationImageMouth;
@@ -60,6 +61,7 @@ fetch('/html-templates/user-customisation.html')
     userCustomisationImageMouth = userCustomisationContainer.querySelector('.user-customisation-character.layer-mouth-slot');
 
     usercustomisationSaveButton = userCustomisationContainer.querySelector('#save-customisation');
+    userCustomisationRandomiseButton = userCustomisationContainer.querySelector('#randomise-customisation');
     userCustomisationOptions = userCustomisationContainer.querySelectorAll('.user-customisation-option');
 
     const scriptUserCustomisationIcon = document.createElement('script');

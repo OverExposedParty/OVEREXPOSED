@@ -74,6 +74,10 @@ nsfwCheckbox.addEventListener('change', function () {
     else {
         playSoundEffect('sliderDisabled');
     }
+    if (typeof isPlaying !== "undefined" && isPlaying === false) {
+        SetGamemodeButtons();
+        UpdateSettings();
+    }
 });
 if (document.querySelector('#card-bounds-checkbox')) {
 

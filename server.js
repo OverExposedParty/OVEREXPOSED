@@ -955,6 +955,12 @@ app.get('/would-you-rather/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res
   res.sendFile(filePath);
 });
 
+app.get('/exposay/settings', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'exposay', 'exposay-settings-page.html');
+  console.log(`Attempting to serve file from: ${filePath}`);
+  res.sendFile(filePath);
+});
+
 app.get('/mafia/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);

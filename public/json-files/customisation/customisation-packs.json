@@ -30,5 +30,13 @@
         "pack-path": "/json-files/customisation/packs/engrave-danger.json",
         "pack-colour": "#8BA67B",
         "pack-secondary-colour": "#3E4B36"
+    },
+    {
+        "pack-name": "claus-and-co",
+        "pack-status": "active",
+        "pack-description": "A festive customisation pack full of gingerbread goodness!",
+        "pack-path": "/json-files/customisation/packs/claus-and-co.json",
+        "pack-colour": "#FFB7B7",
+        "pack-secondary-colour": "#D68585"
     }
 ]

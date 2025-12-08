@@ -210,7 +210,51 @@ if (rightHeaderContainer) {
   }
 }
 
-// Optional: Game settings updates
+function randomiseCustomisation() {
+    const inactiveIds = getInactiveIds();
+
+    const blankFiles = new Set([
+        blankUserCustomisation.colour,
+        blankUserCustomisation.headSlot,
+        blankUserCustomisation.eyesSlot,
+        blankUserCustomisation.mouthSlot
+    ]);
+
+    function getRandomActiveIndex(slotArray) {
+        const activeItems = slotArray.filter(item => {
+            const isInactive = inactiveIds.includes(item.id);
+            const isBlank = blankFiles.has(item.filePath);
+            return !isInactive && !isBlank;
+        });
+
+        if (activeItems.length === 0) return 0;
+
+        const randomItem = activeItems[Math.floor(Math.random() * activeItems.length)];
+        return slotArray.findIndex(item => item.id === randomItem.id);
+    }
+
+    const colourIndex = getRandomActiveIndex(colourSlot);
+    const headSlotIndex = getRandomActiveIndex(headSlot);
+    const eyesSlotIndex = getRandomActiveIndex(eyesSlot);
+    const mouthSlotIndex = getRandomActiveIndex(mouthSlot);
+
+    UpdateCustomisation({
+        colourIndex,
+        headSlotIndex,
+        eyesSlotIndex,
+        mouthSlotIndex
+    });
+
+    userCustomisationContainerSlotColour.setAttribute("data-index", colourIndex);
+    userCustomisationContainerSlotHead.setAttribute("data-index", headSlotIndex);
+    userCustomisationContainerSlotEyes.setAttribute("data-index", eyesSlotIndex);
+    userCustomisationContainerSlotMouth.setAttribute("data-index", mouthSlotIndex);
+}
+
+userCustomisationRandomiseButton.addEventListener("click", () => {
+    randomiseCustomisation();
+});
+
 function checkForGameSettingsUpdates(data) {
   if (partyUserCount < partyGamesInformation[partyGameMode].playerCountRestrictions.minPlayers) {
     //setError(errorNotEnoughPlayers, true);

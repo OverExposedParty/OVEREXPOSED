@@ -171,6 +171,7 @@ async function initialisePage() {
         });
       });
       await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
+      console.log("timer: " + getIncrementContainerValue("time-limit"));
       if (deviceId == hostDeviceId && data[0].userInstructions == "") {
         await SendInstruction({
           instruction: "DISPLAY_PRIVATE_CARD",

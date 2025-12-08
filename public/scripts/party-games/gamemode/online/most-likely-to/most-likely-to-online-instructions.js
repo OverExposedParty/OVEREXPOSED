@@ -50,15 +50,15 @@ async function DisplayVoteResults() {
     setActiveContainers(resultsChartContainer);
   }
   const highestValue = getHighestVoteValue(currentPartyData);
-
+  console.log("highestValue: " + highestValue);
   if (deviceId == hostDeviceId) {
     for (let i = 0; i < icons.length; i++) {
       if (GetHighestVoted(currentPartyData).includes(currentPartyData.players[i].computerId)) {
         currentPartyData.players[i].isReady = false;
         currentPartyData.players[i].hasConfirmed = false;
-        //if(highestValue > 0) {
+        if(highestValue > 0) {
         currentPartyData.players[i].score++;
-        //}
+        }
       }
       else {
         currentPartyData.players[i].isReady = true;

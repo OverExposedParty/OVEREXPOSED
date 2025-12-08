@@ -49,7 +49,9 @@ async function ToggleOnlineMode(toggle) {
 
     onlineSettingsTab.classList.add('active');
     onlineSettingsContainer.classList.add('active');
+    
     SetGamemodeButtons();
+    UpdateSettings();
     updateStartGameButton(false);
     await joinParty(partyCode);
     await sendPartyChat({

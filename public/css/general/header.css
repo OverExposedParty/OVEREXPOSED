@@ -62,6 +62,12 @@ a:hover {
 .svg-primary-fill {
     fill: var(--primarypagecolour);
 }
+.svg-secondary-fill {
+    fill: var(--secondarypagecolour);
+}
+.svg-background-fill {
+    fill: var(--backgroundcolour);
+}
 
 .header {
     width: 100%;
@@ -379,6 +385,7 @@ body {
     height: 75%;
     width: auto;
 }
+
 .social-media-icon:hover {
     transform: scale(1.1);
 }

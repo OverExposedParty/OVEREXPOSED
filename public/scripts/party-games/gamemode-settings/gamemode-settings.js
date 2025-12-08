@@ -10,20 +10,19 @@ const warningStartButton = document.querySelector('.start-game-warning-button');
 
 const inputPartyCode = document.getElementById('party-code');
 
-function updateStartGameButton(allUsersReady) {
-    if (typeof allUsersReady !== 'undefined') {
-        if (allUsersReady && CheckErrors()) {
+function updateStartGameButton(allReady) {
+    if (typeof allReady !== 'undefined') {
+        if (allReady && CheckErrors()) {
             startGameButton.classList.remove('disabled');
-        }
-        else {
+        } else {
             startGameButton.classList.add('disabled');
         }
-        console.log(startGameButton.classList.contains('disabled'));
+        startGameButton.style.pointerEvents = startGameButton.classList.contains('disabled') ? 'none' : 'auto';
         return;
     }
 
     const anyActive = Array.from(packButtons).some(button => button.classList.contains('active'));
-    setError(errorNoPacksSelected, !anyActive)
+    setError(errorNoPacksSelected, !anyActive);
     startGameButton.classList.toggle('disabled', !anyActive);
     startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
 }
@@ -49,9 +48,9 @@ function SetGamemodeButtons() {
             if (!localStorage.getItem(key)) {
                 localStorage.setItem(key, 'false');
             }
+            SetButtonStyle(button, false);
         });
-    }
-    else {
+    } else {
         nsfwButtons.forEach(button => {
             button.disabled = true;
             button.classList.add('disabled');
@@ -60,6 +59,7 @@ function SetGamemodeButtons() {
             if (!button.classList.contains('button-toggle')) return;
             const key = button.getAttribute('data-key');
             localStorage.setItem(key, 'false');
+            SetButtonStyle(button, false);
         });
         gameRulesNsfwButtons.forEach(button => {
             button.disabled = true;
@@ -68,8 +68,13 @@ function SetGamemodeButtons() {
 
             if (!button.classList.contains('button-toggle')) return;
             localStorage.setItem(button.getAttribute('data-key'), 'false');
+            if (button.closest('.rules-settings-container')) {
+                gamemodeSettings = removeSetting(gamemodeSettings, button.getAttribute('data-key'));
+            }
+            SetButtonStyle(button, false);
         });
     }
+
     if (partyCode) {
         onlingSettingsButtons.forEach(button => {
             button.classList.remove('inactive');
@@ -78,8 +83,7 @@ function SetGamemodeButtons() {
             button.classList.add('inactive');
             button.classList.remove('active');
         });
-    }
-    else {
+    } else {
         onlingSettingsButtons.forEach(button => {
             button.disabled = true;
             button.classList.add('inactive');
@@ -90,11 +94,18 @@ function SetGamemodeButtons() {
         });
     }
 }
+
 function SetGameSettingsButtons() {
-    // Handle button toggles
+    ResetActivePacks(GetAnyPackActive());
+
     placeholderGamemodeSettings.querySelectorAll('.button-toggle').forEach(button => {
         const key = button.getAttribute('data-key');
-        let savedState = localStorage.getItem(key);
+        let savedState = localStorage.getItem(key) || 'true';
+
+        if (eighteenPlusEnabled === false && button.classList.contains('nsfw')) {
+            savedState = 'false';
+            localStorage.setItem(key, 'false');
+        }
         if (button.dataset.settingsRequired == "true") savedState = 'true';
 
         if (key && savedState === 'true') {
@@ -117,63 +128,50 @@ function SetGameSettingsButtons() {
         } else if (key && savedState === 'false') {
             button.classList.remove('active');
             if (button.dataset.settingsDependency) {
-                document.querySelector('.rules-settings-container').querySelector(`[data-key="${button.dataset.settingsDependency}"]`).classList.add('inactive');
+                document
+                    .querySelector('.rules-settings-container')
+                    .querySelector(`[data-key="${button.dataset.settingsDependency}"]`)
+                    .classList.add('inactive');
             }
         }
 
         button.addEventListener('click', () => {
-            if (!button.disabled) {
-                button.classList.toggle('active');
-                const key = button.getAttribute('data-key');
-                const isActive = button.classList.contains('active');
-                const settingsButtonDependency = document.querySelector('.rules-settings-container').querySelector(`[data-key="${button.dataset.settingsDependency}"]`)
-                SetButtonStyle(button, false);
-                if (button.getAttribute('data-key')) {
-                    localStorage.setItem(key, isActive ? 'true' : 'false');
+            if (button.disabled) return;
+
+            const activeCount = packButtons.filter(btn => btn.classList.contains('active')).length;
+
+            if (button.closest('.packs-content-container') &&
+                activeCount <= 1 &&
+                button.classList.contains('active')) {
+                return;
+            }
+
+            button.classList.toggle('active');
+            const key = button.getAttribute('data-key');
+            const isActive = button.classList.contains('active');
+            const settingsButtonDependency = document
+                .querySelector('.rules-settings-container')
+                ?.querySelector(`[data-key="${button.dataset.settingsDependency}"]`);
+
+            SetButtonStyle(button, false);
+
+            if (key) {
+                localStorage.setItem(key, isActive ? 'true' : 'false');
+
+                if (button.closest('.packs-content-container') && settingsButtonDependency) {
                     if (isActive) {
-                        if (button.closest('.rules-settings-container')) {
-                            gamemodeSettings += key + ',';
-                        } else if (button.closest('.packs-content-container')) {
-                            if (settingsButtonDependency) {
-                                settingsButtonDependency.classList.remove('inactive');
-                                gamemodeSettings += `${key.replace("pack-", "")}:${settingsButtonDependency.getAttribute('data-count')},`;
-                            }
-                            gamemodeSelectedPacks += key + ',';
-                        }
+                        settingsButtonDependency.classList.remove('inactive');
+                    } else {
+                        settingsButtonDependency.classList.add('inactive');
                     }
-                    else {
-                        if (button.closest('.rules-settings-container')) {
-                            gamemodeSettings = gamemodeSettings.replace(key + ',', '');
-
-                        } else if (button.closest('.packs-content-container')) {
-                            if (settingsButtonDependency) {
-                                settingsButtonDependency.classList.add('inactive');
-                                console.log();
-                                console.log("key", key.replace("pack-", ""));
-                                gamemodeSettings = removeSetting(gamemodeSettings, settingsButtonDependency.getAttribute('data-key'));
-                                gamemodeSelectedPacks = gamemodeSelectedPacks.replace(key + ',', '');
-                            }
-                            gamemodeSelectedPacks = gamemodeSelectedPacks.replace(key + ',', '');
-
-                        }
-                    }
-
-                    if (partyCode) {
-                        updateOnlineParty({
-                            partyId: partyCode,
-                            gameRules: gamemodeSettings,
-                            selectedPacks: gamemodeSelectedPacks,
-                            lastPinged: new Date(),
-                        });
-                    }
-
-                    updateStartGameButton(allUsersReady);
                 }
             }
+
+            UpdateSettings();
+            SetGamemodeButtons();
         });
     });
 
-    // 🟦 Handle increment/decrement containers
     placeholderGamemodeSettings.querySelectorAll('.increment-container').forEach(container => {
         const key = container.getAttribute('data-key');
         const countDisplay = container.querySelector('.count-display');
@@ -183,20 +181,16 @@ function SetGameSettingsButtons() {
         const increment = parseInt(container.getAttribute('data-increment'));
         const min = parseInt(container.getAttribute('data-count-min'));
         const max = parseInt(container.getAttribute('data-count-max'));
-        //localStorage.setItem(key, count); //hard reset
-        // Restore saved value if exists
+
         const savedValue = localStorage.getItem(key);
         if (savedValue) {
             count = parseInt(savedValue);
             countDisplay.textContent = savedValue;
             container.setAttribute('data-count', savedValue);
-            console.log(`Restored saved value for ${key}: ${savedValue}`);
-        }
-        else {
+        } else {
             localStorage.setItem(key, count);
         }
 
-        // Add the key:value to gamemodeSettings
         if (container.closest('.rules-settings-container') && !container.classList.contains('inactive')) {
             gamemodeSettings += `${key}:${count},`;
         }
@@ -204,26 +198,10 @@ function SetGameSettingsButtons() {
         function updateCount(newCount) {
             count = newCount;
             container.setAttribute('data-count', count);
+            container.dataset.count = count;
             countDisplay.textContent = count;
             localStorage.setItem(key, count);
-
-            // Update gamemodeSettings string dynamically
-            const regex = new RegExp(`${key}:[0-9]+,`);
-            if (gamemodeSettings.match(regex)) {
-                gamemodeSettings = gamemodeSettings.replace(regex, `${key}:${count},`);
-            } else {
-                gamemodeSettings += `${key}:${count},`;
-            }
-            const savedValue = localStorage.getItem(key);
-            console.log(`Restored saved value for ${key}: ${savedValue}`);
-            if (partyCode) {
-                updateOnlineParty({
-                    partyId: partyCode,
-                    gameRules: gamemodeSettings,
-                    selectedPacks: gamemodeSelectedPacks,
-                    lastPinged: new Date(),
-                });
-            }
+            UpdateSettings();
         }
 
         incrementBtn.addEventListener('click', () => {
@@ -235,7 +213,6 @@ function SetGameSettingsButtons() {
         });
     });
 
-    // Online toggle logic
     if (onlineButton) {
         onlineButton.addEventListener('click', async () => {
             if (onlineButton.classList.contains('active')) {
@@ -247,8 +224,9 @@ function SetGameSettingsButtons() {
             }
         });
     }
-}
 
+    UpdateSettings();
+}
 
 inputPartyCode.addEventListener('click', () => {
     inputPartyCode.select();
@@ -257,6 +235,7 @@ inputPartyCode.addEventListener('click', () => {
 startGameButton.addEventListener('click', () => {
     const nsfwPacksActive = Array.from(nsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
     const nsfwgameRulesActive = Array.from(gameRulesNsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
+
     if (nsfwPacksActive || nsfwgameRulesActive) {
         addElementIfNotExists(elementClassArray, warningBox);
         warningBox.classList.add('active');
@@ -265,17 +244,16 @@ startGameButton.addEventListener('click', () => {
     } else {
         if (partyCode) {
             startOnlineGame();
-        }
-        else {
+        } else {
             transitionSplashScreen(removeSettingsExtensionFromCurrentURL(), `/images/splash-screens/${startGameButton.id}.png`);
         }
     }
 });
+
 warningStartButton.addEventListener('click', () => {
     if (partyCode) {
         startOnlineGame();
-    }
-    else {
+    } else {
         transitionSplashScreen(removeSettingsExtensionFromCurrentURL(), `/images/splash-screens/${startGameButton.id}.png`);
     }
 });
@@ -301,7 +279,6 @@ function SetGamemodeContainer() {
 }
 
 async function UpdateGamemodeContainer() {
-    let allUsersReady;
     if (partyCode) {
         allUsersReady = await GetAllUsersReady();
     }
@@ -328,5 +305,128 @@ function removeSetting(str, key) {
     return result;
 }
 
+function UpdateSettings() {
+    gamemodeSelectedPacks = '';
+    gamemodeSettings = '';
+    ResetActivePacks(GetAnyPackActive());
+    const activePackButtons = Array.from(packButtons).filter(btn =>
+        btn.classList.contains('active')
+    );
 
+    activePackButtons.forEach(btn => {
+        const key = btn.dataset.key;
+        if (!key) return;
 
+        gamemodeSelectedPacks += key + ',';
+
+        const dependencyKey = btn.dataset.settingsDependency;
+        if (dependencyKey) {
+            const settingsButtonDependency = document
+                .querySelector('.rules-settings-container')
+                ?.querySelector(`[data-key="${dependencyKey}"]`);
+
+            if (settingsButtonDependency) {
+                settingsButtonDependency.classList.remove('inactive');
+
+                const depCount =
+                    settingsButtonDependency.dataset.count ||
+                    settingsButtonDependency.getAttribute('data-count');
+
+                if (depCount) {
+                    gamemodeSettings += `${key.replace('pack-', '')}:${depCount},`;
+                }
+            }
+        }
+    });
+
+    const activeSettingsButtons = Array.from(settingsButtons).filter(btn =>
+        btn.classList.contains('active') &&
+        btn.closest('.rules-settings-container') &&
+        !btn.classList.contains('inactive')
+    );
+
+    activeSettingsButtons.forEach(btn => {
+        const key = btn.dataset.key;
+        if (!key) return;
+
+        const count = btn.dataset.count;
+        if (count) {
+            gamemodeSettings += `${key}:${count},`;
+        } else {
+            gamemodeSettings += `${key},`;
+        }
+    });
+
+    const incrementContainers = placeholderGamemodeSettings.querySelectorAll('.increment-container');
+
+    incrementContainers.forEach(container => {
+        if (!container.closest('.rules-settings-container') ||
+            container.classList.contains('inactive')) return;
+
+        const key = container.dataset.key;
+        const count = container.dataset.count || container.getAttribute('data-count');
+        if (!key || typeof count === 'undefined') return;
+
+        const regex = new RegExp(`${key}:[^,]*,?`, 'g');
+        gamemodeSettings = gamemodeSettings.replace(regex, '');
+        gamemodeSettings += `${key}:${count},`;
+    });
+
+    if (gamemodeSelectedPacks.endsWith(',')) {
+        gamemodeSelectedPacks = gamemodeSelectedPacks.slice(0, -1);
+    }
+    if (gamemodeSettings.endsWith(',')) {
+        gamemodeSettings = gamemodeSettings.slice(0, -1);
+    }
+
+    packButtons.forEach(button => {
+        SetButtonStyle(button, false);
+    });
+    settingsButtons.forEach(button => {
+        SetButtonStyle(button, false);
+    });
+
+    if (partyCode) {
+        updateOnlineParty({
+            partyId: partyCode,
+            selectedPacks: gamemodeSelectedPacks,
+            gameRules: gamemodeSettings,
+            lastPinged: new Date(),
+        });
+    }
+    updateStartGameButton(allUsersReady);
+}
+
+function GetAnyPackActive() {
+    const anyPackTrue = packButtons.some(btn => {
+        const key = btn.getAttribute('data-key');
+        if (!key) return false;
+
+        const isNSFW = btn.classList.contains('nsfw');
+        const savedState = localStorage.getItem(key) === 'true';
+
+        if (eighteenPlusEnabled === false && isNSFW) return false;
+
+        return savedState;
+    });
+    return anyPackTrue;
+}
+function ResetActivePacks(anyPackTrue) {
+    if (!anyPackTrue && packButtons.length > 0) {
+        const first = packButtons[0];
+        packButtons.forEach(btn => {
+            const key = btn.getAttribute('data-key');
+            if (!key) return;
+
+            if (btn === first) {
+                localStorage.setItem(key, 'true');
+                btn.classList.add('active');
+                SetButtonStyle(btn, false);
+            } else {
+                localStorage.setItem(key, 'false');
+                btn.classList.remove('active');
+                SetButtonStyle(btn, false);
+            }
+        });
+    }
+}

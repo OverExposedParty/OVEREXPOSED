@@ -1,0 +1,124 @@
+{
+    "customisation-claus-and-co": [
+        {
+            "id": "2000",
+            "name": "GINGERBREAD",
+            "file-path": "/images/user-customisation/colour/claus-and-co/gingerbread.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "2001",
+            "name": "ELF SKIN",
+            "file-path": "/images/user-customisation/colour/claus-and-co/elf-skin.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "2002",
+            "name": "SNOW WHITE",
+            "file-path": "/images/user-customisation/colour/claus-and-co/snow-white.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "2003",
+            "name": "SNOW GLOBE",
+            "file-path": "/images/user-customisation/colour/claus-and-co/snow-globe.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "2004",
+            "name": "WOOD PLANK",
+            "file-path": "/images/user-customisation/colour/claus-and-co/wood-plank.svg",
+            "slot": "colour"
+        },
+        {
+            "id": "2100",
+            "name": "CHEF HAT",
+            "file-path": "/images/user-customisation/head-slot/claus-and-co/chef-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "2101",
+            "name": "CHRISTMAS HAT",
+            "file-path": "/images/user-customisation/head-slot/claus-and-co/christmas-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "2102",
+            "name": "MISTLETOE ON STRING",
+            "file-path": "/images/user-customisation/head-slot/claus-and-co/mistletoe.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "2103",
+            "name": "TOP HAT",
+            "file-path": "/images/user-customisation/head-slot/claus-and-co/top-hat.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "2104",
+            "name": "ELF HAT AND EARS",
+            "file-path": "/images/user-customisation/head-slot/claus-and-co/elf-hat-and-ears.svg",
+            "slot": "head-slot"
+        },
+        {
+            "id": "2200",
+            "name": "GINGERBREAD EYES",
+            "file-path": "/images/user-customisation/eyes-slot/claus-and-co/gingerbread-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "2201",
+            "name": "BUTTONS",
+            "file-path": "/images/user-customisation/eyes-slot/claus-and-co/buttons.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "2202",
+            "name": "PILL SHAPED EYES",
+            "file-path": "/images/user-customisation/eyes-slot/claus-and-co/pill-shaped-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "2203",
+            "name": "SNOWFLAKE EYES",
+            "file-path": "/images/user-customisation/eyes-slot/claus-and-co/snowflake-eyes.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "2204",
+            "name": "REINDEER SLEEPING MASK",
+            "file-path": "/images/user-customisation/eyes-slot/claus-and-co/reindeer-sleeping-mask.svg",
+            "slot": "eyes-slot"
+        },
+        {
+            "id": "2300",
+            "name": "GINGERBREAD MOUTH",
+            "file-path": "/images/user-customisation/mouth-slot/claus-and-co/gingerbread-mouth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "2301",
+            "name": "SANTA BEARD",
+            "file-path": "/images/user-customisation/mouth-slot/claus-and-co/santa-beard.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "2302",
+            "name": "TEDDY BEAR MOUTH",
+            "file-path": "/images/user-customisation/mouth-slot/claus-and-co/teddy-bear-mouth.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "2303",
+            "name": "CHRISTMAS LABEL",
+            "file-path": "/images/user-customisation/mouth-slot/claus-and-co/christmas-label.svg",
+            "slot": "mouth-slot"
+        },
+        {
+            "id": "2304",
+            "name": "SMOKING PIPE",
+            "file-path": "/images/user-customisation/mouth-slot/claus-and-co/smoking-pipe.svg",
+            "slot": "mouth-slot"
+        }
+    ]
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy"
+        content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
+             script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
+
+
+    <title>IMPOSTER SETTINGS</title>
+
+    <link rel="preload" href="/images/splash-screens/imposter-settings.png" as="image">
+
+    <link rel="stylesheet" href="/css/general/header.css">
+
+    <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/imposter/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/imposter/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/imposter/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/imposter/favicons/favicon-180x180.png">
+
+    <meta name="description"
+        content="Play Paranoia online with friends! OVEREXPOSED brings thrilling and mysterious questions that will keep the party going. Ready to test your friendships? Try it now!">
+    <meta name="keywords"
+        content="paranoia game, online paranoia, party games, free paranoia game, fun games, drinking games, OVEREXPOSED, digital card game">
+    <meta name="author" content="OVEREXPOSED">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta property="og:description"
+        content="Uncover secrets and stir up excitement with OVEREXPOSED's Paranoia game! A fun and suspenseful party game for friends, teens, and adults. Play online for free now!">
+    <meta property="og:image" content="https://overexposed.app/images/icons/overexposed/meta/paranoia/og-image.jpg">
+    <meta property="og:url" content="https://overexposed.app/imposter-settings">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Paranoia Game Online - Play Free Party Game | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Who’s got something to hide? Find out with OVEREXPOSED's Paranoia game! Play online with friends for fun and shocking revelations!">
+    <meta name="twitter:image"
+        content="https://overexposed.app/images/icons/overexposed/meta/paranoia/twitter-image.jpg">
+    <link rel="canonical" href="https://overexposed.app/imposter-settings">
+
+</head>
+
+
+<body>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/imposter-settings.png" alt="Splash Screen">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/imposter-settings.png" alt="Splash Screen">
+        <p></p>
+    </div>
+
+    <div class="chat-box">
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+        </div>
+        <div class="chat-messages">
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
+
+    <div class="warning-box" id="warning-box">
+        <h2 id="warning-title" class="warning-title">NSFW</h2>
+        <img src="/images/icons/warning-icon.svg" alt="Warning Image" class="warning-image">
+        <p class="warning-text">This content is not suitable for all audiences.</p>
+        <button class="start-game-warning-button">START GAME</button>
+    </div>
+
+    <button class="back-button">back</button>
+
+    <div class="error-container username gamemode-settings" id="placeholder-error-container"></div>
+
+    <div class="main-container">
+        <div class=main-settings-container>
+            <div class="settings-tab-container">
+                <button id="packs-settings" class="settings-tab active">Packs</button>
+                <button id="rules-settings" class="settings-tab">Rules</button>
+                <button id="online-settings" class="settings-tab disabled">Online</button>
+            </div>
+            <div id="gamemode-settings-placeholder" data-template="imposter"></div>
+            <button class="start-game-button" id="imposter">Start Game</button>
+        </div>
+    </div>
+
+    <div id="enter-username-placeholder"></div>
+</body>
+
+<script>
+    const partyGameMode = 'imposter';
+    const sessionPartyType = "party-game-" + partyGameMode;
+    const minPlayerCount = 3;
+
+    document.documentElement.style.setProperty('--primarypagecolour', '#E88BAE');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#C3698B');
+</script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
+
+<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false" defer></script>
+
+<script src="/scripts/party-games/online/online-game-settings.js"></script>
+<script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
+
+<script src="/scripts/party-games/general/chat-log.js"></script>
+</html>
