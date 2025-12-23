@@ -65,30 +65,18 @@
     <meta name="twitter:image"
         content="https://overexposed.app/images/icons/overexposed/overexposure/meta/twitter-image.jpg">
     <link rel="canonical" href="https://overexposed.app/overexposure">
-
-    <style>
-        @media (max-width: 768px) and (orientation: landscape) {
-
-            .overexposure-container,
-            .floating-container,
-            .container-title {
-                display: none;
-            }
-
-            .overexposure-container,
-            .warning-container {
-                display: none !important;
-            }
-        }
-    </style>
 </head>
-
-
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-
+<script>
+    document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/overexposure.png')");
+</script>
 <body>
-    <div class="splash-screen-container-static" id="splash-screen-container-static"><img src="/images/splash-screens/overexposure.png" alt="Splash Screen"></div>
-    <div class="splash-screen-container" id="splash-screen-container"><img src="/images/splash-screens/overexposure.png" alt="Splash Screen"></div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/overexposure.png" alt="Splash Screen">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/overexposure.png" alt="Splash Screen">
+        <p></p>
+    </div>
 
     <div id="header-placeholder"></div>
 
@@ -176,25 +164,13 @@
 <script src="https://unpkg.com/compromise"></script>
 
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
 <script src="/scripts/overexposure/overexposure-settings.js"></script>
 <script src="/scripts/overexposure/camera-view.js"></script>
 <script src="/scripts/overexposure/overexposure-data.js"></script>
 <script src="/scripts/overexposure/overexposure-touch-controls.js"></script>
 <script src="/scripts/overexposure/overexposure-computer-controls.js"></script>
 <script>
-
-    document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#B74C57');
-
-    helpTitle.textContent = 'OVEREXPOSURE';
-
-    helpText.innerHTML = `
-Welcome to <highlight>OVEREXPOSURE</highlight> Share your secrets, confessions, or wild experiences—completely anonymously. No filters, no judgment—just raw, uncut truths. The only rule? No names.  Dare to expose?
-`;
-
-    //Header & Settings
-    let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--primarypagecolour');
-    let isSpeaking = false;
 
     backButton.addEventListener('click', () => {
         transitionSplashScreen('/', "/images/splash-screens/overexposed.png")

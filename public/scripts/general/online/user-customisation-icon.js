@@ -236,6 +236,7 @@ function UpdateUserIcons(partyData) {
         username: player.username,
         checked: false
       });
+      console.log('Created user icon for', player.username);
     }
     else {
       editUserIcon({
@@ -244,6 +245,7 @@ function UpdateUserIcons(partyData) {
         userReady: player.isReady,
         userIcon: player.userIcon
       });
+      console.log('Edited user icon for', player.username);
     }
   }
 

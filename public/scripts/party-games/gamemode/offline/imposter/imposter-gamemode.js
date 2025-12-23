@@ -154,6 +154,6 @@ function ImposterNextQuestion() {
 function DisplayImposterInstructions() {
     placeholderCardContainer.querySelector('#question-button').dataset.nextContainer = placeholderCardContainer.querySelector('.card-container#public-view').id;
     placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.regular-button-container #question-button').textContent = "Next Question";
-    placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.text-container').textContent = "Take turns giving a one-word hint about the secret word. Keep it subtle — the imposter’s all ears.";
+    placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.text-container').textContent = "Give one small clue or answer to your prompt each turn. The real players share the same prompt; the Imposter doesn’t. Stay subtle… someone is faking it.";
     setActiveContainers(placeholderCardContainer.querySelector('.card-container#public-view'));
 }

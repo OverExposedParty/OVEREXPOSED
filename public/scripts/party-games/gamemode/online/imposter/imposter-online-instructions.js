@@ -21,7 +21,7 @@ async function DisplayStartTimer() {
       if (currentPartyData.playerTurn == index) {
         selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
       }
-      displayStartTimerText.textContent = "Your word is: " + selectedQuestionObj.question;
+      displayStartTimerText.textContent = "Your prompt is: " + selectedQuestionObj.question;
       setActiveContainers(displayStartTimerContainer);
     }
     else {
@@ -53,7 +53,7 @@ async function DisplayAnswerContainer() {
     if (currentPartyData.playerTurn == index) {
       selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
     }
-    displayUserAnswerText.textContent = `Your word is ${selectedQuestionObj.question} explain the word but remember you may be imposter.`;
+    displayUserAnswerText.textContent = `Your prompt: ${selectedQuestionObj.question}. Explain your answer without giving too much away — you might be the Imposter.`;
     setActiveContainers(displayUserAnswerContainer);
   }
   else {
