@@ -8,112 +8,125 @@ let numberOfTruthQuestions = 0;
 let numberOfDareQuestions = 0;
 
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
-    try {
-        const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
-        if (!packsResponse.ok) {
-            console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
-            return;
+  try {
+    const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
+    if (!packsResponse.ok) {
+      console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
+      return;
+    }
+
+    const packsData = await packsResponse.json();
+    const packs = packsData[`${gamemode}-packs`];
+
+    let filesToFetch = [];
+    if (fetchPacks === null) {
+      // Use localStorage to determine which packs to fetch
+      filesToFetch = packs
+        .filter(pack => {
+          const key = `pack-${gamemode}-${pack["pack-name"]}`;
+          return localStorage.getItem(key) === "true";
+        })
+        .map(pack => pack["pack-path"]);
+    } else {
+      // Use provided comma-separated string to determine packs to fetch
+      const fetchPackList = fetchPacks.split(",").filter(Boolean); // remove empty entries
+
+      filesToFetch = packs
+        .filter(pack => {
+          const key = `pack-${gamemode}-${pack["pack-name"]}`;
+          return fetchPackList.includes(key);
+        })
+        .map(pack => pack["pack-path"]);
+    }
+
+    console.log("Files to Fetch:", filesToFetch);
+
+    const responses = await Promise.all(filesToFetch.map(file => fetch(file)));
+
+    const questionsArrays = await Promise.all(
+      responses.map(async response => {
+        if (!response.ok) {
+          console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
+          return {};
         }
+        const data = await response.json();
+        console.log("Fetched Data:", data);
+        return data;
+      })
+    );
 
-        const packsData = await packsResponse.json();
-        const packs = packsData[`${gamemode}-packs`];
+    questionsArrays.forEach((data) => {
+      Object.keys(data).forEach(packName => {
+        const questions = data[packName];
 
-        let filesToFetch = [];
-        if (fetchPacks === null) {
-            // Use localStorage to determine which packs to fetch
-            filesToFetch = packs
-                .filter(pack => {
-                    const key = `pack-${gamemode}-${pack["pack-name"]}`;
-                    return localStorage.getItem(key) === 'true';
-                })
-                .map(pack => pack["pack-path"]);
-        } else {
-            // Use provided comma-separated string to determine packs to fetch
-            const fetchPackList = fetchPacks.split(',').filter(Boolean); // remove empty entries
+        if (Array.isArray(questions)) {
+          questions.forEach(question => {
+            // ✅ Make question-alternatives OPTIONAL:
+            // - If missing: default to []
+            // - If string: convert to [string]
+            // - If any other wrong type: warn + default to []
+            const alts = question["question-alternatives"];
 
-            filesToFetch = packs
-                .filter(pack => {
-                    const key = `pack-${gamemode}-${pack["pack-name"]}`;
-                    return fetchPackList.includes(key);
-                })
-                .map(pack => pack["pack-path"]);
-        }
-
-        console.log('Files to Fetch:', filesToFetch);
-
-        const responses = await Promise.all(filesToFetch.map(file => fetch(file)));
-
-        const questionsArrays = await Promise.all(
-            responses.map(async response => {
-                if (!response.ok) {
-                    console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
-                    return {};
-                }
-                const data = await response.json();
-                console.log('Fetched Data:', data);
-                return data;
-            })
-        );
-
-        questionsArrays.forEach((data) => {
-            Object.keys(data).forEach(packName => {
-                const questions = data[packName];
-
-                if (Array.isArray(questions)) {
-                    questions.forEach(question => {
-                        // ✅ Enforce new format: question-alternatives must be an array
-                        if (!Array.isArray(question["question-alternatives"])) {
-                            console.error(
-                                `question-alternatives must be an array in pack ${packName}. Bad question:`,
-                                question
-                            );
-                            question["question-alternatives"] = [];
-                        }
-
-                        allQuestions.push(question);
-
-                        questionPackMap.push(
-                            packName
-                                .replace(/-/g, ' ')
-                                .replace(/\b\w/g, char => char.toUpperCase())
-                                .replace(formattedGamemode, "")
-                                .trim()
-                        );
-                    });
-                } else {
-                    console.error(`Expected an array of questions for pack: ${packName}, but received:`, questions);
-                }
-            });
-        });
-
-        packs.forEach(pack => {
-            const packName = pack["pack-name"].replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
-            const packCard = pack["pack-card"];
-            const packColour = pack["pack-colour"];
-            cardPackMap.push({ packName, packCard, packColour });
-        });
-
-        if (allQuestions.length > 0) {
-            if (seedShuffle) {
-                shuffleQuestions(seedShuffle);
+            if (alts === undefined || alts === null) {
+              question["question-alternatives"] = [];
+            } else if (Array.isArray(alts)) {
+              // ok
+            } else if (typeof alts === "string") {
+              question["question-alternatives"] = [alts];
             } else {
-                shuffleQuestions();
+              console.warn(
+                `Invalid question-alternatives in pack ${packName}. Fixing:`,
+                question
+              );
+              question["question-alternatives"] = [];
             }
 
-            numberOfTruthQuestions = allQuestions.filter(q => q["question-type"] === "truth").length;
-            numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
-        } else {
-            console.error('No questions available to shuffle.');
-            window.location.href = addSettingsExtensionToCurrentURL();
-        }
+            allQuestions.push(question);
 
-        numberOfQuestions = allQuestions.length;
-        console.log(`Loaded ${numberOfQuestions} questions`);
-        SetScriptLoaded('/scripts/party-games/general/load-questions.js');
+            questionPackMap.push(
+              packName
+                .replace(/-/g, " ")
+                .replace(/\b\w/g, char => char.toUpperCase())
+                .replace(formattedGamemode, "")
+                .trim()
+            );
+          });
+        } else {
+          console.error(
+            `Expected an array of questions for pack: ${packName}, but received:`,
+            questions
+          );
+        }
+      });
+    });
+
+    packs.forEach(pack => {
+      const packName = pack["pack-name"].replace(/-/g, " ").replace(/^\w/, c => c.toUpperCase());
+      const packCard = pack["pack-card"];
+      const packColour = pack["pack-colour"];
+      cardPackMap.push({ packName, packCard, packColour });
+    });
+
+    if (allQuestions.length > 0) {
+      if (seedShuffle) {
+        shuffleQuestions(seedShuffle);
+      } else {
+        shuffleQuestions();
+      }
+
+      numberOfTruthQuestions = allQuestions.filter(q => q["question-type"] === "truth").length;
+      numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
+    } else {
+      console.error("No questions available to shuffle.");
+      window.location.href = addSettingsExtensionToCurrentURL();
     }
-    catch (error) {
-        console.error('Failed to load JSON files:', error);
-    }
+
+    numberOfQuestions = allQuestions.length;
+    console.log(`Loaded ${numberOfQuestions} questions`);
+    SetScriptLoaded("/scripts/party-games/general/load-questions.js");
+  } catch (error) {
+    console.error("Failed to load JSON files:", error);
+  }
 }
 
 function shuffleQuestions(seed = null) {
