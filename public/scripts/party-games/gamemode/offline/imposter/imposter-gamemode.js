@@ -1,6 +1,6 @@
 let selectPlayerContainer, selectPlayerButtonContainer, selectPlayerButtonConfirm;
 let displayPromptContainer, displayPromptTitle, displayPromptText, displayPromptReadButton;
-let displayStartTimerContainer, displayStartButton;
+let displayStartTimerContainer, displayStartTimerContainerTitle, displayStartButton;
 let imposterTimerWrapper
 
 const imposterTimer = localStorage.getItem("imposter-timer") === "true";
@@ -39,6 +39,7 @@ fetch('/html-templates/party-games/offline/imposter/imposter-template.html')
         displayPromptReadButton = displayPromptContainer.querySelector('#read');
 
         displayStartTimerContainer = document.getElementById('start-timer-container');
+        displayStartTimerContainerTitle = displayStartTimerContainer.querySelector('.content-container h2');
         displayStartButton = displayStartTimerContainer.querySelector('.select-button-container .select-button');
 
         imposterTimerWrapper = document.getElementById('imposter-timer');
@@ -138,11 +139,16 @@ fetch('/html-templates/party-games/offline/imposter/imposter-template.html')
     });
 
 function GetAlternativeQuestion(input) {
-    const aleternativeQuestions = input.split(",, ");
-    const trimmedAleternativeQuestions = aleternativeQuestions.map(p => p.trim());
-    const selectedAlternativeQuestion = trimmedAleternativeQuestions[alternativeQuestionIndex % trimmedAleternativeQuestions.length];
+    if (!Array.isArray(input) || input.length === 0) {
+        return null;
+    }
+
+    const selectedAlternativeQuestion =
+        input[alternativeQuestionIndex % input.length];
+
     return selectedAlternativeQuestion;
 }
+
 
 function ImposterNextQuestion() {
     placeholderCardContainer.querySelector('#question-button').dataset.nextContainer = selectPlayerContainer.id;

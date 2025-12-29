@@ -53,7 +53,7 @@ async function DisplayAnswerContainer() {
     if (currentPartyData.playerTurn == index) {
       selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
     }
-    displayUserAnswerText.textContent = `Your prompt: ${selectedQuestionObj.question}. Explain your answer without giving too much away — you might be the Imposter.`;
+    displayUserAnswerText.textContent = `Your prompt is: ${selectedQuestionObj.question}. Explain it without giving too much away — you might be the Imposter.`;
     setActiveContainers(displayUserAnswerContainer);
   }
   else {

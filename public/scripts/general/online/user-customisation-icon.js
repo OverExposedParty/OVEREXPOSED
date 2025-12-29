@@ -236,7 +236,7 @@ function UpdateUserIcons(partyData) {
         username: player.username,
         checked: false
       });
-      console.log('Created user icon for', player.username);
+      //console.log('Created user icon for', player.username);
     }
     else {
       editUserIcon({
@@ -245,7 +245,7 @@ function UpdateUserIcons(partyData) {
         userReady: player.isReady,
         userIcon: player.userIcon
       });
-      console.log('Edited user icon for', player.username);
+      //console.log('Edited user icon for', player.username);
     }
   }
 
@@ -256,12 +256,12 @@ function UpdateUserIcons(partyData) {
       deleteUserIcon(userId);
     }
   }
-  //if(partyData.players.length > 4){
-  //  onlineSettingsContainer.querySelector(".container-section#users").classList.add('small');
-  //}
-  //else{
-  //  onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
-  //}
+  if(partyData.players.length > 4){
+    onlineSettingsContainer.querySelector(".container-section#users").classList.add('small');
+  }
+  else{
+   onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
+  }
   userCount.textContent = `(${partyData.players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
 }
 

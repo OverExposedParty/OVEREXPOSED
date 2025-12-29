@@ -1,0 +1,260 @@
+{
+  "imposter-brain-rotted": [
+    {
+      "question": "Skibidi",
+      "question-alternatives": ["Brainrot", "NPC", "Ohio", "Fanum Tax", "Ipad Kid"]
+    },
+    {
+      "question": "Gyatt",
+      "question-alternatives": ["Ayo", "Zesty", "Glaze", "Side Eye", "Aura"]
+    },
+    {
+      "question": "Fanum Tax",
+      "question-alternatives": ["Skibidi", "NPC", "Brainrot", "Ohio", "W chat"]
+    },
+    {
+      "question": "Ohiofinalboss",
+      "question-alternatives": ["Main character", "The games gone", "Skibidi", "Hard watch", "Canon"]
+    },
+    {
+      "question": "Blud",
+      "question-alternatives": ["Lil bro", "Dawg", "Unc", "Big Bro", "jit"]
+    },
+    {
+      "question": "jit",
+      "question-alternatives": ["Lil bro", "YN", "Opp", "Blud", "Dawg"]
+    },
+    {
+      "question": "yap",
+      "question-alternatives": ["Hard watch", "Side Eye", "Huh", "Deadass?", "Mid"]
+    },
+    {
+      "question": "cooked",
+      "question-alternatives": ["Hard watch", "Fold", "Fumble", "The games gone", "Bugged"]
+    },
+    {
+      "question": "deep fried",
+      "question-alternatives": ["Bugged", "Lagging", "Hard watch", "Mid", "Fold"]
+    },
+    {
+      "question": "NPC",
+      "question-alternatives": ["Ipad Kid", "Mid", "Brainrot", "Hard watch", "Ohio"]
+    },
+    {
+      "question": "Ipad Kid",
+      "question-alternatives": ["NPC", "Brainrot", "Mid", "Hard watch", "Ohio"]
+    },
+    {
+      "question": "Chat, am I cooked?",
+      "question-alternatives": ["Copium", "Hard watch", "Deadass?", "Fold", "Side Eye"]
+    },
+    {
+      "question": "Mid",
+      "question-alternatives": ["Hard watch", "NPC", "Soft launch", "Bugged", "Ohio"]
+    },
+    {
+      "question": "Brainrot",
+      "question-alternatives": ["Skibidi", "NPC", "Ipad Kid", "Copium", "Ohio"]
+    },
+    {
+      "question": "Glaze",
+      "question-alternatives": ["Simp", "Highkey", "Aura", "Main character", "Canon"]
+    },
+    {
+      "question": "Delulu",
+      "question-alternatives": ["Copium", "Lore", "Main character", "Highkey", "Canon"]
+    },
+    {
+      "question": "Touch Grass",
+      "question-alternatives": ["Brainrot", "NPC", "Ipad Kid", "Hard watch", "Mid"]
+    },
+    {
+      "question": "Hard watch",
+      "question-alternatives": ["Mid", "Side Eye", "Cooked", "Yap", "Deadass?"]
+    },
+    {
+      "question": "Soft Reset",
+      "question-alternatives": ["Arc", "Lore", "Core", "Canon", "Main character"]
+    },
+    {
+      "question": "Soft launch",
+      "question-alternatives": ["Mid", "Bugged", "Lagging", "Fold", "Hard watch"]
+    },
+    {
+      "question": "W chat",
+      "question-alternatives": ["Fr", "Bet", "ONG", "Aura", "Main character"]
+    },
+    {
+      "question": "Aura",
+      "question-alternatives": ["Main character", "Canon", "Big Bro", "Zesty", "W chat"]
+    },
+    {
+      "question": "Sus",
+      "question-alternatives": ["Ayo", "Pause", "Side Eye", "Impasta", "Zesty"]
+    },
+    {
+      "question": "The games gone",
+      "question-alternatives": ["Cooked", "Mid", "Hard watch", "Fold", "Ohio"]
+    },
+    {
+      "question": "All roads lead to rome",
+      "question-alternatives": ["Canon", "Lore", "Arc", "Core", "Main character"]
+    },
+    {
+      "question": "Lil bro",
+      "question-alternatives": ["Blud", "jit", "YN", "Opp", "Dawg"]
+    },
+    {
+      "question": "Cap",
+      "question-alternatives": ["Deadass?", "Fr", "Bet", "Side Eye", "Copium"]
+    },
+    {
+      "question": "Opp",
+      "question-alternatives": ["YN", "jit", "Lil bro", "Blud", "Dawg"]
+    },
+    {
+      "question": "Zesty",
+      "question-alternatives": ["Ayo", "Pause", "Sus", "Side Eye", "Glaze"]
+    },
+    {
+      "question": "Caught in 4K",
+      "question-alternatives": ["Deadass?", "Side Eye", "Cap", "Sus", "Ayo"]
+    },
+    {
+      "question": "Deadass?",
+      "question-alternatives": ["Fr", "Cap", "Bet", "Side Eye", "Huh"]
+    },
+    {
+      "question": "Side Eye",
+      "question-alternatives": ["Ayo", "Sus", "Zesty", "Deadass?", "Hard watch"]
+    },
+    {
+      "question": "Unc",
+      "question-alternatives": ["Big Bro", "Dawg", "Blud", "Lil bro", "YN"]
+    },
+    {
+      "question": "Dawg",
+      "question-alternatives": ["Blud", "Big Bro", "Unc", "Lil bro", "jit"]
+    },
+    {
+      "question": "Ohio",
+      "question-alternatives": ["Skibidi", "Brainrot", "NPC", "Fanum Tax", "The games gone"]
+    },
+    {
+      "question": "Impasta",
+      "question-alternatives": ["Sus", "Ayo", "Caught in 4K", "Pause", "Side Eye"]
+    },
+    {
+      "question": "Ayo",
+      "question-alternatives": ["Pause", "Sus", "Zesty", "Side Eye", "Impasta"]
+    },
+    {
+      "question": "Pause",
+      "question-alternatives": ["Ayo", "Sus", "Zesty", "Side Eye", "Impasta"]
+    },
+    {
+      "question": "Main character",
+      "question-alternatives": ["Aura", "Canon", "Lore", "Arc", "Big Bro"]
+    },
+    {
+      "question": "ONG",
+      "question-alternatives": ["Fr", "Bet", "W chat", "Deadass?", "Highkey"]
+    },
+    {
+      "question": "Lowkey",
+      "question-alternatives": ["Mid", "Soft launch", "Copium", "Delulu", "Hard watch"]
+    },
+    {
+      "question": "Highkey",
+      "question-alternatives": ["Fr", "ONG", "Aura", "Glaze", "Main character"]
+    },
+    {
+      "question": "Huh",
+      "question-alternatives": ["Deadass?", "Side Eye", "Yap", "Ayo", "Sus"]
+    },
+    {
+      "question": "Copium",
+      "question-alternatives": ["Delulu", "Lore", "Brainrot", "Hard watch", "Canon"]
+    },
+    {
+      "question": "Lore",
+      "question-alternatives": ["Canon", "Arc", "Core", "Main character", "Delulu"]
+    },
+    {
+      "question": "Arc",
+      "question-alternatives": ["Lore", "Canon", "Core", "Soft Reset", "Main character"]
+    },
+    {
+      "question": "Core",
+      "question-alternatives": ["Canon", "Lore", "Arc", "Main character", "Aura"]
+    },
+    {
+      "question": "Simp",
+      "question-alternatives": ["Glaze", "Highkey", "Main character", "Aura", "Delulu"]
+    },
+    {
+      "question": "Canon",
+      "question-alternatives": ["Lore", "Arc", "Core", "Main character", "Aura"]
+    },
+    {
+      "question": "Fr",
+      "question-alternatives": ["ONG", "Bet", "Deadass?", "W chat", "Cap"]
+    },
+    {
+      "question": "Bet",
+      "question-alternatives": ["Fr", "ONG", "W chat", "Deadass?", "Cap"]
+    },
+    {
+      "question": "Lagging",
+      "question-alternatives": ["Bugged", "Deep fried", "Soft launch", "Hard watch", "Fold"]
+    },
+    {
+      "question": "Fold",
+      "question-alternatives": ["Fumble", "Cooked", "Lagging", "Hard watch", "The games gone"]
+    },
+    {
+      "question": "Fumble",
+      "question-alternatives": ["Fold", "Cooked", "Hard watch", "Mid", "Side Eye"]
+    },
+    {
+      "question": "Bugged",
+      "question-alternatives": ["Lagging", "Deep fried", "Soft launch", "Hard watch", "Mid"]
+    },
+    {
+      "question": "No Aura",
+      "question-alternatives": ["Hard watch", "NPC", "Mid", "Side Eye", "The games gone"]
+    },
+    {
+      "question": "Aura Loss",
+      "question-alternatives": ["Hard watch", "Fold", "Mid", "Side Eye", "The games gone"]
+    },
+    {
+      "question": "Aura Deficit",
+      "question-alternatives": ["Hard watch", "NPC", "Mid", "Side Eye", "Ohio"]
+    },
+    {
+      "question": "Big Bro",
+      "question-alternatives": ["Unc", "Dawg", "Aura", "Main character", "Blud"]
+    },
+    {
+      "question": "YN",
+      "question-alternatives": ["Opp", "jit", "Lil bro", "Blud", "Dawg"]
+    },
+    {
+      "question": "Level 10 gyatt",
+      "question-alternatives": ["Aura", "Zesty", "Ayo", "Glaze", "Main character"]
+    },
+    {
+      "question": "Nonchalant dreadhead",
+      "question-alternatives": ["Aura", "Main character", "Big Bro", "Lore", "Canon"]
+    },
+    {
+      "question": "Goofy ahh",
+      "question-alternatives": ["Brainrot", "Hard watch", "NPC", "Mid", "Ohio"]
+    },
+    {
+      "question": "Clock it",
+      "question-alternatives": ["Deadass?", "Side Eye", "Caught in 4K", "Cap", "Ayo"]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "imposter-big-screen-icons": [
+    {
+      "question": "Inception",
+      "question-alternatives": ["Interstellar", "The Matrix", "Tenet", "Shutter Island", "Memento"]
+    },
+    {
+      "question": "Interstellar",
+      "question-alternatives": ["Inception", "Gravity", "The Martian", "Arrival", "2001: A Space Odyssey"]
+    },
+    {
+      "question": "The Matrix",
+      "question-alternatives": ["Inception", "Blade Runner", "Tron", "Minority Report", "Ghost in the Shell"]
+    },
+    {
+      "question": "The Lion King",
+      "question-alternatives": ["Toy Story", "Finding Nemo", "Aladdin", "Shrek", "Frozen"]
+    },
+    {
+      "question": "Stranger Things",
+      "question-alternatives": ["The Walking Dead", "Dark", "Black Mirror", "Riverdale", "The X-Files"]
+    },
+    {
+      "question": "Breaking Bad",
+      "question-alternatives": ["Better Call Saul", "The Sopranos", "Ozark", "Narcos", "Prison Break"]
+    },
+    {
+      "question": "Harry Potter",
+      "question-alternatives": ["Lord of the Rings", "Fantastic Beasts", "Star Wars", "Percy Jackson", "Narnia"]
+    },
+    {
+      "question": "Iron Man",
+      "question-alternatives": ["Captain America", "Thor", "Spider-Man", "Batman", "Superman"]
+    },
+    {
+      "question": "Thor",
+      "question-alternatives": ["Iron Man", "Hulk", "Loki", "Captain America", "Wonder Woman"]
+    },
+    {
+      "question": "Tinkerbell",
+      "question-alternatives": ["Peter Pan", "Cinderella", "Elsa", "Ariel", "Belle"]
+    },
+    {
+      "question": "Shrek",
+      "question-alternatives": ["Despicable Me", "Toy Story", "Madagascar", "Kung Fu Panda", "Ice Age"]
+    },
+    {
+      "question": "Gandalf",
+      "question-alternatives": ["Dumbledore", "Saruman", "Voldemort", "Merlin", "Obi-Wan Kenobi"]
+    },
+    {
+      "question": "Dumbledore",
+      "question-alternatives": ["Gandalf", "Voldemort", "Snape", "McGonagall", "Hagrid"]
+    },
+    {
+      "question": "King Kong",
+      "question-alternatives": ["Godzilla", "Jurassic Park", "Rampage", "Planet of the Apes", "Jaws"]
+    },
+    {
+      "question": "Godzilla",
+      "question-alternatives": ["King Kong", "Pacific Rim", "Cloverfield", "Jurassic Park", "Rampage"]
+    },
+    {
+      "question": "Jaws",
+      "question-alternatives": ["Jurassic Park", "Piranha", "Deep Blue Sea", "Godzilla", "Cloverfield"]
+    },
+    {
+      "question": "Piranhas",
+      "question-alternatives": ["Jaws", "Anaconda", "Lake Placid", "Deep Blue Sea", "Sharknado"]
+    },
+    {
+      "question": "Despicable Me",
+      "question-alternatives": ["Minions", "Shrek", "Toy Story", "Madagascar", "The Incredibles"]
+    },
+    {
+      "question": "Toy Story",
+      "question-alternatives": ["The Incredibles", "Finding Nemo", "Up", "Cars", "Monsters Inc."]
+    },
+    {
+      "question": "Emma Watson",
+      "question-alternatives": ["Daniel Radcliffe", "Rupert Grint", "Jennifer Lawrence", "Scarlett Johansson", "Keira Knightley"]
+    },
+    {
+      "question": "Up",
+      "question-alternatives": ["Toy Story", "Wall-E", "Finding Nemo", "Inside Out", "Ratatouille"]
+    },
+    {
+      "question": "Titanic",
+      "question-alternatives": ["Avatar", "Romeo + Juliet", "The Notebook", "Pearl Harbor", "La La Land"]
+    },
+    {
+      "question": "Avatar",
+      "question-alternatives": ["Titanic", "Star Wars", "Dune", "Guardians of the Galaxy", "Interstellar"]
+    },
+    {
+      "question": "Gladiator",
+      "question-alternatives": ["Troy", "300", "Braveheart", "Spartacus", "Kingdom of Heaven"]
+    },
+    {
+      "question": "Forrest Gump",
+      "question-alternatives": ["Cast Away", "The Green Mile", "Rain Man", "Good Will Hunting", "Life of Pi"]
+    },
+    {
+      "question": "Dwayne Johnson",
+      "question-alternatives": ["John Cena", "Vin Diesel", "Jason Statham", "Arnold Schwarzenegger", "Sylvester Stallone"]
+    },
+    {
+      "question": "Leonardo DiCaprio",
+      "question-alternatives": ["Brad Pitt", "Johnny Depp", "Matt Damon", "Christian Bale", "Tom Hardy"]
+    },
+    {
+      "question": "Brad Pitt",
+      "question-alternatives": ["Leonardo DiCaprio", "George Clooney", "Matt Damon", "Ben Affleck", "Tom Cruise"]
+    },
+    {
+      "question": "Keanu Reeves",
+      "question-alternatives": ["Tom Cruise", "Johnny Depp", "Nicolas Cage", "Bruce Willis", "Jason Statham"]
+    },
+    {
+      "question": "Tom Hanks",
+      "question-alternatives": ["Will Smith", "Leonardo DiCaprio", "Robin Williams", "Matt Damon", "Denzel Washington"]
+    },
+    {
+      "question": "Rick & Morty",
+      "question-alternatives": ["Family Guy", "South Park", "The Simpsons", "BoJack Horseman", "Futurama"]
+    },
+    {
+      "question": "The Simpsons",
+      "question-alternatives": ["Family Guy", "South Park", "American Dad", "Futurama", "Rick & Morty"]
+    },
+    {
+      "question": "Marvel",
+      "question-alternatives": ["DC", "Star Wars", "Avengers", "X-Men", "Justice League"]
+    },
+    {
+      "question": "Star Wars",
+      "question-alternatives": ["Star Trek", "Marvel", "Harry Potter", "Lord of the Rings", "Dune"]
+    },
+    {
+      "question": "Game Of Thrones",
+      "question-alternatives": ["House of the Dragon", "The Witcher", "Vikings", "Lord of the Rings", "Spartacus"]
+    },
+    {
+      "question": "Money Heist",
+      "question-alternatives": ["Prison Break", "Narcos", "Breaking Bad", "Ozark", "Peaky Blinders"]
+    },
+    {
+      "question": "Grey’s Anatomy",
+      "question-alternatives": ["ER", "House", "The Good Doctor", "Scrubs", "Chicago Med"]
+    }
+  ]
+}

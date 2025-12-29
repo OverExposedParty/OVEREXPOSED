@@ -55,13 +55,30 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             })
         );
 
-        questionsArrays.forEach((data, index) => {
+        questionsArrays.forEach((data) => {
             Object.keys(data).forEach(packName => {
                 const questions = data[packName];
+
                 if (Array.isArray(questions)) {
                     questions.forEach(question => {
+                        // ✅ Enforce new format: question-alternatives must be an array
+                        if (!Array.isArray(question["question-alternatives"])) {
+                            console.error(
+                                `question-alternatives must be an array in pack ${packName}. Bad question:`,
+                                question
+                            );
+                            question["question-alternatives"] = [];
+                        }
+
                         allQuestions.push(question);
-                        questionPackMap.push(packName.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()).replace(formattedGamemode, "").trim());
+
+                        questionPackMap.push(
+                            packName
+                                .replace(/-/g, ' ')
+                                .replace(/\b\w/g, char => char.toUpperCase())
+                                .replace(formattedGamemode, "")
+                                .trim()
+                        );
                     });
                 } else {
                     console.error(`Expected an array of questions for pack: ${packName}, but received:`, questions);
@@ -75,21 +92,21 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             const packColour = pack["pack-colour"];
             cardPackMap.push({ packName, packCard, packColour });
         });
+
         if (allQuestions.length > 0) {
             if (seedShuffle) {
                 shuffleQuestions(seedShuffle);
-            }
-            else {
+            } else {
                 shuffleQuestions();
             }
 
             numberOfTruthQuestions = allQuestions.filter(q => q["question-type"] === "truth").length;
             numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
-        }
-        else {
+        } else {
             console.error('No questions available to shuffle.');
             window.location.href = addSettingsExtensionToCurrentURL();
         }
+
         numberOfQuestions = allQuestions.length;
         console.log(`Loaded ${numberOfQuestions} questions`);
         SetScriptLoaded('/scripts/party-games/general/load-questions.js');
@@ -130,21 +147,26 @@ function getNextQuestion(index = null, questionType = null, seed = null) {
     if (questionType !== null) {
         filteredQuestions = allQuestions.filter(q => q["question-type"] === questionType);
     }
+
     if (index == null) {
         if (currentQuestionIndex >= filteredQuestions.length) {
             shuffleQuestions();
             currentQuestionIndex = 0;
         }
+
         selectedQuestion = filteredQuestions[currentQuestionIndex];
         cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
-
         currentQuestionIndex++;
-    }
-    else {
+    } else {
         selectedQuestion = filteredQuestions[index];
         cardType = questionPackMap[index] || 'Unknown Pack';
     }
 
-
-    return { question: selectedQuestion['question'], cardType: cardType, punishment: selectedQuestion['punishment'] || null, questionAlternatives: selectedQuestion['question-alternatives'] || [] };
+    return {
+        question: selectedQuestion["question"],
+        cardType: cardType,
+        punishment: selectedQuestion["punishment"] || null,
+        // ✅ Now always an array in your JSON
+        questionAlternatives: selectedQuestion["question-alternatives"] || []
+    };
 }

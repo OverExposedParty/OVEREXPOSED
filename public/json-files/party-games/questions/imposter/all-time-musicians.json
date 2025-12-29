@@ -1,0 +1,236 @@
+{
+  "imposter-all-time-musicians": [
+    {
+      "question": "Taylor Swift",
+      "question-alternatives": ["Ariana Grande", "Olivia Rodrigo", "Selena Gomez", "Dua Lipa", "Katy Perry"]
+    },
+    {
+      "question": "Beyoncé",
+      "question-alternatives": ["Rihanna", "Nicki Minaj", "Madonna", "Doja Cat", "Shakira"]
+    },
+    {
+      "question": "Rihanna",
+      "question-alternatives": ["Beyoncé", "Doja Cat", "Nicki Minaj", "SZA", "Shakira"]
+    },
+    {
+      "question": "Adele",
+      "question-alternatives": ["Ed Sheeran", "Sam Smith", "Lana Del Rey", "Olivia Rodrigo", "Norah Jones"]
+    },
+    {
+      "question": "Billie Eilish",
+      "question-alternatives": ["Lana Del Rey", "Olivia Rodrigo", "SZA", "Lorde", "Sabrina Carpenter"]
+    },
+    {
+      "question": "Drake",
+      "question-alternatives": ["Kendrick Lamar", "J. Cole", "Future", "Travis Scott", "Lil Uzi Vert"]
+    },
+    {
+      "question": "Michael Jackson",
+      "question-alternatives": ["Prince", "Stevie Wonder", "Madonna", "David Bowie", "Elton John"]
+    },
+    {
+      "question": "The Weeknd",
+      "question-alternatives": ["Frank Ocean", "Bruno Mars", "Drake", "Post Malone", "Miguel"]
+    },
+    {
+      "question": "Ed Sheeran",
+      "question-alternatives": ["Adele", "Shawn Mendes", "Justin Bieber", "Harry Styles", "Sam Smith"]
+    },
+    {
+      "question": "Kendrick Lamar",
+      "question-alternatives": ["J. Cole", "Drake", "Nas", "Jay-Z", "Tyler, The Creator"]
+    },
+    {
+      "question": "Bruno Mars",
+      "question-alternatives": ["The Weeknd", "Usher", "Justin Timberlake", "Pharrell Williams", "Jason Derulo"]
+    },
+    {
+      "question": "Post Malone",
+      "question-alternatives": ["Drake", "Travis Scott", "The Weeknd", "Lil Uzi Vert", "Juice WRLD"]
+    },
+    {
+      "question": "Harry Styles",
+      "question-alternatives": ["Shawn Mendes", "Justin Bieber", "Ed Sheeran", "Niall Horan", "Troye Sivan"]
+    },
+    {
+      "question": "Pharrell Williams",
+      "question-alternatives": ["Kanye West", "Timbaland", "Dr. Dre", "Mark Ronson", "Metro Boomin"]
+    },
+    {
+      "question": "Dr. Dre",
+      "question-alternatives": ["Eminem", "Snoop Dogg", "Timbaland", "Pharrell Williams", "50 Cent"]
+    },
+    {
+      "question": "Timbaland",
+      "question-alternatives": ["Pharrell Williams", "Dr. Dre", "Metro Boomin", "Kanye West", "Swizz Beatz"]
+    },
+    {
+      "question": "Metro Boomin",
+      "question-alternatives": ["Future", "Travis Scott", "21 Savage", "Timbaland", "Southside"]
+    },
+    {
+      "question": "Kanye West",
+      "question-alternatives": ["Jay-Z", "Travis Scott", "Kid Cudi", "Pharrell Williams", "Tyler, The Creator"]
+    },
+    {
+      "question": "Prince",
+      "question-alternatives": ["Michael Jackson", "David Bowie", "Stevie Wonder", "Madonna", "Elton John"]
+    },
+    {
+      "question": "David Bowie",
+      "question-alternatives": ["Prince", "Elton John", "Madonna", "Stevie Wonder", "Freddie Mercury"]
+    },
+    {
+      "question": "Madonna",
+      "question-alternatives": ["Beyoncé", "Lady Gaga", "Rihanna", "Britney Spears", "Cher"]
+    },
+    {
+      "question": "Stevie Wonder",
+      "question-alternatives": ["Prince", "Michael Jackson", "Marvin Gaye", "Elton John", "Ray Charles"]
+    },
+    {
+      "question": "Elton John",
+      "question-alternatives": ["Paul McCartney", "Billy Joel", "David Bowie", "Stevie Wonder", "Prince"]
+    },
+    {
+      "question": "Paul McCartney",
+      "question-alternatives": ["John Lennon", "Elton John", "David Bowie", "Mick Jagger", "George Harrison"]
+    },
+    {
+      "question": "Olivia Rodrigo",
+      "question-alternatives": ["Billie Eilish", "Taylor Swift", "Sabrina Carpenter", "Lorde", "Conan Gray"]
+    },
+    {
+      "question": "Doja Cat",
+      "question-alternatives": ["Nicki Minaj", "Megan Thee Stallion", "Ice Spice", "Rihanna", "Cardi B"]
+    },
+    {
+      "question": "Travis Scott",
+      "question-alternatives": ["Future", "Playboi Carti", "Drake", "Lil Uzi Vert", "Kanye West"]
+    },
+    {
+      "question": "Ariana Grande",
+      "question-alternatives": ["Taylor Swift", "Selena Gomez", "Dua Lipa", "Miley Cyrus", "Katy Perry"]
+    },
+    {
+      "question": "Justin Bieber",
+      "question-alternatives": ["Shawn Mendes", "Harry Styles", "Ed Sheeran", "The Kid LAROI", "Charlie Puth"]
+    },
+    {
+      "question": "Eminem",
+      "question-alternatives": ["Dr. Dre", "50 Cent", "Nas", "Jay-Z", "Logic"]
+    },
+    {
+      "question": "Jay-Z",
+      "question-alternatives": ["Kanye West", "Nas", "Eminem", "J. Cole", "Drake"]
+    },
+    {
+      "question": "Nicki Minaj",
+      "question-alternatives": ["Doja Cat", "Cardi B", "Megan Thee Stallion", "Ice Spice", "Rihanna"]
+    },
+    {
+      "question": "SZA",
+      "question-alternatives": ["Frank Ocean", "Summer Walker", "Doja Cat", "H.E.R.", "Lana Del Rey"]
+    },
+    {
+      "question": "Lana Del Rey",
+      "question-alternatives": ["Billie Eilish", "SZA", "Lorde", "Phoebe Bridgers", "Adele"]
+    },
+    {
+      "question": "Lady Gaga",
+      "question-alternatives": ["Madonna", "Katy Perry", "Rihanna", "Beyoncé", "Ariana Grande"]
+    },
+    {
+      "question": "Katy Perry",
+      "question-alternatives": ["Lady Gaga", "Taylor Swift", "Ariana Grande", "Dua Lipa", "Miley Cyrus"]
+    },
+    {
+      "question": "Usher",
+      "question-alternatives": ["Chris Brown", "Bruno Mars", "Justin Timberlake", "Ne-Yo", "R. Kelly"]
+    },
+    {
+      "question": "Bad Bunny",
+      "question-alternatives": ["Karol G", "J Balvin", "Peso Pluma", "Rosalía", "Shakira"]
+    },
+    {
+      "question": "Peso Pluma",
+      "question-alternatives": ["Bad Bunny", "Natanael Cano", "Junior H", "Karol G", "Fuerza Regida"]
+    },
+    {
+      "question": "Karol G",
+      "question-alternatives": ["Bad Bunny", "Shakira", "Rosalía", "Natti Natasha", "Becky G"]
+    },
+    {
+      "question": "Shakira",
+      "question-alternatives": ["Karol G", "Rosalía", "Jennifer Lopez", "Rihanna", "Beyoncé"]
+    },
+    {
+      "question": "Rosalía",
+      "question-alternatives": ["Bad Bunny", "Karol G", "Shakira", "C. Tangana", "J Balvin"]
+    },
+    {
+      "question": "Dua Lipa",
+      "question-alternatives": ["Ariana Grande", "Katy Perry", "Miley Cyrus", "Selena Gomez", "Rita Ora"]
+    },
+    {
+      "question": "Miley Cyrus",
+      "question-alternatives": ["Dua Lipa", "Ariana Grande", "Selena Gomez", "Katy Perry", "Lady Gaga"]
+    },
+    {
+      "question": "Selena Gomez",
+      "question-alternatives": ["Ariana Grande", "Taylor Swift", "Miley Cyrus", "Dua Lipa", "Camila Cabello"]
+    },
+    {
+      "question": "Shawn Mendes",
+      "question-alternatives": ["Justin Bieber", "Harry Styles", "Ed Sheeran", "Charlie Puth", "Niall Horan"]
+    },
+    {
+      "question": "Sabrina Carpenter",
+      "question-alternatives": ["Olivia Rodrigo", "Billie Eilish", "Madison Beer", "Ariana Grande", "Conan Gray"]
+    },
+    {
+      "question": "Frank Ocean",
+      "question-alternatives": ["The Weeknd", "SZA", "Tyler, The Creator", "Daniel Caesar", "Brent Faiyaz"]
+    },
+    {
+      "question": "Tyler, The Creator",
+      "question-alternatives": ["Kanye West", "Frank Ocean", "A$AP Rocky", "Earl Sweatshirt", "Childish Gambino"]
+    },
+    {
+      "question": "Playboi Carti",
+      "question-alternatives": ["Lil Uzi Vert", "Travis Scott", "Future", "Yeat", "Destroy Lonely"]
+    },
+    {
+      "question": "Lil Uzi Vert",
+      "question-alternatives": ["Playboi Carti", "Travis Scott", "Future", "Yeat", "Juice WRLD"]
+    },
+    {
+      "question": "Future",
+      "question-alternatives": ["Travis Scott", "Lil Uzi Vert", "Metro Boomin", "Young Thug", "Playboi Carti"]
+    },
+    {
+      "question": "J. Cole",
+      "question-alternatives": ["Kendrick Lamar", "Drake", "Jay-Z", "Nas", "Big Sean"]
+    },
+    {
+      "question": "Nas",
+      "question-alternatives": ["Jay-Z", "Eminem", "Kendrick Lamar", "J. Cole", "Wu-Tang Clan"]
+    },
+    {
+      "question": "Ice Spice",
+      "question-alternatives": ["Doja Cat", "Nicki Minaj", "Cardi B", "Megan Thee Stallion", "Latto"]
+    },
+    {
+      "question": "Central Cee",
+      "question-alternatives": ["Dave", "Stormzy", "Headie One", "Skepta", "AJ Tracey"]
+    },
+    {
+      "question": "Burna Boy",
+      "question-alternatives": ["Wizkid", "Davido", "Tems", "Fireboy DML", "Rema"]
+    },
+    {
+      "question": "Wizkid",
+      "question-alternatives": ["Burna Boy", "Davido", "Tems", "Rema", "Mr Eazi"]
+    }
+  ]
+}

@@ -48,9 +48,14 @@ const nsfwSetting = document.getElementById('settings-nsfw');
 instagramLink.href = instagramUrl;
 tiktokLink.href = tiktokUrl;
 
-if (localStorage.getItem('settings-sound') === 'true') {
-    settingsSoundCheckbox.checked = true;
+if (localStorage.getItem('settings-sound') === null) {
+    localStorage.setItem('settings-sound', 'true');
 }
+if (localStorage.getItem('settings-nsfw') === null) {
+    localStorage.setItem('settings-nsfw', 'true');
+}
+nsfwCheckbox.checked = localStorage.getItem('settings-nsfw') === 'true';
+settingsSoundCheckbox.checked = localStorage.getItem('settings-sound') === 'true';
 
 settingsSoundCheckbox.addEventListener('change', function () {
     localStorage.setItem('settings-sound', settingsSoundCheckbox.checked);
@@ -61,10 +66,6 @@ settingsSoundCheckbox.addEventListener('change', function () {
         playSoundEffect('sliderDisabled');
     }
 });
-
-if (localStorage.getItem('settings-nsfw') === 'true') {
-    nsfwCheckbox.checked = true;
-}
 
 nsfwCheckbox.addEventListener('change', function () {
     localStorage.setItem('settings-nsfw', nsfwCheckbox.checked);

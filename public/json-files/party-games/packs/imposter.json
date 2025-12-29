@@ -1,8 +1,48 @@
 {
     "imposter-packs": [
         {
-            "pack-name": "household-names",
-            "pack-path": "/json-files/party-games/questions/imposter/household-names.json",
+            "pack-name": "foody",
+            "pack-path": "/json-files/party-games/questions/imposter/foody.json",
+            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": "chill, creative, funny, deep",
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },        
+        {
+            "pack-name": "all-time-musicians",
+            "pack-path": "/json-files/party-games/questions/imposter/all-time-musicians.json",
+            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": "chill, creative, funny, deep",
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "brain-rotted",
+            "pack-path": "/json-files/party-games/questions/imposter/brain-rotted.json",
+            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": "chill, creative, funny, deep",
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "big-screen-icons",
+            "pack-path": "/json-files/party-games/questions/imposter/big-screen-icons.json",
+            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
+            "pack-colour": "var(--primarypagecolour)",
+            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-difficulty": "chill, creative, funny, deep",
+            "pack-restriction": "sfw",
+            "pack-active": true
+        },
+        {
+            "pack-name": "sports-icons",
+            "pack-path": "/json-files/party-games/questions/imposter/sports-icons.json",
             "pack-card": "/images/blank-cards/imposter-blank-card.svg",
             "pack-colour": "var(--primarypagecolour)",
             "pack-secondary-colour": "var(--secondarypagecolour)",

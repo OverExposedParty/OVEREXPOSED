@@ -376,8 +376,12 @@ function GetVoteCount(currentPartyData, computerId) {
 }
 
 function GetAlternativeQuestion(input) {
-  const aleternativeQuestions = input.split(",, ");
-  const trimmedAleternativeQuestions = aleternativeQuestions.map(p => p.trim());
-  const selectedAlternativeQuestion = trimmedAleternativeQuestions[currentPartyData.alternativeQuestionIndex % trimmedAleternativeQuestions.length];
-  return selectedAlternativeQuestion;
+    if (!Array.isArray(input) || input.length === 0) {
+        return null;
+    }
+
+    const selectedAlternativeQuestion =
+        input[currentPartyData.alternativeQuestionIndex % input.length];
+
+    return selectedAlternativeQuestion;
 }
