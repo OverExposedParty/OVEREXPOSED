@@ -57,7 +57,7 @@
     { "question": "Chloe Kelly", "question-alternatives": ["Lauren James", "Beth Mead", "Lucy Bronze", "Sam Kerr", "Alexia Putellas"] },
     { "question": "Lauren James", "question-alternatives": ["Chloe Kelly", "Beth Mead", "Lucy Bronze", "Sam Kerr", "Megan Rapinoe"] },
     { "question": "Luke Littler", "question-alternatives": ["Phil Taylor", "Michael van Gerwen", "Gary Anderson", "Peter Wright", "Gerwyn Price"] },
-    { "question": "Manny Paki", "question-alternatives": ["Floyd Mayweather", "Muhammad Ali", "Mike Tyson", "Canelo Alvarez", "Sugar Ray Leonard"] },
+    { "question": "Manny Pacquiao", "question-alternatives": ["Floyd Mayweather", "Muhammad Ali", "Mike Tyson", "Canelo Alvarez", "Sugar Ray Leonard"] },
     { "question": "Bruce Lee", "question-alternatives": ["Jackie Chan", "Jet Li", "Chuck Norris", "Anderson Silva", "Georges St-Pierre"] }
   ]
 }

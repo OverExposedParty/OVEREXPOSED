@@ -163,7 +163,6 @@ function SetGamemodeContainer() {
     }
   });
   inputPartyCode.value = `https://overexposed.app/${partyCode}`;
-
 }
 
 function CreateGameSettingsButtonsScript() {

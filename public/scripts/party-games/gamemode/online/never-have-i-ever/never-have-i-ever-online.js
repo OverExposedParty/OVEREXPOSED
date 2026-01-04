@@ -171,6 +171,7 @@ async function FetchInstructions() {
     SetPartyGameStatisticsGameOver();
   }
   else if (currentPartyData.userInstructions.includes("RESET_QUESTION")) {
+    const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
     await ResetQuestion({
       icons: icons,
       timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
