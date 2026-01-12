@@ -140,7 +140,7 @@ highlight {
 }
 
 .warning-container p {
-    font-size: 20px;
+    font-size: 12px;
     margin: 10px 0;
 }
 
@@ -429,7 +429,6 @@ textarea {
 }
 
 .title-text {
-    text-align: left;
     margin: 0;
     color: var(--primarypagecolour);
     font-size: 20px;
@@ -437,6 +436,7 @@ textarea {
 }
 
 .title-text-container {
+    text-align: center;
     display: none;
     align-items: center;
     justify-content: space-between;
@@ -453,14 +453,14 @@ textarea {
 
 .moderation-controls-container {
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 .moderation-controls-container button {
     all: unset;
     color: var(--primarypagecolour);
     cursor: pointer;
-    font-size: 100%;
+    font-size: 1.5dvh;
     transition: background-color 0.3s, color 0.3s;
     text-decoration: none;
 }
@@ -505,7 +505,7 @@ textarea {
 
 .contents-container-text {
     font-size: 15px;
-    padding: 5%;
+    padding: 2.5dvh;
     display: none;
     white-space: pre-line;
     width: auto;
@@ -620,5 +620,9 @@ textarea {
     .tag-container button {
         height: 2.5dvw;
         width: 2.5dvw;
+    }
+
+    .warning-container button {
+        font-size: 0.75dvh;
     }
 }

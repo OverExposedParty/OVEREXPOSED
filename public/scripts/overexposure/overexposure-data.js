@@ -59,7 +59,6 @@ async function fetchConfessions() {
         }
 
         SetNSFW();
-        SetScriptLoaded('/scripts/overexposure/overexposure-data.js');
     } catch (error) {
         console.error("❌ Error fetching confessions:", error);
     }
