@@ -612,4 +612,13 @@ textarea {
     .title-text {
         font-size: 16px;
     }
+
+    .tag-text {
+        font-size: 2.5dvw;
+    }
+
+    .tag-container button {
+        height: 2.5dvw;
+        width: 2.5dvw;
+    }
 }
