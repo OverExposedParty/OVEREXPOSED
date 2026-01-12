@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // === 2. Services ===
         .then(() => LoadScript('/scripts/overexposure/overexposure-sounds.js'))
         .then(() => LoadScript('/scripts/overexposure/overexposure-names.js'))
+        .then(() => LoadScript('/scripts/overexposure/overexposure-settings.js'))
 
         // === 3. UI Components ===
         .then(() => LoadScript('/scripts/overexposure/overexposure-tags.js'))

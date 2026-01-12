@@ -249,6 +249,7 @@ highlight {
 
 
 .floating-button:hover p.card-type-text {
+
     transform: scale(1.1);
 }
 

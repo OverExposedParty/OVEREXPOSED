@@ -3,7 +3,7 @@ cardBoundsOption.className = 'settings-option';
 
 const cardBoundsLabel = document.createElement('label');
 cardBoundsLabel.setAttribute('for', 'settings-card-bounds');
-cardBoundsLabel.textContent = 'Card Bounds';
+cardBoundsLabel.textContent = 'Bounds';
 cardBoundsOption.appendChild(cardBoundsLabel);
 
 const cardBoundsToggleSwitch = document.createElement('label');
