@@ -13,17 +13,17 @@ const blankUserCustomisation = {
 
 // 🔹 Get all inactive IDs from savedState
 function getInactiveIds() {
-    const inactiveIds = [];
-    // Loop through all keys in localStorage
-    Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('customisation-')) {
-            const savedState = JSON.parse(localStorage.getItem(key)) || {};
-            Object.keys(savedState).forEach(id => {
-                if (!savedState[id]) inactiveIds.push(id);
-            });
-        }
-    });
-    return inactiveIds;
+  const inactiveIds = [];
+  // Loop through all keys in localStorage
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('customisation-')) {
+      const savedState = JSON.parse(localStorage.getItem(key)) || {};
+      Object.keys(savedState).forEach(id => {
+        if (!savedState[id]) inactiveIds.push(id);
+      });
+    }
+  });
+  return inactiveIds;
 }
 
 // 🔹 Get next valid index skipping inactive items
@@ -159,6 +159,7 @@ usercustomisationSaveButton.addEventListener('click', async () => {
   };
 
   localStorage.setItem("user-customisation", JSON.stringify(userCustomisation));
+  removeElementIfExists(permanantElementClassArray, userCustomisationContainer);
   toggleUserCustomisation();
   const customisationString = createCustomisationString(userCustomisation);
 
@@ -176,8 +177,14 @@ usercustomisationSaveButton.addEventListener('click', async () => {
   }
 });
 
-function toggleUserCustomisation() {
-  toggleClass(userCustomisationContainer, settingsElementClassArray);
+function toggleUserCustomisation(permanant = false) {
+  if (permanant == true) {
+    toggleClass(userCustomisationContainer, permanantElementClassArray);
+  }
+  else {
+    toggleClass(userCustomisationContainer, settingsElementClassArray);
+  }
+
 }
 
 function toggleUserCustomisationIcon(bool) {
@@ -201,6 +208,7 @@ if (rightHeaderContainer) {
   rightHeaderContainer.appendChild(userCustomisationIcon);
 
   userCustomisationIcon.addEventListener('click', async () => {
+    if(permanantElementClassArray.includes(userCustomisationContainer)) return;
     UpdateCustomisation({ initialLoad: true });
     toggleUserCustomisation();
   });
@@ -211,48 +219,48 @@ if (rightHeaderContainer) {
 }
 
 function randomiseCustomisation() {
-    const inactiveIds = getInactiveIds();
+  const inactiveIds = getInactiveIds();
 
-    const blankFiles = new Set([
-        blankUserCustomisation.colour,
-        blankUserCustomisation.headSlot,
-        blankUserCustomisation.eyesSlot,
-        blankUserCustomisation.mouthSlot
-    ]);
+  const blankFiles = new Set([
+    blankUserCustomisation.colour,
+    blankUserCustomisation.headSlot,
+    blankUserCustomisation.eyesSlot,
+    blankUserCustomisation.mouthSlot
+  ]);
 
-    function getRandomActiveIndex(slotArray) {
-        const activeItems = slotArray.filter(item => {
-            const isInactive = inactiveIds.includes(item.id);
-            const isBlank = blankFiles.has(item.filePath);
-            return !isInactive && !isBlank;
-        });
-
-        if (activeItems.length === 0) return 0;
-
-        const randomItem = activeItems[Math.floor(Math.random() * activeItems.length)];
-        return slotArray.findIndex(item => item.id === randomItem.id);
-    }
-
-    const colourIndex = getRandomActiveIndex(colourSlot);
-    const headSlotIndex = getRandomActiveIndex(headSlot);
-    const eyesSlotIndex = getRandomActiveIndex(eyesSlot);
-    const mouthSlotIndex = getRandomActiveIndex(mouthSlot);
-
-    UpdateCustomisation({
-        colourIndex,
-        headSlotIndex,
-        eyesSlotIndex,
-        mouthSlotIndex
+  function getRandomActiveIndex(slotArray) {
+    const activeItems = slotArray.filter(item => {
+      const isInactive = inactiveIds.includes(item.id);
+      const isBlank = blankFiles.has(item.filePath);
+      return !isInactive && !isBlank;
     });
 
-    userCustomisationContainerSlotColour.setAttribute("data-index", colourIndex);
-    userCustomisationContainerSlotHead.setAttribute("data-index", headSlotIndex);
-    userCustomisationContainerSlotEyes.setAttribute("data-index", eyesSlotIndex);
-    userCustomisationContainerSlotMouth.setAttribute("data-index", mouthSlotIndex);
+    if (activeItems.length === 0) return 0;
+
+    const randomItem = activeItems[Math.floor(Math.random() * activeItems.length)];
+    return slotArray.findIndex(item => item.id === randomItem.id);
+  }
+
+  const colourIndex = getRandomActiveIndex(colourSlot);
+  const headSlotIndex = getRandomActiveIndex(headSlot);
+  const eyesSlotIndex = getRandomActiveIndex(eyesSlot);
+  const mouthSlotIndex = getRandomActiveIndex(mouthSlot);
+
+  UpdateCustomisation({
+    colourIndex,
+    headSlotIndex,
+    eyesSlotIndex,
+    mouthSlotIndex
+  });
+
+  userCustomisationContainerSlotColour.setAttribute("data-index", colourIndex);
+  userCustomisationContainerSlotHead.setAttribute("data-index", headSlotIndex);
+  userCustomisationContainerSlotEyes.setAttribute("data-index", eyesSlotIndex);
+  userCustomisationContainerSlotMouth.setAttribute("data-index", mouthSlotIndex);
 }
 
 userCustomisationRandomiseButton.addEventListener("click", () => {
-    randomiseCustomisation();
+  randomiseCustomisation();
 });
 
 function checkForGameSettingsUpdates(data) {

@@ -55,6 +55,7 @@
         { "question": "Who is most likely to have the most kids?" },
         { "question": "Who is most likely to disappear from the friend group?" },
         { "question": "Who is most likely to not back a friend in a fight?" },
-        { "question": "Who is most likely to betray their friends?" }
+        { "question": "Who is most likely to betray their friends?" },
+        { "question": "Who is most likely to owe someone a lot of money?" }
     ]
 }

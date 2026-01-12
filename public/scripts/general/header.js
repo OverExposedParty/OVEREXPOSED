@@ -15,10 +15,9 @@ const tiktokIcon = document.getElementById('tik-tok-icon');
 const instagramIcon = document.getElementById('instagram-icon');
 
 const header = document.querySelector('#header');
-const settingsIcon = document.querySelector('#settings-icon');
-const helpIcon = document.querySelector('#help-icon');
-const extraMenuIcon = document.querySelector('#extra-menu-icon');
-
+const headerSettingsButton = header.querySelector('#settings-button');
+const headerHelpButton = header.querySelector('#help-button');
+const headerExtraMenuButton = header.querySelector('#extra-menu-button');
 const settingsBox = document.querySelector('#settings-box');
 const settingsBoxLabels = document.querySelectorAll('#settings-box label');
 const settingsBoxTitle = document.querySelector('#settings-title');
@@ -137,6 +136,11 @@ function toggleHelp() {
 }
 
 function toggleOverlay(bool) {
+    console.log("settingsElementClassArray: " + settingsElementClassArray.length);
+    console.log("elementClassArray: " + elementClassArray.length);
+    console.log("popUpClassArray: " + popUpClassArray.length);
+    console.log("permanantElementClassArray: " + permanantElementClassArray.length);
+
     if (bool === true) {
         overlay.classList.add('active');
         if (backButton) {
@@ -144,26 +148,53 @@ function toggleOverlay(bool) {
         }
     }
     else {
-        if (popUpClassArray.length > 0) {
-            removeAllElements(popUpClassArray)
+        if (settingsElementClassArray.length > 0) {
+            removeAllElements(settingsElementClassArray)
+            if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
+                toggleOverlay(false);
+            }
         }
-        else if (permanantElementClassArray.length == 0) {
-            overlay.classList.remove('active');
-            playSoundEffect('containerClose');
+        else if (popUpClassArray.length > 0) {
+            removeAllElements(popUpClassArray);
+            if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
+                toggleOverlay(false);
+            }
         }
-        removeAllElements(settingsElementClassArray);
-        removeAllElements(elementClassArray);
+        else {
+            if (typeof ToggleOverexposureContainer === "function") {
+                if (overexposureContainer.classList.contains('active')) {
+                    ToggleOverexposureContainer({ toggle: false });
+                    playSoundEffect('containerClose');
+                }
+                else {
+                    if (permanantElementClassArray.length === 0) {
+                        overlay.classList.remove('active');
+                        playSoundEffect('containerClose');
+                    }
+                }
+            }
+            else {
+                if (permanantElementClassArray.length === 0) {
+                    overlay.classList.remove('active');
+                    playSoundEffect('containerClose');
+                }
+            }
 
-        //temp fix
-        document.querySelectorAll('.floating-button').forEach(el => {
-            el.classList.remove('touchhover');
-        });
-        if (backButton) {
-            backButton.classList.remove('inactive');
+            removeAllElements(settingsElementClassArray);
+            removeAllElements(elementClassArray);
+
+            //temp fix
+            document.querySelectorAll('.floating-button').forEach(el => {
+                el.classList.remove('touchhover');
+            });
+
+            if (backButton) {
+                backButton.classList.remove('inactive');
+            }
+            document.querySelectorAll('.side-buttons .side-button').forEach(sideButton => {
+                sideButton.classList.remove('active');
+            });
         }
-        document.querySelectorAll('.side-buttons .side-button').forEach(sideButton => {
-            sideButton.classList.remove('active');
-        });
     }
 }
 
@@ -175,10 +206,28 @@ function setActiveClass(selectedElements, keepActive) {
     });
 }
 
-settingsIcon.addEventListener('click', toggleSettings);
-helpIcon.addEventListener('click', toggleHelp);
-overlay.addEventListener('click', () => toggleOverlay(false));
-extraMenuIcon.addEventListener('click', toggleExtraMenu);
+function initHeaderListeners() {
+    if (headerSettingsButton) {
+        headerSettingsButton.addEventListener('click', toggleSettings);
+    }
+    if (headerHelpButton) {
+        headerHelpButton.addEventListener('click', toggleHelp);
+    }
+    if (overlay) {
+        overlay.addEventListener('click', () => toggleOverlay(false));
+    }
+    if (headerExtraMenuButton) {
+        headerExtraMenuButton.addEventListener('click', toggleExtraMenu);
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeaderListeners);
+}
+else {
+    initHeaderListeners();
+}
+
 
 
 function waitForButtons(selector, callback) {
@@ -318,10 +367,6 @@ function waitForElementWithTimeout(selector, callback, timeout = 10000) {
         console.warn(`Timeout: Element with selector "${selector}" not found within ${timeout}ms.`);
     }, timeout);
 }
-
-waitForElementWithTimeout('.settings-icon', (settingsIcon) => {
-    settingsIcon.addEventListener('click', toggleSettings);
-}, 15000);
 
 if (!localStorage.getItem('cookie-consent')) {
     LoadScript('/scripts/other/cookie-consent.js');

@@ -63,41 +63,44 @@ async function loadActivePacks(masterJsonPath) {
     console.error("Failed to load packs:", error);
   }
 }
-loadActivePacks('/json-files/customisation/customisation-packs.json');
 
-function createUserIconPartyGames({ container, userId, userCustomisationString, size = null }) {
-  const userIcon = document.createElement('div');
-  userIcon.className = 'icon';
-  userIcon.setAttribute('data-user-id', userId);
-
-  if (size !== null) {
-    userIcon.classList.add(size);
-  }
-
-  const parsed = parseCustomisationString(userCustomisationString);
-  const userCustomisation = {
-    colour: getFilePathByCustomisationId(parsed.colour),
-    headSlot: getFilePathByCustomisationId(parsed.head),
-    eyesSlot: getFilePathByCustomisationId(parsed.eyes),
-    mouthSlot: getFilePathByCustomisationId(parsed.mouth),
-  };
-
-  userIcon.appendChild(CreateImageStack(userCustomisation));
-  container.appendChild(userIcon);;
-}
+const packsLoadedPromise = loadActivePacks('/json-files/customisation/customisation-packs.json');
 
 function EditUserIconPartyGames({ container, userId, userCustomisationString }) {
-  if (container.querySelector('.icon')) {
-    container.querySelector('.icon').setAttribute('data-user-id', userId);
-  }
-  const parsed = parseCustomisationString(userCustomisationString);
-  const userCustomisation = {
-    colour: getFilePathByCustomisationId(parsed.colour),
-    headSlot: getFilePathByCustomisationId(parsed.head),
-    eyesSlot: getFilePathByCustomisationId(parsed.eyes),
-    mouthSlot: getFilePathByCustomisationId(parsed.mouth),
-  };
-  EditImageStack(userCustomisation, userId, container);
+  packsLoadedPromise.then(() => {
+    if (container.querySelector('.icon')) {
+      container.querySelector('.icon').setAttribute('data-user-id', userId);
+    }
+    const parsed = parseCustomisationString(userCustomisationString);
+    const userCustomisation = {
+      colour: getFilePathByCustomisationId(parsed.colour),
+      headSlot: getFilePathByCustomisationId(parsed.head),
+      eyesSlot: getFilePathByCustomisationId(parsed.eyes),
+      mouthSlot: getFilePathByCustomisationId(parsed.mouth),
+    };
+    EditImageStack(userCustomisation, userId, container);
+  });
+}
+function createUserIconPartyGames({ container, userId, userCustomisationString, size = null }) {
+  packsLoadedPromise.then(() => {
+    const userIcon = document.createElement('div');
+    userIcon.className = 'icon';
+    userIcon.setAttribute('data-user-id', userId);
+
+    if (size !== null) {
+      userIcon.classList.add(size);
+    }
+
+    const parsed = parseCustomisationString(userCustomisationString);
+    const userCustomisation = {
+      colour: getFilePathByCustomisationId(parsed.colour),
+      headSlot: getFilePathByCustomisationId(parsed.head),
+      eyesSlot: getFilePathByCustomisationId(parsed.eyes),
+      mouthSlot: getFilePathByCustomisationId(parsed.mouth),
+    };
+    userIcon.appendChild(CreateImageStack(userCustomisation));
+    container.appendChild(userIcon);
+  });
 }
 
 function createUserIcon({ userId, username, checked = false }) {
@@ -256,11 +259,11 @@ function UpdateUserIcons(partyData) {
       deleteUserIcon(userId);
     }
   }
-  if(partyData.players.length > 4){
+  if (partyData.players.length > 4) {
     onlineSettingsContainer.querySelector(".container-section#users").classList.add('small');
   }
-  else{
-   onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
+  else {
+    onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
   }
   userCount.textContent = `(${partyData.players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
 }
@@ -274,4 +277,19 @@ function parseCustomisationString(customisationString) {
     eyes,
     mouth
   };
+}
+function getFilePathByCustomisationId(customisationId) {
+
+  const allItems = [
+    ...colourSlot,
+    ...headSlot,
+    ...eyesSlot,
+    ...mouthSlot
+  ];
+  const match = allItems.find(item => item.id === customisationId);
+  return match ? match.filePath : null;
+}
+
+function toKebabCase(input) {
+  return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }

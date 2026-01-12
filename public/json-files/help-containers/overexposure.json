@@ -1,0 +1,154 @@
+[
+    {
+        "title": "CONTROLS",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/controls/container.svg",
+                    "alt": "Controls Container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/controls/instructions.svg",
+                    "alt": "Controls instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "BOUNDARIES",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/boundaries/container.svg",
+                    "alt": "BOUNDARIES container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/boundaries/instructions.svg",
+                    "alt": "BOUNDARIES instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "CARD BREAKDOWN",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/card-breakdown/container.svg",
+                    "alt": "CARD BREAKDOWN container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/card-breakdown/instructions.svg",
+                    "alt": "CARD BREAKDOWN instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "CREATE POST",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/create-post/container.svg",
+                    "alt": "CREATE POST container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/create-post/instructions.svg",
+                    "alt": "CREATE POST instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "REMEMBER DELETE CODE",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/remember-delete-code/container.svg",
+                    "alt": "REMEMBER DELETE CODE container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/remember-delete-code/instructions.svg",
+                    "alt": "REMEMBER DELETE CODE instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "READ POST",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/read-post/container.svg",
+                    "alt": "READ POST container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/read-post/instructions.svg",
+                    "alt": "READ POST instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "DELETE POST",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/delete-post/container.svg",
+                    "alt": "DELETE POST container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/delete-post/instructions.svg",
+                    "alt": "DELETE POST instructions"
+                }
+            ]
+        }
+    },
+    {
+        "title": "CUSTOMISE OE",
+        "text": {
+            "images": [
+                {
+                    "src": "/images/help-container/backgrounds/overexposure.jpg",
+                    "alt": "OVEREXPOSURE background"
+                },
+                {
+                    "src": "/images/help-container/overexposure/customise-oe/container.svg",
+                    "alt": "CUSTOMISE OE container"
+                },
+                {
+                    "src": "/images/help-container/overexposure/customise-oe/instructions.svg",
+                    "alt": "CUSTOMISE OE instructions"
+                }
+            ]
+        }
+    }
+]

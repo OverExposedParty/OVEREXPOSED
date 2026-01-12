@@ -1,7 +1,6 @@
 let lastTap = 0;
 const maxTouchRadius = 20;
 let singleTouchPosition = { x: 0, y: 0 };
-let count = 0;
 let intervalId = null;
 let touchStartTime = null;
 let touchDuration = 500;

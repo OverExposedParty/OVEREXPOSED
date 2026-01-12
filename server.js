@@ -1,9 +1,11 @@
 const express = require('express');
+const bcrypt = require("bcryptjs");
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const permissionsPolicy = require('permissions-policy');
 const http = require('http');
+const { generateDeleteCode } = require("./utils/generate-delete-code");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -238,21 +240,69 @@ app.get('/api/confessions', async (req, res) => {
 
 app.post('/api/confessions', async (req, res) => {
   try {
-    const { title, text, id, date, x, y } = req.body;
+    const { title, text, id, date, userIcon, x, y, tag } = req.body;
 
+    // 1) Generate user-facing delete code, e.g. "123-456"
+    const deleteCode = generateDeleteCode();
+
+    // 2) Hash it (Option B)
+    const saltRounds = 10;
+    const deleteCodeHash = await bcrypt.hash(deleteCode, saltRounds);
+
+    // 3) Save confession with hash ONLY
     const saved = await Confession.create({
       title,
       text,
       id,
       date,
+      userIcon,
       x,
-      y
+      y,
+      tag,
+      deleteCodeHash,
     });
 
-    res.json({ message: 'Confession saved successfully', saved });
+    // 4) Return the delete code ONCE to the client
+    res.status(201).json({
+      message: 'Confession saved successfully',
+      confession: saved,
+      deleteCode, // 👈 the plain code, not stored in DB
+    });
   } catch (err) {
     console.error("❌ Error saving confession:", err);
     res.status(500).json({ error: 'Failed to save confession' });
+  }
+});
+
+// Delete a confession by id + delete code
+app.delete('/api/confessions/:id', async (req, res) => {
+  try {
+    const publicId = req.params.id;         // this is your custom 'id' like "20260109200112819"
+    const { deleteCode } = req.body;
+
+    if (!deleteCode) {
+      return res.status(400).json({ error: 'Delete code is required' });
+    }
+
+    // 🔍 Find by your custom `id` field, NOT Mongo _id
+    const confession = await Confession.findOne({ id: publicId });
+
+    if (!confession || !confession.deleteCodeHash) {
+      return res.status(403).json({ error: 'Invalid confession or delete code' });
+    }
+
+    const matches = await bcrypt.compare(deleteCode, confession.deleteCodeHash);
+    if (!matches) {
+      return res.status(403).json({ error: 'Invalid confession or delete code' });
+    }
+
+    // 🗑 Delete using the same custom id
+    await Confession.deleteOne({ id: publicId });
+
+    res.json({ success: true, message: 'Confession deleted successfully' });
+  } catch (err) {
+    console.error('❌ Error deleting confession:', err);
+    res.status(500).json({ error: 'Failed to delete confession' });
   }
 });
 

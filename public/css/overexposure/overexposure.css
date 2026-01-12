@@ -6,6 +6,16 @@
     --noplacepadding: 100px;
 
     --cardtemplate: url(/images/overexposure/card-template.svg);
+
+    --confessions-primary-colour: #FF6961;
+    --stories-primary-colour: #3DA7A1;
+    --thoughts-primary-colour: #F6C86D;
+    --feelings-primary-colour: #E88BAE;
+
+    --confessions-secondary-colour: #B74C57;
+    --stories-secondary-colour: #2A6E6A;
+    --thoughts-secondary-colour: #C29B50;
+    --feelings-secondary-colour: #C3698B;
 }
 
 .create-card {
@@ -32,7 +42,7 @@ img {
 highlight {
     color: var(--backgroundcolour);
     background-color: var(--primarypagecolour);
-    padding: 0 10px 0 10px;
+    padding: 0 10px 0 10px !important;
     border-radius: 25px;
 }
 
@@ -50,17 +60,27 @@ highlight {
     width: calc(var(--cardWidth) * 1.5);
     aspect-ratio: var(--cardRatio);
     position: absolute;
-    z-index:1;
+    z-index: 1;
     opacity: 1;
     transition: opacity 0.3s ease;
 }
+
 .no-place.fade-out {
     opacity: 0;
 }
 
 .no-place.visible,
-.safe-zone.visible{
-    background-color:#41414159;
+.safe-zone.visible {
+    background-color: #41414159;
+}
+
+#viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    touch-action: none;
+    z-index: 1;
+    /* important for pinch/drag */
 }
 
 .floating-container {
@@ -80,9 +100,11 @@ highlight {
 
     text-align: center;
     font-size: 20px;
-    
+
     color: var(--primarypagecolour);
     user-select: none;
+    transform-origin: 0 0;
+    will-change: transform;
 }
 
 .warning-container {
@@ -90,7 +112,7 @@ highlight {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 55vh;
+    width: 55dvh;
     height: auto;
     padding: 2%;
     background-color: #101010;
@@ -98,7 +120,7 @@ highlight {
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     z-index: 800;
     text-align: center;
-    
+
     border-radius: 25px;
     max-width: 60vw;
     flex-direction: column;
@@ -114,15 +136,17 @@ highlight {
 
 .warning-container h2 {
     font-size: 20px;
+    margin: 10px 0;
 }
 
 .warning-container p {
     font-size: 20px;
+    margin: 10px 0;
 }
 
 .warning-container button {
-    background-color: #101010;
-    color: var(--warningcolour);
+    background-color: var(--warningcolour);
+    color: #202020;
     border: 4px solid var(--warningcolour);
     padding: 10px 20px;
     border-radius: 50px;
@@ -130,14 +154,14 @@ highlight {
     font-size: 100%;
     transition: background-color 0.3s ease;
     text-decoration: none;
-    
+
     width: 25%;
 }
 
 .warning-container button:hover {
-    background-color: var(--warningcolour);
+    background-color: var(--warningcoloursecondary);
     color: #202020;
-    border-color: var(--warningcolour);
+    border-color: var(--warningcoloursecondary);
 }
 
 .warning-button-container {
@@ -146,6 +170,11 @@ highlight {
     justify-content: center;
     gap: 10px;
     width: 100%;
+}
+
+.warning-container input {
+    margin: 10px 0;
+    color: var(--warningcolour);
 }
 
 .floating-container p {
@@ -178,6 +207,7 @@ highlight {
     z-index: 10;
     transition: transform 0.2s;
 }
+
 .floating-button.disabled {
     cursor: not-allowed;
     pointer-events: none;
@@ -193,13 +223,33 @@ highlight {
 
 .floating-button img {
     width: var(--cardWidth);
-    opacity: 0.9;
     transition: transform 0.2s, opacity 0.2s;
 }
 
 .floating-button:hover img {
     transform: scale(1.1);
-    opacity: 1;
+}
+
+.floating-button p.card-type-text {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+
+    transform-origin: top left;
+
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    text-align: right;
+
+    pointer-events: none;
+    user-select: none;
+    z-index: 5;
+    display: block;
+}
+
+
+.floating-button:hover p.card-type-text {
+    transform: scale(1.1);
 }
 
 .button-text {
@@ -214,7 +264,7 @@ highlight {
     pointer-events: none;
     transition: transform 0.2s;
     /* Smooth transition for text */
-    
+
     user-select: none;
 }
 
@@ -225,8 +275,8 @@ highlight {
 
 .overexposure-container {
     display: none;
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
-    margin-top: calc(var(--headerheight) + 5vh);
+    height: calc(var(--dvh, 1dvh) * 100 - var(--headerheight));
+    margin-top: calc(var(--headerheight) + 2.5dvh);
     flex-direction: column;
     align-items: center;
 
@@ -244,8 +294,8 @@ highlight {
 }
 
 .overexposure-publish-button {
-    background-color: var(--backgroundcolour);
-    color: var(--primarypagecolour);
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
     border: 4px solid var(--primarypagecolour);
     padding: 10px 20px;
     border-radius: 50px;
@@ -253,20 +303,27 @@ highlight {
     font-size: 100%;
     transition: background-color 0.3s, color 0.3s;
     text-decoration: none;
-    
-    width: 25%;
-    min-width:100px;
-    text-align: center;
-    font-size: 10px;
 
-    margin: 2.5vh auto;
-    
+    width: 25%;
+    min-width: 100px;
+    text-align: center;
+    font-size: 12px;
+
+    margin: 2.5dvh auto;
+
+}
+
+.overexposure-publish-button.disabled {
+    background-color: #666666;
+    border-color: #666666;
+    color: var(--backgroundcolour);
+    pointer-events: none;
 }
 
 .overexposure-publish-button:hover {
-    background-color: var(--primarypagecolour);
+    background-color: var(--secondarypagecolour);
     color: var(--backgroundcolour);
-    border-color: var(--primarypagecolour);
+    border-color: var(--secondarypagecolour);
 }
 
 button:disabled {
@@ -300,11 +357,13 @@ button:disabled {
     font-size: 14px;
     color: gray;
     position: absolute;
-    bottom: 35px; /* Adjust based on button position */
+    bottom: 35px;
+    /* Adjust based on button position */
     right: 10px;
-    pointer-events: none; /* Prevent interaction */
-    padding: 0 10px 6.5vh 0 ;
-    
+    pointer-events: none;
+    /* Prevent interaction */
+    padding: 0 10px 6.5dvh 0;
+
 }
 
 .contents-text-editor.active {
@@ -320,7 +379,7 @@ textarea {
     border-radius: 5px;
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
-    
+
 }
 
 input:focus,
@@ -329,7 +388,7 @@ textarea:focus {
 }
 
 input {
-    width: 90%;
+    width: 80%;
     text-align: center;
     font-size: 20px;
 }
@@ -338,7 +397,6 @@ textarea {
     width: auto;
     height: 100%;
     resize: none;
-    padding: 5%;
     overflow-y: scroll;
 }
 
@@ -346,24 +404,22 @@ textarea {
 .title-container {
     width: 40vw;
     min-width: 640px;
-
     display: flex;
     flex-direction: column;
     z-index: 500;
     pointer-events: all;
+    border-radius: 20px;
 }
 
 .title-container {
     position: relative;
     height: auto;
-    margin-top: 0;
-    margin-bottom: 2.5vh;
+    margin-bottom: 2.5dvh;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     background-color: var(--backgroundcolour);
     border: var(--bordersize) solid var(--backgroundcolour);
-    border-radius: 50px;
 }
 
 .container {
@@ -373,18 +429,48 @@ textarea {
 }
 
 .title-text {
+    text-align: left;
     margin: 0;
-    text-align: center;
-    
     color: var(--primarypagecolour);
     font-size: 20px;
-    flex: 1;
-    padding: 1vh 0;
-    display: none;
+    pointer-events: none;
 }
 
-.title-text.active {
+.title-text-container {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5dvh;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.title-text-container.active {
     display: flex;
+}
+
+.moderation-controls-container {
+    display: flex;
+    gap: 12px;
+}
+
+.moderation-controls-container button {
+    all: unset;
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font-size: 100%;
+    transition: background-color 0.3s, color 0.3s;
+    text-decoration: none;
+}
+
+.moderation-controls-container button:hover {
+    color: var(--secondarypagecolour);
+}
+
+.title-spacer {
+    flex: 1;
 }
 
 .contents-container {
@@ -396,7 +482,7 @@ textarea {
 .contents-container h2 {
     width: 100%;
     height: auto;
-    margin: 1vh auto;
+    margin: 1dvh auto;
     justify-content: center;
     align-items: center;
     text-align: left;
@@ -408,7 +494,7 @@ textarea {
 .contents-container h3 {
     width: 100%;
     height: auto;
-    margin: 1vh auto;
+    margin: 1dvh auto;
     justify-content: center;
     align-items: center;
     text-align: left;
@@ -417,7 +503,7 @@ textarea {
     font-size: 150%;
 }
 
-.contents-container-text{
+.contents-container-text {
     font-size: 15px;
     padding: 5%;
     display: none;
@@ -427,7 +513,7 @@ textarea {
     justify-content: left;
     align-items: left;
     text-align: left;
-    
+
     color: var(--primarypagecolour);
     overflow-y: scroll;
 }
@@ -445,6 +531,49 @@ textarea {
     color: var(--primarypagecolour);
 }
 
+.floating-button .icon {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.tag-container {
+    width: 80%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: all;
+    cursor: pointer;
+}
+
+.tag-text {
+    font-size: 16px;
+    color: var(--primarypagecolour);
+    user-select: none;
+}
+
+.tag-container button {
+    border-radius: 20px;
+    background-color: var(--backgroundcolour);
+    border: 4px solid var(--primarypagecolour);
+    height: 18px;
+    width: 18px;
+    user-select: all;
+    cursor: pointer;
+}
+
+
 @media (orientation: portrait) {
 
     .container,
@@ -456,24 +585,31 @@ textarea {
     .container {
         height: 75%;
     }
-    .contents-container-text{
+
+    .contents-container-text {
         font-size: 13px;
     }
+
     .warning-container button {
         border: 4px solid var(--warningcolour);
         padding: 5px 10px;
         font-size: 10px;
         min-width: 60px;
     }
+
     .floating-container p {
         font-size: 12.5px;
         line-height: 1.7;
         margin-bottom: 10px;
     }
-    
+
     .floating-container h2 {
         font-size: 22px;
         line-height: 1.7;
         margin-bottom: 0px;
-    } 
+    }
+
+    .title-text {
+        font-size: 16px;
+    }
 }

@@ -8,8 +8,6 @@
 html,
 body,
 html * {
-    margin: 0;
-    padding: 0;
     font-family: "LemonMilk", Arial, sans-serif;
 }
 
@@ -32,6 +30,7 @@ a:hover {
     --backgroundcolour: #202020;
     --secondarybackgroundcolour: #131313;
     --warningcolour: #FF3333;
+    --warningcoloursecondary: #B22626;
     --bordersize: 5px;
     --headerheight: 5vh;
     --cardRatio: 1/1.64044950946;
@@ -155,6 +154,7 @@ a:hover {
 .icon-container img {
     height: 60%;
     width: auto;
+    pointer-events: none;
 }
 
 .icon-container img.small {
@@ -232,9 +232,9 @@ body {
 
 .overlay-text {
     position: absolute;
-    bottom: 5px;
+    bottom: 0px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 50%);
     color: var(--primarypagecolour);
     font-size: 15px;
     text-align: center;

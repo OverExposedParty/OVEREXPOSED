@@ -14,13 +14,17 @@ fetch('/html-templates/other/cookie-banner.html')
         placeHolderCookieConsentBanner.querySelector('#accept-cookies').addEventListener('click', () => {
             localStorage.setItem('cookie-consent', true);
             removeElementIfExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
-            overlay.classList.remove('active');
+            toggleOverlay(false);
+            acceptCookies();
+            console.log(permanantElementClassArray);
             placeHolderCookieConsentBanner.remove();
         });
         placeHolderCookieConsentBanner.querySelector('#decline-cookies').addEventListener('click', () => {
             localStorage.setItem('cookie-consent', false);
             removeElementIfExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
-            overlay.classList.remove('active');
+            toggleOverlay(false);
+            declineCookies()
+            console.log(permanantElementClassArray);
             placeHolderCookieConsentBanner.remove();
         });
         addElementIfNotExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
@@ -32,7 +36,7 @@ function acceptCookies() {
     gtag('consent', 'update', { 'analytics_storage': 'granted' });
 }
 
-function rejectCookies() {
+function declineCookies() {
     localStorage.setItem('cookie-consent', false);
     gtag('consent', 'update', { 'analytics_storage': 'denied' });
 }

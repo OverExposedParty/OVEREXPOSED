@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta property="og:description"
         content="The ultimate digital card game that’s about to make your pre-drinks and hangouts unforgettable is here! OverExposed is your go-to for laughs, wild confessions, and pure chaos. Whether it’s 'Never Have I Ever,' 'Most Likely To,' or our custom cards, you’re in for a wild night. Get ready to turn up the fun and make every motive one to remember…stay tuned, it’s about to get LIT!">
-        <meta http-equiv="Content-Security-Policy"
-        content="
+    <meta http-equiv="Content-Security-Policy" content="
             connect-src 
                 'self' 
                 https://www.google-analytics.com 
@@ -31,7 +30,7 @@
                 https://cdn.socket.io/4.8.1/socket.io.min.js 
                 'unsafe-inline';
         ">
-    
+
 
     <title>OVEREXPOSURE</title>
 
@@ -69,6 +68,7 @@
 <script>
     document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/overexposure.png')");
 </script>
+
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static">
         <img src="/images/splash-screens/overexposure.png" alt="Splash Screen">
@@ -79,16 +79,49 @@
     </div>
 
     <div id="header-placeholder"></div>
+    <div id="user-customisation-placeholder"></div>
 
     <button class="back-button">HOME</button>
 
     <div class="overexposure-container" id="overexposure-container">
         <div class="title-container">
-            <h1 class="title-text" id="title-text"></h1>
-            <div class="title-text-editor " id="title-text-editor">
-                <input type="text" name="Title" placeholder="New Title" id="title-text-editor-input" maxlength="50" />
+            <div class="title-text-container">
+                <h1 class="title-text" id="title-text"></h1>
+                <div class="title-spacer"></div>
+                <div class="moderation-controls-container">
+                    <button id="delete-post-button">[DELETE]</button>
+                    <button id="flag-post-button">[FLAG]</button>
+                </div>
             </div>
 
+            <div class="title-text-editor " id="title-text-editor">
+                <input type="text" name="Title" placeholder="New Title" id="title-text-editor-input" maxlength="50" />
+                <div class="tag-container">
+                    <div class="tag-item selected" data-primary="var(--confessions-primary-colour)"
+                        data-secondary="var(--confessions-secondary-colour)" id="confessions">
+                        <span class="tag-text">Confessions</span>
+                        <button class="tag"></button>
+                    </div>
+
+                    <div class="tag-item" data-primary="var(--stories-primary-colour)"
+                        data-secondary="var(--stories-secondary-colour)" id="stories">
+                        <span class="tag-text">Stories</span>
+                        <button class="tag"></button>
+                    </div>
+
+                    <div class="tag-item" data-primary="var(--thoughts-primary-colour)"
+                        data-secondary="var(--thoughts-secondary-colour)" id="thoughts">
+                        <span class="tag-text">Thoughts</span>
+                        <button class="tag"></button>
+                    </div>
+
+                    <div class="tag-item" data-primary="var(--feelings-primary-colour)"
+                        data-secondary="var(--feelings-secondary-colour)" id="feelings">
+                        <span class="tag-text">Feelings</span>
+                        <button class="tag"></button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="container">
             <div class="contents-container" id="contents-container">
@@ -96,14 +129,14 @@
                 </div>
                 <div class="contents-text-editor " id="contents-text-editor">
                     <textarea id="text-input" placeholder="Type here..." maxlength="800"></textarea>
-                        <span id="char-counter">800</span>
+                    <span id="char-counter">800</span>
                     <button class="overexposure-publish-button">Publish</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="wrapper" style="position: absolute; width: 100vw; height: 100vh; overflow: hidden;">
+    <div id="viewport">
         <div id="floating-container" class="floating-container">
             <div class="safe-zone" id="safe-zone"></div>
             <h2>Welcome to OVEREXPOSURE</h2>
@@ -156,7 +189,34 @@
         <h2>Failed to post</h2>
         <p>*Make sure no names are used</p>
     </div>
+
+    <div class="warning-container" id="delete-post-container">
+        <h2>DELETE POST</h2>
+        <p>Enter delete code</p>
+        <input type="text" maxlength="7" placeholder="XXX-XXX"/>
+        <div class="warning-button-container">
+            <button>SUBMIT</button>
+        </div>
+    </div>
+
+    <div class="warning-container" id="remember-code-container">
+        <h2>REMEMBER THIS CODE:</h2>
+        <input type="text" maxlength="7" placeholder="XXX-XXX" readonly/>
+        <div class="warning-button-container"> 
+            <button>CONTINUE</button>
+        </div>
+    </div>
 </body>
+<script>
+    const defaultColours = {
+        primary: '#FF6961',
+        secondary: '#B74C57'
+    };
+
+    document.documentElement.style.setProperty('--primarypagecolour', defaultColours.primary);
+    document.documentElement.style.setProperty('--secondarypagecolour', defaultColours.secondary);
+    const helpContainerFile = "overexposure.json";
+</script>
 
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -165,17 +225,16 @@
 
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false"></script>
 <script src="/scripts/overexposure/overexposure-settings.js"></script>
 <script src="/scripts/overexposure/camera-view.js"></script>
-<script src="/scripts/overexposure/overexposure-data.js"></script>
-<script src="/scripts/overexposure/overexposure-touch-controls.js"></script>
+<script src="/scripts/overexposure/overexposure-data.js" data-loaded="false" defer></script>
+
 <script src="/scripts/overexposure/overexposure-computer-controls.js"></script>
 <script>
-
-    backButton.addEventListener('click', () => {
-        transitionSplashScreen('/', "/images/splash-screens/overexposed.png")
-    });
-
-
+    waitForFunction("FetchHelpContainer", () => {
+        FetchHelpContainer(helpContainerFile);
+    })
 </script>
+
 </html>

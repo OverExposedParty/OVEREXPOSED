@@ -680,22 +680,6 @@ function disconnectUserOnExit() {
 // Use both visibilitychange and beforeunload for maximum reliability
 window.addEventListener("beforeunload", disconnectUserOnExit);
 
-
-function getFilePathByCustomisationId(customisationId) {
-  const allItems = [
-    ...colourSlot,
-    ...headSlot,
-    ...eyesSlot,
-    ...mouthSlot
-  ];
-  const match = allItems.find(item => item.id === customisationId);
-  return match ? match.filePath : null;
-}
-
-function toKebabCase(input) {
-  return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-}
-
 function RemoveUserFromParty(computerIdToRemove) {
   let payload = {};
   if (partyCode && computerIdToRemove && loadingPage == false) {

@@ -1,3 +1,36 @@
+let count = 0;
+
+const blankCard = {
+    confessions: "/images/overexposure/card-templates/confessions.svg",
+    stories: "/images/overexposure/card-templates/stories.svg",
+    thoughts: "/images/overexposure/card-templates/thoughts.svg",
+    feelings: "/images/overexposure/card-templates/feelings.svg"
+};
+
+const tagColours = {
+    confessions: {
+        primary: getComputedStyle(document.documentElement).getPropertyValue('--confessions-primary-colour').trim(),
+        secondary: getComputedStyle(document.documentElement).getPropertyValue('--confessions-secondary-colour').trim()
+    },
+    stories: {
+        primary: getComputedStyle(document.documentElement).getPropertyValue('--stories-primary-colour').trim(),
+        secondary: getComputedStyle(document.documentElement).getPropertyValue('--stories-secondary-colour').trim()
+    },
+    thoughts: {
+        primary: getComputedStyle(document.documentElement).getPropertyValue('--thoughts-primary-colour').trim(),
+        secondary: getComputedStyle(document.documentElement).getPropertyValue('--thoughts-secondary-colour').trim()
+    },
+    feelings: {
+        primary: getComputedStyle(document.documentElement).getPropertyValue('--feelings-primary-colour').trim(),
+        secondary: getComputedStyle(document.documentElement).getPropertyValue('--feelings-secondary-colour').trim()
+    }
+};
+
+let currentPageColours = {
+    primary: '#FF6961',
+    secondary: '#B74C57'
+};
+
 const canvasWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasWidth').trim(), 10);
 const canvasHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvasHeight').trim(), 10);
 
@@ -6,6 +39,7 @@ const cardWidthValue = parseFloat(cardWidth);
 
 const safeZone = document.querySelector(".safe-zone");
 const titleText = document.querySelector(".title-text");
+const titleTextContainer = document.querySelector(".title-text-container");
 const contentsContainerText = document.querySelector('.contents-container-text');
 const titleTextEditor = document.querySelector(".title-text-editor");
 const contentsTextEditor = document.getElementById("contents-text-editor");
@@ -20,6 +54,7 @@ const exitMenuNo = document.getElementById("exit-menu-button-no");
 const submitPostYes = document.getElementById("submit-post-yes");
 const submitPostNo = document.getElementById("submit-post-no");
 const publishButton = document.querySelector(".overexposure-publish-button");
+
 const exitMenuContainer = document.getElementById("exit-menu-container");
 const uploadingPostContainer = document.getElementById("uploading-post-container");
 const areYouSurePostContainer = document.getElementById("are-you-sure-container");
@@ -27,7 +62,20 @@ const postIncompleteContainer = document.getElementById("post-incomplete-contain
 
 const enableNSFWContainer = document.getElementById("enable-nsfw-container");
 
-publishButton.disabled = true;
+const deletePostButton = document.getElementById("delete-post-button");
+const flagPostButton = document.getElementById("flag-post-button");
+
+const deletePostContainer = document.getElementById("delete-post-container");
+const deleteCodeInput = deletePostContainer.querySelector('input');
+const deletePostSubmit = deletePostContainer.querySelector('.warning-button-container button');
+
+const rememberCodeContainer = document.getElementById("remember-code-container");
+const rememberCodeContinue = rememberCodeContainer.querySelector('.warning-button-container button');
+const rememberCodeText = rememberCodeContainer.querySelector('input');
+
+let intervalId;
+
+publishButton.classList.add("disabled");
 
 const textInput = document.getElementById("text-input");
 const charCounter = document.getElementById("char-counter");
@@ -183,10 +231,10 @@ function showFloatingText(event, message) {
         displayFloatingText(message, event.clientX, event.clientY);
     }
 
-    if (creatingCard) {
-        creatingCard.remove();
-        creatingCard = null;
-    }
+    //if (creatingCard) {
+    // creatingCard.remove();
+    // creatingCard = null;
+    //} // add back when touch controls implemented
 }
 
 function getIDFromURL() {
@@ -213,8 +261,10 @@ async function fetchConfessions() {
                 confession.text,
                 confession.id,
                 confession.date,
+                confession.userIcon,
                 confession.x,
-                confession.y
+                confession.y,
+                confession.tag
             ], false);
         });
         CardBoundsToggle(cardBoundsCheckbox.checked);
@@ -224,6 +274,7 @@ async function fetchConfessions() {
         }
 
         SetNSFW();
+        SetScriptLoaded('/scripts/overexposure/overexposure-data.js');
     } catch (error) {
         console.error("❌ Error fetching confessions:", error);
     }
@@ -231,35 +282,60 @@ async function fetchConfessions() {
 
 async function updateConfessions() {
     try {
-        // Fetch the new confessions from the API
+        // Fetch the latest confessions from the API
         const response = await fetch('/api/confessions');
         const data = await response.json();
 
         console.log("📥 Confessions from MongoDB:", data);
 
+        // Build a Set of all confession IDs currently in the database
+        const confessionIds = new Set(data.map(confession => confession.id));
+
         // Get all existing floating buttons
         const floatingButtons = document.querySelectorAll('.floating-button');
 
-        // Iterate through the confessions
-        data.forEach(confession => {
-            let isNewConfession = true;
+        // 1️⃣ Remove any non-draft floating buttons that no longer exist in the DB
+        floatingButtons.forEach(button => {
+            const id = button.getAttribute('data-id');
+            const isDraft = button.classList.contains('draft');
 
-            // Check if a floating button with the same ID already exists
-            floatingButtons.forEach(button => {
-                if (button.getAttribute('data-id') === confession.id) {
-                    isNewConfession = false;
+            // Skip drafts – they won't be in the DB yet
+            if (isDraft) return;
+
+            if (!confessionIds.has(id)) {
+                console.log(`🗑 Removing floating button not in DB: ${id}`);
+
+                // Remove paired .no-place div
+                const noPlace = document.querySelector(`.no-place[data-id="${id}"]`);
+                if (noPlace) noPlace.remove();
+
+                // If this card was currently selected, close/reset the editor
+                const selectedId = overexposureContainer.getAttribute('data-selected-card');
+                if (selectedId === id) {
+                    overexposureContainer.removeAttribute('data-selected-card');
+                    ToggleOverexposureContainer({ toggle: false, force: true });
                 }
-            });
 
-            // If the confession is new, create a new floating button
-            if (isNewConfession) {
+                // Remove the button itself
+                button.remove();
+            }
+        });
+
+        // 2️⃣ Add any new confessions that *don’t* have a button yet
+        data.forEach(confession => {
+            const existingButton = document.querySelector(`.floating-button[data-id="${confession.id}"]`);
+
+            if (!existingButton) {
+                console.log(`➕ Creating new floating button for confession: ${confession.id}`);
                 createFloatingButton(null, [
                     confession.title,
                     confession.text,
                     confession.id,
                     confession.date,
+                    confession.userIcon,
                     confession.x,
-                    confession.y
+                    confession.y,
+                    confession.tag
                 ], false);
             }
         });
@@ -268,6 +344,7 @@ async function updateConfessions() {
         console.error("❌ Error fetching confessions:", error);
     }
 }
+
 socket.on("confessions-updated", async (change) => {
     updateConfessions();
 });
@@ -292,23 +369,32 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
 
 function createFloatingButton(event = null, row, draft = false) {
     const idFromURL = getIDFromURL();
-    const [title = "New Title", text = "Type here...", id = new Date().toISOString(), date = Date.now(), xPosition = "0", yPosition = "0"] = row;
+    const [title = "New Title", text = "Type here...", id = new Date().toISOString(), date = Date.now(), userIcon = "0000:0100:0200:0300", xPosition = "0", yPosition = "0", tag = "confessions"] = row;
 
     const button = document.createElement("button");
     button.classList.add("floating-button");
 
     const img = document.createElement("img");
-    img.src = "/images/overexposure/card-template.svg";
+    img.src = blankCard[tag]
     img.classList.add("floating-image");
+
+    createUserIconPartyGames({
+        container: button,
+        userCustomisationString: userIcon,
+        size: "dual-stack"
+    });
 
     const span = document.createElement("span");
     span.classList.add("button-text");
     span.textContent = title;
+    span.style.color = tagColours[tag].primary;
 
     button.setAttribute("data-id", id);
     button.setAttribute("data-date", date);
     button.setAttribute("data-title", title);
     button.setAttribute("data-text", text);
+    button.setAttribute("data-tag", tag);
+    button.setAttribute("data-usericon", userIcon);
 
     const noPlaceDiv = document.createElement("div");
     noPlaceDiv.classList.add("no-place");
@@ -325,6 +411,12 @@ function createFloatingButton(event = null, row, draft = false) {
 
     noPlaceDiv.style.left = `${parseFloat(xPosition) - cardWidthValue / 4}px`;
     noPlaceDiv.style.top = `${parseFloat(yPosition) - cardWidthValue / 4}px`;
+
+    const cardTypeText = document.createElement("p");
+    cardTypeText.classList.add("card-type-text");
+    cardTypeText.textContent = tag.charAt(0).toUpperCase() + tag.slice(1);
+    cardTypeText.style.color = tagColours[tag].primary;
+    button.appendChild(cardTypeText);
 
     const speed = Math.random() * 5 + 2;
     button.animate(
@@ -402,26 +494,46 @@ function placeCard(event, positionX, positionY) {
 
     contentsTextArea.value = "";
     titleTextInput.value = "";
-
-    createFloatingButton(event, ["New Title", "Type here...", new Date().toISOString().replace(/[-:T.]/g, '').split('Z')[0], formatDate(Date.now()), positionX.toString(), positionY.toString()], true);
+    createFloatingButton(event, ["New Title", "Type here...", new Date().toISOString().replace(/[-:T.]/g, '').split('Z')[0], formatDate(Date.now()), getUserIconString(), positionX.toString(), positionY.toString(), "confessions"], true);
     CardBoundsToggle(cardBoundsCheckbox.checked);
 }
 
 function setOverexposureContainerToEditor(isActive) {
     if (isActive) {
         contentsContainerText.classList.remove('active');
-        titleText.classList.remove('active');
+        titleTextContainer.classList.remove('active');
         titleTextEditor.classList.add('active');
         contentsTextEditor.classList.add('active');
     } else {
         contentsContainerText.classList.add('active');
-        titleText.classList.add('active');
+        titleTextContainer.classList.add('active');
         titleTextEditor.classList.remove('active');
         contentsTextEditor.classList.remove('active');
     }
 }
 
-fetchConfessions();
+function isOverexposureEditorActive() {
+    return titleTextEditor.classList.contains('active') && contentsTextEditor.classList.contains('active');
+}
+
+function isOverexposureEditorEmpty() {
+    if (titleTextInput.value.trim() === "" && contentsTextArea.value.trim() === "") {
+        return true;
+    }
+    return false;
+}
+
+function SetOverexposureClassArray() {
+    if (isOverexposureEditorEmpty()) {
+        addElementIfNotExists(elementClassArray, overexposureContainer);
+        removeElementIfExists(permanantElementClassArray, overexposureContainer);
+    }
+    else {
+        addElementIfNotExists(permanantElementClassArray, overexposureContainer);
+        removeElementIfExists(elementClassArray, overexposureContainer);
+    }
+}
+
 publishButton.addEventListener("click", async () => {
     if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
         playSoundEffect('postIncomplete');
@@ -444,31 +556,34 @@ submitPostYes.addEventListener("click", async () => {
         intervalId = setInterval(updateEllipses, 400);
         const draftData = [];
         draftButtons.forEach(button => {
-            button.setAttribute("data-title", titleTextInput.value.trim());
-            button.setAttribute("data-text", contentsTextArea.value.trim());
-
             const title = button.getAttribute("data-title");
             const text = button.getAttribute("data-text");
             const id = button.getAttribute("data-id");
             const date = button.getAttribute("data-date");
             const xPosition = parseInt(button.style.left, 10);
             const yPosition = parseInt(button.style.top, 10);
+            const tag = button.getAttribute("data-tag");
+            const userIcon = button.getAttribute("data-usericon");
 
-            button.querySelector(".button-text").textContent = title;
-
-            draftData.push([title, text, id, date, xPosition, yPosition]);
+            draftData.push([title, text, id, date, userIcon, xPosition, yPosition, tag]);
         });
-
         try {
             const response = await saveDataToMongoDB(draftData);
-            toggleOverlay(false);
-            overexposureContainer.classList.remove('active');
+            removeElementIfExists(popUpClassArray, uploadingPostContainer);
+            rememberCodeContainer.classList.add('active');
+            overexposureContainer.removeAttribute('data-selected-card');
+            addElementIfNotExists(permanantElementClassArray, rememberCodeContainer);
+            ToggleOverexposureContainer({
+                toggle: false,
+                force: true
+            });
+            draftButtons.forEach(button => {
+                const noPlaceDiv = document.querySelector(`.no-place[data-id="${button.getAttribute("data-id")}"]`);
+                if (noPlaceDiv) noPlaceDiv.remove();
+                button.remove();
+            });
             console.log("Draft data saved successfully:", response);
             playSoundEffect('postUploaded');
-            draftButtons.forEach(button => {
-                button.classList.remove("draft");
-            });
-            cleanOverexposureUrl();
         } catch (error) {
             console.error("Error saving draft data:", error);
             playSoundEffect('postIncomplete');
@@ -477,6 +592,7 @@ submitPostYes.addEventListener("click", async () => {
         addElementIfNotExists(popUpClassArray, uploadingPostContainer);
     }
 });
+
 submitPostNo.addEventListener("click", async () => {
     areYouSurePostContainer.classList.remove('active');
     removeElementIfExists(popUpClassArray, areYouSurePostContainer)
@@ -484,12 +600,11 @@ submitPostNo.addEventListener("click", async () => {
 
 async function saveDataToMongoDB(draftData) {
     try {
-        const [title, text, id, date, x, y] = draftData[0]; // ✅ Destructure first item
+        const [title, text, id, date, userIcon, x, y, tag] = draftData[0];
 
-        const confession = { title, text, id, date, x, y };
+        const confession = { title, text, id, date, userIcon, x, y, tag };
 
         console.log("📤 Saving confession", confession);
-
         const response = await fetch('/api/confessions', {
             method: 'POST',
             headers: {
@@ -497,63 +612,33 @@ async function saveDataToMongoDB(draftData) {
             },
             body: JSON.stringify(confession)
         });
-
         const result = await response.json();
         console.log("✅ Response from MongoDB:", result);
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save confession');
+        }
+
+        const { confession: savedConfession, deleteCode } = result;
+
+        // 👉 THIS is the code you show to the user
+        console.log("🧾 Delete code for this confession:", deleteCode);
+
+        // Simple version: just alert it
+        //alert(`Your delete code for this post is: ${deleteCode}\n\nSave this code if you want to delete it later.`);
+        rememberCodeText.value = deleteCode;
+
+        // Optional: store it locally so the same browser remembers it
+        if (savedConfession && savedConfession._id && deleteCode) {
+            localStorage.setItem(`overexposure-delete-code-${savedConfession.id}`, deleteCode);
+        }
+        return result;
     } catch (error) {
         playSoundEffect('postIncomplete');
         console.error("❌ Error sending confession to MongoDB:", error);
+        throw error;
     }
 }
 
-
-const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === "attributes" && mutation.attributeName === "class") {
-            if (!overlay.classList.contains("active")) {
-                cleanOverexposureUrl();
-            }
-            if (!overexposureContainer.classList.contains("active")) {
-                const draftButtons = document.querySelectorAll(".floating-button.draft");
-                if (contentsTextArea.value.trim() !== "" || titleTextInput.value.trim() !== "") {
-                    if (draftButtons.length > 0) {
-                        toggleOverlay(true);
-                        overexposureContainer.classList.add('active');
-                        addElementIfNotExists(elementClassArray, overexposureContainer);
-                        if (elementExists(popUpClassArray, postIncompleteContainer)) {
-                            postIncompleteContainer.classList.remove('active');
-                        }
-                        else if (!(areYouSurePostContainer.classList.contains('active'))) {
-                            exitMenuContainer.classList.add('active');
-                            addElementIfNotExists(popUpClassArray, exitMenuContainer);
-                        }
-                        else {
-                            areYouSurePostContainer.classList.remove('active');
-                            removeElementIfExists(popUpClassArray, areYouSurePostContainer)
-                        }
-
-                    }
-                }
-                else {
-                    document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
-                    document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
-                    history.pushState(null, "", window.location.pathname);
-                    charCounter.textContent = maxLength;
-                }
-            }
-            if (!uploadingPostContainer.classList.contains("active") && isIntervalActive()) {
-                clearInterval(intervalId);
-                intervalId = null;
-                uploadingText.textContent = "Uploading Post"
-            }
-        }
-    }
-});
-
-observer.observe(overexposureContainer, { attributes: true, attributeFilter: ["class"] });
-observer.observe(exitMenuContainer, { attributes: true, attributeFilter: ["class"] });
-observer.observe(uploadingPostContainer, { attributes: true, attributeFilter: ["class"] });
-observer.observe(postIncompleteContainer, { attributes: true, attributeFilter: ["class"] });
 
 function selectCard(button, draft) {
     const rect = button.getBoundingClientRect();
@@ -571,25 +656,11 @@ function selectCard(button, draft) {
         displayFloatingText("Enable NSFW in settings", centerX, centerY);
         return;
     }
-    overexposureContainer.classList.add("active");
-    const dataId = button.getAttribute("data-id");
-    history.pushState(null, "", window.location.pathname.replace(/\/$/, '') + "/" + dataId);
-
-    titleText.textContent = button.getAttribute("data-title");
-    contentsContainerText.innerHTML = button.getAttribute("data-text");
-
-    if (draft) {
-        setOverexposureContainerToEditor(true);
-
-    }
-    else {
-        setOverexposureContainerToEditor(false);
-    }
-
-    toggleOverlay(true);
-    addElementIfNotExists(elementClassArray, overexposureContainer);
-    playSoundEffect('containerOpen');
-    button.classList.add('touchhover');
+    ToggleOverexposureContainer({
+        toggle: true,
+        button,
+        draft
+    });
 }
 
 exitMenuYes.addEventListener("click", ExitMenuButtonYes);
@@ -600,8 +671,9 @@ function ExitMenuButtonYes() {
     contentsTextArea.value = "";
     exitMenuContainer.classList.remove('active');
     removeElementIfExists(popUpClassArray, exitMenuContainer)
-    publishButton.disabled = true;
-    toggleOverlay(false);
+    removeElementIfExists(permanantElementClassArray, overexposureContainer);
+    publishButton.classList.add("disabled");
+    ToggleOverexposureContainer({ toggle: false });
 }
 
 function ExitMenuButtonNo() {
@@ -625,19 +697,37 @@ overexposureContainer.addEventListener("mousedown", function () {
         postIncompleteContainer.classList.remove('active');
         removeElementIfExists(popUpClassArray, postIncompleteContainer)
     }
+    if (deletePostContainer.classList.contains("active")) {
+        deletePostContainer.classList.remove('active');
+        removeElementIfExists(popUpClassArray, deletePostContainer)
+    }
 });
-
 
 function togglePublishButton() {
     if (titleTextInput.value.trim() !== "" && contentsTextArea.value.trim() !== "") {
-        publishButton.disabled = false;
+        publishButton.classList.remove("disabled");
     } else {
-        publishButton.disabled = true;
+        publishButton.classList.add("disabled");
     }
 }
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    waitForFunction("fetchConfessions", async () => {
+        await fetchConfessions();
+    })
+
     titleTextInput.addEventListener("input", togglePublishButton);
     contentsTextArea.addEventListener("input", togglePublishButton);
+
+    titleTextInput.addEventListener("input", SetOverexposureClassArray);
+    contentsTextArea.addEventListener("input", SetOverexposureClassArray);
+
+    if (localStorage.getItem('first-time-overexposure') === null) {
+        localStorage.setItem('first-time-overexposure', 'no');
+        waitForFunction("toggleUserCustomisation", () => {
+            toggleUserCustomisation(true);
+        })
+
+    }
 });
 
 function cleanOverexposureUrl() {
@@ -649,6 +739,9 @@ function cleanOverexposureUrl() {
         const newUrl = currentUrl.slice(0, overexposureIndex + basePath.length) + "/";
         history.pushState(null, "", newUrl);
     }
+
+    document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
+    document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
 }
 
 textInput.addEventListener("input", () => {
@@ -673,7 +766,7 @@ titleTextInput.addEventListener("keydown", (event) => {
 
 function SetNSFW() {
     const bool = localStorage.getItem('settings-nsfw');
-    const buttons = document.querySelectorAll('.floating-button img');
+    const buttons = document.querySelectorAll('.floating-button');
 
     const sizes = ['16x16', '32x32', '96x96', '180x180'];
     const faviconLinks = document.querySelectorAll('link[rel="icon"]');
@@ -681,9 +774,10 @@ function SetNSFW() {
     if (bool === 'true') {
         enableNSFWContainer.classList.remove('active');
         removeElementIfExists(permanantElementClassArray, enableNSFWContainer);
-        document.documentElement.style.setProperty('--primarypagecolour', '#FF6961');
+        document.documentElement.style.setProperty('--primarypagecolour', currentPageColours.primary);
+        document.documentElement.style.setProperty('--secondarypagecolour', currentPageColours.secondary);
         buttons.forEach(button => {
-            button.src = "/images/overexposure/card-template.svg";
+            button.querySelector('img').src = blankCard[button.getAttribute("data-tag")] || blankCard["confessions"];
             button.classList.remove("disabled")
         });
 
@@ -700,8 +794,9 @@ function SetNSFW() {
         enableNSFWContainer.classList.add('active');
         addElementIfNotExists(permanantElementClassArray, enableNSFWContainer);
         document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+        document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
         buttons.forEach(button => {
-            button.src = "/images/overexposure/card-template-blank.svg";
+            button.querySelector('img').src = "/images/overexposure/card-template-blank.svg";
             button.classList.add("disabled")
         });
 
@@ -761,3 +856,316 @@ waitForFunction("loadSound", () => {
         await LoadOverexposureSounds();
     })();
 });
+
+function SetOverexpossureTags() {
+    document.querySelectorAll('.tag-item').forEach(tagItem => {
+        const primaryColour = tagItem.getAttribute('data-primary');
+        const secondaryColour = tagItem.getAttribute('data-secondary');
+
+        if (!tagItem.classList.contains('selected')) {
+            updateTagStyles({
+                tagElement: tagItem,
+                state: 'not-selected',
+                primaryColour: primaryColour,
+                secondaryColour: secondaryColour
+            });
+        }
+        else {
+            updateTagStyles({
+                tagElement: tagItem,
+                state: 'selected',
+                primaryColour: primaryColour,
+                secondaryColour: secondaryColour
+            });
+        }
+
+        tagItem.addEventListener('mouseover', () => {
+            updateTagStyles({
+                tagElement: tagItem,
+                state: 'hovered',
+                primaryColour: primaryColour,
+                secondaryColour: secondaryColour
+            });
+        });
+
+        tagItem.addEventListener('mouseout', () => {
+            if (tagItem.classList.contains('selected')) {
+                updateTagStyles({
+                    tagElement: tagItem,
+                    state: 'selected',
+                    primaryColour: primaryColour,
+                    secondaryColour: secondaryColour
+                });
+            }
+            else {
+                updateTagStyles({
+                    tagElement: tagItem,
+                    state: 'not-selected',
+                    primaryColour: primaryColour,
+                    secondaryColour: secondaryColour
+                });
+            }
+        });
+
+        tagItem.addEventListener('click', () => {
+            ToggleSelectedTag(tagItem);
+        });
+    });
+}
+
+contentsTextEditor.querySelector('textarea').addEventListener('blur', () => {
+    const selectedCard = document.querySelector(`.floating-button[data-id="${overexposureContainer.getAttribute('data-selected-card')}"]`);
+    if (!selectedCard) return;
+    selectedCard.setAttribute('data-text', contentsTextEditor.querySelector('textarea').value.trim());
+});
+
+titleTextEditor.querySelector('input').addEventListener('blur', () => {
+    const selectedCard = document.querySelector(`.floating-button[data-id="${overexposureContainer.getAttribute('data-selected-card')}"]`);
+    if (!selectedCard) return;
+    selectedCard.setAttribute('data-title', titleTextEditor.querySelector('input').value.trim());
+    selectedCard.querySelector(".button-text").textContent = titleTextEditor.querySelector('input').value.trim();
+});
+
+function ToggleOverexposureContainer({ toggle = false, button = null, draft = false, force = false } = {}) {
+    if (force == true) {
+        titleTextInput.value = "";
+        contentsTextArea.value = "";
+        publishButton.classList.add("disabled");
+        removeElementIfExists(permanantElementClassArray, overexposureContainer);
+        ToggleOverexposureContainer({ toggle: false });
+        return;
+    }
+    if (toggle == true && permanantElementClassArray.includes(overexposureContainer) == false) {
+        overexposureContainer.classList.add('active');
+    }
+    else if (toggle == false && permanantElementClassArray.includes(overexposureContainer) == false) {
+        overexposureContainer.classList.remove('active');
+        if (permanantElementClassArray.length == 0) {
+            overlay.classList.remove('active');
+        }
+        playSoundEffect('containerClose');
+    }
+    if (overexposureContainer.classList.contains('active') && toggle == true) {
+        if (!button) return;
+        const dataId = button.getAttribute("data-id");
+        history.pushState(null, "", window.location.pathname.replace(/\/$/, '') + "/" + dataId);
+
+        titleText.textContent = button.getAttribute("data-title");
+        contentsContainerText.innerHTML = button.getAttribute("data-text");
+
+        if (draft) {
+            setOverexposureContainerToEditor(true);
+        }
+        else {
+            setOverexposureContainerToEditor(false);
+        }
+
+        addElementIfNotExists(elementClassArray, overexposureContainer);
+        toggleOverlay(true);
+        playSoundEffect('containerOpen');
+        overexposureContainer.setAttribute('data-selected-card', dataId);
+        if (button) ToggleSelectedTag(document.querySelector(`.tag-item#${button.getAttribute("data-tag")}`));
+        button.classList.add('touchhover');
+    }
+    else {
+        if (!isOverexposureEditorEmpty() && toggle == false) {
+            exitMenuContainer.classList.add('active');
+            addElementIfNotExists(popUpClassArray, exitMenuContainer);
+        }
+        if (!permanantElementClassArray.includes(overexposureContainer)) {
+            cleanOverexposureUrl();
+            ToggleSelectedTag();
+        }
+    }
+}
+
+function ChangePageColour(primary = defaultColours.primary, secondary = defaultColours.secondary) {
+    document.documentElement.style.setProperty('--primarypagecolour', primary);
+    document.documentElement.style.setProperty('--secondarypagecolour', secondary);
+    currentPageColours.primary = primary;
+    currentPageColours.secondary = secondary;
+}
+
+SetOverexpossureTags();
+
+function ToggleSelectedTag(tagItem = document.querySelector(`.tag-item#confessions`)) {
+    if (!tagItem) return;
+    const tagItemText = tagItem.querySelector('.tag-text');
+    const tagItemButton = tagItem.querySelector('button');
+
+    const primaryColour = tagItem.getAttribute('data-primary');
+    const secondaryColour = tagItem.getAttribute('data-secondary');
+    tagItem.classList.add('selected');
+    const selectedCard = document.querySelector(`.floating-button[data-id="${overexposureContainer.getAttribute('data-selected-card')}"]`);
+
+    if (selectedCard && selectedCard.classList.contains('draft') == true) {
+        selectedCard.setAttribute('data-tag', tagItem.id);
+        selectedCard.querySelector('.card-type-text').textContent = tagItemText.textContent;
+        selectedCard.querySelector('.card-type-text').style.color = primaryColour;
+        selectedCard.querySelector('.button-text').style.color = primaryColour;
+        selectedCard.querySelector('img').src = blankCard[tagItem.id] || blankCard["confessions"];
+    }
+
+    ChangePageColour(primaryColour, secondaryColour);
+
+    document.querySelectorAll('.tag-item.selected').forEach(otherTag => {
+        if (otherTag !== tagItem) {
+            otherTag.classList.remove('selected');
+            const otherButton = otherTag.querySelector('button');
+            const otherPrimary = otherTag.getAttribute('data-primary');
+
+            updateTagStyles({
+                tagElement: otherTag,
+                state: 'not-selected',
+                primaryColour: otherPrimary,
+                secondaryColour: secondaryColour
+            });
+        }
+    });
+
+    if (tagItem.classList.contains('selected')) {
+        updateTagStyles({
+            tagElement: tagItem,
+            state: 'selected',
+            primaryColour: primaryColour,
+            secondaryColour: secondaryColour
+        });
+    }
+}
+function updateTagStyles({
+    tagElement = null,
+    state = 'not-selected',   // 'selected', 'not-selected', 'hovered'
+    primaryColour = null,
+    secondaryColour = null
+}) {
+    if (!tagElement) return;
+
+    const tagText = tagElement.querySelector('.tag-text');
+    const tagButton = tagElement.querySelector('button');
+
+    switch (state) {
+        case 'selected':
+            tagText.style.color = primaryColour;
+            tagButton.style.backgroundColor = primaryColour;
+            tagButton.style.border = `4px solid ${primaryColour}`;
+            break;
+
+        case 'hovered':
+            tagText.style.color = secondaryColour;
+            tagButton.style.backgroundColor = secondaryColour;
+            tagButton.style.border = `4px solid ${secondaryColour}`;
+            break;
+
+        case 'not-selected':
+        default:
+            tagText.style.color = primaryColour;
+            tagButton.style.backgroundColor = 'var(--backgroundcolour)';
+            tagButton.style.border = `4px solid ${primaryColour}`;
+            break;
+    }
+}
+
+deletePostButton.addEventListener("click", () => {
+    const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
+    if (!selectedCardId) return;
+    deletePostContainer.classList.add('active');
+    addElementIfNotExists(popUpClassArray, deletePostContainer);
+    if (localStorage.getItem(`overexposure-delete-code-${selectedCardId}`)) {
+        deleteCodeInput.value = localStorage.getItem(`overexposure-delete-code-${selectedCardId}`);
+    }
+    else {
+        deleteCodeInput.value = "";
+    }
+});
+
+async function deleteConfession(confessionId, deleteCode) {
+    const res = await fetch(`/api/confessions/${confessionId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deleteCode }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+}
+
+deletePostSubmit.addEventListener("click", async () => {
+    const confessionId = overexposureContainer.getAttribute('data-selected-card');
+    if (!confessionId) return;
+
+    const deleteCode = (deleteCodeInput.value || "").trim();
+
+    if (!deleteCode) {
+        alert("Please enter your delete code.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/confessions/${confessionId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deleteCode }),
+        });
+
+        const data = await res.json();
+        console.log("🗑 Delete response:", data);
+
+        if (!res.ok) {
+            alert(data.error || "Failed to delete post. Check your delete code.");
+            return;
+        }
+
+        // Remove card from UI
+        const button = document.querySelector(`.floating-button[data-id="${confessionId}"]`);
+        const noPlace = document.querySelector(`.no-place[data-id="${confessionId}"]`);
+        if (button) button.remove();
+        if (noPlace) noPlace.remove();
+
+        deletePostContainer.classList.remove('active');
+        removeElementIfExists(popUpClassArray, deletePostContainer);
+        deleteCodeInput.value = "";
+        overexposureContainer.removeAttribute('data-selected-card');
+        ToggleOverexposureContainer({
+            toggle: false,
+            force: true
+        });
+    } catch (err) {
+        console.error("❌ Error deleting confession:", err);
+        alert("Server error deleting post.");
+    }
+});
+
+deleteCodeInput.addEventListener("input", () => {
+    let val = deleteCodeInput.value;
+
+    if (val.length === 4 && val[3] !== "-") {
+        val = val.substring(0, 3) + "-" + val.substring(3);
+    }
+
+    deleteCodeInput.value = val;
+});
+
+
+rememberCodeContinue.addEventListener("click", () => {
+    rememberCodeContainer.classList.remove('active');
+    removeElementIfExists(popUpClassArray, uploadingPostContainer);
+    removeElementIfExists(permanantElementClassArray, rememberCodeContainer);
+    toggleOverlay(false);
+});
+
+flagPostButton.addEventListener("click", () => {
+    const confessionId = overexposureContainer.getAttribute('data-selected-card');
+    if (!confessionId) return;
+
+    toggleFlagPost({
+        toggle: true,
+        confessionId
+    });
+});
+
+function toggleFlagPost({ toggle = false, confessionId = null }) {
+    if (toggle) {
+        flagPostButton.textContent = flagPostButton.textContent === "[FLAG]" ? "[UNFLAG]" : "[FLAG]";
+    }
+    console.log("Toggle flag post:", toggle, confessionId);
+}

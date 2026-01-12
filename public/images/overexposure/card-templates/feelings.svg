@@ -3,7 +3,7 @@
   <defs>
     <style>
       .cls-1 {
-        fill: #ff6961;
+        fill: #e88bae;
       }
 
       .cls-2 {
@@ -12,7 +12,7 @@
 
       .cls-3 {
         fill: none;
-        stroke: #ff6961;
+        stroke: #e88bae;
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 5.05px;

@@ -1,5 +1,7 @@
 const placeholderUserCustomisation = document.getElementById('user-customisation-placeholder');
 
+const DEFAULT_ICON = "0000:0100:0200:0300";
+
 let userCustomisationContainer;
 let usercustomisationSaveButton, userCustomisationRandomiseButton;
 let userCustomisationContainerSlotColour, userCustomisationContainerSlotHead, userCustomisationContainerSlotEyes, userCustomisationContainerSlotMouth;
@@ -93,4 +95,25 @@ function loadCustomisation() {
 
 function saveCustomisation(customisation) {
   localStorage.setItem("user-customisation", JSON.stringify(customisation));
+}
+
+function getUserIconString() {
+  const stored = localStorage.getItem("user-customisation");
+
+  if (!stored) {
+    return "0000:0100:0200:0300";
+  }
+
+  try {
+    const data = JSON.parse(stored);
+
+    return [
+      data.colourSlotId,
+      data.headSlotId,
+      data.eyesSlotId,
+      data.mouthSlotId
+    ].join(":");
+  } catch {
+    return "0000:0100:0200:0300";
+  }
 }
