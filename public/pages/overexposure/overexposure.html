@@ -130,7 +130,7 @@
                 <div class="contents-text-editor " id="contents-text-editor">
                     <textarea id="text-input" placeholder="Type here..." maxlength="800"></textarea>
                     <span id="char-counter">800</span>
-                    <button class="overexposure-publish-button">Publish</button>
+                    <button class="overexposure-publish-button disabled">Publish</button>
                 </div>
             </div>
         </div>
@@ -228,9 +228,8 @@
 <script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false"></script>
 <script src="/scripts/overexposure/overexposure-settings.js"></script>
 <script src="/scripts/overexposure/camera-view.js"></script>
-<script src="/scripts/overexposure/overexposure-data.js" data-loaded="false" defer></script>
+<script src="/scripts/overexposure/overexposure-init.js" data-loaded="false" defer></script>
 
-<script src="/scripts/overexposure/overexposure-computer-controls.js"></script>
 <script>
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);
