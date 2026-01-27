@@ -146,14 +146,9 @@ usercustomisationSaveButton.addEventListener('click', async () => {
     eyesSlotId: userCustomisationContainerSlotEyes.getAttribute('data-id'),
     mouthSlotId: userCustomisationContainerSlotMouth.getAttribute('data-id')
   };
-  console.log(userCustomisation);
   localStorage.setItem("user-customisation", JSON.stringify(userCustomisation));
-  removeElementIfExists(permanantElementClassArray, userCustomisationContainer);
-  toggleOverlay(false);
   toggleUserCustomisation();
   const customisationString = createCustomisationString(userCustomisation);
-  console.log(customisationString);
-
   if (typeof partyCode !== "undefined" && partyCode) {
     await UpdateUserPartyData({
       partyId: partyCode,
