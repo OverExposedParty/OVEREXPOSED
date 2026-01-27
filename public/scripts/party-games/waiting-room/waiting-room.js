@@ -18,58 +18,69 @@ gameContainers.push(
   userKickedContainer
 );
 
-
 const url = window.location.href;
 const segments = url.split('/');
-partyCode = segments.pop() || segments.pop();
 
 waitingForHost = true;
 
 async function checkPartyExists() {
-  //toggleOverlay(true);
   const response = await fetch(`/api/waiting-room?partyCode=${partyCode}`);
   const data = await response.json();
   if (data.length > 0) {
     const partyData = data[0];
-    partyRulesSettings = parseGameRules(data[0].gameRules);
-    partyGameMode = partyData.gamemode;
+
+    const config = partyData.config;
+    const state = partyData.state;
+
+    partyGameMode = config.gamemode;
+    console.log("config.gameRules:", config.gameRules);
     maxPlayerCount = partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
     helpContainerFile = "party-games-online/waiting-rooms/" + partyGameMode + '.json';
+
     CreateGameSettingsButtonsScript();
     inputPartyCode = document.getElementById('party-code');
+
     if (partyGameMode) {
       sessionPartyType = partyGamesInformation[partyGameMode].partyType;
-      document.documentElement.style.setProperty('--primarypagecolour', partyGamesInformation[partyGameMode].gamemodeColours.primary);
-      document.documentElement.style.setProperty('--secondarypagecolour', partyGamesInformation[partyGameMode].gamemodeColours.secondary);
+      document.documentElement.style.setProperty(
+        '--primarypagecolour',
+        partyGamesInformation[partyGameMode].gamemodeColours.primary
+      );
+      document.documentElement.style.setProperty(
+        '--secondarypagecolour',
+        partyGamesInformation[partyGameMode].gamemodeColours.secondary
+      );
       changeFavicon(partyGameMode);
     }
-    if (partyData.isPlaying === false) {
+
+    if (state.isPlaying === false) {
       const players = partyData.players || [];
 
-      // Find if current device is already in players
-      const playerIndex = players.findIndex(p => p.computerId === deviceId);
-      console.log("playerIndex: " + playerIndex);
-      console.log("players DeviceId: " + deviceId);
-      console.log("players index DeviceId: " + players[0].computerId);
+      const playerIndex = players.findIndex(
+        p => p.identity?.computerId === deviceId
+      );
       const playerCount = players.length;
 
       if (playerCount >= 16) {
         if (playerIndex !== -1) {
+          addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
+          toggleOverlay(true);
           setActiveContainers(enterUsernameContainer);
 
           await UpdateUserPartyData({
             partyId: partyCode,
             computerId: deviceId,
             newUserReady: false,
-            newUserConfirmation: false
+            newUserConfirmation: false,
+            newUserSocketId: socket.id
           });
-          console.log("partyCode: " + partyCode);
         } else {
-          setActiveContainers(partyFullContainer)
+          setActiveContainers(partyFullContainer);
           document.title = "WAITING ROOM | ERROR";
         }
-      }
-      else {
+      } else {
+        addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
+        toggleOverlay(true);
         setActiveContainers(enterUsernameContainer);
 
         if (playerIndex !== -1) {
@@ -81,9 +92,7 @@ async function checkPartyExists() {
             newUserConfirmation: false,
             newUserSocketId: socket.id
           });
-          console.log("partyCode: " + partyCode);
-        }
-        else {
+        } else {
           await addUserToParty({
             partyId: partyCode,
             newComputerId: deviceId,
@@ -93,20 +102,24 @@ async function checkPartyExists() {
           });
         }
       }
+
       joinParty(partyCode);
     } else {
       setActiveContainers(partySessionInProgressContainer);
       document.title = "WAITING ROOM | ERROR";
       addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
     }
+
     waitForFunction("FetchHelpContainer", () => {
       FetchHelpContainer(helpContainerFile);
     });
+    SetScriptLoaded('/scripts/party-games/online/online-settings.js');
   } else {
     setActiveContainers(partyDoesNotExistContainer);
     gamemodeSettingsContainer.classList.remove('active');
     document.title = "WAITING ROOM | PARTY DOES NOT EXIST";
     addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
+    SetScriptLoaded('/scripts/party-games/online/online-settings.js');
   }
 }
 
@@ -149,7 +162,7 @@ function changeFavicon(gamemode) {
 }
 
 function SetGamemodeContainer() {
-  UpdateGamemodeContainer()
+  UpdateGamemodeContainer();
   onlineSettingsTab.classList.remove('disabled');
   rulesContainer.querySelectorAll('button').forEach(button => {
     if (button.dataset.settingsRestriction == "offline") {
@@ -157,7 +170,6 @@ function SetGamemodeContainer() {
     }
   });
   rulesContainer.querySelectorAll('.increment-container').forEach(button => {
-    console.log(button);
     if (button.dataset.settingsRestriction == "offline") {
       button.classList.add('inactive');
     }
@@ -177,26 +189,46 @@ async function UpdateGamemodeContainer() {
     return;
   }
   currentPartyData = await getWaitingRoomPartyData();
+  if (!currentPartyData) return;
+
+  const config = currentPartyData.config;
+
+  const selectedPacks = Array.isArray(config.selectedPacks) ? config.selectedPacks : [];
+  const selectedRoles = Array.isArray(config.selectedRoles) ? config.selectedRoles : [];
+  const gameRules = config.gameRules || {};
 
   packsContainer.querySelectorAll('button').forEach(button => {
-    const inPacks = currentPartyData.selectedPacks?.includes(button.dataset.key);
-    const inRoles = currentPartyData.selectedRoles?.includes(button.dataset.key);
+    const key = button.dataset.key;
+    const inPacks = selectedPacks.includes(key);
+    const inRoles = selectedRoles.includes(key);
 
     if (inPacks || inRoles) {
       button.classList.add('active');
-    }
-    else {
+    } else {
       button.classList.remove('active');
     }
     SetButtonStyle(button, false);
   });
 
   rulesContainer.querySelectorAll('.increment-container').forEach(button => {
-    button.dataset.count = getIncrementContainerValue(button.dataset.key, parseGameRules(currentPartyData.gameRules));
-    button.querySelector('.count-display').textContent = button.dataset.count;
+    const key = button.dataset.key;
+    const value = gameRules[key];
+
+    if (typeof value === 'number') {
+      button.dataset.count = value;
+      const display = button.querySelector('.count-display');
+      if (display) {
+        display.textContent = value;
+      }
+    }
   });
+
   rulesContainer.querySelectorAll('button').forEach(button => {
-    button.classList.toggle('active', currentPartyData.gameRules?.includes(button.dataset.key));
+    const key = button.dataset.key;
+    const raw = gameRules[key];
+    const isActive = raw === true || raw === 'true';
+    button.classList.toggle('active', isActive);
+    SetButtonStyle(button, false);
   });
 }
 

@@ -14,7 +14,7 @@
             "mafia-type": "civilian",
             "pack-colour": "var(--civilianColour)",
             "pack-secondary-colour": "var(--secondaryCivilianColour)",
-            "settings-dependency": "mafia-inspector",
+            "settings-dependency": "inspector",
             "pack-active": true
         },
         {

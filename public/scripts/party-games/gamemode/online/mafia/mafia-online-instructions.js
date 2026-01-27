@@ -1,233 +1,457 @@
-const nightTimer = getIncrementContainerValue("night-timer") * 1000;
-const dayTimer = getIncrementContainerValue("day-timer") * 1000;
+// Timers (seconds -> milliseconds where needed)
+const nightTimerSeconds = gameRules["night-timer"];
+const dayTimerSeconds = gameRules["day-timer"];
+
+const nightTimer = nightTimerSeconds * 1000;
+const dayTimer = dayTimerSeconds * 1000;
 
 const mafiaDisplayRoleTimer = 7500;
 const displayPlayerKilledTimer = 7500;
 
 async function DisplayRole() {
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: mafiaDisplayRoleTimer / 1000, selectedTimer: displayRoleContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_NIGHT_PHASE", nextDelay: nightTimer })
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
 
-  displayRoleTitle.textContent = currentPartyData.players[index].role;
-  displayRoleText.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: mafiaDisplayRoleTimer / 1000,
+    selectedTimer: displayRoleContainer.querySelector('.timer-wrapper')
+  });
 
-  popUpRoleHeader.textContent = currentPartyData.players[index].role;
-  popUpRoleDescription.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_NIGHT_PHASE",
+    nextDelay: nightTimer
+  });
+
+  const index = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (index === -1) {
+    console.warn("Device not found in players when displaying role.");
+    return;
+  }
+
+  const myState = getPlayerState(players[index]);
+  const role = myState.role;
+
+  displayRoleTitle.textContent = role;
+  displayRoleText.textContent = mafiaRoleDescription[role];
+
+  popUpRoleHeader.textContent = role;
+  popUpRoleDescription.textContent = mafiaRoleDescription[role];
 
   setActiveContainers(displayRoleContainer);
 }
 
 async function DisplayNightPhase() {
-  const delay = (new Date(currentPartyData.timer) - Date.now());
-  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: selectCivilianWatchContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: displayCivilianWatchResponseContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: nightTimer / 1000, selectedTimer: selectUserNightPhaseContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_NIGHT_PHASE_PART_TWO", nextDelay: null });
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  sideButtonsContainer.classList.remove('disabled');
-
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  displayRoleTitle.textContent = currentPartyData.players[index].role;
-  displayRoleText.textContent = mafiaRoleDescription[currentPartyData.players[index].role];
-  console.log("role: ", currentPartyData.players[index].role);
-  console.log("index: ", index);
-  if (currentPartyData.players[index].role == "civilian") {
-    if (!selectCivilianWatchContainer.classList.contains('active') && !displayCivilianWatchResponseContainer.classList.contains('active')) {
-      if (currentPartyData.players[index].hasConfirmed === true) {
-        selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.add('disabled'));
-      } else if (currentPartyData.players[index].hasConfirmed === false) {
-        selectCivilianWatchContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('disabled'));
-      }
-
-      InitializeCivilianWatch();
-    }
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) return;
+  const allVotesSubmitted = await sendInstructionIfAllVotesSubmitted({
+    players,
+    instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
+    partyData: currentPartyData,
+    checkStatus: true
+  });
+  if (allVotesSubmitted) return;
+  else if (currentPartyData.players[myIndex].state.status === "dead") {
+    DisplayPlayerDeadPLayerBoard();
+    return;
   }
-  else {
+
+  syncPlayerButtonsWithParty(currentPartyData);
+
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: nightTimerSeconds,
+    selectedTimer: selectCivilianWatchContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: nightTimerSeconds,
+    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: nightTimerSeconds,
+    selectedTimer: selectUserNightPhaseContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
+    nextDelay: null
+  });
+
+  const index = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (index === -1) return;
+
+  const myPlayer = players[index];
+  const myState = getPlayerState(myPlayer);
+  const myRole = myState.role;
+
+  displayRoleTitle.textContent = myRole;
+  displayRoleText.textContent = mafiaRoleDescription[myRole];
+
+  if (myRole === "civilian") {
+    if (
+      !selectCivilianWatchContainer.classList.contains('active') &&
+      !displayCivilianWatchResponseContainer.classList.contains('active')
+    ) {
+      console.log("completed", myState.phase.state === "completed");
+      waitForFunction("InitializeCivilianWatch", async () => {
+        await InitializeCivilianWatch(myState.phase.state === "completed");
+      })
+
+    }
+  } else {
     setActiveContainers(selectUserNightPhaseContainer);
     const civilianButtons = selectUserNightPhaseButtonContainer.querySelectorAll('button');
-    if (currentPartyData.players[index].hasConfirmed == true) {
+
+    if (myState.hasConfirmed) {
       selectUserNightPhaseConfirmButton.classList.add('disabled');
-    }
-    else {
+      civilianButtons.forEach(civilianButton => civilianButton.classList.add('disabled'));
+      return;
+    } else {
       selectUserNightPhaseConfirmButton.classList.remove('disabled');
     }
-
     civilianButtons.forEach(civilianButton => {
-      civilianButton.querySelector("#hover").textContent = String(currentPartyData.players.filter(p => p.isReady && p.vote === civilianButton.id).length);
-      civilianButton.querySelector("#confirmed").textContent = String(currentPartyData.players.filter(p => p.hasConfirmed && p.vote === civilianButton.id).length);
-    });
-  }
-  if (deviceId == hostDeviceId) {
-    const allVotesSubmitted = currentPartyData.players.every(player => player.hasConfirmed === true);
+      const btnId = civilianButton.id;
 
-    if (!allVotesSubmitted) return;
-    await SendInstruction({
-      instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
-      partyData: currentPartyData,
+      const hoverCount = players.filter(p => {
+        const ps = getPlayerState(p);
+        return ps.isReady && ps.vote === btnId;
+      }).length;
+
+      const confirmedCount = players.filter(p => {
+        const ps = getPlayerState(p);
+        return ps.hasConfirmed && ps.vote === btnId;
+      }).length;
+
+      const hoverSpan = civilianButton.querySelector('.hover-count');
+      const confirmedSpan = civilianButton.querySelector('.confirmed-count');
+
+      if (hoverSpan) hoverSpan.textContent = String(hoverCount);
+      if (confirmedSpan) confirmedSpan.textContent = String(confirmedCount);
     });
   }
 }
 
 async function DisplayNightPhasePartTwo() {
-  if (deviceId != hostDeviceId) return;
-  currentPartyData.phase = "day";
+
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const newState = {
+    ...state,
+    phase: "day"
+  };
+
   const mafiaVote = GetMafiaVote();
-  currentPartyData.players = ResetVotes(currentPartyData.players);
+  console.log("mafiaVote", mafiaVote);
+
+  const resetPlayers = ResetVotes(players);
+
+  currentPartyData.state = newState;
+  currentPartyData.players = resetPlayers;
+
   await SendInstruction({
     instruction: "DISPLAY_PLAYER_KILLED:" + mafiaVote,
     partyData: currentPartyData,
-    timer: new Date(Date.now() + displayPlayerKilledTimer),
+    timer: new Date(Date.now() + displayPlayerKilledTimer)
   });
 }
 
 async function DisplayPlayerKilled(instruction) {
-  const delay = (new Date(currentPartyData.timer) - Date.now());
-  startTimer({ timeLeft: delay / 1000, duration: displayPlayerKilledTimer / 1000, selectedTimer: displayPlayerKilledContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_PLAYER_KILLED_PART_TWO", nextDelay: null });
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: displayPlayerKilledTimer / 1000,
+    selectedTimer: displayPlayerKilledContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_PLAYER_KILLED_PART_TWO",
+    nextDelay: null
+  });
 
   const parsedInstructions = parseInstruction(instruction);
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const rawDialogue = mafiaDialogueKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
-  const playerKilledIndex = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.reason)
+  const rawDialogue =
+    mafiaDialogueKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
+
+  const playerKilledIndex = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.reason
+  );
+
   let finalDialogue;
 
-  if (playerKilledIndex !== -1 || parsedInstructions.reason !== "") {
-    const playerKilled = currentPartyData.players[playerKilledIndex].username;
+  if (playerKilledIndex !== -1 && parsedInstructions.reason !== "") {
+    const playerKilled = getPlayerUsername(players[playerKilledIndex]);
     finalDialogue = rawDialogue.replace("[Player Name]", playerKilled);
-    //currentPartyData.players[playerKilledIndex].status = 'dead';
-    //RemoveUserButton(selectUserDayPhaseContainer, currentPartyData.players[playerKilledIndex].computerId);
-    //RemoveUserButton(selectUserNightPhaseContainer, currentPartyData.players[playerKilledIndex].computerId);
+
+    const killedState = getPlayerState(players[playerKilledIndex]);
+    killedState.status = "dead";
+  } else {
+    finalDialogue =
+      mafiaDialogueNoKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
   }
-  else {
-    finalDialogue = mafiaDialogueNoKill[Math.floor(Math.random() * mafiaDialogueKill.length)];
-  }
+
   displayPlayerKilledText.textContent = finalDialogue;
   setActiveContainers(displayPlayerKilledContainer);
 }
 
 async function DisplayPlayerKilledPartTwo() {
-  if (deviceId == hostDeviceId) {
-    currentPartyData.players = ResetVotes(currentPartyData.players);
-    const checkGameOver = await CheckGameOver();
-    if (checkGameOver != null) {
-      await SendInstruction({
-        instruction: checkGameOver,
-        partyData: currentPartyData,
-      });
-    }
-    else {
-      await SendInstruction({
-        instruction: "DISPLAY_DAY_PHASE_DISCUSSION",
-        partyData: currentPartyData,
-        timer: new Date(Date.now() + dayTimer)
-      });
-    }
+  const players = currentPartyData.players || [];
+  const resetPlayers = ResetVotes(players);
+
+  currentPartyData.players = resetPlayers;
+
+  const checkGameOver = await CheckGameOver();
+
+  if (checkGameOver != null) {
+    await SendInstruction({
+      instruction: checkGameOver,
+      partyData: currentPartyData
+    });
+  } else {
+    await SendInstruction({
+      instruction: "DISPLAY_DAY_PHASE_DISCUSSION",
+      partyData: currentPartyData,
+      timer: new Date(Date.now() + dayTimer)
+    });
   }
 }
 
 async function DisplayDayPhaseDiscussion() {
-  const delay = (new Date(currentPartyData.timer) - Date.now());
-  startTimer({ timeLeft: delay / 1000, duration: dayTimer / 1000, selectedTimer: displayDayTimerContainer });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_DAY_PHASE_VOTE", nextDelay: dayTimer });
+  const players = currentPartyData.players || [];
+  myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  const state = getPartyState(currentPartyData);
+
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: dayTimerSeconds,
+    selectedTimer: displayDayTimerContainer
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_DAY_PHASE_VOTE",
+    nextDelay: dayTimer
+  });
+  console.log(currentPartyData.players[myIndex].state.status);
+  if (currentPartyData.players[myIndex].state.status === "dead") {
+    DisplayPlayerDeadPLayerBoard();
+    return;
+  }
   setActiveContainers(displayDayTimerContainer);
 }
 
 async function DisplayDayPhaseVote() {
-  const delay = (new Date(currentPartyData.timer) - Date.now());
-  startTimer({ timeLeft: delay / 1000, duration: dayTimer / 1000, selectedTimer: selectUserDayPhaseContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO", nextDelay: dayTimer });
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  setActiveContainers(selectUserDayPhaseContainer);
-  const usersButtons = selectUserDayPhaseButtonContainer.querySelectorAll('button');
-  if (currentPartyData.players[index].hasConfirmed == true) {
-    selectUserDayPhaseConfirmButton.classList.add('disabled');
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) return;
+  const allVotesSubmitted = await sendInstructionIfAllVotesSubmitted({
+    players,
+    instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
+    partyData: currentPartyData,
+    checkStatus: true
+  });
+  console.log("allVotesSubmitted: ", allVotesSubmitted);
+  if (allVotesSubmitted) return;
+  else if (currentPartyData.players[myIndex].state.status === "dead") {
+    DisplayPlayerDeadPLayerBoard();
+    return;
   }
-  else {
+
+  syncPlayerButtonsWithParty(currentPartyData);
+
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: dayTimerSeconds,
+    selectedTimer: selectUserDayPhaseContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
+    nextDelay: dayTimer
+  });
+
+  const myState = getPlayerState(players[myIndex]);
+
+  setActiveContainers(selectUserDayPhaseContainer);
+
+  const usersButtons = selectUserDayPhaseButtonContainer.querySelectorAll('button');
+
+  if (myState.hasConfirmed) {
+    selectUserDayPhaseConfirmButton.classList.add('disabled');
+  } else {
     selectUserDayPhaseConfirmButton.classList.remove('disabled');
   }
 
   usersButtons.forEach(usersButton => {
-    usersButton.querySelector("#hover").textContent = String(currentPartyData.players.filter(p => p.isReady && p.vote === usersButton.id).length);
-    usersButton.querySelector("#confirmed").textContent = String(currentPartyData.players.filter(p => p.hasConfirmed && p.vote === usersButton.id).length);
-  });
+    const btnId = usersButton.id;
 
-  if (deviceId == hostDeviceId) {
-    const allVotesSubmitted = currentPartyData.players.every(player => player.hasConfirmed === true);
-    if (!allVotesSubmitted) return;
-    await SendInstruction({
-      instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
-      partyData: currentPartyData,
-    });
-  }
+    const hoverCount = players.filter(p => {
+      const ps = getPlayerState(p);
+      return ps.isReady && ps.vote === btnId;
+    }).length;
+
+    const confirmedCount = players.filter(p => {
+      const ps = getPlayerState(p);
+      return ps.hasConfirmed && ps.vote === btnId;
+    }).length;
+
+    const hoverSpan = usersButton.querySelector('.hover-count');
+    const confirmedSpan = usersButton.querySelector('.confirmed-count');
+
+    if (hoverSpan) hoverSpan.textContent = String(hoverCount);
+    if (confirmedSpan) confirmedSpan.textContent = String(confirmedCount);
+  });
 }
 
 async function DisplayDayPhaseVotePartTwo() {
-  if (deviceId != hostDeviceId) return;
+
+  const players = currentPartyData.players || [];
   const townVote = await GetTownVote();
-  currentPartyData.players = ResetVotes(currentPartyData.players);
+
+  const resetPlayers = ResetVotes(players);
+  currentPartyData.players = resetPlayers;
+
   await SendInstruction({
     instruction: "DISPLAY_TOWN_VOTE:" + townVote,
     partyData: currentPartyData,
-    timer: new Date(Date.now() + displayPlayerKilledTimer),
+    timer: new Date(Date.now() + displayPlayerKilledTimer)
   });
 }
 
 async function DisplayTownVote(instruction) {
-  const delay = (new Date(currentPartyData.timer) - Date.now());
-  startTimer({ timeLeft: delay / 1000, duration: displayPlayerKilledTimer / 1000, selectedTimer: displayTownVoteContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_TOWN_VOTE_PART_TWO", nextDelay: null });
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const timerValue = state.timer ?? Date.now();
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: displayPlayerKilledTimer / 1000,
+    selectedTimer: displayTownVoteContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_TOWN_VOTE_PART_TWO",
+    nextDelay: null
+  });
 
   const parsedInstructions = parseInstruction(instruction);
-  const rawDialogue = mafiaDialogueTownVote[Math.floor(Math.random() * mafiaDialogueTownVote.length)];
-  const playerVotedOutIndex = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.reason)
-  if (playerVotedOutIndex == "") {
-    const playerVotedOut = currentPartyData.players[playerVotedOutIndex].username;
-    finalDialogue = rawDialogue.replace("[Player Name]", playerVotedOut); //Get Player Killed
-    //currentPartyData.players[playerVotedOutIndex].status = 'dead';
-    //RemoveUserButton(selectUserVoteDaySelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
-    //RemoveUserButton(selectUserVoteNightSelectUserContainer, currentPartyData.players[playerVotedOutIndex].computerId);
-  }
-  else {
-    finalDialogue = mafiaDialogueTownNoVote[Math.floor(Math.random() * mafiaDialogueKill.length)];
-  }
-  displayTownVoteText.textContent = finalDialogue;
+  const rawDialogue =
+    mafiaDialogueTownVote[Math.floor(Math.random() * mafiaDialogueTownVote.length)];
 
+  const playerVotedOutIndex = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.reason
+  );
+
+  let finalDialogue;
+
+  if (playerVotedOutIndex !== -1 && parsedInstructions.reason !== "") {
+    const playerVotedOut = getPlayerUsername(players[playerVotedOutIndex]);
+    finalDialogue = rawDialogue.replace("[Player Name]", playerVotedOut);
+
+    const votedState = getPlayerState(players[playerVotedOutIndex]);
+    votedState.status = "dead";
+  } else {
+    finalDialogue =
+      mafiaDialogueTownNoVote[Math.floor(Math.random() * mafiaDialogueKill.length)];
+  }
+
+  displayTownVoteText.textContent = finalDialogue;
   setActiveContainers(displayTownVoteContainer);
 }
 
 async function DisplayTownVotePartTwo() {
-  if (deviceId != hostDeviceId) return;
+
   const checkGameOver = await CheckGameOver();
+
   if (checkGameOver != null) {
     await SendInstruction({
       instruction: checkGameOver,
-      partyData: currentPartyData,
+      partyData: currentPartyData
     });
-  }
-  else {
+  } else {
     await SendInstruction({
       instruction: "DISPLAY_NIGHT_PHASE",
       partyData: currentPartyData,
-      timer: new Date(Date.now() + nightTimer),
+      timer: new Date(Date.now() + nightTimer)
     });
   }
 }
 
 async function DisplayGameOver(instruction) {
   const parsedInstructions = parseInstruction(instruction);
-  if (parsedInstructions.reason == "MAFIOSO") {
+
+  if (parsedInstructions.reason === "MAFIOSO") {
     displayGameOverTitle.textContent = "MAFIA WIN";
     displayGameOverText.textContent = "MAFIA HAVE OUTLASTED THE CIVILIANS";
-  }
-  else if (parsedInstructions.reason == "CIVILIAN") {
+  } else if (parsedInstructions.reason === "CIVILIAN") {
     displayGameOverTitle.textContent = "CIVILIAN WIN";
     displayGameOverText.textContent = "CIVILIAN HAVE OUTLASTED THE MAFIA";
   }
+
   setActiveContainers(displayGameOverContainer);
+}
+
+
+function DisplayPlayerDeadPLayerBoard() {
+  if (!playerBoard.classList.contains('active')) {
+    setActiveContainers();
+    playerBoard.classList.add('active');
+    addElementIfNotExists(permanantElementClassArray, playerBoard);
+    toggleOverlay(true);
+  }
+}
+
+async function sendInstructionIfAllVotesSubmitted({
+  players,
+  instruction,
+  partyData,
+  checkStatus
+}) {
+  const allVotesSubmitted = players.every(p => {
+    const playerState = getPlayerState(p);
+
+    // If we're only checking alive players, ignore dead ones
+    if (checkStatus && p.state?.status !== 'alive') return true;
+
+    // For relevant players, require confirmation
+    return !!playerState?.hasConfirmed;
+  });
+
+  if (allVotesSubmitted) {
+    await SendInstruction({ instruction, partyData });
+  }
+
+  return allVotesSubmitted;
 }

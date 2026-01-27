@@ -35,11 +35,7 @@
         <div class="gamemode-info-container">
           Online Mode Enabled
         </div>
-
-        <!-- Cards will be injected here -->
         <div class="selected-card-container" id="cards-container"></div>
-
-        <!-- Carousel will be injected here -->
         <div class="carousel-container" id="carousel-container"></div>
       </div>
 
@@ -50,8 +46,12 @@
 <script>
   document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
   document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
+  window.pageScripts = {
+    "/scripts/party-games/homepage/homepage.js": { addDataLoaded: true }
+  };
+
 </script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/party-games/homepage/homepage.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
 </html>

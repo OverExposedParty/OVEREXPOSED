@@ -312,13 +312,9 @@ createUpsertPartyHandler({
   model: waitingRoomSchema,
   logLabel: 'Waiting room',
   fields: [
-    'gamemode',
-    'isPlaying',
-    'lastPinged',
-    'players',
-    'gameRules',
-    'selectedPacks',
-    'selectedRoles',
+      'config',
+      'state',
+      'players'
   ]
 });
 createPartyGetHandler({
@@ -333,19 +329,10 @@ const partyGameRoutes = [
     route: 'party-game-truth-or-dare',
     partyGameModel: partyGameTruthOrDareSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'playerTurn',
-      'shuffleSeed',
-      'currentCardIndex',
-      'currentCardSecondIndex',
-      'questionType',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Truth Or Dare'
   },
@@ -353,17 +340,10 @@ const partyGameRoutes = [
     route: 'party-game-paranoia',
     partyGameModel: partyGameParanoiaSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'playerTurn',
-      'shuffleSeed',
-      'currentCardIndex',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Paranoia'
   },
@@ -371,17 +351,10 @@ const partyGameRoutes = [
     route: 'party-game-never-have-i-ever',
     partyGameModel: partyGameNeverHaveIEverSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'playerTurn',
-      'shuffleSeed',
-      'currentCardIndex',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Never Have I Ever'
   },
@@ -389,17 +362,10 @@ const partyGameRoutes = [
     route: 'party-game-most-likely-to',
     partyGameModel: partyGameMostLikelyToSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'playerTurn',
-      'shuffleSeed',
-      'currentCardIndex',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Most Likely To'
   },
@@ -407,20 +373,10 @@ const partyGameRoutes = [
     route: 'party-game-imposter',
     partyGameModel: partyGameImposterSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'shuffleSeed',
-      'currentCardIndex',
-      'alternativeQuestionIndex',
-      'playerTurn',
-      'round',
-      'roundPlayerTurn',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Imposter'
   },
@@ -428,16 +384,10 @@ const partyGameRoutes = [
     route: 'party-game-would-you-rather',
     partyGameModel: partyGameWouldYouRatherSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'lastPinged',
-      'shuffleSeed',
-      'currentCardIndex',
-      'timer'
+      'config',
+      'state',
+      'deck',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Would You Rather'
   },
@@ -445,18 +395,9 @@ const partyGameRoutes = [
     route: 'party-game-mafia',
     partyGameModel: partyGameMafiaSchema,
     partyGameFields: [
-      'players',
-      'gamemode',
-      'gameRules',
-      'selectedRoles',
-      'selectedPacks',
-      'userInstructions',
-      'isPlaying',
-      'phase',
-      'generalChat',
-      'mafiaChat',
-      'timer',
-      'lastPinged'
+      'config',
+      'state',
+      'players'
     ],
     partyGameLogLabel: 'Party Game Mafia'
   }
@@ -642,7 +583,9 @@ function createRemoveUserHandler({ route, mainModel, waitingRoomModel, logLabel 
       }
 
       const originalCount = session.players.length;
-      session.players = session.players.filter(player => player.computerId !== computerIdToRemove);
+      session.players = session.players.filter(
+        player => player.identity?.computerId !== computerIdToRemove
+      );
 
       if (session.players.length === originalCount) {
         return res.status(400).json({ error: 'Computer ID not found in session' });
@@ -655,7 +598,7 @@ function createRemoveUserHandler({ route, mainModel, waitingRoomModel, logLabel 
       if (waitingRoom) {
         const originalWaitingCount = waitingRoom.players.length;
         waitingRoom.players = waitingRoom.players.filter(
-          player => player.computerId !== computerIdToRemove
+          player => player.identity?.computerId !== computerIdToRemove
         );
 
         if (waitingRoom.players.length !== originalWaitingCount) {
@@ -670,6 +613,7 @@ function createRemoveUserHandler({ route, mainModel, waitingRoomModel, logLabel 
     }
   });
 }
+
 
 function createDisconnectUserHandler({ route, mainModel, waitingRoomModel, logLabel }) {
   app.post(route, async (req, res) => {
@@ -689,7 +633,7 @@ function createDisconnectUserHandler({ route, mainModel, waitingRoomModel, logLa
       const actualPartyId = partyId || partyCode;
 
       if (!actualPartyId || !computerId) {
-        return res.status(400).json({ error: 'partyId and computerId are required' });
+        return res.status(400).json({ error: "partyId and computerId are required" });
       }
 
       // --- Update main session ---
@@ -698,46 +642,85 @@ function createDisconnectUserHandler({ route, mainModel, waitingRoomModel, logLa
         return res.status(404).json({ error: `${logLabel} not found` });
       }
 
-      const player = session.players.find(p => p.computerId === computerId);
+      const player = session.players.find(
+        (p) => p.identity?.computerId === computerId
+      );
       if (!player) {
-        return res.status(400).json({ error: 'Computer ID not found in session' });
+        return res.status(400).json({ error: "Computer ID not found in session" });
       }
 
-      player.socketId = "DISCONNECTED";
-      player.lastPing = new Date();
-      session.lastPinged = new Date();
-      await session.save();
+      // Ensure nested connection exists
+      if (!player.connection) {
+        player.connection = {};
+      }
+      player.connection.socketId = "DISCONNECTED";
+      player.connection.lastPing = new Date();
+
+      // For new schema, lastPinged lives in state; fall back to top-level for legacy docs
+      if (session.state) {
+        session.state.lastPinged = new Date();
+      } else {
+        session.lastPinged = new Date();
+      }
 
       // --- Update waiting room if exists ---
-      const waitingRoomSession = await waitingRoomModel.findOne({ partyId: actualPartyId });
+      const waitingRoomSession = await waitingRoomModel.findOne({
+        partyId: actualPartyId,
+      });
       if (waitingRoomSession) {
-        const waitingPlayer = waitingRoomSession.players.find(p => p.computerId === computerId);
+        const waitingPlayer = waitingRoomSession.players.find(
+          (p) => p.identity?.computerId === computerId
+        );
         if (waitingPlayer) {
-          waitingPlayer.socketId = "DISCONNECTED";
-          waitingPlayer.lastPing = new Date();
+          if (!waitingPlayer.connection) {
+            waitingPlayer.connection = {};
+          }
+          waitingPlayer.connection.socketId = "DISCONNECTED";
+          waitingPlayer.connection.lastPing = new Date();
+          // waiting room schema still has flat lastPinged
           waitingRoomSession.lastPinged = new Date();
           await waitingRoomSession.save();
         }
       }
 
       // --- Update chat log if exists ---
-      const chatLogSession = await partyGameChatLogSchema.findOne({ partyId: actualPartyId });
+      const chatLogSession = await partyGameChatLogSchema.findOne({
+        partyId: actualPartyId,
+      });
+
       if (chatLogSession) {
+        // Disconnect message
         chatLogSession.chat.push({
-          username: '[CONSOLE]',
-          message: `${player.username} has been disconnected.`,
-          eventType: 'disconnect'
+          username: "[CONSOLE]",
+          message: `${player.identity.username} has been disconnected.`,
+          eventType: "disconnect",
         });
+      }
+
+      // --- Host reassignment (uses the helper) ---
+      await reassignHostIfNeeded({
+        session,
+        disconnectedComputerId: computerId,
+        chatLogSession,
+      });
+
+      // Save session + chat log
+      await session.save();
+      if (chatLogSession) {
         await chatLogSession.save();
       }
 
-      res.json({ message: 'Socket ID reset successfully in session and waiting room (if present)' });
+      res.json({
+        message:
+          "Socket ID reset successfully in session and waiting room (if present)",
+      });
     } catch (err) {
       console.error(`❌ Error resetting socket ID for ${logLabel.toLowerCase()}:`, err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 }
+
 
 function createPartyGetHandler({ route, model, logLabel }) {
   app.get(route, async (req, res) => {
@@ -751,6 +734,56 @@ function createPartyGetHandler({ route, model, logLabel }) {
       console.error(`❌ Failed to fetch ${logLabel.toLowerCase()}(s):`, err);
       res.status(500).json({ error: 'Server error' });
     }
+  });
+}
+
+async function reassignHostIfNeeded({ session, disconnectedComputerId, chatLogSession }) {
+  const state = session.state;
+  if (!state) return;
+
+  const previousHostId = state.hostComputerId;
+  const hostList = Array.isArray(state.hostComputerIdList)
+    ? state.hostComputerIdList
+    : [];
+
+  if (!previousHostId) return;
+  if (hostList.length === 0) return;
+
+  let newHostPlayer = null;
+
+  for (const candidateComputerId of hostList) {
+    if (String(candidateComputerId) === String(disconnectedComputerId)) continue;
+
+    const candidate = session.players.find(
+      (p) =>
+        p.identity?.computerId === candidateComputerId ||
+        p.computerId === candidateComputerId
+    );
+
+    if (!candidate) continue;
+
+    const socketId = candidate.connection?.socketId;
+    if (socketId === "DISCONNECTED") continue;
+
+    state.hostComputerId = candidateComputerId;
+    newHostPlayer = candidate;
+    break;
+  }
+
+  if (!newHostPlayer) {
+    state.hostComputerId = null;
+    return;
+  }
+
+  if (!chatLogSession) return;
+  if (String(state.hostComputerId) === String(previousHostId)) return;
+
+  const username = newHostPlayer.identity?.username || newHostPlayer.username;
+
+  chatLogSession.chat.push({
+    username: "[CONSOLE]",
+    message: `${username} is now the host.`,
+    eventType: "connect",
   });
 }
 

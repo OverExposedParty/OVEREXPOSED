@@ -116,7 +116,7 @@ function toggleClass(selectedClass, classArray) {
         playSoundEffect('containerClose');
     }
 
-    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0) {
+    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0 && popUpClassArray.length == 0) {
         toggleOverlay(false);
     }
     else {
@@ -136,11 +136,6 @@ function toggleHelp() {
 }
 
 function toggleOverlay(bool) {
-    console.log("settingsElementClassArray: " + settingsElementClassArray.length);
-    console.log("elementClassArray: " + elementClassArray.length);
-    console.log("popUpClassArray: " + popUpClassArray.length);
-    console.log("permanantElementClassArray: " + permanantElementClassArray.length);
-
     if (bool === true) {
         overlay.classList.add('active');
         if (backButton) {
@@ -148,14 +143,14 @@ function toggleOverlay(bool) {
         }
     }
     else {
-        if (settingsElementClassArray.length > 0) {
-            removeAllElements(settingsElementClassArray)
+        if (popUpClassArray.length > 0) {
+            removeAllElements(popUpClassArray);
             if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
                 toggleOverlay(false);
             }
         }
-        else if (popUpClassArray.length > 0) {
-            removeAllElements(popUpClassArray);
+        else if (settingsElementClassArray.length > 0) {
+            removeAllElements(settingsElementClassArray)
             if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
                 toggleOverlay(false);
             }
@@ -287,11 +282,23 @@ function removeElementIfExists(array, element) {
     const index = array.indexOf(element);
     if (index !== -1) {
         array.splice(index, 1);
+        if (!anyElementExists()) {
+            toggleOverlay(false);
+        }
     }
+
 }
 
 function elementExists(array, element) {
     return Array.isArray(array) && array.includes(element);
+}
+
+function anyElementExists() {
+    if (Array.isArray(settingsElementClassArray) && settingsElementClassArray.length > 0) return true;
+    if (Array.isArray(elementClassArray) && elementClassArray.length > 0) return true;
+    if (Array.isArray(popUpClassArray) && popUpClassArray.length > 0) return true;
+    if (Array.isArray(permanantElementClassArray) && permanantElementClassArray.length > 0) return true;
+    return false;
 }
 
 function removeAllElements(array) {

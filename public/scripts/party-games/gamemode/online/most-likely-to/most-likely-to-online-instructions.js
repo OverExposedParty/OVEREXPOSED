@@ -1,131 +1,234 @@
 async function DisplayPrivateCard() {
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectUserContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_VOTE_RESULTS", nextDelay: resultTimerDuration })
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+  const delay = new Date(state.timer) - Date.now();
+
+  const durationSeconds = getTimeLimit();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: selectUserContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_VOTE_RESULTS",
+    nextDelay: resultTimerDuration
+  });
+
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) {
+    console.warn("Device not found in players.");
+    return;
+  }
+
+  const myState   = getPlayerState(players[myIndex]);
+  const cardIndex = deck.currentCardIndex ?? 0;
+
+  selectedQuestionObj = getNextQuestion(cardIndex);
   selectNumberButtonContainer.innerHTML = "";
 
-  selectUserQuestionText.textContent = selectedQuestionObj.question.replace("Who's most likely to ", "");
+  selectUserQuestionText.textContent =
+    selectedQuestionObj.question.replace("Who's most likely to ", "");
+
   DisplayCard(gameContainerPrivate, selectedQuestionObj);
 
-  const currentPlayer = currentPartyData.players[index];
-  if (!currentPlayer.isReady && !currentPlayer.hasConfirmed) {
+  if (!myState.isReady && !myState.hasConfirmed) {
     setActiveContainers(gameContainerPrivate);
   }
-  else if (currentPlayer.isReady && !currentPlayer.hasConfirmed) {
+  else if (myState.isReady && !myState.hasConfirmed) {
     setActiveContainers(selectUserContainer);
   }
   else {
-    const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed);
+    const allConfirmed = players.every(p => getPlayerState(p).hasConfirmed);
+
     if (allConfirmed) {
-      if (deviceId === hostDeviceId) {
         await SendInstruction({
           instruction: "DISPLAY_VOTE_RESULTS",
           timer: Date.now() + resultTimerDuration
         });
-      }
-    }
-    else {
-      if (currentPlayer.hasConfirmed) {
-        DisplayWaitingForPlayers();
-      }
+    } else if (myState.hasConfirmed) {
+      DisplayWaitingForPlayers();
     }
   }
 }
 
-
 async function DisplayVoteResults() {
-  const delay = new Date(currentPartyData.timer) - Date.now();
+  const state   = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const delay = new Date(state.timer) - Date.now();
+
   stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
-  startTimer({ timeLeft: delay / 1000, duration: resultTimerDuration / 1000, selectedTimer: resultsChartContainer.querySelector('.timer-wrapper') });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: resultTimerDuration / 1000,
+    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+  });
+
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) {
+    console.warn("Device not found in players.");
+    return;
+  }
 
   if (!resultsChartContainer.classList.contains('active')) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }
+
   const highestValue = getHighestVoteValue(currentPartyData);
-  console.log("highestValue: " + highestValue);
-  if (deviceId == hostDeviceId) {
-    for (let i = 0; i < icons.length; i++) {
-      if (GetHighestVoted(currentPartyData).includes(currentPartyData.players[i].computerId)) {
-        currentPartyData.players[i].isReady = false;
-        currentPartyData.players[i].hasConfirmed = false;
-        if(highestValue > 0) {
-        currentPartyData.players[i].score++;
+  console.log("highestValue:", highestValue);
+
+    const highestVotedIds = GetHighestVoted(currentPartyData); // comma string
+
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      const pState = getPlayerState(player);
+      const pid    = getPlayerId(player);
+
+      if (highestVotedIds.includes(pid)) {
+        pState.isReady = false;
+        pState.hasConfirmed = false;
+        if (highestValue > 0) {
+          pState.score = (pState.score ?? 0) + 1;
         }
-      }
-      else {
-        currentPartyData.players[i].isReady = true;
-        currentPartyData.players[i].hasConfirmed = true;
+      } else {
+        pState.isReady = true;
+        pState.hasConfirmed = true;
       }
     }
+
     ClearIcons();
-    if (selectPunishmentButtonContainer.childElementCount == 0) {
-      SetTimeOut({ delay: delay, instruction: "RESET_QUESTION", nextDelay: null });
-    }
-    else {
+
+    if (selectPunishmentButtonContainer.childElementCount === 0) {
+      SetTimeOut({
+        delay,
+        instruction: "RESET_QUESTION",
+        nextDelay: null
+      });
+    } else {
       if (highestValue < 0) {
-        const updateInstruction = "TIE_BREAKER_PUNISHMENT_OFFER:" + GetHighestVoted(currentPartyData);
-        SetTimeOut({ delay: delay, instruction: updateInstruction, nextDelay: getIncrementContainerValue("time-limit") * 1000 });
+        const updateInstruction =
+          "TIE_BREAKER_PUNISHMENT_OFFER:" + highestVotedIds;
+        SetTimeOut({
+          delay,
+          instruction: updateInstruction,
+          nextDelay: getTimeLimit() * 1000
+        });
       }
-      else if (highestValue == 0) {
-        SetTimeOut({ delay: delay, instruction: "RESET_QUESTION", nextDelay: null });
+      else if (highestValue === 0) {
+        SetTimeOut({
+          delay,
+          instruction: "RESET_QUESTION",
+          nextDelay: null
+        });
       }
       else {
-        SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT:" + GetHighestVoted(currentPartyData), nextDelay: getIncrementContainerValue("time-limit") * 1000 });
+        SetTimeOut({
+          delay,
+          instruction: "CHOOSING_PUNISHMENT:" + highestVotedIds,
+          nextDelay: getTimeLimit() * 1000
+        });
       }
     }
-  }
 }
 
 async function TieBreakerPunishmentOffer(instruction) {
-  let parsedInstructions = parseInstruction(instruction);
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectNumberContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT:" + GetStringAtIndex(parsedInstructions.reason, 0), nextDelay: null }); //make it so that if the person has voted but others havent then they are penalised for not voting
+  const state   = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  if ((parsedInstructions.reason).includes(deviceId)) {
-    console.log(parsedInstructions.reason);
-    for (let i = 0; i < CountParsedString(parsedInstructions.reason); i++) {
-      if (selectNumberButtonContainer.querySelectorAll('button').length < CountParsedString(parsedInstructions.reason)) {
-        const selectedNumberButton = createUserButton(i, i + 1);
+  const parsedInstructions = parseInstruction(instruction);
+  const delay = new Date(state.timer) - Date.now();
+
+  const durationSeconds = getTimeLimit();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: selectNumberContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "CHOOSING_PUNISHMENT:" + GetStringAtIndex(parsedInstructions.reason, 0),
+    nextDelay: null
+  });
+
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) {
+    console.warn("Device not found in players.");
+    return;
+  }
+  const myState = getPlayerState(players[myIndex]);
+
+  if (parsedInstructions.reason.includes(deviceId)) {
+    const count = CountParsedString(parsedInstructions.reason);
+
+    for (let i = 0; i < count; i++) {
+      if (selectNumberButtonContainer.querySelectorAll('button').length < count) {
+        const selectedNumberButton = createUserButton(String(i), i + 1);
 
         selectedNumberButton.addEventListener('click', () => {
-          selectNumberContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+          selectNumberContainer.querySelectorAll('button')
+            .forEach(btn => btn.classList.remove('active'));
           selectedNumberButton.classList.add('active');
-          selectNumberContainer.setAttribute('selected-id', selectedNumberButton.getAttribute('id'));
+          selectNumberContainer.setAttribute(
+            'selected-id',
+            selectedNumberButton.getAttribute('id')
+          );
         });
 
         selectNumberButtonContainer.appendChild(selectedNumberButton);
       }
     }
 
-    if (currentPartyData.players[index].hasConfirmed === false) {
+    if (!myState.hasConfirmed) {
       setActiveContainers(selectNumberContainer);
-      for (let i = 0; i < CountParsedString(parsedInstructions.reason); i++) {
+
+      for (let i = 0; i < count; i++) {
         const button = document.getElementById(String(i));
-        if (currentPartyData.players.some(player => player.vote === String(i))) {
+        const someoneChoseThis =
+          players.some(player => getPlayerState(player).vote === String(i));
+
+        if (someoneChoseThis) {
           button.classList.add("disabled");
         } else {
           button.classList.remove("disabled");
         }
       }
-    }
-    else {
-      if (currentPartyData.players.every(player => player.hasConfirmed === true)) {
-        const randomInt = Math.floor(Math.random() * -getHighestVoteValue(currentPartyData));
+    } else {
+      const allConfirmed = players.every(p => getPlayerState(p).hasConfirmed);
+      if (allConfirmed) {
+        const randomInt = Math.floor(
+          Math.random() * -getHighestVoteValue(currentPartyData)
+        );
         await SendInstruction({
-          instruction: "CHOOSING_PUNISHMENT:" + GetStringAtIndex(parsedInstructions.reason, randomInt),
-          updateisReady: false,
-          updatehasConfirmed: false,
+          instruction:
+            "CHOOSING_PUNISHMENT:" +
+            GetStringAtIndex(parsedInstructions.reason, randomInt),
+          updateUsersReady: false,
+          updateUsersConfirmation: false
         });
       } else {
         DisplayWaitingForPlayers();
@@ -137,10 +240,12 @@ async function TieBreakerPunishmentOffer(instruction) {
 }
 
 async function WaitingForPlayer(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
+  const parsedInstructions = parseInstruction(instruction);
 
-  if (await GetSelectedPlayerTurnID() === deviceId) {
-    if (parsedInstructions.reason != "READING_CARD") {
+  const selectedTurnId = await GetSelectedPlayerTurnID();
+
+  if (selectedTurnId === deviceId) {
+    if (parsedInstructions.reason !== "READING_CARD") {
       setActiveContainers(selectUserContainer);
     }
     else {
@@ -151,130 +256,169 @@ async function WaitingForPlayer(instruction) {
     setActiveContainers(waitingForPlayerContainer);
   }
 
-  waitingForPlayerTitle.textContent = "Waiting for " + parsedInstructions.username;
+  waitingForPlayerTitle.textContent =
+    "Waiting for " + parsedInstructions.username;
 
-  if (parsedInstructions.reason == "CHOOSE_PLAYER") {
+  if (parsedInstructions.reason === "CHOOSE_PLAYER") {
     waitingForPlayerText.textContent = "Choosing Player...";
   }
-  else if (parsedInstructions.reason == "READING_CARD") {
+  else if (parsedInstructions.reason === "READING_CARD") {
     waitingForPlayerText.textContent = "Reading Card...";
   }
 }
 
 async function DisplayPunishmentToUser(instruction) {
-  let parsedInstructions = parseInstruction(instruction);
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
+  const players = currentPartyData.players || [];
+  const parsedInstructions = parseInstruction(instruction);
 
-  if (parsedInstructions.deviceId == deviceId) {
-    completePunishmentText.textContent = "take " + parsedInstructions.reason.replace("_", " ");
+  const index = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.deviceId
+  );
+
+  if (parsedInstructions.deviceId === deviceId) {
+    completePunishmentText.textContent =
+      "take " + parsedInstructions.reason.replace("_", " ");
     setActiveContainers(completePunishmentContainer);
   }
-  else {
+  else if (index !== -1) {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
       waitingForRoomText: "Showing player punishment...",
-      player: currentPartyData.players[index]
+      player: players[index]
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
 async function PunishmentOffer(instruction) {
-  let parsedInstructions = parseInstruction(instruction);
+  const parsedInstructions = parseInstruction(instruction);
 
-  if (parsedInstructions.reason == "CONFIRM") {
-    if (deviceId == hostDeviceId) {
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      await ResetQuestion({
-        icons: icons,
-        timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
-      });
-    }
+  if (parsedInstructions.reason === "CONFIRM") {
+    const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+    await ResetQuestion({
+      icons,
+      timer: Date.now() + getTimeLimit() * 1000
+    });
   }
 }
 
 async function ChoosingPunishment(instruction) {
-    let parsedInstructions = parseInstructionDeviceId(instruction);
+  const state   = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectPunishmentContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: `RESET_QUESTION:PLAYER_TURN_PASSED:${parsedInstructions.reason}`, nextDelay: resultTimerDuration })
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
+  const parsedInstructions = parseInstructionDeviceId(instruction);
+  const delay = new Date(state.timer) - Date.now();
+
+  const durationSeconds = getTimeLimit();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: selectPunishmentContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: durationSeconds,
+    selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: `RESET_QUESTION:PLAYER_TURN_PASSED:${parsedInstructions.reason}`,
+    nextDelay: resultTimerDuration
+  });
+
+  const index = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.deviceId
+  );
 
   if (parsedInstructions.deviceId === deviceId) {
     setActiveContainers(selectPunishmentContainer);
   }
-  else {
+  else if (index !== -1) {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
       waitingForRoomText: "Choosing Punishment...",
-      player: currentPartyData.players[index]
+      player: players[index]
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
 async function ChosePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction);
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
+  const players = currentPartyData.players || [];
+  const parsedInstructions = parseInstruction(instruction);
 
-  if (deviceId === parsedInstructions.deviceId) {
+  const index = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.deviceId
+  );
+
+  if (parsedInstructions.deviceId === deviceId) {
     if (parsedInstructions.reason === "MOST_LIKELY_TO_DRINK_WHEEL") {
       setActiveContainers(drinkWheelContainer);
     } else if (parsedInstructions.reason === "TAKE_A_SHOT") {
       punishmentText.textContent = "Take a shot.";
       setActiveContainers(completePunishmentContainer);
     }
-  } else {
+  } else if (index !== -1) {
     let currentWaitingForPlayerText = "";
     if (parsedInstructions.reason === "MOST_LIKELY_TO_DRINK_WHEEL") {
       currentWaitingForPlayerText = "Spinning drink wheel...";
     } else if (parsedInstructions.reason === "TAKE_A_SHOT") {
       currentWaitingForPlayerText = "Reading punishment...";
     }
+
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
       waitingForRoomText: currentWaitingForPlayerText,
-      player: currentPartyData.players[index]
+      player: players[index]
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
-
 async function UserSelectedForPunishment(instruction) {
-  let parsedInstructions = parseInstructionDeviceId(instruction);
-  const index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
-  if (parsedInstructions.deviceId == deviceId) {
+  const players = currentPartyData.players || [];
+  const parsedInstructions = parseInstructionDeviceId(instruction);
+
+  const index = players.findIndex(
+    p => getPlayerId(p) === parsedInstructions.deviceId
+  );
+
+  if (parsedInstructions.deviceId === deviceId) {
     setActiveContainers(selectPunishmentContainer);
   }
-  else {
+  else if (index !== -1) {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
       waitingForRoomText: "Choosing Punishment...",
-      player: currentPartyData.players[index]
+      player: players[index]
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
 async function AnswerToUserDonePunishment() {
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+  const players = currentPartyData.players || [];
+  const icons   = waitingForPlayersIconContainer.querySelectorAll('.icon');
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (myIndex === -1) {
+    console.warn("Device not found in players.");
+    return;
+  }
 
-  if (currentPartyData.players[index].isReady === true) {
+  const myState = getPlayerState(players[myIndex]);
+
+  if (myState.isReady === true) {
     DisplayWaitingForPlayers();
 
-    let totalisReady = currentPartyData.players.filter(player => player.isReady).length;
-    if (totalisReady === currentPartyData.players.length) {
-      if (deviceId === currentPartyData.players[0].computerId) {
-        await ResetQuestion({
-          icons: icons,
-          timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
-        });
-      }
+    const totalReady = players.filter(p => getPlayerState(p).isReady).length;
+    if (totalReady === players.length) {
+      await ResetQuestion({
+        icons,
+        timer: Date.now() + getTimeLimit() * 1000
+      });
     }
   }
 }
@@ -282,7 +426,7 @@ async function AnswerToUserDonePunishment() {
 async function PartySkip() {
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
   await ResetQuestion({
-    icons: icons,
-    timer: Date.now() + getIncrementContainerValue("time-limit") * 1000
+    icons,
+    timer: Date.now() + getTimeLimit() * 1000
   });
 }

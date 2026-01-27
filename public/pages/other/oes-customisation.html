@@ -71,9 +71,14 @@
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
     document.documentElement.style.setProperty('--secondarypagecolour', '#C29B50');
+
+        window.pageScripts = {
+        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true },
+        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+        '/scripts/general/online/user-customisation.js': { },
+        "/scripts/other/oes-customisation.js": { addDataLoaded: true }
+    };
+
 </script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false"
-    data-standalone="true" defer></script>
-<script src="/scripts/other/oes-customisation.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 </html>

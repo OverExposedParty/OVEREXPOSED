@@ -19,23 +19,22 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     const packs = packsData[`${gamemode}-packs`];
 
     let filesToFetch = [];
+
     if (fetchPacks === null) {
-      // Use localStorage to determine which packs to fetch
       filesToFetch = packs
         .filter(pack => {
-          const key = `pack-${gamemode}-${pack["pack-name"]}`;
+          const key = pack["pack-name"];
           return localStorage.getItem(key) === "true";
         })
         .map(pack => pack["pack-path"]);
     } else {
-      // Use provided comma-separated string to determine packs to fetch
-      const fetchPackList = fetchPacks.split(",").filter(Boolean); // remove empty entries
+      if (!Array.isArray(fetchPacks)) {
+        console.error("fetchPacks must be an array of pack names");
+        return;
+      }
 
       filesToFetch = packs
-        .filter(pack => {
-          const key = `pack-${gamemode}-${pack["pack-name"]}`;
-          return fetchPackList.includes(key);
-        })
+        .filter(pack => fetchPacks.includes(pack["pack-name"]))
         .map(pack => pack["pack-path"]);
     }
 
@@ -49,54 +48,38 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
           console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
           return {};
         }
-        const data = await response.json();
-        console.log("Fetched Data:", data);
-        return data;
+        return await response.json();
       })
     );
 
-    questionsArrays.forEach((data) => {
+    questionsArrays.forEach(data => {
       Object.keys(data).forEach(packName => {
         const questions = data[packName];
 
-        if (Array.isArray(questions)) {
-          questions.forEach(question => {
-            // ✅ Make question-alternatives OPTIONAL:
-            // - If missing: default to []
-            // - If string: convert to [string]
-            // - If any other wrong type: warn + default to []
-            const alts = question["question-alternatives"];
-
-            if (alts === undefined || alts === null) {
-              question["question-alternatives"] = [];
-            } else if (Array.isArray(alts)) {
-              // ok
-            } else if (typeof alts === "string") {
-              question["question-alternatives"] = [alts];
-            } else {
-              console.warn(
-                `Invalid question-alternatives in pack ${packName}. Fixing:`,
-                question
-              );
-              question["question-alternatives"] = [];
-            }
-
-            allQuestions.push(question);
-
-            questionPackMap.push(
-              packName
-                .replace(/-/g, " ")
-                .replace(/\b\w/g, char => char.toUpperCase())
-                .replace(formattedGamemode, "")
-                .trim()
-            );
-          });
-        } else {
-          console.error(
-            `Expected an array of questions for pack: ${packName}, but received:`,
-            questions
-          );
+        if (!Array.isArray(questions)) {
+          console.error(`Invalid pack format for ${packName}`, questions);
+          return;
         }
+
+        questions.forEach(question => {
+          const alts = question["question-alternatives"];
+
+          if (alts === undefined || alts === null) {
+            question["question-alternatives"] = [];
+          } else if (!Array.isArray(alts)) {
+            question["question-alternatives"] = [alts];
+          }
+
+          allQuestions.push(question);
+
+          questionPackMap.push(
+            packName
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, c => c.toUpperCase())
+              .replace(formattedGamemode, "")
+              .trim()
+          );
+        });
       });
     });
 
@@ -108,7 +91,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     });
 
     if (allQuestions.length > 0) {
-      if (seedShuffle) {
+      if (seedShuffle !== null && seedShuffle !== undefined) {
         shuffleQuestions(seedShuffle);
       } else {
         shuffleQuestions();
@@ -124,10 +107,12 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     numberOfQuestions = allQuestions.length;
     console.log(`Loaded ${numberOfQuestions} questions`);
     SetScriptLoaded("/scripts/party-games/general/load-questions.js");
+
   } catch (error) {
     console.error("Failed to load JSON files:", error);
   }
 }
+
 
 function shuffleQuestions(seed = null) {
     // Seedable random number generator (simple LCG)

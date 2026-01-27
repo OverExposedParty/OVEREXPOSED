@@ -8,7 +8,7 @@
         content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js;
              script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
 
-    <title>MAFIA</title>
+    <title>MAFIA SETTINGS</title>
 
     <link rel="preload" href="/images/splash-screens/mafia-settings.png" as="image">
 
@@ -94,20 +94,26 @@
 
     document.documentElement.style.setProperty('--primarypagecolour', '#9B56D3');
     document.documentElement.style.setProperty('--secondarypagecolour', '#6D3C95');
+
+    window.pageScripts = {
+        "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+
+        "/scripts/party-games/online/online-settings.js": { addDataLoaded: true },
+
+        "/scripts/html-templates/online/enter-username-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/gamemode-settings/error-container-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/gamemode-settings/gamemode-settings-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true },
+
+        "/scripts/party-games/online/online-game-settings.js": {},
+        "/scripts/party-games/gamemode-settings/error-game-settings.js": {},
+
+        "/scripts/party-games/general/chat-log.js": {},
+        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+        '/scripts/general/online/user-customisation.js': {}
+    };
+
 </script>
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
-
-<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false"
-    defer></script>
-<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false" defer></script>
-
-<script src="/scripts/party-games/online/online-game-settings.js"></script>
-<script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
-
-<script src="/scripts/party-games/general/chat-log.js"></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
 </html>

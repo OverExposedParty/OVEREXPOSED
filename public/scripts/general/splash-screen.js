@@ -97,6 +97,6 @@ async function getRandomFact(key) {
     staticSplashScreenContainerFact.textContent = categoryFacts[randomIndex];
 }
 
-SetScriptLoaded("/scripts/html-templates/html-template-header.js");
+SetScriptLoaded("/scripts/html-templates/core-template.js");
 
 //getRandomFact("truth-or-dare");

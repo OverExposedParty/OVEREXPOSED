@@ -1,22 +1,9 @@
+const sideButtonsContainer = document.querySelector('.side-buttons');
+const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
+
 let hasBeenClicked = false;
-let voices = [];
-let ttsButtonTimeout;
-let currentUtterance = null;
 
 const vibrationEnabled = localStorage.getItem('settings-vibration') === 'true';
-
-function stopSpeech() {
-    if (responsiveVoice.isPlaying()) {
-        responsiveVoice.cancel();
-    }
-}
-
-function enableTTSButton() {
-    const ttsButton = document.getElementById('tts-button');
-    if (ttsButton.classList.contains('disabled')) {
-        ttsButton.classList.remove('disabled');
-    }
-}
 
 function updateTextContainer(text, cardType, punishment) {
     const textContainer = document.querySelector('.text-container');
@@ -50,72 +37,7 @@ function updateTextContainer(text, cardType, punishment) {
     }
 
     document.querySelector('.card-type-text').textContent = cardType;
-    vibrateOnClick();
 }
-
-
-function vibrateOnClick() {
-    if (vibrationEnabled && 'vibrate' in navigator) {
-        navigator.vibrate(200);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const sideButtonsContainer = document.querySelector('.side-buttons');
-    const sideButtonElements = sideButtonsContainer.querySelectorAll('.side-button');
-
-    var sidebuttonLength = sideButtonElements.length;
-    console.log(sideButtonElements);
-    if (sidebuttonLength <= 1) {
-        sideButtonsContainer.classList.add('single');
-    }
-
-    function disableTTSButton() {
-        const ttsButton = document.getElementById('tts-button');
-        if (!ttsButton.classList.contains('disabled')) {
-            ttsButton.classList.add('disabled');
-            clearTimeout(ttsButtonTimeout);
-            ttsButtonTimeout = setTimeout(() => {
-                enableTTSButton();
-            }, 8000);
-        }
-    }
-
-    function getSelectedVoice() {
-        const voiceKeys = ['tts-voice-male1', 'tts-voice-male2', 'tts-voice-female1', 'tts-voice-female2'];
-        voiceKeys.forEach(key => console.log(`${key}: ${localStorage.getItem(key)}`));
-
-        const selectedVoiceKey = voiceKeys.find(key => localStorage.getItem(key) === 'true');
-
-        console.log(`Selected Voice Key: ${selectedVoiceKey}`);
-
-        switch (selectedVoiceKey) {
-            case 'tts-voice-male1':
-                return 'UK English Male';
-            case 'tts-voice-male2':
-                return 'US English Male';
-            case 'tts-voice-female1':
-                return 'UK English Female';
-            case 'tts-voice-female2':
-                return 'US English Female';
-            default:
-                return 'UK English Male';
-        }
-    }
-    document.getElementById('tts-button').addEventListener('click', () => {
-        const textContainerText = document.querySelector('.text-container').textContent;
-        const selectedVoiceName = getSelectedVoice();
-
-        if (selectedVoiceName) {
-            responsiveVoice.speak(textContainerText, selectedVoiceName);
-        } else {
-            responsiveVoice.speak(textContainerText, "US English Female");
-        }
-
-        disableTTSButton();
-    });
-    await loadJSONFiles();
-});
 
 //Press Main Image Container
 const mainImageContainer = document.querySelector('.main-image-container');
@@ -132,7 +54,9 @@ function addSettingsExtensionToCurrentURL() {
     return currentURL;
 }
 
-window.onload = () => {
+(async () => {
+    await loadJSONFiles();
+
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);
     });
@@ -140,4 +64,9 @@ window.onload = () => {
         link: addSettingsExtensionToCurrentURL(),
         splashScreen: `/images/splash-screens/${gamemode}-settings.png`
     };
-};
+
+        var sidebuttonLength = sideButtonElements.length;
+    if (sidebuttonLength <= 1) {
+        sideButtonsContainer.classList.add('single');
+    }
+})();

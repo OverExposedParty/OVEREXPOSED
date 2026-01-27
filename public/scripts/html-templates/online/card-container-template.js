@@ -174,12 +174,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         // scriptGamemodeOnline.src = `/scripts/party-games/${cardContainerGamemode}/${cardContainerGamemode}-online.js`;
         // document.body.appendChild(scriptGamemodeOnline);
         (async () => {
-            await LoadScript(`/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online.js?30082025`);
-            await SetPageSettings();
+            //await LoadScript(`/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online.js?30082025`);
         })();
     }).then(() => {
-        if (!document.querySelector('script[src="/scripts/html-templates/online/card-container-template.js"]:not([data-standalone="true"])')) {
-            SetScriptLoaded('/scripts/html-templates/online/card-container-template.js');
-        }
+        SetScriptLoaded('/scripts/html-templates/online/card-container-template.js');
+
     })
     .catch(error => console.error('Error loading templates:', error));

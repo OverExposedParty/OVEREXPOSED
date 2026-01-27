@@ -1,0 +1,71 @@
+{
+    "area-1": [
+        {
+            "dialogue": "<dialogue for area 1>",
+            "options": [
+                {
+                    "text": "<timid option>",
+                    "no-hint": "<neutral resolution>",
+                    "advance": "<transition text to area-2>"
+                },
+                {
+                    "text": "<regular option>",
+                    "no-hint": "<neutral resolution>",
+                    "advance": "<transition text to area-2>"
+                },
+                {
+                    "text": "<bold option>",
+                    "no-hint": "<neutral resolution>",
+                    "advance": "<transition text to area-2>"
+                }
+            ]
+        }
+    ],
+    "area-2": [
+        {
+            "dialogue": "<dialogue for area 2>",
+            "options": [
+                {
+                    "text": "<timid option>",
+                    "no-hint": "<neutral resolution>",
+                    "small-hint": "<reveal any one of [colour type], [headwear type], [mouth-slot type], [eye-slot type]>",
+                    "advance": "<transition text to area-3>"
+                },
+                {
+                    "text": "<regular option>",
+                    "no-hint": "<neutral resolution>",
+                    "small-hint": "<reveal any one of [colour type], [headwear type], [mouth-slot type], [eye-slot type]>",
+                    "advance": "<transition text to area-3>"
+                },
+                {
+                    "text": "<bold option>",
+                    "no-hint": "<neutral resolution>",
+                    "small-hint": "<reveal any one of [colour type], [headwear type], [mouth-slot type], [eye-slot type]>",
+                    "advance": "<transition text to area-3>"
+                }
+            ]
+        }
+    ],
+    "area-3": [
+        {
+            "dialogue": "<dialogue for area 3>",
+            "options": [
+                {
+                    "text": "<timid option>",
+                    "no-hint": "<neutral resolution>",
+                    "hint": "<reveals any 2 of: [colour], [headwear], [mouth], [eye-slot]>"
+                },
+                {
+                    "text": "<regular option>",
+                    "no-hint": "<neutral resolution>",
+                    "hint": "<reveals any 2 of: [colour], [headwear], [mouth], [eye-slot]>"
+                },
+                {
+                    "text": "<bold option>",
+                    "no-hint": "<neutral resolution>",
+                    "hint": "<reveals any 2 of: [colour], [headwear], [mouth], [eye-slot]>"
+                }
+            ]
+        }
+    ]
+}

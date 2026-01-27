@@ -1,5 +1,8 @@
-let gamemodeSettings = "";
-let gamemodeSelectedPacks = "";
+// ─────────────────────────────────────────────
+// State: now using object + array
+// ─────────────────────────────────────────────
+let gamemodeSettings = {};      // key -> true or number
+let gamemodeSelectedPacks = []; // array of pack keys
 let allUsersReady = undefined;
 
 let eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
@@ -10,6 +13,9 @@ const warningStartButton = document.querySelector('.start-game-warning-button');
 
 const inputPartyCode = document.getElementById('party-code');
 
+// ─────────────────────────────────────────────
+// Start button enabling / disabling
+// ─────────────────────────────────────────────
 function updateStartGameButton(allReady) {
     if (typeof allReady !== 'undefined') {
         if (allReady && CheckErrors()) {
@@ -27,7 +33,10 @@ function updateStartGameButton(allReady) {
     startGameButton.style.pointerEvents = anyActive ? 'auto' : 'none';
 }
 
-function SetGamemodeButtons() {
+// ─────────────────────────────────────────────
+// NSFW / online / offline availability
+// ─────────────────────────────────────────────
+async function SetGamemodeButtons(initialLoad = false) {
     if (eighteenPlusEnabled) {
         nsfwButtons.forEach(button => {
             button.disabled = false;
@@ -67,9 +76,10 @@ function SetGamemodeButtons() {
             button.classList.remove('active');
 
             if (!button.classList.contains('button-toggle')) return;
-            localStorage.setItem(button.getAttribute('data-key'), 'false');
+            const key = button.getAttribute('data-key');
+            localStorage.setItem(key, 'false');
             if (button.closest('.rules-settings-container')) {
-                gamemodeSettings = removeSetting(gamemodeSettings, button.getAttribute('data-key'));
+                gamemodeSettings = removeSetting(gamemodeSettings, key);
             }
             SetButtonStyle(button, false);
         });
@@ -93,11 +103,18 @@ function SetGamemodeButtons() {
             button.classList.remove('inactive');
         });
     }
+    if (partyGamesInformation[partyGameMode].forceOnline === true && initialLoad) {
+        await ToggleOnlineMode(true);
+    }
 }
 
+// ─────────────────────────────────────────────
+// Initialising / wiring all settings & packs
+// ─────────────────────────────────────────────
 function SetGameSettingsButtons() {
     ResetActivePacks(GetAnyPackActive());
 
+    // Toggle buttons (packs + rules)
     placeholderGamemodeSettings.querySelectorAll('.button-toggle').forEach(button => {
         const key = button.getAttribute('data-key');
         let savedState = localStorage.getItem(key) || 'true';
@@ -111,19 +128,19 @@ function SetGameSettingsButtons() {
         if (key && savedState === 'true') {
             button.classList.add('active');
             SetButtonStyle(button, false);
-            if (button.closest('.rules-settings-container') && !button.classList.contains('online') && !button.classList.contains('inactive')) {
-                gamemodeSettings += key + ',';
-            } else if (button.closest('.packs-content-container')) {
-                gamemodeSelectedPacks += key + ',';
-            }
 
-            if (partyCode) {
-                updateOnlineParty({
-                    partyId,
-                    gameRules: gamemodeSettings,
-                    selectedPacks: gamemodeSelectedPacks,
-                    lastPinged: new Date(),
-                });
+            if (
+                button.closest('.rules-settings-container') &&
+                !button.classList.contains('online') &&
+                !button.classList.contains('inactive')
+            ) {
+                // toggle rule -> true
+                gamemodeSettings[key] = true;
+            } else if (button.closest('.packs-content-container')) {
+                // pack selected
+                if (!gamemodeSelectedPacks.includes(key)) {
+                    gamemodeSelectedPacks.push(key);
+                }
             }
         } else if (key && savedState === 'false') {
             button.classList.remove('active');
@@ -140,9 +157,11 @@ function SetGameSettingsButtons() {
 
             const activeCount = packButtons.filter(btn => btn.classList.contains('active')).length;
 
-            if (button.closest('.packs-content-container') &&
+            if (
+                button.closest('.packs-content-container') &&
                 activeCount <= 1 &&
-                button.classList.contains('active')) {
+                button.classList.contains('active')
+            ) {
                 return;
             }
 
@@ -158,20 +177,39 @@ function SetGameSettingsButtons() {
             if (key) {
                 localStorage.setItem(key, isActive ? 'true' : 'false');
 
-                if (button.closest('.packs-content-container') && settingsButtonDependency) {
+                if (button.closest('.packs-content-container')) {
                     if (isActive) {
-                        settingsButtonDependency.classList.remove('inactive');
+                        if (!gamemodeSelectedPacks.includes(key)) {
+                            gamemodeSelectedPacks.push(key);
+                            console.log('selected', gamemodeSelectedPacks);
+                        }
                     } else {
-                        settingsButtonDependency.classList.add('inactive');
+                        gamemodeSelectedPacks = gamemodeSelectedPacks.filter(k => k !== key);
+                    }
+
+                    if (settingsButtonDependency) {
+                        if (isActive) {
+                            settingsButtonDependency.classList.remove('inactive');
+                        } else {
+                            settingsButtonDependency.classList.add('inactive');
+                        }
+                    }
+                } else if (button.closest('.rules-settings-container')) {
+                    // toggle rules directly in object
+                    if (isActive && !button.classList.contains('inactive')) {
+                        gamemodeSettings[key] = true;
+                    } else {
+                        gamemodeSettings = removeSetting(gamemodeSettings, key);
                     }
                 }
             }
 
             UpdateSettings();
-            SetGamemodeButtons();
+            SetGamemodeButtons(true);
         });
     });
 
+    // Increment containers (numeric settings)
     placeholderGamemodeSettings.querySelectorAll('.increment-container').forEach(container => {
         const key = container.getAttribute('data-key');
         const countDisplay = container.querySelector('.count-display');
@@ -184,21 +222,27 @@ function SetGameSettingsButtons() {
 
         const savedValue = localStorage.getItem(key);
         if (savedValue) {
-            count = parseInt(savedValue);
-            countDisplay.textContent = savedValue;
-            container.setAttribute('data-count', savedValue);
+            if (savedValue !== null && /^-?\d+$/.test(savedValue)) {
+                count = Number(savedValue);
+                countDisplay.textContent = String(count);
+                container.dataset.count = String(count);
+            } else {
+                localStorage.setItem(key, String(count));
+                container.dataset.count = String(count);
+                countDisplay.textContent = String(count);
+            }
         } else {
             localStorage.setItem(key, count);
         }
 
         if (container.closest('.rules-settings-container') && !container.classList.contains('inactive')) {
-            gamemodeSettings += `${key}:${count},`;
+            gamemodeSettings[key] = count;
         }
 
         function updateCount(newCount) {
             count = newCount;
             container.setAttribute('data-count', count);
-            container.dataset.count = count;
+            container.dataset.count = String(count);;
             countDisplay.textContent = count;
             localStorage.setItem(key, count);
             UpdateSettings();
@@ -228,6 +272,9 @@ function SetGameSettingsButtons() {
     UpdateSettings();
 }
 
+// ─────────────────────────────────────────────
+// Small UI handlers
+// ─────────────────────────────────────────────
 inputPartyCode.addEventListener('click', () => {
     inputPartyCode.select();
 });
@@ -273,9 +320,16 @@ async function startOnlineGame() {
     transitionSplashScreen(removeSettingsExtensionFromCurrentURL() + "/" + partyCode, `/images/splash-screens/${startGameButton.id}.png`);
 }
 
-function SetGamemodeContainer() {
+// ─────────────────────────────────────────────
+// Container init / refresh
+// ─────────────────────────────────────────────
+async function SetGamemodeContainer() {
     SetGameSettingsButtons();
-    UpdateGamemodeContainer();
+    if (partyCode) {
+        allUsersReady = await GetAllUsersReady();
+    }
+    updateStartGameButton(allUsersReady);
+    SetGamemodeButtons(true);
 }
 
 async function UpdateGamemodeContainer() {
@@ -286,29 +340,27 @@ async function UpdateGamemodeContainer() {
     SetGamemodeButtons();
 }
 
-function removeSetting(str, key) {
-    const regex = new RegExp(`(^|,)\\s*${key}(?::[^,\\s]*)?\\s*(,|$)`, 'g');
-
-    let result = str.replace(regex, (match, before, after, offset, fullStr) => {
-        if (after === ',' && offset + match.length === fullStr.length) {
-            return '';
-        }
-        if (before === ',' && after === ',') {
-            return ',';
-        }
-        return before === ',' ? '' : '';
-    });
-
-    const hadTrailingComma = str.endsWith(',');
-    result = result.replace(/,{2,}/g, ',').replace(/^,|,$/g, '').trim();
-    if (hadTrailingComma && !result.endsWith(',')) result += ',';
-    return result;
+// ─────────────────────────────────────────────
+// Remove setting from object
+// ─────────────────────────────────────────────
+function removeSetting(settingsObj, key) {
+    if (!settingsObj || typeof settingsObj !== 'object') return settingsObj;
+    const newSettings = { ...settingsObj };
+    delete newSettings[key];
+    return newSettings;
 }
 
-function UpdateSettings() {
-    gamemodeSelectedPacks = '';
-    gamemodeSettings = '';
+// ─────────────────────────────────────────────
+// Rebuild config objects + sync to backend
+// ─────────────────────────────────────────────
+async function UpdateSettings() {
+    // reset to fresh object / array
+    gamemodeSelectedPacks = [];
+    gamemodeSettings = {};
+
     ResetActivePacks(GetAnyPackActive());
+
+    // 1) ACTIVE PACK BUTTONS
     const activePackButtons = Array.from(packButtons).filter(btn =>
         btn.classList.contains('active')
     );
@@ -317,8 +369,12 @@ function UpdateSettings() {
         const key = btn.dataset.key;
         if (!key) return;
 
-        gamemodeSelectedPacks += key + ',';
+        // track selected packs as an array of keys
+        if (!gamemodeSelectedPacks.includes(key)) {
+            gamemodeSelectedPacks.push(key);
+        }
 
+        // handle settings dependency (e.g. pack requires a timer)
         const dependencyKey = btn.dataset.settingsDependency;
         if (dependencyKey) {
             const settingsButtonDependency = document
@@ -333,12 +389,15 @@ function UpdateSettings() {
                     settingsButtonDependency.getAttribute('data-count');
 
                 if (depCount) {
-                    gamemodeSettings += `${key.replace('pack-', '')}:${depCount},`;
+                    // keep old behaviour: use the pack key without 'pack-' as the field name
+                    const alias = key.replace('pack-', '');
+                    gamemodeSettings[alias] = Number(depCount);
                 }
             }
         }
     });
 
+    // 2) ACTIVE SETTINGS TOGGLE BUTTONS
     const activeSettingsButtons = Array.from(settingsButtons).filter(btn =>
         btn.classList.contains('active') &&
         btn.closest('.rules-settings-container') &&
@@ -350,35 +409,32 @@ function UpdateSettings() {
         if (!key) return;
 
         const count = btn.dataset.count;
-        if (count) {
-            gamemodeSettings += `${key}:${count},`;
+        if (typeof count !== 'undefined' && count !== null) {
+            // toggle that also has a count value – store number
+            gamemodeSettings[key] = Number(count);
         } else {
-            gamemodeSettings += `${key},`;
+            // plain toggle
+            gamemodeSettings[key] = true;
         }
     });
 
+    // 3) INCREMENT CONTAINERS (numeric settings)
     const incrementContainers = placeholderGamemodeSettings.querySelectorAll('.increment-container');
 
     incrementContainers.forEach(container => {
-        if (!container.closest('.rules-settings-container') ||
-            container.classList.contains('inactive')) return;
+        if (
+            !container.closest('.rules-settings-container') ||
+            container.classList.contains('inactive')
+        ) return;
 
         const key = container.dataset.key;
         const count = container.dataset.count || container.getAttribute('data-count');
         if (!key || typeof count === 'undefined') return;
 
-        const regex = new RegExp(`${key}:[^,]*,?`, 'g');
-        gamemodeSettings = gamemodeSettings.replace(regex, '');
-        gamemodeSettings += `${key}:${count},`;
+        gamemodeSettings[key] = Number(count);
     });
 
-    if (gamemodeSelectedPacks.endsWith(',')) {
-        gamemodeSelectedPacks = gamemodeSelectedPacks.slice(0, -1);
-    }
-    if (gamemodeSettings.endsWith(',')) {
-        gamemodeSettings = gamemodeSettings.slice(0, -1);
-    }
-
+    // 4) VISUAL STYLING
     packButtons.forEach(button => {
         SetButtonStyle(button, false);
     });
@@ -386,17 +442,42 @@ function UpdateSettings() {
         SetButtonStyle(button, false);
     });
 
+    // 5) SYNC ONLINE PARTY (now sending objects instead of strings)
     if (partyCode) {
-        updateOnlineParty({
-            partyId: partyCode,
-            selectedPacks: gamemodeSelectedPacks,
-            gameRules: gamemodeSettings,
-            lastPinged: new Date(),
-        });
+        try {
+            const existingData = await getExistingPartyData(partyCode);
+            const currentPartyData = existingData[0] || {};
+
+            const oldConfig = currentPartyData.config || {};
+
+            const mergedConfig = {
+                // keep existing gamemode or fall back to partyGameMode
+                gamemode: oldConfig.gamemode || currentPartyData.gamemode || partyGameMode,
+                // overwrite rules + packs with the new values we just built
+                gameRules: gamemodeSettings,       // <--- object now
+                selectedPacks: gamemodeSelectedPacks,  // <--- array now
+                // preserve existing instructions / shuffleSeed if present
+                userInstructions: oldConfig.userInstructions ?? currentPartyData.userInstructions ?? '',
+                shuffleSeed: oldConfig.shuffleSeed ?? currentPartyData.shuffleSeed ?? 0
+            };
+
+
+            await updateOnlineParty({
+                partyId: partyCode,
+                config: mergedConfig,
+                players: currentPartyData.players
+            });
+        } catch (err) {
+            console.error('❌ Failed to update settings party config:', err);
+        }
     }
+
     updateStartGameButton(allUsersReady);
 }
 
+// ─────────────────────────────────────────────
+// Pack helpers
+// ─────────────────────────────────────────────
 function GetAnyPackActive() {
     const anyPackTrue = packButtons.some(btn => {
         const key = btn.getAttribute('data-key');
@@ -411,6 +492,7 @@ function GetAnyPackActive() {
     });
     return anyPackTrue;
 }
+
 function ResetActivePacks(anyPackTrue) {
     if (!anyPackTrue && packButtons.length > 0) {
         const first = packButtons[0];

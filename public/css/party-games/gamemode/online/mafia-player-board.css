@@ -1,0 +1,164 @@
+.player-board {
+  position: fixed;
+  left: 50%;
+  margin-top: calc(calc(100vh - var(--headerheight)) - 80vh - calc(var(--headerheight) / 2));
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1080px;
+  height: 80vh;
+  background: var(--backgroundcolour);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+
+  display: none;
+  flex-direction: column;
+  z-index: 800;
+}
+
+.player-board.active {
+  display: flex;
+}
+.player-board.dead .player-board-header{
+  background-color: #666666;
+}
+
+.player-board-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background-color: var(--primarypagecolour);
+  border-radius: 12px 12px 0 0;
+  padding: 10px 0;
+  width: 100%;
+}
+
+/* Title always stays in the middle column */
+.player-board-title {
+  grid-column: 2;
+  justify-self: center;
+  font-weight: bold;
+  font-size: 32px;
+  text-align: center;
+}
+
+/* My Role button lives in the right column */
+.player-board-role-btn {
+  grid-column: 3;
+  justify-self: end;
+  padding: 4px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.25s ease;
+  color: var(--backgroundcolour);
+}
+
+.player-board-role-btn:hover {
+  color: var(--secondarypagecolour);
+}
+
+/* Grid of player cards */
+.players-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
+  grid-auto-flow: row;
+  gap: 0px;
+  align-items: start;
+  overflow-y: auto;
+  flex: 1;
+  margin-top: 10px;
+
+  justify-content: center;
+  justify-items: center;
+}
+
+/* Single player card */
+.player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: var(--primarypagecolour);
+  text-align: center;
+  width: max-content;
+  height: max-content;
+}
+
+/* Role text ("MAFIOSO", etc.) */
+.player-inner-text-role {
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+}
+
+/* Info under avatar */
+.player-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 1rem;
+}
+
+.player-username .value,
+.player-status .value {
+  font-weight: 600;
+}
+
+.player-container.dead {
+  background-color: #666666;
+}
+
+/* Responsive grid */
+@media (max-width: 1000px) {
+  .players-container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .players-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, max-content));
+    gap: 10px;
+  }
+}
+
+.player-board-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-board-button {
+  width: 64px;
+  height: 64px;
+  border: var(--bordersize) solid var(--primarypagecolour);
+  border-radius: 50%;
+  background: var(--backgroundcolour);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.player-board-button:hover{
+  transform: scale(1.1);
+}
+.player-board-button.dead{
+border-color: #666666;
+}
+
+.mafia-hint {
+  font-weight: 600;
+}

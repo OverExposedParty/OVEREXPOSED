@@ -1,29 +1,58 @@
 const mongoose = require('mongoose');
 
-const playerSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+const identitySchema = new mongoose.Schema({
+  username:   { type: String, required: true },
   computerId: { type: String, required: true },
-  userIcon: { type: String, required: true },
-  isReady: { type: Boolean, default: false },
-  hasConfirmed: { type: Boolean, default: false },
-  lastPing: { type: Date, default: Date.now },
-  socketId: { type: String, default: null }
+  userIcon:   { type: String, required: true }
+}, { _id: false });
+
+const connectionSchema = new mongoose.Schema({
+  socketId: { type: String, default: null },
+  lastPing: { type: Date,  default: Date.now }
+}, { _id: false });
+
+const playerStateSchema = new mongoose.Schema({
+  isReady:      { type: Boolean, default: false },
+  hasConfirmed: { type: Boolean, default: false }
+}, { _id: false });
+
+const playerSchema = new mongoose.Schema({
+  identity:   identitySchema,
+  connection: connectionSchema,
+  state:      playerStateSchema
+}, { _id: false });
+
+const waitingRoomConfigSchema = new mongoose.Schema({
+  gamemode: { type: String, required: true },
+  gameRules: {
+    type: Map,
+    of: mongoose.Schema.Types.Mixed,
+    required: true
+  },
+  selectedPacks: {
+    type: [String],
+    default: []
+  },
+  selectedRoles: {
+    type: [String],
+    default: []
+  }
+}, { _id: false });
+
+const waitingRoomStateSchema = new mongoose.Schema({
+  isPlaying:  { type: Boolean, required: true },
+  lastPinged: { type: Date, default: Date.now }
 }, { _id: false });
 
 const WaitingRoomSchema = new mongoose.Schema({
   partyId: { type: String, required: true },
-  gamemode: { type: String, required: true },
-  isPlaying: { type: Boolean, required: true },
-  lastPinged: { type: Date, default: Date.now },
-  players: { type: [playerSchema], required: true },
-  gameRules: { type: String, required: true },
-  selectedPacks: { type: String, required: false },
-  selectedRoles: { type: String, required: false }
+  config: waitingRoomConfigSchema,
+  state:  waitingRoomStateSchema,
+  players: { type: [playerSchema], default: [] }
 }, {
   versionKey: false
 });
 
-// Optional: remove _id and __v from response
 WaitingRoomSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret._id;

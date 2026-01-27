@@ -15,9 +15,6 @@ function getNextQuestion(type) {
         currentQuestionIndex = 0;
     }
 
-    stopSpeech();
-    enableTTSButton();
-
     const selectedQuestion = filteredQuestions[currentQuestionIndex];
     const cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
 
@@ -40,15 +37,12 @@ function updateTruthOrDareText(type) {
 }
 
 document.getElementById('truth-button').addEventListener('click', () => {
-    stopSpeech();
-    playSoundEffect('buttonClicked');
     if (hasBeenClicked) return;
     hasBeenClicked = true;
     const selectedQuestionObj = getNextQuestion('truth');
     if (selectedQuestionObj) {
         updateTextContainer(selectedQuestionObj.question, selectedQuestionObj.cardType, selectedQuestionObj.punishment);
         updateTruthOrDareText('truth');
-        enableTTSButton();
 
         currentQuestion = selectedQuestionObj.question;
         currentPunishment = selectedQuestionObj.punishment;
@@ -57,15 +51,12 @@ document.getElementById('truth-button').addEventListener('click', () => {
 });
 
 document.getElementById('dare-button').addEventListener('click', () => {
-    stopSpeech();
-    playSoundEffect('buttonClicked');
     if (hasBeenClicked) return;
     hasBeenClicked = true;
     const question = getNextQuestion('dare');
     if (question) {
         updateTextContainer(question.question, question.cardType, question.punishment);
         updateTruthOrDareText('dare');
-        enableTTSButton();
 
         currentQuestion = question.question;
         currentPunishment = question.punishment;

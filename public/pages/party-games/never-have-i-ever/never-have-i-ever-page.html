@@ -62,7 +62,6 @@
     </div>
 
     <div class="side-buttons">
-        <img src="/images/icons/never-have-i-ever/tts-icon.svg" alt="TTS Icon" class="side-button" id="tts-button">
         <img src="/images/icons/never-have-i-ever/odd-man-out-icon.svg" alt="Odd Man Out Icon" class="side-button"
             id="odd-man-out-button">
     </div>
@@ -80,14 +79,16 @@
 
     document.documentElement.style.setProperty('--primarypagecolour', '#FF9266');
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
+
+    window.pageScripts = {
+  "/scripts/html-templates/online/card-container-template.js": { addDataLoaded: true },
+  "/scripts/html-templates/gamemode/gamemode-addons-containers.js": {},
+
+  "/scripts/party-games/general/load-questions.js": { addDataLoaded: true },
+  "/scripts/party-games/general/party-games.js": {},
+  "/scripts/party-games/general/get-next-question.js": {}
+};
+
 </script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/online/card-container-template.js" data-loaded="false" data-standalone="true"></script>
-<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
-
-<script src="/scripts/party-games/general/load-questions.js" data-loaded="false"></script>
-<script src="/scripts/party-games/general/party-games.js"></script>
-<script src="/scripts/party-games/general/get-next-question.js"></script>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 </html>

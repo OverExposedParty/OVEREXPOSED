@@ -4,13 +4,6 @@ let userCustomisationIcon;
 gameContainers = gameContainers || [];
 gameContainers.push(userCustomisationContainer);
 
-const blankUserCustomisation = {
-  colour: '/images/user-customisation/colour/blank/blank-colour.svg',
-  headSlot: '/images/user-customisation/head-slot/blank/no-head-slot.svg',
-  eyesSlot: '/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg',
-  mouthSlot: '/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg'
-};
-
 // 🔹 Get all inactive IDs from savedState
 function getInactiveIds() {
   const inactiveIds = [];
@@ -100,10 +93,6 @@ function applyCustomisation(slotArray, index, elements) {
   }
 }
 
-function createCustomisationString(userCustomisation) {
-  return `${userCustomisation.colourSlotId}:${userCustomisation.headSlotId}:${userCustomisation.eyesSlotId}:${userCustomisation.mouthSlotId}`;
-}
-
 // Arrow navigation
 userCustomisationOptions.forEach(option => {
   option.querySelector('.arrow-previous').addEventListener('click', () => {
@@ -157,11 +146,13 @@ usercustomisationSaveButton.addEventListener('click', async () => {
     eyesSlotId: userCustomisationContainerSlotEyes.getAttribute('data-id'),
     mouthSlotId: userCustomisationContainerSlotMouth.getAttribute('data-id')
   };
-
+  console.log(userCustomisation);
   localStorage.setItem("user-customisation", JSON.stringify(userCustomisation));
   removeElementIfExists(permanantElementClassArray, userCustomisationContainer);
+  toggleOverlay(false);
   toggleUserCustomisation();
   const customisationString = createCustomisationString(userCustomisation);
+  console.log(customisationString);
 
   if (typeof partyCode !== "undefined" && partyCode) {
     await UpdateUserPartyData({
@@ -263,13 +254,13 @@ userCustomisationRandomiseButton.addEventListener("click", () => {
   randomiseCustomisation();
 });
 
-function checkForGameSettingsUpdates(data) {
+async function checkForGameSettingsUpdates(data) {
   if (partyUserCount < partyGamesInformation[partyGameMode].playerCountRestrictions.minPlayers) {
     //setError(errorNotEnoughPlayers, true);
   } else {
     setError(errorNotEnoughPlayers, false);
   }
-  UpdateUserIcons(data);
+  await UpdateUserIcons(data);
   if (sessionPartyType == "party-mafia") {
     UpdateRoleCount();
   }

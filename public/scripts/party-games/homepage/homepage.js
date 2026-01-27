@@ -16,12 +16,6 @@ const offscreenX = 1000;
 const rotateAngle = 20;
 const transitionDuration = 1000;
 
-
-document.addEventListener('DOMContentLoaded', async function () {
-    await loadGamemodes();
-    initializeCards();
-});
-
 async function loadGamemodes() {
     try {
         const response = await fetch('/json-files/other/homepage.json');
@@ -292,3 +286,9 @@ waitForFunction("loadSound", () => {
         await LoadHomepageSoundEffects();
     })();
 });
+
+
+(async () => {
+    await loadGamemodes();
+    initializeCards();
+})();

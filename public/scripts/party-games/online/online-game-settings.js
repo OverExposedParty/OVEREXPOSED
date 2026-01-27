@@ -1,41 +1,83 @@
-hostedParty = true;
 let partyUserCount = 0;
 
 async function ToggleOnlineMode(toggle) {
-  if (toggle == true) {
+  if (toggle === true) {
+    if(partyCode) return;
+    hostedParty = true;
+    hostDeviceId = deviceId;
     onlineSettingsTab.classList.remove('disabled');
-    const newShuffleSeed = Math.floor(Math.random() * 256);  // Random number between 0 and 255
-    partyCode = generatePartyCode();
-    const players = [{
-      computerId: deviceId,
-      username: "",
-      userIcon: "0000:0100:0200:0300",
-      isReady: true,
-      hasConfirmed: false,
-      lastPing: new Date(),
-      socketId: socket.id
-    }];
 
-    await updateOnlineParty({
-      partyId: partyCode,
-      players,
+    const newShuffleSeed = Math.floor(Math.random() * 256);
+    partyCode = generatePartyCode();
+
+    let baseState = {
+      isReady: true,
+      hasConfirmed: false
+    };
+
+    if (partyGameMode === 'mafia') {
+      baseState = {
+        ...baseState,
+        role: 'N/A',
+        status: 'alive',
+        vote: 'N/A',
+        phase: {
+          scenarioFileName: 'N/A',
+          index: 1,
+          state: 'pending'
+        }
+      };
+    }
+
+    const players = {
+      identity: {
+        computerId: deviceId,
+        username: "",
+        userIcon: "0000:0100:0200:0300"
+      },
+      connection: {
+        socketId: socket.id,
+        lastPing: new Date()
+      },
+      state: baseState
+    };
+
+    const config = {
       gamemode: partyGameMode,
       gameRules: gamemodeSettings,
       selectedPacks: gamemodeSelectedPacks,
       userInstructions: "",
+      shuffleSeed: newShuffleSeed
+    };
+
+    const state = {
       isPlaying: false,
       lastPinged: new Date(),
+      phase: 'lobby',
+      timer: null,
       playerTurn: 0,
-      shuffleSeed: newShuffleSeed,
+      hostComputerId: hostDeviceId,
+    };
+
+    const deck = {
+      currentCardIndex: 0,
+      currentCardSecondIndex: 0,
+      questionType: "truth",
+      alternativeQuestionIndex: 0
+    };
+        console.log("players", players);
+    await updateOnlineParty({
+      partyId: partyCode,
+      config,
+      state,
+      deck,
+      players
     });
+
     document.querySelectorAll(".user-icon").forEach(el => el.remove());
-    createUserIcon({
-      userId: deviceId,
-      username: "",
-      checked: true
-    });
-    //inputPartyCode.value = "https://overexposed.app/" + partyCode;
-    inputPartyCode.value = "https://overexposed.app/" + partyCode;
+
+
+    inputPartyCode.value = "http://localhost:3000/" + partyCode;
 
     enterUsernameContainer.classList.add('active');
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
@@ -43,16 +85,16 @@ async function ToggleOnlineMode(toggle) {
 
     packsContainer.classList.remove('active');
     packsSettingsTab.classList.remove('active');
-
     rulesContainer.classList.remove('active');
-    rulesSettingsTab.classList.remove('active')
+    rulesSettingsTab.classList.remove('active');
 
     onlineSettingsTab.classList.add('active');
     onlineSettingsContainer.classList.add('active');
-    
+
     SetGamemodeButtons();
     UpdateSettings();
     updateStartGameButton(false);
+
     await joinParty(partyCode);
     await sendPartyChat({
       username: "[CONSOLE]",
@@ -61,8 +103,8 @@ async function ToggleOnlineMode(toggle) {
     });
     DisplayChatLogs();
     toggleUserCustomisationIcon(true);
-  }
-  else {
+
+  } else {
     inputPartyCode.value = "";
 
     onlineSettingsTab.classList.add('disabled');
@@ -73,11 +115,12 @@ async function ToggleOnlineMode(toggle) {
     packsSettingsTab.classList.remove('active');
 
     rulesContainer.classList.add('active');
-    rulesSettingsTab.classList.add('active')
+    rulesSettingsTab.classList.add('active');
 
     SetGamemodeButtons();
     updateStartGameButton(true);
-    await DeletePartyChat()
+
+    await DeletePartyChat();
     DeleteParty();
     toggleUserCustomisationIcon(false);
   }

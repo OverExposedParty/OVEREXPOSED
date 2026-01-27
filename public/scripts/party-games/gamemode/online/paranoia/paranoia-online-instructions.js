@@ -1,170 +1,266 @@
 async function NextQuestion() {
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const votedIndex = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  const currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
-  const VotedPlayer = currentPartyData.players[votedIndex];
-  if (index === -1) {
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+
+  const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const currentPlayer = players[playerTurn];
+
+  const votedId = getPlayerVote(currentPlayer);
+  const votedIndex = votedId != null
+    ? players.findIndex(p => getPlayerId(p) === votedId)
+    : -1;
+
+  const votedPlayer = votedIndex !== -1 ? players[votedIndex] : null;
+
+  if (meIndex === -1) {
     console.warn("Device not found in players.");
     return;
   }
 
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+  const meState = getPlayerState(players[meIndex]);
 
-  if (currentPartyData.players[index].hasConfirmed === true) {
+  if (meState.hasConfirmed === true) {
     if (!waitingForPlayersContainer.classList.contains('active')) {
       ClearIcons();
     }
     setActiveContainers(waitingForPlayersContainer);
 
     // Update player's last ping
-    currentPartyData.players[index].lastPing = Date.now();
+    const meConn = ensureConnection(players[meIndex]);
+    meConn.lastPing = new Date();
+    players[meIndex].lastPing = meConn.lastPing; // legacy mirror
 
-    // Count total players ready
-    currentPartyData.players.forEach((player, i) => {
-      if (player.hasConfirmed && icons[i]) {
+    // Mark who has confirmed
+    players.forEach((player, i) => {
+      const pState = getPlayerState(player);
+      if (pState.hasConfirmed && icons[i]) {
         icons[i].classList.add('yes');
       }
     });
 
-
-    const allReady = currentPartyData.players.every(player => player.hasConfirmed === true);
+    const allReady = players.every(p => getPlayerState(p).hasConfirmed === true);
 
     if (allReady) {
-      // Only host should update indexes and player turn
-      const hostId = currentPartyData.players[0].computerId;
       icons.forEach(icon => icon.classList.add('yes'));
       await new Promise(resolve => setTimeout(resolve, 1500));
-      ResetParanoiaQuestion({ nextPlayer: true, incrementScore: 1 });
+
+      ResetParanoiaQuestion({
+        nextPlayer: true,
+        incrementScore: 1
+      });
     }
     else if (!waitingForPlayersContainer.classList.contains('active')) {
       await SendInstruction({ partyData: currentPartyData });
     }
   } else {
+    // Show dual stack with current + voted player
+    if (!currentPlayer || !votedPlayer) {
+      console.warn('Missing current or voted player for dual stack view.');
+      return;
+    }
+
     EditUserIconPartyGames({
       container: gameContainerDualStack.querySelector('.dual-image-stack#dual-image-stack-1'),
-      userId: currentPlayer.computerId,
-      userCustomisationString: currentPlayer.userIcon
+      userId: getPlayerId(currentPlayer),
+      userCustomisationString: getPlayerIcon(currentPlayer)
     });
 
     EditUserIconPartyGames({
       container: gameContainerDualStack.querySelector('.dual-image-stack#dual-image-stack-2'),
-      userId: VotedPlayer.computerId,
-      userCustomisationString: VotedPlayer.userIcon
+      userId: getPlayerId(votedPlayer),
+      userCustomisationString: getPlayerIcon(votedPlayer)
     });
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+
+    const currentIndex = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
+    selectedQuestionObj = getNextQuestion(currentIndex);
     DisplayCard(gameContainerDualStack, selectedQuestionObj);
     setActiveContainers(gameContainerDualStack);
   }
 }
 
-
 async function DisplayPrivateCard(instruction) {
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: selectUserContainer.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("time-limit") * 1000 / 1000, selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper') });
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const timerValue = state.timer ?? currentPartyData.timer;
+  const delay = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: gameRules["time-limit"],
+    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: gameRules["time-limit"],
+    selectedTimer: selectUserContainer.querySelector('.timer-wrapper')
+  });
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: gameRules["time-limit"],
+    selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper')
+  });
+
   if (selectPunishmentButtonContainer.childElementCount == 0) {
-    SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:TIME_EXPIRED", nextDelay: null })
-  }
-  else {
-    SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT:TIME_EXPIRED", nextDelay: null })
+    SetTimeOut({ delay: delay, instruction: "RESET_QUESTION:TIME_EXPIRED", nextDelay: null });
+  } else {
+    SetTimeOut({ delay: delay, instruction: "CHOOSING_PUNISHMENT:TIME_EXPIRED", nextDelay: null });
   }
 
-  let parsedInstructions = parseInstruction(instruction)
-  currentPlayer = currentPartyData.players[currentPartyData.playerTurn];
+  const parsedInstructions = parseInstruction(instruction);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const currentPlayer = players[playerTurn];
 
-  if (currentPlayer.computerId == deviceId) {
-    if (parsedInstructions.reason != "READING_CARD") {
+  if (!currentPlayer) {
+    console.warn('Current player not found in DisplayPrivateCard');
+    return;
+  }
+
+  const currentPlayerId = getPlayerId(currentPlayer);
+
+  if (currentPlayerId === deviceId) {
+    if (parsedInstructions.reason !== "READING_CARD") {
       setActiveContainers(selectUserContainer);
-    }
-    else {
-      selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
+    } else {
+      const deck = getPartyDeck(currentPartyData);
+      const index = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
+      selectedQuestionObj = getNextQuestion(index);
       DisplayCard(gameContainerPrivate, selectedQuestionObj);
       setActiveContainers(gameContainerPrivate);
     }
-  }
-  else {
+  } else {
     let currentWaitingForPlayerText;
 
-    if (parsedInstructions.reason == "CHOOSE_PLAYER") {
+    if (parsedInstructions.reason === "CHOOSE_PLAYER") {
       currentWaitingForPlayerText = "Choosing Player...";
     }
-    else if (parsedInstructions.reason == "READING_CARD") {
+    else if (parsedInstructions.reason === "READING_CARD") {
       currentWaitingForPlayerText = "Reading Card...";
     }
+
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPlayer.username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(currentPlayer),
       waitingForRoomText: currentWaitingForPlayerText,
       player: currentPlayer
     });
     setActiveContainers(waitingForPlayerContainer);
   }
-
 }
 
 async function DisplayPunishmentToUser(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  const parsedInstructions = parseInstruction(instruction);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+
   let index;
-  if (currentPartyData.players[currentPartyData.playerTurn].vote == null) {
-    index = currentPartyData.playerTurn;
+  if (votedId == null) {
+    index = playerTurn;
+  } else {
+    index = players.findIndex(p => getPlayerId(p) === votedId);
   }
-  else {
-    index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  }
-  console.log("parsedInstructions.reason: ", parsedInstructions.reason);
-  if (currentPartyData.players[index].computerId == deviceId) {
-    if (parsedInstructions.reason == "DOWN_IT") {
-      if (index == currentPartyData.playerTurn) {
-      completePunishmentText.textContent = "Down your drink. (if you refuse, the question will be passed to the next player and you will lose double points)"
-      }
-      else {
-        completePunishmentText.textContent = "In order to find out the question you have to down your drink.";
+
+  if (index === -1) index = playerTurn;
+
+  const target = players[index];
+
+  console.log("parsedInstructions.reason:", parsedInstructions.reason);
+
+  if (getPlayerId(target) === deviceId) {
+    // This device is being punished
+    if (parsedInstructions.reason.toUpperCase() === "DOWN_IT") {
+      if (index === playerTurn) {
+        completePunishmentText.textContent =
+          "Down your drink. (if you refuse, the question will be passed to the next player and you will lose double points)";
+      } else {
+        completePunishmentText.textContent =
+          "In order to find out the question you have to down your drink.";
       }
       completePunishmentContainer.setAttribute("punishment-type", "down-drink");
-    }
-    else {
-      if (index == currentPartyData.playerTurn) {
-        completePunishmentText.textContent = "take " + (parsedInstructions.reason).replace('_', ' ') + " (if you refuse, the question will be passed to the next player and you will lose double points)";
-      }
-      else {
-        completePunishmentText.textContent = "In order to find out the question you have to take " + (parsedInstructions.reason).replace('_', ' ') + ".";
+    } else {
+      const readable = (parsedInstructions.reason).replace('_', ' ');
+      if (index === playerTurn) {
+        completePunishmentText.textContent =
+          `take ${readable} (if you refuse, the question will be passed to the next player and you will lose double points)`;
+      } else {
+        completePunishmentText.textContent =
+          `In order to find out the question you have to take ${readable}.`;
       }
       completePunishmentContainer.setAttribute("punishment-type", parsedInstructions.reason);
     }
     setActiveContainers(completePunishmentContainer);
-  }
-  else {
+  } else {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(target),
       waitingForRoomText: "Showing player punishment...",
-      player: currentPartyData.players[index]
+      player: target
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
-//add container 
+// Single unified PunishmentOffer using nested structure
 async function PunishmentOffer(instruction) {
-  let parsedInstructions = parseInstructionSecondReason(instruction);
-  if (parsedInstructions.reason == "PASS") {
-    if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
+  const parsedInstructions = parseInstructionSecondReason(instruction);
+  const latestPartyData = await GetCurrentPartyData();
+  if (!latestPartyData) return;
+
+  currentPartyData = latestPartyData;
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+  let index;
+  if (votedId == null) {
+    index = playerTurn;
+  } else {
+    index = players.findIndex(p => getPlayerId(p) === votedId);
+  }
+  if (index === -1) index = playerTurn;
+
+  const target = players[index];
+
+  if (parsedInstructions.reason === "PASS") {
+    if (getPlayerId(target) === deviceId) {
       await SendInstruction({
         instruction: "USER_HAS_PASSED:USER_PASSED_PUNISHMENT",
         updateUsersReady: false,
         updateUsersConfirmation: false
       });
     }
-  }
-  else if (parsedInstructions.reason == "CONFIRM") {
-    if (deviceId == currentPartyData.players[currentPartyData.playerTurn].vote) {
-      for (let i = 0; i < currentPartyData.players.length; i++) {
-        currentPartyData.players[i].isReady = false;
-      }
-      const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  } else if (parsedInstructions.reason === "CONFIRM") {
+    if (getPlayerId(target) === deviceId) {
+      // Reset readiness
+      players.forEach(p => {
+        const s = getPlayerState(p);
+        s.isReady = false;
+        s.hasConfirmed = false;
+        p.isReady = false;
+        p.hasConfirmed = false;
+      });
+
       const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      icons[index].classList.add('yes');
-      currentPartyData.players[index].isReady = true;
-      currentPartyData.players[index].hasConfirmed = true;
+      if (icons[index]) icons[index].classList.add('yes');
+
+      const tState = getPlayerState(target);
+      tState.isReady = true;
+      tState.hasConfirmed = true;
+      target.isReady = true;
+      target.hasConfirmed = true;
+
       await SendInstruction({
         instruction: "HAS_USER_DONE_PUNISHMENT:" + parsedInstructions.secondReason,
         updateUsersReady: false,
@@ -175,81 +271,119 @@ async function PunishmentOffer(instruction) {
 }
 
 async function UserHasPassed(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
-  const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  const parsedInstructions = parseInstruction(instruction);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+
+  const index = votedId == null
+    ? playerTurn
+    : players.findIndex(p => getPlayerId(p) === votedId);
+
+  const target = players[index];
+
   setActiveContainers(playerHasPassedContainer);
-  playerHasPassedTitle.textContent = currentPartyData.players[index].username + " has passed";
-  if (parsedInstructions.reason == "USER_CALLED_WRONG_FACE") {
+  playerHasPassedTitle.textContent = getPlayerUsername(target) + " has passed";
+
+  if (parsedInstructions.reason === "USER_CALLED_WRONG_FACE") {
     playerHasPassedText.textContent = "unsuccessful coin flip";
   }
-  else if (parsedInstructions.reason == "USER_PASSED_PUNISHMENT") {
+  else if (parsedInstructions.reason === "USER_PASSED_PUNISHMENT") {
     playerHasPassedText.textContent = "punishment has been forfeited";
   }
-  else if (parsedInstructions.reason == "USER_DIDNT_DO_PUNISHMENT") {
+  else if (parsedInstructions.reason === "USER_DIDNT_DO_PUNISHMENT") {
     playerHasPassedText.textContent = "punishment not complete";
   }
 
   await new Promise(resolve => setTimeout(resolve, 2000));
-
   ResetParanoiaQuestion({ nextPlayer: true });
 }
 
 async function HasUserDonePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
-  const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  const currentIndex = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
 
-  if (currentPartyData.players[currentIndex].isReady == false) {
-    if (currentPartyData.players[currentPartyData.playerTurn].vote != deviceId) {
+  const parsedInstructions = parseInstruction(instruction);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+  const punishedIndex = votedId == null
+    ? playerTurn
+    : players.findIndex(p => getPlayerId(p) === votedId);
+
+  const punishedPlayer = players[punishedIndex];
+  const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  const meState = getPlayerState(players[meIndex]);
+
+  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+  
+  if (!meState.isReady) {
+    // Not ready yet
+    if (getPlayerId(punishedPlayer) !== deviceId) {
+      // I am voting on someone else
       if (!confirmPunishmentContainer.classList.contains('active')) {
-        if (parsedInstructions.reason == "TAKE_A_SHOT") {
-          confirmPunishmentText.textContent = "Has " + currentPartyData.players[index].username + " taken their shot";
+        if (parsedInstructions.reason.toUpperCase().includes("TAKE_A_SHOT")) {
+          confirmPunishmentText.textContent =
+            "Has " + getPlayerUsername(punishedPlayer) + " taken their shot";
         }
-        else if (parsedInstructions.reason == "DOWN_DRINK") {
-          confirmPunishmentText.textContent = "Has " + currentPartyData.players[index].username + " downed their drink";
+        else if (parsedInstructions.reason.toUpperCase().includes("DOWN_IT")) {
+          confirmPunishmentText.textContent =
+            "Has " + getPlayerUsername(punishedPlayer) + " downed their drink";
         }
-        else if (parsedInstructions.reason.includes("SIP")) {
-          confirmPunishmentText.textContent = "Has " + currentPartyData.players[index].username + " taken " + parsedInstructions.reason.replace("_", " "); + ".";
+        else if (parsedInstructions.reason.toUpperCase().includes("SIP")) {
+          confirmPunishmentText.textContent =
+            "Has " + getPlayerUsername(punishedPlayer) + " taken " +
+            parsedInstructions.reason.toUpperCase().replace("_", " ");
         }
         setActiveContainers(confirmPunishmentContainer);
       }
-    }
-    else if (!waitingForPlayersContainer.classList.contains('active')) {
+    } else if (!waitingForPlayersContainer.classList.contains('active')) {
+      // I am the punished player
       setActiveContainers(waitingForPlayersContainer);
-      currentPartyData.players[index].isReady = true;
-      currentPartyData.players[index].hasConfirmed = true; //voted true automatically
-      currentPartyData.players[index].lastPing = Date.now();
+
+      const pState = getPlayerState(punishedPlayer);
+      pState.isReady = true;
+      pState.hasConfirmed = true;
+      punishedPlayer.isReady = true;
+      punishedPlayer.hasConfirmed = true;
+
+      const conn = ensureConnection(punishedPlayer);
+      conn.lastPing = new Date();
+      punishedPlayer.lastPing = conn.lastPing;
 
       await SendInstruction({
         partyData: currentPartyData
       });
     }
-  }
+  } else {
+    // I have already voted; check if everyone finished
+    const meConn = ensureConnection(players[meIndex]);
+    meConn.lastPing = new Date();
+    players[meIndex].lastPing = meConn.lastPing;
 
-  else {
-    currentPartyData.players[currentIndex].lastPing = Date.now();
-    const totalUsersConfirmation = currentPartyData.players.filter(player => player.isReady === true).length;
+    const totalUsersReady = players.filter(p => getPlayerState(p).isReady === true).length;
 
-    if (totalUsersConfirmation === currentPartyData.players.length) {
-      const yesVoteCount = currentPartyData.players.filter(player => player.hasConfirmed === true).length;
-      const noVoteCount = currentPartyData.players.filter(player => player.hasConfirmed === false).length;
+    if (totalUsersReady === players.length) {
+      const yesVoteCount = players.filter(p => getPlayerState(p).hasConfirmed === true).length;
+      const noVoteCount = players.filter(p => getPlayerState(p).hasConfirmed === false).length;
 
       if (noVoteCount < yesVoteCount) {
         if (parsedInstructions.reason === "QUESTION") {
           ResetParanoiaQuestion({ nextPlayer: true, incrementScore: 1 });
-        }
-        else {
-          const hostId = currentPartyData.players[0].computerId;
-
-          if (deviceId === hostId) {
+        } else {
             await SendInstruction({
               instruction: "NEXT_QUESTION",
               partyData: currentPartyData,
               updateUsersReady: false,
               updateUsersConfirmation: false
             });
-          }
         }
       } else {
         await SendInstruction({
@@ -258,11 +392,10 @@ async function HasUserDonePunishment(instruction) {
           updateUsersConfirmation: false
         });
       }
-    }
-    else {
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      currentPartyData.players.forEach((player, i) => {
-        if (player.hasConfirmed && icons[i]) {
+    } else {
+      players.forEach((player, i) => {
+        const pState = getPlayerState(player);
+        if (pState.hasConfirmed && icons[i]) {
           icons[i].classList.add('yes');
         }
       });
@@ -272,102 +405,91 @@ async function HasUserDonePunishment(instruction) {
 }
 
 async function ChosePunishment(instruction) {
-  let parsedInstructions = parseInstruction(instruction)
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  const parsedInstructions = parseInstruction(instruction);
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+
   let index;
-  if (currentPartyData.players[currentPartyData.playerTurn].vote == null) {
-    index = currentPartyData.playerTurn;
+  if (votedId == null) {
+    index = playerTurn;
+  } else {
+    index = players.findIndex(p => getPlayerId(p) === votedId);
   }
-  else {
-    index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  }
-  console.log("index: ", index);
-  currentPlayer = currentPartyData.players[index];
-  if (deviceId == currentPartyData.players[index].computerId) {
-    if (parsedInstructions.reason == "COIN_FLIP") {
+  if (index === -1) index = playerTurn;
+
+  const target = players[index];
+  currentPlayer = target;
+
+  if (getPlayerId(target) === deviceId) {
+    if (parsedInstructions.reason === "COIN_FLIP") {
       setActiveContainers(pickHeadsOrTailsContainer);
     }
-    else if (parsedInstructions.reason == "DRINK_WHEEL") {
+    else if (parsedInstructions.reason === "DRINK_WHEEL") {
       setActiveContainers(drinkWheelContainer);
     }
-    else if (parsedInstructions.reason == "TAKE_A_SHOT") {
-      if (index == currentPartyData.playerTurn) {
-        completePunishmentText.textContent = "take a shot. (if you refuse, the question will be passed to the next player and you will lose double points)";
-      }
-      else {
-        completePunishmentText.textContent = "In order to find out the question you have to take a shot.";
+    else if (parsedInstructions.reason === "TAKE_A_SHOT") {
+      if (index === playerTurn) {
+        completePunishmentText.textContent =
+          "take a shot. (if you refuse, the question will be passed to the next player and you will lose double points)";
+      } else {
+        completePunishmentText.textContent =
+          "In order to find out the question you have to take a shot.";
       }
       setActiveContainers(completePunishmentContainer);
     }
-  }
-  else {
+  } else {
     let currentWaitingForPlayerText;
-    if (parsedInstructions.reason == "COIN_FLIP") {
+    if (parsedInstructions.reason === "COIN_FLIP") {
       currentWaitingForPlayerText = "Flipping coin...";
     }
-    else if (parsedInstructions.reason == "DRINK_WHEEL") {
+    else if (parsedInstructions.reason === "DRINK_WHEEL") {
       currentWaitingForPlayerText = "Spinning drink wheel...";
     }
-    else if (parsedInstructions.reason == "TAKE_A_SHOT") {
+    else if (parsedInstructions.reason === "TAKE_A_SHOT") {
       currentWaitingForPlayerText = "Reading punishment...";
     }
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(target),
       waitingForRoomText: currentWaitingForPlayerText,
-      player: currentPlayer
+      player: target
     });
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
-async function PunishmentOffer(instruction) {
-  let parsedInstructions = parseInstructionSecondReason(instruction)
-  const currentPartyData = await GetCurrentPartyData();
-  let index;
-  if (currentPartyData.players[currentPartyData.playerTurn].vote == null) {
-    index = currentPartyData.playerTurn;
-  }
-  else {
-    index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  }
-
-  if (parsedInstructions.reason == "PASS") {
-    if (currentPartyData.players[index].computerId == deviceId) {
-      await SendInstruction({
-        instruction: "USER_HAS_PASSED:USER_PASSED_PUNISHMENT",
-        updateUsersReady: false,
-        updateUsersConfirmation: false
-      });
-    }
-  }
-  else if (parsedInstructions.reason == "CONFIRM") {
-    if (currentPartyData.players[index].computerId == deviceId) {
-      for (let i = 0; i < currentPartyData.players.length; i++) {
-        currentPartyData.players[i].isReady = false;
-      }
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      icons[index].classList.add('yes');
-      currentPartyData.players[index].isReady = true;
-      currentPartyData.players[index].hasConfirmed = true;
-      await SendInstruction({
-        instruction: "HAS_USER_DONE_PUNISHMENT:" + parsedInstructions.secondReason,
-        updateUsersReady: false,
-        updateUsersConfirmation: false
-      });
-    }
-  }
-}
-
 async function UserSelectedForPunishment(instruction) {
-  let parsedInstructions = parseInstructionDeviceId(instruction);
-  const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  // still parse, in case you later use deviceId from instruction
+  const parsedInstructions = parseInstructionDeviceId(instruction);
+
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+  const turnPlayer = players[playerTurn];
+  if (!turnPlayer) return;
+
+  const votedId = getPlayerVote(turnPlayer);
+
+  const index = votedId == null
+    ? playerTurn
+    : players.findIndex(p => getPlayerId(p) === votedId);
+
+  const target = players[index];
+  currentPlayer = target;
+
+  if (getPlayerId(target) === deviceId) {
     setActiveContainers(selectPunishmentContainer);
-  }
-  else {
+  } else {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + getPlayerUsername(target),
       waitingForRoomText: "Choosing Punishment...",
-      player: currentPlayer
+      player: target
     });
     setActiveContainers(waitingForPlayerContainer);
   }
@@ -383,25 +505,69 @@ async function DisplayDualStackCard() {
   ClearIcons();
 }
 
-async function ResetParanoiaQuestion({ currentPlayerIndex = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote), nextPlayer = true, incrementScore = 0 }) {
+async function ResetParanoiaQuestion({
+  currentPlayerIndex = null,
+  nextPlayer = true,
+  incrementScore = 0
+}) {
   ClearIcons();
-  if (deviceId == hostDeviceId) {
-    currentPartyData.currentCardIndex++;
-    currentPartyData.players[currentPlayerIndex].score += incrementScore;
-    if (nextPlayer == true) {
-      currentPartyData.playerTurn = (currentPartyData.playerTurn + 1) % currentPartyData.players.length;
+
+  if (deviceId !== currentPartyData.state.hostComputerId) return;
+
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+
+  if (players.length === 0) return;
+
+  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+
+  if (currentPlayerIndex == null) {
+    const turnPlayer = players[playerTurn];
+    const votedId = getPlayerVote(turnPlayer);
+
+    if (votedId == null) {
+      currentPlayerIndex = playerTurn;
+    } else {
+      currentPlayerIndex = players.findIndex(p => getPlayerId(p) === votedId);
+      if (currentPlayerIndex === -1) currentPlayerIndex = playerTurn;
     }
-    for (let i = 0; i < currentPartyData.players.length; i++) {
-      currentPartyData.players[i].isReady = false;
-      currentPartyData.players[i].hasConfirmed = false;
-      currentPartyData.players[i].vote = null;
-    }
-    await SendInstruction({
-      instruction: "DISPLAY_PRIVATE_CARD:READING_CARD",
-      partyData: currentPartyData,
-      timer: Date.now() + getIncrementContainerValue("time-limit") * 1000,
-    });
   }
+
+  // Advance deck index
+  const currentIndex = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
+  deck.currentCardIndex = currentIndex + 1;
+  currentPartyData.currentCardIndex = deck.currentCardIndex; // legacy mirror
+
+  // Increment score for the relevant player
+  const target = players[currentPlayerIndex];
+  const tState = getPlayerState(target);
+  tState.score = (tState.score ?? target.score ?? 0) + incrementScore;
+  target.score = tState.score;
+
+  // Rotate player turn
+  if (nextPlayer === true) {
+    const nextTurn = (playerTurn + 1) % players.length;
+    state.playerTurn = nextTurn;
+    currentPartyData.playerTurn = nextTurn;
+  }
+
+  // Reset ready/confirm/votes
+  players.forEach(p => {
+    const s = getPlayerState(p);
+    s.isReady = false;
+    s.hasConfirmed = false;
+    s.vote = null;
+    p.isReady = false;
+    p.hasConfirmed = false;
+    p.vote = null;
+  });
+
+  await SendInstruction({
+    instruction: "DISPLAY_PRIVATE_CARD:READING_CARD",
+    partyData: currentPartyData,
+    timer: Date.now() + gameRules["time-limit"] * 1000,
+  });
 }
 
 async function PartySkip() {

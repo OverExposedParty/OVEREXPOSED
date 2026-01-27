@@ -52,12 +52,21 @@ fetch('/html-templates/party-games/party-game-statistics.html')
 
 function SetPartyGameStatistics() {
     if (typeof currentPartyData == "undefined" || currentPartyData == null) return;
+    if (!Array.isArray(currentPartyData.players)) return;
+
+    scoreboardContainer.innerHTML = "";
+
     for (let i = 0; i < currentPartyData.players.length; i++) {
+        const player = currentPartyData.players[i];
+        const id = getPlayerId(player);
+        const username = getPlayerUsername(player);
+        const score = getPlayerScore(player);
+
         const playerStatisticContainer = document.createElement('div');
         playerStatisticContainer.classList.add('player-statistic');
-        playerStatisticContainer.dataset.userId = currentPartyData.players[i].computerId;
+        playerStatisticContainer.dataset.userId = id;
 
-        playerStatisticContainer.textContent = `${currentPartyData.players[i].username}: ${currentPartyData.players[i].score} pts`;
+        playerStatisticContainer.textContent = `${username}: ${score} pts`;
         scoreboardContainer.appendChild(playerStatisticContainer);
     }
     if (deviceId != hostDeviceId) {
@@ -67,9 +76,18 @@ function SetPartyGameStatistics() {
 
 async function UpdatePartyGameStatistics() {
     if (typeof currentPartyData == "undefined" || currentPartyData == null) return;
+    if (!Array.isArray(currentPartyData.players)) return;
+
     const playerStatisticContainers = scoreboardContainer.querySelectorAll('.player-statistic');
+
     for (let i = 0; i < playerStatisticContainers.length; i++) {
-        playerStatisticContainers[i].textContent = `${currentPartyData.players[i].username}: ${currentPartyData.players[i].score} pts`;
+        const player = currentPartyData.players[i];
+        if (!player) continue;
+
+        const username = getPlayerUsername(player);
+        const score = getPlayerScore(player);
+
+        playerStatisticContainers[i].textContent = `${username}: ${score} pts`;
     }
 }
 
@@ -77,13 +95,18 @@ function SetPartyGameStatisticsGameOver() {
     console.log("GAME IS OVER - SHOWING STATISTICS");
     const playersByStanding = GetPlayersByStanding();
 
-    for (let i = 0; i < 3; i++) { //top 3 players
+    // Podium icons
+    for (let i = 0; i < 3; i++) { // top 3 players
         const podiumContainer = i === 0 ? podiumFirstPlace : i === 1 ? podiumSecondPlace : podiumThirdPlace;
         if (playersByStanding[i]) {
+            const player = playersByStanding[i];
+            const id = getPlayerId(player);
+            const icon = getPlayerIcon(player);
+
             EditUserIconPartyGames({
                 container: podiumContainer,
-                userId: playersByStanding[i].computerId,
-                userCustomisationString: playersByStanding[i].userIcon
+                userId: id,
+                userCustomisationString: icon
             });
             console.log(`podium place ${i + 1}:`, podiumContainer);
         }
@@ -91,15 +114,17 @@ function SetPartyGameStatisticsGameOver() {
             podiumContainer.innerHTML = "";
         }
     }
+
     function getOrdinal(n) {
-    if (n % 100 >= 11 && n % 100 <= 13) return n + "th";
-    switch (n % 10) {
-        case 1: return n + "st";
-        case 2: return n + "nd";
-        case 3: return n + "rd";
-        default: return n + "th";
+        if (n % 100 >= 11 && n % 100 <= 13) return n + "th";
+        switch (n % 10) {
+            case 1: return n + "st";
+            case 2: return n + "nd";
+            case 3: return n + "rd";
+            default: return n + "th";
+        }
     }
-}
+
     const gameOverScoresContainer = document.getElementById('game-over-scores-container');
     gameOverScoresContainer.innerHTML = "";
 
@@ -118,8 +143,11 @@ function SetPartyGameStatisticsGameOver() {
         const div = document.createElement('div');
         div.classList.add('game-over-player-statistic');
 
+        const username = getPlayerUsername(player);
+        const score = getPlayerScore(player);
+
         const rank = getOrdinal(index + startRank); // actual rank in the original list
-        div.textContent = `[${rank}] ${player.username}: ${player.score} pts`;
+        div.textContent = `[${rank}] ${username}: ${score} pts`;
 
         const row = Math.floor(index / columns) + 1;
         const col = (index % columns) + 1;
@@ -145,7 +173,15 @@ function SetPartyGameStatisticsGameOver() {
 
     setActiveContainers();
     partyGameStatisticsEndGameButton.classList.remove('disabled');
+
+    // Local client flag
     isPlaying = false;
+
+    // Try to mirror into nested state too (for consistency)
+    if (currentPartyData.state) {
+        currentPartyData.state.isPlaying = false;
+    }
+
     overlay.classList.add('active');
     gameOverContainer.classList.add('active');
     removeElementIfExists(settingsElementClassArray, partyGameStatisticsContainer);
@@ -178,10 +214,28 @@ function GetPlayersByStanding() {
         if (!currentPartyData) return [];
         if (!Array.isArray(currentPartyData.players)) return [];
 
-        return [...currentPartyData.players].sort((a, b) => b.score - a.score);
+        return [...currentPartyData.players].sort((a, b) => {
+            const scoreA = getPlayerScore(a);
+            const scoreB = getPlayerScore(b);
+            return scoreB - scoreA;
+        });
 
     } catch (err) {
         console.error("Error parsing currentPartyData:", err);
         return [];
     }
+}
+
+/* ──────────────────────────────────────────────
+   HELPERS FOR NESTED/LEGACY PLAYER SHAPES
+────────────────────────────────────────────── */
+
+function getPlayerScore(player) {
+    if (player?.state && typeof player.state.score === 'number') {
+        return player.state.score;
+    }
+    if (typeof player?.score === 'number') {
+        return player.score;
+    }
+    return 0;
 }

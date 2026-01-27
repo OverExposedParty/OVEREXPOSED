@@ -23,7 +23,8 @@
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/would-you-rather/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/would-you-rather/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="89x96" href="/images/icons/would-you-rather/favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="167x180" href="/images/icons/would-you-rather/favicons/favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="167x180"
+        href="/images/icons/would-you-rather/favicons/favicon-180x180.png">
 </head>
 <script>
     document.documentElement.style.setProperty('--splashscreen', "url('/images/splash-screens/would-you-rather.png')");
@@ -62,7 +63,6 @@
     </div>
 
     <div class="side-buttons">
-        <img src="/images/icons/would-you-rather/tts-icon.svg" alt="TTS Icon" class="side-button disabled" id="tts-button">
     </div>
 </body>
 <script>
@@ -72,13 +72,16 @@
 
     document.documentElement.style.setProperty('--primarypagecolour', '#7CFFB2');
     document.documentElement.style.setProperty('--secondarypagecolour', '#55B97F');
-</script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/online/card-container-template.js" data-loaded="false" data-standalone="true"></script>
-<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
 
-<script src="/scripts/party-games/general/load-questions.js" data-loaded="false"></script>
-<script src="/scripts/party-games/general/party-games.js"></script>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
+    window.pageScripts = {
+        "/scripts/html-templates/online/card-container-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/gamemode/gamemode-addons-containers.js": {},
+
+        "/scripts/party-games/general/load-questions.js": { addDataLoaded: true },
+        "/scripts/party-games/general/party-games.js": {}
+    };
+
+</script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
 </html>

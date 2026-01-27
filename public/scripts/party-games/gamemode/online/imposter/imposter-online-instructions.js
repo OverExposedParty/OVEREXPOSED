@@ -1,201 +1,340 @@
 async function DisplayStartTimer() {
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("imposter-time-limit") * 1000 / 1000, selectedTimer: displayStartTimerContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_ANSWER_CONTAINER", nextDelay: null });
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const timerValue = state.timer ?? Date.now();
+  const delay      = new Date(timerValue) - Date.now();
+  const timeLimit  = getTimeLimit("imposter-time-limit");
 
-  const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed === true);
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: timeLimit,
+    selectedTimer: displayStartTimerContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_ANSWER_CONTAINER",
+    nextDelay: null
+  });
+
+  const index = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (index === -1) return;
+
+  const allConfirmed = players.every(p => getPlayerState(p).hasConfirmed);
+
   if (allConfirmed) {
-    if (deviceId === hostDeviceId) {
-      await SendInstruction({
-        instruction: "DISPLAY_ANSWER_CONTAINER",
-        updateUsersReady: false,
-        updateUsersConfirmation: false
-      });
-    }
+    await SendInstruction({
+      instruction: "DISPLAY_ANSWER_CONTAINER",
+      updateUsersReady: false,
+      updateUsersConfirmation: false
+    });
+    return;
   }
-  else {
-    if (currentPartyData.players[index].hasConfirmed === false) {
-      selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-      if (currentPartyData.playerTurn == index) {
-        selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
-      }
-      displayStartTimerText.textContent = "Your prompt is: " + selectedQuestionObj.question;
-      setActiveContainers(displayStartTimerContainer);
+
+  const me      = players[index];
+  const meState = getPlayerState(me);
+
+  if (!meState.hasConfirmed) {
+    const cardIndex = deck.currentCardIndex ?? 0;
+    selectedQuestionObj = getNextQuestion(cardIndex);
+
+    if ((state.playerTurn ?? 0) === index) {
+      selectedQuestionObj.question = GetAlternativeQuestion(
+        selectedQuestionObj.questionAlternatives
+      );
     }
-    else {
-      DisplayWaitingForPlayers();
-    }
+
+    displayStartTimerText.textContent =
+      "Your prompt is: " + selectedQuestionObj.question;
+
+    setActiveContainers(displayStartTimerContainer);
+  } else {
+    DisplayWaitingForPlayers();
   }
 }
 
 async function DisplayAnswerContainer() {
-  if (timeout?.cancel) {
-    timeout.cancel();
-  }
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  if (currentPartyData.round >= rounds) {
-    if (deviceId === hostDeviceId) {
-      currentPartyData.round = 0;
-      currentPartyData.roundPlayerTurn = 0;
+  if (timeout?.cancel) timeout.cancel();
+
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+  const players = currentPartyData.players || [];
+
+  const index = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (index === -1) return;
+
+  const currentRound        = state.round ?? 0;
+  const currentRoundTurnIdx = state.roundPlayerTurn ?? 0;
+
+  if (currentRound >= rounds) {
+      state.round           = 0;
+      state.roundPlayerTurn = 0;
+
+      currentPartyData.state = state;
+
       await SendInstruction({
         partyData: currentPartyData,
         instruction: "DISPLAY_PRIVATE_CARD",
         updateUsersReady: true,
         updateUsersConfirmation: false,
-        timer: Date.now() + getIncrementContainerValue("imposter-time-limit") * 1000,
+        timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000
       });
-    }
-  }
-  else if (index === currentPartyData.roundPlayerTurn) {
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    if (currentPartyData.playerTurn == index) {
-      selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
-    }
-    displayUserAnswerText.textContent = `Your prompt is: ${selectedQuestionObj.question}. Explain it without giving too much away — you might be the Imposter.`;
-    setActiveContainers(displayUserAnswerContainer);
-  }
-  else {
-    SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[currentPartyData.roundPlayerTurn].username,
-      waitingForRoomText: "Choosing Punishment...",
-      player: currentPartyData.players[currentPartyData.roundPlayerTurn]
-    });
-    setActiveContainers(waitingForPlayerContainer);
+    return;
   }
 
+  if (index === currentRoundTurnIdx) {
+    const cardIndex = deck.currentCardIndex ?? 0;
+    selectedQuestionObj = getNextQuestion(cardIndex);
+
+    if ((state.playerTurn ?? 0) === index) {
+      selectedQuestionObj.question = GetAlternativeQuestion(
+        selectedQuestionObj.questionAlternatives
+      );
+    }
+
+    displayUserAnswerText.textContent =
+      `Your prompt is: ${selectedQuestionObj.question}. ` +
+      `Explain it without giving too much away — you might be the Imposter.`;
+
+    setActiveContainers(displayUserAnswerContainer);
+  } else {
+    const currentPlayer = players[currentRoundTurnIdx];
+    if (!currentPlayer) return;
+
+    const username = getPlayerUsername(currentPlayer);
+
+    SetWaitingForPlayer({
+      waitingForRoomTitle: "Waiting for " + username,
+      waitingForRoomText: "Choosing Punishment...",
+      player: currentPlayer
+    });
+
+    setActiveContainers(waitingForPlayerContainer);
+  }
 }
 
 async function DisplayPrivateCard() {
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
-  const player = currentPartyData.players[index];
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+  const players = currentPartyData.players || [];
 
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("imposter-time-limit") * 1000 / 1000, selectedTimer: cardContainerPrivate.querySelector('.timer-wrapper') });
-  startTimer({ timeLeft: delay / 1000, duration: getIncrementContainerValue("imposter-time-limit") * 1000 / 1000, selectedTimer: selectUserContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_VOTE_RESULTS", nextDelay: resultTimerDuration })
+  const index = players.findIndex(p => getPlayerId(p) === deviceId);
+  if (index === -1) return;
+
+  const player = players[index];
+  const pState = getPlayerState(player);
+
+  const timerValue = state.timer ?? Date.now();
+  const delay      = new Date(timerValue) - Date.now();
+  const timeLimit  = getTimeLimit("imposter-time-limit");
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: timeLimit,
+    selectedTimer: cardContainerPrivate.querySelector('.timer-wrapper')
+  });
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: timeLimit,
+    selectedTimer: selectUserContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_VOTE_RESULTS",
+    nextDelay: resultTimerDuration
+  });
 
   selectUserQuestionText.textContent = "Select who you think is the Imposter";
-  if (!player.isReady && !player.hasConfirmed) {
-    selectedQuestionObj = getNextQuestion(currentPartyData.currentCardIndex);
-    if (currentPartyData.playerTurn == index) {
-      selectedQuestionObj.question = GetAlternativeQuestion(selectedQuestionObj.questionAlternatives);
+
+  if (!pState.isReady && !pState.hasConfirmed) {
+    const cardIndex = deck.currentCardIndex ?? 0;
+    selectedQuestionObj = getNextQuestion(cardIndex);
+
+    if ((state.playerTurn ?? 0) === index) {
+      selectedQuestionObj.question = GetAlternativeQuestion(
+        selectedQuestionObj.questionAlternatives
+      );
     }
+
     DisplayCard(gameContainerPrivate, selectedQuestionObj);
     setActiveContainers(gameContainerPrivate);
-  }
-  else if (player.isReady && !player.hasConfirmed) {
+  } else if (pState.isReady && !pState.hasConfirmed) {
     setActiveContainers(selectUserContainer);
-  }
-  else {
-    const allConfirmed = currentPartyData.players.every(player => player.hasConfirmed === true);
+  } else {
+    const allConfirmed = players.every(
+      pl => getPlayerState(pl).hasConfirmed === true
+    );
 
     if (allConfirmed) {
-      if (deviceId === currentPartyData.players[0].computerId) {
-        await SendInstruction({
-          instruction: "DISPLAY_VOTE_RESULTS",
-          timer: Date.now() + resultTimerDuration
-        });
-      }
-    }
-    else {
-      if (player.hasConfirmed) {
-        DisplayWaitingForPlayers();
-      }
+      await SendInstruction({
+        instruction: "DISPLAY_VOTE_RESULTS",
+        timer: Date.now() + resultTimerDuration
+      });
+    } else if (pState.hasConfirmed) {
+      DisplayWaitingForPlayers();
     }
   }
 }
 
 async function DisplayVoteResults() {
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const state = getPartyState(currentPartyData);
 
   if (!resultsChartContainer.classList.contains('active')) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }
 
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: resultTimerDuration / 1000, selectedTimer: resultsChartContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: "DISPLAY_VOTE_RESULTS_PART_TWO", nextDelay: resultTimerDuration })
+  const timerValue = state.timer ?? Date.now();
+  const delay      = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: resultTimerDuration / 1000,
+    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction: "DISPLAY_VOTE_RESULTS_PART_TWO",
+    nextDelay: resultTimerDuration
+  });
 }
 
 async function DisplayVoteResultsPartTwo() {
+  const state   = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+
   let instruction = "";
-  const highestValue = getHighestVoteValue(currentPartyData);
-  if (GetHighestVoted(currentPartyData).includes(currentPartyData.players[currentPartyData.playerTurn].computerId) && highestValue > 0) {
+  const highestValue   = getHighestVoteValue(currentPartyData);
+  const imposterIndex  = state.playerTurn ?? 0;
+  const imposter       = players[imposterIndex];
+
+  if (!imposter) return;
+
+  const imposterId       = getPlayerId(imposter);
+  const imposterUsername = getPlayerUsername(imposter);
+
+  if (GetHighestVoted(currentPartyData).includes(imposterId) && highestValue > 0) {
     SetWaitingForPlayer({
       waitingForRoomTitle: "Imposter found!",
-      waitingForRoomText: currentPartyData.players[currentPartyData.playerTurn].username + " was the Imposter",
-      player: currentPartyData.players[currentPartyData.playerTurn]
+      waitingForRoomText: `${imposterUsername} was the Imposter`,
+      player: imposter
     });
+
     if (CheckSettingsExists("drink-punishment")) {
       instruction = "CHOOSING_PUNISHMENT";
-    }
-    else {
+    } else {
       instruction = "RESET_QUESTION:NEXT_PLAYER";
     }
-  }
-  else {
+  } else {
     SetWaitingForPlayer({
       waitingForRoomTitle: "Imposter wins",
-      waitingForRoomText: currentPartyData.players[currentPartyData.playerTurn].username + " was the Imposter",
-      player: currentPartyData.players[currentPartyData.playerTurn]
+      waitingForRoomText: `${imposterUsername} was the Imposter`,
+      player: imposter
     });
+
     instruction = "RESET_QUESTION:NEXT_PLAYER";
   }
+
   setActiveContainers(waitingForPlayerContainer);
 
-  const delay = new Date(currentPartyData.timer) - Date.now();
-  startTimer({ timeLeft: delay / 1000, duration: resultTimerDuration / 1000, selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper') });
-  SetTimeOut({ delay: delay, instruction: instruction })
+  const timerValue = state.timer ?? Date.now();
+  const delay      = new Date(timerValue) - Date.now();
+
+  startTimer({
+    timeLeft: delay / 1000,
+    duration: resultTimerDuration / 1000,
+    selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper')
+  });
+
+  SetTimeOut({
+    delay,
+    instruction
+  });
 }
 
 async function DisplayPunishmentToUser() {
-  let parsedInstructions = parseInstruction(currentPartyData.userInstructions)
-  const index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  console.log("parsedInstructions.reason: ", parsedInstructions.reason);
-  if (currentPartyData.players[currentPartyData.playerTurn].vote == deviceId) {
-    if (parsedInstructions.reason == "DOWN_IT") {
-      completePunishmentText.textContent = "In order to find out the question you have to down your drink.";
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+
+  const userInstructions   = getUserInstructions(currentPartyData);
+  const parsedInstructions = parseInstruction(userInstructions);
+
+  const imposterIndex = state.playerTurn ?? 0;
+  const imposter      = players[imposterIndex];
+
+  if (!imposter) return;
+
+  const imposterState = getPlayerState(imposter);
+  const punishedId    = imposterState.vote;
+
+  const punishedIndex  = players.findIndex(p => getPlayerId(p) === punishedId);
+  const punishedPlayer = punishedIndex !== -1 ? players[punishedIndex] : null;
+
+  if (punishedId === deviceId) {
+    if (parsedInstructions.reason === "DOWN_IT") {
+      completePunishmentText.textContent =
+        "In order to find out the question you have to down your drink.";
       completePunishmentContainer.setAttribute("punishment-type", "down-drink");
     } else {
-      completePunishmentText.textContent = "In order to find out the question you have to take " + (parsedInstructions.reason).replace('_', ' ') + ".";
-      completePunishmentContainer.setAttribute("punishment-type", parsedInstructions.reason);
+      completePunishmentText.textContent =
+        "In order to find out the question you have to take " +
+        parsedInstructions.reason.replace('_', ' ') +
+        ".";
+      completePunishmentContainer.setAttribute(
+        "punishment-type",
+        parsedInstructions.reason
+      );
     }
+
     setActiveContainers(completePunishmentContainer);
-  }
-  else {
+  } else if (punishedPlayer) {
+    const username = getPlayerUsername(punishedPlayer);
+
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + username,
       waitingForRoomText: "Showing player punishment...",
-      player: currentPlayer
+      player: punishedPlayer
     });
+
     setActiveContainers(waitingForPlayerContainer);
   }
 }
 
 async function ResetImposterQuestion({ nextPlayer = true } = {}) {
-  if (deviceId != hostDeviceId) return;
+
   ClearIcons();
 
-  currentPartyData.currentCardIndex++;
-  if (nextPlayer == true) {
-    currentPartyData.playerTurn = Math.floor(Math.random() * currentPartyData.players.length);
+  const players = currentPartyData.players || [];
+  const state   = getPartyState(currentPartyData);
+  const deck    = getPartyDeck(currentPartyData);
+
+  deck.currentCardIndex = (deck.currentCardIndex ?? 0) + 1;
+
+  if (nextPlayer && players.length > 0) {
+    state.playerTurn = Math.floor(Math.random() * players.length);
   }
-  for (let i = 0; i < currentPartyData.players.length; i++) {
-    currentPartyData.players[i].isReady = false;
-    currentPartyData.players[i].hasConfirmed = false;
-    currentPartyData.players[i].vote = "";
-  }
+
+  players.forEach(player => {
+    const pState = getPlayerState(player);
+    pState.isReady      = false;
+    pState.hasConfirmed = false;
+    pState.vote         = null;
+  });
+
+  currentPartyData.state = state;
+  currentPartyData.deck  = deck;
+
   await SendInstruction({
     instruction: resetGamemodeInstruction,
     partyData: currentPartyData,
-    timer: Date.now() + getIncrementContainerValue("imposter-time-limit") * 1000,
+    timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
     alternativeQuestionIndex: Math.floor(Math.random() * 255)
   });
-
 }
 
 async function PartySkip() {

@@ -39,8 +39,11 @@
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#6A9EF6');
     document.documentElement.style.setProperty('--secondarypagecolour', '#507AC2');
+
+    window.pageScripts = {
+        "/scripts/other/other-page-format.js": { addDataLoaded: true }
+    };
 </script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/other/other-page-format.js" data-loaded="false" defer></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
 </html>

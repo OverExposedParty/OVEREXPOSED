@@ -42,7 +42,7 @@
             "settings-name": "online",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-active": false,
+            "settings-active": true,
             "button-type": "toggle"
         }
     ]

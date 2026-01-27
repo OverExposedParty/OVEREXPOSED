@@ -156,16 +156,28 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
         const currentPartyData = existingData[0] || {};
 
         if (spinEl.textContent === "DOWN IT") {
-            completePunishmentText.textContent = "In order to find out the question you have to down your drink.";
+            if (placeholderGamemodeAddons.dataset.gamemode === "paranoia") {
+                completePunishmentText.textContent = "In order to find out the question you have to down your drink.";
+            }
+            else {
+                completePunishmentText.textContent = "Down your drink!";
+            }
+
             completePunishmentContainer.setAttribute("punishment-type", "DOWN-IT");
         } else {
-            completePunishmentText.textContent = "In order to find out the question you have to take " + spinEl.textContent;
+            if (placeholderGamemodeAddons.dataset.gamemode === "paranoia") {
+                completePunishmentText.textContent = "In order to find out the question you have to take " + spinEl.textContent;
+            }
+            else {
+                completePunishmentText.textContent = "Take " + spinEl.textContent;
+            }
             completePunishmentContainer.setAttribute("punishment-type", spinEl.textContent.replace(/\s+/g, '-'));
         }
 
         await new Promise(resolve => setTimeout(resolve, 500));
         await SendInstruction({
             instruction: "DISPLAY_PUNISHMENT_TO_USER:" + (spinEl.textContent).replace(/\s+/g, "_").toUpperCase() + ":" + deviceId,
+            byPassHost: true
         });
 
         spinDisabled = false;

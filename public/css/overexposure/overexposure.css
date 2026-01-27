@@ -214,7 +214,7 @@ highlight {
 }
 
 .floating-button.touchhover img {
-    transform: scale(1.1)
+    transform: scale(1.1);
 }
 
 .floating-button.touchhover .button-text {

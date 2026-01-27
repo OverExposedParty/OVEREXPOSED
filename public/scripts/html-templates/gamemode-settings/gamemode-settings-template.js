@@ -8,7 +8,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#66CCFF",
       secondary: "#427BB9"
-    }
+    },
+    forceOnline: false
   },
   "paranoia": {
     partyType: "party-game-paranoia",
@@ -19,7 +20,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#9D8AFF",
       secondary: "#7F71B2"
-    }
+    },
+    forceOnline: false
   },
   "never-have-i-ever": {
     partyType: "party-game-never-have-i-ever",
@@ -30,7 +32,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#FF9266",
       secondary: "#B96542"
-    }
+    },
+    forceOnline: false
   },
   "most-likely-to": {
     partyType: "party-game-most-likely-to",
@@ -41,7 +44,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#FFEE66",
       secondary: "#B9AA42"
-    }
+    },
+    forceOnline: false
   },
   "imposter": {
     partyType: "party-game-imposter",
@@ -52,7 +56,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#3DA7A1",
       secondary: "#2A6E6A"
-    }
+    },
+    forceOnline: false
   },
   "would-you-rather": {
     partyType: "party-game-would-you-rather",
@@ -63,7 +68,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#7CFFB2",
       secondary: "#55B97F"
-    }
+    },
+    forceOnline: false
   },
   "mafia": {
     partyType: "party-game-mafia",
@@ -74,7 +80,8 @@ const partyGamesInformation = {
     gamemodeColours: {
       primary: "#9B56D3",
       secondary: "#6D3C95"
-    }
+    },
+    forceOnline: true
   }
 };
 

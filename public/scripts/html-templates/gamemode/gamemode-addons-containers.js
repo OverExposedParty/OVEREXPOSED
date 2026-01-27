@@ -5,18 +5,18 @@ const placeholderGamemodeAddons = document.getElementById('placeholder-gamemode-
 const gamemodeAddonContains = ['drink-wheel','lucky-coin-flip','odd-man-out']
 if (placeholderGamemodeAddons.dataset.online === "false") {
     coinFlipButton = document.getElementById('coin-flip-button');
-    const coinFlipEnabled = localStorage.getItem(`${placeholderGamemodeAddons.dataset.gamemode}-lucky-coin-flip`) === 'true';
+    const coinFlipEnabled = localStorage.getItem(`lucky-coin-flip`) === 'true';
     if (!coinFlipEnabled && coinFlipButton) {
         coinFlipButton.remove();
     }
     spinButton = document.getElementById('spin-button');
-    const spinWheelEnabled = localStorage.getItem(`${placeholderGamemodeAddons.dataset.gamemode}-drink-wheel`) === 'true';
+    const spinWheelEnabled = localStorage.getItem(`drink-wheel`) === 'true';
     if (!spinWheelEnabled && spinButton) {
         spinButton.remove();
     }
 
     gamemodeAddonContains.forEach(addon => {
-        const isEnabled = localStorage.getItem(`${placeholderGamemodeAddons.dataset.gamemode}-${addon}`) === "true";
+        const isEnabled = localStorage.getItem(`${addon}`) === "true";
         console.log(`${addon}: ${isEnabled}`);
         if (isEnabled) AddGamemodeContainers(addon);
     });

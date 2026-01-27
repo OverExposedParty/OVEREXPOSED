@@ -20,7 +20,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
         data[`${partyGameMode}-packs`].forEach(pack => {
             if (pack["pack-active"]) {
                 const button = document.createElement("button");
-                button.dataset.key = `pack-${partyGameMode}-${pack["pack-name"]}`;
+                button.dataset.key = pack["pack-name"];
                 if (pack["pack-restriction"]) {
                     button.className = `pack ${pack["pack-restriction"]}`;
                 }
@@ -109,7 +109,6 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         container.dataset.increment = setting["button-increment-value"] ?? 30;
                         container.dataset.countMin = setting["button-minimum-value"] ?? 30;
                         container.dataset.countMax = setting["button-maximum-value"] ?? 180;
-
                         // Label
                         const label = document.createElement("label");
                         label.className = "settings-name";
@@ -181,21 +180,16 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                             let current = parseInt(container.dataset.count);
                             const increment = parseInt(container.dataset.increment);
                             const min = parseInt(container.dataset.countMin);
-                            console.log("current: " + current);
-                            console.log("min: " + min);
-                            console.log("increment: " + increment);
                             if (current - increment >= min) {
                                 current -= increment;
                                 container.dataset.count = current;
                                 countDisplay.textContent = current;
                             }
-                            console.log("current: " + current);
                         });
 
                         // Assign container as button reference for later tracking
                         button = container;
                     }
-
                     if (setting["settings-restriction"] === "nsfw") gameRulesNsfwButtons.push(button);
                     else if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
                     else if (setting["settings-restriction"] === "offline") offlineSettingsButtons.push(button);
@@ -204,7 +198,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         button.id = "button-online";
                         onlineButton = button;
                     } else {
-                        button.dataset.key = `${partyGameMode}-${setting["settings-name"]}`;
+                        button.dataset.key = setting["settings-name"];
                         settingsButtons.push(button);
                     }
                 }
@@ -257,7 +251,7 @@ onlineSettingsTab.addEventListener('click', () => {
 });
 
 function SetButtonStyle(button, isHovering) {
-    if (button.classList.contains('disabled')) return;
+    if (button.classList.contains('disabled') || !button.classList.contains('button-toggle')) return;
     if (isHovering) {
         button.style.backgroundColor = button.getAttribute('data-secondary-color');
         button.style.borderColor = button.getAttribute('data-secondary-color');

@@ -37,7 +37,7 @@ let displayDayTimerContainer;
 let displayRoleContainer, displayRoleTitle, displayRoleText;
 let selectUserDayPhaseContainer, selectUserDayPhaseTitle, selectUserDayPhaseButtonContainer, selectUserDayPhaseConfirmButton;
 let selectUserNightPhaseContainer, selectUserNightPhaseTitle, selectUserNightPhaseText, selectUserNightPhaseButtonContainer, selectUserNightPhaseConfirmButton;
-let selectCivilianWatchContainer, selectCivilianWatchTitle, selectCivilianWatchText, selectCivilianWatchButtonContainer, selectCivilianWatchOptionButtons, selectCivilianWatchConfirmButton, selectCivilianWatchLeaveButton;
+let selectCivilianWatchContainer, selectCivilianWatchTitle, selectCivilianWatchText, selectCivilianWatchButtonContainer, selectCivilianWatchOptionButtons, selectCivilianWatchConfirmButton;
 let displayCivilianWatchResponseContainer, displayCivilianWatchResponseText;
 let displayTownVoteContainer, displayTownVoteText;
 let displayPlayerKilledContainer, displayPlayerKilledText;
@@ -234,8 +234,7 @@ async function loadTemplatesAndScripts() {
             selectCivilianWatchTitle = selectCivilianWatchContainer.querySelector('.content-container h1');
             selectCivilianWatchText = selectCivilianWatchContainer.querySelector('.content-container h2');
             selectCivilianWatchButtonContainer = selectCivilianWatchContainer.querySelector('.button-container');
-            selectCivilianWatchOptionButtons = selectCivilianWatchButtonContainer.querySelectorAll('button:not(#leave)');
-            selectCivilianWatchLeaveButton = selectCivilianWatchButtonContainer.querySelector('#leave');
+            selectCivilianWatchOptionButtons = selectCivilianWatchButtonContainer.querySelectorAll('button');
             selectCivilianWatchConfirmButton = selectCivilianWatchContainer.querySelector('.select-button-container .select-button');
 
             displayCivilianWatchResponseContainer = document.querySelector('#select-civilian-watch-response-container');
@@ -297,21 +296,8 @@ async function loadTemplatesAndScripts() {
 
             gameContainers.push(confirmPunishmentContainer);
         }
-
-        // Finally, load scripts last
-        console.log("Loading online script for " + template);
-        await LoadScript(`/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025`);
-        if (placeHolderSelectedUser.dataset.template != 'mafia') {
-            await LoadScript(`/scripts/html-templates/online/card-container-template.js`);
-            await LoadScript(`/scripts/party-games/gamemode/online/general/party-game-statistics.js`);
-        }
-        else {
-            (async () => {
-                await LoadScript(`/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online.js?30082025`);
-                await SetPageSettings();
-            })();
-        }
-
+        SetScriptLoaded('/scripts/html-templates/online/selected-user-containers-template.js');
+        Ready.set('selected-user-containers');
     } catch (error) {
         console.error('Error loading templates or scripts:', error);
     }

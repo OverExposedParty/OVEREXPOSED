@@ -1,3 +1,4 @@
+let gameRules = {};
 let partyRulesSettings;
 
 const resultTimerDuration = 5000;
@@ -10,8 +11,10 @@ async function SendInstruction({
   partyData = null,
   fetchInstruction = false,
   isPlaying = true,
-  timer = null
+  timer = null,
+  byPassHost = false
 }) {
+  if (deviceId !== hostDeviceId && !byPassHost) return;
   currentPartyData = partyData;
 
   if (partyData == null) {
@@ -22,73 +25,101 @@ async function SendInstruction({
     }
     currentPartyData = existingData[0];
   }
-  const index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
 
-  if (index === -1) {
+  const players = currentPartyData.players || [];
+  const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+
+  if (meIndex === -1) {
     console.warn('Device ID not found in players.');
     return;
   }
 
-  // Update this player's lastPinged timestamp
-  currentPartyData.players[index].lastPinged = Date.now();
-  if (currentPartyData.players[index].socketId === null) {
-    currentPartyData.players[index].socketId = socket.id;
+  // Normalise config/state/deck
+  let config = normalizeConfig(currentPartyData);
+  let state = normalizeState(currentPartyData);
+  const deck = normalizeDeck(currentPartyData);
+
+  // Update this player's connection
+  const me = players[meIndex];
+  const meConn = ensureConnection(me);
+  meConn.lastPing = new Date();
+  if (!meConn.socketId) {
+    meConn.socketId = socket.id;
   }
 
-  // Update all players' usersReady if requested
+  // Update all players' ready
   if (updateUsersReady !== null) {
-    currentPartyData.players.forEach(player => {
-      player.isReady = updateUsersReady;
+    players.forEach(player => {
+      const pState = getPlayerState(player);
+      pState.isReady = updateUsersReady;
+      player.isReady = updateUsersReady; // legacy mirror
     });
   }
 
-  // Update all players' usersConfirmation if requested
+  // Update all players' confirmation
   if (updateUsersConfirmation !== null) {
-    currentPartyData.players.forEach(player => {
-      player.hasConfirmed = updateUsersConfirmation;
+    players.forEach(player => {
+      const pState = getPlayerState(player);
+      pState.hasConfirmed = updateUsersConfirmation;
+      player.hasConfirmed = updateUsersConfirmation; // legacy mirror
     });
   }
 
+  // Update all players' vote
   if (updateUsersVote !== null) {
-    currentPartyData.players.forEach(player => {
-      player.vote = updateUsersVote;
+    players.forEach(player => {
+      const pState = getPlayerState(player);
+      pState.vote = updateUsersVote;
+      player.vote = updateUsersVote; // legacy mirror
     });
   }
 
+  // Timer lives in state
   if (timer !== null) {
-    currentPartyData.timer = timer;
+    state.timer = timer;
+    currentPartyData.timer = timer; // legacy mirror
     if (timeout?.cancel) {
       timeout.cancel();
     }
   }
 
   // Use existing userInstructions if instruction param is null
+  const existingInstruction =
+    config.userInstructions ??
+    state.userInstructions ??
+    currentPartyData.userInstructions ??
+    null;
+
   if (instruction == null) {
-    instruction = currentPartyData.userInstructions;
+    instruction = existingInstruction;
   }
 
   console.log("🧪 Instruction Received:", instruction);
 
+  // Update game-level state
+  state.isPlaying = isPlaying;
+  state.lastPinged = new Date();
+
+  // ✅ keep the in-memory object in sync too
+  currentPartyData.config = config;
+  currentPartyData.state = state;
+  if (instruction != null) {
+    config.userInstructions = instruction;
+  }
+  console.log("🧪 Instruction Sent:", instruction);
   await updateOnlineParty({
     partyId: partyCode,
-    players: currentPartyData.players,
-    userInstructions: instruction,
-    lastPinged: Date.now(),
-    playerTurn: currentPartyData.playerTurn,
-    currentCardIndex: currentPartyData.currentCardIndex,
-    currentCardSecondIndex: currentPartyData.currentCardSecondIndex,
-    score: currentPartyData.score,
-    timer: currentPartyData.timer,
-    questionType: currentPartyData.questionType,
-    round: currentPartyData.round,
-    roundPlayerTurn: currentPartyData.roundPlayerTurn,
-    isPlaying: isPlaying,
-    vote: currentPartyData.vote
+    config,
+    state,
+    deck,
+    players
   });
+
   if (fetchInstruction) {
     FetchInstructions();
   }
 }
+
 
 function parseInstructionDeviceId(input) {
   const [instruction, deviceId] = input.split(":");
@@ -123,56 +154,80 @@ async function SetUserConfirmation({
   reason = null,
   userInstruction = null
 }) {
-  const index = currentPartyData.players.findIndex(player => player.computerId === selectedDeviceId);
+  const players = currentPartyData.players || [];
+  const index = players.findIndex(player => getPlayerId(player) === selectedDeviceId);
 
   if (index === -1) {
     console.warn('Player not found for device ID:', selectedDeviceId);
     return;
   }
 
-  currentPartyData.players[index].isReady = true;
-  currentPartyData.players[index].hasConfirmed = option;
-  currentPartyData.players[index].lastPing = Date.now();
+  const player = players[index];
+  const pState = getPlayerState(player);
+  const conn = ensureConnection(player);
+
+  pState.isReady = true;
+  pState.hasConfirmed = option;
+  player.isReady = true;
+  player.hasConfirmed = option; // legacy mirror
+  conn.lastPing = new Date();
 
   if (userInstruction != null) {
     await SendInstruction({
       instruction: `${userInstruction}:${reason}`,
-      partyData: currentPartyData
+      partyData: currentPartyData,
+      byPassHost: true
     });
-  }
-  else {
+  } else {
     await SendInstruction({
-      partyData: currentPartyData
+      partyData: currentPartyData,
+      byPassHost: true
     });
   }
 }
 
-
 async function setUserBool(selectedDeviceId, userConfirmation = null, userReady = null, setInstruction = null) {
-  const player = currentPartyData.players.find(p => p.computerId === selectedDeviceId);
+  const players = currentPartyData.players || [];
+  const player = players.find(p => getPlayerId(p) === selectedDeviceId);
 
   if (!player) {
     console.warn('Player not found for device ID:', selectedDeviceId);
     return;
   }
 
+  const pState = getPlayerState(player);
+
   if (userConfirmation !== null) {
-    player.hasConfirmed = userConfirmation;
+    pState.hasConfirmed = userConfirmation;
+    player.hasConfirmed = userConfirmation; // legacy
   }
 
   if (userReady !== null) {
-    player.isReady = userReady;
+    pState.isReady = userReady;
+    player.isReady = userReady; // legacy
   }
 
-  if (currentPartyData.userInstructions.includes(setInstruction) || setInstruction === null) {
+  const instructionString =
+    currentPartyData.state?.userInstructions ??
+    currentPartyData.userInstructions ??
+    "";
+
+  if (instructionString.includes(setInstruction) || setInstruction === null) {
+    const config = normalizeConfig(currentPartyData);
+    const state = normalizeState(currentPartyData);
+    const deck = normalizeDeck(currentPartyData);
+
+    state.lastPinged = new Date();
+
     await updateOnlineParty({
       partyId: partyCode,
-      players: currentPartyData.players,
-      lastPinged: Date.now(),
+      config,
+      state,
+      deck,
+      players
     });
   }
 }
-
 
 function ClearIcons() {
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
@@ -182,43 +237,75 @@ function ClearIcons() {
   }
 }
 
-async function ResetQuestion({ icons = null, instruction = "DISPLAY_PRIVATE_CARD", incrementScore = 0, timer = null, playerIndex = null }) {
-  if (hostDeviceId !== deviceId) return;
-  console.log(currentPartyData);
-  const playerCount = currentPartyData.players.length;
+async function ResetQuestion({
+  icons = null,
+  instruction = "DISPLAY_PRIVATE_CARD",
+  incrementScore = 0,
+  timer = null,
+  playerIndex = null
+}) {
+  if (deviceId !== currentPartyData.state.hostComputerId) return;
+
+  const players = currentPartyData.players || [];
+  const config = normalizeConfig(currentPartyData);
+  const state = normalizeState(currentPartyData);
+  const deck = normalizeDeck(currentPartyData);
+
+  const playerCount = players.length;
+
   // Move to next card
-  currentPartyData.currentCardIndex++;
-  if (currentPartyData.playerTurn !== undefined) {
-    currentPartyData.players[currentPartyData.playerTurn].score += incrementScore;
+  deck.currentCardIndex = (deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0) + 1;
+  currentPartyData.currentCardIndex = deck.currentCardIndex; // legacy mirror
+
+  // Add score for current or specific player
+  if (state.playerTurn !== undefined && state.playerTurn !== null) {
+    const idx = state.playerTurn;
+    const p = players[idx];
+    if (p) {
+      const pState = getPlayerState(p);
+      pState.score = (pState.score ?? p.score ?? 0) + incrementScore;
+      p.score = pState.score; // legacy mirror
+    }
+  } else if (playerIndex !== null) {
+    const p = players[playerIndex];
+    if (p) {
+      const pState = getPlayerState(p);
+      pState.score = (pState.score ?? p.score ?? 0) + incrementScore;
+      p.score = pState.score; // legacy mirror
+    }
   }
-  else if (playerIndex !== null) {
-    currentPartyData.players[playerIndex].score += incrementScore;
-  }
+
   // Reset each player's status and icon
   for (let i = 0; i < playerCount; i++) {
-    currentPartyData.players[i].isReady = false;
-    currentPartyData.players[i].hasConfirmed = false;
-    currentPartyData.players[i].vote = null;
-    if (icons !== null) {
+    const p = players[i];
+    const pState = getPlayerState(p);
+    pState.isReady = false;
+    pState.hasConfirmed = false;
+    pState.vote = null;
+    p.isReady = false;
+    p.hasConfirmed = false;
+    p.vote = null; // legacy
+    if (icons !== null && icons[i]) {
       icons[i].classList.remove('yes');
       icons[i].classList.remove('no');
     }
   }
 
   if (timer !== null) {
-    currentPartyData.timer = timer;
+    state.timer = timer;
+    currentPartyData.timer = timer; // legacy
   }
 
+  config.userInstructions = instruction;
+  state.lastPinged = new Date();
   await updateOnlineParty({
     partyId: partyCode,
-    players: currentPartyData.players,
-    lastPinged: Date.now(),
-    userInstructions: instruction,
-    currentCardIndex: currentPartyData.currentCardIndex,
-    timer: currentPartyData.timer
+    config,
+    state,
+    deck,
+    players
   });
 }
-
 
 function countWords(str) {
   if (!str) return 0;
@@ -253,17 +340,23 @@ function formatDashedString({ input, gamemode = null, seperator = ' ', uppercase
 
 function ResetVotes(players, gamemodeMafia = false) {
   for (let i = 0; i < players.length; i++) {
+    const p = players[i];
+    const pState = getPlayerState(p);
+
     if (gamemodeMafia) {
-      if (players[i].status == "alive") {
-        players[i].vote = null;
+      if (pState.status === "alive" || p.status === "alive") {
+        pState.vote = null;
+        p.vote = null;
       }
-    }
-    else {
-      players[i].vote = null;
+    } else {
+      pState.vote = null;
+      p.vote = null;
     }
 
-    players[i].hasConfirmed = false;
-    players[i].isReady = false;
+    pState.hasConfirmed = false;
+    pState.isReady = false;
+    p.hasConfirmed = false;
+    p.isReady = false;
   }
   return players;
 }
@@ -271,35 +364,67 @@ function ResetVotes(players, gamemodeMafia = false) {
 async function SetVote({ option, sendInstruction = null, hover = false }) {
   const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
+  if (!data || data.length === 0) return;
 
-  const index = data[0].players.findIndex(player => player.computerId === deviceId);
-  data[0].players[index].vote = option;
-  data[0].players[index].isReady = true;
-  console.log(data[0].players);
-  if (hover == false) {
-    data[0].players[index].hasConfirmed = true;
+  const party = data[0];
+  const players = party.players || [];
+  const index = players.findIndex(player => getPlayerId(player) === deviceId);
+  if (index === -1) return;
+
+  const player = players[index];
+  const pState = getPlayerState(player);
+
+  pState.vote = option;
+  pState.isReady = true;
+  player.vote = option; // legacy
+  player.isReady = true;
+
+  if (hover === false) {
+    pState.hasConfirmed = true;
+    player.hasConfirmed = true;
   }
+
+  const config = normalizeConfig(party);
+  const state = normalizeState(party);
+  const deck = normalizeDeck(party);
+
+  state.lastPinged = new Date();
+
   if (sendInstruction != null) {
     await SendInstruction({
       instruction: sendInstruction,
-      partyData: data[0]
+      partyData: {
+        ...party,
+        config,
+        state,
+        deck,
+        players
+      },
+      byPassHost: true
     });
-  }
-  else {
+  } else {
     await updateOnlineParty({
       partyId: partyCode,
-      players: data[0].players,
-      lastPinged: Date.now()
+      config,
+      state,
+      deck,
+      players
     });
   }
 }
 
-
 function ResetBoolVotes(players) {
   for (let i = 0; i < players.length; i++) {
-    players[i].vote = null;
-    players[i].hasConfirmed = false;
-    players[i].isReady = false;
+    const p = players[i];
+    const pState = getPlayerState(p);
+
+    pState.vote = null;
+    pState.hasConfirmed = false;
+    pState.isReady = false;
+
+    p.vote = null;
+    p.hasConfirmed = false;
+    p.isReady = false; // legacy mirror
   }
   return players;
 }
@@ -307,25 +432,47 @@ function ResetBoolVotes(players) {
 async function SetBoolVote(bool) {
   const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
+  if (!data || data.length === 0) return;
 
-  const index = data[0].players.findIndex(player => player.computerId === deviceId);
-  data[0].players[index].vote = bool;
-  data[0].players[index].hasConfirmed = true;
-  console.log("working");
+  const party = data[0];
+  const players = party.players || [];
+  const index = players.findIndex(player => getPlayerId(player) === deviceId);
+  if (index === -1) return;
+
+  const player = players[index];
+  const pState = getPlayerState(player);
+
+  pState.vote = bool;
+  pState.hasConfirmed = true;
+
+  player.vote = bool; // legacy
+  player.hasConfirmed = true;
+
+  const config = normalizeConfig(party);
+  const state = normalizeState(party);
+  const deck = normalizeDeck(party);
+
+  state.lastPinged = new Date();
+
   await updateOnlineParty({
     partyId: partyCode,
-    players: data[0].players,
-    lastPinged: Date.now()
+    config,
+    state,
+    deck,
+    players
   });
 }
 
 function SetWaitingForPlayer({ waitingForRoomTitle, waitingForRoomText, player }) {
+  const id = getPlayerId(player);
+  const icon = getPlayerIcon(player);
+
   waitingForPlayerTitle.textContent = waitingForRoomTitle;
   waitingForPlayerText.textContent = waitingForRoomText;
   EditUserIconPartyGames({
     container: waitingForPlayerContainer,
-    userId: player.computerId,
-    userCustomisationString: player.userIcon
+    userId: id,
+    userCustomisationString: icon
   });
 }
 
@@ -356,17 +503,29 @@ function DisplayCard(card, questionObject) {
 async function ChoosingPunishment(index = null) {
   timeout?.cancel();
   stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
-  if (index === null) {
-    index = currentPartyData.players.findIndex(player => player.computerId === currentPartyData.players[currentPartyData.playerTurn].vote);
-  }
-  currentPlayer = currentPartyData.players[index];
 
-  if (currentPartyData.players[index].computerId == deviceId) {
-    setActiveContainers(selectPunishmentContainer);
+  const players = currentPartyData.players || [];
+  const state = normalizeState(currentPartyData);
+
+  if (index === null) {
+    const turnIndex = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
+    const turnPlayer = players[turnIndex];
+    if (!turnPlayer) return;
+    const turnPlayerVote = getPlayerState(turnPlayer).vote ?? turnPlayer.vote;
+    index = players.findIndex(player => getPlayerId(player) === turnPlayerVote);
   }
-  else {
+
+  const currentPlayer = players[index];
+  if (!currentPlayer) return;
+
+  const id = getPlayerId(currentPlayer);
+  const username = getPlayerUsername(currentPlayer);
+
+  if (id == deviceId) {
+    setActiveContainers(selectPunishmentContainer);
+  } else {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + currentPartyData.players[index].username,
+      waitingForRoomTitle: "Waiting for " + username,
       waitingForRoomText: "Choosing Punishment...",
       player: currentPlayer
     });
@@ -377,11 +536,22 @@ async function ChoosingPunishment(index = null) {
 async function ChosePunishment(index = null) {
   timeout?.cancel();
   stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
-  let parsedInstructions = parseInstruction(currentPartyData.userInstructions)
+
+  const players = currentPartyData.players || [];
+  let parsedInstructions = parseInstruction(
+    currentPartyData.config?.userInstructions ?? currentPartyData.state?.userInstructions ?? ""
+  );
+
   if (index === null) {
-    index = currentPartyData.players.findIndex(player => player.computerId === parsedInstructions.deviceId);
+    index = players.findIndex(player => getPlayerId(player) === parsedInstructions.deviceId);
   }
-  if (deviceId == currentPartyData.players[index].computerId) {
+  const target = players[index];
+  if (!target) return;
+
+  const id = getPlayerId(target);
+  const username = getPlayerUsername(target);
+  console.log(parsedInstructions.reason);
+  if (deviceId == id) {
     if (parsedInstructions.reason == "DRINK_WHEEL") {
       setActiveContainers(drinkWheelContainer);
     }
@@ -395,18 +565,20 @@ async function ChosePunishment(index = null) {
     }
   }
   else {
-    const currentTitle = "Waiting for " + currentPartyData.players[index].username;
+    const currentTitle = "Waiting for " + username;
     let currentText;
     if (parsedInstructions.reason == "DRINK_WHEEL") {
       currentText = "Spinning drink wheel...";
     }
     else if (parsedInstructions.reason == "TAKE_A_SHOT") {
       currentText = "Reading punishment...";
+    } else {
+      currentText = "Reading punishment...";
     }
     SetWaitingForPlayer({
       waitingForRoomTitle: currentTitle,
       waitingForRoomText: currentText,
-      player: currentPartyData.players[index]
+      player: target
     });
     setActiveContainers(waitingForPlayerContainer);
   }
@@ -418,31 +590,151 @@ function CheckSettingsExists(key) {
 }
 
 async function AddUserIcons() {
-  if (currentPartyData) {
+  if (currentPartyData && Array.isArray(currentPartyData.players)) {
     for (let i = 0; i < currentPartyData.players.length; i++) {
+      const p = currentPartyData.players[i];
+      const id = getPlayerId(p);
+      const icon = getPlayerIcon(p);
       createUserIconPartyGames({
         container: waitingForPlayersIconContainer,
-        userId: currentPartyData.players[i].computerId,
-        userCustomisationString: currentPartyData.players[i].userIcon
+        userId: id,
+        userCustomisationString: icon
       });
     }
   }
 }
 
 function DisplayWaitingForPlayers(confirmation = true) {
-  index = currentPartyData.players.findIndex(player => player.computerId === deviceId);
+  const players = currentPartyData.players || [];
+  const index = players.findIndex(player => getPlayerId(player) === deviceId);
+  if (index === -1) return;
+
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
 
-  for (let i = 0; i < currentPartyData.players.length; i++) {
-    const player = currentPartyData.players[i];
-    const check = confirmation ? player.hasConfirmed : player.isReady;
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+    const pState = getPlayerState(player);
+    const check = confirmation ? pState.hasConfirmed : pState.isReady;
 
     if (check === true) {
-      icons[i].classList.add('yes');
+      icons[i]?.classList.add('yes');
     } else if (check === false) {
-      icons[i].classList.remove('yes');
+      icons[i]?.classList.remove('yes');
     }
   }
-  currentPartyData.players[index].lastPing = Date.now();
+
+  const me = players[index];
+  const conn = ensureConnection(me);
+  conn.lastPing = new Date();
+
   setActiveContainers(waitingForPlayersContainer);
+}
+
+/* ──────────────────────────────────────────────
+   NORMALISERS & HELPERS FOR NESTED/LEGACY SHAPES
+────────────────────────────────────────────── */
+
+function normalizeConfig(doc) {
+  if (doc.config) return { ...doc.config };
+  return {
+    gamemode: doc.gamemode,
+    gameRules: doc.gameRules,
+    selectedPacks: doc.selectedPacks,
+    selectedRoles: doc.selectedRoles,
+    userInstructions: doc.userInstructions,
+    shuffleSeed: doc.shuffleSeed
+  };
+}
+
+function normalizeState(doc) {
+  const base = doc.state ? { ...doc.state } : {};
+  if (base.isPlaying == null && doc.isPlaying != null) base.isPlaying = doc.isPlaying;
+  if (base.lastPinged == null && doc.lastPinged != null) base.lastPinged = doc.lastPinged;
+  if (base.playerTurn == null && doc.playerTurn != null) base.playerTurn = doc.playerTurn;
+  if (base.timer == null && doc.timer != null) base.timer = doc.timer;
+  if (base.round == null && doc.round != null) base.round = doc.round;
+  if (base.roundPlayerTurn == null && doc.roundPlayerTurn != null) base.roundPlayerTurn = doc.roundPlayerTurn;
+  if (base.userInstructions == null && doc.userInstructions != null) base.userInstructions = doc.userInstructions;
+  if (base.vote == null && doc.vote != null) base.vote = doc.vote;
+  return base;
+}
+
+function normalizeDeck(doc) {
+  const base = doc.deck ? { ...doc.deck } : {};
+  if (base.currentCardIndex == null && doc.currentCardIndex != null) base.currentCardIndex = doc.currentCardIndex;
+  if (base.currentCardSecondIndex == null && doc.currentCardSecondIndex != null) base.currentCardSecondIndex = doc.currentCardSecondIndex;
+  if (base.alternativeQuestionIndex == null && doc.alternativeQuestionIndex != null) base.alternativeQuestionIndex = doc.alternativeQuestionIndex;
+  if (base.questionType == null && doc.questionType != null) base.questionType = doc.questionType;
+  return base;
+}
+
+function getPlayerUsername(player) {
+  return player?.identity?.username ?? player?.username ?? "";
+}
+
+function getPlayerIcon(player) {
+  return player?.identity?.userIcon ?? player?.userIcon ?? "0000:0100:0200:0300";
+}
+
+function getPlayerState(player) {
+  return player.state;
+}
+
+function ensureConnection(player) {
+  if (!player.connection) {
+    player.connection = {
+      socketId: player.socketId ?? null,
+      lastPing: player.lastPing ? new Date(player.lastPing) : new Date()
+    };
+  }
+  return player.connection;
+}
+
+function getPlayerId(player) {
+  return player?.identity?.computerId ?? null;
+}
+
+function getPlayerUsername(player) {
+  return player?.identity?.username ?? player?.username ?? '';
+}
+
+function getPlayerIcon(player) {
+  return player?.identity?.userIcon ?? player?.userIcon ?? '';
+}
+
+function getPartyConfig(party) {
+  return party.config ?? party;
+}
+
+function getPartyState(party) {
+  return party.state ?? party;
+}
+
+function getPartyDeck(party) {
+  return party.deck ?? party;
+}
+
+function getUserInstructions(party) {
+  const config = getPartyConfig(party);
+  const state = getPartyState(party);
+
+  return (
+    state.userInstructions ??
+    party.userInstructions ??
+    config.userInstructions ??
+    ''
+  );
+}
+
+function getTimeLimit() {
+  if (!gameRules) return 120;
+  const raw = gameRules["time-limit"];
+
+  if (raw === undefined || raw === null || raw === "") {
+    return 120;
+  }
+
+  const n = Number(raw);
+  if (Number.isNaN(n)) return 120;
+  return n;
 }

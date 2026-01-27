@@ -51,38 +51,27 @@ async function loadActivePacks(masterJsonPath) {
         initialLoad: true
       });
     }
-    if (!document.querySelector('script[src="/scripts/general/online/user-customisation-icon.js"]:not([data-standalone="true"])')) {
-      SetScriptLoaded("/scripts/general/online/user-customisation-icon.js");
-    }
-    else {
-      userCustomisationTasks.userIcons.taskCompleted = true;
-      CheckUserCustomisationLoaded();
-    }
 
   } catch (error) {
     console.error("Failed to load packs:", error);
   }
 }
 
-const packsLoadedPromise = loadActivePacks('/json-files/customisation/customisation-packs.json');
-
 function EditUserIconPartyGames({ container, userId, userCustomisationString }) {
-  packsLoadedPromise.then(() => {
-    if (container.querySelector('.icon')) {
-      container.querySelector('.icon').setAttribute('data-user-id', userId);
-    }
-    const parsed = parseCustomisationString(userCustomisationString);
-    const userCustomisation = {
-      colour: getFilePathByCustomisationId(parsed.colour),
-      headSlot: getFilePathByCustomisationId(parsed.head),
-      eyesSlot: getFilePathByCustomisationId(parsed.eyes),
-      mouthSlot: getFilePathByCustomisationId(parsed.mouth),
-    };
-    EditImageStack(userCustomisation, userId, container);
-  });
+  if (container.querySelector('.icon')) {
+    container.querySelector('.icon').setAttribute('data-user-id', userId);
+  }
+  const parsed = parseCustomisationString(userCustomisationString);
+  const userCustomisation = {
+    colour: getFilePathByCustomisationId(parsed.colour),
+    headSlot: getFilePathByCustomisationId(parsed.head),
+    eyesSlot: getFilePathByCustomisationId(parsed.eyes),
+    mouthSlot: getFilePathByCustomisationId(parsed.mouth),
+  };
+  EditImageStack(userCustomisation, userId, container);
 }
-function createUserIconPartyGames({ container, userId, userCustomisationString, size = null }) {
-  packsLoadedPromise.then(() => {
+
+async function createUserIconPartyGames({ container, userId, userCustomisationString, size = null }) {
     const userIcon = document.createElement('div');
     userIcon.className = 'icon';
     userIcon.setAttribute('data-user-id', userId);
@@ -100,7 +89,6 @@ function createUserIconPartyGames({ container, userId, userCustomisationString, 
     };
     userIcon.appendChild(CreateImageStack(userCustomisation));
     container.appendChild(userIcon);
-  });
 }
 
 function createUserIcon({ userId, username, checked = false }) {
@@ -177,7 +165,6 @@ function EditImageStack(customisation, userId, container) {
   }
 }
 
-
 function editUserIcon({ userId, newUsername, userReady, userIcon }) {
   const userIconContainer = document.querySelector(`.user-icon[data-user-id="${userId}"]`);
   parsedUserIcon = parseCustomisationString(userIcon);
@@ -220,36 +207,42 @@ function deleteUserIcon(userId) {
   }
 }
 
-function UpdateUserIcons(partyData) {
+async function UpdateUserIcons(partyData) {
   const userIconDivs = document.querySelectorAll('.user-icon');
-  const currentIds = partyData.players.map(player => player.computerId);
+
+  // ✅ New layout only
+  const currentIds = partyData.players.map(player => player.identity.computerId);
   // Create or update icons
   for (let player of partyData.players) {
-    const userIconDiv = document.querySelector(`.user-icon[data-user-id="${player.computerId}"]`);
+    const computerId = player.identity.computerId;
+    const username = player.identity.username;
+    const userIconString = player.identity.userIcon;
+    const isReady = player.state.isReady;
+
+    if (!computerId) {
+      console.warn('Player missing computerId:', player);
+      continue;
+    }
+
+    const userIconDiv = document.querySelector(`.user-icon[data-user-id="${computerId}"]`);
+
     if (!userIconDiv) {
-      let newChecked;
-      if (player.computerId == deviceId) {
-        newChecked = true
-      }
-      else {
-        newChecked = false
-      }
+      const isSelf = computerId == deviceId;
+
       createUserIcon({
-        userId: player.computerId,
-        username: player.username,
-        checked: false
+        userId: computerId,
+        username,
+        checked: isSelf && isReady
       });
-      //console.log('Created user icon for', player.username);
     }
-    else {
-      editUserIcon({
-        userId: player.computerId,
-        newUsername: player.username,
-        userReady: player.isReady,
-        userIcon: player.userIcon
-      });
-      //console.log('Edited user icon for', player.username);
-    }
+
+    // Always apply latest customisation/ready/name
+    editUserIcon({
+      userId: computerId,
+      newUsername: username,
+      userReady: isReady,
+      userIcon: userIconString
+    });
   }
 
   // Delete icons that are no longer in the party
@@ -259,14 +252,21 @@ function UpdateUserIcons(partyData) {
       deleteUserIcon(userId);
     }
   }
+
   if (partyData.players.length > 4) {
-    onlineSettingsContainer.querySelector(".container-section#users").classList.add('small');
+    onlineSettingsContainer
+      .querySelector(".container-section#users")
+      .classList.add('small');
+  } else {
+    onlineSettingsContainer
+      .querySelector(".container-section#users")
+      .classList.remove('small');
   }
-  else {
-    onlineSettingsContainer.querySelector(".container-section#users").classList.remove('small');
-  }
-  userCount.textContent = `(${partyData.players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
+
+  userCount.textContent =
+    `(${partyData.players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
 }
+
 
 function parseCustomisationString(customisationString) {
   const [colour, head, eyes, mouth] = customisationString.split(':');
@@ -278,8 +278,8 @@ function parseCustomisationString(customisationString) {
     mouth
   };
 }
-function getFilePathByCustomisationId(customisationId) {
 
+function getFilePathByCustomisationId(customisationId) {
   const allItems = [
     ...colourSlot,
     ...headSlot,
@@ -293,3 +293,17 @@ function getFilePathByCustomisationId(customisationId) {
 function toKebabCase(input) {
   return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
+
+function createCustomisationString(userCustomisation) {
+  return `${userCustomisation.colourSlotId}:${userCustomisation.headSlotId}:${userCustomisation.eyesSlotId}:${userCustomisation.mouthSlotId}`;
+}
+
+(async () => {
+    try {
+        await loadActivePacks('/json-files/customisation/customisation-packs.json');
+        SetScriptLoaded('/scripts/general/online/user-customisation-icon.js');
+        Ready.set('user-customisation-icon', true);
+    } catch (err) {
+        console.error("❌ Error loading user-customisation-icon scripts:", err);
+    }
+})();

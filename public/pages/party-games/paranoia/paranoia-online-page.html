@@ -70,14 +70,23 @@
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#7F71B2');
+
+    window.pageScripts = {
+        "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+
+        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+        "/scripts/html-templates/online/card-container-template.js": { addDataLoaded: true },
+        "/scripts/party-games/gamemode/online/general/party-game-statistics.js": {},
+        "/scripts/html-templates/online/selected-user-containers-template.js": { addDataLoaded: true },
+        "/scripts/party-games/online/online-settings.js": { addDataLoaded: true },
+        "/scripts/html-templates/gamemode/gamemode-addons-containers.js": {},
+        "/scripts/party-games/general/load-questions.js": {},
+        "/scripts/party-games/general/chat-log.js": {},
+        "/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025": {},
+        "/scripts/party-games/gamemode/online/paranoia/paranoia-online.js?30082025": { addDataLoaded: true },
+    };
 </script>
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/general/online/user-customisation-icon.js" data-loaded="false" data-standalone="true"></script>
-<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/gamemode/gamemode-addons-containers.js"></script>
-<script src="/scripts/party-games/general/load-questions.js" data-loaded="false"></script>
-<script src="/scripts/party-games/general/chat-log.js"></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 <script>
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);

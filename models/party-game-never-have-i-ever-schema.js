@@ -1,30 +1,78 @@
 const mongoose = require('mongoose');
 
-const PlayerSchema = new mongoose.Schema({
+/* ──────────────────────────────────────────────
+   PLAYER SUB-SCHEMAS
+────────────────────────────────────────────── */
+
+const identitySchema = new mongoose.Schema({
   computerId: { type: String, required: true },
-  username: { type: String, required: true },
-  userIcon: { type: String, required: true },
-  isReady: { type: Boolean, default: false },
-  hasConfirmed: { type: Boolean, default: false },
-  vote: { type: Boolean, default: null },
-  lastPing: { type: Date, default: Date.now },
-  socketId: { type: String, default: null },
-  score: { type: Number, default: 0 }
+  username:   { type: String, required: true },
+  userIcon:   { type: String, required: true }
 }, { _id: false });
+
+const connectionSchema = new mongoose.Schema({
+  socketId: { type: String, default: null },
+  lastPing: { type: Date, default: Date.now }
+}, { _id: false });
+
+const playerStateSchema = new mongoose.Schema({
+  isReady:      { type: Boolean, default: false },
+  hasConfirmed: { type: Boolean, default: false },
+  vote:         { type: Boolean, default: null },
+  score:        { type: Number,  default: 0 }
+}, { _id: false });
+
+const playerSchema = new mongoose.Schema({
+  identity:   identitySchema,
+  connection: connectionSchema,
+  state:      playerStateSchema
+}, { _id: false });
+
+/* ──────────────────────────────────────────────
+   GAME CONFIG & STATE
+────────────────────────────────────────────── */
+
+const configSchema = new mongoose.Schema({
+  gamemode:        { type: String, required: true },
+  gameRules:     { type: Map, of: mongoose.Schema.Types.Mixed, required: true },
+  selectedPacks: { type: [String], required: true },
+  userInstructions:{ type: String },
+  shuffleSeed:     { type: Number, required: true }
+}, { _id: false });
+
+const stateSchema = new mongoose.Schema({
+  isPlaying:  { type: Boolean, required: true },
+  lastPinged: { type: Date, default: Date.now },
+  playerTurn: { type: Number, required: true },
+  timer:      { type: Date, default: null },
+  hostComputerId:    { type: String, default: null },
+  hostComputerIdList:{ type: [String], default: [] }
+}, { _id: false });
+
+/* ──────────────────────────────────────────────
+   DECK
+────────────────────────────────────────────── */
+
+const deckSchema = new mongoose.Schema({
+  currentCardIndex: { type: Number, default: 0 }
+}, { _id: false });
+
+/* ──────────────────────────────────────────────
+   MAIN SCHEMA
+────────────────────────────────────────────── */
 
 const partyGameNeverHaveIEverSchema = new mongoose.Schema({
   partyId: { type: String, required: true },
-  gamemode: { type: String, required: true },
-  gameRules: { type: String, required: true },
-  selectedPacks: { type: String, required: true },
-  userInstructions: { type: String},
-  isPlaying: { type: Boolean, required: true },
-  lastPinged: { type: Date, default: Date.now },
-  playerTurn: { type: Number, required: true },
-  shuffleSeed: { type: Number, required: true },
-  currentCardIndex: { type: Number, default: 0 },
-  timer: { type: Date, default: null },
-  players: { type: [PlayerSchema], default: [] }
+
+  config: configSchema,
+  state:  stateSchema,
+  deck:   deckSchema,
+
+  players: { type: [playerSchema], default: [] }
 });
 
-module.exports = mongoose.model('partyGameNeverHaveIEverSchema', partyGameNeverHaveIEverSchema, 'party-game-never-have-i-ever');
+module.exports = mongoose.model(
+  'partyGameNeverHaveIEver',
+  partyGameNeverHaveIEverSchema,
+  'party-game-never-have-i-ever'
+);

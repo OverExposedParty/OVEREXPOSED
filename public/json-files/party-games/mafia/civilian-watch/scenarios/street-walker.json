@@ -1,0 +1,71 @@
+{
+    "area-1": [
+        {
+            "dialogue": "You wake up in the middle of the night to a strange noise. A shadow moves outside your window.",
+            "options": [
+                {
+                    "text": "Ignore it",
+                    "no-hint": "You close the curtain and go back to sleep.",
+                    "advance": "The noise returns louder than before and now you cannot ignore it. You get up to check."
+                },
+                {
+                    "text": "Watch quietly",
+                    "no-hint": "A fox slips out of the shadows and runs off. You go back to bed.",
+                    "advance": "The figure shifts again and it looks too big to be an animal. You decide to take a closer look."
+                },
+                {
+                    "text": "Investigate",
+                    "no-hint": "You step outside and find a fox digging through the trash. It runs off and you head back inside.",
+                    "advance": "You move to another window for a better view. The figure moves again. You put on your shoes and head out."
+                }
+            ]
+        }
+    ],
+    "area-2": [
+        {
+            "dialogue": "You stand on the front porch. The night is quiet and the shadow lingers near the road.",
+            "options": [
+                {
+                    "text": "Go inside.",
+                    "no-hint": "You shut the door and the sound startles the figure. It runs off and you return to bed.",
+                    "small-hint": "You peek through the door crack. The figure is wearing a [HINT]. The door creaks and the figure runs off. You return to bed.",
+                    "advance": "You check the door peephole. The figure walks past and once they are far enough ahead you follow."
+                },
+                {
+                    "text": "Duck down",
+                    "no-hint": "The figure spots the top of your head and runs off before you can get a look. You return to bed.",
+                    "small-hint": "You back into a twig and it snaps. The figure runs but you catch a glimpse of their face. They are wearing a [HINT]. You return to bed.",
+                    "advance": "The figure walks past. They do not notice you but you fail to get a clear look. You follow down the road."
+                },
+                {
+                    "text": "Yell",
+                    "no-hint": "The figure bolts away before you can make anything out. You return to bed.",
+                    "small-hint": "The figure stumbles as they run. You catch a small glimpse of their face. They are wearing a [HINT]. You return to bed.",
+                    "advance": "The figure panics and fumbles with something. You move closer to see."
+                }
+            ]
+        }
+    ],
+    "area-3": [
+        {
+            "dialogue": "You are only a few meters behind the figure now.",
+            "options": [
+                {
+                    "text": "Stay back",
+                    "no-hint": "The figure turns the corner and disappears. You head home and go to bed.",
+                    "advance": "The figure jumps into a car. They are wearing a [HINT]. They drive off. You head home and go to bed."
+                },
+                {
+                    "text": "Creep closer",
+                    "no-hint": "The figure hears you and sprints away. You head home and go to bed.",
+                    "advance": "You grab the figure by the shoulder and they twist free. You catch a glimpse of their face. They are wearing a [HINT]. They run off. You head home and go to bed."
+                },
+                {
+                    "text": "Chase",
+                    "no-hint": "You chase after them but they escape. You head home and go to bed.",
+                    "advance": "You chase the figure to their car. They struggle with the door and you catch a look at their face. They are wearing a [HINT]. They speed away. You head home and go to bed."
+                }
+            ]
+        }
+    ]
+}

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="/css/party-games/side-buttons.css">
     <link rel="stylesheet" href="/css/party-games/online.css">
     <link rel="stylesheet" href="/css/party-games/mafia/mafia-gamemode.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode/online/mafia-player-board.css">
+    <link rel="stylesheet" href="/css/general/online/user-customisation-icon.css">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/mafia/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/mafia/favicons/favicon-32x32.png">
@@ -48,10 +50,6 @@
     <div class="main-container">
         <div id="placeholder-selected-user-container" data-template="mafia"></div>
     </div>
-
-    <div class="side-buttons disabled">
-        <img src="/images/party-games/mafia/role-button.svg" alt="Role Icon" class="side-button" id="role-button">
-    </div>
 </body>
 
 <div class="selected-user-container pop-up" id="pop-up-role-container">
@@ -63,6 +61,19 @@
             suspicion.</h2>
     </div>
 </div>
+
+<div class="player-board" id="player-board">
+    <div class="player-board-header">
+        <div class="player-board-title">PLAYER BOARD</div>
+        <div class="player-board-role-btn">[MY ROLE]</div>
+    </div>
+    <class class="players-container" id="players-container">
+
+    </class>
+</div>
+<div class="player-board-button-container" id="player-board-button-container">
+    <button class="player-board-button" id="player-board-button"></button>
+</div>
 <script>
     const gamemode = "mafia";
     const helpContainerFile = "party-games/" + gamemode + '.json';
@@ -70,12 +81,21 @@
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#9B56D3');
     document.documentElement.style.setProperty('--secondarypagecolour', '#6D3C95');
+
+    window.pageScripts = {
+  "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+
+  "/scripts/html-templates/online/selected-user-containers-template.js": { addDataLoaded: true },
+  "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+  "/scripts/party-games/online/online-settings.js": { addDataLoaded: true },
+
+  "/scripts/party-games/general/chat-log.js": {},
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025": {},
+  "/scripts/party-games/gamemode/online/mafia/mafia-online.js?30082025": { addDataLoaded: true },
+};
+
 </script>
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/general/online/user-customisation-icon.js" data-loaded="false" data-standalone="true"></script>
-<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
-<script src="/scripts/party-games/general/chat-log.js"></script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 <script>
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);

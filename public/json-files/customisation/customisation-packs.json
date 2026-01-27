@@ -5,7 +5,8 @@
         "pack-description": "Nothingness.",
         "pack-path": "/json-files/customisation/packs/blank.json",
         "pack-colour": "var(--primarypagecolour)",
-        "pack-secondary-colour": "var(--secondarypagecolour)"
+        "pack-secondary-colour": "var(--secondarypagecolour)",
+        "pack-prefix": "0"
     },
     {
         "pack-name": "base",
@@ -13,7 +14,8 @@
         "pack-description": "Base customisation pack containing the default character customisation options.",
         "pack-path": "/json-files/customisation/packs/base.json",
         "pack-colour": "#66CCFF",
-        "pack-secondary-colour": "#427BB9"
+        "pack-secondary-colour": "#427BB9",
+        "pack-prefix": "A"
     },
         {
         "pack-name": "base-too",
@@ -21,7 +23,8 @@
         "pack-description": "Base customisation pack containing the default character customisation options.",
         "pack-path": "/json-files/customisation/packs/base-too.json",
         "pack-colour": "#9D8AFF",
-        "pack-secondary-colour": "#7F71B2"
+        "pack-secondary-colour": "#7F71B2",
+        "pack-prefix": "B"
     },
     {
         "pack-name": "engrave-danger",
@@ -29,7 +32,8 @@
         "pack-description": "Base customisation pack containing the default character customisation options.",
         "pack-path": "/json-files/customisation/packs/engrave-danger.json",
         "pack-colour": "#8BA67B",
-        "pack-secondary-colour": "#3E4B36"
+        "pack-secondary-colour": "#3E4B36",
+        "pack-prefix": "1"
     },
     {
         "pack-name": "claus-and-co",
@@ -37,6 +41,7 @@
         "pack-description": "A festive customisation pack full of gingerbread goodness!",
         "pack-path": "/json-files/customisation/packs/claus-and-co.json",
         "pack-colour": "#FFB7B7",
-        "pack-secondary-colour": "#D68585"
+        "pack-secondary-colour": "#D68585",
+        "pack-prefix": "2"
     }
 ]

@@ -217,23 +217,29 @@
     document.documentElement.style.setProperty('--primarypagecolour', defaultColours.primary);
     document.documentElement.style.setProperty('--secondarypagecolour', defaultColours.secondary);
     const helpContainerFile = "overexposure.json";
+
+      window.pageScripts = {
+    "https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv": {},
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js": {},
+    "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js": {},
+    "https://unpkg.com/compromise": {},
+    "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+    "/scripts/html-templates/online/html-template-user-customisation.js": {addDataLoaded: true},
+    "/scripts/overexposure/camera-view.js": {},
+    "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+    '/scripts/general/online/user-customisation.js': {},
+    "/scripts/overexposure/overexposure-init.js": {addDataLoaded: true},
+
+
+  };
 </script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<script src="https://unpkg.com/compromise"></script>
-
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false"></script>
-<script src="/scripts/overexposure/camera-view.js"></script>
-<script src="/scripts/overexposure/overexposure-init.js" data-loaded="false" defer></script>
 
 <script>
-    waitForFunction("FetchHelpContainer", () => {
-        FetchHelpContainer(helpContainerFile);
-    })
+   // waitForFunction("FetchHelpContainer", () => {
+        //FetchHelpContainer(helpContainerFile);
+   // })
 </script>
 
 </html>

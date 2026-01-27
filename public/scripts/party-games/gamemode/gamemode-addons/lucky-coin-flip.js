@@ -9,8 +9,7 @@ tossBtn.addEventListener('click', () => {
 });
 
 if (placeholderGamemodeAddons?.dataset.online === "false") {
-    console.log(coinFlipButton);
-    coinFlipButton.addEventListener('click', toggleCoinFlip);
+    coinFlipButton?.addEventListener('click', toggleCoinFlip);
     function toggleCoinFlip() {
         addElementIfNotExists(elementClassArray, luckyCoinFlipContainer);
         if (!luckyCoinFlipContainer.classList.contains('active')) {
@@ -71,14 +70,16 @@ async function tossCoinFunction() {
                     instruction: "DISPLAY_DUAL_STACK_CARD",
                     partyData: currentPartyData,
                     updateUsersReady: false,
-                    updateUsersConfirmation: false
+                    updateUsersConfirmation: false,
+                    byPassHost: true
                 });
 
             } else {
                 SendInstruction({
                     instruction: "USER_HAS_PASSED:USER_CALLED_WRONG_FACE:",
                     updateUsersReady: false,
-                    updateUsersConfirmation: false
+                    updateUsersConfirmation: false,
+                    byPassHost: true
                 });
             }
         }, 2500);

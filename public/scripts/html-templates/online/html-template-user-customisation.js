@@ -17,6 +17,14 @@ const userCustomisationTasks = {
   }
 };
 
+const blankUserCustomisation = {
+  colour: '/images/user-customisation/colour/blank/blank-colour.svg',
+  headSlot: '/images/user-customisation/head-slot/blank/no-head-slot.svg',
+  eyesSlot: '/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg',
+  mouthSlot: '/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg'
+};
+
+
 const cssFilesUserCustomisation = [
   '/css/general/online/user-customisation.css',
   '/css/general/online/user-customisation-icon.css'
@@ -65,28 +73,18 @@ fetch('/html-templates/user-customisation.html')
     usercustomisationSaveButton = userCustomisationContainer.querySelector('#save-customisation');
     userCustomisationRandomiseButton = userCustomisationContainer.querySelector('#randomise-customisation');
     userCustomisationOptions = userCustomisationContainer.querySelectorAll('.user-customisation-option');
-
-    const scriptUserCustomisationIcon = document.createElement('script');
-    scriptUserCustomisationIcon.src = '/scripts/general/online/user-customisation-icon.js';
-    document.body.appendChild(scriptUserCustomisationIcon);
-
-    const scriptUserCustomisation = document.createElement('script');
-    scriptUserCustomisation.src = '/scripts/general/online/user-customisation.js';
-    scriptUserCustomisation.defer = true;
-    document.body.appendChild(scriptUserCustomisation);
-
   }).then(() => {
-    userCustomisationTasks.userCustomisation.taskCompleted = true;
-    CheckUserCustomisationLoaded();
+        return waitForGlobals([
+      'loadCustomisation',
+      'saveCustomisation',
+      'getUserIconString'
+    ]);
+  })
+  .then(() => {
+    SetScriptLoaded('/scripts/html-templates/online/html-template-user-customisation.js');
   })
   .catch(error => console.error('Error loading user customization:', error));
 
-function CheckUserCustomisationLoaded() {
-  const tasksCompleted = Object.values(userCustomisationTasks).every((task) => task.taskCompleted);
-  if (tasksCompleted) {
-    SetScriptLoaded('/scripts/html-templates/online/html-template-user-customisation.js');
-  }
-}
 
 function loadCustomisation() {
   const saved = localStorage.getItem("user-customisation");

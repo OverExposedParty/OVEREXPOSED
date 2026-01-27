@@ -18,13 +18,13 @@
 
 
 <body>
-  <div class="splash-screen-container-static" id="splash-screen-container-static">
-    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
-  </div>
-  <div class="splash-screen-container waiting-room" id="splash-screen-container">
-    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
-    <p></p>
-  </div>
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+    </div>
+    <div class="splash-screen-container waiting-room" id="splash-screen-container">
+        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+        <p></p>
+    </div>
 
     <div class="chat-box">
         <div class="chat-input">
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div id="header-placeholder"></div>
+    <div id="header-placeholder" data-key="waiting-room"></div>
     <div id="user-customisation-placeholder" class="waiting-room"></div>
 
     <div class="error-container username gamemode-settings mafia-gamemode-settings " id="placeholder-error-container">
@@ -50,8 +50,6 @@
             <div id="gamemode-settings-placeholder" data-template="waiting-room"></div>
             <button class="start-game-button ready-up" id="waiting-room">READY</button>
         </div>
-
-        <div id="enter-username-placeholder" data-template="waiting-room"></div>
 
         <div class="waiting-container" id="party-does-not-exist">
             <h2>Party does not exist</h2>
@@ -73,21 +71,29 @@
             <h2>Party is full</h2>
         </div>
     </div>
+    <div id="enter-username-placeholder" data-template="waiting-room"></div>
 </body>
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
     document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
-</script>
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-<script src="/scripts/html-templates/html-template-header.js" data-loaded="false"></script>
-<script src="/scripts/party-games/online/online-settings.js" data-loaded="false"></script>
-<script src="/scripts/html-templates/gamemode-settings/gamemode-settings-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/online/enter-username-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/gamemode-settings/error-container-template.js" data-loaded="false" defer></script>
-<script src="/scripts/html-templates/online/html-template-user-customisation.js" data-loaded="false" defer></script>
 
-<script src="/scripts/party-games/waiting-room/waiting-room.js?30082025" defer></script>
-<script src="/scripts/party-games/gamemode-settings/error-game-settings.js"></script>
-<script src="/scripts/party-games/general/chat-log.js"></script>
+    window.pageScripts = {
+        "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+
+        "/scripts/party-games/online/online-settings.js": { addDataLoaded: true },
+
+        "/scripts/html-templates/gamemode-settings/gamemode-settings-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/online/enter-username-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/gamemode-settings/error-container-template.js": { addDataLoaded: true },
+        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true },
+
+        "/scripts/party-games/gamemode-settings/error-game-settings.js": {},
+        "/scripts/party-games/general/chat-log.js": {},
+        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
+        '/scripts/general/online/user-customisation.js': {}
+    };
+
+</script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 
 </html>

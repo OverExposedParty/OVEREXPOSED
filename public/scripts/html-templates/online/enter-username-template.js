@@ -46,10 +46,10 @@ fetch('/html-templates/online/enter-username.html')
             }
             const data = await getExistingPartyData(partyCode);
             const currentPartyData = data[0];
-            const usernames = currentPartyData.players.map(player => player.username.toUpperCase());
+            const usernames = currentPartyData.players.map(player => player.identity.username.toUpperCase());
             if (!usernames.includes(username)) {
                 enterUsernameContainer.classList.remove('active');
-                removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
+
                 await UpdateUserPartyData({
                     partyId: partyCode,
                     computerId: deviceId,
@@ -64,6 +64,8 @@ fetch('/html-templates/online/enter-username.html')
                     });
                 }
                 setActiveContainers(userCustomisationContainer);
+                addElementIfNotExists(permanantElementClassArray, userCustomisationContainer);
+                removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
                 onlineUsername = username;
             }
             else {
