@@ -102,29 +102,37 @@ overlay.id = 'overlay';
 overlay.innerHTML = '<p class="overlay-text">Tap empty area to close</p>';
 document.body.appendChild(overlay);
 
-function toggleClass(selectedClass, classArray) {
-    selectedClass.classList.toggle('active');
+function toggleClass(selectedClass, classArray, forceState = null) {
+    if (forceState === null) {
+        selectedClass.classList.toggle('active');
+    } 
+    else {
+        selectedClass.classList.toggle('active', forceState);
+    }
+
     if (selectedClass.classList.contains('active')) {
-        if (classArray == settingsElementClassArray) {
+        if (classArray === settingsElementClassArray) {
             removeAllElements(classArray);
         }
         addElementIfNotExists(classArray, selectedClass);
         playSoundEffect('containerOpen');
-    }
-    else {
+    } else {
         removeElementIfExists(classArray, selectedClass);
         playSoundEffect('containerClose');
     }
 
-    if (elementClassArray.length == 0 && settingsElementClassArray.length == 0 && permanantElementClassArray.length == 0 && popUpClassArray.length == 0) {
+    if (
+        elementClassArray.length === 0 &&
+        settingsElementClassArray.length === 0 &&
+        permanantElementClassArray.length === 0 &&
+        popUpClassArray.length === 0
+    ) {
         toggleOverlay(false);
-    }
-    else {
-        if (!(overlay.classList.contains('active'))) {
-            toggleOverlay(true);
-        }
+    } else if (!overlay.classList.contains('active')) {
+        toggleOverlay(true);
     }
 }
+
 function toggleExtraMenu() {
     toggleClass(extraMenuContainer, settingsElementClassArray);
 }

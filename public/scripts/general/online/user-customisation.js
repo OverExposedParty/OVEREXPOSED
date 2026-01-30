@@ -163,14 +163,19 @@ usercustomisationSaveButton.addEventListener('click', async () => {
   }
 });
 
-function toggleUserCustomisation(permanant = false) {
-  if (permanant == true) {
+function toggleUserCustomisation(permanant = false,) {
+  if (permanant == true && !userCustomisationContainer.classList.contains('active')) {
     toggleClass(userCustomisationContainer, permanantElementClassArray);
   }
-  else {
+  else if (permanant == false && !userCustomisationContainer.classList.contains('active')) {
     toggleClass(userCustomisationContainer, settingsElementClassArray);
   }
-
+  else {
+    removeElementIfExists(settingsElementClassArray, userCustomisationContainer);
+    removeElementIfExists(permanantElementClassArray, userCustomisationContainer);
+    userCustomisationContainer.classList.remove('active');
+    toggleOverlay(false);
+  }
 }
 
 function toggleUserCustomisationIcon(bool) {
@@ -181,28 +186,31 @@ function toggleUserCustomisationIcon(bool) {
   }
 }
 
-// User icon in header
-if (rightHeaderContainer) {
-  userCustomisationIcon = document.createElement('div');
-  userCustomisationIcon.classList.add('icon-container');
+(async () => {
+  if (rightHeaderContainer) {
+    userCustomisationIcon = document.createElement('div');
+    userCustomisationIcon.classList.add('icon-container');
 
-  const iconImage = document.createElement('img');
-  iconImage.src = '/images/icons/user-customisation-icon.svg';
-  iconImage.alt = 'User Customisation';
-  iconImage.id = 'user-customisation-icon';
-  userCustomisationIcon.appendChild(iconImage);
-  rightHeaderContainer.appendChild(userCustomisationIcon);
+    const iconImage = document.createElement('img');
+    iconImage.src = '/images/icons/user-customisation-icon.svg';
+    iconImage.alt = 'User Customisation';
+    iconImage.id = 'user-customisation-icon';
+    userCustomisationIcon.appendChild(iconImage);
+    rightHeaderContainer.appendChild(userCustomisationIcon);
 
-  userCustomisationIcon.addEventListener('click', async () => {
-    if(permanantElementClassArray.includes(userCustomisationContainer)) return;
-    UpdateCustomisation({ initialLoad: true });
-    toggleUserCustomisation();
-  });
+    userCustomisationIcon.addEventListener('click', async () => {
+      if (permanantElementClassArray.includes(userCustomisationContainer)) return;
+      UpdateCustomisation({ initialLoad: true });
+      toggleUserCustomisation();
+    });
 
-  if (typeof hostedParty !== "undefined" && hostedParty) {
-    userCustomisationIcon.classList.add('disabled');
+    if (typeof hostedParty !== "undefined" && hostedParty) {
+      userCustomisationIcon.classList.add('disabled');
+    }
+    SetScriptLoaded('/scripts/general/online/user-customisation.js');
+    Ready.set('user-customisation', true);
   }
-}
+})();
 
 function randomiseCustomisation() {
   const inactiveIds = getInactiveIds();

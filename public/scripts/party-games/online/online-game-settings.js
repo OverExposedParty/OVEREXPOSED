@@ -77,7 +77,7 @@ async function ToggleOnlineMode(toggle) {
     document.querySelectorAll(".user-icon").forEach(el => el.remove());
 
 
-    inputPartyCode.value = "http://localhost:3000/" + partyCode;
+    inputPartyCode.value = "https://overposed.app/" + partyCode;
 
     enterUsernameContainer.classList.add('active');
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
