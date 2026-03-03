@@ -1,6 +1,36 @@
+const WEBSITE_VERSION = "31012026"
+
+const SCRIPT_VERSIONS = {
+  HOMEPAGE: WEBSITE_VERSION,
+
+  PARTY_GAMES_SETTINGS: WEBSITE_VERSION,
+
+  PARTY_GAMES_OFFLINE_GENERAL: WEBSITE_VERSION,
+  PARTY_GAMES_OFFLINE_IMPOSTER: WEBSITE_VERSION,
+
+  PARTY_GAMES_ONLINE_TRUTH_OR_DARE: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_PARANOIA: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_MOST_LIKELY_TO: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_IMPOSTER: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_WOULD_YOU_RATHER: WEBSITE_VERSION,
+  PARTY_GAMES_ONLINE_MAFIA: WEBSITE_VERSION,
+  
+  PARTY_GAMES_WAITING_ROOM: WEBSITE_VERSION,
+
+  OVEREXPOSURE: WEBSITE_VERSION,
+  OTHER: WEBSITE_VERSION,
+  ERROR_404: WEBSITE_VERSION,
+};
+
+
 const splashScreenContainer = document.getElementById("splash-screen-container");
 const staticSplashScreenContainer = document.getElementById("splash-screen-container-static");
+
 const headerPlaceholder = document.getElementById('header-placeholder');
+
+let pageScriptsPlaceholder;
+let pageStylesheetPlaceholder;
 
 let pageLoaded = false;
 let gameContainers = [];
@@ -13,18 +43,20 @@ const cssFilesHeader = [
 ];
 
 const coreScripts = {
-  '/scripts/general/sound.js': {},
-  '/scripts/general/dom-and-const.js': {},
-  '/scripts/general/settings-and-links.js': {},
-  '/scripts/general/overlay-and-toggle.js': {},
-  '/scripts/general/header-init.js': {},
-  '/scripts/general/observers.js': {},
-  '/scripts/general/utils.js': {},
-  '/scripts/general/cookies.js': {},
-  '/scripts/general/help-container.js': {},
-  '/scripts/general/google-analytics.js': {},
-  '/scripts/general/rotate-device.js': {},
-  '/scripts/general/template-ready.js': {}
+  '/scripts/general/dom-and-const.js': { zIndex: 0 },
+  '/scripts/general/utils.js': { zIndex: 0 },
+  '/scripts/general/cookies.js': { zIndex: 1 },
+
+  '/scripts/general/sound.js': { zIndex: 1 },
+  '/scripts/general/settings-and-links.js': { zIndex: 1 },
+  '/scripts/general/overlay-and-toggle.js': { zIndex: 1 },
+  '/scripts/general/header-init.js': { zIndex: 2 },
+  '/scripts/general/observers.js': { zIndex: 1 },
+  '/scripts/general/help-container.js': { zIndex: 1000 },
+  '/scripts/general/google-analytics.js': { zIndex: 2 },
+  '/scripts/general/rotate-device.js': { zIndex: 2 },
+
+  '/scripts/general/template-ready.js': { zIndex: 2 }
 };
 
 
@@ -35,10 +67,21 @@ cssFilesHeader.forEach(href => {
   document.head.appendChild(link);
 });
 
-function LoadScript(src, { addDataLoaded = false } = {}) {
+function LoadScript(
+  src,
+  { addDataLoaded = false, cacheBustKey = null } = {},
+  core = false
+) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = src;
+
+    // cache busting
+    if (cacheBustKey !== null) {
+      const separator = src.includes('?') ? '&' : '?';
+      script.src = `${src}${separator}v=${SCRIPT_VERSIONS[cacheBustKey]}`;
+    } else {
+      script.src = src;
+    }
 
     if (addDataLoaded === true) {
       script.dataset.loaded = 'false';
@@ -47,14 +90,48 @@ function LoadScript(src, { addDataLoaded = false } = {}) {
     script.onload = resolve;
     script.onerror = reject;
 
-    document.head.appendChild(script);
+    if (core === true) {
+      pageScriptsPlaceholder
+        .querySelector('#core-scripts-placeholder')
+        .appendChild(script);
+    } else {
+      pageScriptsPlaceholder
+        .querySelector('#additional-scripts-placeholder')
+        .appendChild(script);
+    }
   });
 }
 
+function normalizeZIndex(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
 
-async function loadScriptsInOrder(scriptsObj) {
-  for (const [src, config] of Object.entries(scriptsObj)) {
-    await LoadScript(src, config);
+function groupScriptsByZIndex(scriptsObj) {
+  const groups = new Map();
+  const scripts = Object.entries(scriptsObj || {});
+
+  for (const [order, [src, config = {}]] of scripts.entries()) {
+    // Backward compatibility:
+    // - explicit zIndex => layer behavior
+    // - no zIndex => preserve old serial order
+    const hasExplicitZIndex = Object.prototype.hasOwnProperty.call(config, "zIndex");
+    const zIndex = hasExplicitZIndex ? normalizeZIndex(config.zIndex) : Number(order);
+    if (!groups.has(zIndex)) groups.set(zIndex, []);
+    groups.get(zIndex).push([src, config]);
+  }
+
+  return [...groups.entries()].sort((a, b) => a[0] - b[0]);
+}
+
+async function loadScriptsByZIndex(scriptsObj, core = false) {
+  const groups = groupScriptsByZIndex(scriptsObj);
+
+  for (const [zIndex, scripts] of groups) {
+    console.log(`Loading script layer zIndex=${zIndex} (${scripts.length} script(s))`);
+    await Promise.all(
+      scripts.map(([src, config]) => LoadScript(src, config, core))
+    );
   }
 }
 
@@ -104,13 +181,17 @@ function waitForEvent(eventName, { timeout = 5000 } = {}) {
 
 function setActiveContainers(...activeContainers) {
   if (activeContainers.length === 0) {
-    gameContainers.forEach(container => container.classList.remove('active'));
+    gameContainers.forEach(container => {
+      if (!container || !container.classList) return;
+      container.classList.remove('active');
+    });
     return;
   }
 
-  const uniqueActiveContainers = new Set(activeContainers);
+  const uniqueActiveContainers = new Set(activeContainers.filter(container => container && container.classList));
 
   gameContainers.forEach(container => {
+    if (!container || !container.classList) return;
     if (uniqueActiveContainers.has(container)) {
       container.classList.add('active');
     } else {
@@ -119,30 +200,50 @@ function setActiveContainers(...activeContainers) {
   });
 }
 
+function stripQuery(u) {
+  return (u || "").split("?")[0];
+}
+
+function findScriptElByBaseSrc(baseSrc) {
+  const base = stripQuery(baseSrc);
+
+  let el = document.querySelector(`script[src="${baseSrc}"]`);
+  if (el) return el;
+
+  const selector = `script[src^="${base}?"]`;
+  el = document.querySelector(selector);
+  if (el) return el;
+
+  return [...document.scripts].find(s => stripQuery(s.getAttribute("src")) === base) || null;
+}
+
 async function SetScriptLoaded(script) {
-  const el = document.querySelector(`script[src="${script}"]`);
+  const baseScript = stripQuery(script);
+
+  const el = findScriptElByBaseSrc(script);
   if (el) el.setAttribute("data-loaded", "true");
 
-  // Scripts that should contribute to the loading counter
   const trackedScripts = Object.entries(window.pageScripts)
     .filter(([src, cfg]) => cfg.addDataLoaded === true)
-    .map(([src]) => src);
+    .map(([src]) => stripQuery(src)); // ensure base paths
 
-  // Add core template explicitly if not already counted
-  if (!trackedScripts.includes("/scripts/html-templates/core-template.js")) {
-    trackedScripts.push("/scripts/html-templates/core-template.js");
-  }
+  const core = "/scripts/html-templates/core-template.js";
+  if (!trackedScripts.includes(core)) trackedScripts.push(core);
 
   const total = trackedScripts.length;
 
   const loaded = trackedScripts.filter(src => {
-    const s = document.querySelector(`script[src="${src}"]`);
+    const s =
+      document.querySelector(`script[src="${src}"]`) ||
+      document.querySelector(`script[src^="${src}?"]`) ||
+      [...document.scripts].find(x => stripQuery(x.getAttribute("src")) === src);
+
     return s?.dataset.loaded === "true";
   }).length;
 
   splashScreenContainer.querySelector("p").textContent = `(${loaded}/${total})`;
 
-  console.log(script);
+  console.log(baseScript);
   console.log(`(${loaded}/${total}) scripts loaded`);
 
   if (loaded === total && !pageLoaded) {
@@ -179,7 +280,9 @@ fetch('/html-templates/header.html')
   .then(response => response.text())
   .then(data => {
     headerPlaceholder.innerHTML = data;
+    pageScriptsPlaceholder = document.getElementById('page-scripts-placeholder');
+    pageStylesheetPlaceholder = document.getElementById('page-stylesheet-placeholder');
   })
-  .then(() => loadScriptsInOrder(coreScripts))
-  .then(() => loadScriptsInOrder(window.pageScripts))
+  .then(() => loadScriptsByZIndex(coreScripts, true))
+  .then(() => loadScriptsByZIndex(window.pageScripts, false))
   .catch(error => console.error('Error loading header:', error));

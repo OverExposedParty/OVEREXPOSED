@@ -210,8 +210,8 @@
 </body>
 <script>
     const defaultColours = {
-        primary: '#FF6961',
-        secondary: '#B74C57'
+        primary: '#5DA9FF',
+        secondary: '#3F7CC4'
     };
 
     document.documentElement.style.setProperty('--primarypagecolour', defaultColours.primary);
@@ -219,16 +219,17 @@
     const helpContainerFile = "overexposure.json";
 
       window.pageScripts = {
-    "https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv": {},
-    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js": {},
-    "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js": {},
-    "https://unpkg.com/compromise": {},
-    "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
-    "/scripts/html-templates/online/html-template-user-customisation.js": {addDataLoaded: true},
-    "/scripts/overexposure/camera-view.js": {},
-    "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
-    '/scripts/general/online/user-customisation.js': { addDataLoaded: true },
-    "/scripts/overexposure/overexposure-init.js": {addDataLoaded: true},
+    "https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv": { zIndex: 1 },
+    "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js": { zIndex: 1 },
+    "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js": { zIndex: 1 },
+    "https://unpkg.com/compromise": { zIndex: 1 },
+    "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 1 },
+    "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, zIndex: 10 },
+    "/scripts/overexposure/camera-view.js": { zIndex: 10 },
+    "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 20 },
+    "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 20 },
+    '/scripts/general/online/user-customisation.js': { addDataLoaded: true, zIndex: 30 },
+    "/scripts/overexposure/overexposure-init.js": { addDataLoaded: true, zIndex: 100 },
 
 
   };

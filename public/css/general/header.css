@@ -394,6 +394,16 @@ body {
     fill: var(--secondarypagecolour);
 }
 
+.icon-ring {
+    height: calc(60% - 4px);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 2px solid var(--backgroundcolour);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media (orientation: portrait) {
     :root {

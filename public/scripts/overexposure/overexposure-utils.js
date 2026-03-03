@@ -122,3 +122,80 @@ function ChangePageColour(primary = defaultColours.primary, secondary = defaultC
     currentPageColours.primary = primary;
     currentPageColours.secondary = secondary;
 }
+
+const CARD_TEMPLATE_PATH = "/images/overexposure/card-template.svg";
+let cardTemplateSvgPromise = null;
+
+function getCardTemplateSvgText() {
+    if (!cardTemplateSvgPromise) {
+        cardTemplateSvgPromise = fetch(CARD_TEMPLATE_PATH)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${CARD_TEMPLATE_PATH}: ${response.status}`);
+                }
+                return response.text();
+            })
+            .catch((error) => {
+                cardTemplateSvgPromise = null;
+                throw error;
+            });
+    }
+    return cardTemplateSvgPromise;
+}
+
+function normalizeCardTemplateSvg(svgEl) {
+    if (!svgEl) return null;
+
+    // Remove embedded style defs and map legacy classes to semantic ones.
+    svgEl.querySelectorAll("defs").forEach((defs) => defs.remove());
+
+    svgEl.querySelectorAll(".cls-1").forEach((el) => {
+        el.classList.remove("cls-1");
+        el.classList.add("card-accent-fill");
+        el.removeAttribute("fill");
+    });
+
+    svgEl.querySelectorAll(".cls-2").forEach((el) => {
+        el.classList.remove("cls-2");
+        el.classList.add("card-base-fill");
+        el.removeAttribute("fill");
+    });
+
+    svgEl.querySelectorAll(".cls-3").forEach((el) => {
+        el.classList.remove("cls-3");
+        el.classList.add("card-accent-stroke");
+        el.removeAttribute("stroke");
+    });
+
+    return svgEl;
+}
+
+async function applyFloatingCardTemplate(button, { tag = "confessions", disabled = false } = {}) {
+    if (!button) return;
+    button.classList.toggle("disabled", disabled);
+
+    const tintColour = disabled ? "#666666" : (tagColours[tag]?.primary || tagColours.confessions.primary);
+    try {
+        const svgText = await getCardTemplateSvgText();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, "image/svg+xml");
+        const svgEl = normalizeCardTemplateSvg(doc.querySelector("svg"));
+
+        if (!svgEl) {
+            throw new Error("Card template SVG element not found");
+        }
+
+        svgEl.classList.add("floating-image", "floating-card-template");
+        svgEl.setAttribute("aria-hidden", "true");
+        svgEl.style.setProperty("--card-tag-colour", tintColour);
+
+        const existingVisual = button.querySelector(".floating-image");
+        if (existingVisual) {
+            existingVisual.replaceWith(svgEl);
+        } else {
+            button.prepend(svgEl);
+        }
+    } catch (error) {
+        console.error("Failed to apply floating card template:", error);
+    }
+}

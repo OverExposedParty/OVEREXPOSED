@@ -113,13 +113,13 @@ async function checkPartyExists() {
     waitForFunction("FetchHelpContainer", () => {
       FetchHelpContainer(helpContainerFile);
     });
-    SetScriptLoaded('/scripts/party-games/online/online-settings.js');
+    SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   } else {
     setActiveContainers(partyDoesNotExistContainer);
     gamemodeSettingsContainer.classList.remove('active');
     document.title = "WAITING ROOM | PARTY DOES NOT EXIST";
     addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
-    SetScriptLoaded('/scripts/party-games/online/online-settings.js');
+    SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   }
 }
 

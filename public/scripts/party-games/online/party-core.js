@@ -173,12 +173,7 @@ function getIncrementContainerValue(key) {
 // Game page loader
 async function CheckGamePage() {
   waitForFunction("SetScriptLoaded", () => {
-    if (headerPlaceholder.getAttribute('data-key') === 'waiting-room') {
-      LoadScript('/scripts/party-games/waiting-room/waiting-room.js');
-    }
-    else {
-      SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    }
+    SetScriptLoaded('/scripts/party-games/online/online-settings.js');
   });
 }
 
@@ -228,14 +223,14 @@ async function checkAndMaybeBecomeHost({ party, deviceId, onlineUsername }) {
   return resolvedHostId;
 }
 
-async function SendPlayerDataToParty(player){
+async function SendPlayerDataToParty(player) {
   const existingData = await getExistingPartyData(partyCode);
   const updatedPartyData = existingData[0];
   console.log(updatedPartyData.players);
   const playerIndex = updatedPartyData.players.findIndex(p => getPlayerId(p) === deviceId);
-  if(playerIndex === -1) return;
+  if (playerIndex === -1) return;
   updatedPartyData.players[playerIndex] = player;
 
   updatedPartyData.state.lastPinged = Date.now();
-  await updateOnlineParty({ partyId: partyCode, players:updatedPartyData.players, state: updatedPartyData.state });
+  await updateOnlineParty({ partyId: partyCode, players: updatedPartyData.players, state: updatedPartyData.state });
 }

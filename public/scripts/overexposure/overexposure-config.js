@@ -10,13 +10,6 @@ const maxLength = parseInt(textInput.getAttribute("maxlength"), 10);
 
 let count = 0;
 
-const blankCard = {
-    confessions: "/images/overexposure/card-templates/confessions.svg",
-    stories: "/images/overexposure/card-templates/stories.svg",
-    thoughts: "/images/overexposure/card-templates/thoughts.svg",
-    feelings: "/images/overexposure/card-templates/feelings.svg"
-};
-
 const tagColours = {
     confessions: {
         primary: getComputedStyle(document.documentElement).getPropertyValue('--confessions-primary-colour').trim(),
@@ -37,6 +30,6 @@ const tagColours = {
 };
 
 let currentPageColours = {
-    primary: '#FF6961',
-    secondary: '#B74C57'
+    primary: defaultColours.primary,
+    secondary: defaultColours.secondary
 };

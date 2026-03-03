@@ -7,15 +7,15 @@
 
     --cardtemplate: url(/images/overexposure/card-template.svg);
 
-    --confessions-primary-colour: #FF6961;
-    --stories-primary-colour: #3DA7A1;
-    --thoughts-primary-colour: #F6C86D;
-    --feelings-primary-colour: #E88BAE;
+    --confessions-primary-colour: #5DA9FF;
+    --stories-primary-colour: #B57CFF;
+    --thoughts-primary-colour: #FFB86B;
+    --feelings-primary-colour: #FFF066;
 
-    --confessions-secondary-colour: #B74C57;
-    --stories-secondary-colour: #2A6E6A;
-    --thoughts-secondary-colour: #C29B50;
-    --feelings-secondary-colour: #C3698B;
+    --confessions-secondary-colour: #3F7CC4;
+    --stories-secondary-colour: #8C5FD1;
+    --thoughts-secondary-colour: #C98C4F;
+    --feelings-secondary-colour: #C6B43F;
 }
 
 .create-card {
@@ -213,7 +213,7 @@ highlight {
     pointer-events: none;
 }
 
-.floating-button.touchhover img {
+.floating-button.touchhover .floating-image {
     transform: scale(1.1);
 }
 
@@ -221,12 +221,30 @@ highlight {
     transform: translate(-50%, -55%) scale(1.1);
 }
 
-.floating-button img {
+.floating-button .floating-image {
     width: var(--cardWidth);
     transition: transform 0.2s, opacity 0.2s;
+    pointer-events: none;
+    user-select: none;
 }
 
-.floating-button:hover img {
+.floating-card-template .card-base-fill {
+    fill: #202020;
+}
+
+.floating-card-template .card-accent-fill {
+    fill: var(--card-tag-colour, var(--primarypagecolour));
+}
+
+.floating-card-template .card-accent-stroke {
+    fill: none;
+    stroke: var(--card-tag-colour, var(--primarypagecolour));
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 5.05px;
+}
+
+.floating-button:hover .floating-image {
     transform: scale(1.1);
 }
 
@@ -235,7 +253,9 @@ highlight {
     bottom: 0px;
     right: 10px;
 
-    transform-origin: top left;
+    transform: scale(1);
+    transform-origin: center center;
+    transition: transform 0.2s, right 0.2s, bottom 0.2s;
 
     color: var(--primarypagecolour);
     font-size: 12px;
@@ -249,8 +269,15 @@ highlight {
 
 
 .floating-button:hover p.card-type-text {
-
     transform: scale(1.1);
+    right: 0px;
+    bottom: -10px;
+}
+
+.floating-button.touchhover p.card-type-text {
+    transform: scale(1.1);
+    right: 0px;
+    bottom: -10px;
 }
 
 .button-text {
@@ -536,8 +563,15 @@ textarea {
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(1);
+    transform-origin: center center;
+    transition: transform 0.2s;
     pointer-events: none;
+}
+
+.floating-button:hover .icon,
+.floating-button.touchhover .icon {
+    transform: translateX(-50%) scale(1.1);
 }
 
 .tag-container {

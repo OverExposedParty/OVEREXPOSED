@@ -46,9 +46,9 @@ function buildHelpText(textObj) {
 //  PRELOAD IMAGES (supports new images[] format)
 // ---------------------------------------------------
 async function preloadImagesStructured(pages) {
-  const urls = new Set();
+  const getPageImageUrls = (page) => {
+    const urls = new Set();
 
-  pages.forEach(page => {
     // Preload images inside structured images[]
     if (page.text && Array.isArray(page.text.images)) {
       page.text.images.forEach(img => {
@@ -73,18 +73,62 @@ async function preloadImagesStructured(pages) {
       const matches = page.title.matchAll(/<img[^>]+src=["']([^"']+)["']/g);
       for (const m of matches) urls.add(m[1]);
     }
+
+    return [...urls];
+  };
+
+  const preloadUrl = (src) => new Promise(resolve => {
+    const img = new Image();
+    img.onload = resolve;
+    img.onerror = resolve;
+    img.src = src;
   });
 
-  const preloadPromises = [...urls].map(src => {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = resolve;
-      img.onerror = resolve;
-      img.src = src;
-    });
+  const allUrls = new Set();
+  pages.forEach(page => getPageImageUrls(page).forEach(url => allUrls.add(url)));
+
+  // Eager load current (index 0) + next (index 1) help page assets first.
+  const eagerUrls = new Set();
+  [0, 1].forEach(idx => {
+    if (pages[idx]) {
+      getPageImageUrls(pages[idx]).forEach(url => eagerUrls.add(url));
+    }
   });
 
-  await Promise.all(preloadPromises);
+  await Promise.all([...eagerUrls].map(preloadUrl));
+
+  // Defer remaining images in small background batches to avoid bandwidth spikes.
+  const deferredUrls = [...allUrls].filter(url => !eagerUrls.has(url));
+  if (deferredUrls.length === 0) return;
+
+  const scheduleBackground = (cb) => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(cb, { timeout: 2000 });
+    } else {
+      setTimeout(cb, 0);
+    }
+  };
+
+  scheduleBackground(() => {
+    let i = 0;
+    const BATCH_SIZE = 2;
+    const BATCH_DELAY_MS = 120;
+
+    const loadBatch = () => {
+      const batch = deferredUrls.slice(i, i + BATCH_SIZE);
+      i += BATCH_SIZE;
+      batch.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+
+      if (i < deferredUrls.length) {
+        setTimeout(loadBatch, BATCH_DELAY_MS);
+      }
+    };
+
+    loadBatch();
+  });
 }
 
 

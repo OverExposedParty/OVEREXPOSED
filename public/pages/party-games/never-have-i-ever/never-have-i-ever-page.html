@@ -81,12 +81,11 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
     window.pageScripts = {
-  "/scripts/html-templates/online/card-container-template.js": { addDataLoaded: true },
-  "/scripts/html-templates/gamemode/gamemode-addons-containers.js": {},
-
-  "/scripts/party-games/general/load-questions.js": { addDataLoaded: true },
-  "/scripts/party-games/general/party-games.js": {},
-  "/scripts/party-games/general/get-next-question.js": {}
+  "/scripts/html-templates/online/card-container-template.js": { addDataLoaded: true, zIndex: 0 },
+  "/scripts/party-games/general/load-questions.js": { addDataLoaded: true, zIndex: 0 },
+  "/scripts/html-templates/gamemode/gamemode-addons-containers.js": { zIndex: 1 },
+  "/scripts/party-games/general/party-games.js": { cacheBustKey: "PARTY_GAMES_OFFLINE_GENERAL", zIndex: 2 },
+  "/scripts/party-games/general/get-next-question.js": { zIndex: 3 }
 };
 
 </script>

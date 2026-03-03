@@ -69,7 +69,10 @@ function ToggleSelectedTag(tagItem = document.querySelector(`.tag-item#confessio
         selectedCard.querySelector('.card-type-text').textContent = tagItemText.textContent;
         selectedCard.querySelector('.card-type-text').style.color = primaryColour;
         selectedCard.querySelector('.button-text').style.color = primaryColour;
-        selectedCard.querySelector('img').src = blankCard[tagItem.id] || blankCard["confessions"];
+        applyFloatingCardTemplate(selectedCard, {
+            tag: tagItem.id,
+            disabled: localStorage.getItem('settings-nsfw') === 'false'
+        });
     }
 
     ChangePageColour(primaryColour, secondaryColour);

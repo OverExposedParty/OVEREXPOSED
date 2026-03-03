@@ -220,7 +220,7 @@ async function DisplayVoteResultsPartTwo() {
 
   if (GetHighestVoted(currentPartyData).includes(imposterId) && highestValue > 0) {
     SetWaitingForPlayer({
-      waitingForRoomTitle: "Imposter found!",
+      waitingForRoomTitle: "Imposter found",
       waitingForRoomText: `${imposterUsername} was the Imposter`,
       player: imposter
     });

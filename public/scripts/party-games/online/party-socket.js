@@ -156,9 +156,7 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
         if (waitingForHost) {
           loadingPage = true;
           console.log("start");
-          const baseUrl = hostname === 'overexposed.app'
-            ? `${protocol}//${hostname}`
-            : `${protocol}//${hostname}:3000`;
+          const baseUrl = window.location.origin;
           const gm = config.gamemode;
           transitionSplashScreen(
             `${baseUrl}/${formatPackName(gm)}/${codeToUse}`,

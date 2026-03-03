@@ -73,10 +73,11 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#C29B50');
 
         window.pageScripts = {
-        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true },
-        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
-        '/scripts/general/online/user-customisation.js': { addDataLoaded: true },
-        "/scripts/other/oes-customisation.js": { addDataLoaded: true }
+        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, zIndex: 0 },
+        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 0 },
+        "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 0 },
+        '/scripts/general/online/user-customisation.js': { addDataLoaded: true, zIndex: 1 },
+        "/scripts/other/oes-customisation.js": { addDataLoaded: true, zIndex: 1 }
     };
 
 </script>

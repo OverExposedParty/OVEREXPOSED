@@ -260,10 +260,10 @@ function SetGameSettingsButtons() {
     if (onlineButton) {
         onlineButton.addEventListener('click', async () => {
             if (onlineButton.classList.contains('active')) {
-                userCustomisationIcon.classList.remove('disabled');
+                userCustomisationIconButton.classList.remove('disabled');
                 await ToggleOnlineMode(true);
             } else {
-                userCustomisationIcon.classList.add('disabled');
+                userCustomisationIconButton.classList.add('disabled');
                 await ToggleOnlineMode(false);
             }
         });

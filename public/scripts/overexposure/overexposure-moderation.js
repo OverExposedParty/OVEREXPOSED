@@ -11,8 +11,10 @@ function SetNSFW() {
         document.documentElement.style.setProperty('--primarypagecolour', currentPageColours.primary);
         document.documentElement.style.setProperty('--secondarypagecolour', currentPageColours.secondary);
         buttons.forEach(button => {
-            button.querySelector('img').src = blankCard[button.getAttribute("data-tag")] || blankCard["confessions"];
-            button.classList.remove("disabled")
+            applyFloatingCardTemplate(button, {
+                tag: button.getAttribute("data-tag") || "confessions",
+                disabled: false
+            });
         });
 
         faviconLinks.forEach((favicon, i) => {
@@ -30,8 +32,10 @@ function SetNSFW() {
         document.documentElement.style.setProperty('--primarypagecolour', '#999999');
         document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
         buttons.forEach(button => {
-            button.querySelector('img').src = "/images/overexposure/card-template-blank.svg";
-            button.classList.add("disabled")
+            applyFloatingCardTemplate(button, {
+                tag: button.getAttribute("data-tag") || "confessions",
+                disabled: true
+            });
         });
 
         faviconLinks.forEach((favicon, i) => {

@@ -83,15 +83,15 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#6D3C95');
 
     window.pageScripts = {
-  "https://cdn.socket.io/4.8.1/socket.io.min.js": {},
+  "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },
 
-  "/scripts/html-templates/online/selected-user-containers-template.js": { addDataLoaded: true },
-  "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true },
-  "/scripts/party-games/online/online-settings.js": { addDataLoaded: true },
+  "/scripts/html-templates/online/selected-user-containers-template.js": { addDataLoaded: true, zIndex: 1 },
+  "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 1 },
+  "/scripts/party-games/online/online-settings.js": { addDataLoaded: true, zIndex: 1 },
+  "/scripts/party-games/general/chat-log.js": { zIndex: 1 },
 
-  "/scripts/party-games/general/chat-log.js": {},
-  "/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025": {},
-  "/scripts/party-games/gamemode/online/mafia/mafia-online.js?30082025": { addDataLoaded: true },
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions.js?30082025": { zIndex: 2 },
+  "/scripts/party-games/gamemode/online/mafia/mafia-online.js?30082025": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_ONLINE_MAFIA", zIndex: 2 },
 };
 
 </script>

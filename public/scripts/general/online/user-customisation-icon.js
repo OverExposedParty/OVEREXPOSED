@@ -280,15 +280,23 @@ function parseCustomisationString(customisationString) {
 }
 
 function getFilePathByCustomisationId(customisationId) {
+  if (customisationId == null) return null;
+
+  const normalisedId = String(customisationId);
+
   const allItems = [
     ...colourSlot,
     ...headSlot,
     ...eyesSlot,
     ...mouthSlot
   ];
-  const match = allItems.find(item => item.id === customisationId);
+  const match = allItems.find(
+    item => String(item.id) === normalisedId
+  );
+
   return match ? match.filePath : null;
 }
+
 
 function toKebabCase(input) {
   return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();

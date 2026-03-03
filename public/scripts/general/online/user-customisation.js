@@ -1,8 +1,4 @@
-const rightHeaderContainer = document.querySelector('.header-icon-container.row.right');
-let userCustomisationIcon;
-
 gameContainers = gameContainers || [];
-gameContainers.push(userCustomisationContainer);
 
 // 🔹 Get all inactive IDs from savedState
 function getInactiveIds() {
@@ -93,76 +89,6 @@ function applyCustomisation(slotArray, index, elements) {
   }
 }
 
-// Arrow navigation
-userCustomisationOptions.forEach(option => {
-  option.querySelector('.arrow-previous').addEventListener('click', () => {
-    const slotId = option.id;
-    let currentIndex = parseInt(option.getAttribute('data-index')) || 0;
-
-    if (slotId === 'colour') {
-      currentIndex = getNextActiveIndex(colourSlot, currentIndex, -1);
-      UpdateCustomisation({ colourIndex: currentIndex });
-    } else if (slotId === 'head-slot') {
-      currentIndex = getNextActiveIndex(headSlot, currentIndex, -1);
-      UpdateCustomisation({ headSlotIndex: currentIndex });
-    } else if (slotId === 'eyes-slot') {
-      currentIndex = getNextActiveIndex(eyesSlot, currentIndex, -1);
-      UpdateCustomisation({ eyesSlotIndex: currentIndex });
-    } else if (slotId === 'mouth-slot') {
-      currentIndex = getNextActiveIndex(mouthSlot, currentIndex, -1);
-      UpdateCustomisation({ mouthSlotIndex: currentIndex });
-    }
-
-    option.setAttribute('data-index', currentIndex);
-  });
-
-  option.querySelector('.arrow-next').addEventListener('click', () => {
-    const slotId = option.id;
-    let currentIndex = parseInt(option.getAttribute('data-index')) || 0;
-
-    if (slotId === 'colour') {
-      currentIndex = getNextActiveIndex(colourSlot, currentIndex, 1);
-      UpdateCustomisation({ colourIndex: currentIndex });
-    } else if (slotId === 'head-slot') {
-      currentIndex = getNextActiveIndex(headSlot, currentIndex, 1);
-      UpdateCustomisation({ headSlotIndex: currentIndex });
-    } else if (slotId === 'eyes-slot') {
-      currentIndex = getNextActiveIndex(eyesSlot, currentIndex, 1);
-      UpdateCustomisation({ eyesSlotIndex: currentIndex });
-    } else if (slotId === 'mouth-slot') {
-      currentIndex = getNextActiveIndex(mouthSlot, currentIndex, 1);
-      UpdateCustomisation({ mouthSlotIndex: currentIndex });
-    }
-
-    option.setAttribute('data-index', currentIndex);
-  });
-});
-
-// Save button
-usercustomisationSaveButton.addEventListener('click', async () => {
-  const userCustomisation = {
-    colourSlotId: userCustomisationContainerSlotColour.getAttribute('data-id'),
-    headSlotId: userCustomisationContainerSlotHead.getAttribute('data-id'),
-    eyesSlotId: userCustomisationContainerSlotEyes.getAttribute('data-id'),
-    mouthSlotId: userCustomisationContainerSlotMouth.getAttribute('data-id')
-  };
-  localStorage.setItem("user-customisation", JSON.stringify(userCustomisation));
-  toggleUserCustomisation();
-  const customisationString = createCustomisationString(userCustomisation);
-  if (typeof partyCode !== "undefined" && partyCode) {
-    await UpdateUserPartyData({
-      partyId: partyCode,
-      computerId: deviceId,
-      newUserIcon: customisationString
-    });
-    if (placeholderUserCustomisation.classList.contains('waiting-room')) {
-      gamemodeSettingsContainer.classList.add('active');
-    }
-  } else if (typeof renderOESOptions === "function") {
-    rerenderSelectedButtons();
-  }
-});
-
 function toggleUserCustomisation(permanant = false,) {
   if (permanant == true && !userCustomisationContainer.classList.contains('active')) {
     toggleClass(userCustomisationContainer, permanantElementClassArray);
@@ -180,36 +106,21 @@ function toggleUserCustomisation(permanant = false,) {
 
 function toggleUserCustomisationIcon(bool) {
   if (bool === true) {
-    userCustomisationIcon.classList.remove('disabled');
+    userCustomisationIconButton.classList.remove('disabled');
   } else {
-    userCustomisationIcon.classList.add('disabled');
+    userCustomisationIconButton.classList.add('disabled');
   }
 }
 
 (async () => {
   if (rightHeaderContainer) {
-    userCustomisationIcon = document.createElement('div');
-    userCustomisationIcon.classList.add('icon-container');
-
-    const iconImage = document.createElement('img');
-    iconImage.src = '/images/icons/user-customisation-icon.svg';
-    iconImage.alt = 'User Customisation';
-    iconImage.id = 'user-customisation-icon';
-    userCustomisationIcon.appendChild(iconImage);
-    rightHeaderContainer.appendChild(userCustomisationIcon);
-
-    userCustomisationIcon.addEventListener('click', async () => {
-      if (permanantElementClassArray.includes(userCustomisationContainer)) return;
-      UpdateCustomisation({ initialLoad: true });
-      toggleUserCustomisation();
-    });
-
-    if (typeof hostedParty !== "undefined" && hostedParty) {
-      userCustomisationIcon.classList.add('disabled');
-    }
     SetScriptLoaded('/scripts/general/online/user-customisation.js');
     Ready.set('user-customisation', true);
   }
+  
+  waitForFunction("SetUserCustomisationLoaded", () => {
+    SetUserCustomisationLoaded();
+  })
 })();
 
 function randomiseCustomisation() {
@@ -253,10 +164,6 @@ function randomiseCustomisation() {
   userCustomisationContainerSlotMouth.setAttribute("data-index", mouthSlotIndex);
 }
 
-userCustomisationRandomiseButton.addEventListener("click", () => {
-  randomiseCustomisation();
-});
-
 async function checkForGameSettingsUpdates(data) {
   if (partyUserCount < partyGamesInformation[partyGameMode].playerCountRestrictions.minPlayers) {
     //setError(errorNotEnoughPlayers, true);
@@ -267,4 +174,87 @@ async function checkForGameSettingsUpdates(data) {
   if (sessionPartyType == "party-mafia") {
     UpdateRoleCount();
   }
+}
+
+function SetUserCustomisationLoaded() {
+  if (userCustomisationContainer && !gameContainers.includes(userCustomisationContainer)) {
+    gameContainers.push(userCustomisationContainer);
+  }
+
+  if (userCustomisationRandomiseButton) {
+    userCustomisationRandomiseButton.addEventListener("click", () => {
+      randomiseCustomisation();
+    });
+  }
+
+  // Arrow navigation
+  userCustomisationOptions.forEach(option => {
+    option.querySelector('.arrow-previous').addEventListener('click', () => {
+      const slotId = option.id;
+      let currentIndex = parseInt(option.getAttribute('data-index')) || 0;
+
+      if (slotId === 'colour') {
+        currentIndex = getNextActiveIndex(colourSlot, currentIndex, -1);
+        UpdateCustomisation({ colourIndex: currentIndex });
+      } else if (slotId === 'head-slot') {
+        currentIndex = getNextActiveIndex(headSlot, currentIndex, -1);
+        UpdateCustomisation({ headSlotIndex: currentIndex });
+      } else if (slotId === 'eyes-slot') {
+        currentIndex = getNextActiveIndex(eyesSlot, currentIndex, -1);
+        UpdateCustomisation({ eyesSlotIndex: currentIndex });
+      } else if (slotId === 'mouth-slot') {
+        currentIndex = getNextActiveIndex(mouthSlot, currentIndex, -1);
+        UpdateCustomisation({ mouthSlotIndex: currentIndex });
+      }
+
+      option.setAttribute('data-index', currentIndex);
+    });
+
+    option.querySelector('.arrow-next').addEventListener('click', () => {
+      const slotId = option.id;
+      let currentIndex = parseInt(option.getAttribute('data-index')) || 0;
+
+      if (slotId === 'colour') {
+        currentIndex = getNextActiveIndex(colourSlot, currentIndex, 1);
+        UpdateCustomisation({ colourIndex: currentIndex });
+      } else if (slotId === 'head-slot') {
+        currentIndex = getNextActiveIndex(headSlot, currentIndex, 1);
+        UpdateCustomisation({ headSlotIndex: currentIndex });
+      } else if (slotId === 'eyes-slot') {
+        currentIndex = getNextActiveIndex(eyesSlot, currentIndex, 1);
+        UpdateCustomisation({ eyesSlotIndex: currentIndex });
+      } else if (slotId === 'mouth-slot') {
+        currentIndex = getNextActiveIndex(mouthSlot, currentIndex, 1);
+        UpdateCustomisation({ mouthSlotIndex: currentIndex });
+      }
+
+      option.setAttribute('data-index', currentIndex);
+    });
+  });
+
+  // Save button
+  usercustomisationSaveButton.addEventListener('click', async () => {
+    const userCustomisation = {
+      colourSlotId: userCustomisationContainerSlotColour.getAttribute('data-id'),
+      headSlotId: userCustomisationContainerSlotHead.getAttribute('data-id'),
+      eyesSlotId: userCustomisationContainerSlotEyes.getAttribute('data-id'),
+      mouthSlotId: userCustomisationContainerSlotMouth.getAttribute('data-id')
+    };
+    localStorage.setItem("user-customisation", JSON.stringify(userCustomisation));
+    toggleUserCustomisation();
+    const customisationString = createCustomisationString(userCustomisation);
+    if (typeof partyCode !== "undefined" && partyCode) {
+      await UpdateUserPartyData({
+        partyId: partyCode,
+        computerId: deviceId,
+        newUserIcon: customisationString
+      });
+      if (placeholderUserCustomisation.classList.contains('waiting-room')) {
+        gamemodeSettingsContainer.classList.add('active');
+      }
+    } else if (typeof renderOESOptions === "function") {
+      rerenderSelectedButtons();
+    }
+    renderUserCustomisationHeaderIcon();
+  });
 }

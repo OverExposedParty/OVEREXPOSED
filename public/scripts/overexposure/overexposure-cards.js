@@ -22,10 +22,13 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
         const button = document.createElement("button");
         button.classList.add("floating-button");
 
-        const cardImg = document.createElement("img");
-        cardImg.src = blankCard[tag]
-        cardImg.classList.add("floating-image");
-        button.appendChild(cardImg);
+        const cardVisualPlaceholder = document.createElement("div");
+        cardVisualPlaceholder.classList.add("floating-image");
+        button.appendChild(cardVisualPlaceholder);
+        applyFloatingCardTemplate(button, {
+            tag,
+            disabled: localStorage.getItem('settings-nsfw') === 'false'
+        });
         createUserIconPartyGames({
             container: button,
             userCustomisationString: userIcon,
@@ -176,7 +179,7 @@ function selectCard(button, draft) {
 
     const bool = localStorage.getItem('settings-nsfw');
 
-    if (button.querySelector('img').classList.contains("disabled")) {
+    if (button.classList.contains("disabled")) {
         displayFloatingText("Enable NSFW in settings", centerX, centerY);
         return;
     }
