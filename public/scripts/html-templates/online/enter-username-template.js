@@ -4,6 +4,26 @@ let buttonSubmitUsername, usernameInput, usernameCountDisplay, enterUsernameCont
 let waitingForLeaderContainer;
 
 const usernameMaxLength = 16;
+const ONLINE_USERNAME_STORAGE_KEY = 'online-username';
+const USERNAME_ALLOWED_PATTERN = /^[A-Za-z0-9_]+$/;
+
+function isValidUsernameInput(value) {
+    return USERNAME_ALLOWED_PATTERN.test(value);
+}
+
+function isValidUsernameSubmit(username) {
+    if (username === '') return false;
+    if (username.length > usernameMaxLength) return false;
+    return USERNAME_ALLOWED_PATTERN.test(username);
+}
+
+function hasNoActiveErrors() {
+    if (typeof CheckErrors === 'function') {
+        return CheckErrors();
+    }
+    const activeError = document.querySelector('.error-container .error-box.active');
+    return !activeError;
+}
 
 const cssFilesEnterUsername = [
     '/css/general/online/enter-username.css'
@@ -27,6 +47,11 @@ fetch('/html-templates/online/enter-username.html')
         usernameCountDisplay = document.querySelector('.enter-username-container .input-container .input-count');
         enterUsernameContainer = document.querySelector('.enter-username-container');
 
+        const savedUsername = localStorage.getItem(ONLINE_USERNAME_STORAGE_KEY);
+        if (savedUsername && USERNAME_ALLOWED_PATTERN.test(savedUsername) && savedUsername.length <= usernameMaxLength) {
+            usernameInput.value = savedUsername.toUpperCase();
+        }
+
         if (placeholderEnterUsername.dataset.template === 'waiting-room') {
             gameContainers.push(
                 enterUsernameContainer,
@@ -41,7 +66,10 @@ fetch('/html-templates/online/enter-username.html')
     }).then(() => {
         buttonSubmitUsername.addEventListener('click', async function () {
             const username = usernameInput.value.trim().toUpperCase();
-            if (!CheckUsernameIsValid(username)) {
+            const isValid = (typeof CheckUsernameIsValid === 'function')
+                ? CheckUsernameIsValid(username)
+                : isValidUsernameSubmit(username);
+            if (!isValid) {
                 return;
             }
             const data = await getExistingPartyData(partyCode);
@@ -67,6 +95,7 @@ fetch('/html-templates/online/enter-username.html')
                 addElementIfNotExists(permanantElementClassArray, userCustomisationContainer);
                 removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
                 onlineUsername = username;
+                localStorage.setItem(ONLINE_USERNAME_STORAGE_KEY, username);
             }
             else {
                 setError(errorUsernameTaken, true)
@@ -85,19 +114,20 @@ fetch('/html-templates/online/enter-username.html')
             else {
                 setError(errorUsernameEmpty, false)
             }
-            if (!isValidString(usernameInput.value) && remaining != usernameMaxLength) {
+            if (!isValidUsernameInput(usernameInput.value) && remaining != usernameMaxLength) {
                 setError(errorUsernameInvalid, true);
             } else {
                 setError(errorUsernameInvalid, false);
             }
 
-            if (CheckErrors()) {
+            if (hasNoActiveErrors()) {
                 buttonSubmitUsername.classList.remove('disabled');
             }
             else {
                 buttonSubmitUsername.classList.add('disabled');
             }
         });
+        usernameInput.dispatchEvent(new Event('input'));
     }).then(() => {
         SetScriptLoaded('/scripts/html-templates/online/enter-username-template.js');
     })

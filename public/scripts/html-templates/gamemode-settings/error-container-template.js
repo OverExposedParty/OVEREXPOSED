@@ -59,6 +59,7 @@ Promise.all(errorContainertasks).then(() => {
 }).catch(err => console.error('Error loading error boxes:', err));
 
 function setError(element, isActive) {
+    if (!element || !element.classList) return;
     element.classList.toggle('active', isActive);
 }
 
