@@ -1,10 +1,12 @@
 function addElementIfNotExists(array, element) {
+    if (!element || !element.classList) return;
     if (!array.includes(element)) {
         array.push(element);
     }
 }
 
 function removeElementIfExists(array, element) {
+    if (!element || !element.classList) return;
     const index = array.indexOf(element);
     if (index !== -1) {
         array.splice(index, 1);

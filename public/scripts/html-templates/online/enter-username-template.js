@@ -25,6 +25,29 @@ function hasNoActiveErrors() {
     return !activeError;
 }
 
+function waitForUserCustomisationContainer({ timeout = 3000 } = {}) {
+    return new Promise((resolve) => {
+        const start = performance.now();
+
+        function tick() {
+            const container = (typeof userCustomisationContainer !== 'undefined' && userCustomisationContainer)
+                ? userCustomisationContainer
+                : document.querySelector('.user-customisation-container');
+
+            if (container && container.classList) {
+                return resolve(container);
+            }
+
+            if (performance.now() - start > timeout) {
+                return resolve(null);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        tick();
+    });
+}
+
 const cssFilesEnterUsername = [
     '/css/general/online/enter-username.css'
 ];
@@ -91,8 +114,15 @@ fetch('/html-templates/online/enter-username.html')
                         eventType: "connect"
                     });
                 }
-                setActiveContainers(userCustomisationContainer);
-                addElementIfNotExists(permanantElementClassArray, userCustomisationContainer);
+                const customisationContainer = await waitForUserCustomisationContainer();
+                if (!customisationContainer) {
+                    console.error('User customisation container was not ready after username submit.');
+                    return;
+                }
+
+                addElementIfNotExists(gameContainers, customisationContainer);
+                setActiveContainers(customisationContainer);
+                addElementIfNotExists(permanantElementClassArray, customisationContainer);
                 removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
                 onlineUsername = username;
                 localStorage.setItem(ONLINE_USERNAME_STORAGE_KEY, username);

@@ -193,7 +193,7 @@ async function checkForGameSettingsUpdates(data) {
 
 function SetUserCustomisationLoaded() {
   if (userCustomisationInitialised) return;
-  if (!Array.isArray(userCustomisationOptions) || userCustomisationOptions.length === 0) {
+  if (!userCustomisationOptions || typeof userCustomisationOptions.length !== "number" || userCustomisationOptions.length === 0) {
     setTimeout(SetUserCustomisationLoaded, 50);
     return;
   }
