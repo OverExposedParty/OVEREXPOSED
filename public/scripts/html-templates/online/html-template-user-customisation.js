@@ -7,6 +7,7 @@ let usercustomisationSaveButton, userCustomisationRandomiseButton;
 let userCustomisationContainerSlotColour, userCustomisationContainerSlotHead, userCustomisationContainerSlotEyes, userCustomisationContainerSlotMouth;
 let userCustomisationLabelColourSlot, userCustomisationLabelHeadSlot, userCustomisationLabelEyes, userCustomisationLabelMouth;
 let userCustomisationImageColourSlot, userCustomisationImageHeadSlot, userCustomisationImageEyes, userCustomisationImageMouth;
+let userCustomisationOptions = [];
 
 const userCustomisationTasks = {
   userIcons: {

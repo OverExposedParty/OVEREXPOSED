@@ -1,4 +1,5 @@
 gameContainers = gameContainers || [];
+let userCustomisationInitialised = false;
 
 // 🔹 Get all inactive IDs from savedState
 function getInactiveIds() {
@@ -27,6 +28,19 @@ function getNextActiveIndex(slotArray, currentIndex, direction = 1) {
 }
 
 function UpdateCustomisation({ colourIndex, headSlotIndex, eyesSlotIndex, mouthSlotIndex, initialLoad = false }) {
+  if (
+    !userCustomisationContainerSlotColour ||
+    !userCustomisationContainerSlotHead ||
+    !userCustomisationContainerSlotEyes ||
+    !userCustomisationContainerSlotMouth ||
+    !userCustomisationImageColourSlot ||
+    !userCustomisationImageHeadSlot ||
+    !userCustomisationImageEyes ||
+    !userCustomisationImageMouth
+  ) {
+    return;
+  }
+
   function getIndexById(slotArray, savedId) {
     const index = slotArray.findIndex(item => item.id === savedId);
     // Skip inactive items
@@ -79,6 +93,7 @@ function UpdateCustomisation({ colourIndex, headSlotIndex, eyesSlotIndex, mouthS
 
 function applyCustomisation(slotArray, index, elements) {
   const inactiveIds = getInactiveIds();
+  if (!elements || !elements.image || !elements.label || !elements.container) return;
   if (typeof index === "number" && index >= 0 && index < slotArray.length) {
     const item = slotArray[index];
     if (inactiveIds.includes(item.id)) return; // skip inactive items
@@ -177,6 +192,12 @@ async function checkForGameSettingsUpdates(data) {
 }
 
 function SetUserCustomisationLoaded() {
+  if (userCustomisationInitialised) return;
+  if (!Array.isArray(userCustomisationOptions) || userCustomisationOptions.length === 0) {
+    setTimeout(SetUserCustomisationLoaded, 50);
+    return;
+  }
+
   if (userCustomisationContainer && !gameContainers.includes(userCustomisationContainer)) {
     gameContainers.push(userCustomisationContainer);
   }
@@ -257,4 +278,6 @@ function SetUserCustomisationLoaded() {
     }
     renderUserCustomisationHeaderIcon();
   });
+
+  userCustomisationInitialised = true;
 }
