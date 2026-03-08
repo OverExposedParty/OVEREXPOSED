@@ -1,9 +1,11 @@
 .main-container {
     position: fixed;
-    top: 0;
+    top: var(--headerheight);
+    left: 0;
+    right: 0;
     width: 100vw;
-    margin-top: var(--headerheight);
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
+    margin-top: 0;
+    height: calc(100dvh - var(--headerheight));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -269,10 +271,18 @@
     pointer-events: none !important;
 }
 
-.main-container button:not(.active):hover {
+.main-container button.touchhover:not(.active) {
     background-color: var(--secondarypagecolour);
     color: var(--secondarybackgroundcolour);
     border-color: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .main-container button:not(.active):hover {
+        background-color: var(--secondarypagecolour);
+        color: var(--secondarybackgroundcolour);
+        border-color: var(--primarypagecolour);
+    }
 }
 
 .answer-text {
@@ -291,12 +301,14 @@ button.party-game-statistics-button {
     transform-origin: center center;
 }
 
-button.party-game-statistics-button img {
+button.party-game-statistics-button svg {
     width: 50px;
     height: 50px;
+    display: block;
+    transition: transform 0.3s ease;
 }
 
-button.party-game-statistics-button img:hover {
+button.party-game-statistics-button:hover svg {
     transform: scale(1.2);
 }
 

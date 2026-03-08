@@ -129,6 +129,12 @@
     border-color: var(--primarypagecolour);
 }
 
+.start-game-button.ready-up.touchhover:not(.active) {
+    background-color: var(--secondarypagecolour);
+    border-color: var(--secondarypagecolour);
+    color: #999999;
+}
+
 @media (orientation: landscape) {
     .start-game-button.ready-up:hover {
         background-color: var(--secondarypagecolour);

@@ -43,6 +43,21 @@
     border-radius: 5px;
 }
 
+.nsfw-card-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: clamp(40px, 8.4vw, 56px);
+    height: auto;
+    display: none;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.nsfw-card-icon.active {
+    display: block;
+}
+
 .question-button {
     padding: 10px 20px;
     font-size: 1.2rem;
@@ -54,8 +69,10 @@
     transition: background 0.3s ease;
 }
 
-.question-button:hover {
-    background-color: #e64a19;
+@media (hover: hover) and (pointer: fine) {
+    .question-button:hover {
+        background-color: #e64a19;
+    }
 }
 
 .text-container {
@@ -110,19 +127,31 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.content .button-container button:hover {
-    background-color: var(--primarypagecolour);
-    color: var(--backgroundcolour);
+@media (hover: hover) and (pointer: fine) {
+    .content .button-container button:hover {
+        background-color: var(--primarypagecolour);
+        color: var(--backgroundcolour);
+    }
 }
 
 .card-container {
+    --cardHeight: 55dvh;
     display: none;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    z-index: 200;
+    top: var(--headerheight);
+    left: 0;
+    right: 0;
     width: 100vw;
     box-sizing: border-box;
-    height: calc(var(--vh, 1vh) * 100 - var(--headerheight));
-    margin-top: var(--headerheight);
+    height: calc(100dvh - var(--headerheight));
+    margin-top: 0;
+}
+
+#placeholder-card-container[data-online="true"] .card-container {
+    --cardHeight: 50dvh;
 }
 
 .card-container.active {
@@ -144,9 +173,16 @@
     justify-content: center;
     gap: 5px;
     height: auto;
-    width: 300px;
-    max-width: 75vw;
+    width: min(calc(var(--cardHeight) * var(--cardRatio)), 85vw);
+    max-width: 85vw;
     max-height: auto;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.content > * {
+    max-width: 100%;
 }
 
 .main-image-container {
@@ -155,6 +191,10 @@
     justify-content: center;
     align-items: center;
     z-index: 101;
+    flex: 0 0 auto;
+    height: var(--cardHeight);
+    max-height: var(--cardHeight);
+    aspect-ratio: var(--cardRatio);
 }
 
 .main-image-container {
@@ -163,7 +203,8 @@
 
 .main-image {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
 }
 
 
@@ -210,17 +251,24 @@
     display: none;
 }
 
-.regular-button-container button:hover,
-.button-container button:hover {
+.regular-button-container button.touchhover,
+.button-container button.touchhover {
     background-color: var(--primarypagecolour);
     color: var(--backgroundcolour);
 }
 
+@media (hover: hover) and (pointer: fine) {
+    .regular-button-container button:hover,
+    .button-container button:hover {
+        background-color: var(--primarypagecolour);
+        color: var(--backgroundcolour);
+    }
+}
+
 @media (orientation: portrait) {
     .content {
-        height: 75vh;
-        width: auto;
-        max-width: 70vw;
-        max-height: auto;
+        width: min(calc(var(--cardHeight) * var(--cardRatio)), 90vw);
+        max-width: 90vw;
+        height: auto;
     }
 }

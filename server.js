@@ -6,6 +6,9 @@ const helmet = require('helmet');
 const permissionsPolicy = require('permissions-policy');
 const http = require('http');
 const { generateDeleteCode } = require("./utils/generate-delete-code");
+const { QRCodeStyling } = require('qr-code-styling/lib/qr-code-styling.common.js');
+const nodeCanvas = require('canvas');
+const { JSDOM } = require('jsdom');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -615,6 +618,64 @@ app.post('/api/party-mafia/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})/chat', asyn
   }
 });
 
+app.get('/api/party-qr/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', async (req, res) => {
+  const { partyCode } = req.params;
+  const rawColor = typeof req.query.color === 'string' ? req.query.color.trim() : '';
+  const safeColor = /^#[0-9A-Fa-f]{6}$/.test(rawColor) ? rawColor : '#000000';
+  const joinUrl = `${req.protocol}://${req.get('host')}/${partyCode}`;
+
+  try {
+    const qrCode = new QRCodeStyling({
+      jsdom: JSDOM,
+      nodeCanvas,
+      width: 512,
+      height: 512,
+      type: 'canvas',
+      data: joinUrl,
+      margin: 8,
+      qrOptions: {
+        errorCorrectionLevel: 'M'
+      },
+      dotsOptions: {
+        color: safeColor,
+        type: 'rounded'
+      },
+      backgroundOptions: {
+        color: 'transparent'
+      }
+    });
+
+    const imageBuffer = await qrCode.getRawData('png');
+
+    // Ensure transparent background even when QR renderers flatten to white.
+    const image = await nodeCanvas.loadImage(imageBuffer);
+    const transparentCanvas = nodeCanvas.createCanvas(image.width, image.height);
+    const transparentCtx = transparentCanvas.getContext('2d');
+    transparentCtx.drawImage(image, 0, 0);
+
+    const imageData = transparentCtx.getImageData(0, 0, image.width, image.height);
+    const pixels = imageData.data;
+    for (let i = 0; i < pixels.length; i += 4) {
+      const r = pixels[i];
+      const g = pixels[i + 1];
+      const b = pixels[i + 2];
+      // Remove near-white background pixels.
+      if (r >= 248 && g >= 248 && b >= 248) {
+        pixels[i + 3] = 0;
+      }
+    }
+    transparentCtx.putImageData(imageData, 0, 0);
+    const outputBuffer = transparentCanvas.toBuffer('image/png');
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
+    res.send(outputBuffer);
+  } catch (err) {
+    console.error(`❌ Failed to generate QR for party ${partyCode}:`, err);
+    res.status(500).json({ error: 'Failed to generate QR code' });
+  }
+});
+
 function createDeleteHandler({ route, mainModel, waitingRoomModel, logLabel }) {
   app.post(route, async (req, res) => {
     const { partyCode } = req.body;
@@ -979,13 +1040,24 @@ app.delete('/api/chat/:partyId', async (req, res) => {
   }
 });
 
-// Add security headers using helmet
-app.use(helmet());
+const isProduction = process.env.NODE_ENV === 'production';
 
-// Customize specific headers
-app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
+// Add security headers using helmet.
+// Keep strict isolation/HSTS for production, but avoid breaking LAN HTTP testing.
+app.use(helmet({
+  contentSecurityPolicy: false,
+  hsts: false,
+  crossOriginOpenerPolicy: isProduction ? { policy: 'same-origin' } : false,
+  originAgentCluster: isProduction
+}));
+
+if (isProduction) {
+  app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
+}
+
 app.use(
   helmet.contentSecurityPolicy({
+    useDefaults: true,
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: [
@@ -1029,7 +1101,9 @@ app.use(
         "https://*.google-analytics.com",
         "https://script.google.com",
         "https://script.googleusercontent.com"
-      ]
+      ],
+      // Avoid upgrading LAN HTTP requests to HTTPS during local testing.
+      upgradeInsecureRequests: isProduction ? [] : null
     }
   })
 );

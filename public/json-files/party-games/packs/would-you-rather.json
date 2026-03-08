@@ -4,8 +4,8 @@
             "pack-name": "the-great-debate",
             "pack-path": "/json-files/party-games/questions/would-you-rather/the-great-debate.json",
             "pack-card": "/images/blank-cards/would-you-rather-blank-card.svg",
-            "pack-colour": "var(--primarypagecolour)",
-            "pack-secondary-colour": "var(--secondarypagecolour)",
+            "pack-colour": "#7CFFB2",
+            "pack-secondary-colour": "#55B97F",
             "pack-difficulty": "chill, deep, cheeky, creative",
             "pack-restriction": "sfw",
             "pack-active": true

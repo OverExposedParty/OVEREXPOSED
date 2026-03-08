@@ -4,7 +4,7 @@
             "settings-name": "take-a-shot",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "nsfw",
+            "settings-restriction": ["nsfw", "online"],
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -12,7 +12,7 @@
             "settings-name": "drink-wheel",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "nsfw",
+            "settings-restriction": ["nsfw"],
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -20,7 +20,7 @@
             "settings-name": "lucky-coin-flip",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "sfw",
+            "settings-restriction": ["sfw"],
             "settings-required": true,
             "settings-active": true,
             "button-type": "toggle"
@@ -29,7 +29,7 @@
             "settings-name": "online",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "sfw",
+            "settings-restriction": ["sfw"],
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -37,7 +37,7 @@
             "settings-name": "time-limit",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "online",
+            "settings-restriction": ["online"],
             "settings-active": true,
             "button-type": "increment",
             "button-initial-value": 60,

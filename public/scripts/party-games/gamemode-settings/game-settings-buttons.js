@@ -14,6 +14,13 @@ const packsSettingsTab = document.getElementById('packs-settings');
 const rulesSettingsTab = document.getElementById('rules-settings');
 const onlineSettingsTab = document.getElementById('online-settings');
 
+function normalizeRestrictions(restrictions) {
+    if (Array.isArray(restrictions)) {
+        return restrictions.map(restriction => String(restriction).trim()).filter(Boolean);
+    }
+    return [];
+}
+
 fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
     .then(response => response.json())
     .then(data => {
@@ -66,11 +73,13 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
             if (setting["settings-active"]) {
                 if (!(setting["settings-name"] === "online" && placeholderGamemodeSettings.dataset.template.includes('waiting-room'))) {
                     let button;
+                    const restrictions = normalizeRestrictions(setting["settings-restriction"]);
                     if (setting["button-type"] === "toggle") {
                         button = document.createElement("button");
-                        button.className = `game-settings-pack ${setting["settings-restriction"]}`;
-                        if (setting["settings-restriction"]) {
-                            button.dataset.settingsRestriction = setting["settings-restriction"];
+                        button.className = "game-settings-pack";
+                        if (restrictions.length > 0) {
+                            button.classList.add(...restrictions);
+                            button.dataset.settingsRestriction = JSON.stringify(restrictions);
                         }
                         if(setting["settings-required"]) {
                             button.dataset.settingsRequired = setting["settings-required"];
@@ -96,10 +105,11 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     else if (setting["button-type"] === "increment") {
                         const container = document.createElement("div");
                         container.classList.add('button-increment');
-                        if (setting["settings-restriction"]) {
-                            container.dataset.settingsRestriction = setting["settings-restriction"];
-                        }
                         container.className = "increment-container setting";
+                        if (restrictions.length > 0) {
+                            container.classList.add(...restrictions);
+                            container.dataset.settingsRestriction = JSON.stringify(restrictions);
+                        }
                         container.id = setting["settings-name"];
                         container.dataset.primaryColor = setting["settings-colour"];
                         container.dataset.secondaryColor = setting["settings-secondary-colour"];
@@ -190,9 +200,9 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         // Assign container as button reference for later tracking
                         button = container;
                     }
-                    if (setting["settings-restriction"] === "nsfw") gameRulesNsfwButtons.push(button);
-                    else if (setting["settings-restriction"] === "online") onlingSettingsButtons.push(button);
-                    else if (setting["settings-restriction"] === "offline") offlineSettingsButtons.push(button);
+                    if (restrictions.includes("nsfw")) gameRulesNsfwButtons.push(button);
+                    if (restrictions.includes("online")) onlingSettingsButtons.push(button);
+                    if (restrictions.includes("offline")) offlineSettingsButtons.push(button);
 
                     if (setting["settings-name"] === "online") {
                         button.id = "button-online";

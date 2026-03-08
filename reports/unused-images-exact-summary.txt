@@ -1,0 +1,42 @@
+46	/images/icons/other
+12	/images/icons/paranoia
+12	/images/icons/never-have-i-ever
+11	/images/icons/difficulty
+10	/images/icons/most-likely-to
+9	/images/icons/overexposed
+9	/images/help-container/how-to-play
+8	/images/icons/party-games
+8	/images/what-is-overexposed/back
+8	/images/what-is-overexposed/front
+5	/images/icons/would-you-rather
+5	/images/icons/grey
+4	/images/icons/imposter
+3	/images/homepage/back
+3	/images/homepage/front
+3	/images/icons/mafia
+2	/images/help-container/gamemode-settings
+2	/images/splash-screens/blogs
+2	/images/blank-cards/limited
+1	/images/logo-square.svg
+1	/images/party-games/imposter
+1	/images/user-customisation/head-slot
+1	/images/splash-screens/what-is-overexposed.png
+1	/images/party-games/would-you-rather
+1	/images/party-games/most-likely-to
+1	/images/party-games/paranoia
+1	/images/party-games/never-have-i-ever
+1	/images/splash-screens/party-games.png
+1	/images/logo Release.svg
+1	/images/icons/oes-randomise.svg
+1	/images/icons/user-customisation-icon.svg
+1	/images/icons/truth-or-dare
+1	/images/email-images/download-is-ready.png
+1	/images/card-titles/front
+1	/images/card-titles/back
+1	/images/blog-thumbnails/thumbnail-nye-party.png
+1	/images/blog-thumbnails/thumbnail-final-year-stress.png
+1	/images/blog-thumbnails/thumbnail-break-the-ice-not-hearts.png
+1	/images/background-tile.svg
+1	/images/background-tile-old.png
+1	/images/logo beta old.svg
+1	/images/background-tile - Copy.png

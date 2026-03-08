@@ -32,12 +32,12 @@ function getCurrentHeaderCustomisation() {
 
 function renderUserCustomisationHeaderIcon() {
     if (!userCustomisationIconButton) return;
-    userCustomisationIconButton.querySelector(".icon-ring").innerHTML = "";
+    userCustomisationIconButton.innerHTML = "";
 
     const current = getCurrentHeaderCustomisation();
     console.log('Rendering header icon with customisation:', current);
     const stack = CreateImageStack(current);
-    userCustomisationIconButton.querySelector(".icon-ring").appendChild(stack);
+    userCustomisationIconButton.appendChild(stack);
 }
 
 (async () => {
@@ -46,12 +46,11 @@ function renderUserCustomisationHeaderIcon() {
     userCustomisationIconButton = document.createElement("div");
     userCustomisationIconButton.classList.add("icon-container");
     userCustomisationIconButton.id = "user-customisation-button";
-    const iconRing = document.createElement("div");
-    iconRing.classList.add("icon-ring");
-
-    userCustomisationIconButton.appendChild(iconRing);
 
     rightHeaderContainer.appendChild(userCustomisationIconButton);
+    if (typeof syncHeaderIconActiveStates === "function") {
+        syncHeaderIconActiveStates();
+    }
 
     userCustomisationIconButton.addEventListener("click", async () => {
         if (permanantElementClassArray.includes(userCustomisationContainer)) return;
@@ -64,6 +63,9 @@ function renderUserCustomisationHeaderIcon() {
     }
     await Ready.when('user-customisation-icon', { timeout: 10000 });
     renderUserCustomisationHeaderIcon();
+    if (typeof syncHeaderIconActiveStates === "function") {
+        syncHeaderIconActiveStates();
+    }
 
     SetScriptLoaded("/scripts/general/online/user-customisation-header.js");
     Ready.set("user-customisation-header", true);

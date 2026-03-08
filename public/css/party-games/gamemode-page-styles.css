@@ -11,6 +11,8 @@ html,
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    overscroll-behavior-y: none;
 
 }
 
@@ -64,7 +66,7 @@ body {
 
 .gamemode-popup-container {
     background-color: var(--backgroundcolour);
-    height: auto;
+    height: 350px;
     width: 350px;
     border: var(--bordersize) solid var(--primarypagecolour);
     border-radius: 25px;

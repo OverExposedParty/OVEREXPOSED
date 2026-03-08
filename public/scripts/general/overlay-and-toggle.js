@@ -4,6 +4,24 @@ overlay.id = 'overlay';
 overlay.innerHTML = '<p class="overlay-text">Tap empty area to close</p>';
 document.body.appendChild(overlay);
 
+function syncHeaderIconActiveStates() {
+    if (headerExtraMenuButton && extraMenuContainer) {
+        headerExtraMenuButton.classList.toggle('active', extraMenuContainer.classList.contains('active'));
+    }
+    if (headerSettingsButton && settingsBox) {
+        headerSettingsButton.classList.toggle('active', settingsBox.classList.contains('active'));
+    }
+    if (headerHelpButton && typeof helpContainer !== 'undefined' && helpContainer) {
+        headerHelpButton.classList.toggle('active', helpContainer.classList.contains('active'));
+    }
+    if (
+        typeof userCustomisationIconButton !== 'undefined' && userCustomisationIconButton &&
+        typeof userCustomisationContainer !== 'undefined' && userCustomisationContainer
+    ) {
+        userCustomisationIconButton.classList.toggle('active', userCustomisationContainer.classList.contains('active'));
+    }
+}
+
 function toggleClass(selectedClass, classArray) {
     selectedClass.classList.toggle('active');
     if (selectedClass.classList.contains('active')) {
@@ -26,6 +44,8 @@ function toggleClass(selectedClass, classArray) {
             toggleOverlay(true);
         }
     }
+
+    syncHeaderIconActiveStates();
 }
 
 function toggleExtraMenu() {
@@ -44,6 +64,7 @@ function toggleOverlay(bool) {
         if (backButton) {
             backButton.classList.add('inactive');
         }
+        syncHeaderIconActiveStates();
     }
     else {
         if (popUpClassArray.length > 0) {
@@ -51,12 +72,14 @@ function toggleOverlay(bool) {
             if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
                 toggleOverlay(false);
             }
+            syncHeaderIconActiveStates();
         }
         else if (settingsElementClassArray.length > 0) {
             removeAllElements(settingsElementClassArray)
             if (settingsElementClassArray.length === 0 && elementClassArray.length === 0 && popUpClassArray.length === 0 && permanantElementClassArray.length === 0) {
                 toggleOverlay(false);
             }
+            syncHeaderIconActiveStates();
         }
         else {
             if (typeof ToggleOverexposureContainer === "function") {
@@ -91,6 +114,8 @@ function toggleOverlay(bool) {
             document.querySelectorAll('.side-buttons .side-button').forEach(sideButton => {
                 sideButton.classList.remove('active');
             });
+
+            syncHeaderIconActiveStates();
         }
     }
 }

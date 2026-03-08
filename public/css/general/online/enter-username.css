@@ -32,9 +32,9 @@
     margin: 20px 0;
 }
 .enter-username-container button {
-    background-color: #101010;
+    background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
-    border: 4px solid var(--primarypagecolour);
+    border: 4px solid var(--backgroundcolour);
     padding: 10px 20px;
     border-radius: 50px;
     cursor: pointer;
@@ -45,10 +45,18 @@
     width: 25%;
 }
 
-.enter-username-container button:hover {
+.enter-username-container button.touchhover {
     background-color: var(--primarypagecolour);
     color: #202020;
-    border-color: var(--primarypagecolour);
+    border-color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .enter-username-container button:hover {
+        background-color: var(--primarypagecolour);
+        color: #202020;
+        border-color: var(--backgroundcolour);
+    }
 }
 
 .enter-username-button-container {

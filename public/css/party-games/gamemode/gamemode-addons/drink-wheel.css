@@ -1,11 +1,23 @@
+#drink-wheel-container {
+  justify-content: center;
+  align-items: center;
+}
+
 #spin_the_wheel {
-  display: inline-block;
+  display: flex;
   position: relative;
   overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
 }
 
 #wheel {
   display: block;
+  width: 300px;
+  height: 300px;
   border-radius: 50px;
 }
 
@@ -30,7 +42,13 @@
     0 0 0 8px currentColor,
     0 0px 15px 5px rgba(0, 0, 0, 0.6);
   border-radius: 50%;
-  transition: 0.8s;
+  transition: 220ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #spin.can-spin:hover {
+    font-size: 0.75em;
+  }
 }
 
 #spin::after {

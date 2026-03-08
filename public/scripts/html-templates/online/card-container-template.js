@@ -24,11 +24,66 @@ const cssFilesCardContainer = [
 ];
 
 cssFilesCardContainer.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+    LoadStylesheet(href);
 });
+
+function getGamemodeTextSvgPath(gamemode) {
+    if (gamemode === 'truth-or-dare') {
+        return `/images/party-games/${gamemode}/truth-text.svg`;
+    }
+    return `/images/party-games/${gamemode}/${gamemode}-text.svg`;
+}
+
+function tintSvgToPrimaryColour(svgElement) {
+    const textShapeSelector = 'path, polygon, polyline, circle, ellipse, line, text, tspan';
+
+    svgElement.querySelectorAll(textShapeSelector).forEach(el => {
+        if (el.classList.contains('cls-2')) {
+            el.classList.remove('cls-2');
+            el.classList.add('cls-1');
+        }
+
+        const fill = (el.getAttribute('fill') || '').trim().toLowerCase();
+        if (fill !== 'none') {
+            el.style.fill = 'var(--primarypagecolour)';
+        }
+
+        const stroke = (el.getAttribute('stroke') || '').trim().toLowerCase();
+        if (stroke && stroke !== 'none') {
+            el.style.stroke = 'var(--primarypagecolour)';
+        }
+    });
+}
+
+async function buildGamemodeTextMarkup(gamemode, templateHtml) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(templateHtml, 'text/html');
+    const container = doc.querySelector('.gamemode-text-container');
+
+    if (!container) {
+        return doc.body.innerHTML;
+    }
+
+    const svgPath = getGamemodeTextSvgPath(gamemode);
+    const svgText = await fetch(svgPath).then(res => res.text());
+    const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+    const svgElement = svgDoc.querySelector('svg');
+
+    if (!svgElement) {
+        return doc.body.innerHTML;
+    }
+
+    // Prevent class-based rules inside title SVG (e.g. .cls-2 { opacity: 0; })
+    // from leaking and affecting other inline SVGs like the main card.
+    svgElement.querySelectorAll('style').forEach(styleEl => styleEl.remove());
+    svgElement.querySelectorAll('rect').forEach(rect => rect.remove());
+
+    svgElement.classList.add('gamemode-text-svg');
+    tintSvgToPrimaryColour(svgElement);
+    container.appendChild(svgElement);
+
+    return doc.body.innerHTML;
+}
 
 // First: fetch main image container
 fetch('/html-templates/party-games/card-container/main-image-container.html')
@@ -38,11 +93,16 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         const mainDoc = parser.parseFromString(mainHTML, 'text/html');
 
         const mainImage = mainDoc.querySelector('.main-image');
-        mainImage.src = `/images/blank-cards/${cardContainerGamemode}-blank-card.svg`;
+        if (mainImage?.tagName === 'IMG') {
+            mainImage.src = `/images/blank-cards/${cardContainerGamemode}-blank-card.svg`;
+        }
 
         // Clone base for private
         const privateDoc = parser.parseFromString(mainHTML, 'text/html');
-        privateDoc.querySelector('.main-image').src = mainImage.src;
+        const privateMainImage = privateDoc.querySelector('.main-image');
+        if (privateMainImage?.tagName === 'IMG' && mainImage?.tagName === 'IMG') {
+            privateMainImage.src = mainImage.src;
+        }
         const baseHTML = privateDoc.body.innerHTML;
 
         // For public/answer, append single stack if online
@@ -62,7 +122,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         const dualStackDoc = parser.parseFromString(dualStackHTML, 'text/html');
         const dualStackEl = dualStackDoc.body.firstElementChild;
         const dualDoc = parser.parseFromString(mainHTML, 'text/html');
-        dualDoc.querySelector('.main-image').src = mainImage.src;
+        const dualMainImage = dualDoc.querySelector('.main-image');
+        if (dualMainImage?.tagName === 'IMG' && mainImage?.tagName === 'IMG') {
+            dualMainImage.src = mainImage.src;
+        }
         dualDoc.querySelector('.main-image-container').appendChild(dualStackEl);
         const withDualStackHTML = dualDoc.body.innerHTML;
 
@@ -83,21 +146,8 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         return fetch('/html-templates/party-games/card-container/gamemode-text-container.html');
     })
     .then(response => response.text())
-    .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        const gamemodeTextContainer = doc.querySelector('.gamemode-text-svg');
-
-        if (gamemodeTextContainer) {
-            if (cardContainerGamemode === 'truth-or-dare') {
-                gamemodeTextContainer.src = `/images/party-games/${cardContainerGamemode}/truth-text.svg`;
-            } else {
-                gamemodeTextContainer.src = `/images/party-games/${cardContainerGamemode}/${cardContainerGamemode}-text.svg`;
-            }
-        }
-
-        const updatedHTML = doc.body.innerHTML;
+    .then(async html => {
+        const updatedHTML = await buildGamemodeTextMarkup(cardContainerGamemode, html);
 
         cardContainerPublic?.insertAdjacentHTML('afterbegin', updatedHTML);
         cardContainerDualStack?.insertAdjacentHTML('afterbegin', updatedHTML);

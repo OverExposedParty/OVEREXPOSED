@@ -91,6 +91,9 @@
     aspect-ratio: 7 / 11;
 }
 
+.icon-container .image-stack {
+    height: 100%;
+}
 .icon .image-stack {
     height: 80px;
 }

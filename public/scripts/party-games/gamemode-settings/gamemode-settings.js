@@ -12,6 +12,8 @@ const warningBox = document.getElementById('warning-box');
 const warningStartButton = document.querySelector('.start-game-warning-button');
 
 const inputPartyCode = document.getElementById('party-code');
+const copyPartyCodeButton = document.getElementById('party-code-copy-button');
+const qrCodeButton = document.getElementById('qr-code-button');
 
 // ─────────────────────────────────────────────
 // Start button enabling / disabling
@@ -87,19 +89,30 @@ async function SetGamemodeButtons(initialLoad = false) {
 
     if (partyCode) {
         onlingSettingsButtons.forEach(button => {
+            if ('disabled' in button) {
+                button.disabled = false;
+            }
             button.classList.remove('inactive');
         });
         offlineSettingsButtons.forEach(button => {
+            if ('disabled' in button) {
+                button.disabled = true;
+            }
             button.classList.add('inactive');
             button.classList.remove('active');
         });
     } else {
         onlingSettingsButtons.forEach(button => {
-            button.disabled = true;
+            if ('disabled' in button) {
+                button.disabled = true;
+            }
             button.classList.add('inactive');
             button.classList.remove('active');
         });
         offlineSettingsButtons.forEach(button => {
+            if ('disabled' in button) {
+                button.disabled = false;
+            }
             button.classList.remove('inactive');
         });
     }
@@ -275,9 +288,28 @@ function SetGameSettingsButtons() {
 // ─────────────────────────────────────────────
 // Small UI handlers
 // ─────────────────────────────────────────────
-inputPartyCode.addEventListener('click', () => {
-    inputPartyCode.select();
-});
+
+if (copyPartyCodeButton) {
+    copyPartyCodeButton.addEventListener('click', async () => {
+        const codeToCopy = (inputPartyCode?.value || '').trim();
+        if (!codeToCopy) return;
+        const fullPartyUrl = `${window.location.origin}/${codeToCopy}`;
+
+        try {
+            await navigator.clipboard.writeText(fullPartyUrl);
+        } catch (err) {
+            console.error('Failed to copy party URL:', err);
+        }
+    });
+}
+
+if (qrCodeButton) {
+    qrCodeButton.addEventListener('click', async () => {
+        if (!partyCode || typeof togglePartyQrCode !== 'function') return;
+        const willShow = !qrCodeButton.classList.contains('active');
+        togglePartyQrCode(willShow, partyCode);
+    });
+}
 
 startGameButton.addEventListener('click', () => {
     const nsfwPacksActive = Array.from(nsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));

@@ -77,7 +77,16 @@ async function ToggleOnlineMode(toggle) {
     document.querySelectorAll(".user-icon").forEach(el => el.remove());
 
 
-    inputPartyCode.value = `${window.location.origin}/${partyCode}`;
+    inputPartyCode.value = partyCode;
+    if (typeof preparePartyQrCode === 'function') {
+      await preparePartyQrCode(partyCode);
+    }
+    if (typeof togglePartyQrCode === 'function') {
+      togglePartyQrCode(false, partyCode);
+    }
+    if (typeof updatePartyQrPlayerCount === 'function') {
+      updatePartyQrPlayerCount(1);
+    }
 
     enterUsernameContainer.classList.add('active');
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
@@ -106,6 +115,12 @@ async function ToggleOnlineMode(toggle) {
 
   } else {
     inputPartyCode.value = "";
+    if (typeof togglePartyQrCode === 'function') {
+      togglePartyQrCode(false);
+    }
+    if (typeof updatePartyQrPlayerCount === 'function') {
+      updatePartyQrPlayerCount(0);
+    }
 
     onlineSettingsTab.classList.add('disabled');
     onlineSettingsTab.classList.remove('active');
@@ -117,11 +132,14 @@ async function ToggleOnlineMode(toggle) {
     rulesContainer.classList.add('active');
     rulesSettingsTab.classList.add('active');
 
-    SetGamemodeButtons();
-    updateStartGameButton(true);
-
     await DeletePartyChat();
     DeleteParty();
+
+    // Re-evaluate rule visibility after partyCode is cleared.
+    SetGamemodeButtons();
+    UpdateSettings();
+    allUsersReady = undefined;
+    updateStartGameButton();
     toggleUserCustomisationIcon(false);
   }
 }

@@ -23,8 +23,17 @@
         <h2>Online</h2>
     </div>
     <div class="online-settings-container">
-        <div class="container-section" id="party-code-container">
+        <div class="container-section center" id="party-code-container">
             <input type="text" id="party-code" name="codeInput" value="" readonly>
+            <button id="party-code-copy-button" type="button" aria-label="Copy party code">
+                <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 206.78 262.84" aria-hidden="true"
+                    focusable="false">
+                    <rect x="49.78" y="55.84" width="150" height="200" rx="12.37" ry="12.37" />
+                    <path
+                        d="M49.78,68.24v126.15c0,6.79-5.47,12.32-12.26,12.4l-18.15.21c-6.83,0-12.37-5.54-12.37-12.37V19.4c0-6.85,5.55-12.4,12.4-12.4h125.2c6.85,0,12.4,5.55,12.4,12.4v24.06c0,6.85-5.55,12.4-12.41,12.4l-82.41-.03c-6.85,0-12.41,5.55-12.41,12.4h0Z" />
+                </svg>
+            </button>
+            <button id="qr-code-button" type="button" aria-label="QR code">QR</button>
         </div>
         <div class="container-section " id="users">
         </div>
@@ -33,3 +42,5 @@
         </div>
     </div>
 </div>
+
+<div id="qr-code-container-placeholder"></div>

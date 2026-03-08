@@ -9,7 +9,7 @@ if (placeholderGamemodeAddons.dataset.online === "false") {
     if (!coinFlipEnabled && coinFlipButton) {
         coinFlipButton.remove();
     }
-    spinButton = document.getElementById('spin-button');
+    spinButton = document.getElementById('spin-button') || document.getElementById('odd-man-out-button');
     const spinWheelEnabled = localStorage.getItem(`drink-wheel`) === 'true';
     if (!spinWheelEnabled && spinButton) {
         spinButton.remove();

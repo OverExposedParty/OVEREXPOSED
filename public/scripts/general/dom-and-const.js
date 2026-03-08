@@ -43,3 +43,61 @@ const instagramLink = document.getElementById('instagram-link');
 const tiktokLink = document.getElementById('tiktok-link');
 const soundSetting = document.getElementById('settings-sound');
 const nsfwSetting = document.getElementById('settings-nsfw');
+
+function setupMobileNavButtonHoverFlash() {
+    const isTouchLikeDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    if (!isTouchLikeDevice) return;
+
+    const tapHoverClass = 'tap-hover-flash';
+    const hoverFlashClass = 'touchhover';
+    const hoverFlashDurationMs = 220;
+    const candidateSelector = 'button';
+    const buttonSelector = `.${tapHoverClass}`;
+    const hoverTimeoutMap = new WeakMap();
+
+    const markTapHoverElements = (root) => {
+        if (!root || typeof root.querySelectorAll !== 'function') return;
+        root.querySelectorAll(candidateSelector).forEach((element) => {
+            element.classList.add(tapHoverClass);
+        });
+    };
+
+    markTapHoverElements(document);
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (!(node instanceof Element)) return;
+                if (node.matches(candidateSelector)) {
+                    node.classList.add(tapHoverClass);
+                }
+                markTapHoverElements(node);
+            });
+        });
+    });
+
+    if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    document.addEventListener('pointerdown', (event) => {
+        const tappedButton = event.target.closest(buttonSelector);
+        if (!tappedButton) return;
+        if (tappedButton.disabled || tappedButton.classList.contains('disabled') || tappedButton.classList.contains('inactive')) return;
+
+        const existingTimeout = hoverTimeoutMap.get(tappedButton);
+        if (existingTimeout) {
+            clearTimeout(existingTimeout);
+        }
+
+        tappedButton.classList.add(hoverFlashClass);
+        const timeoutId = setTimeout(() => {
+            tappedButton.classList.remove(hoverFlashClass);
+            hoverTimeoutMap.delete(tappedButton);
+        }, hoverFlashDurationMs);
+
+        hoverTimeoutMap.set(tappedButton, timeoutId);
+    }, { passive: true });
+}
+
+setupMobileNavButtonHoverFlash();

@@ -4,7 +4,7 @@
             "settings-name": "drink-punishment",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "nsfw",
+            "settings-restriction": ["nsfw", "online"],
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -30,7 +30,7 @@
             "settings-name": "player-count",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "offline",
+            "settings-restriction": ["offline"],
             "settings-active": true,
             "button-type": "increment",
             "button-initial-value": 3,

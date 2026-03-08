@@ -197,13 +197,53 @@ function CreatePartyGameStatisticsButton(gamemode) {
     button.className = "party-game-statistics-button";
     button.setAttribute("data-gamemode", gamemode);
 
-    // Create image
-    const img = document.createElement("img");
-    img.src = `/images/icons/${gamemode}/party-game-statistics-icon.svg`;
-    img.alt = "Statistics Icon";
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 485 485");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Statistics Icon");
 
-    // Append image to button
-    button.appendChild(img);
+    const rootGroup = document.createElementNS(svgNS, "g");
+    const group = document.createElementNS(svgNS, "g");
+
+    const outerCircle = document.createElementNS(svgNS, "circle");
+    outerCircle.setAttribute("cx", "242.5");
+    outerCircle.setAttribute("cy", "242.5");
+    outerCircle.setAttribute("r", "225");
+    outerCircle.setAttribute("fill", "#1f1f1f");
+    outerCircle.setAttribute("stroke", "var(--primarypagecolour)");
+    outerCircle.setAttribute("stroke-miterlimit", "10");
+    outerCircle.setAttribute("stroke-width", "35px");
+
+    const barOne = document.createElementNS(svgNS, "rect");
+    barOne.setAttribute("x", "130");
+    barOne.setAttribute("y", "205");
+    barOne.setAttribute("width", "75");
+    barOne.setAttribute("height", "100");
+    barOne.setAttribute("fill", "var(--secondarypagecolour)");
+
+    const barTwo = document.createElementNS(svgNS, "rect");
+    barTwo.setAttribute("x", "205");
+    barTwo.setAttribute("y", "180");
+    barTwo.setAttribute("width", "75");
+    barTwo.setAttribute("height", "125");
+    barTwo.setAttribute("fill", "var(--primarypagecolour)");
+
+    const barThree = document.createElementNS(svgNS, "rect");
+    barThree.setAttribute("x", "280");
+    barThree.setAttribute("y", "230");
+    barThree.setAttribute("width", "75");
+    barThree.setAttribute("height", "75");
+    barThree.setAttribute("fill", "var(--secondarypagecolour)");
+
+    group.appendChild(barOne);
+    group.appendChild(barTwo);
+    group.appendChild(barThree);
+
+    rootGroup.appendChild(outerCircle);
+    rootGroup.appendChild(group);
+    svg.appendChild(rootGroup);
+    button.appendChild(svg);
     document.body.appendChild(button);
 
     return button;

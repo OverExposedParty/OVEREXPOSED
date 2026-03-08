@@ -66,6 +66,12 @@
     border-color: var(--primarypagecolour);
 }
 
+.start-game-button.touchhover {
+    background-color: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+    border-color: var(--primarypagecolour);
+}
+
 .container-section {
     position: relative;
     width: 80%;
@@ -78,10 +84,12 @@
     padding: 1vh 10%;
     gap: 15px 5px;
 }
-
+.container-section.center{
+    justify-content: center;
+}
 .container-section input {
-    width: 100%;
-    font-size: 16px;
+    width: auto;
+    font-size: 28px;
     color: var(--primarypagecolour);
     background-color: var(--backgroundcolour);
     border: none;
@@ -89,6 +97,80 @@
     box-shadow: none;
     user-select: text;
     pointer-events: auto;
+    border-radius: 8px;
+}
+
+#party-code-container {
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+#party-code-container input {
+    flex: 0 0 auto;
+    width: 8ch;
+    min-width: 8ch;
+    min-height: 48px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#party-code {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    caret-color: transparent;
+    pointer-events: none;
+}
+
+#party-code-copy-button,
+#qr-code-button {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--backgroundcolour);
+    border: var(--bordersize) solid var(--backgroundcolour);
+    color: var(--primarypagecolour);
+    border-radius: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#party-code-copy-button svg {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+#party-code-copy-button svg rect,
+#party-code-copy-button svg path {
+    fill: none;
+    stroke: currentColor;
+    stroke-miterlimit: 10;
+    stroke-width: 14px;
+}
+
+#party-code-copy-button.touchhover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
+}
+
+#qr-code-button {
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#qr-code-button.active {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
 }
 
 .user-count {
@@ -103,10 +185,109 @@
     gap: 2.5%;
 }
 
-@media (orientation: landscape) {
+.join-party-qr-code-container {
+    --qr-block-width: min(100%, 260px);
+    width: min(90vw, 420px);
+    padding: 16px;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: var(--secondarybackgroundcolour);
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    color: var(--primarypagecolour);
+    aspect-ratio: 4/5;
+}
+
+.join-party-qr-code-container.active {
+    display: flex;
+}
+
+.join-party-qr-code-container .qr-code-header {
+    width: var(--qr-block-width);
+    text-align: center;
+    color: var(--primarypagecolour);
+
+}
+
+.join-party-qr-code-container .qr-code-header .qr-code-header-logo {
+    width: 100%;
+    display: block;
+    height: auto;
+}
+
+#qr-code-container {
+    width: var(--qr-block-width);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#qr-code-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+}
+
+#qr-code-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: block;
+    background-color: transparent;
+}
+
+.join-party-qr-code-container .qr-code-footer {
+    width: var(--qr-block-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.join-party-qr-code-container .qr-code-footer p {
+    margin: 0;
+}
+
+#partycode-reminder {
+    font-size: 0.5rem;
+    text-align: left;
+    width: 100%;
+    margin: 0.1em 0;
+}
+
+#join-party-cta {
+    font-size: 0.9rem;
+}
+
+#qr-player-count {
+    font-size: 1rem;
+}
+
+@media (hover: hover) and (pointer: fine) and (orientation: landscape) {
     .start-game-button:hover {
         background-color: var(--primarypagecolour);
         color: var(--secondarybackgroundcolour);
+        border-color: var(--primarypagecolour);
+    }
+
+    #party-code-copy-button:hover,
+    #qr-code-button:hover {
+        background-color: var(--primarypagecolour);
+        color: var(--backgroundcolour);
         border-color: var(--primarypagecolour);
     }
 }

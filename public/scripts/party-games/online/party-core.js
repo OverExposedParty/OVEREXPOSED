@@ -10,6 +10,37 @@ let onlineUsername = 'N/A';
 const { protocol, hostname } = window.location;
 let socket;
 
+function setupMobileButtonHoverFlash() {
+  const isTouchLikeDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (!isTouchLikeDevice) return;
+
+  const hoverFlashClass = 'touchhover';
+  const hoverFlashDurationMs = 220;
+  const buttonSelector = '.tap-hover-flash';
+  const hoverTimeoutMap = new WeakMap();
+
+  document.addEventListener('pointerdown', (event) => {
+    const tappedButton = event.target.closest(buttonSelector);
+    if (!tappedButton) return;
+    if (tappedButton.disabled || tappedButton.classList.contains('disabled')) return;
+
+    const existingTimeout = hoverTimeoutMap.get(tappedButton);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+    }
+
+    tappedButton.classList.add(hoverFlashClass);
+    const timeoutId = setTimeout(() => {
+      tappedButton.classList.remove(hoverFlashClass);
+      hoverTimeoutMap.delete(tappedButton);
+    }, hoverFlashDurationMs);
+
+    hoverTimeoutMap.set(tappedButton, timeoutId);
+  }, { passive: true });
+}
+
+setupMobileButtonHoverFlash();
+
 let partyCode =
   window.location.pathname
     .match(/\/([A-Za-z0-9]{3}-[A-Za-z0-9]{3})(?:\/|$)/)?.[1] ?? null;

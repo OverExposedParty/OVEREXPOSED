@@ -476,10 +476,36 @@ function SetWaitingForPlayer({ waitingForRoomTitle, waitingForRoomText, player }
   });
 }
 
+const nsfwBadgeEnabledGamemodes = new Set([
+  "truth-or-dare",
+  "paranoia",
+  "never-have-i-ever",
+  "most-likely-to",
+  "would-you-rather"
+]);
+
+function setOnlineNsfwCardBadge(card, isNsfw) {
+  const mainImageContainer = card?.querySelector('.main-image-container');
+  if (!mainImageContainer) return;
+
+  let nsfwBadge = mainImageContainer.querySelector('.nsfw-card-icon');
+  if (!nsfwBadge) {
+    nsfwBadge = document.createElement('img');
+    nsfwBadge.className = 'nsfw-card-icon';
+    nsfwBadge.src = '/images/icons/difficulty/nsfw.svg';
+    nsfwBadge.alt = 'NSFW Difficulty';
+    nsfwBadge.loading = 'lazy';
+    mainImageContainer.appendChild(nsfwBadge);
+  }
+
+  nsfwBadge.classList.toggle('active', Boolean(isNsfw));
+}
+
 function DisplayCard(card, questionObject) {
   const cardText = card.querySelector('.text-container');
   const cardImage = card.querySelector('.main-image');
   const cardType = card.querySelector('.card-type-text');
+  const showNsfwBadge = nsfwBadgeEnabledGamemodes.has(gamemode);
 
   cardText.textContent = questionObject.question;
 
@@ -494,8 +520,14 @@ function DisplayCard(card, questionObject) {
     cardImage.src = imageUrl;
     cardText.style.color = matchedPack.packColour;
     card.querySelector('.card-type-text').style.color = matchedPack.packColour;
+    if (showNsfwBadge) {
+      setOnlineNsfwCardBadge(card, matchedPack.packRestriction === 'nsfw');
+    }
   } else {
     console.log("Pack not found");
+    if (showNsfwBadge) {
+      setOnlineNsfwCardBadge(card, false);
+    }
   }
   cardType.textContent = questionObject.cardType;
 }

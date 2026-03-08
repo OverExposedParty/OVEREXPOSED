@@ -82,6 +82,9 @@ socket.on('joined-party', (data) => {
 
 socket.on('left-party', (code) => {
   console.log(`✅ You left party: ${code}`);
+  if (typeof togglePartyQrCode === 'function') {
+    togglePartyQrCode(false);
+  }
   PartyDisbanded();
 });
 
@@ -107,6 +110,9 @@ socket.on('user-disconnected', ({ socketId }) => {
 
 socket.on('party-deleted', ({ partyCode: deletedCode }) => {
   console.log(`🛑 Party ${deletedCode} has been disbanded.`);
+  if (typeof togglePartyQrCode === 'function') {
+    togglePartyQrCode(false);
+  }
   PartyDisbanded();
 });
 
@@ -131,6 +137,9 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
 
     if (!isPlaying) {
       partyUserCount = players.length;
+      if (typeof updatePartyQrPlayerCount === 'function') {
+        updatePartyQrPlayerCount(partyUserCount);
+      }
 
       const playerIndex = players.findIndex(
         p => p.identity?.computerId === deviceId

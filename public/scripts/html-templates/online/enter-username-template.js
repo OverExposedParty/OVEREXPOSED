@@ -6,6 +6,7 @@ let waitingForLeaderContainer;
 const usernameMaxLength = 16;
 const ONLINE_USERNAME_STORAGE_KEY = 'online-username';
 const USERNAME_ALLOWED_PATTERN = /^[A-Za-z0-9_]+$/;
+const DEFAULT_USER_ICON = "0000:0100:0200:0300";
 
 function isValidUsernameInput(value) {
     return USERNAME_ALLOWED_PATTERN.test(value);
@@ -48,15 +49,34 @@ function waitForUserCustomisationContainer({ timeout = 3000 } = {}) {
     });
 }
 
+function getStoredUserIconString() {
+    const saved = localStorage.getItem("user-customisation");
+    if (!saved) return DEFAULT_USER_ICON;
+
+    try {
+        const parsed = JSON.parse(saved);
+        const icon = [
+            parsed.colourSlotId,
+            parsed.headSlotId,
+            parsed.eyesSlotId,
+            parsed.mouthSlotId
+        ].join(":");
+
+        if (icon.includes("undefined") || icon.includes("null")) {
+            return DEFAULT_USER_ICON;
+        }
+        return icon;
+    } catch {
+        return DEFAULT_USER_ICON;
+    }
+}
+
 const cssFilesEnterUsername = [
     '/css/general/online/enter-username.css'
 ];
 
 cssFilesEnterUsername.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+    LoadStylesheet(href);
 });
 
 fetch('/html-templates/online/enter-username.html')
@@ -100,11 +120,13 @@ fetch('/html-templates/online/enter-username.html')
             const usernames = currentPartyData.players.map(player => player.identity.username.toUpperCase());
             if (!usernames.includes(username)) {
                 enterUsernameContainer.classList.remove('active');
+                const savedUserIcon = getStoredUserIconString();
+                const hasCustomisedIcon = savedUserIcon !== DEFAULT_USER_ICON;
 
                 await UpdateUserPartyData({
                     partyId: partyCode,
                     computerId: deviceId,
-                    newUserIcon: "0000:0100:0200:0300",
+                    newUserIcon: savedUserIcon,
                     newUsername: username
                 });
                 if (!hostedParty) {
@@ -114,6 +136,23 @@ fetch('/html-templates/online/enter-username.html')
                         eventType: "connect"
                     });
                 }
+
+                if (hasCustomisedIcon) {
+                    removeElementIfExists(permanantElementClassArray, enterUsernameContainer);
+                    toggleOverlay(false);
+                    if (
+                        placeholderUserCustomisation &&
+                        placeholderUserCustomisation.classList.contains('waiting-room') &&
+                        typeof gamemodeSettingsContainer !== 'undefined' &&
+                        gamemodeSettingsContainer
+                    ) {
+                        gamemodeSettingsContainer.classList.add('active');
+                    }
+                    onlineUsername = username;
+                    localStorage.setItem(ONLINE_USERNAME_STORAGE_KEY, username);
+                    return;
+                }
+
                 const customisationContainer = await waitForUserCustomisationContainer();
                 if (!customisationContainer) {
                     console.error('User customisation container was not ready after username submit.');

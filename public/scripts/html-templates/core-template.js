@@ -1,5 +1,5 @@
-const WEBSITE_VERSION = "04032026"; // 04/03/2026
-const GAME_SETTINGS_VERSION = "03032026"; // 03/03/2026
+const WEBSITE_VERSION = "07032026"; //07/03/2026
+const GAME_SETTINGS_VERSION = "07032026"; //07/03/2026
 
 const SCRIPT_VERSIONS = {
   HOMEPAGE: WEBSITE_VERSION,
@@ -60,12 +60,56 @@ const coreScripts = {
   '/scripts/general/template-ready.js': { zIndex: 2 }
 };
 
+function getVersionForAsset(cacheBustKey = null) {
+  if (cacheBustKey !== null) {
+    return SCRIPT_VERSIONS[cacheBustKey] ?? null;
+  }
 
-cssFilesHeader.forEach(href => {
+  const currentScriptSrc = document.currentScript?.getAttribute('src') || document.currentScript?.src;
+  if (!currentScriptSrc) return null;
+
+  try {
+    const url = new URL(currentScriptSrc, window.location.origin);
+    return url.searchParams.get('v');
+  } catch {
+    return null;
+  }
+}
+
+function findStylesheetElByBaseHref(baseHref) {
+  const base = stripQuery(baseHref);
+
+  let el = document.querySelector(`link[rel="stylesheet"][href="${baseHref}"]`);
+  if (el) return el;
+
+  const selector = `link[rel="stylesheet"][href^="${base}?"]`;
+  el = document.querySelector(selector);
+  if (el) return el;
+
+  return [...document.querySelectorAll('link[rel="stylesheet"]')]
+    .find(l => stripQuery(l.getAttribute("href")) === base) || null;
+}
+
+function LoadStylesheet(href, { cacheBustKey = null } = {}) {
+  if (findStylesheetElByBaseHref(href)) return null;
+
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = href;
-  document.head.appendChild(link);
+
+  const version = getVersionForAsset(cacheBustKey);
+  if (version) {
+    const separator = href.includes('?') ? '&' : '?';
+    link.href = `${href}${separator}v=${version}`;
+  } else {
+    link.href = href;
+  }
+
+  (pageStylesheetPlaceholder || document.head).appendChild(link);
+  return link;
+}
+
+cssFilesHeader.forEach(href => {
+  LoadStylesheet(href, { cacheBustKey: "OTHER" });
 });
 
 function LoadScript(

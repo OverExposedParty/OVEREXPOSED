@@ -80,6 +80,49 @@ function drawSector(sector, i) {
     ctx.restore();
 }
 
+function getCurrentPageColours() {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+        primary: styles.getPropertyValue('--primarypagecolour').trim(),
+        secondary: styles.getPropertyValue('--secondarypagecolour').trim(),
+        background: styles.getPropertyValue('--backgroundcolour').trim(),
+        secondaryBackground: styles.getPropertyValue('--secondarybackgroundcolour').trim()
+    };
+}
+
+function recolourSectorsFromCurrentTheme() {
+    const { primary, secondary, background } = getCurrentPageColours();
+    const downItIndex = sectors.length - 1;
+
+    sectors.forEach((sector, index) => {
+        if (index === downItIndex) {
+            sector.color = background;
+            sector.text = primary;
+            return;
+        }
+
+        sector.color = index % 2 === 0 ? primary : secondary;
+        sector.text = background;
+    });
+}
+
+function redrawWheel() {
+    ctx.clearRect(0, 0, dia, dia);
+    sectors.forEach(drawSector);
+    rotate();
+}
+
+function refreshWheelTheme() {
+    recolourSectorsFromCurrentTheme();
+    redrawWheel();
+
+    if (!spinning) {
+        const { primary, secondaryBackground } = getCurrentPageColours();
+        spinEl.style.backgroundColor = primary;
+        spinEl.style.color = secondaryBackground;
+    }
+}
+
 function rotate() {
     const sector = sectors[getIndex()];
     ctx.canvas.style.transform = `rotate(${ang - PI / 2}rad)`;
@@ -88,6 +131,11 @@ function rotate() {
         spinEl.style.background = sector.color;
         spinEl.style.color = sector.text;
     }
+}
+
+function updateSpinHoverState() {
+    const canSpin = !spinDisabled && !angVel;
+    spinEl.classList.toggle('can-spin', canSpin);
 }
 
 function frame() {
@@ -128,13 +176,14 @@ function toggleDrinkWheel() {
 }
 
 function init() {
-    sectors.forEach(drawSector);
-    rotate();
+    refreshWheelTheme();
     engine();
 
     spinEl.textContent = 'SPIN';
-    spinEl.style.backgroundColor = primaryColour;
-    spinEl.style.color = secondaryBackgroundColour;
+    const { primary, secondaryBackground } = getCurrentPageColours();
+    spinEl.style.backgroundColor = primary;
+    spinEl.style.color = secondaryBackground;
+    updateSpinHoverState();
 
     spinEl.addEventListener("click", () => {
         if (spinDisabled || angVel) return;
@@ -142,11 +191,13 @@ function init() {
         spinButtonClicked = true;
         spinDisabled = true;
         spinning = true;
+        updateSpinHoverState();
         playSoundEffect('wheelSpin');
     });
 }
 
 init();
+document.addEventListener('page-colours-updated', refreshWheelTheme);
 
 if (placeholderGamemodeAddons?.dataset.online === "true") {
     events.addListener("spinEnd", async (sector) => {
@@ -181,10 +232,12 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
         });
 
         spinDisabled = false;
+        updateSpinHoverState();
     });
 } else {
     events.addListener("spinEnd", (sector) => {
         spinning = false;
+        updateSpinHoverState();
     });
 }
 

@@ -143,12 +143,18 @@ a:hover {
     justify-content: center;
     align-items: center;
     text-align: center;
+    transition: transform 220ms ease;
+    transform-origin: center center;
 }
 
 .icon-container.disabled {
     display: none;
     cursor: none;
     pointer-events: none;
+}
+
+.header .icon-container.active {
+    transform: scale(1.1);
 }
 
 .icon-container img {
@@ -220,10 +226,22 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.back-button:hover {
+.back-button.touchhover {
     background-color: var(--primarypagecolour);
     color: var(--backgroundcolour);
     border-color: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .back-button:hover {
+        background-color: var(--primarypagecolour);
+        color: var(--backgroundcolour);
+        border-color: var(--primarypagecolour);
+    }
+
+    .header .icon-container:hover {
+        transform: scale(1.1);
+    }
 }
 
 .back-button.inactive {
@@ -367,6 +385,8 @@ body {
     justify-content: center;
     align-items: center;
     width: 25%;
+    background-color: var(--backgroundcolour);
+    transition: background-color 0.3s;
 }
 
 .social-media-image-container a {
@@ -382,16 +402,21 @@ body {
 }
 
 .social-media-icon {
-    height: 75%;
+    height: 56.25%;
     width: auto;
 }
 
-.social-media-icon:hover {
+.social-media-icon:hover,
+.social-media-image-container:hover .social-media-icon {
     transform: scale(1.1);
 }
 
-.social-media-icon:hover .svg-primary-fill {
-    fill: var(--secondarypagecolour);
+.social-media-image-container:hover {
+    background-color: var(--primarypagecolour);
+}
+
+.social-media-image-container:hover .svg-primary-fill {
+    fill: var(--backgroundcolour);
 }
 
 .icon-ring {

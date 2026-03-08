@@ -17,10 +17,7 @@ const cssFilesImposterGamemode = [
 ];
 
 cssFilesImposterGamemode.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+    LoadStylesheet(href);
 });
 
 fetch('/html-templates/party-games/offline/imposter/imposter-template.html')
@@ -159,7 +156,7 @@ function ImposterNextQuestion() {
 
 function DisplayImposterInstructions() {
     placeholderCardContainer.querySelector('#question-button').dataset.nextContainer = placeholderCardContainer.querySelector('.card-container#public-view').id;
-    placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.regular-button-container #question-button').textContent = "Next Question";
+    placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.regular-button-container #question-button').textContent = "Next Card";
     placeholderCardContainer.querySelector('.card-container#public-view').querySelector('.text-container').textContent = "Give one small clue or answer to your prompt each turn. The real players share the same prompt; the Imposter doesn’t. Stay subtle… someone is faking it.";
     setActiveContainers(placeholderCardContainer.querySelector('.card-container#public-view'));
 }

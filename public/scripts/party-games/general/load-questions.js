@@ -87,7 +87,9 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
       const packName = pack["pack-name"].replace(/-/g, " ").replace(/^\w/, c => c.toUpperCase());
       const packCard = pack["pack-card"];
       const packColour = pack["pack-colour"];
-      cardPackMap.push({ packName, packCard, packColour });
+      const packSecondaryColour = pack["pack-secondary-colour"];
+      const packRestriction = pack["pack-restriction"] || null;
+      cardPackMap.push({ packName, packCard, packColour, packSecondaryColour, packRestriction });
     });
 
     if (allQuestions.length > 0) {

@@ -4,7 +4,7 @@
             "settings-name": "drink-punishment",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "nsfw",
+            "settings-restriction": ["nsfw"],
             "settings-active": true,
             "button-type": "toggle"
         },
@@ -12,7 +12,7 @@
             "settings-name": "time-limit",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "online",
+            "settings-restriction": ["online"],
             "settings-active": true,
             "button-type": "increment",
             "button-initial-value": 60,
@@ -24,7 +24,7 @@
             "settings-name": "online",
             "settings-colour": "var(--primarypagecolour)",
             "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": "sfw",
+            "settings-restriction": ["sfw"],
             "settings-active": true,
             "button-type": "toggle"
         }

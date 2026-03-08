@@ -11,10 +11,7 @@ const cssFilesErrorContainer = [
 ];
 
 cssFilesErrorContainer.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+    LoadStylesheet(href);
 });
 
 if (placeholderErrorContainer.classList.contains('gamemode-settings')) {
