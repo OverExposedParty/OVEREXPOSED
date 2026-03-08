@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "obfuscate": "javascript-obfuscator public/js --output public/js/obfuscated --recursive"
@@ -17,7 +20,7 @@
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
-    "jsdom": "^22.1.0",
+    "jsdom": "^28.1.0",
     "mongoose": "^8.23.0",
     "permissions-policy": "^0.6.0",
     "qr-code-styling": "^1.9.2",
