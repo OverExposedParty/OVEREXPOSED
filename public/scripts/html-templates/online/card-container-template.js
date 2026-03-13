@@ -158,12 +158,12 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
 
             if (cardContainerGamemode === 'truth-or-dare') {
                 const scriptGetNextQuestion = document.createElement('script');
-                scriptGetNextQuestion.src = `/scripts/party-games/gamemode/online/truth-or-dare/get-next-question.js`;
+                scriptGetNextQuestion.src = versionAssetUrl(`/scripts/party-games/gamemode/online/truth-or-dare/get-next-question.js`);
                 document.body.appendChild(scriptGetNextQuestion);
             }
             else if (cardContainerGamemode != 'imposter') {
                 const scriptGetNextQuestion = document.createElement('script');
-                scriptGetNextQuestion.src = `/scripts/party-games/general/get-next-question.js`;
+                scriptGetNextQuestion.src = versionAssetUrl(`/scripts/party-games/general/get-next-question.js`);
                 document.body.appendChild(scriptGetNextQuestion);
             }
         }

@@ -1,5 +1,5 @@
-const WEBSITE_VERSION = "07032026"; //07/03/2026
-const GAME_SETTINGS_VERSION = "07032026"; //07/03/2026
+const WEBSITE_VERSION = "13032026"; //13/03/2026
+const GAME_SETTINGS_VERSION = "13032026"; //13/03/2026
 
 const SCRIPT_VERSIONS = {
   HOMEPAGE: WEBSITE_VERSION,
@@ -76,6 +76,39 @@ function getVersionForAsset(cacheBustKey = null) {
   }
 }
 
+function shouldVersionAssetUrl(assetUrl) {
+  if (typeof assetUrl !== "string" || assetUrl.length === 0) return false;
+  if (assetUrl.startsWith("http://") || assetUrl.startsWith("https://") || assetUrl.startsWith("//")) return false;
+  if (!assetUrl.startsWith("/")) return false;
+  if (assetUrl.startsWith("/api/")) return false;
+  return true;
+}
+
+function versionAssetUrl(assetUrl, { cacheBustKey = null } = {}) {
+  if (!shouldVersionAssetUrl(assetUrl)) {
+    return assetUrl;
+  }
+
+  try {
+    const url = new URL(assetUrl, window.location.origin);
+    if (url.searchParams.has("v")) {
+      return `${url.pathname}${url.search}${url.hash}`;
+    }
+
+    const version = getVersionForAsset(cacheBustKey) || WEBSITE_VERSION;
+    if (!version) {
+      return assetUrl;
+    }
+
+    url.searchParams.set("v", version);
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return assetUrl;
+  }
+}
+
+window.versionAssetUrl = versionAssetUrl;
+
 function findStylesheetElByBaseHref(baseHref) {
   const base = stripQuery(baseHref);
 
@@ -95,14 +128,7 @@ function LoadStylesheet(href, { cacheBustKey = null } = {}) {
 
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-
-  const version = getVersionForAsset(cacheBustKey);
-  if (version) {
-    const separator = href.includes('?') ? '&' : '?';
-    link.href = `${href}${separator}v=${version}`;
-  } else {
-    link.href = href;
-  }
+  link.href = versionAssetUrl(href, { cacheBustKey });
 
   (pageStylesheetPlaceholder || document.head).appendChild(link);
   return link;
@@ -119,14 +145,7 @@ function LoadScript(
 ) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-
-    // cache busting
-    if (cacheBustKey !== null) {
-      const separator = src.includes('?') ? '&' : '?';
-      script.src = `${src}${separator}v=${SCRIPT_VERSIONS[cacheBustKey]}`;
-    } else {
-      script.src = src;
-    }
+    script.src = versionAssetUrl(src, { cacheBustKey });
 
     if (addDataLoaded === true) {
       script.dataset.loaded = 'false';
@@ -179,6 +198,19 @@ async function loadScriptsByZIndex(scriptsObj, core = false) {
     );
   }
 }
+
+const nativeFetch = window.fetch.bind(window);
+window.fetch = (input, init) => {
+  if (typeof input === "string") {
+    return nativeFetch(versionAssetUrl(input), init);
+  }
+
+  if (input instanceof Request) {
+    return nativeFetch(input, init);
+  }
+
+  return nativeFetch(input, init);
+};
 
 
 

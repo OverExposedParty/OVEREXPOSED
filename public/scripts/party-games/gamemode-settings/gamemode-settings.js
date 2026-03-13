@@ -291,12 +291,22 @@ function SetGameSettingsButtons() {
 
 if (copyPartyCodeButton) {
     copyPartyCodeButton.addEventListener('click', async () => {
+        flashButtonHoverState(copyPartyCodeButton, {
+            duration: 0,
+            fadeDuration: 200,
+            className: 'copy-feedback-active',
+            transitionClassName: 'copy-feedback-fade'
+        });
+
         const codeToCopy = (inputPartyCode?.value || '').trim();
         if (!codeToCopy) return;
         const fullPartyUrl = `${window.location.origin}/${codeToCopy}`;
 
         try {
-            await navigator.clipboard.writeText(fullPartyUrl);
+            const copied = await copyTextToClipboard(fullPartyUrl);
+            if (!copied) {
+                throw new Error('Clipboard copy command was not successful.');
+            }
         } catch (err) {
             console.error('Failed to copy party URL:', err);
         }

@@ -7,18 +7,34 @@
     <meta http-equiv="Content-Security-Policy"
         content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://overexposed.app:3000 'unsafe-inline';">
 
-    <title>TRUTH OR DARE</title>
+    <title>Truth or Dare Online With Friends | OVEREXPOSED</title>
+    <meta name="description"
+        content="Play Truth or Dare online with friends on OVEREXPOSED. Start a free browser game, take turns choosing truth or dare, and see who answers honestly or completes the challenge.">
+    <meta name="author" content="OVEREXPOSED">
+    <meta name="robots" content="noindex, follow">
+    <meta property="og:title" content="Truth or Dare Online With Friends | OVEREXPOSED">
+    <meta property="og:description"
+        content="Play Truth or Dare online with friends on OVEREXPOSED. Start a free browser game, take turns choosing truth or dare, and see who answers honestly or completes the challenge.">
+    <meta property="og:image" content="/images/meta/og-images/party-games/truth-or-dare/play.jpg">
+    <meta property="og:url" content="https://overexposed.app/truth-or-dare/settings/" id="og-url">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Truth or Dare Online With Friends | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Play Truth or Dare online with friends on OVEREXPOSED. Start a free browser game, take turns choosing truth or dare, and see who answers honestly or completes the challenge.">
+    <meta name="twitter:image" content="/images/meta/og-images/party-games/truth-or-dare/play.jpg">
+    <link rel="canonical" href="https://overexposed.app/truth-or-dare/settings/">
 
     <link rel="preload" href="/images/splash-screens/truth-or-dare.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/header.css?v=07032026">
 
-    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
-    <link rel="stylesheet" href="/css/party-games/online.css">
+    <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css?v=07032026">
+    <link rel="stylesheet" href="/css/party-games/online.css?v=07032026">
 
-    <link rel="stylesheet" href="/css/general/online/user-customisation-icon.css">
+    <link rel="stylesheet" href="/css/general/online/user-customisation-icon.css?v=07032026">
 
-    <link rel="stylesheet" href="/css/general/online/timer.css">
+    <link rel="stylesheet" href="/css/general/online/timer.css?v=07032026">
 
     <link rel="icon" type="image/png" sizes="15x16" href="/images/icons/overexposed/favicons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="30x32" href="/images/icons/overexposed/favicons/favicon-32x32.png">
@@ -96,8 +112,9 @@
 
     };
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template.js?v=07032026" data-loaded="false"></script>
 <script>
+    document.getElementById("og-url")?.setAttribute("content", window.location.href);
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);
     })

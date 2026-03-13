@@ -49,6 +49,27 @@ function waitForUserCustomisationContainer({ timeout = 3000 } = {}) {
     });
 }
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function getPartyDataForUsernameSubmit(partyId, { attempts = 4, delayMs = 200 } = {}) {
+    for (let attempt = 0; attempt < attempts; attempt++) {
+        const data = await getExistingPartyData(partyId);
+        const partyData = data?.[0];
+
+        if (partyData && Array.isArray(partyData.players)) {
+            return partyData;
+        }
+
+        if (attempt < attempts - 1) {
+            await delay(delayMs);
+        }
+    }
+
+    return null;
+}
+
 function getStoredUserIconString() {
     const saved = localStorage.getItem("user-customisation");
     if (!saved) return DEFAULT_USER_ICON;
@@ -103,7 +124,7 @@ fetch('/html-templates/online/enter-username.html')
 
 
         const enterUsernameScript = document.createElement('script');
-        enterUsernameScript.src = '/scripts/party-games/online/enter-username.js';
+        enterUsernameScript.src = versionAssetUrl('/scripts/party-games/online/enter-username.js');
         enterUsernameScript.defer = true;
         document.body.appendChild(enterUsernameScript);
     }).then(() => {
@@ -115,8 +136,12 @@ fetch('/html-templates/online/enter-username.html')
             if (!isValid) {
                 return;
             }
-            const data = await getExistingPartyData(partyCode);
-            const currentPartyData = data[0];
+            const currentPartyData = await getPartyDataForUsernameSubmit(partyCode);
+            if (!currentPartyData) {
+                console.error('Party data was not ready when submitting username.');
+                return;
+            }
+
             const usernames = currentPartyData.players.map(player => player.identity.username.toUpperCase());
             if (!usernames.includes(username)) {
                 enterUsernameContainer.classList.remove('active');

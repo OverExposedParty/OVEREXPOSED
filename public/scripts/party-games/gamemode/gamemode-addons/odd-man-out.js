@@ -16,5 +16,5 @@ if (typeof sectors === "undefined" || sectors === null) {
 }
 
 const gamemodeAddonDrinkWheelScript = document.createElement('script');
-gamemodeAddonDrinkWheelScript.src = `/scripts/party-games/gamemode/gamemode-addons/drink-wheel.js`;
+gamemodeAddonDrinkWheelScript.src = versionAssetUrl(`/scripts/party-games/gamemode/gamemode-addons/drink-wheel.js`);
 document.body.appendChild(gamemodeAddonDrinkWheelScript);

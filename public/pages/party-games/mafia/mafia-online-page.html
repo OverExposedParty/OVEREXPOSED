@@ -8,7 +8,23 @@
     <meta http-equiv="Content-Security-Policy"
         content="connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io/4.8.1/socket.io.min.js https://cdn.jsdelivr.net/npm/chart.js; script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io/4.8.1/socket.io.min.js https://cdn.jsdelivr.net/npm/chart.js https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2 https://overexposed.app:3000 'unsafe-inline';">
 
-    <title>MAFIA</title>
+    <title>Mafia Online With Friends | OVEREXPOSED</title>
+    <meta name="description"
+        content="Play Mafia online with friends on OVEREXPOSED. Take on secret roles, debate as a group, and try to uncover the Mafia before they eliminate everyone.">
+    <meta name="author" content="OVEREXPOSED">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Mafia Online With Friends | OVEREXPOSED">
+    <meta property="og:description"
+        content="Play Mafia online with friends on OVEREXPOSED. Take on secret roles, debate as a group, and try to uncover the Mafia before they eliminate everyone.">
+    <meta property="og:image" content="/images/meta/og-images/party-games/mafia/play.jpg">
+    <meta property="og:url" content="https://overexposed.app/mafia/settings/" id="og-url">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mafia Online With Friends | OVEREXPOSED">
+    <meta name="twitter:description"
+        content="Play Mafia online with friends on OVEREXPOSED. Take on secret roles, debate as a group, and try to uncover the Mafia before they eliminate everyone.">
+    <meta name="twitter:image" content="/images/meta/og-images/party-games/mafia/play.jpg">
+    <link rel="canonical" href="https://overexposed.app/mafia/settings/">
 
     <link rel="preload" href="/images/splash-screens/mafia.png" as="image">
 
@@ -97,6 +113,7 @@
 </script>
 <script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
 <script>
+    document.getElementById("og-url")?.setAttribute("content", window.location.href);
     waitForFunction("FetchHelpContainer", () => {
         FetchHelpContainer(helpContainerFile);
     })

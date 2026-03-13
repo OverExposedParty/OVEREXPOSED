@@ -160,6 +160,16 @@
     border-color: var(--primarypagecolour);
 }
 
+#party-code-copy-button.copy-feedback-active {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
+}
+
+#party-code-copy-button.copy-feedback-fade {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
 #qr-code-button {
     border-radius: 6px;
     font-size: 12px;

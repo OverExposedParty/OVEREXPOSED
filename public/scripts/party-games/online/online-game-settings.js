@@ -8,7 +8,7 @@ async function ToggleOnlineMode(toggle) {
     onlineSettingsTab.classList.remove('disabled');
 
     const newShuffleSeed = Math.floor(Math.random() * 256);
-    partyCode = generatePartyCode();
+    partyCode = await reserveUniquePartyCode();
 
     let baseState = {
       isReady: true,

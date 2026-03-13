@@ -45,7 +45,7 @@ const waitingRoomStateSchema = new mongoose.Schema({
 }, { _id: false });
 
 const WaitingRoomSchema = new mongoose.Schema({
-  partyId: { type: String, required: true },
+  partyId: { type: String, required: true, unique: true },
   config: waitingRoomConfigSchema,
   state:  waitingRoomStateSchema,
   players: { type: [playerSchema], default: [] }

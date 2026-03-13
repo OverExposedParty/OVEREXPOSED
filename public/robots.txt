@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# API and utility routes
+Disallow: /api/
+Disallow: /waiting-room
+Disallow: /production-tools
+
+# Party session routes (gamemode + party code)
+Disallow: /truth-or-dare/*-*
+Disallow: /paranoia/*-*
+Disallow: /never-have-i-ever/*-*
+Disallow: /most-likely-to/*-*
+Disallow: /imposter/*-*
+Disallow: /would-you-rather/*-*
+Disallow: /mafia/*-*
+
+Sitemap: https://overexposed.app/sitemap.xml

@@ -20,6 +20,23 @@ async function GetCurrentPartyData() {
   return existingData[0];
 }
 
+async function reserveUniquePartyCode() {
+  const res = await fetch('/api/party-code/reserve', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.error || 'Failed to reserve unique party code');
+  }
+
+  const data = await res.json();
+  return data.partyCode;
+}
+
 async function getPartyChatLog() {
   try {
     const res = await fetch(`/api/chat/${partyCode}`);

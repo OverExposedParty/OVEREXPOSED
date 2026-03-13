@@ -209,3 +209,19 @@
     line-height: 3;
     color: var(--primarypagecolour);
 }
+
+@media (orientation: portrait) {
+    .checkmark {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+    }
+
+    .checkmark.checked::before {
+        top: 50%;
+        left: 50%;
+        font-size: 7px;
+        line-height: 1;
+        transform: translate(-50%, -52%);
+    }
+}

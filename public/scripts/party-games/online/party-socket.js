@@ -145,7 +145,8 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
         p => p.identity?.computerId === deviceId
       );
       if (playerIndex === -1) {
-        await KickUser();
+        await kickUser(codeToUse);
+        return;
       }
 
       partyRulesSettings = config.gameRules;

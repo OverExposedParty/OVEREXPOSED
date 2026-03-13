@@ -35,14 +35,14 @@ function AddGamemodeContainers(gamemodeAddon) {
                 gamemodeAddon = realAddon;
             }
             const gamemodeAddonScript = document.createElement('script');
-            gamemodeAddonScript.src = `/scripts/party-games/gamemode/gamemode-addons/${gamemodeAddon}.js`;
+            gamemodeAddonScript.src = versionAssetUrl(`/scripts/party-games/gamemode/gamemode-addons/${gamemodeAddon}.js`);
             document.body.appendChild(gamemodeAddonScript);
 
             if (gamemodeAddon === 'odd-man-out') gamemodeAddon = 'drink-wheel';
 
             const gamemodeAddonlink = document.createElement('link');
             gamemodeAddonlink.rel = 'stylesheet';
-            gamemodeAddonlink.href = `/css/party-games/gamemode/gamemode-addons/${gamemodeAddon}.css`;
+            gamemodeAddonlink.href = versionAssetUrl(`/css/party-games/gamemode/gamemode-addons/${gamemodeAddon}.css`);
             document.head.appendChild(gamemodeAddonlink);
         })
         .catch(error => console.error('Error loading header:', error));

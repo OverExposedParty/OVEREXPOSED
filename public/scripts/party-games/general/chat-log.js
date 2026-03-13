@@ -199,5 +199,5 @@ document.addEventListener("click", (e) => {
 
 const chatLogCSS = document.createElement('link');
 chatLogCSS.rel = 'stylesheet';
-chatLogCSS.href = "/css/general/online/chat-room.css";
+chatLogCSS.href = versionAssetUrl("/css/general/online/chat-room.css");
 document.head.appendChild(chatLogCSS);

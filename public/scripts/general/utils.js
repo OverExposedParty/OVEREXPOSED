@@ -62,6 +62,68 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function copyTextToClipboard(text) {
+    if (typeof text !== 'string' || text.length === 0) {
+        return false;
+    }
+
+    if (window.isSecureContext && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.top = '-9999px';
+    textArea.style.left = '-9999px';
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        return document.execCommand('copy');
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+function flashButtonHoverState(button, {
+    duration = 0,
+    fadeDuration = 500,
+    className = 'touchhover',
+    transitionClassName = null,
+    touchOnly = true
+} = {}) {
+    if (!(button instanceof HTMLElement)) return;
+    if (touchOnly && !window.matchMedia('(hover: none), (pointer: coarse)').matches) {
+        return;
+    }
+
+    const existingTimeout = Number(button.dataset.hoverFlashTimeoutId);
+    if (existingTimeout) {
+        clearTimeout(existingTimeout);
+    }
+
+    button.classList.add(className);
+    const timeoutId = window.setTimeout(() => {
+        if (transitionClassName) {
+            button.classList.add(transitionClassName);
+        }
+        button.classList.remove(className);
+        window.setTimeout(() => {
+            if (transitionClassName) {
+                button.classList.remove(transitionClassName);
+            }
+            delete button.dataset.hoverFlashTimeoutId;
+        }, fadeDuration);
+    }, duration);
+
+    button.dataset.hoverFlashTimeoutId = String(timeoutId);
+}
+
 function updateVh() {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);

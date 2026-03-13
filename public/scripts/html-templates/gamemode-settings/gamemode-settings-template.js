@@ -127,11 +127,11 @@ fetch('/html-templates/gamemode-settings.html')
     }
     if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
       const scriptGameSettingsButton = document.createElement('script');
-      scriptGameSettingsButton.src = '/scripts/party-games/gamemode-settings/game-settings-buttons.js';
+      scriptGameSettingsButton.src = versionAssetUrl('/scripts/party-games/gamemode-settings/game-settings-buttons.js');
       document.body.appendChild(scriptGameSettingsButton);
 
       const scriptGameSettings = document.createElement('script');
-      scriptGameSettings.src = '/scripts/party-games/gamemode-settings/gamemode-settings.js';
+      scriptGameSettings.src = versionAssetUrl('/scripts/party-games/gamemode-settings/gamemode-settings.js');
       scriptGameSettings.defer = true;
       document.body.appendChild(scriptGameSettings);
     }
