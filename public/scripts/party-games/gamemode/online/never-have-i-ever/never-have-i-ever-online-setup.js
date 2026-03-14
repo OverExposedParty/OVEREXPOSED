@@ -15,7 +15,10 @@ gameContainers.push(
 async function initialisePage() {
   const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
   const data = await response.json();
-  if (!data || data.length === 0) return;
+  if (!data || data.length === 0) {
+    ShowPartyDoesNotExistState();
+    return;
+  }
 
   const party = data[0];
   currentPartyData = party;
@@ -176,6 +179,7 @@ async function SetPageSettings() {
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
+    ShowPartyDoesNotExistState();
     return;
   }
   currentPartyData = existingData[0];

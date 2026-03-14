@@ -1,4 +1,3 @@
-const partyDoesNotExistContainer = document.getElementById('party-does-not-exist');
 const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
 const userKickedContainer = document.getElementById('user-kicked');
 const partyFullContainer = document.getElementById('party-full');
@@ -91,7 +90,6 @@ function observePartyCodeActionButtons() {
 }
 
 gameContainers.push(
-  partyDoesNotExistContainer,
   partySessionInProgressContainer,
   userKickedContainer
 );
@@ -195,10 +193,8 @@ async function checkPartyExists() {
     });
     SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   } else {
-    setActiveContainers(partyDoesNotExistContainer);
-    gamemodeSettingsContainer.classList.remove('active');
+    ShowPartyDoesNotExistState();
     document.title = "WAITING ROOM | PARTY DOES NOT EXIST";
-    addElementIfNotExists(permanantElementClassArray, partyDoesNotExistContainer);
     SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   }
 }

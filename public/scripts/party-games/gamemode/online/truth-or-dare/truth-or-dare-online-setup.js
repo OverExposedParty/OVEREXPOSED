@@ -139,6 +139,7 @@ async function SetPageSettings() {
   const existingData = await getExistingPartyData(partyCode);
   if (!existingData || existingData.length === 0) {
     console.warn('No party data found.');
+    ShowPartyDoesNotExistState();
     return;
   }
   currentPartyData = existingData[0];

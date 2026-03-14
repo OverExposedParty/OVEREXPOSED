@@ -5,6 +5,7 @@
         await LoadScript('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online-setup.js');
         await Ready.when('selected-user-containers', { timeout: 10000 });
         await SetPageSettings();
+        SetScriptLoaded('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online.js?30082025');
     } catch (err) {
         console.error("❌ Error loading Truth or Dare scripts:", err);
     }

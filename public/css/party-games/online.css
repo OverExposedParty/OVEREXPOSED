@@ -14,6 +14,40 @@
     z-index: 100;
 }
 
+.online-status-container {
+    display: none;
+    flex-direction: column;
+    min-height: 220px;
+    padding: 24px 20px;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    max-width: 500px;
+    min-width: 300px;
+    border: var(--bordersize) solid var(--primarypagecolour);
+    border-radius: 25px;
+    background-color: var(--secondarybackgroundcolour);
+    position: relative;
+    overflow: hidden;
+    z-index: 150;
+}
+
+.online-status-container.active {
+    display: flex;
+}
+
+body.party-missing-state #placeholder-card-container,
+body.party-missing-state #placeholder-gamemode-addons-container,
+body.party-missing-state #player-board,
+body.party-missing-state #player-board-button-container,
+body.party-missing-state #pop-up-role-container {
+    display: none !important;
+}
+
+body.party-missing-state .main-container > :not(.online-status-container) {
+    display: none !important;
+}
+
 .content-container,
 .button-container {
     display: flex;

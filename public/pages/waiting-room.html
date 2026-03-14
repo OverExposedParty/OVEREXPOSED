@@ -65,10 +65,6 @@
             <button class="start-game-button ready-up" id="waiting-room">READY</button>
         </div>
 
-        <div class="waiting-container" id="party-does-not-exist">
-            <h2>Party does not exist</h2>
-        </div>
-
         <div class="waiting-container" id="party-session-in-progress">
             <h2>Party is already in progress</h2>
         </div>
@@ -88,8 +84,8 @@
     <div id="enter-username-placeholder" data-template="waiting-room"></div>
 </body>
 <script>
-    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+    document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
 
     window.pageScripts = {
         "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },

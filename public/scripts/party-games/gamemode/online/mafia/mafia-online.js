@@ -7,6 +7,7 @@
         await Ready.when('selected-user-containers', { timeout: 10000 });
         await Ready.when('user-customisation-icon', { timeout: 10000 });
         await SetPageSettings();
+        SetScriptLoaded('/scripts/party-games/gamemode/online/mafia/mafia-online.js?30082025');
 
     } catch (err) {
         console.error("❌ Error loading Mafia scripts:", err);

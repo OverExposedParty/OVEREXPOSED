@@ -163,6 +163,50 @@ function PartyDisbanded() {
   } catch (e) { }
 }
 
+function ensureOnlineStatusContainer({
+  id,
+  title,
+  description = ""
+}) {
+  let container = document.getElementById(id);
+
+  if (!container) {
+    container = document.createElement("div");
+    container.id = id;
+    const mainContainer = document.querySelector(".main-container");
+    (mainContainer || document.body).appendChild(container);
+  }
+
+  container.className = "online-status-container";
+  container.innerHTML = `
+    <div class="content-container">
+      <h1>${title}</h1>
+      ${description ? `<p>${description}</p>` : ""}
+    </div>
+  `;
+
+  return container;
+}
+
+function ShowPartyDoesNotExistState() {
+  document.body.classList.add("party-missing-state");
+  document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+  document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+
+  const statusContainer = ensureOnlineStatusContainer({
+    id: "party-does-not-exist",
+    title: "Party does not exist",
+    description: "Check the code and try joining again."
+  });
+
+  setActiveContainers();
+  statusContainer.classList.add("active");
+  const titlePrefix = typeof formattedGamemode === "string" && formattedGamemode.trim()
+    ? formattedGamemode.toUpperCase()
+    : "WAITING ROOM";
+  document.title = `${titlePrefix} | PARTY DOES NOT EXIST`;
+}
+
 function postToBothEndpoints(payload, endpoint1, endpoint2) {
   const options = {
     method: 'POST',
