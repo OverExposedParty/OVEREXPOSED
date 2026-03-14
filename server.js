@@ -60,8 +60,8 @@ let dbReconnectHooksAttached = false;
 const WAITING_ROOM_TEMPLATE_PATH = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
 const WAITING_ROOM_TEMPLATE = fs.readFileSync(WAITING_ROOM_TEMPLATE_PATH, 'utf8');
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
-const ASSET_VERSION_CACHE = new Map();
-const DEPLOYMENT_VERSION = String(Date.now());
+const WEBSITE_CACHE_VERSION = process.env.WEBSITE_CACHE_VERSION || '2026-03-14-1';
+const DEPLOYMENT_VERSION = WEBSITE_CACHE_VERSION;
 
 function getCookieValue(cookieHeader, key) {
   if (typeof cookieHeader !== 'string' || typeof key !== 'string' || key.length === 0) {
@@ -108,17 +108,10 @@ function getVersionedPublicAssetUrl(assetUrl) {
       return assetUrl;
     }
 
-    let version = ASSET_VERSION_CACHE.get(filePath);
-    const stats = fs.statSync(filePath);
-    const modifiedTime = String(Math.trunc(stats.mtimeMs));
-
-    if (version !== modifiedTime) {
-      version = modifiedTime;
-      ASSET_VERSION_CACHE.set(filePath, version);
-    }
+    fs.accessSync(filePath, fs.constants.F_OK);
 
     removeLegacyCacheBustParams(url);
-    url.searchParams.set('v', version);
+    url.searchParams.set('v', WEBSITE_CACHE_VERSION);
     return `${url.pathname}${url.search}${url.hash}`;
   } catch {
     return assetUrl;

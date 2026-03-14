@@ -10,9 +10,10 @@ function getInitialAssetVersion() {
   }
 }
 
-const DEFAULT_ASSET_VERSION = getInitialAssetVersion();
-const WEBSITE_VERSION = DEFAULT_ASSET_VERSION;
-const GAME_SETTINGS_VERSION = DEFAULT_ASSET_VERSION;
+const WEBSITE_CACHE_VERSION = getInitialAssetVersion();
+const WEBSITE_VERSION = WEBSITE_CACHE_VERSION;
+const GAME_SETTINGS_VERSION = WEBSITE_CACHE_VERSION;
+window.WEBSITE_CACHE_VERSION = WEBSITE_CACHE_VERSION;
 
 const SCRIPT_VERSIONS = {
   HOMEPAGE: WEBSITE_VERSION,
@@ -110,7 +111,7 @@ function versionAssetUrl(assetUrl, { cacheBustKey = null } = {}) {
       }
     }
 
-    const version = getVersionForAsset(cacheBustKey) || DEFAULT_ASSET_VERSION;
+    const version = getVersionForAsset(cacheBustKey) || WEBSITE_CACHE_VERSION;
     if (!version) {
       return `${url.pathname}${url.search}${url.hash}`;
     }
