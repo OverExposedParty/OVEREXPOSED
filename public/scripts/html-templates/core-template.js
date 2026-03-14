@@ -1,5 +1,18 @@
-const WEBSITE_VERSION = "14032026"; //14/03/2026
-const GAME_SETTINGS_VERSION = "14032026"; //14/03/2026
+function getInitialAssetVersion() {
+  const currentScriptSrc = document.currentScript?.getAttribute('src') || document.currentScript?.src;
+  if (!currentScriptSrc) return null;
+
+  try {
+    const url = new URL(currentScriptSrc, window.location.origin);
+    return url.searchParams.get('v');
+  } catch {
+    return null;
+  }
+}
+
+const DEFAULT_ASSET_VERSION = getInitialAssetVersion();
+const WEBSITE_VERSION = DEFAULT_ASSET_VERSION;
+const GAME_SETTINGS_VERSION = DEFAULT_ASSET_VERSION;
 
 const SCRIPT_VERSIONS = {
   HOMEPAGE: WEBSITE_VERSION,
@@ -91,13 +104,15 @@ function versionAssetUrl(assetUrl, { cacheBustKey = null } = {}) {
 
   try {
     const url = new URL(assetUrl, window.location.origin);
-    if (url.searchParams.has("v")) {
-      return `${url.pathname}${url.search}${url.hash}`;
+    for (const [key, value] of [...url.searchParams.entries()]) {
+      if (/^\d+$/.test(key) && value === "") {
+        url.searchParams.delete(key);
+      }
     }
 
-    const version = getVersionForAsset(cacheBustKey) || WEBSITE_VERSION;
+    const version = getVersionForAsset(cacheBustKey) || DEFAULT_ASSET_VERSION;
     if (!version) {
-      return assetUrl;
+      return `${url.pathname}${url.search}${url.hash}`;
     }
 
     url.searchParams.set("v", version);

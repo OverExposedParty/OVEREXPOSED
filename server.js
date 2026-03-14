@@ -62,6 +62,20 @@ const WAITING_ROOM_TEMPLATE = fs.readFileSync(WAITING_ROOM_TEMPLATE_PATH, 'utf8'
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
 const ASSET_VERSION_CACHE = new Map();
 
+function removeLegacyCacheBustParams(url) {
+  const keysToDelete = [];
+
+  for (const [key, value] of url.searchParams.entries()) {
+    if (/^\d+$/.test(key) && value === '') {
+      keysToDelete.push(key);
+    }
+  }
+
+  keysToDelete.forEach((key) => {
+    url.searchParams.delete(key);
+  });
+}
+
 function getVersionedPublicAssetUrl(assetUrl) {
   if (typeof assetUrl !== 'string' || !assetUrl.startsWith('/')) {
     return assetUrl;
@@ -69,10 +83,6 @@ function getVersionedPublicAssetUrl(assetUrl) {
 
   try {
     const url = new URL(assetUrl, 'http://localhost');
-    if (url.searchParams.has('v')) {
-      return assetUrl;
-    }
-
     const assetPath = decodeURIComponent(url.pathname);
     const normalizedAssetPath = path.normalize(assetPath).replace(/^([\\/])+/, '');
     const filePath = path.join(PUBLIC_DIRECTORY, normalizedAssetPath);
@@ -90,6 +100,7 @@ function getVersionedPublicAssetUrl(assetUrl) {
       ASSET_VERSION_CACHE.set(filePath, version);
     }
 
+    removeLegacyCacheBustParams(url);
     url.searchParams.set('v', version);
     return `${url.pathname}${url.search}${url.hash}`;
   } catch {
@@ -1367,16 +1378,27 @@ const STATIC_ASSET_EXTENSIONS = new Set([
 
 app.use((req, res, next) => {
   const ext = path.extname(req.path).toLowerCase();
-  const hasCacheBustQuery = typeof req.originalUrl === 'string' && req.originalUrl.includes('?');
+  let hasVersionQuery = false;
+
+  try {
+    const requestUrl = new URL(req.originalUrl, 'http://localhost');
+    hasVersionQuery = requestUrl.searchParams.has('v');
+  } catch {
+    hasVersionQuery = false;
+  }
 
   if (STATIC_ASSET_EXTENSIONS.has(ext)) {
-    if (hasCacheBustQuery) {
+    if (hasVersionQuery) {
       res.setHeader('Cache-Control', `public, max-age=${ONE_YEAR_IN_SECONDS}, immutable`);
     } else {
-      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
     }
   } else if (ext === '.html') {
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
   }
 
   next();
