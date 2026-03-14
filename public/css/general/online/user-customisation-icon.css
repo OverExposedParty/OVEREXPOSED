@@ -3,13 +3,12 @@
     
     font-size: 1vw;
     padding: 0 20px;
-    min-width: 90px;
     aspect-ratio: 7 / 11;
     border-radius: 20px;
     text-align: center;
     white-space: nowrap;
     box-sizing: border-box;
-    width: auto;
+    width: 90px;
     color: var(--primarypagecolour);
     display: flex;
     flex-direction: column;
@@ -20,7 +19,7 @@
 
 .container-section.small .user-icon {
     font-size: 0.5vw;
-    min-width: 60px;
+    width: 60px;
     aspect-ratio: 7 / 11;
     border-radius: 10px;
     gap: 5px;

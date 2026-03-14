@@ -26,6 +26,10 @@ function hasNoActiveErrors() {
     return !activeError;
 }
 
+function isEnterUsernameContainerActive() {
+    return !!(enterUsernameContainer && enterUsernameContainer.classList?.contains('active'));
+}
+
 function waitForUserCustomisationContainer({ timeout = 3000 } = {}) {
     return new Promise((resolve) => {
         const start = performance.now();
@@ -202,12 +206,9 @@ fetch('/html-templates/online/enter-username.html')
             const remaining = usernameMaxLength - usernameInput.value.length;
             usernameCountDisplay.textContent = remaining >= 0 ? remaining : 0;
             setError(errorUsernameTaken, false);
-            if (remaining == usernameMaxLength) {
-                setError(errorUsernameEmpty, true)
-            }
-            else {
-                setError(errorUsernameEmpty, false)
-            }
+            const shouldShowEmptyError =
+                remaining === usernameMaxLength && isEnterUsernameContainerActive();
+            setError(errorUsernameEmpty, shouldShowEmptyError);
             if (!isValidUsernameInput(usernameInput.value) && remaining != usernameMaxLength) {
                 setError(errorUsernameInvalid, true);
             } else {
