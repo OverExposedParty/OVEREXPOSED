@@ -61,6 +61,23 @@ const WAITING_ROOM_TEMPLATE_PATH = path.join(__dirname, 'public', 'pages', 'wait
 const WAITING_ROOM_TEMPLATE = fs.readFileSync(WAITING_ROOM_TEMPLATE_PATH, 'utf8');
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
 const ASSET_VERSION_CACHE = new Map();
+const DEPLOYMENT_VERSION = String(Date.now());
+
+function getCookieValue(cookieHeader, key) {
+  if (typeof cookieHeader !== 'string' || typeof key !== 'string' || key.length === 0) {
+    return null;
+  }
+
+  const cookies = cookieHeader.split(';');
+  for (const cookie of cookies) {
+    const [rawName, ...rawValue] = cookie.trim().split('=');
+    if (rawName === key) {
+      return rawValue.join('=');
+    }
+  }
+
+  return null;
+}
 
 function removeLegacyCacheBustParams(url) {
   const keysToDelete = [];
@@ -137,7 +154,7 @@ function versionLocalAssetReferences(html) {
   });
 }
 
-function sendVersionedHtmlFile(res, filePath, statusCode = 200) {
+function sendVersionedHtmlFile(req, res, filePath, statusCode = 200) {
   fs.readFile(filePath, 'utf8', (error, html) => {
     if (error) {
       console.error(`Error reading HTML file "${filePath}":`, error);
@@ -145,6 +162,12 @@ function sendVersionedHtmlFile(res, filePath, statusCode = 200) {
         res.status(500).send('Internal Server Error');
       }
       return;
+    }
+
+    const existingDeploymentVersion = getCookieValue(req.headers.cookie, 'oe-deployment-version');
+    if (existingDeploymentVersion !== DEPLOYMENT_VERSION) {
+      res.setHeader('Clear-Site-Data', '"cache"');
+      res.append('Set-Cookie', `oe-deployment-version=${DEPLOYMENT_VERSION}; Path=/; Max-Age=${ONE_YEAR_IN_SECONDS}; SameSite=Lax`);
     }
 
     res.status(statusCode).type('html').send(versionLocalAssetReferences(html));
@@ -1415,153 +1438,153 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Define routes for your HTML pages
 app.get('/', (req, res) => {
-  sendVersionedHtmlFile(res, path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html'));
+  sendVersionedHtmlFile(req, res, path.join(__dirname, 'public', 'pages', 'homepages', 'homepage.html'));
 });
 
 app.get('/truth-or-dare/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'truth-or-dare', 'truth-or-dare-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/truth-or-dare', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'truth-or-dare', 'truth-or-dare-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/truth-or-dare/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'truth-or-dare', 'truth-or-dare-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/paranoia/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'paranoia', 'paranoia-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/paranoia', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'paranoia', 'paranoia-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/paranoia/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'paranoia', 'paranoia-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/never-have-i-ever/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'never-have-i-ever', 'never-have-i-ever-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/never-have-i-ever', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'never-have-i-ever', 'never-have-i-ever-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/never-have-i-ever/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'never-have-i-ever', 'never-have-i-ever-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/most-likely-to/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/most-likely-to', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/most-likely-to/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'most-likely-to', 'most-likely-to-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/imposter/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/imposter', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 
 app.get('/imposter/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'imposter', 'imposter-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/would-you-rather', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/would-you-rather/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/would-you-rather/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'would-you-rather', 'would-you-rather-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/exposay/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'exposay', 'exposay-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/mafia/settings', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-settings-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/mafia/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'party-games', 'mafia', 'mafia-online-page.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/overexposure', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/overexposure/:timestamp', (req, res) => {
   const timestamp = req.params.timestamp; // This will capture the dynamic timestamp part
   const filePath = path.join(__dirname, 'public', 'pages', 'overexposure', 'overexposure.html');
   // Your logic for handling the request
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/waiting-room', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', async (req, res) => {
@@ -1581,30 +1604,30 @@ app.get('/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', async (req, res) => {
 app.get('/terms-and-privacy', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'terms-and-privacy.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/faqs', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'frequently-asked-questions.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/oes-customisation', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'oes-customisation.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 app.get('/production-tools', (req, res) => {
   const filePath = path.join(__dirname, 'public', 'pages', 'other', 'production-tools.html');
   console.log(`Attempting to serve file from: ${filePath}`);
-  sendVersionedHtmlFile(res, filePath);
+  sendVersionedHtmlFile(req, res, filePath);
 });
 
 // Handle 404 (Page Not Found)
 app.use((req, res) => {
-  sendVersionedHtmlFile(res, path.join(__dirname, 'public', 'pages', '404.html'), 404);
+  sendVersionedHtmlFile(req, res, path.join(__dirname, 'public', 'pages', '404.html'), 404);
 });
 
 (async () => {
