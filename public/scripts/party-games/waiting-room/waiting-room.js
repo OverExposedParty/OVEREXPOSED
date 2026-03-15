@@ -100,6 +100,35 @@ const segments = url.split('/');
 waitingForHost = true;
 observePartyCodeActionButtons();
 
+function waitForScriptDataLoaded(scriptPath, { timeout = 5000 } = {}) {
+  const basePath = scriptPath.split('?')[0];
+
+  return new Promise((resolve, reject) => {
+    const start = performance.now();
+
+    function tick() {
+      const script = [...document.scripts].find((candidate) => {
+        const src = candidate.getAttribute('src') || '';
+        return src.split('?')[0] === basePath;
+      });
+
+      if (script?.dataset.loaded === 'true') {
+        resolve();
+        return;
+      }
+
+      if (performance.now() - start > timeout) {
+        reject(new Error(`Timed out waiting for ${basePath} to finish loading.`));
+        return;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    tick();
+  });
+}
+
 async function checkPartyExists() {
   const response = await fetch(`/api/waiting-room?partyCode=${partyCode}`);
   const data = await response.json();
@@ -213,7 +242,19 @@ async function getWaitingRoomPartyData() {
   return data[0];
 }
 
-checkPartyExists(partyCode);
+async function initWaitingRoom() {
+  try {
+    await waitForScriptDataLoaded('/scripts/party-games/online/online-settings.js');
+    await checkPartyExists();
+  } catch (error) {
+    console.error('Failed to initialise waiting room:', error);
+    ShowPartyDoesNotExistState();
+    document.title = "WAITING ROOM | ERROR";
+    SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
+  }
+}
+
+initWaitingRoom();
 
 function KickUser() {
   gamemodeSettingsContainer.classList.remove('active');
