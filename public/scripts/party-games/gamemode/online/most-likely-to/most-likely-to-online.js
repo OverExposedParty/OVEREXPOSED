@@ -23,7 +23,7 @@ async function waitForOnlineCore() {
         await Ready.when('selected-user-containers', { timeout: 10000 });
         await waitForOnlineCore();
         await SetPageSettings();
-        SetScriptLoaded('/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js?30082025');
+        SetScriptLoaded('/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js');
 
     } catch (err) {
         console.error("❌ Error loading Most Likely To scripts:", err);

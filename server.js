@@ -62,6 +62,30 @@ const WAITING_ROOM_TEMPLATE = fs.readFileSync(WAITING_ROOM_TEMPLATE_PATH, 'utf8'
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
 const WEBSITE_CACHE_VERSION = process.env.WEBSITE_CACHE_VERSION || '2026-03-14-1';
 const DEPLOYMENT_VERSION = WEBSITE_CACHE_VERSION;
+const ONLINE_GAMEMODE_MAX_PLAYERS = {
+  'truth-or-dare': 20,
+  'paranoia': 15,
+  'never-have-i-ever': 20,
+  'most-likely-to': 20,
+  'imposter': 16,
+  'would-you-rather': 20,
+  'mafia': 20
+};
+const PARTY_GAME_MODELS_BY_GAMEMODE = {
+  'truth-or-dare': partyGameTruthOrDareSchema,
+  'paranoia': partyGameParanoiaSchema,
+  'never-have-i-ever': partyGameNeverHaveIEverSchema,
+  'most-likely-to': partyGameMostLikelyToSchema,
+  'imposter': partyGameImposterSchema,
+  'would-you-rather': partyGameWouldYouRatherSchema,
+  'mafia': partyGameMafiaSchema
+};
+const PARTY_META_IMAGE_FILENAMES = {
+  waitingForHost: ['waiting-for-host.jpg', 'play.jpg'],
+  gameHasStarted: ['game-has-started.jpg'],
+  gameHasFinished: ['game-has-finished.jpg'],
+  lobbyFull: ['lobby-full.jpg', 'lobby full.jpg', 'play.jpg']
+};
 
 function getCookieValue(cookieHeader, key) {
   if (typeof cookieHeader !== 'string' || typeof key !== 'string' || key.length === 0) {
@@ -127,7 +151,7 @@ function versionLocalAssetReferences(html) {
     const lowerTagName = tagName.toLowerCase();
     const lowerTag = tag.toLowerCase();
 
-    if (lowerTagName === 'link' && !/(rel=["'](?:stylesheet|preload|icon|shortcut icon|apple-touch-icon)["'])/i.test(tag)) {
+    if (lowerTagName === 'link' && !/(rel=["'](?:stylesheet|preload|icon|shortcut icon|apple-touch-icon|manifest)["'])/i.test(tag)) {
       return tag;
     }
 
@@ -183,6 +207,38 @@ function formatGamemodeName(gamemode = '') {
     .join(' ');
 }
 
+function getPartyMetaImagePath(gamemode, stateKey) {
+  const filenames = PARTY_META_IMAGE_FILENAMES[stateKey] || [];
+
+  for (const filename of filenames) {
+    const relativePath = `/images/meta/og-images/party-games/${gamemode}/${filename}`;
+    const absolutePath = path.join(PUBLIC_DIRECTORY, relativePath.replace(/^\//, ''));
+
+    if (fs.existsSync(absolutePath)) {
+      return relativePath;
+    }
+  }
+
+  return '/images/meta/og-images/party-games/party-not-found.jpg';
+}
+
+async function getPartySessionByGamemode(gamemode, partyCode) {
+  const model = PARTY_GAME_MODELS_BY_GAMEMODE[gamemode];
+
+  if (!model) {
+    return null;
+  }
+
+  return model.findOne({ partyId: partyCode }).lean();
+}
+
+function getPartyUserInstructions(partySession) {
+  return partySession?.config?.userInstructions
+    || partySession?.state?.userInstructions
+    || partySession?.userInstructions
+    || '';
+}
+
 function generatePartyCode() {
   let code = '';
 
@@ -236,7 +292,7 @@ function buildAbsoluteUrl(req, relativePath = '/') {
   return `${protocol}://${req.get('host')}${relativePath}`;
 }
 
-function getWaitingRoomMeta(req, partyCode, waitingRoom) {
+async function getWaitingRoomMeta(req, partyCode, waitingRoom) {
   const waitingRoomUrl = buildAbsoluteUrl(req, `/${partyCode}`);
   const fallbackImageUrl = buildAbsoluteUrl(req, '/images/meta/og-images/party-games/party-not-found.jpg');
 
@@ -252,17 +308,38 @@ function getWaitingRoomMeta(req, partyCode, waitingRoom) {
   const gamemode = waitingRoom.config?.gamemode || 'overexposed';
   const gamemodeName = formatGamemodeName(gamemode) || 'Overexposed';
   const isPartyInProgress = Boolean(waitingRoom.state?.isPlaying);
-  const ogImagePath = isPartyInProgress
-    ? `/images/meta/og-images/party-games/${gamemode}/party-already-started.jpg`
-    : `/images/meta/og-images/party-games/${gamemode}/play.jpg`;
+  const playerCount = Array.isArray(waitingRoom.players) ? waitingRoom.players.length : 0;
+  const maxPlayers = ONLINE_GAMEMODE_MAX_PLAYERS[gamemode] ?? null;
+  const isLobbyFull = !isPartyInProgress && maxPlayers != null && playerCount >= maxPlayers;
+  let metaState = 'waitingForHost';
+
+  if (isLobbyFull) {
+    metaState = 'lobbyFull';
+  } else if (isPartyInProgress) {
+    const partySession = await getPartySessionByGamemode(gamemode, partyCode);
+    const userInstructions = getPartyUserInstructions(partySession);
+    metaState = userInstructions.includes('GAME_OVER')
+      ? 'gameHasFinished'
+      : 'gameHasStarted';
+  }
+
+  const ogImagePath = getPartyMetaImagePath(gamemode, metaState);
 
   return {
-    title: isPartyInProgress
-      ? `${gamemodeName} Party Already Started | OVEREXPOSED`
-      : `${gamemodeName} Online | OVEREXPOSED`,
-    description: isPartyInProgress
-      ? `This ${gamemodeName} party is already in progress. Start a new room on Overexposed and get everyone back in.`
-      : `Join this ${gamemodeName} room on Overexposed and jump straight into the party.`,
+    title: metaState === 'gameHasFinished'
+      ? `${gamemodeName} Game Over | OVEREXPOSED`
+      : metaState === 'gameHasStarted'
+        ? `${gamemodeName} Game In Progress | OVEREXPOSED`
+        : metaState === 'lobbyFull'
+          ? `${gamemodeName} Lobby Full | OVEREXPOSED`
+          : `${gamemodeName} Online | OVEREXPOSED`,
+    description: metaState === 'gameHasFinished'
+      ? `This ${gamemodeName} game is over. Start a new room on Overexposed to play again.`
+      : metaState === 'gameHasStarted'
+        ? `This ${gamemodeName} game has already started. Start a new room on Overexposed and get everyone back in.`
+        : metaState === 'lobbyFull'
+          ? `This ${gamemodeName} lobby is full. Start a new room on Overexposed to make space for more players.`
+          : `Join this ${gamemodeName} room on Overexposed and jump straight into the party.`,
     ogImage: buildAbsoluteUrl(req, ogImagePath),
     url: waitingRoomUrl
   };
@@ -1585,12 +1662,24 @@ app.get('/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})', async (req, res) => {
 
   try {
     const waitingRoom = await waitingRoomSchema.findOne({ partyId: partyCode }).lean();
-    const meta = getWaitingRoomMeta(req, partyCode, waitingRoom);
-    res.send(versionLocalAssetReferences(renderWaitingRoomPage(meta)));
+    const meta = await getWaitingRoomMeta(req, partyCode, waitingRoom);
+    const existingDeploymentVersion = getCookieValue(req.headers.cookie, 'oe-deployment-version');
+    if (existingDeploymentVersion !== DEPLOYMENT_VERSION) {
+      res.setHeader('Clear-Site-Data', '"cache"');
+      res.append('Set-Cookie', `oe-deployment-version=${DEPLOYMENT_VERSION}; Path=/; Max-Age=${ONE_YEAR_IN_SECONDS}; SameSite=Lax`);
+    }
+
+    res.type('html').send(versionLocalAssetReferences(renderWaitingRoomPage(meta)));
   } catch (error) {
     console.error(`Error rendering waiting room preview for party "${partyCode}":`, error);
-    const meta = getWaitingRoomMeta(req, partyCode, null);
-    res.status(500).send(versionLocalAssetReferences(renderWaitingRoomPage(meta)));
+    const meta = await getWaitingRoomMeta(req, partyCode, null);
+    const existingDeploymentVersion = getCookieValue(req.headers.cookie, 'oe-deployment-version');
+    if (existingDeploymentVersion !== DEPLOYMENT_VERSION) {
+      res.setHeader('Clear-Site-Data', '"cache"');
+      res.append('Set-Cookie', `oe-deployment-version=${DEPLOYMENT_VERSION}; Path=/; Max-Age=${ONE_YEAR_IN_SECONDS}; SameSite=Lax`);
+    }
+
+    res.status(500).type('html').send(versionLocalAssetReferences(renderWaitingRoomPage(meta)));
   }
 });
 

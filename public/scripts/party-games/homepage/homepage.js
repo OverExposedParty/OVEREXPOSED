@@ -263,19 +263,19 @@ function changeFavicon(gamemode) {
     const faviconManifest = document.getElementById('favicon-manifest');
 
     if (faviconIco) {
-        faviconIco.href = `${faviconBasePath}/favicon.ico`;
+        faviconIco.href = versionAssetUrl(`${faviconBasePath}/favicon.ico`, { cacheBustKey: "HOMEPAGE" });
     }
     if (favicon16) {
-        favicon16.href = `${faviconBasePath}/favicon-16x16.png`;
+        favicon16.href = versionAssetUrl(`${faviconBasePath}/favicon-16x16.png`, { cacheBustKey: "HOMEPAGE" });
     }
     if (favicon32) {
-        favicon32.href = `${faviconBasePath}/favicon-32x32.png`;
+        favicon32.href = versionAssetUrl(`${faviconBasePath}/favicon-32x32.png`, { cacheBustKey: "HOMEPAGE" });
     }
     if (faviconApple) {
-        faviconApple.href = `${faviconBasePath}/apple-touch-icon.png`;
+        faviconApple.href = versionAssetUrl(`${faviconBasePath}/apple-touch-icon.png`, { cacheBustKey: "HOMEPAGE" });
     }
     if (faviconManifest) {
-        faviconManifest.href = `${faviconBasePath}/site.webmanifest`;
+        faviconManifest.href = versionAssetUrl(`${faviconBasePath}/site.webmanifest`, { cacheBustKey: "HOMEPAGE" });
     }
 }
 

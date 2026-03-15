@@ -152,7 +152,7 @@ const index = players.findIndex(
     });
 
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
     );
 
     console.log("timer:", getTimeLimit());
@@ -186,7 +186,7 @@ const index = players.findIndex(
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js?30082025');
+    SetScriptLoaded('/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js');
   }
 }
 

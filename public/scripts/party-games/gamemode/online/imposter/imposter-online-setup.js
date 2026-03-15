@@ -271,7 +271,7 @@ async function initialisePage() {
     });
 
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
     );
 
     const currentInstructions = getUserInstructions(party);
@@ -307,6 +307,6 @@ async function initialisePage() {
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/imposter/imposter-online.js?30082025');
+    SetScriptLoaded('/scripts/party-games/gamemode/online/imposter/imposter-online.js');
   }
 }

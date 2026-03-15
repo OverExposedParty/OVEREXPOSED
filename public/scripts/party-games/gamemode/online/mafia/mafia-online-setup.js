@@ -154,7 +154,7 @@ const index = players.findIndex(
     }
 
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online-instructions.js?30082025`
+      `/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online-instructions.js`
     );
     await LoadScript("/scripts/party-games/gamemode/online/mafia/mafia-dialogue.js");
     await LoadScript("/scripts/party-games/gamemode/online/mafia/mafia-civilian-watch.js");
@@ -214,7 +214,7 @@ const index = players.findIndex(
 
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/mafia/mafia-online.js?30082025');
+    SetScriptLoaded('/scripts/party-games/gamemode/online/mafia/mafia-online.js');
   }
 }
 

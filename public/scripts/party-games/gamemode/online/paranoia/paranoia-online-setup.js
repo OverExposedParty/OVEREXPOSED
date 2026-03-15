@@ -153,7 +153,7 @@ async function initialisePage() {
       });
     });
 
-    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
+    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`);
 
     selectPunishmentTitle.textContent = "You've been selected";
     selectPunishmentText.textContent = "Select a punishment to find out the question";
@@ -191,7 +191,7 @@ async function initialisePage() {
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/paranoia/paranoia-online.js?30082025');
+    SetScriptLoaded('/scripts/party-games/gamemode/online/paranoia/paranoia-online.js');
   }
 }
 

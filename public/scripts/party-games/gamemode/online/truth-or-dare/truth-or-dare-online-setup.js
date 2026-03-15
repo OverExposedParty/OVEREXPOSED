@@ -261,7 +261,7 @@ async function initialisePage() {
         });
       });
     }
-    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js?30082025`);
+    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`);
 
     const userInstructions = config.userInstructions;
     if (!gameRules["time-limit"]) {
@@ -305,6 +305,6 @@ async function initialisePage() {
       userCustomisationString: firstIcon
     });
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online.js?30082025');
+    SetScriptLoaded('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online.js');
   }
 }
