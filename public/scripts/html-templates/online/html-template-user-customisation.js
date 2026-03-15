@@ -35,6 +35,21 @@ cssFilesUserCustomisation.forEach(href => {
   LoadStylesheet(href);
 });
 
+async function initialiseCustomisationPackDefaults() {
+  try {
+    const response = await fetch('/json-files/customisation/customisation-packs.json');
+    const packs = await response.json();
+
+    packs.forEach(pack => {
+      if (localStorage.getItem(`customisation-${pack["pack-name"]}-active`) === null) {
+        localStorage.setItem(`customisation-${pack["pack-name"]}-active`, 'true');
+      }
+    });
+  } catch (error) {
+    console.error('Error initialising customisation pack defaults:', error);
+  }
+}
+
 fetch('/html-templates/user-customisation.html')
   .then(response => response.text())
   .then(data => {
@@ -45,11 +60,7 @@ fetch('/html-templates/user-customisation.html')
       });
     });
   })
-  .then(() => {
-    if (localStorage.getItem('customisation-base-active') === null) {
-      localStorage.setItem('customisation-base-active', true);
-    }
-  })
+  .then(() => initialiseCustomisationPackDefaults())
   .then(() => {
     userCustomisationContainer = document.querySelector('.user-customisation-container');
 

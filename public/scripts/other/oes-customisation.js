@@ -10,6 +10,11 @@ const oesSettingsTab = document.getElementById('oes-settings');
 const packsContainer = document.querySelector('.packs-container');
 const oesContainer = document.querySelector('.oes-settings-container');
 
+function isPackEnabledByDefault(packName) {
+    const savedState = localStorage.getItem(`customisation-${packName}-active`);
+    return savedState === null ? true : savedState === "true";
+}
+
 function renderPacks(packs) {
     packs.forEach(pack => {
         const packName = pack["pack-name"];
@@ -27,12 +32,14 @@ function renderPacks(packs) {
 
             packButtons.push(button);
 
-            const savedState = localStorage.getItem(`customisation-${packName}-active`);
-            if (savedState === "true") {
+            if (isPackEnabledByDefault(packName)) {
                 button.classList.add("active");
                 button.style.backgroundColor = pack["pack-colour"];
                 button.style.borderColor = pack["pack-colour"];
                 renderOESOptions(packName, pack["pack-colour"], pack["pack-secondary-colour"]);
+                if (localStorage.getItem(`customisation-${packName}-active`) === null) {
+                    localStorage.setItem(`customisation-${packName}-active`, "true");
+                }
             }
 
             button.addEventListener('click', () => {

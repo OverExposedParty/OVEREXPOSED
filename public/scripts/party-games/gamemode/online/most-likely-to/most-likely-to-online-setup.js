@@ -30,11 +30,12 @@ async function initialisePage() {
 
   isPlaying = true;
 
-  const index = players.findIndex(
+const index = players.findIndex(
     player => player.identity?.computerId === deviceId || player.computerId === deviceId
   );
   if (index === -1) {
     console.warn('Current device not found in players.');
+    ShowGameAlreadyStartedState();
     return;
   }
 

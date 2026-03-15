@@ -508,13 +508,7 @@ function DisplayCard(card, questionObject) {
   const showNsfwBadge = nsfwBadgeEnabledGamemodes.has(gamemode);
 
   cardText.textContent = questionObject.question;
-
-  const searchPackName = (questionObject.cardType).toLowerCase();
-  // Find the matching pack based on the cardType
-  const matchedPack = cardPackMap.find(pack => {
-    const packNameLower = pack.packName.toLowerCase();
-    return packNameLower === searchPackName;
-  });
+  const matchedPack = applyOnlinePackTheme(questionObject.cardType);
   if (matchedPack) {
     const imageUrl = matchedPack.packCard ? matchedPack.packCard : `/images/blank-cards/${gamemode}-blank-card.svg`;
     cardImage.src = imageUrl;

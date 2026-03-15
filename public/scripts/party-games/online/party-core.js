@@ -188,10 +188,61 @@ function ensureOnlineStatusContainer({
   return container;
 }
 
+function replaceHeadLink(selector, href, cacheBustKey = null) {
+  const existingLink = document.querySelector(selector);
+  if (!existingLink) return;
+
+  const nextLink = existingLink.cloneNode(true);
+  nextLink.href = typeof versionAssetUrl === "function"
+    ? versionAssetUrl(href, { cacheBustKey })
+    : href;
+  existingLink.replaceWith(nextLink);
+}
+
+function setPartyDoesNotExistFavicons() {
+  const faviconBasePath = "/images/meta/favicons/party-games/party-does-not-exist";
+
+  replaceHeadLink('link[rel="icon"][type="image/x-icon"]', `${faviconBasePath}/favicon.ico`);
+  replaceHeadLink('link[rel="icon"][sizes="16x16"]', `${faviconBasePath}/favicon-16x16.png`);
+  replaceHeadLink('link[rel="icon"][sizes="32x32"]', `${faviconBasePath}/favicon-32x32.png`);
+  replaceHeadLink('link[rel="apple-touch-icon"]', `${faviconBasePath}/apple-touch-icon.png`);
+  replaceHeadLink('link[rel="manifest"]', `${faviconBasePath}/site.webmanifest`);
+}
+
+function getCurrentGamemodeSlug() {
+  if (typeof window.location?.pathname === "string") {
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    if (segments.length > 0) {
+      return segments[0].trim().toLowerCase();
+    }
+  }
+
+  if (typeof formattedGamemode === "string" && formattedGamemode.trim()) {
+    return formattedGamemode.trim().toLowerCase().replace(/\s+/g, '-');
+  }
+
+  return "";
+}
+
+function setGameAlreadyStartedFavicons() {
+  const gamemode = getCurrentGamemodeSlug();
+
+  if (!gamemode) return;
+
+  const faviconBasePath = `/images/meta/favicons/party-games/${gamemode}/in-game-locked`;
+
+  replaceHeadLink('link[rel="icon"][type="image/x-icon"]', `${faviconBasePath}/favicon.ico`);
+  replaceHeadLink('link[rel="icon"][sizes="16x16"]', `${faviconBasePath}/favicon-16x16.png`);
+  replaceHeadLink('link[rel="icon"][sizes="32x32"]', `${faviconBasePath}/favicon-32x32.png`);
+  replaceHeadLink('link[rel="apple-touch-icon"]', `${faviconBasePath}/apple-touch-icon.png`);
+  replaceHeadLink('link[rel="manifest"]', `${faviconBasePath}/site.webmanifest`);
+}
+
 function ShowPartyDoesNotExistState() {
   document.body.classList.add("party-missing-state");
   document.documentElement.style.setProperty('--primarypagecolour', '#999999');
   document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+  setPartyDoesNotExistFavicons();
 
   const statusContainer = ensureOnlineStatusContainer({
     id: "party-does-not-exist",
@@ -205,6 +256,54 @@ function ShowPartyDoesNotExistState() {
     ? formattedGamemode.toUpperCase()
     : "WAITING ROOM";
   document.title = `${titlePrefix} | PARTY DOES NOT EXIST`;
+}
+
+function ShowGameAlreadyStartedState() {
+  document.body.classList.add("party-missing-state");
+  setGameAlreadyStartedFavicons();
+
+  const statusContainer = ensureOnlineStatusContainer({
+    id: "game-already-started",
+    title: "Game Already Started",
+    description: "You can’t join mid-game. create a new game."
+  });
+
+  setActiveContainers();
+  statusContainer.classList.add("active");
+  const titlePrefix = typeof formattedGamemode === "string" && formattedGamemode.trim()
+    ? formattedGamemode.toUpperCase()
+    : "WAITING ROOM";
+  document.title = `${titlePrefix} | GAME ALREADY STARTED`;
+}
+
+function dispatchOnlinePageColours(primary, secondary) {
+  if (!primary || !secondary) return;
+
+  document.documentElement.style.setProperty('--primarypagecolour', primary);
+  document.documentElement.style.setProperty('--secondarypagecolour', secondary);
+  document.dispatchEvent(new CustomEvent('page-colours-updated', {
+    detail: { primary, secondary }
+  }));
+}
+
+function getOnlinePackByCardType(cardType) {
+  if (!cardType || !Array.isArray(cardPackMap)) return null;
+
+  const searchPackName = String(cardType).trim().toLowerCase();
+  if (!searchPackName) return null;
+
+  return cardPackMap.find(pack => {
+    const packNameLower = pack.packName?.toLowerCase?.();
+    return packNameLower === searchPackName;
+  }) || null;
+}
+
+function applyOnlinePackTheme(cardType) {
+  const matchedPack = getOnlinePackByCardType(cardType);
+  if (!matchedPack) return null;
+
+  dispatchOnlinePageColours(matchedPack.packColour, matchedPack.packSecondaryColour);
+  return matchedPack;
 }
 
 function postToBothEndpoints(payload, endpoint1, endpoint2) {

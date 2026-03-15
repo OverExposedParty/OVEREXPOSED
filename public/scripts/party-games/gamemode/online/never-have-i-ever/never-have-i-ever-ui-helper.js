@@ -24,13 +24,7 @@ function updateTextContainer(text, cardType) {
   textContainerPrivate.textContent = text;
   selectOptionQuestionText.textContent = text.replace("Never have I ever ", "");
 
-  const searchPackName = cardType.toLowerCase();
-
-  // Find the matching pack based on the cardType
-  const matchedPack = cardPackMap.find(pack => {
-    const packNameLower = pack.packName.toLowerCase();
-    return packNameLower === searchPackName;
-  });
+  const matchedPack = applyOnlinePackTheme(cardType);
 
   if (matchedPack) {
     const imageUrl = matchedPack.packCard

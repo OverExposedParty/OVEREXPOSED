@@ -100,6 +100,7 @@ function initializeCards() {
         card.dataset.originalZ = z;
     });
     SetCarouselActive(cards[0].dataset.gamemodeId);
+    changeFavicon(cards[0].dataset.gamemodeId);
     gamemodeUpdateContainer.textContent = cardsUpdateText[cards[0].dataset.gamemodeId];
 }
 
@@ -253,18 +254,29 @@ leftArrow.addEventListener('click', () => {
     }
 });
 
-function changeFavicon(colour) {
-    if (colour === 'truth-or-dare') {
-        colour = 'overexposed';
+function changeFavicon(gamemode) {
+    const faviconBasePath = `/images/meta/favicons/party-games/${gamemode}/lobby`;
+    const faviconIco = document.getElementById('favicon-ico');
+    const favicon16 = document.getElementById('favicon-16');
+    const favicon32 = document.getElementById('favicon-32');
+    const faviconApple = document.getElementById('favicon-apple');
+    const faviconManifest = document.getElementById('favicon-manifest');
+
+    if (faviconIco) {
+        faviconIco.href = `${faviconBasePath}/favicon.ico`;
     }
-    const sizes = ['16x16', '32x32', '96x96', '180x180'];
-
-    const faviconLinks = document.querySelectorAll('link[rel="icon"]');
-
-    faviconLinks.forEach((favicon, i) => {
-        const size = sizes[i % sizes.length];
-        favicon.href = `/images/icons/${colour}/favicons/favicon-${size}.png`;
-    });
+    if (favicon16) {
+        favicon16.href = `${faviconBasePath}/favicon-16x16.png`;
+    }
+    if (favicon32) {
+        favicon32.href = `${faviconBasePath}/favicon-32x32.png`;
+    }
+    if (faviconApple) {
+        faviconApple.href = `${faviconBasePath}/apple-touch-icon.png`;
+    }
+    if (faviconManifest) {
+        faviconManifest.href = `${faviconBasePath}/site.webmanifest`;
+    }
 }
 
 waitForFunction("FetchHelpContainer", () => {

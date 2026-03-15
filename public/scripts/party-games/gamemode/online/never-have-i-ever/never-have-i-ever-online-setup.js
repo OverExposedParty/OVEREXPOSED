@@ -39,6 +39,7 @@ async function initialisePage() {
   );
   if (index === -1) {
     console.warn('Current device not found in players.');
+    ShowGameAlreadyStartedState();
     return;
   }
 

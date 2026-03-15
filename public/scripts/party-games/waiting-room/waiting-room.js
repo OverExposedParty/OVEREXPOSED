@@ -183,6 +183,9 @@ async function checkPartyExists() {
 
       joinParty(partyCode);
     } else {
+      if (partyGameMode) {
+        changeFavicon(partyGameMode, "in-game-locked");
+      }
       setActiveContainers(partySessionInProgressContainer);
       document.title = "WAITING ROOM | ERROR";
       addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
@@ -217,24 +220,24 @@ function KickUser() {
   setActiveContainers(userKickedContainer);
 }
 
-function changeFavicon(gamemode) {
-  const sizes = ['16x16', '32x32', '96x96', '180x180'];
+function replaceFaviconLink(linkId, href) {
+  const existingLink = document.getElementById(linkId);
+  if (!existingLink) {
+    return;
+  }
 
-  const gamemodeFolderPath = {
-    "truth-or-dare": "party-games",
-    "paranoia": "paranoia",
-    "never-have-i-ever": "never-have-i-ever",
-    "most-likely-to": "most-likely-to",
-    "would-you-rather": "would-you-rather",
-    "mafia": "mafia",
-  };
+  const nextLink = existingLink.cloneNode(true);
+  nextLink.href = versionAssetUrl(href, { cacheBustKey: "PARTY_GAMES_WAITING_ROOM" });
+  existingLink.replaceWith(nextLink);
+}
 
-  const faviconLinks = document.querySelectorAll('link[rel="icon"]');
-
-  faviconLinks.forEach((favicon, i) => {
-    const size = sizes[i % sizes.length];
-    favicon.href = `/images/icons/${gamemodeFolderPath[gamemode]}/favicons/favicon-${size}.png`;
-  });
+function changeFavicon(gamemode, variant = "lobby") {
+  const faviconBasePath = `/images/meta/favicons/party-games/${gamemode}/${variant}`;
+  replaceFaviconLink('favicon-ico', `${faviconBasePath}/favicon.ico`);
+  replaceFaviconLink('favicon-16', `${faviconBasePath}/favicon-16x16.png`);
+  replaceFaviconLink('favicon-32', `${faviconBasePath}/favicon-32x32.png`);
+  replaceFaviconLink('favicon-apple', `${faviconBasePath}/apple-touch-icon.png`);
+  replaceFaviconLink('favicon-manifest', `${faviconBasePath}/site.webmanifest`);
 }
 
 function SetGamemodeContainer() {
