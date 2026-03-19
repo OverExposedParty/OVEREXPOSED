@@ -23,9 +23,14 @@ const postIncompleteContainer = document.getElementById("post-incomplete-contain
 
 const enableNSFWContainer = document.getElementById("enable-nsfw-container");
 
+const sharePostButton = document.getElementById("share-post-button");
 const deletePostButton = document.getElementById("delete-post-button");
 const flagPostButton = document.getElementById("flag-post-button");
 
+const sharePostContainer = document.getElementById("share-post-container");
+const sharePostBodyTitle = sharePostContainer.querySelector(".share-post-body-title");
+const sharePostBodyText = sharePostContainer.querySelector(".share-post-body-text");
+const sharePostUrlInput = document.getElementById("share-post-url-input");
 const deletePostContainer = document.getElementById("delete-post-container");
 const deleteCodeInput = deletePostContainer.querySelector('input');
 const deletePostSubmit = deletePostContainer.querySelector('.warning-button-container button');

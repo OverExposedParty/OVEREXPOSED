@@ -56,10 +56,24 @@ function ToggleOverexposureContainer({ toggle = false, button = null, draft = fa
     if (overexposureContainer.classList.contains('active') && toggle == true) {
         if (!button) return;
         const dataId = button.getAttribute("data-id");
-        history.pushState(null, "", window.location.pathname.replace(/\/$/, '') + "/" + dataId);
+        const cardSlug = buildOverexposureCardSlug(
+            button.getAttribute("data-x") ?? button.style.left,
+            button.getAttribute("data-y") ?? button.style.top
+        );
+        const nextPathSegment = cardSlug || dataId;
+        const nextPath = `/overexposure/${nextPathSegment}`;
+        const postTitle = button.getAttribute("data-title");
+        const postText = button.getAttribute("data-text");
 
-        titleText.textContent = button.getAttribute("data-title");
-        contentsContainerText.innerHTML = button.getAttribute("data-text");
+        history.pushState(null, "", nextPath);
+
+        titleText.textContent = postTitle;
+        contentsContainerText.innerHTML = postText;
+        populateSharePostDetails({
+            title: postTitle,
+            text: postText,
+            path: nextPath
+        });
 
         if (draft) {
             setOverexposureContainerToEditor(true);

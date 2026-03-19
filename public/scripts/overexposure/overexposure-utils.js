@@ -102,6 +102,22 @@ function getIDFromURL() {
     return pathSegments[pathSegments.length - 1];
 }
 
+function normalizeCardCoordinate(value) {
+    const numericValue = Number.parseFloat(value);
+    return Number.isFinite(numericValue) ? Math.round(numericValue) : null;
+}
+
+function buildOverexposureCardSlug(x, y) {
+    const normalizedX = normalizeCardCoordinate(x);
+    const normalizedY = normalizeCardCoordinate(y);
+
+    if (normalizedX === null || normalizedY === null) {
+        return "";
+    }
+
+    return `${normalizedX}-${normalizedY}`;
+}
+
 function cleanOverexposureUrl() {
     const currentUrl = window.location.pathname;
     const basePath = "/overexposure";
@@ -114,6 +130,40 @@ function cleanOverexposureUrl() {
 
     document.querySelectorAll(".floating-button.draft").forEach(button => button.remove());
     document.querySelectorAll(".no-place.draft").forEach(noPlaceDraft => noPlaceDraft.remove());
+}
+
+function stripHtmlToPlainText(html = "") {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = html;
+    return (tempElement.textContent || tempElement.innerText || "").replace(/\s+/g, " ").trim();
+}
+
+function truncateShareText(text = "", maxLength = 200) {
+    const normalizedText = (text || "").trim();
+
+    if (!normalizedText) {
+        return "";
+    }
+
+    if (normalizedText.length <= maxLength) {
+        return normalizedText;
+    }
+
+    const truncatedText = normalizedText.slice(0, maxLength + 1);
+    const lastSpaceIndex = truncatedText.lastIndexOf(" ");
+    const safeText = lastSpaceIndex > 0
+        ? truncatedText.slice(0, lastSpaceIndex)
+        : normalizedText.slice(0, maxLength);
+
+    return `${safeText.trim()}...`;
+}
+
+function populateSharePostDetails({ title = "", text = "", path = "" } = {}) {
+    sharePostBodyTitle.textContent = title || "Untitled";
+    sharePostBodyText.textContent = truncateShareText(stripHtmlToPlainText(text), 200);
+
+    const relativePath = path || window.location.pathname;
+    sharePostUrlInput.value = `${window.location.origin}${relativePath}`;
 }
 
 function ChangePageColour(primary = defaultColours.primary, secondary = defaultColours.secondary) {

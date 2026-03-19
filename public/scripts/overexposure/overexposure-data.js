@@ -38,7 +38,7 @@ async function fetchConfessions() {
         let idFound = false;
 
         data.forEach(confession => {
-            if (confession.id === idFromURL) {
+            if (confession.id === idFromURL || buildOverexposureCardSlug(confession.x, confession.y) === idFromURL) {
                 idFound = true;
             }
             createFloatingButton(null, [
@@ -174,7 +174,11 @@ async function saveDataToMongoDB(draftData) {
     }
 }
 
-overexposureContainer.addEventListener("mousedown", function () {
+overexposureContainer.addEventListener("mousedown", function (event) {
+    if (event.target.closest('.moderation-controls-container')) {
+        return;
+    }
+
     if (exitMenuContainer.classList.contains("active")) {
         exitMenuContainer.classList.remove("active");
         areYouSurePostContainer.classList.remove('active');
@@ -193,6 +197,10 @@ overexposureContainer.addEventListener("mousedown", function () {
     if (deletePostContainer.classList.contains("active")) {
         deletePostContainer.classList.remove('active');
         removeElementIfExists(popUpClassArray, deletePostContainer)
+    }
+    if (sharePostContainer.classList.contains("active")) {
+        sharePostContainer.classList.remove('active');
+        removeElementIfExists(popUpClassArray, sharePostContainer)
     }
 });
 

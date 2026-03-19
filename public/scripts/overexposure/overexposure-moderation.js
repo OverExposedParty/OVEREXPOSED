@@ -49,9 +49,56 @@ function SetNSFW() {
     }
 }
 
+function trapModerationButtonPointer(button) {
+    if (!button) return;
+    button.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
+    });
+    button.addEventListener("click", (event) => {
+        event.stopPropagation();
+    });
+}
+
+trapModerationButtonPointer(sharePostButton);
+trapModerationButtonPointer(deletePostButton);
+trapModerationButtonPointer(flagPostButton);
+
+function closeModerationPopups({ except = null } = {}) {
+    const moderationPopups = [sharePostContainer, deletePostContainer];
+
+    moderationPopups.forEach((popup) => {
+        if (!popup || popup === except) return;
+        popup.classList.remove('active');
+        removeElementIfExists(popUpClassArray, popup);
+    });
+}
+
+sharePostButton.addEventListener("click", () => {
+    const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
+    if (!selectedCardId) return;
+
+    if (sharePostContainer.classList.contains('active')) {
+        sharePostContainer.classList.remove('active');
+        removeElementIfExists(popUpClassArray, sharePostContainer);
+        return;
+    }
+
+    closeModerationPopups({ except: sharePostContainer });
+    sharePostContainer.classList.add('active');
+    addElementIfNotExists(popUpClassArray, sharePostContainer);
+});
+
 deletePostButton.addEventListener("click", () => {
     const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
     if (!selectedCardId) return;
+
+    if (deletePostContainer.classList.contains('active')) {
+        deletePostContainer.classList.remove('active');
+        removeElementIfExists(popUpClassArray, deletePostContainer);
+        return;
+    }
+
+    closeModerationPopups({ except: deletePostContainer });
     deletePostContainer.classList.add('active');
     addElementIfNotExists(popUpClassArray, deletePostContainer);
     if (localStorage.getItem(`overexposure-delete-code-${selectedCardId}`)) {
@@ -137,7 +184,8 @@ flagPostButton.addEventListener("click", () => {
 
 function toggleFlagPost({ toggle = false, confessionId = null }) {
     if (toggle) {
-        flagPostButton.textContent = flagPostButton.textContent === "[FLAG]" ? "[UNFLAG]" : "[FLAG]";
+        const isToggled = flagPostButton.classList.toggle('toggled');
+        flagPostButton.setAttribute('aria-pressed', isToggled ? 'true' : 'false');
     }
     console.log("Toggle flag post:", toggle, confessionId);
 }

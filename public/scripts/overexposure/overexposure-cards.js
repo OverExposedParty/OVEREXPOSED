@@ -19,6 +19,7 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
     function createFloatingButton(event = null, row, draft = false) {
         const idFromURL = getIDFromURL();
         const [title = "New Title", text = "Type here...", id = new Date().toISOString(), date = Date.now(), userIcon = "0000:0100:0200:0300", xPosition = "0", yPosition = "0", tag = "confessions"] = row;
+        const cardSlug = buildOverexposureCardSlug(xPosition, yPosition);
         const button = document.createElement("button");
         button.classList.add("floating-button");
 
@@ -46,6 +47,8 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
         button.setAttribute("data-text", text);
         button.setAttribute("data-tag", tag);
         button.setAttribute("data-usericon", userIcon);
+        button.setAttribute("data-x", normalizeCardCoordinate(xPosition) ?? xPosition);
+        button.setAttribute("data-y", normalizeCardCoordinate(yPosition) ?? yPosition);
 
         const noPlaceDiv = document.createElement("div");
         noPlaceDiv.classList.add("no-place");
@@ -125,8 +128,7 @@ function CreateTempNoPlaceDiv(xPosition, yPosition) {
             noPlaceDiv.classList.add("draft");
             selectCard(button, true)
         }
-        if (id === idFromURL) {
-            cleanOverexposureUrl();
+        if (id === idFromURL || cardSlug === idFromURL) {
             selectCard(button, false)
         }
     }
