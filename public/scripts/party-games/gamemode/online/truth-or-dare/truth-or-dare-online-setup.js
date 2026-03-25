@@ -201,9 +201,10 @@ async function initialisePage() {
       });
     }
 
-    // Ensure connection exists
+    // Mirror the socket id in both shapes while the codebase still has mixed readers.
     me.connection = me.connection || {};
     me.connection.socketId = socket.id;
+    me.socketId = socket.id;
 
     joinParty(partyCode);
 
@@ -290,6 +291,8 @@ async function initialisePage() {
         deck,
         players
       });
+
+      await FetchInstructions();
     }
 
     SetPartyGameStatistics();

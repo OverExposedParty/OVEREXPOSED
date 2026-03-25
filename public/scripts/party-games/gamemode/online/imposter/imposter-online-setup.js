@@ -196,6 +196,7 @@ async function initialisePage() {
   joinParty(partyCode);
   const meConn = ensureConnection(me); 
   meConn.socketId = socket.id;
+  me.socketId = socket.id;
   console.log("Socket ID set to: " + meConn.socketId);
 
   if (state.isPlaying === true) {

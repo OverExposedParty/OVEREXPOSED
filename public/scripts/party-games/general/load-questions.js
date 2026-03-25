@@ -1,6 +1,5 @@
 let allQuestions = [];
 let currentQuestionIndex = 0;
-let questionPackMap = []; // Maps questions to their respective packs
 let cardPackMap = []; // Maps cards to their respective packs
 
 let numberOfQuestions = 0;
@@ -61,6 +60,12 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
           return;
         }
 
+        const displayPackName = packName
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, c => c.toUpperCase())
+          .replace(formattedGamemode, "")
+          .trim();
+
         questions.forEach(question => {
           const alts = question["question-alternatives"];
 
@@ -70,15 +75,8 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
             question["question-alternatives"] = [alts];
           }
 
+          question.__packName = displayPackName;
           allQuestions.push(question);
-
-          questionPackMap.push(
-            packName
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, c => c.toUpperCase())
-              .replace(formattedGamemode, "")
-              .trim()
-          );
         });
       });
     });
@@ -135,7 +133,6 @@ function shuffleQuestions(seed = null) {
     for (let i = allQuestions.length - 1; i > 0; i--) {
         const j = Math.floor(random() * (i + 1));
         [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
-        [questionPackMap[i], questionPackMap[j]] = [questionPackMap[j], questionPackMap[i]];
     }
 }
 
@@ -155,11 +152,11 @@ function getNextQuestion(index = null, questionType = null, seed = null) {
         }
 
         selectedQuestion = filteredQuestions[currentQuestionIndex];
-        cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
+        cardType = selectedQuestion?.__packName || 'Unknown Pack';
         currentQuestionIndex++;
     } else {
         selectedQuestion = filteredQuestions[index];
-        cardType = questionPackMap[index] || 'Unknown Pack';
+        cardType = selectedQuestion?.__packName || 'Unknown Pack';
     }
 
     return {

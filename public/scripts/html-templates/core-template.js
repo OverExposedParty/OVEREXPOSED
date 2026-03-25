@@ -10,10 +10,23 @@ function getInitialAssetVersion() {
   }
 }
 
-const WEBSITE_CACHE_VERSION = getInitialAssetVersion();
-const WEBSITE_VERSION = WEBSITE_CACHE_VERSION;
-const GAME_SETTINGS_VERSION = WEBSITE_CACHE_VERSION;
+// Update these values manually when you want to force browsers to fetch new script files.
+// Leave a value empty to fall back to the version already on the core-template.js URL.
+const MANUAL_SCRIPT_VERSIONS = Object.freeze({
+  WEBSITE_CACHE_VERSION: '2026-03-25-1',
+  WEBSITE_VERSION: '2026-03-25-1',
+  GAME_SETTINGS_VERSION: '2026-03-25-1'
+});
+
+function resolveScriptVersion(manualVersion) {
+  return manualVersion || getInitialAssetVersion() || null;
+}
+
+const WEBSITE_CACHE_VERSION = resolveScriptVersion(MANUAL_SCRIPT_VERSIONS.WEBSITE_CACHE_VERSION);
+const WEBSITE_VERSION = resolveScriptVersion(MANUAL_SCRIPT_VERSIONS.WEBSITE_VERSION) || WEBSITE_CACHE_VERSION;
+const GAME_SETTINGS_VERSION = resolveScriptVersion(MANUAL_SCRIPT_VERSIONS.GAME_SETTINGS_VERSION) || WEBSITE_CACHE_VERSION;
 window.WEBSITE_CACHE_VERSION = WEBSITE_CACHE_VERSION;
+window.MANUAL_SCRIPT_VERSIONS = MANUAL_SCRIPT_VERSIONS;
 
 const SCRIPT_VERSIONS = {
   HOMEPAGE: WEBSITE_VERSION,
@@ -37,6 +50,7 @@ const SCRIPT_VERSIONS = {
   OTHER: WEBSITE_VERSION,
   ERROR_404: WEBSITE_VERSION,
 };
+window.SCRIPT_VERSIONS = SCRIPT_VERSIONS;
 
 
 const splashScreenContainer = document.getElementById("splash-screen-container");
@@ -76,18 +90,10 @@ const coreScripts = {
 
 function getVersionForAsset(cacheBustKey = null) {
   if (cacheBustKey !== null) {
-    return SCRIPT_VERSIONS[cacheBustKey] ?? null;
+    return SCRIPT_VERSIONS[cacheBustKey] ?? WEBSITE_CACHE_VERSION ?? null;
   }
 
-  const currentScriptSrc = document.currentScript?.getAttribute('src') || document.currentScript?.src;
-  if (!currentScriptSrc) return null;
-
-  try {
-    const url = new URL(currentScriptSrc, window.location.origin);
-    return url.searchParams.get('v');
-  } catch {
-    return null;
-  }
+  return WEBSITE_CACHE_VERSION ?? getInitialAssetVersion() ?? null;
 }
 
 function shouldVersionAssetUrl(assetUrl) {

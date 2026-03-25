@@ -105,6 +105,7 @@ const index = players.findIndex(
 
   const meConn = ensureConnection(me);
   meConn.socketId = socket.id;
+  me.socketId = socket.id;
   console.log("Socket ID set to: " + meConn.socketId);
 
   if (state.isPlaying === true) {
@@ -210,6 +211,8 @@ const index = players.findIndex(
         state: updatedState,
         players
       });
+
+      await FetchInstructions();
     }
 
     await AddUserIcons();

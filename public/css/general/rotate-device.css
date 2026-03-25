@@ -1,7 +1,3 @@
-:root {
-    --rotatedeviceicon: url(/images/icons/overexposed/rotate-phone-icon.svg);
-}
-
 .landscape-message {
     position: fixed;
     left: 0;
@@ -27,7 +23,7 @@
 .rotate-icon {
     margin-top: 10vh;
     width: 30vh;
-    height: 30vh; /* Ensure height is defined */
+    height: 30vh;
     animation: rotate-and-disappear 3s infinite;
     
     background-image: var(--rotatedeviceicon);

@@ -76,6 +76,9 @@ function ToggleSelectedTag(tagItem = document.querySelector(`.tag-item#confessio
     }
 
     ChangePageColour(primaryColour, secondaryColour);
+    if (typeof window.updateOverexposureFavicons === 'function') {
+        window.updateOverexposureFavicons(tagItem.id);
+    }
 
     document.querySelectorAll('.tag-item.selected').forEach(otherTag => {
         if (otherTag !== tagItem) {

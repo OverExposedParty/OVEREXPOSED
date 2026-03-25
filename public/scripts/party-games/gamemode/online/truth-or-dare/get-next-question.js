@@ -16,7 +16,7 @@ function getNextQuestion(type) {
     }
 
     const selectedQuestion = filteredQuestions[currentQuestionIndex];
-    const cardType = questionPackMap[currentQuestionIndex] || 'Unknown Pack';
+    const cardType = selectedQuestion?.__packName || 'Unknown Pack';
 
     // Check if there's a punishment key in the selected question
     const punishment = selectedQuestion["punishment"] ? selectedQuestion["punishment"] : null;

@@ -75,6 +75,7 @@ async function initialisePage() {
 
   if (!me.connection) me.connection = {};
   me.connection.socketId = socket.id;
+  me.socketId = socket.id;
 
   joinParty(partyCode);
 

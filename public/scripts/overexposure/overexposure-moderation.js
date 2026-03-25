@@ -1,9 +1,30 @@
+function getActiveOverexposureTag() {
+    const selectedTag = document.querySelector('.tag-item.selected');
+    return selectedTag?.id || 'confessions';
+}
+
+function updateOverexposureFavicons(tag = getActiveOverexposureTag()) {
+    const safeTag = tag || 'confessions';
+    const faviconBasePath = `/images/meta/favicons/overexposure/${safeTag}`;
+
+    const faviconIco = document.querySelector('link[rel="icon"][type="image/x-icon"]');
+    const favicon16 = document.querySelector('link[rel="icon"][sizes="16x16"]');
+    const favicon32 = document.querySelector('link[rel="icon"][sizes="32x32"]');
+    const faviconApple = document.querySelector('link[rel="apple-touch-icon"]');
+    const faviconManifest = document.querySelector('link[rel="manifest"]');
+
+    if (faviconIco) faviconIco.href = `${faviconBasePath}/favicon.ico`;
+    if (favicon16) favicon16.href = `${faviconBasePath}/favicon-16x16.png`;
+    if (favicon32) favicon32.href = `${faviconBasePath}/favicon-32x32.png`;
+    if (faviconApple) faviconApple.href = `${faviconBasePath}/apple-touch-icon.png`;
+    if (faviconManifest) faviconManifest.href = `${faviconBasePath}/site.webmanifest`;
+}
+
+window.updateOverexposureFavicons = updateOverexposureFavicons;
+
 function SetNSFW() {
     const bool = localStorage.getItem('settings-nsfw');
     const buttons = document.querySelectorAll('.floating-button');
-
-    const sizes = ['16x16', '32x32', '96x96', '180x180'];
-    const faviconLinks = document.querySelectorAll('link[rel="icon"]');
 
     if (bool === 'true') {
         enableNSFWContainer.classList.remove('active');
@@ -17,14 +38,10 @@ function SetNSFW() {
             });
         });
 
-        faviconLinks.forEach((favicon, i) => {
-            const size = sizes[i % sizes.length];
-            favicon.href = `/images/icons/overexposure/favicons/favicon-${size}.png`;
-
-            document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
-            document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/overexposure/tik-tok-icon.svg)`);
-            document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/overexposure/instagram-icon.svg)`);
-        });
+        updateOverexposureFavicons();
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/overexposure/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/overexposure/tik-tok-icon.svg)`);
+        document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/overexposure/instagram-icon.svg)`);
     }
     else {
         enableNSFWContainer.classList.add('active');
@@ -38,14 +55,10 @@ function SetNSFW() {
             });
         });
 
-        faviconLinks.forEach((favicon, i) => {
-            const size = sizes[i % sizes.length];
-            favicon.href = `/images/icons/grey/favicons/favicon-${size}.png`;
-
-            document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/grey/rotate-phone-icon.svg)`);
-            document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/grey/tik-tok-icon.svg)`);
-            document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/grey/instagram-icon.svg)`);
-        });
+        updateOverexposureFavicons();
+        document.documentElement.style.setProperty('--rotatedeviceicon', `url(/images/icons/grey/rotate-phone-icon.svg)`);
+        document.documentElement.style.setProperty('--tiktokicon', `url(/images/icons/grey/tik-tok-icon.svg)`);
+        document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/grey/instagram-icon.svg)`);
     }
 }
 
