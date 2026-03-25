@@ -1,5 +1,10 @@
 async function waitForOnlineCore() {
-    const timeoutMs = 10000;
+    const timeoutMs = 30000;
+
+    if (window.Ready?.when) {
+        await Ready.when('online-core', { timeout: timeoutMs });
+    }
+
     const startTime = Date.now();
 
     while (

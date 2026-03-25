@@ -13,9 +13,9 @@ function getInitialAssetVersion() {
 // Update these values manually when you want to force browsers to fetch new script files.
 // Leave a value empty to fall back to the version already on the core-template.js URL.
 const MANUAL_SCRIPT_VERSIONS = Object.freeze({
-  WEBSITE_CACHE_VERSION: '2026-03-25-1',
-  WEBSITE_VERSION: '2026-03-25-1',
-  GAME_SETTINGS_VERSION: '2026-03-25-1'
+  WEBSITE_CACHE_VERSION: '2026-03-25-2',
+  WEBSITE_VERSION: '2026-03-25-2',
+  GAME_SETTINGS_VERSION: '2026-03-25-2'
 });
 
 function resolveScriptVersion(manualVersion) {

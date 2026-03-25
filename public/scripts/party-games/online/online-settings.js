@@ -8,6 +8,11 @@
 
         await CheckGamePage();
 
+        window.onlineCoreReady = true;
+        if (window.Ready?.set) {
+            Ready.set('online-core');
+        }
+
     } catch (err) {
         console.error("❌ Error loading Online scripts:", err);
     }
