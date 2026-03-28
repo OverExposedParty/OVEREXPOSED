@@ -136,13 +136,16 @@ async function SetPageSettings() {
   console.log(cardContainerPublic);
   console.log(cardContainerPublic.querySelector('.main-image-container'));
 
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
+  const initialPartyData = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (!initialPartyData) {
     console.warn('No party data found.');
     ShowPartyDoesNotExistState();
     return;
   }
-  currentPartyData = existingData[0];
+  currentPartyData = initialPartyData;
 
   // Use config for selectedPacks & shuffleSeed (fallback to flat for legacy)
   const config = currentPartyData.config ?? currentPartyData;
@@ -152,10 +155,11 @@ async function SetPageSettings() {
 }
 
 async function initialisePage() {
-  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (data.length > 0) {
-    const party = data[0];
+  const party = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (party) {
 
     const players = party.players || [];
     const config = party.config ?? party;
@@ -309,5 +313,7 @@ async function initialisePage() {
     });
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
     SetScriptLoaded('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online.js');
+  } else {
+    ShowPartyDoesNotExistState();
   }
 }

@@ -163,7 +163,14 @@ function populateSharePostDetails({ title = "", text = "", path = "" } = {}) {
     sharePostBodyText.textContent = truncateShareText(stripHtmlToPlainText(text), 200);
 
     const relativePath = path || window.location.pathname;
-    sharePostUrlInput.value = `${window.location.origin}${relativePath}`;
+    const fullShareUrl = `${window.location.origin}${relativePath}`;
+    const displayShareCode = relativePath
+        .split("/")
+        .filter(Boolean)
+        .pop() || "";
+
+    sharePostUrlInput.value = displayShareCode;
+    sharePostUrlInput.dataset.fullUrl = fullShareUrl;
 }
 
 function ChangePageColour(primary = defaultColours.primary, secondary = defaultColours.secondary) {

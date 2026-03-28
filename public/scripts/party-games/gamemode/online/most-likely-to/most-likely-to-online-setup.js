@@ -16,14 +16,14 @@ const punishmentText = document
   .querySelector('#complete-punishment-container .content-container #punishment-text');
 
 async function initialisePage() {
-  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (data.length === 0) {
+  const party = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (!party) {
     ShowPartyDoesNotExistState();
     return;
   }
-
-  const party = data[0];
   const players = party.players || [];
   const config = getPartyConfig(party);
   const state = getPartyState(party);
@@ -282,13 +282,16 @@ async function SetPageSettings() {
   AddTimerToContainer(waitingForPlayerContainer);
 
   // Load current party (new schema only)
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
+  const initialPartyData = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (!initialPartyData) {
     console.warn('No party data found.');
     ShowPartyDoesNotExistState();
     return;
   }
-  currentPartyData = existingData[0];
+  currentPartyData = initialPartyData;
 
   const config = getPartyConfig(currentPartyData);
   const deck = currentPartyData.deck;

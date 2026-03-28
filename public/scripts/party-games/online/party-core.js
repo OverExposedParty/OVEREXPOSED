@@ -329,6 +329,50 @@ function postToBothEndpoints(payload, endpoint1, endpoint2) {
     });
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForOnlinePartySnapshot({
+  partyType = sessionPartyType,
+  requirePlayer = false,
+  requirePlaying = false,
+  retries = 20,
+  delayMs = 250
+} = {}) {
+  let latestParty = null;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const existingData = await getExistingPartyData(partyCode, partyType);
+      latestParty = Array.isArray(existingData) ? existingData[0] ?? null : null;
+    } catch (error) {
+      console.warn('Failed to fetch party snapshot during startup:', error);
+      latestParty = null;
+    }
+
+    if (latestParty) {
+      const players = latestParty.players || [];
+      const state = getPartyState(latestParty) || {};
+      const hasPlayer = players.some(
+        (player) => player.identity?.computerId === deviceId || player.computerId === deviceId
+      );
+      const playingReady = requirePlaying ? state.isPlaying === true : true;
+      const playerReady = requirePlayer ? hasPlayer : true;
+
+      if (playerReady && playingReady) {
+        return latestParty;
+      }
+    }
+
+    if (attempt < retries) {
+      await delay(delayMs);
+    }
+  }
+
+  return latestParty;
+}
+
 // Game rules helpers
 function getIncrementContainerValue(key) {
   if (!Array.isArray(partyRulesSettings)) return null;

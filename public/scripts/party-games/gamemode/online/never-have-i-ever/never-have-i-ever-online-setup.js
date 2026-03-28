@@ -13,14 +13,14 @@ gameContainers.push(
 );
 
 async function initialisePage() {
-  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (!data || data.length === 0) {
+  const party = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (!party) {
     ShowPartyDoesNotExistState();
     return;
   }
-
-  const party = data[0];
   currentPartyData = party;
 
   const players = party.players || [];
@@ -177,13 +177,16 @@ async function SetPageSettings() {
   AddTimerToContainer(waitingForPlayersContainer);
   AddTimerToContainer(resultsChartContainer);
 
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
+  const initialPartyData = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying: true
+  });
+  if (!initialPartyData) {
     console.warn('No party data found.');
     ShowPartyDoesNotExistState();
     return;
   }
-  currentPartyData = existingData[0];
+  currentPartyData = initialPartyData;
 
   // 🔁 Use nested config (with legacy fallback)
   const config = getPartyConfig(currentPartyData);

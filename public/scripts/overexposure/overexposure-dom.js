@@ -31,6 +31,7 @@ const sharePostContainer = document.getElementById("share-post-container");
 const sharePostBodyTitle = sharePostContainer.querySelector(".share-post-body-title");
 const sharePostBodyText = sharePostContainer.querySelector(".share-post-body-text");
 const sharePostUrlInput = document.getElementById("share-post-url-input");
+const sharePostCopyButton = document.getElementById("share-post-copy-button");
 const deletePostContainer = document.getElementById("delete-post-container");
 const deleteCodeInput = deletePostContainer.querySelector('input');
 const deletePostSubmit = deletePostContainer.querySelector('.warning-button-container button');

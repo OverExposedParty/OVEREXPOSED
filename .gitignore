@@ -3,6 +3,7 @@
 
 # Node dependencies
 node_modules/
+docs/
 
 # Logs
 logs

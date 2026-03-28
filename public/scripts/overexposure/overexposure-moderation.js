@@ -75,6 +75,7 @@ function trapModerationButtonPointer(button) {
 trapModerationButtonPointer(sharePostButton);
 trapModerationButtonPointer(deletePostButton);
 trapModerationButtonPointer(flagPostButton);
+trapModerationButtonPointer(sharePostCopyButton);
 
 function closeModerationPopups({ except = null } = {}) {
     const moderationPopups = [sharePostContainer, deletePostContainer];
@@ -99,6 +100,26 @@ sharePostButton.addEventListener("click", () => {
     closeModerationPopups({ except: sharePostContainer });
     sharePostContainer.classList.add('active');
     addElementIfNotExists(popUpClassArray, sharePostContainer);
+});
+
+sharePostCopyButton.addEventListener("click", async () => {
+    flashButtonHoverState(sharePostCopyButton, {
+        duration: 250,
+        className: 'copy-feedback-active',
+        transitionClassName: 'copy-feedback-fade',
+        touchOnly: false
+    });
+
+    try {
+        const shareUrl = sharePostUrlInput.dataset.fullUrl || `${window.location.origin}${window.location.pathname}`;
+        const copied = await copyTextToClipboard(shareUrl);
+
+        if (!copied) {
+            throw new Error('Clipboard copy command was not successful.');
+        }
+    } catch (err) {
+        console.error('Failed to copy share URL:', err);
+    }
 });
 
 deletePostButton.addEventListener("click", () => {

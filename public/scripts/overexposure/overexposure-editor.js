@@ -138,7 +138,20 @@ titleTextEditor.querySelector('input').addEventListener('blur', () => {
 });
 
 publishButton.addEventListener("click", async () => {
-    if (detectName(contentsTextArea.value).hasName || detectName(titleTextInput.value).hasName) {
+    const contentNameCheck = detectName(contentsTextArea.value);
+    const titleNameCheck = detectName(titleTextInput.value);
+
+    if (contentNameCheck.hasName || titleNameCheck.hasName) {
+        console.warn("[Overexposure] Post blocked by name filter", {
+            title: {
+                text: titleTextInput.value,
+                matches: titleNameCheck.name || []
+            },
+            content: {
+                text: contentsTextArea.value,
+                matches: contentNameCheck.name || []
+            }
+        });
         playSoundEffect('postIncomplete');
         postIncompleteContainer.classList.add('active');
         addElementIfNotExists(popUpClassArray, postIncompleteContainer);

@@ -40,6 +40,10 @@ function collapseRepeatedLetters(value) {
     return value.replace(/([a-z])\1{1,}/g, "$1");
 }
 
+function countAlphaWords(value) {
+    return (String(value || "").match(/[A-Za-z]+/g) || []).length;
+}
+
 function generateNameCandidates(text) {
     const sanitizedText = String(text || "")
         .normalize("NFKD")
@@ -48,40 +52,23 @@ function generateNameCandidates(text) {
         .replace(/./g, char => LEETSPEAK_MAP[char] ?? char);
 
     const alphaChunks = sanitizedText.match(/[a-z]+/g) || [];
-    const candidates = new Set();
 
-    for (const chunk of alphaChunks) {
-        if (!chunk) continue;
-        candidates.add(chunk);
-        candidates.add(collapseRepeatedLetters(chunk));
-    }
-
-    for (let index = 0; index < alphaChunks.length; index++) {
-        let combined = "";
-
-        for (let offset = 0; offset < 4 && index + offset < alphaChunks.length; offset++) {
-            combined += alphaChunks[index + offset];
-
-            if (combined.length < 2) continue;
-
-            candidates.add(combined);
-            candidates.add(collapseRepeatedLetters(combined));
-        }
-    }
-
-    return candidates;
+    return { alphaChunks };
 }
 
 function detectName(text) {
     const detectedNames = new Set();
-    const normalizedCandidates = generateNameCandidates(text);
+    const { alphaChunks } = generateNameCandidates(text);
 
-    normalizedCandidates.forEach(candidate => {
-        if (candidate.length < 3) return;
-        if (nameList.has(candidate)) {
-            detectedNames.add(candidate);
+    for (let index = 0; index < alphaChunks.length - 1; index++) {
+        const firstChunk = collapseRepeatedLetters(alphaChunks[index]);
+        const secondChunk = collapseRepeatedLetters(alphaChunks[index + 1]);
+
+        if (firstChunk.length < 3 || secondChunk.length < 3) continue;
+        if (nameList.has(firstChunk) && nameList.has(secondChunk)) {
+            detectedNames.add(`${firstChunk} ${secondChunk}`);
         }
-    });
+    }
 
     if (detectedNames.size > 0) {
         return { hasName: true, name: Array.from(detectedNames) };
@@ -90,6 +77,8 @@ function detectName(text) {
     if (typeof nlp === "function") {
         const doc = nlp(text);
         const nlpNames = doc.people().out("array")
+            .map(name => String(name || "").trim())
+            .filter(name => countAlphaWords(name) >= 2)
             .map(name => normalizeNameToken(name))
             .filter(name => name.length >= 3 && nameList.has(name));
 

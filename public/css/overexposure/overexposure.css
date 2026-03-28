@@ -706,8 +706,9 @@ textarea {
     border-radius: 8px;
     background-color: var(--backgroundcolour);
     color: var(--primarypagecolour);
-    font-size: 12px;
-    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
