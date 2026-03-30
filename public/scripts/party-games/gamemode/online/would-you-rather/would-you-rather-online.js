@@ -29,6 +29,11 @@ async function waitForOnlineCore() {
         await Ready.when('selected-user-containers', { timeout: 10000 });
         await waitForOnlineCore();
         await SetPageSettings();
+        window.onlineGameUiReady = true;
+        await flushPendingOnlineInstructionSync();
+        if (typeof FetchInstructions === 'function' && isPlaying) {
+            await FetchInstructions();
+        }
         SetScriptLoaded('/scripts/party-games/gamemode/online/would-you-rather/would-you-rather-online.js');
 
     } catch (err) {

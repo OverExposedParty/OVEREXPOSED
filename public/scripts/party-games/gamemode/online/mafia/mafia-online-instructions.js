@@ -102,8 +102,8 @@ async function DisplayNightPhase() {
 
   if (myRole === "civilian") {
     if (
-      !selectCivilianWatchContainer.classList.contains('active') &&
-      !displayCivilianWatchResponseContainer.classList.contains('active')
+      !isContainerVisible(selectCivilianWatchContainer) &&
+      !isContainerVisible(displayCivilianWatchResponseContainer)
     ) {
       console.log("completed", myState.phase.state === "completed");
       waitForFunction("InitializeCivilianWatch", async () => {
@@ -425,9 +425,9 @@ async function DisplayGameOver(instruction) {
 
 
 function DisplayPlayerDeadPLayerBoard() {
-  if (!playerBoard.classList.contains('active')) {
+  if (!isContainerVisible(playerBoard)) {
     setActiveContainers();
-    playerBoard.classList.add('active');
+    showContainer(playerBoard);
     addElementIfNotExists(permanantElementClassArray, playerBoard);
     toggleOverlay(true);
   }

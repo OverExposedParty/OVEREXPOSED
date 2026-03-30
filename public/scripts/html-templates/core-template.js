@@ -13,9 +13,9 @@ function getInitialAssetVersion() {
 // Update these values manually when you want to force browsers to fetch new script files.
 // Leave a value empty to fall back to the version already on the core-template.js URL.
 const MANUAL_SCRIPT_VERSIONS = Object.freeze({
-  WEBSITE_CACHE_VERSION: '2026-03-25-2',
-  WEBSITE_VERSION: '2026-03-25-2',
-  GAME_SETTINGS_VERSION: '2026-03-25-2'
+  WEBSITE_CACHE_VERSION: '2026-03-30-1',
+  WEBSITE_VERSION: '2026-03-30-1',
+  GAME_SETTINGS_VERSION: '2026-03-30-1'
 });
 
 function resolveScriptVersion(manualVersion) {
@@ -67,6 +67,7 @@ let gameContainers = [];
 const cssFilesHeader = [
   '/css/general/settings.css',
   '/css/general/help-container.css',
+  '/css/general/tool-tip.css',
   '/css/general/warning-message-style.css',
   '/css/general/rotate-device.css'
 ];
@@ -74,6 +75,7 @@ const cssFilesHeader = [
 const coreScripts = {
   '/scripts/general/dom-and-const.js': { zIndex: 0 },
   '/scripts/general/utils.js': { zIndex: 0 },
+  '/scripts/general/tool-tip.js': { zIndex: 0 },
   '/scripts/general/cookies.js': { zIndex: 1 },
 
   '/scripts/general/sound.js': { zIndex: 1 },
@@ -282,7 +284,7 @@ function setActiveContainers(...activeContainers) {
   if (activeContainers.length === 0) {
     gameContainers.forEach(container => {
       if (!container || !container.classList) return;
-      container.classList.remove('active');
+      hideContainer(container);
     });
     return;
   }
@@ -292,9 +294,9 @@ function setActiveContainers(...activeContainers) {
   gameContainers.forEach(container => {
     if (!container || !container.classList) return;
     if (uniqueActiveContainers.has(container)) {
-      container.classList.add('active');
+      showContainer(container);
     } else {
-      container.classList.remove('active');
+      hideContainer(container);
     }
   });
 }

@@ -19,14 +19,11 @@
     border-radius: 25px;
     max-width: 60vw;
     max-height: 60vw;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    display: none;
-}
-.warning-box.active {
-    display: block;
+    display: var(--container-display, none);
+    --container-visible-display: block;
 }
 
 .warning-image {

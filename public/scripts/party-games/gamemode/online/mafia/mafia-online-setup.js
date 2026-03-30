@@ -104,7 +104,7 @@ const index = players.findIndex(
     });
   }
 
-  joinParty(partyCode);
+  await joinParty(partyCode);
 
   const meConn = ensureConnection(me);
   meConn.socketId = socket.id;
@@ -193,34 +193,35 @@ const index = players.findIndex(
         updateUsersReady: false,
         updateUsersConfirmation: false,
         partyData: party,
+        fetchInstruction: true,
         timer: new Date(Date.now() + mafiaDisplayRoleTimer)
       });
     } else {
-      const updatedState = {
-        ...state,
-        lastPinged: new Date()
-      };
+      const syncedPartyState = await syncStartupPartyState();
 
-      currentPartyData = {
-        ...party,
-        config,
-        state: updatedState,
-        players
-      };
+      if (syncedPartyState) {
+        currentPartyData = {
+          ...syncedPartyState.party,
+          config: syncedPartyState.config,
+          state: syncedPartyState.state,
+          players: syncedPartyState.players
+        };
+      }
 
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: updatedState,
-        players
+      const partyWithInstruction = await waitForPartyInstruction({
+        retries: 20,
+        delayMs: 250
       });
+
+      if (partyWithInstruction) {
+        currentPartyData = partyWithInstruction;
+      }
 
       await FetchInstructions();
     }
 
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/mafia/mafia-online.js');
   }
 }
 

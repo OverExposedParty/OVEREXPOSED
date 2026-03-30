@@ -12,6 +12,12 @@
     height: 100%;
 }
 
+.packs-container.is-visible,
+.rules-settings-container.is-visible,
+.online-game-settings-container.is-visible {
+    display: flex;
+}
+
 /* Content Containers */
 .packs-content-container,
 .rules-content-container,
@@ -25,10 +31,9 @@
 }
 
 
-.packs-container.active,
-.rules-settings-container.active,
-.online-game-settings-container.active {
-    display: flex;
+.packs-container.is-visible,
+.rules-settings-container.is-visible,
+.online-game-settings-container.is-visible {
     margin: 0 auto;
     padding: 0;
 }
@@ -216,7 +221,7 @@
     aspect-ratio: 4/5;
 }
 
-.join-party-qr-code-container.active {
+.join-party-qr-code-container.is-visible {
     display: flex;
 }
 

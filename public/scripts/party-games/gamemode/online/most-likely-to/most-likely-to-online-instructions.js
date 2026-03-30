@@ -87,7 +87,7 @@ async function DisplayVoteResults() {
     return;
   }
 
-  if (!resultsChartContainer.classList.contains('active')) {
+  if (!isContainerVisible(resultsChartContainer)) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }

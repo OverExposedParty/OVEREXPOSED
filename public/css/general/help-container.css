@@ -13,16 +13,13 @@
     border-radius: 25px;
     min-width: 260px;
     max-height: calc(100dvh - var(--headerheight) - 40px);
-    min-height: none;
-    display: none;
+    min-height: var(--container-min-height, none);
+    display: var(--container-display, none);
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-}
-
-.help-container.active {
-    display: flex;
-    min-height: 200px;
+    --container-visible-display: flex;
+    --container-visible-min-height: 200px;
 }
 
 .help-content {

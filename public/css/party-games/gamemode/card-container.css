@@ -49,7 +49,7 @@
     right: 10px;
     width: clamp(40px, 8.4vw, 56px);
     height: auto;
-    display: none;
+    display: var(--container-display, none);
     pointer-events: none;
     z-index: 2;
 }
@@ -148,14 +148,16 @@
     box-sizing: border-box;
     height: calc(100dvh - var(--headerheight));
     margin-top: 0;
+    --container-visible-display: flex;
+}
+
+.card-container.is-visible,
+.card-container.active {
+    display: var(--container-visible-display, flex);
 }
 
 #placeholder-card-container[data-online="true"] .card-container {
     --cardHeight: 50dvh;
-}
-
-.card-container.active {
-    display: flex;
 }
 
 .regular-button-container {

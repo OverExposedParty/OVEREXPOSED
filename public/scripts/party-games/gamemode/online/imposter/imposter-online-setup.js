@@ -67,7 +67,7 @@ async function SetPageSettings() {
 
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
-      selectPunishmentContainer.classList.remove('active');
+      hideContainer(selectPunishmentContainer);
 
       const selectedId = selectPunishmentContainer.getAttribute('select-id');
 
@@ -195,7 +195,7 @@ async function initialisePage() {
     });
   }
 
-  joinParty(partyCode);
+  await joinParty(partyCode);
   const meConn = ensureConnection(me); 
   meConn.socketId = socket.id;
   me.socketId = socket.id;
@@ -290,19 +290,28 @@ async function initialisePage() {
         alternativeQuestionIndex: Math.floor(Math.random() * 255)
       });
     } else {
-      const updatedState = {
-        ...state,
-        lastPinged: new Date()
-      };
+      const syncedPartyState = await syncStartupPartyState();
 
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: updatedState,
-        deck,
-        players
+      if (syncedPartyState) {
+        currentPartyData = {
+          ...syncedPartyState.party,
+          config: syncedPartyState.config,
+          state: syncedPartyState.state,
+          deck: syncedPartyState.deck,
+          players: syncedPartyState.players
+        };
+      }
+
+      const partyWithInstruction = await waitForPartyInstruction({
+        retries: 20,
+        delayMs: 250
       });
-      FetchInstructions();
+
+      if (partyWithInstruction) {
+        currentPartyData = partyWithInstruction;
+      }
+
+      await FetchInstructions();
     }
 
     currentPartyData = { ...party, config, state, deck };
@@ -310,6 +319,5 @@ async function initialisePage() {
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/imposter/imposter-online.js');
   }
 }

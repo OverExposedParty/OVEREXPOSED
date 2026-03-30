@@ -91,7 +91,7 @@ async function DisplayVoteResults() {
 
   const players = currentPartyData.players || [];
 
-  if (!resultsChartContainer.classList.contains('active')) {
+  if (!isContainerVisible(resultsChartContainer)) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }

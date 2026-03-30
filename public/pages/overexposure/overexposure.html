@@ -92,7 +92,8 @@
                 <h1 class="title-text" id="title-text"></h1>
                 <div class="title-spacer"></div>
                 <div class="moderation-controls-container">
-                    <button id="share-post-button" aria-label="Share post" title="Share post">
+                    <button id="share-post-button" class="tool-tip" data-tooltip="Share post">
+                        <span class="sr-only">Share post</span>
                         <svg class="moderation-icon share-post-icon" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 640 640" aria-hidden="true" focusable="false">
                             <path fill="currentColor"
@@ -101,7 +102,8 @@
                                 d="M508.94,83.73c-12.61-.39-25.33.5-37.94.01-9.66-.37-17.17-1.31-24.82-7.74-17.42-14.66-14.51-42.43,5.49-53.19,8.42-4.53,17.79-3.9,27.09-3.8,34.81.36,69.76,1.39,104.54.88,8.62-.13,15.54,1.37,22.46,6.67,16.83,12.9,12.61,31.76,12.87,50.55.39,28.08,1.03,56.3,1.32,84.38.09,8.54.52,16.76-3.24,24.65-10.01,21.05-39.16,24.35-53.99,6.44-12.73-15.37-5.42-42.88-7.47-61.52-.07-.65-.04-1.06-.66-1.47l-241.88,243.17c-31.15,26.12-71.68-13.99-45.84-45.41l242.09-243.61Z" />
                         </svg>
                     </button>
-                    <button id="delete-post-button" aria-label="Delete post" title="Delete post">
+                    <button id="delete-post-button" class="tool-tip" data-tooltip="Delete post">
+                        <span class="sr-only">Delete post</span>
                         <svg class="moderation-icon delete-post-icon" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 640 640" aria-hidden="true" focusable="false">
                             <path fill="currentColor"
@@ -110,7 +112,8 @@
                                 d="M404.5,588.72l193.4-.06c29.21,4.06,29.57,45.24.42,49.74l-193.88-.04c-28.55-4.77-28.47-44.86.06-49.64Z" />
                         </svg>
                     </button>
-                    <button id="flag-post-button" aria-label="Flag post" title="Flag post" aria-pressed="false">
+                    <button id="flag-post-button" class="tool-tip" data-tooltip="Flag post" aria-pressed="false">
+                        <span class="sr-only" id="flag-post-button-label">Flag post</span>
                         <svg class="moderation-icon flag-post-icon" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 640 640" aria-hidden="true" focusable="false">
                             <path fill="currentColor"
@@ -267,7 +270,8 @@
             <div class="share-post-url-container">
                 <input type="text" class="share-post-url-input" id="share-post-url-input"
                     value="example-share-link" readonly>
-                <button id="share-post-copy-button" type="button" aria-label="Copy full link" title="COPY FULL LINK">
+                <button id="share-post-copy-button" type="button" class="tool-tip" data-tooltip="COPY LINK">
+                    <span class="sr-only">Copy full link</span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 206.78 262.84" aria-hidden="true"
                         focusable="false">
                         <rect x="49.78" y="55.84" width="150" height="200" rx="12.37" ry="12.37" />
@@ -279,6 +283,7 @@
         </div>
         <div class="share-post-footer">
             <button class="share-post-footer-button" id="share-whatsapp">
+                <span class="sr-only">Share on WhatsApp</span>
                 <svg class="share-post-footer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400"
                     aria-hidden="true" focusable="false">
                     <path
@@ -288,6 +293,7 @@
                 </svg>
             </button>
             <button class="share-post-footer-button" id="share-snapchat">
+                <span class="sr-only">Share on Snapchat</span>
                 <svg class="share-post-footer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400"
                     aria-hidden="true" focusable="false">
                     <path
@@ -295,6 +301,7 @@
                 </svg>
             </button>
             <button class="share-post-footer-button" id="share-instagram">
+                <span class="sr-only">Share on Instagram</span>
                 <svg class="share-post-footer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400"
                     aria-hidden="true" focusable="false">
                     <path
@@ -306,6 +313,7 @@
                 </svg>
             </button>
             <button class="share-post-footer-button" id="share-x">
+                <span class="sr-only">Share on X</span>
                 <svg class="share-post-footer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400"
                     aria-hidden="true" focusable="false">
                     <path
@@ -313,6 +321,7 @@
                 </svg>
             </button>
             <button class="share-post-footer-button" id="share-discord">
+                <span class="sr-only">Share on Discord</span>
                 <svg class="share-post-footer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400"
                     aria-hidden="true" focusable="false">
                     <path
@@ -343,7 +352,7 @@
         "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 20 },
         "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 20 },
         '/scripts/general/online/user-customisation.js': { addDataLoaded: true, zIndex: 30 },
-        "/scripts/overexposure/overexposure-init.js?v=2": { addDataLoaded: true, zIndex: 40 },
+        "/scripts/overexposure/overexposure-init.js?v=2026-03-30-1": { addDataLoaded: true, zIndex: 40 },
 
 
     };

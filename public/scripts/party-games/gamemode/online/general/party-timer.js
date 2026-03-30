@@ -19,7 +19,7 @@ function startTimer({ timeLeft = 0, duration = 0, selectedTimer = null }) {
   if (timeLeft > duration) timeLeft = duration;
   if (timeLeft < 0) timeLeft = 0;
 
-  timerWrapper.classList.add('active');
+  showContainer(timerWrapper);
 
   let startTime = null;
   let remaining = timeLeft;
@@ -108,7 +108,7 @@ function stopTimer(selectedTimer) {
   }
 
   // keep active state
-  selectedTimer.classList.add('active');
+  showContainer(selectedTimer);
 }
 
 function createCancelableTimeout(ms) {

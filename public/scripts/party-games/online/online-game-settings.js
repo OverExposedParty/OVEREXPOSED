@@ -88,17 +88,17 @@ async function ToggleOnlineMode(toggle) {
       updatePartyQrPlayerCount(1);
     }
 
-    enterUsernameContainer.classList.add('active');
+    showContainer(enterUsernameContainer);
     addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
     toggleOverlay(true);
 
-    packsContainer.classList.remove('active');
+    hideContainer(packsContainer);
     packsSettingsTab.classList.remove('active');
-    rulesContainer.classList.remove('active');
+    hideContainer(rulesContainer);
     rulesSettingsTab.classList.remove('active');
 
     onlineSettingsTab.classList.add('active');
-    onlineSettingsContainer.classList.add('active');
+    showContainer(onlineSettingsContainer);
 
     SetGamemodeButtons();
     UpdateSettings();
@@ -124,12 +124,12 @@ async function ToggleOnlineMode(toggle) {
 
     onlineSettingsTab.classList.add('disabled');
     onlineSettingsTab.classList.remove('active');
-    onlineSettingsContainer.classList.remove('active');
+    hideContainer(onlineSettingsContainer);
 
-    packsContainer.classList.remove('active');
+    hideContainer(packsContainer);
     packsSettingsTab.classList.remove('active');
 
-    rulesContainer.classList.add('active');
+    showContainer(rulesContainer);
     rulesSettingsTab.classList.add('active');
 
     await DeletePartyChat();

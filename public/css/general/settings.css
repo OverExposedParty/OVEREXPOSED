@@ -14,11 +14,12 @@
     background-color: var(--backgroundcolour);
     border: 6px solid var(--backgroundcolour);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    display: none;
+    display: var(--container-display, none);
     z-index: 1001;
     text-align: center;
     
     border-radius: 40px;
+    --container-visible-display: block;
 }
 
 .settings-icon {
@@ -34,10 +35,6 @@
 .settings-icon img {
     height: auto;
     width: 50%;
-}
-
-.settings-box.active {
-    display: block;
 }
 
 .settings-box h2,

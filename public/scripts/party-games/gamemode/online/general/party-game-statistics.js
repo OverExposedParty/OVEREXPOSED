@@ -29,10 +29,13 @@ fetch('/html-templates/party-games/party-game-statistics.html')
         partyGameStatisticsButton = CreatePartyGameStatisticsButton(cardContainerGamemode);
 
         partyGameStatisticsButton.addEventListener('click', () => {
-            partyGameStatisticsContainer.classList.toggle('active');
-            if (partyGameStatisticsContainer.classList.contains('active')) {
+            const isVisible = toggleContainerVisibility(
+                partyGameStatisticsContainer,
+                !isContainerVisible(partyGameStatisticsContainer)
+            );
+            if (isVisible) {
                 addElementIfNotExists(settingsElementClassArray, partyGameStatisticsContainer);
-                overlay.classList.add('active');
+                showContainer(overlay);
             }
         })
     }).then(() => {
@@ -182,8 +185,8 @@ function SetPartyGameStatisticsGameOver() {
         currentPartyData.state.isPlaying = false;
     }
 
-    overlay.classList.add('active');
-    gameOverContainer.classList.add('active');
+    showContainer(overlay);
+    showContainer(gameOverContainer);
     removeElementIfExists(settingsElementClassArray, partyGameStatisticsContainer);
     addElementIfNotExists(permanantElementClassArray, partyGameStatisticsContainer);
     if (deviceId == hostDeviceId) {

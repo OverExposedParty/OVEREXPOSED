@@ -6,25 +6,31 @@ document.body.appendChild(overlay);
 
 function syncHeaderIconActiveStates() {
     if (headerExtraMenuButton && extraMenuContainer) {
-        headerExtraMenuButton.classList.toggle('active', extraMenuContainer.classList.contains('active'));
+        headerExtraMenuButton.classList.toggle('active', isContainerVisible(extraMenuContainer));
     }
     if (headerSettingsButton && settingsBox) {
-        headerSettingsButton.classList.toggle('active', settingsBox.classList.contains('active'));
+        headerSettingsButton.classList.toggle('active', isContainerVisible(settingsBox));
     }
     if (headerHelpButton && typeof helpContainer !== 'undefined' && helpContainer) {
-        headerHelpButton.classList.toggle('active', helpContainer.classList.contains('active'));
+        headerHelpButton.classList.toggle('active', isContainerVisible(helpContainer));
     }
     if (
         typeof userCustomisationIconButton !== 'undefined' && userCustomisationIconButton &&
         typeof userCustomisationContainer !== 'undefined' && userCustomisationContainer
     ) {
-        userCustomisationIconButton.classList.toggle('active', userCustomisationContainer.classList.contains('active'));
+        userCustomisationIconButton.classList.toggle('active', isContainerVisible(userCustomisationContainer));
+    }
+}
+
+function syncTransientContainerToggleStates() {
+    if (typeof window.syncPartyQrCodeButtonState === 'function') {
+        window.syncPartyQrCodeButtonState();
     }
 }
 
 function toggleClass(selectedClass, classArray) {
-    selectedClass.classList.toggle('active');
-    if (selectedClass.classList.contains('active')) {
+    const isVisible = toggleContainerVisibility(selectedClass, !isContainerVisible(selectedClass));
+    if (isVisible) {
         if (classArray == settingsElementClassArray) {
             removeAllElements(classArray);
         }
@@ -40,12 +46,13 @@ function toggleClass(selectedClass, classArray) {
         toggleOverlay(false);
     }
     else {
-        if (!(overlay.classList.contains('active'))) {
+        if (!isContainerVisible(overlay)) {
             toggleOverlay(true);
         }
     }
 
     syncHeaderIconActiveStates();
+    syncTransientContainerToggleStates();
 }
 
 function toggleExtraMenu() {
@@ -60,7 +67,7 @@ function toggleHelp() {
 
 function toggleOverlay(bool) {
     if (bool === true) {
-        overlay.classList.add('active');
+        showContainer(overlay);
         if (backButton) {
             backButton.classList.add('inactive');
         }
@@ -83,20 +90,20 @@ function toggleOverlay(bool) {
         }
         else {
             if (typeof ToggleOverexposureContainer === "function") {
-                if (overexposureContainer.classList.contains('active')) {
+                if (isContainerVisible(overexposureContainer)) {
                     ToggleOverexposureContainer({ toggle: false });
                     playSoundEffect('containerClose');
                 }
                 else {
                     if (permanantElementClassArray.length === 0) {
-                        overlay.classList.remove('active');
+                        hideContainer(overlay);
                         playSoundEffect('containerClose');
                     }
                 }
             }
             else {
                 if (permanantElementClassArray.length === 0) {
-                    overlay.classList.remove('active');
+                    hideContainer(overlay);
                     playSoundEffect('containerClose');
                 }
             }
@@ -116,6 +123,7 @@ function toggleOverlay(bool) {
             });
 
             syncHeaderIconActiveStates();
+            syncTransientContainerToggleStates();
         }
     }
 }

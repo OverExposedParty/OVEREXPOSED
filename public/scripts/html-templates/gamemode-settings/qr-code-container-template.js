@@ -7,6 +7,13 @@ let qrPlayerCount;
 let qrCodeImage;
 let preparedQrPartyCode = null;
 
+function syncPartyQrCodeButtonState() {
+  const qrButton = document.getElementById('qr-code-button');
+  if (!qrButton) return;
+
+  qrButton.classList.toggle('active', isContainerVisible(joinPartyQrCodeContainer));
+}
+
 fetch('/html-templates/online/party-games-settings/qr-code-container.html')
   .then(response => response.text())
   .then(data => {
@@ -20,7 +27,8 @@ fetch('/html-templates/online/party-games-settings/qr-code-container.html')
     partyCodeReminder = qrCodeContainerPlaceholder.querySelector('#partycode-reminder');
     joinPartyCta = qrCodeContainerPlaceholder.querySelector('#join-party-cta');
     qrPlayerCount = qrCodeContainerPlaceholder.querySelector('#qr-player-count');
-    joinPartyQrCodeContainer?.classList.remove('active');
+    hideContainer(joinPartyQrCodeContainer);
+    syncPartyQrCodeButtonState();
   })
   .then(() => {
     SetScriptLoaded('/scripts/html-templates/gamemode-settings/qr-code-container-template.js');
@@ -79,23 +87,25 @@ function togglePartyQrCode(show, code = partyCode) {
   const qrButton = document.getElementById('qr-code-button');
 
   if (!show || !code) {
-    joinPartyQrCodeContainer.classList.remove('active');
-    qrButton?.classList.remove('active');
+    hideContainer(joinPartyQrCodeContainer);
     if (typeof removeElementIfExists === 'function') {
       removeElementIfExists(elementClassArray, joinPartyQrCodeContainer);
       if (qrButton) removeElementIfExists(elementClassArray, qrButton);
     }
+    syncPartyQrCodeButtonState();
     return;
   }
 
-  qrButton?.classList.add('active');
-  joinPartyQrCodeContainer.classList.add('active');
+  showContainer(joinPartyQrCodeContainer);
   if (typeof addElementIfNotExists === 'function') {
     addElementIfNotExists(elementClassArray, joinPartyQrCodeContainer);
     if (qrButton) addElementIfNotExists(elementClassArray, qrButton);
   }
+  syncPartyQrCodeButtonState();
   if (typeof toggleOverlay === 'function') {
     toggleOverlay(true);
   }
   renderPartyQrCode(code);
 }
+
+window.syncPartyQrCodeButtonState = syncPartyQrCodeButtonState;

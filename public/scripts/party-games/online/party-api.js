@@ -11,13 +11,62 @@ async function getExistingPartyData(partyId, partyType = sessionPartyType) {
   }
 }
 
-async function GetCurrentPartyData() {
-  const existingData = await getExistingPartyData(partyCode);
-  if (!existingData || existingData.length === 0) {
-    console.warn('No party data found.');
-    return;
+async function GetCurrentPartyData({
+  requireInstructions = false,
+  retries = 0,
+  delayMs = 150
+} = {}) {
+  const fallbackParty =
+    currentPartyData && (currentPartyData.partyId === partyCode || !currentPartyData.partyId)
+      ? currentPartyData
+      : null;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const existingData = await getExistingPartyData(partyCode);
+    const latestParty = existingData?.[0];
+
+    if (!latestParty) {
+      if (attempt < retries) {
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+        continue;
+      }
+
+      if (fallbackParty) {
+        return fallbackParty;
+      }
+
+      console.warn('No party data found.');
+      return;
+    }
+
+    if (!requireInstructions) {
+      return latestParty;
+    }
+
+    const latestInstructions = typeof getUserInstructions === 'function'
+      ? getUserInstructions(latestParty)
+      : latestParty?.config?.userInstructions ?? latestParty?.state?.userInstructions ?? latestParty?.userInstructions ?? '';
+
+    if (typeof latestInstructions === 'string' && latestInstructions.trim() !== '') {
+      return latestParty;
+    }
+
+    const fallbackInstructions = fallbackParty
+      ? (typeof getUserInstructions === 'function'
+        ? getUserInstructions(fallbackParty)
+        : fallbackParty?.config?.userInstructions ?? fallbackParty?.state?.userInstructions ?? fallbackParty?.userInstructions ?? '')
+      : '';
+
+    if (typeof fallbackInstructions === 'string' && fallbackInstructions.trim() !== '') {
+      return fallbackParty;
+    }
+
+    if (attempt < retries) {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    } else {
+      return latestParty;
+    }
   }
-  return existingData[0];
 }
 
 async function reserveUniquePartyCode() {
@@ -66,7 +115,7 @@ function updateOnlineParty({
     ...(players !== undefined && { players })
   };
     console.log("players", players);
-  postToBothEndpoints(
+  return postToBothEndpoints(
     payload,
     `/api/${partyType}?partyCode=${partyId}`,
     `/api/waiting-room?partyCode=${partyId}`

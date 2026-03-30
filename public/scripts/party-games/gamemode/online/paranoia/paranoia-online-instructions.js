@@ -23,7 +23,7 @@ async function NextQuestion() {
   const meState = getPlayerState(players[meIndex]);
 
   if (meState.hasConfirmed === true) {
-    if (!waitingForPlayersContainer.classList.contains('active')) {
+    if (!isContainerVisible(waitingForPlayersContainer)) {
       ClearIcons();
     }
     setActiveContainers(waitingForPlayersContainer);
@@ -52,7 +52,7 @@ async function NextQuestion() {
         incrementScore: 1
       });
     }
-    else if (!waitingForPlayersContainer.classList.contains('active')) {
+    else if (!isContainerVisible(waitingForPlayersContainer)) {
       await SendInstruction({ partyData: currentPartyData });
     }
   } else {
@@ -328,7 +328,7 @@ async function HasUserDonePunishment(instruction) {
     // Not ready yet
     if (getPlayerId(punishedPlayer) !== deviceId) {
       // I am voting on someone else
-      if (!confirmPunishmentContainer.classList.contains('active')) {
+      if (!isContainerVisible(confirmPunishmentContainer)) {
         if (parsedInstructions.reason.toUpperCase().includes("TAKE_A_SHOT")) {
           confirmPunishmentText.textContent =
             "Has " + getPlayerUsername(punishedPlayer) + " taken their shot";
@@ -344,7 +344,7 @@ async function HasUserDonePunishment(instruction) {
         }
         setActiveContainers(confirmPunishmentContainer);
       }
-    } else if (!waitingForPlayersContainer.classList.contains('active')) {
+    } else if (!isContainerVisible(waitingForPlayersContainer)) {
       // I am the punished player
       setActiveContainers(waitingForPlayersContainer);
 

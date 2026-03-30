@@ -1,5 +1,5 @@
 .user-customisation-container {
-  display: none;
+  display: var(--container-display, none);
   flex-direction: column;
   align-items: center;
   position: fixed;
@@ -16,10 +16,7 @@
   max-width: 600px;
   min-width: 260px;
   z-index: 500;
-}
-
-.user-customisation-container.active {
-  display: flex;
+  --container-visible-display: flex;
 }
 
 .user-customisation-content-container {

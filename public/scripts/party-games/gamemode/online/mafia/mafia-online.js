@@ -31,6 +31,11 @@ async function waitForOnlineCore() {
         await Ready.when('user-customisation-icon', { timeout: 10000 });
         await waitForOnlineCore();
         await SetPageSettings();
+        window.onlineGameUiReady = true;
+        await flushPendingOnlineInstructionSync();
+        if (typeof FetchInstructions === 'function' && isPlaying) {
+            await FetchInstructions();
+        }
         SetScriptLoaded('/scripts/party-games/gamemode/online/mafia/mafia-online.js');
 
     } catch (err) {

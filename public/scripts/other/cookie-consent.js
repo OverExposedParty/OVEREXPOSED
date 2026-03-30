@@ -28,7 +28,7 @@ fetch('/html-templates/other/cookie-banner.html')
             placeHolderCookieConsentBanner.remove();
         });
         addElementIfNotExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
-        overlay.classList.add('active');
+        showContainer(overlay);
     });
 
 function acceptCookies() {

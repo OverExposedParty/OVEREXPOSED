@@ -3,18 +3,55 @@ let devModeUnlocked = false;
 const chatLogContainer = document.querySelector('.chat-box');
 const chatMessagesContainer = chatLogContainer.querySelector('.chat-messages');
 const chatLogInput = chatLogContainer.querySelector('.chat-input input');
+const chatInputContainer = chatLogContainer.querySelector('.chat-input');
+const chatInputBadge = document.createElement('div');
+chatInputBadge.className = 'chat-input-badge';
+chatInputContainer.appendChild(chatInputBadge);
 chatLogInput.maxLength = 100;
+let unreadMessageCount = 0;
+let hasInitialChatLogLoaded = false;
+
+function isPortraitMode() {
+    return window.innerHeight >= window.innerWidth;
+}
+
+function updateUnreadBadge() {
+    const showBadge = isPortraitMode() && unreadMessageCount > 0;
+    chatInputBadge.textContent = unreadMessageCount > 9 ? '9+' : String(unreadMessageCount);
+    chatInputBadge.hidden = !showBadge;
+    chatInputBadge.style.display = showBadge ? 'flex' : 'none';
+}
+
+function clearUnreadMessages() {
+    unreadMessageCount = 0;
+    updateUnreadBadge();
+}
+
+function setPortraitChatExpanded(isExpanded) {
+    if (!isPortraitMode()) return;
+
+    chatLogContainer.classList.toggle("expanded", isExpanded);
+
+    if (isExpanded) {
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        clearUnreadMessages();
+    }
+}
 
 async function DisplayChatLogs() {
     if (!partyCode) return;
     const chatLog = await getPartyChatLog();
+    const markUnread = hasInitialChatLogLoaded;
 
     chatLog.chat.forEach(chat => {
-        CreateChatMessage(chat.username, chat.message, chat.eventType, chat.timestamp);
+        CreateChatMessage(chat.username, chat.message, chat.eventType, chat.timestamp, { markUnread });
     });
+
+    hasInitialChatLogLoaded = true;
 }
 
-function CreateChatMessage(name, message, eventType, timestamp) {
+function CreateChatMessage(name, message, eventType, timestamp, options = {}) {
+    const { markUnread = true } = options;
     if (!chatMessagesContainer || chatMessagesContainer.querySelector(`[data-timestamp="${timestamp}"]`)) return;
 
     const date = new Date(timestamp);
@@ -46,6 +83,11 @@ function CreateChatMessage(name, message, eventType, timestamp) {
         chatMessage.classList.remove('new-message');
     }, 10000);
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+    if (markUnread && isPortraitMode() && !chatLogContainer.classList.contains("expanded")) {
+        unreadMessageCount += 1;
+        updateUnreadBadge();
+    }
 }
 
 chatLogInput.addEventListener("keydown", (e) => {
@@ -189,6 +231,11 @@ function parseCommand(message) {
 
 
 document.addEventListener("click", (e) => {
+    if (isPortraitMode()) {
+        setPortraitChatExpanded(chatLogInput.contains(e.target));
+        return;
+    }
+
     if (chatLogInput.contains(e.target) || chatMessagesContainer.contains(e.target)) {
         chatLogContainer.classList.add("expanded");
         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
@@ -196,6 +243,19 @@ document.addEventListener("click", (e) => {
         chatLogContainer.classList.remove("expanded");
     }
 });
+
+chatLogInput.addEventListener("focus", () => {
+    setPortraitChatExpanded(true);
+});
+
+window.addEventListener("resize", () => {
+    if (!isPortraitMode()) {
+        clearUnreadMessages();
+    }
+    updateUnreadBadge();
+});
+
+updateUnreadBadge();
 
 const chatLogCSS = document.createElement('link');
 chatLogCSS.rel = 'stylesheet';

@@ -72,7 +72,7 @@ const index = players.findIndex(
   me.connection.socketId = socket.id;
   me.socketId = socket.id;
 
-  joinParty(partyCode);
+  await joinParty(partyCode);
 
   if (state.isPlaying === true) {
     // Build "who's most likely to" buttons for all other players
@@ -170,24 +170,32 @@ const index = players.findIndex(
         timer: Date.now() + getTimeLimit() * 1000
       });
     } else {
-      const updatedState = {
-        ...state,
-        lastPinged: new Date()
-      };
+      const syncedPartyState = await syncStartupPartyState();
 
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: updatedState,
-        players
+      if (syncedPartyState) {
+        currentPartyData = {
+          ...syncedPartyState.party,
+          config: syncedPartyState.config,
+          state: syncedPartyState.state,
+          players: syncedPartyState.players
+        };
+      }
+
+      const partyWithInstruction = await waitForPartyInstruction({
+        retries: 20,
+        delayMs: 250
       });
+
+      if (partyWithInstruction) {
+        currentPartyData = partyWithInstruction;
+      }
+
       await FetchInstructions();
     }
 
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/most-likely-to/most-likely-to-online.js');
   }
 }
 
@@ -228,7 +236,7 @@ async function SetPageSettings() {
     const selectedId = selectPunishmentContainer.getAttribute('select-id');
     if (!selectedId) return;
 
-    selectPunishmentContainer.classList.remove('active');
+    hideContainer(selectPunishmentContainer);
 
     if (selectedId === 'drink-wheel') {
       await SendInstruction({
@@ -254,7 +262,7 @@ async function SetPageSettings() {
   completePunishmentButtonConfirm.addEventListener('click', async () => {
     const instructions = getUserInstructions(currentPartyData);
     const parsedInstructions = parseInstruction(instructions);
-    completePunishmentContainer.classList.remove('active');
+    hideContainer(completePunishmentContainer);
 
     await SetUserConfirmation({
       selectedDeviceId: deviceId,

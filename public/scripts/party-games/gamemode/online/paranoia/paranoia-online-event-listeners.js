@@ -28,7 +28,7 @@ async function handleChoosePlayerClick() {
 }
 
 async function handleNextQuestionClick() {
-  gameContainerDualStack.classList.remove('active');
+  hideContainer(gameContainerDualStack);
   await SetUserConfirmation({
     selectedDeviceId: deviceId,
     option: true,
@@ -60,7 +60,7 @@ async function handleConfirmPunishmentClick() {
   const selectedId = selectPunishmentContainer.getAttribute('select-id');
   if (!selectedId) return;
 
-  selectPunishmentContainer.classList.remove('active');
+  hideContainer(selectPunishmentContainer);
 
   if (selectedId === 'lucky-coin-flip') {
     console.log("paranoia-coin-flip");
@@ -95,7 +95,7 @@ async function handleConfirmPunishmentClick() {
 }
 
 async function handleCompletePunishmentPassClick() {
-  completePunishmentContainer.classList.remove('active');
+  hideContainer(completePunishmentContainer);
 
   const players = currentPartyData.players || [];
   const state = getPartyState(currentPartyData);
@@ -122,7 +122,7 @@ async function handleCompletePunishmentConfirmClick() {
   const instructions = getUserInstructions(currentPartyData);
   const parsedInstructions = parseInstruction(instructions);
 
-  completePunishmentContainer.classList.remove('active');
+  hideContainer(completePunishmentContainer);
 
   const players = currentPartyData.players || [];
   const state = getPartyState(currentPartyData);
@@ -146,14 +146,14 @@ async function handleCompletePunishmentConfirmClick() {
 }
 
 function handlePickHeadsClick() {
-  pickHeadsOrTailsContainer.classList.remove('active');
-  luckyCoinFlipContainer.classList.add('active');
+  hideContainer(pickHeadsOrTailsContainer);
+  showContainer(luckyCoinFlipContainer);
   pickedHeads = true;
 }
 
 function handlePickTailsClick() {
-  pickHeadsOrTailsContainer.classList.remove('active');
-  luckyCoinFlipContainer.classList.add('active');
+  hideContainer(pickHeadsOrTailsContainer);
+  showContainer(luckyCoinFlipContainer);
   pickedHeads = false;
 }
 

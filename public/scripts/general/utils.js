@@ -1,3 +1,25 @@
+const VISIBLE_CONTAINER_CLASS = 'is-visible';
+
+function showContainer(element) {
+    if (!element || !element.classList) return;
+    element.classList.add(VISIBLE_CONTAINER_CLASS);
+}
+
+function hideContainer(element) {
+    if (!element || !element.classList) return;
+    element.classList.remove(VISIBLE_CONTAINER_CLASS);
+}
+
+function toggleContainerVisibility(element, force) {
+    if (!element || !element.classList) return false;
+    element.classList.toggle(VISIBLE_CONTAINER_CLASS, force);
+    return element.classList.contains(VISIBLE_CONTAINER_CLASS);
+}
+
+function isContainerVisible(element) {
+    return !!(element && element.classList && element.classList.contains(VISIBLE_CONTAINER_CLASS));
+}
+
 function addElementIfNotExists(array, element) {
     if (!element || !element.classList) return;
     if (!array.includes(element)) {
@@ -29,7 +51,7 @@ function anyElementExists() {
 }
 
 function removeAllElements(array) {
-    array.forEach(element => element.classList.remove("active"));
+    array.forEach(element => hideContainer(element));
     array.length = 0;
 }
 
@@ -40,7 +62,7 @@ function findActiveElementsWithClasses(classArray) {
     );
 
     const activeElements = elementsWithClasses.filter(element =>
-        element.classList.contains('active')
+        isContainerVisible(element)
     );
 
     return activeElements;
@@ -53,8 +75,8 @@ function removeActiveClassFromParent(childElement) {
     }
 
     const parentElement = childElement.parentElement;
-    if (parentElement && parentElement.classList.contains('active')) {
-        parentElement.classList.remove('active');
+    if (parentElement && isContainerVisible(parentElement)) {
+        hideContainer(parentElement);
     }
 }
 

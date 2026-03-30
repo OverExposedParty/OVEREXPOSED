@@ -60,21 +60,21 @@ function SetTextContainerToggle() {
         const dropDownButton = section.querySelector('.drop-down');
 
         subHeadingContainer.addEventListener('click', () => {
-            if (container.classList.contains('active')) {
+            if (isContainerVisible(container)) {
                 container.style.height = container.scrollHeight + 'px';
                 container.offsetHeight;
                 container.style.height = '0';
-                container.classList.remove('active');
+                hideContainer(container);
                 dropDownButton.classList.remove('active');
             }
             else {
-                container.classList.add('active');
+                showContainer(container);
                 dropDownButton.classList.add('active');
                 container.style.height = container.scrollHeight + 'px';
             }
         });
         container.addEventListener('transitionend', () => {
-            if (container.classList.contains('active')) {
+            if (isContainerVisible(container)) {
                 container.style.height = 'auto';
             }
         });

@@ -10,11 +10,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 900;
-    display: none;
+    display: var(--container-display, none);
     flex-direction: column;
-  }
-  .lucky-coin-flip-container.active {
-    display: flex;
+    --container-visible-display: flex;
   }
   
   .lucky-coin-flip-container button {

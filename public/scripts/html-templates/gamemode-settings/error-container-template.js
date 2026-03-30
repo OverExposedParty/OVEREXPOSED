@@ -57,11 +57,11 @@ Promise.all(errorContainertasks).then(() => {
 
 function setError(element, isActive) {
     if (!element || !element.classList) return;
-    element.classList.toggle('active', isActive);
+    toggleContainerVisibility(element, isActive);
 }
 
 function CheckErrorNotEnoughPlayers(){
-    if(errorNotEnoughPlayers.classList.contains('active')){
+    if(isContainerVisible(errorNotEnoughPlayers)){
         return true;
     }
     else{

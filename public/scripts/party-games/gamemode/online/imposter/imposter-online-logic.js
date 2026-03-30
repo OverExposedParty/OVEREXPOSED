@@ -116,7 +116,7 @@ function GetAlternativeQuestion(input) {
 }
 
 async function FetchInstructions() {
-  currentPartyData = await GetCurrentPartyData();
+  currentPartyData = await GetCurrentPartyData({ requireInstructions: true, retries: 8, delayMs: 150 });
   if (!currentPartyData) {
     PartyDisbanded();
     return;

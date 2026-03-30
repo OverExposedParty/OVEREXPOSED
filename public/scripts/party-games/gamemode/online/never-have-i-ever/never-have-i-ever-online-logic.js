@@ -1,6 +1,6 @@
 async function FetchInstructions() {
   // Pull latest party data
-  currentPartyData = await GetCurrentPartyData();
+  currentPartyData = await GetCurrentPartyData({ requireInstructions: true, retries: 8, delayMs: 150 });
   if (!currentPartyData) {
     PartyDisbanded();
     return;

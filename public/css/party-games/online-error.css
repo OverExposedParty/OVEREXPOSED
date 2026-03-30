@@ -12,16 +12,13 @@
 }
 
 .error-box {
-    display: none;
+    display: var(--container-display, none);
     align-items: stretch;
     width: 250px;
     overflow: hidden;
     transition: transform 0.3s ease;
     box-sizing: border-box;
-}
-
-.error-box.active {
-    display: flex;
+    --container-visible-display: flex;
 }
 
 .drawer-button,

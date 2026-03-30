@@ -1,6 +1,6 @@
 .packs-container,
 .oes-settings-container {
-    display: none;
+    display: var(--container-display, none);
     flex-direction: column;
     border-radius: 10px;
     width: 90vw;
@@ -9,6 +9,7 @@
     background-color: var(--secondarybackgroundcolour);
     position: relative;
     height: 100%;
+    --container-visible-display: flex;
 }
 
 .packs-content-container,
@@ -21,9 +22,8 @@
     align-items: flex-start;
 }
 
-.packs-container.active,
-.oes-settings-container.active {
-    display: flex;
+.packs-container.is-visible,
+.oes-settings-container.is-visible {
     margin: 0 auto;
     padding: 0;
 }

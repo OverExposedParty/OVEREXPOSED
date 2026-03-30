@@ -23,5 +23,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function CheckErrors() {
     const errorBoxes = document.querySelectorAll('.error-container .error-box');
-    return !Array.from(errorBoxes).some(box => box.classList.contains('active'));
+    return !Array.from(errorBoxes).some(box => isContainerVisible(box));
 }

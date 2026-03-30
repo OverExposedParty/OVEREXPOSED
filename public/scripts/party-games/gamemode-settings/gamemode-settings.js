@@ -307,6 +307,9 @@ if (copyPartyCodeButton) {
             if (!copied) {
                 throw new Error('Clipboard copy command was not successful.');
             }
+            if (typeof window.setTooltipSelectedState === 'function') {
+                window.setTooltipSelectedState(copyPartyCodeButton);
+            }
         } catch (err) {
             console.error('Failed to copy party URL:', err);
         }
@@ -327,7 +330,7 @@ startGameButton.addEventListener('click', () => {
 
     if (nsfwPacksActive || nsfwgameRulesActive) {
         addElementIfNotExists(elementClassArray, warningBox);
-        warningBox.classList.add('active');
+        showContainer(warningBox);
         toggleOverlay(true);
         playSoundEffect('containerOpen');
     } else {

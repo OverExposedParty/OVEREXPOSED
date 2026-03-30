@@ -85,7 +85,7 @@ async function DisplayVoteResults() {
     selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
   });
 
-  if (!resultsChartContainer.classList.contains('active')) {
+  if (!isContainerVisible(resultsChartContainer)) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }

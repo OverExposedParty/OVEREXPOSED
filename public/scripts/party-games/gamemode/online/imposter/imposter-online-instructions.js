@@ -183,7 +183,7 @@ async function DisplayPrivateCard() {
 async function DisplayVoteResults() {
   const state = getPartyState(currentPartyData);
 
-  if (!resultsChartContainer.classList.contains('active')) {
+  if (!isContainerVisible(resultsChartContainer)) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }

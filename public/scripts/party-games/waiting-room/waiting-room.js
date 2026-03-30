@@ -1,5 +1,6 @@
 const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
 const userKickedContainer = document.getElementById('user-kicked');
+const partyDisbandedContainer = document.getElementById('party-disbanded-container');
 const partyFullContainer = document.getElementById('party-full');
 
 const gamemodeSettingsContainer = document.querySelector('.waiting-room-container');
@@ -11,6 +12,7 @@ let partyGameMode;
 let helpContainerFile = "waiting-room-error.json";
 let minPlayerCount;
 let waitingRoomPartyCodeObserver = null;
+let waitingRoomDisbandMonitor = null;
 
 function hasRestriction(restrictionValue, expectedRestriction) {
   if (!restrictionValue || !expectedRestriction) return false;
@@ -45,6 +47,9 @@ function setupPartyCodeActionButtons() {
         const copied = await copyTextToClipboard(fullPartyUrl);
         if (!copied) {
           throw new Error('Clipboard copy command was not successful.');
+        }
+        if (typeof window.setTooltipSelectedState === 'function') {
+          window.setTooltipSelectedState(copyPartyCodeButton);
         }
       } catch (err) {
         console.error('Failed to copy party URL:', err);
@@ -168,7 +173,7 @@ async function checkPartyExists() {
       );
       const playerCount = players.length;
 
-      if (playerCount >= 16) {
+      if (playerCount >= maxPlayerCount) {
         if (playerIndex !== -1) {
           addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
           toggleOverlay(true);
@@ -210,7 +215,8 @@ async function checkPartyExists() {
         }
       }
 
-      joinParty(partyCode);
+      await joinParty(partyCode);
+      startWaitingRoomDisbandMonitor();
     } else {
       if (partyGameMode) {
         changeFavicon(partyGameMode, "in-game-locked");
@@ -242,6 +248,37 @@ async function getWaitingRoomPartyData() {
   return data[0];
 }
 
+function stopWaitingRoomDisbandMonitor() {
+  if (!waitingRoomDisbandMonitor) {
+    return;
+  }
+
+  clearInterval(waitingRoomDisbandMonitor);
+  waitingRoomDisbandMonitor = null;
+}
+
+function startWaitingRoomDisbandMonitor() {
+  stopWaitingRoomDisbandMonitor();
+
+  waitingRoomDisbandMonitor = setInterval(async () => {
+    if (!partyCode) {
+      stopWaitingRoomDisbandMonitor();
+      return;
+    }
+
+    try {
+      const waitingRoomPartyData = await getWaitingRoomPartyData();
+
+      if (!waitingRoomPartyData) {
+        stopWaitingRoomDisbandMonitor();
+        PartyDisbanded();
+      }
+    } catch (error) {
+      console.error('Failed to monitor waiting room party state:', error);
+    }
+  }, 1500);
+}
+
 async function initWaitingRoom() {
   try {
     await waitForScriptDataLoaded('/scripts/party-games/online/online-settings.js');
@@ -257,7 +294,7 @@ async function initWaitingRoom() {
 initWaitingRoom();
 
 function KickUser() {
-  gamemodeSettingsContainer.classList.remove('active');
+  hideContainer(gamemodeSettingsContainer);
   setActiveContainers(userKickedContainer);
 }
 
@@ -274,6 +311,15 @@ function replaceFaviconLink(linkId, href) {
 
 function changeFavicon(gamemode, variant = "lobby") {
   const faviconBasePath = `/images/meta/favicons/party-games/${gamemode}/${variant}`;
+  replaceFaviconLink('favicon-ico', `${faviconBasePath}/favicon.ico`);
+  replaceFaviconLink('favicon-16', `${faviconBasePath}/favicon-16x16.png`);
+  replaceFaviconLink('favicon-32', `${faviconBasePath}/favicon-32x32.png`);
+  replaceFaviconLink('favicon-apple', `${faviconBasePath}/apple-touch-icon.png`);
+  replaceFaviconLink('favicon-manifest', `${faviconBasePath}/site.webmanifest`);
+}
+
+function setDisbandedFavicons() {
+  const faviconBasePath = '/images/meta/favicons/party-games/party-does-not-exist';
   replaceFaviconLink('favicon-ico', `${faviconBasePath}/favicon.ico`);
   replaceFaviconLink('favicon-16', `${faviconBasePath}/favicon-16x16.png`);
   replaceFaviconLink('favicon-32', `${faviconBasePath}/favicon-32x32.png`);
@@ -357,9 +403,15 @@ async function UpdateGamemodeContainer() {
 }
 
 function PartyDisbanded() {
-  partyDisbandedContainer = document.getElementById('party-disbanded-container');
-  gamemodeSettingsContainer.classList.remove('active');
-  setActiveContainers(partyDisbandedContainer);
+  stopWaitingRoomDisbandMonitor();
+  document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+  document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+  setDisbandedFavicons();
+  hideContainer(gamemodeSettingsContainer);
+  hideContainer(partySessionInProgressContainer);
+  hideContainer(userKickedContainer);
+  hideContainer(partyFullContainer);
+  showContainer(partyDisbandedContainer);
 }
 
 readyButton.addEventListener('click', async () => {

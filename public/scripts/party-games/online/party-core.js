@@ -6,6 +6,8 @@ let loadingPage = false;
 let isPlaying = false;
 let lastKnownPing = 0;
 let onlineUsername = 'N/A';
+window.onlineGameUiReady = false;
+window.pendingOnlineInstructionSync = false;
 
 const { protocol, hostname } = window.location;
 let socket;
@@ -154,10 +156,27 @@ function formatPackName(name) {
 
 function PartyDisbanded() {
   try {
+    const waitingRoomContainer = document.querySelector('.waiting-room-container');
+    const waitingRoomDisbandedContainer = document.getElementById('party-disbanded-container');
+
+    if (waitingRoomContainer && waitingRoomDisbandedContainer) {
+      document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+      document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+      setPartyDoesNotExistFavicons();
+      hideContainer(waitingRoomContainer);
+      hideContainer(document.getElementById('party-session-in-progress'));
+      hideContainer(document.getElementById('user-kicked'));
+      hideContainer(document.getElementById('party-full'));
+      showContainer(waitingRoomDisbandedContainer);
+    }
+
     if (gameContainers) {
-      if (!partyGameStatisticsContainer.classList.contains('active')) {
+      if (!isContainerVisible(partyGameStatisticsContainer)) {
         setActiveContainers(partyDisbandedContainer);
       }
+    }
+
+    if (typeof CreateChatMessage === "function") {
       CreateChatMessage("[CONSOLE]", "PARTY HAS BEEN DISBANDED.", "disconnect", Date.now());
     }
   } catch (e) { }
@@ -251,7 +270,7 @@ function ShowPartyDoesNotExistState() {
   });
 
   setActiveContainers();
-  statusContainer.classList.add("active");
+  showContainer(statusContainer);
   const titlePrefix = typeof formattedGamemode === "string" && formattedGamemode.trim()
     ? formattedGamemode.toUpperCase()
     : "WAITING ROOM";
@@ -269,7 +288,7 @@ function ShowGameAlreadyStartedState() {
   });
 
   setActiveContainers();
-  statusContainer.classList.add("active");
+  showContainer(statusContainer);
   const titlePrefix = typeof formattedGamemode === "string" && formattedGamemode.trim()
     ? formattedGamemode.toUpperCase()
     : "WAITING ROOM";
@@ -371,6 +390,97 @@ async function waitForOnlinePartySnapshot({
   }
 
   return latestParty;
+}
+
+async function waitForPartyInstruction({
+  partyType = sessionPartyType,
+  retries = 20,
+  delayMs = 250
+} = {}) {
+  let latestParty = null;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const existingData = await getExistingPartyData(partyCode, partyType);
+      latestParty = Array.isArray(existingData) ? existingData[0] ?? null : null;
+    } catch (error) {
+      console.warn('Failed to fetch party instructions during startup:', error);
+      latestParty = null;
+    }
+
+    const userInstructions = latestParty ? getUserInstructions(latestParty) : '';
+    if (typeof userInstructions === 'string' && userInstructions.trim() !== '') {
+      return latestParty;
+    }
+
+    if (attempt < retries) {
+      await delay(delayMs);
+    }
+  }
+
+  return latestParty;
+}
+
+async function flushPendingOnlineInstructionSync() {
+  if (!window.pendingOnlineInstructionSync) {
+    return;
+  }
+
+  window.pendingOnlineInstructionSync = false;
+
+  if (typeof FetchInstructions === 'function') {
+    await FetchInstructions();
+  }
+}
+
+async function syncStartupPartyState({
+  partyType = sessionPartyType,
+  requirePlaying = true
+} = {}) {
+  const latestParty = await waitForOnlinePartySnapshot({
+    partyType,
+    requirePlayer: true,
+    requirePlaying,
+    retries: 8,
+    delayMs: 200
+  });
+
+  if (!latestParty) {
+    return null;
+  }
+
+  const config = typeof normalizeConfig === 'function'
+    ? normalizeConfig(latestParty)
+    : { ...(latestParty.config ?? latestParty) };
+  const state = typeof normalizeState === 'function'
+    ? normalizeState(latestParty)
+    : { ...(latestParty.state ?? latestParty) };
+  const deck = typeof normalizeDeck === 'function'
+    ? normalizeDeck(latestParty)
+    : { ...(latestParty.deck ?? latestParty) };
+  const players = Array.isArray(latestParty.players)
+    ? latestParty.players.map(player => ({ ...player }))
+    : [];
+
+  const playerIndex = players.findIndex(
+    player => player.identity?.computerId === deviceId || player.computerId === deviceId
+  );
+
+  if (playerIndex !== -1) {
+    const player = players[playerIndex];
+    player.connection = player.connection || {};
+    player.connection.socketId = socket.id;
+    player.connection.lastPing = new Date();
+    player.socketId = socket.id;
+  }
+
+  return {
+    party: latestParty,
+    config,
+    state,
+    deck,
+    players
+  };
 }
 
 // Game rules helpers

@@ -240,6 +240,6 @@ playerBoardRoleButton.addEventListener("click", event => {
 })
 
 playerBoard.addEventListener("click", () => {
-  popUpRoleContainer.classList.remove("active")
+  hideContainer(popUpRoleContainer)
   removeElementIfExists(popUpClassArray, popUpRoleContainer)
 })

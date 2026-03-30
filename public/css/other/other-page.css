@@ -83,7 +83,7 @@
     font-size: 12px;
 }
 
-.main-container .section-container .text-container.active p {
+.main-container .section-container .text-container.is-visible p {
     margin-bottom: 20px;
 }
 

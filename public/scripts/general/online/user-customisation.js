@@ -105,16 +105,16 @@ function applyCustomisation(slotArray, index, elements) {
 }
 
 function toggleUserCustomisation(permanant = false,) {
-  if (permanant == true && !userCustomisationContainer.classList.contains('active')) {
+  if (permanant == true && !isContainerVisible(userCustomisationContainer)) {
     toggleClass(userCustomisationContainer, permanantElementClassArray);
   }
-  else if (permanant == false && !userCustomisationContainer.classList.contains('active')) {
+  else if (permanant == false && !isContainerVisible(userCustomisationContainer)) {
     toggleClass(userCustomisationContainer, settingsElementClassArray);
   }
   else {
     removeElementIfExists(settingsElementClassArray, userCustomisationContainer);
     removeElementIfExists(permanantElementClassArray, userCustomisationContainer);
-    userCustomisationContainer.classList.remove('active');
+    hideContainer(userCustomisationContainer);
     toggleOverlay(false);
   }
 }
@@ -271,7 +271,7 @@ function SetUserCustomisationLoaded() {
         newUserIcon: customisationString
       });
       if (placeholderUserCustomisation.classList.contains('waiting-room')) {
-        gamemodeSettingsContainer.classList.add('active');
+        showContainer(gamemodeSettingsContainer);
       }
     } else if (typeof renderOESOptions === "function") {
       rerenderSelectedButtons();

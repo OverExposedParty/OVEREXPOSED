@@ -225,38 +225,38 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
 
 packsSettingsTab.addEventListener('click', () => {
     if (!(packsSettingsTab.classList.contains('active'))) {
-        packsContainer.classList.add('active');
+        showContainer(packsContainer);
         packsSettingsTab.classList.add('active');
 
-        rulesContainer.classList.remove('active');
+        hideContainer(rulesContainer);
         rulesSettingsTab.classList.remove('active');
 
         onlineSettingsTab.classList.remove('active');
-        onlineSettingsContainer.classList.remove('active');
+        hideContainer(onlineSettingsContainer);
     }
 });
 rulesSettingsTab.addEventListener('click', () => {
     if (!(rulesSettingsTab.classList.contains('active'))) {
-        packsContainer.classList.remove('active');
+        hideContainer(packsContainer);
         packsSettingsTab.classList.remove('active');
 
-        rulesContainer.classList.add('active');
+        showContainer(rulesContainer);
         rulesSettingsTab.classList.add('active');
 
         onlineSettingsTab.classList.remove('active');
-        onlineSettingsContainer.classList.remove('active');
+        hideContainer(onlineSettingsContainer);
     }
 });
 onlineSettingsTab.addEventListener('click', () => {
-    if (!(onlineSettingsContainer.classList.contains('active'))) {
-        packsContainer.classList.remove('active');
+    if (!isContainerVisible(onlineSettingsContainer)) {
+        hideContainer(packsContainer);
         packsSettingsTab.classList.remove('active');
 
-        rulesContainer.classList.remove('active');
+        hideContainer(rulesContainer);
         rulesSettingsTab.classList.remove('active')
 
         onlineSettingsTab.classList.add('active');
-        onlineSettingsContainer.classList.add('active');
+        showContainer(onlineSettingsContainer);
     }
 });
 

@@ -22,12 +22,12 @@ function hasNoActiveErrors() {
     if (typeof CheckErrors === 'function') {
         return CheckErrors();
     }
-    const activeError = document.querySelector('.error-container .error-box.active');
+    const activeError = document.querySelector('.error-container .error-box.is-visible');
     return !activeError;
 }
 
 function isEnterUsernameContainerActive() {
-    return !!(enterUsernameContainer && enterUsernameContainer.classList?.contains('active'));
+    return isContainerVisible(enterUsernameContainer);
 }
 
 function waitForUserCustomisationContainer({ timeout = 3000 } = {}) {
@@ -148,7 +148,7 @@ fetch('/html-templates/online/enter-username.html')
 
             const usernames = currentPartyData.players.map(player => player.identity.username.toUpperCase());
             if (!usernames.includes(username)) {
-                enterUsernameContainer.classList.remove('active');
+                hideContainer(enterUsernameContainer);
                 const savedUserIcon = getStoredUserIconString();
                 const hasCustomisedIcon = savedUserIcon !== DEFAULT_USER_ICON;
 
@@ -175,7 +175,7 @@ fetch('/html-templates/online/enter-username.html')
                         typeof gamemodeSettingsContainer !== 'undefined' &&
                         gamemodeSettingsContainer
                     ) {
-                        gamemodeSettingsContainer.classList.add('active');
+                        showContainer(gamemodeSettingsContainer);
                     }
                     onlineUsername = username;
                     localStorage.setItem(ONLINE_USERNAME_STORAGE_KEY, username);

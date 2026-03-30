@@ -236,20 +236,20 @@ fetch(`/json-files/customisation/customisation-packs.json`)
 
 packsSettingsTab.addEventListener('click', () => {
     if (!(packsSettingsTab.classList.contains('active'))) {
-        packsContainer.classList.add('active');
+        showContainer(packsContainer);
         packsSettingsTab.classList.add('active');
 
-        oesContainer.classList.remove('active');
+        hideContainer(oesContainer);
         oesSettingsTab.classList.remove('active');
     }
 });
 
 oesSettingsTab.addEventListener('click', () => {
     if (!(oesSettingsTab.classList.contains('active'))) {
-        packsContainer.classList.remove('active');
+        hideContainer(packsContainer);
         packsSettingsTab.classList.remove('active');
 
-        oesContainer.classList.add('active');
+        showContainer(oesContainer);
         oesSettingsTab.classList.add('active');
     }
 });

@@ -11,13 +11,10 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   box-sizing: border-box;
 
-  display: none;
+  display: var(--container-display, none);
   flex-direction: column;
   z-index: 800;
-}
-
-.player-board.active {
-  display: flex;
+  --container-visible-display: flex;
 }
 .player-board.dead .player-board-header{
   background-color: #666666;

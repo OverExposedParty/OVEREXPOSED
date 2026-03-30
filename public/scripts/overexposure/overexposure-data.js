@@ -179,27 +179,27 @@ overexposureContainer.addEventListener("mousedown", function (event) {
         return;
     }
 
-    if (exitMenuContainer.classList.contains("active")) {
-        exitMenuContainer.classList.remove("active");
-        areYouSurePostContainer.classList.remove('active');
+    if (isContainerVisible(exitMenuContainer)) {
+        hideContainer(exitMenuContainer);
+        hideContainer(areYouSurePostContainer);
 
         removeElementIfExists(popUpClassArray, exitMenuContainer)
         removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     }
-    if (areYouSurePostContainer.classList.contains("active")) {
-        areYouSurePostContainer.classList.remove('active');
+    if (isContainerVisible(areYouSurePostContainer)) {
+        hideContainer(areYouSurePostContainer);
         removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     }
-    if (postIncompleteContainer.classList.contains("active")) {
-        postIncompleteContainer.classList.remove('active');
+    if (isContainerVisible(postIncompleteContainer)) {
+        hideContainer(postIncompleteContainer);
         removeElementIfExists(popUpClassArray, postIncompleteContainer)
     }
-    if (deletePostContainer.classList.contains("active")) {
-        deletePostContainer.classList.remove('active');
+    if (isContainerVisible(deletePostContainer)) {
+        hideContainer(deletePostContainer);
         removeElementIfExists(popUpClassArray, deletePostContainer)
     }
-    if (sharePostContainer.classList.contains("active")) {
-        sharePostContainer.classList.remove('active');
+    if (isContainerVisible(sharePostContainer)) {
+        hideContainer(sharePostContainer);
         removeElementIfExists(popUpClassArray, sharePostContainer)
     }
 });

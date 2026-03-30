@@ -52,7 +52,7 @@ function getMostFrequentVote(votes) {
 }
 
 async function CheckGameOver() {
-  const currentPartyData = await GetCurrentPartyData();
+  const currentPartyData = await GetCurrentPartyData({ requireInstructions: true, retries: 8, delayMs: 150 });
   if (!currentPartyData || !currentPartyData.players) return null;
 
   const alive = currentPartyData.players.filter(p => p.state.status === "alive");

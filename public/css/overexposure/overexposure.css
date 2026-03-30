@@ -127,11 +127,8 @@ highlight {
     align-items: center;
     justify-content: center;
     color: var(--warningcolour);
-    display: none;
-}
-
-.warning-container.active {
-    display: flex;
+    display: var(--container-display, none);
+    --container-visible-display: flex;
 }
 
 .warning-container h2 {
@@ -182,7 +179,7 @@ highlight {
     line-height: 1.5;
     margin-top: 0;
     margin-bottom: 10px;
-    display: none;
+    display: var(--container-display, none);
 }
 
 .floating-container p.active {
@@ -302,7 +299,7 @@ highlight {
 }
 
 .overexposure-container {
-    display: none;
+    display: var(--container-display, none);
     height: calc(var(--dvh, 1dvh) * 100 - var(--headerheight));
     margin-top: calc(var(--headerheight) + 2.5dvh);
     flex-direction: column;
@@ -315,10 +312,7 @@ highlight {
     /* Set this to control its vertical position */
     z-index: 700;
     pointer-events: none;
-}
-
-.overexposure-container.active {
-    display: flex;
+    --container-visible-display: flex;
 }
 
 .overexposure-publish-button {
@@ -369,7 +363,7 @@ button:disabled {
     display: none;
 }
 
-.title-text-editor.active {
+.title-text-editor.is-visible {
     display: flex;
 }
 
@@ -379,6 +373,10 @@ button:disabled {
     margin: 0;
     height: 100%;
     flex-direction: column;
+}
+
+.contents-text-editor.is-visible {
+    display: flex;
 }
 
 #char-counter {
@@ -392,10 +390,6 @@ button:disabled {
     /* Prevent interaction */
     padding: 0 10px 6.5dvh 0;
 
-}
-
-.contents-text-editor.active {
-    display: flex;
 }
 
 input,
@@ -475,7 +469,7 @@ textarea {
     min-width: 0;
 }
 
-.title-text-container.active {
+.title-text-container.is-visible {
     display: flex;
 }
 
@@ -562,7 +556,7 @@ textarea {
     overflow-y: scroll;
 }
 
-.contents-container-text.active {
+.contents-container-text.is-visible {
     display: flex;
     height: 90%;
 }
@@ -634,15 +628,13 @@ textarea {
     max-width: 400px;
     aspect-ratio: 5 / 6;
     border-radius: 20px;
-    display: none;
+    display: var(--container-display, none);
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
     z-index: 850;
     overflow: hidden;
-}
-.share-post-container.active {
-    display: flex;
+    --container-visible-display: flex;
 }
 
 .share-post-header {

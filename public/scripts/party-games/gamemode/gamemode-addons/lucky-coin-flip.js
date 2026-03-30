@@ -36,15 +36,15 @@ if (placeholderGamemodeAddons?.dataset.online === "false") {
     coinFlipButton?.addEventListener('click', toggleCoinFlip);
     function toggleCoinFlip() {
         addElementIfNotExists(elementClassArray, luckyCoinFlipContainer);
-        if (!luckyCoinFlipContainer.classList.contains('active')) {
-            luckyCoinFlipContainer.classList.add('active');
+        if (!isContainerVisible(luckyCoinFlipContainer)) {
+            showContainer(luckyCoinFlipContainer);
             coinFlipButton.classList.add('active');
             playSoundEffect('containerOpen');
-            if (!overlay.classList.contains('active')) {
+            if (!isContainerVisible(overlay)) {
                 toggleOverlay(true);
             }
         } else {
-            luckyCoinFlipContainer.classList.remove('active');
+            hideContainer(luckyCoinFlipContainer);
             playSoundEffect('containerClose');
             if (findActiveElementsWithClasses(classArray).length == 0) {
                 toggleOverlay(false);

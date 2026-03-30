@@ -79,6 +79,13 @@ a:hover {
   border: 0;
 }
 
+.is-visible {
+    --container-display: var(--container-visible-display, initial);
+    --container-left: var(--container-visible-left, initial);
+    --container-min-height: var(--container-visible-min-height, initial);
+    --container-overflow-y: var(--container-visible-overflow-y, initial);
+}
+
 .header {
     width: 100%;
     height: var(--headerheight);
@@ -202,14 +209,11 @@ body {
     min-width: auto;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: none;
+    display: var(--container-display, none);
     z-index: 400;
-    overflow-y: auto;
-}
-
-.overlay.active {
-    display: block;
-    overflow-y: hidden;
+    overflow-y: var(--container-overflow-y, auto);
+    --container-visible-display: block;
+    --container-visible-overflow-y: hidden;
 }
 
 .tts-voice-button.selected {
@@ -331,14 +335,11 @@ body {
     margin-top: var(--headerheight);
     width: 30vw;
     background-color: var(--backgroundcolour);
-    left: -100%;
+    left: var(--container-left, -100%);
     position: fixed;
     transition: left 0.7s ease;
     z-index: 900;
-}
-
-.extra-menu-container.active {
-    left: 0;
+    --container-visible-left: 0;
 }
 
 .extra-menu-title {

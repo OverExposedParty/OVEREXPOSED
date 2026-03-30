@@ -162,13 +162,13 @@ function toggleDrinkWheel() {
     addElementIfNotExists(elementClassArray, drinkWheelContainer);
     spinDisabled = false;
     spinEl.textContent = 'SPIN';
-    if (!drinkWheelContainer.classList.contains('active')) {
-        drinkWheelContainer.classList.add('active');
+    if (!isContainerVisible(drinkWheelContainer)) {
+        showContainer(drinkWheelContainer);
         spinButton.classList.add('active');
         playSoundEffect('containerOpen');
-        if (!overlay.classList.contains('active')) toggleOverlay(true);
+        if (!isContainerVisible(overlay)) toggleOverlay(true);
     } else {
-        drinkWheelContainer.classList.remove('active');
+        hideContainer(drinkWheelContainer);
         spinButton.classList.remove('active');
         playSoundEffect('containerClose');
         if (findActiveElementsWithClasses(classArray).length === 0) toggleOverlay(false);

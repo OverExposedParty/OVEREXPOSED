@@ -27,7 +27,7 @@ function SetNSFW() {
     const buttons = document.querySelectorAll('.floating-button');
 
     if (bool === 'true') {
-        enableNSFWContainer.classList.remove('active');
+        hideContainer(enableNSFWContainer);
         removeElementIfExists(permanantElementClassArray, enableNSFWContainer);
         document.documentElement.style.setProperty('--primarypagecolour', currentPageColours.primary);
         document.documentElement.style.setProperty('--secondarypagecolour', currentPageColours.secondary);
@@ -44,7 +44,7 @@ function SetNSFW() {
         document.documentElement.style.setProperty('--instagramicon', `url(/images/icons/overexposure/instagram-icon.svg)`);
     }
     else {
-        enableNSFWContainer.classList.add('active');
+        showContainer(enableNSFWContainer);
         addElementIfNotExists(permanantElementClassArray, enableNSFWContainer);
         document.documentElement.style.setProperty('--primarypagecolour', '#999999');
         document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
@@ -82,7 +82,7 @@ function closeModerationPopups({ except = null } = {}) {
 
     moderationPopups.forEach((popup) => {
         if (!popup || popup === except) return;
-        popup.classList.remove('active');
+        hideContainer(popup);
         removeElementIfExists(popUpClassArray, popup);
     });
 }
@@ -91,14 +91,14 @@ sharePostButton.addEventListener("click", () => {
     const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
     if (!selectedCardId) return;
 
-    if (sharePostContainer.classList.contains('active')) {
-        sharePostContainer.classList.remove('active');
+    if (isContainerVisible(sharePostContainer)) {
+        hideContainer(sharePostContainer);
         removeElementIfExists(popUpClassArray, sharePostContainer);
         return;
     }
 
     closeModerationPopups({ except: sharePostContainer });
-    sharePostContainer.classList.add('active');
+    showContainer(sharePostContainer);
     addElementIfNotExists(popUpClassArray, sharePostContainer);
 });
 
@@ -117,6 +117,10 @@ sharePostCopyButton.addEventListener("click", async () => {
         if (!copied) {
             throw new Error('Clipboard copy command was not successful.');
         }
+
+        if (typeof window.setTooltipSelectedState === 'function') {
+            window.setTooltipSelectedState(sharePostCopyButton);
+        }
     } catch (err) {
         console.error('Failed to copy share URL:', err);
     }
@@ -126,14 +130,14 @@ deletePostButton.addEventListener("click", () => {
     const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
     if (!selectedCardId) return;
 
-    if (deletePostContainer.classList.contains('active')) {
-        deletePostContainer.classList.remove('active');
+    if (isContainerVisible(deletePostContainer)) {
+        hideContainer(deletePostContainer);
         removeElementIfExists(popUpClassArray, deletePostContainer);
         return;
     }
 
     closeModerationPopups({ except: deletePostContainer });
-    deletePostContainer.classList.add('active');
+    showContainer(deletePostContainer);
     addElementIfNotExists(popUpClassArray, deletePostContainer);
     if (localStorage.getItem(`overexposure-delete-code-${selectedCardId}`)) {
         deleteCodeInput.value = localStorage.getItem(`overexposure-delete-code-${selectedCardId}`);
@@ -175,7 +179,7 @@ deletePostSubmit.addEventListener("click", async () => {
         if (button) button.remove();
         if (noPlace) noPlace.remove();
 
-        deletePostContainer.classList.remove('active');
+        hideContainer(deletePostContainer);
         removeElementIfExists(popUpClassArray, deletePostContainer);
         deleteCodeInput.value = "";
         overexposureContainer.removeAttribute('data-selected-card');
@@ -200,7 +204,7 @@ deleteCodeInput.addEventListener("input", () => {
 });
 
 rememberCodeContinue.addEventListener("click", () => {
-    rememberCodeContainer.classList.remove('active');
+    hideContainer(rememberCodeContainer);
     removeElementIfExists(popUpClassArray, uploadingPostContainer);
     removeElementIfExists(permanantElementClassArray, rememberCodeContainer);
     toggleOverlay(false);
@@ -219,7 +223,20 @@ flagPostButton.addEventListener("click", () => {
 function toggleFlagPost({ toggle = false, confessionId = null }) {
     if (toggle) {
         const isToggled = flagPostButton.classList.toggle('toggled');
+        const label = isToggled ? 'Unflag post' : 'Flag post';
+
         flagPostButton.setAttribute('aria-pressed', isToggled ? 'true' : 'false');
+        flagPostButton.setAttribute('data-tooltip', label);
+        flagPostButton.classList.toggle('warning', isToggled);
+
+        const flagPostButtonLabel = document.getElementById('flag-post-button-label');
+        if (flagPostButtonLabel) {
+            flagPostButtonLabel.textContent = label;
+        }
+
+        if (typeof window.refreshActiveTooltip === 'function') {
+            window.refreshActiveTooltip(flagPostButton);
+        }
     }
     console.log("Toggle flag post:", toggle, confessionId);
 }

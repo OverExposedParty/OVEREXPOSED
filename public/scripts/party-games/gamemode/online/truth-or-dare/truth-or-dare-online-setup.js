@@ -21,7 +21,7 @@ let textBoxSetting = false;
 async function SetPageSettings() {
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
-      selectPunishmentContainer.classList.remove('active');
+      hideContainer(selectPunishmentContainer);
       if (selectPunishmentContainer.getAttribute('select-id') == 'drink-wheel') {
         await SendInstruction({
           instruction: `CHOSE_PUNISHMENT:${formatDashedString({
@@ -210,7 +210,7 @@ async function initialisePage() {
     me.connection.socketId = socket.id;
     me.socketId = socket.id;
 
-    joinParty(partyCode);
+    await joinParty(partyCode);
 
     if (state.isPlaying === true) {
       gameRules = config.gameRules || {};
@@ -279,22 +279,31 @@ async function initialisePage() {
         updateUsersReady: false,
         updateUsersConfirmation: false,
         partyData: party,
+        fetchInstruction: true,
         timer: Date.now() + gameRules["time-limit"] * 1000,
       });
     }
     else {
-      const updatedState = {
-        ...state,
-        lastPinged: Date.now()
-      };
+      const syncedPartyState = await syncStartupPartyState();
 
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: updatedState,
-        deck,
-        players
+      if (syncedPartyState) {
+        currentPartyData = {
+          ...syncedPartyState.party,
+          config: syncedPartyState.config,
+          state: syncedPartyState.state,
+          deck: syncedPartyState.deck,
+          players: syncedPartyState.players
+        };
+      }
+
+      const partyWithInstruction = await waitForPartyInstruction({
+        retries: 20,
+        delayMs: 250
       });
+
+      if (partyWithInstruction) {
+        currentPartyData = partyWithInstruction;
+      }
 
       await FetchInstructions();
     }
@@ -312,7 +321,6 @@ async function initialisePage() {
       userCustomisationString: firstIcon
     });
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/truth-or-dare/truth-or-dare-online.js');
   } else {
     ShowPartyDoesNotExistState();
   }

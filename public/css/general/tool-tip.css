@@ -1,0 +1,35 @@
+.floating-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  max-width: min(18rem, calc(100vw - 1rem));
+  padding: 0.45rem 0.7rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--primarypagecolour);
+  color: var(--secondarybackgroundcolour);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(0.25rem);
+  pointer-events: none;
+  z-index: 5000;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.floating-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.floating-tooltip.warning {
+  background-color: var(--warningcolour);
+}
+
+.floating-tooltip.selected {
+  background-color: var(--secondarypagecolour);
+}

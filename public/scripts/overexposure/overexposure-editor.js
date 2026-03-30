@@ -1,19 +1,19 @@
 function setOverexposureContainerToEditor(isActive) {
     if (isActive) {
-        contentsContainerText.classList.remove('active');
-        titleTextContainer.classList.remove('active');
-        titleTextEditor.classList.add('active');
-        contentsTextEditor.classList.add('active');
+        hideContainer(contentsContainerText);
+        hideContainer(titleTextContainer);
+        showContainer(titleTextEditor);
+        showContainer(contentsTextEditor);
     } else {
-        contentsContainerText.classList.add('active');
-        titleTextContainer.classList.add('active');
-        titleTextEditor.classList.remove('active');
-        contentsTextEditor.classList.remove('active');
+        showContainer(contentsContainerText);
+        showContainer(titleTextContainer);
+        hideContainer(titleTextEditor);
+        hideContainer(contentsTextEditor);
     }
 }
 
 function isOverexposureEditorActive() {
-    return titleTextEditor.classList.contains('active') && contentsTextEditor.classList.contains('active');
+    return isContainerVisible(titleTextEditor) && isContainerVisible(contentsTextEditor);
 }
 
 function isOverexposureEditorEmpty() {
@@ -44,16 +44,16 @@ function ToggleOverexposureContainer({ toggle = false, button = null, draft = fa
         return;
     }
     if (toggle == true && permanantElementClassArray.includes(overexposureContainer) == false) {
-        overexposureContainer.classList.add('active');
+        showContainer(overexposureContainer);
     }
     else if (toggle == false && permanantElementClassArray.includes(overexposureContainer) == false) {
-        overexposureContainer.classList.remove('active');
+        hideContainer(overexposureContainer);
         if (permanantElementClassArray.length == 0) {
-            overlay.classList.remove('active');
+            hideContainer(overlay);
         }
         playSoundEffect('containerClose');
     }
-    if (overexposureContainer.classList.contains('active') && toggle == true) {
+    if (isContainerVisible(overexposureContainer) && toggle == true) {
         if (!button) return;
         const dataId = button.getAttribute("data-id");
         const cardSlug = buildOverexposureCardSlug(
@@ -91,7 +91,7 @@ function ToggleOverexposureContainer({ toggle = false, button = null, draft = fa
     }
     else {
         if (!isOverexposureEditorEmpty() && toggle == false) {
-            exitMenuContainer.classList.add('active');
+            showContainer(exitMenuContainer);
             addElementIfNotExists(popUpClassArray, exitMenuContainer);
         }
         if (!permanantElementClassArray.includes(overexposureContainer)) {
@@ -112,7 +112,7 @@ function togglePublishButton() {
 function ExitMenuButtonYes() {
     titleTextInput.value = "";
     contentsTextArea.value = "";
-    exitMenuContainer.classList.remove('active');
+    hideContainer(exitMenuContainer);
     removeElementIfExists(popUpClassArray, exitMenuContainer)
     removeElementIfExists(permanantElementClassArray, overexposureContainer);
     publishButton.classList.add("disabled");
@@ -120,7 +120,7 @@ function ExitMenuButtonYes() {
 }
 
 function ExitMenuButtonNo() {
-    exitMenuContainer.classList.remove('active');
+    hideContainer(exitMenuContainer);
     removeElementIfExists(popUpClassArray, exitMenuContainer)
 }
 
@@ -153,21 +153,21 @@ publishButton.addEventListener("click", async () => {
             }
         });
         playSoundEffect('postIncomplete');
-        postIncompleteContainer.classList.add('active');
+        showContainer(postIncompleteContainer);
         addElementIfNotExists(popUpClassArray, postIncompleteContainer);
         playSoundEffect('containerClose');
     }
     else {
-        areYouSurePostContainer.classList.add('active');
+        showContainer(areYouSurePostContainer);
         addElementIfNotExists(popUpClassArray, areYouSurePostContainer);
     }
 });
 submitPostYes.addEventListener("click", async () => {
-    areYouSurePostContainer.classList.remove('active');
+    hideContainer(areYouSurePostContainer);
     removeElementIfExists(popUpClassArray, areYouSurePostContainer)
     const draftButtons = document.querySelectorAll(".floating-button.draft");
     if (draftButtons.length > 0) {
-        uploadingPostContainer.classList.add("active");
+        showContainer(uploadingPostContainer);
         addElementIfNotExists(popUpClassArray, uploadingPostContainer);
         intervalId = setInterval(updateEllipses, 400);
         const draftData = [];
@@ -186,7 +186,7 @@ submitPostYes.addEventListener("click", async () => {
         try {
             const response = await saveDataToMongoDB(draftData);
             removeElementIfExists(popUpClassArray, uploadingPostContainer);
-            rememberCodeContainer.classList.add('active');
+            showContainer(rememberCodeContainer);
             overexposureContainer.removeAttribute('data-selected-card');
             addElementIfNotExists(permanantElementClassArray, rememberCodeContainer);
             ToggleOverexposureContainer({
@@ -204,13 +204,13 @@ submitPostYes.addEventListener("click", async () => {
             console.error("Error saving draft data:", error);
             playSoundEffect('postIncomplete');
         }
-        uploadingPostContainer.classList.remove("active");
+        hideContainer(uploadingPostContainer);
         addElementIfNotExists(popUpClassArray, uploadingPostContainer);
     }
 });
 
 submitPostNo.addEventListener("click", async () => {
-    areYouSurePostContainer.classList.remove('active');
+    hideContainer(areYouSurePostContainer);
     removeElementIfExists(popUpClassArray, areYouSurePostContainer)
 });
 

@@ -3,7 +3,21 @@
 // Join / leave / kick via socket
 async function joinParty(code) {
   console.log(`Joining party: ${code}`);
-  socket.emit('join-party', code);
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      socket.off('joined-party', handleJoinedParty);
+      reject(new Error(`Timed out joining party: ${code}`));
+    }, 5000);
+
+    function handleJoinedParty(data) {
+      clearTimeout(timeoutId);
+      socket.off('joined-party', handleJoinedParty);
+      resolve(data);
+    }
+
+    socket.on('joined-party', handleJoinedParty);
+    socket.emit('join-party', code);
+  });
 }
 
 async function leaveParty(code) {
@@ -117,18 +131,28 @@ socket.on('party-deleted', ({ partyCode: deletedCode }) => {
 });
 
 // Party data updates
-socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
+socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey }) => {
   try {
-    const codeToUse = partyCode || emittedPartyCode.partyId;
-    const res = await fetch(`/api/${sessionPartyType}?partyCode=${codeToUse}`);
-    const data = await res.json();
-
-    if (!data || data.length === 0) {
-      PartyDisbanded();
+    if (isPlaying && source === 'waiting-room') {
       return;
     }
 
-    const party = data[0];
+    const codeToUse = partyCode || emittedPartyCode?.partyId;
+    let party = null;
+
+    if (source === sessionPartyType && emittedPartyCode?.partyId === codeToUse) {
+      party = emittedPartyCode;
+    } else {
+      const res = await fetch(`/api/${sessionPartyType}?partyCode=${codeToUse}`);
+      const data = await res.json();
+
+      if (!data || data.length === 0) {
+        PartyDisbanded();
+        return;
+      }
+
+      party = data[0];
+    }
 
     // ✅ New layout only
     const config = party.config;
@@ -175,7 +199,14 @@ socket.on("party-updated", async ({ type, emittedPartyCode, documentKey }) => {
           return;
         }
         if (isPlaying) {
-          FetchInstructions();
+          currentPartyData = party;
+
+          if (!window.onlineGameUiReady) {
+            window.pendingOnlineInstructionSync = true;
+            return;
+          }
+
+          await FetchInstructions();
         }
       }
       lastKnownPing = latestPing;

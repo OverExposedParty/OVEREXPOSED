@@ -80,7 +80,7 @@ async function initialisePage() {
   me.socketId = socket.id;
   console.log("Socket ID set to: " + me.connection.socketId);
 
-  joinParty(partyCode);
+  await joinParty(partyCode);
 
   if (state.isPlaying === true) {
     for (let i = 0; i < players.length; i++) {
@@ -173,26 +173,33 @@ async function initialisePage() {
         timer: Date.now() + gameRules["time-limit"] * 1000,
       });
     } else {
-      const updatedState = {
-        ...state,
-        lastPinged: new Date()
-      };
+      const syncedPartyState = await syncStartupPartyState();
 
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: updatedState,
-        deck,
-        players
+      if (syncedPartyState) {
+        currentPartyData = {
+          ...syncedPartyState.party,
+          config: syncedPartyState.config,
+          state: syncedPartyState.state,
+          deck: syncedPartyState.deck,
+          players: syncedPartyState.players
+        };
+      }
+
+      const partyWithInstruction = await waitForPartyInstruction({
+        retries: 20,
+        delayMs: 250
       });
 
-      FetchInstructions();
+      if (partyWithInstruction) {
+        currentPartyData = partyWithInstruction;
+      }
+
+      await FetchInstructions();
     }
 
     SetPartyGameStatistics();
     await AddUserIcons();
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
-    SetScriptLoaded('/scripts/party-games/gamemode/online/paranoia/paranoia-online.js');
   }
 }
 
