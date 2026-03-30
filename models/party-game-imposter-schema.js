@@ -55,7 +55,7 @@ const deckSchema = new mongoose.Schema({
 // --- Main schema ---
 
 const partyGameImposterSchema = new mongoose.Schema({
-  partyId: { type: String, required: true },
+  partyId: { type: String, required: true, unique: true },
 
   config: configSchema,
   state:  stateSchema,

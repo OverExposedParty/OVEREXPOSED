@@ -58,7 +58,7 @@ const deckStateSchema = new mongoose.Schema({
 }, { _id: false });
 
 const partyGameTruthOrDareSchema = new mongoose.Schema({
-  partyId: { type: String, required: true },
+  partyId: { type: String, required: true, unique: true },
   config: configSchema,
   state:  runtimeStateSchema,
   deck:   deckStateSchema,

@@ -9,6 +9,25 @@ async function ToggleOnlineMode(toggle) {
 
     const newShuffleSeed = Math.floor(Math.random() * 256);
     partyCode = await reserveUniquePartyCode();
+    inputPartyCode.value = partyCode;
+
+    document.querySelectorAll(".user-icon").forEach(el => el.remove());
+
+    showContainer(enterUsernameContainer);
+    addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
+    toggleOverlay(true);
+
+    hideContainer(packsContainer);
+    packsSettingsTab.classList.remove('active');
+    hideContainer(rulesContainer);
+    rulesSettingsTab.classList.remove('active');
+
+    onlineSettingsTab.classList.add('active');
+    showContainer(onlineSettingsContainer);
+
+    SetGamemodeButtons();
+    UpdateSettings();
+    updateStartGameButton(false);
 
     let baseState = {
       isReady: true,
@@ -65,7 +84,6 @@ async function ToggleOnlineMode(toggle) {
       questionType: "truth",
       alternativeQuestionIndex: 0
     };
-        console.log("players", players);
     await updateOnlineParty({
       partyId: partyCode,
       config,
@@ -73,36 +91,6 @@ async function ToggleOnlineMode(toggle) {
       deck,
       players
     });
-
-    document.querySelectorAll(".user-icon").forEach(el => el.remove());
-
-
-    inputPartyCode.value = partyCode;
-    if (typeof preparePartyQrCode === 'function') {
-      await preparePartyQrCode(partyCode);
-    }
-    if (typeof togglePartyQrCode === 'function') {
-      togglePartyQrCode(false, partyCode);
-    }
-    if (typeof updatePartyQrPlayerCount === 'function') {
-      updatePartyQrPlayerCount(1);
-    }
-
-    showContainer(enterUsernameContainer);
-    addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
-    toggleOverlay(true);
-
-    hideContainer(packsContainer);
-    packsSettingsTab.classList.remove('active');
-    hideContainer(rulesContainer);
-    rulesSettingsTab.classList.remove('active');
-
-    onlineSettingsTab.classList.add('active');
-    showContainer(onlineSettingsContainer);
-
-    SetGamemodeButtons();
-    UpdateSettings();
-    updateStartGameButton(false);
 
     await joinParty(partyCode);
     await sendPartyChat({
@@ -112,6 +100,18 @@ async function ToggleOnlineMode(toggle) {
     });
     DisplayChatLogs();
     toggleUserCustomisationIcon(true);
+
+    if (typeof updatePartyQrPlayerCount === 'function') {
+      updatePartyQrPlayerCount(1);
+    }
+    if (typeof togglePartyQrCode === 'function') {
+      togglePartyQrCode(false, partyCode);
+    }
+    if (typeof preparePartyQrCode === 'function') {
+      preparePartyQrCode(partyCode).catch((error) => {
+        console.error('Failed to prepare party QR code:', error);
+      });
+    }
 
   } else {
     inputPartyCode.value = "";

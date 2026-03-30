@@ -8,7 +8,7 @@ const chatSchema = new mongoose.Schema({
 }, { _id: false });
 
 const ChatLogSchema = new mongoose.Schema({
-  partyId: { type: String, required: true },
+  partyId: { type: String, required: true, index: true },
   chat: { type: [chatSchema], required: true },
   lastPinged: { type: Date, default: Date.now },
 }, {

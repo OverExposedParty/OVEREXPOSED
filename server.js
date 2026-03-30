@@ -36,21 +36,9 @@ const partyGameImposterSchema = require('./models/party-game-imposter-schema');
 
 const PARTY_CODE_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const PARTY_CODE_MAX_ATTEMPTS = 100;
-const partyCodeModels = [
-  waitingRoomSchema,
-  partyGameTruthOrDareSchema,
-  partyGameParanoiaSchema,
-  partyGameNeverHaveIEverSchema,
-  partyGameMostLikelyToSchema,
-  partyGameImposterSchema,
-  partyGameWouldYouRatherSchema,
-  partyGameMafiaSchema,
-  partyGameChatLogSchema
-];
 
 // MongoDB connections
 let overexposureDb = null;
-let overexposedDb = null;
 const changeStreams = new Map();
 const changeStreamRestartTimers = new Map();
 const changeStreamRetryCounts = new Map();
@@ -255,21 +243,9 @@ function generatePartyCode() {
   return code;
 }
 
-async function partyCodeExists(partyCode) {
-  const matches = await Promise.all(
-    partyCodeModels.map((model) => model.exists({ partyId: partyCode }))
-  );
-
-  return matches.some(Boolean);
-}
-
 async function reserveUniquePartyCode() {
   for (let attempt = 0; attempt < PARTY_CODE_MAX_ATTEMPTS; attempt += 1) {
     const partyCode = generatePartyCode();
-
-    if (await partyCodeExists(partyCode)) {
-      continue;
-    }
 
     try {
       await waitingRoomSchema.create({ partyId: partyCode });
@@ -467,24 +443,39 @@ function attachDbReconnectHooks() {
 
 async function connectDatabases() {
   try {
-    const overexposureConn = await mongoose.connect(process.env.MONGO_URI_OVEREXPOSURE, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGO_URI_OVEREXPOSURE);
     console.log('✅ Connected to OVEREXPOSURE Database');
 
-    const overexposedConn = await mongoose.createConnection(process.env.MONGO_URI_OVEREXPOSED, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }).asPromise();
-    console.log('✅ Connected to OVEREXPOSED Database');
-
     overexposureDb = mongoose.connection;
-    overexposedDb = overexposedConn;
   } catch (err) {
     console.error('❌ Database connection error:', err);
     process.exit(1);
   }
+}
+
+async function ensureDatabaseIndexes() {
+  const modelsToIndex = [
+    waitingRoomSchema,
+    partyGameTruthOrDareSchema,
+    partyGameParanoiaSchema,
+    partyGameNeverHaveIEverSchema,
+    partyGameMostLikelyToSchema,
+    partyGameImposterSchema,
+    partyGameWouldYouRatherSchema,
+    partyGameMafiaSchema,
+    partyGameChatLogSchema,
+    Confession
+  ];
+
+  await Promise.all(
+    modelsToIndex.map(async (model) => {
+      try {
+        await model.createIndexes();
+      } catch (error) {
+        console.warn(`⚠️ Failed to ensure indexes for ${model.modelName}:`, error.message || error);
+      }
+    })
+  );
 }
 
 // === SOCKET.IO SETUP ===
@@ -1715,6 +1706,7 @@ app.use((req, res) => {
 
 (async () => {
   await connectDatabases();
+  await ensureDatabaseIndexes();
   await startChangeStreams();
 
   server.listen(PORT, () => {
