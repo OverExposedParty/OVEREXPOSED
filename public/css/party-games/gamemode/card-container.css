@@ -49,7 +49,7 @@
     right: 10px;
     width: clamp(40px, 8.4vw, 56px);
     height: auto;
-    display: var(--container-display, none);
+    display: none;
     pointer-events: none;
     z-index: 2;
 }
