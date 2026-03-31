@@ -1,4 +1,6 @@
 async function DisplayPrivateCard(instruction) {
+  await ensureQuestionsLoadedForCurrentConfig(getPartyConfig(currentPartyData));
+
   const state = getPartyState(currentPartyData);
   const deck  = currentPartyData.deck ?? currentPartyData;
 
@@ -113,52 +115,76 @@ async function DisplayVoteResults() {
 
   let punishmentInstruction;
 
-    const oddManOutEnabled = !!rulesObj["odd-man-out"];
+  const oddManOutEnabled =
+    rulesObj["odd-man-out"] === true || rulesObj["odd-man-out"] === "true";
 
-    if (
-      oddManOutEnabled &&
-      (
-        (haveVoteCount === 1 && !(haveNotVoteCount <= 1)) ||
-        (haveNotVoteCount === 1 && !(haveVoteCount <= 1))
-      )
-    ) {
-      punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
-    } else {
-      punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
+  const hasOddManOut =
+    (haveVoteCount === 1 && haveNotVoteCount > 1) ||
+    (haveNotVoteCount === 1 && haveVoteCount > 1);
+
+  if (oddManOutEnabled && hasOddManOut) {
+    punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
+  } else {
+    punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
+  }
+
+  players.forEach(player => {
+    const ps = player.state ?? (player.state = {});
+    const conn = player.connection ?? {};
+    const socketId = conn.socketId ?? player.socketId;
+    const vote = ps.vote ?? player.vote;
+
+    if (vote === true && socketId !== "DISCONNECTED") {
+      const currentScore = ps.score ?? player.score ?? 0;
+      ps.score = currentScore + 1;
+      player.score = ps.score;
     }
+  });
 
-    players.forEach(player => {
-      const ps = player.state ?? (player.state = {});
-      const conn = player.connection ?? {};
-      const socketId = conn.socketId ?? player.socketId;
-      const vote = ps.vote ?? player.vote;
+  const drinkPunishmentEnabled =
+    rulesObj["drink-punishment"] === true || rulesObj["drink-punishment"] === "true";
 
-      if (vote === true && socketId !== "DISCONNECTED") {
-        const currentScore = ps.score ?? player.score ?? 0;
-        ps.score = currentScore + 1;
-        player.score = ps.score;
-      }
+  const punishmentEnabled = drinkPunishmentEnabled || oddManOutEnabled;
+
+  if (punishmentEnabled) {
+    SetTimeOut({
+      delay,
+      instruction: punishmentInstruction,
+      nextDelay: null,
+      newUserConfirmed: false,
+      newUserReady: false
     });
+  } else {
+    SetTimeOut({
+      delay,
+      instruction: "RESET_QUESTION",
+      nextDelay: null,
+      newUserConfirmed: false,
+      newUserReady: false
+    });
+  }
+}
 
-    const drinkPunishmentEnabled = !!rulesObj["drink-punishment"];
+async function ensureDrinkWheelContainer() {
+  let container = document.querySelector('#drink-wheel-container');
 
-    if (drinkPunishmentEnabled) {
-      SetTimeOut({
-        delay,
-        instruction: punishmentInstruction,
-        nextDelay: null,
-        newUserConfirmed: false,
-        newUserReady: false
-      });
-    } else {
-      SetTimeOut({
-        delay,
-        instruction: "RESET_QUESTION",
-        nextDelay: null,
-        newUserConfirmed: false,
-        newUserReady: false
-      });
+  if (container) {
+    return container;
+  }
+
+  if (typeof AddGamemodeContainers === 'function') {
+    AddGamemodeContainers('odd-man-out');
+
+    for (let attempt = 0; attempt < 20; attempt++) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      container = document.querySelector('#drink-wheel-container');
+      if (container) {
+        return container;
+      }
     }
+  }
+
+  return null;
 }
 
 async function ChosePunishment(instruction) {
@@ -243,7 +269,18 @@ async function ChosePunishment(instruction) {
 
     if (myIndex === oddManOutIndex) {
       console.log("You are the odd man out, spinning the wheel.");
-      setActiveContainers(drinkWheelContainer);
+      const drinkWheelContainer = await ensureDrinkWheelContainer();
+
+      if (drinkWheelContainer) {
+        setActiveContainers(drinkWheelContainer);
+      } else {
+        console.warn("Drink wheel container was not available for odd man out.");
+        SetWaitingForPlayer({
+          waitingForRoomTitle: "Preparing punishment...",
+          waitingForRoomText: "Loading drink wheel..."
+        });
+        setActiveContainers(waitingForPlayerContainer);
+      }
     } else {
       SetWaitingForPlayer({
         waitingForRoomTitle: "Waiting for " + (oddPlayer.identity?.username ?? oddPlayer.username),
@@ -288,7 +325,11 @@ async function DisplayPunishmentToUser(instruction) {
   const player = players[index];
 
   if (parsed.deviceId === deviceId) {
-    completePunishmentText.textContent = "take " + parsed.reason.replace("_", " ");
+    if (parsed.reason === "DOWN_IT") {
+      completePunishmentText.textContent = "Down your drink!";
+    } else {
+      completePunishmentText.textContent = "Take " + parsed.reason.replaceAll("_", " ").toLowerCase();
+    }
     setActiveContainers(completePunishmentContainer);
   } else {
     SetWaitingForPlayer({

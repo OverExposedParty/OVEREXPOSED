@@ -503,8 +503,16 @@ async function UpdateSettings() {
                 selectedPacks: gamemodeSelectedPacks,  // <--- array now
                 // preserve existing instructions / shuffleSeed if present
                 userInstructions: oldConfig.userInstructions ?? currentPartyData.userInstructions ?? '',
-                shuffleSeed: oldConfig.shuffleSeed ?? currentPartyData.shuffleSeed ?? 0
+                shuffleSeed: oldConfig.shuffleSeed
+                    ?? currentPartyData.shuffleSeed
+                    ?? window.currentOnlineShuffleSeed
+                    ?? Math.floor(Math.random() * 256)
             };
+            console.log('[UpdateSettings] preserving shuffleSeed=', mergedConfig.shuffleSeed, {
+                oldConfigShuffleSeed: oldConfig.shuffleSeed,
+                currentPartyDataShuffleSeed: currentPartyData.shuffleSeed,
+                currentOnlineShuffleSeed: window.currentOnlineShuffleSeed
+            });
 
 
             await updateOnlineParty({

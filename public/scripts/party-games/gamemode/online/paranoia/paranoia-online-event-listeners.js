@@ -122,27 +122,14 @@ async function handleCompletePunishmentConfirmClick() {
   const instructions = getUserInstructions(currentPartyData);
   const parsedInstructions = parseInstruction(instructions);
 
-  hideContainer(completePunishmentContainer);
+  setActiveContainers(waitingForPlayersContainer);
 
-  const players = currentPartyData.players || [];
-  const state = getPartyState(currentPartyData);
-  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const turnPlayer = players[playerTurn];
-
-  if (getPlayerId(turnPlayer) === deviceId) {
-    await SendInstruction({
-      instruction: "RESET_PARANOIA_QUESTION:PLAYER_TURN_PASSED:1",
-      byPassHost: true
-    });
-  }
-  else {
-    await SetUserConfirmation({
-      selectedDeviceId: deviceId,
-      option: true,
-      reason: "CONFIRM:" + parsedInstructions.reason,
-      userInstruction: "PUNISHMENT_OFFER"
-    });
-  }
+  await SetUserConfirmation({
+    selectedDeviceId: deviceId,
+    option: true,
+    reason: "CONFIRM:" + parsedInstructions.reason,
+    userInstruction: "PUNISHMENT_OFFER"
+  });
 }
 
 function handlePickHeadsClick() {

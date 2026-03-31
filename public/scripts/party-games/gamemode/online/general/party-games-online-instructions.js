@@ -256,7 +256,6 @@ async function ResetQuestion({
   // Move to next card
   deck.currentCardIndex = (deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0) + 1;
   currentPartyData.currentCardIndex = deck.currentCardIndex; // legacy mirror
-
   // Add score for current or specific player
   if (state.playerTurn !== undefined && state.playerTurn !== null) {
     const idx = state.playerTurn;
@@ -745,9 +744,9 @@ function getUserInstructions(party) {
   const state = getPartyState(party);
 
   return (
+    config.userInstructions ??
     state.userInstructions ??
     party.userInstructions ??
-    config.userInstructions ??
     ''
   );
 }

@@ -23,9 +23,9 @@ async function waitForOnlineCore() {
 
 (async () => {
     try {
-        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-online-logic.js');
-        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-ui-helper.js');
-        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-online-setup.js');
+        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-online-logic.js', { cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER" });
+        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-ui-helper.js', { cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER" });
+        await LoadScript('/scripts/party-games/gamemode/online/never-have-i-ever/never-have-i-ever-online-setup.js', { cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER" });
         await Ready.when('selected-user-containers', { timeout: 10000 });
         await waitForOnlineCore();
         await SetPageSettings();

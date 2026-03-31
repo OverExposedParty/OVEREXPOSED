@@ -19,6 +19,8 @@ gameContainers.push(
 let textBoxSetting = false;
 
 async function SetPageSettings() {
+  selectPunishmentText.textContent = "YOU CHOSE TO PASS. PICK A FORFEIT.";
+
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
       hideContainer(selectPunishmentContainer);

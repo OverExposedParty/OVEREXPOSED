@@ -1,3 +1,9 @@
+function formatMostLikelyToQuestionForSelection(question = "") {
+  return String(question)
+    .replace(/^\s*who(?:['’]s|\s+is)?\s+most\s+likely\s+to\s+/i, "")
+    .trim();
+}
+
 async function DisplayPrivateCard() {
   const state   = getPartyState(currentPartyData);
   const deck    = getPartyDeck(currentPartyData);
@@ -42,7 +48,7 @@ async function DisplayPrivateCard() {
   selectNumberButtonContainer.innerHTML = "";
 
   selectUserQuestionText.textContent =
-    selectedQuestionObj.question.replace("Who's most likely to ", "");
+    formatMostLikelyToQuestionForSelection(selectedQuestionObj.question);
 
   DisplayCard(gameContainerPrivate, selectedQuestionObj);
 

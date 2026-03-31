@@ -8,6 +8,17 @@ let numberOfDareQuestions = 0;
 
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
   try {
+    console.log(`[loadJSONFiles] gamemode=${gamemode}, shuffleSeed=`, seedShuffle);
+
+    // Reset question state on every load so reconnects/re-inits don't duplicate
+    // the deck differently per client.
+    allQuestions = [];
+    currentQuestionIndex = 0;
+    cardPackMap = [];
+    numberOfQuestions = 0;
+    numberOfTruthQuestions = 0;
+    numberOfDareQuestions = 0;
+
     const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
     if (!packsResponse.ok) {
       console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
@@ -120,7 +131,9 @@ function shuffleQuestions(seed = null) {
         let m = 0x80000000; // 2**31
         let a = 1103515245;
         let c = 12345;
-        let state = seed ? seed : Math.floor(Math.random() * m);
+        let state = seed !== null && seed !== undefined
+            ? Number(seed)
+            : Math.floor(Math.random() * m);
 
         return function () {
             state = (a * state + c) % m;

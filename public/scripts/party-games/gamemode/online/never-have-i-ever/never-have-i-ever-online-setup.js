@@ -12,6 +12,26 @@ gameContainers.push(
   resultsChartContainer
 );
 
+let loadedQuestionConfigSignature = null;
+
+function getQuestionConfigSignature(config = {}) {
+  const selectedPacks = Array.isArray(config.selectedPacks) ? [...config.selectedPacks].sort() : [];
+  const shuffleSeed = config.shuffleSeed ?? null;
+  return JSON.stringify({ selectedPacks, shuffleSeed });
+}
+
+async function ensureQuestionsLoadedForCurrentConfig(config = {}) {
+  const nextSignature = getQuestionConfigSignature(config);
+
+  if (loadedQuestionConfigSignature === nextSignature) {
+    return;
+  }
+
+  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  loadedQuestionConfigSignature = nextSignature;
+  console.log("Loaded JSON files for synced config");
+}
+
 async function initialisePage() {
   const party = await waitForOnlinePartySnapshot({
     requirePlayer: true,
@@ -104,7 +124,8 @@ async function initialisePage() {
     });
 
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`,
+      { cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER" }
     );
 
     const instructions = getUserInstructions(party);
@@ -141,6 +162,8 @@ async function initialisePage() {
         currentPartyData = partyWithInstruction;
       }
 
+      await ensureQuestionsLoadedForCurrentConfig(getPartyConfig(currentPartyData));
+
       await FetchInstructions();
     }
 
@@ -170,13 +193,13 @@ async function SetPageSettings() {
     const parsedInstructions = parseInstruction(instructions);
 
     if (parsedInstructions.instruction.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-      await ResetQuestion({
-        icons,
-        timer: Date.now() + gameRules["time-limit"] * 1000
+      await SendInstruction({
+        instruction: "RESET_QUESTION",
+        timer: Date.now() + gameRules["time-limit"] * 1000,
+        byPassHost: true
       });
     } else {
-      setUserBool(deviceId, true, true);
+      await setUserBool(deviceId, true, true);
     }
   });
 
@@ -198,7 +221,6 @@ async function SetPageSettings() {
 
   // 🔁 Use nested config (with legacy fallback)
   const config = getPartyConfig(currentPartyData);
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
-  console.log("Loaded JSON files");
+  await ensureQuestionsLoadedForCurrentConfig(config);
   await initialisePage();
 }

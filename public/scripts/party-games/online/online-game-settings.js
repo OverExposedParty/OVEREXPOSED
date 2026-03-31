@@ -1,4 +1,5 @@
 let partyUserCount = 0;
+window.currentOnlineShuffleSeed = window.currentOnlineShuffleSeed ?? null;
 
 async function ToggleOnlineMode(toggle) {
   if (toggle === true) {
@@ -8,6 +9,8 @@ async function ToggleOnlineMode(toggle) {
     onlineSettingsTab.classList.remove('disabled');
 
     const newShuffleSeed = Math.floor(Math.random() * 256);
+    console.log("[ToggleOnlineMode] generated shuffleSeed=", newShuffleSeed);
+    window.currentOnlineShuffleSeed = newShuffleSeed;
     partyCode = await reserveUniquePartyCode();
     inputPartyCode.value = partyCode;
 
@@ -26,7 +29,7 @@ async function ToggleOnlineMode(toggle) {
     showContainer(onlineSettingsContainer);
 
     SetGamemodeButtons();
-    UpdateSettings();
+    await UpdateSettings();
     updateStartGameButton(false);
 
     let baseState = {
@@ -68,6 +71,7 @@ async function ToggleOnlineMode(toggle) {
       userInstructions: "",
       shuffleSeed: newShuffleSeed
     };
+    console.log("[ToggleOnlineMode] initial config.shuffleSeed=", config.shuffleSeed);
 
     const state = {
       isPlaying: false,
@@ -114,6 +118,7 @@ async function ToggleOnlineMode(toggle) {
     }
 
   } else {
+    window.currentOnlineShuffleSeed = null;
     inputPartyCode.value = "";
     if (typeof togglePartyQrCode === 'function') {
       togglePartyQrCode(false);
