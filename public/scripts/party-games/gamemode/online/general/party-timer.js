@@ -1,8 +1,172 @@
 let timeout;
 
+function createRoundedRectPath({ x, y, width, height, rx, ry }) {
+  const right = x + width;
+  const bottom = y + height;
+  const centerX = x + width / 2;
+
+  return [
+    `M ${centerX},${y}`,
+    `H ${right - rx}`,
+    `A ${rx},${ry} 0 0 1 ${right},${y + ry}`,
+    `V ${bottom - ry}`,
+    `A ${rx},${ry} 0 0 1 ${right - rx},${bottom}`,
+    `H ${x + rx}`,
+    `A ${rx},${ry} 0 0 1 ${x},${bottom - ry}`,
+    `V ${y + ry}`,
+    `A ${rx},${ry} 0 0 1 ${x + rx},${y}`,
+    `H ${centerX}`
+  ].join(' ');
+}
+
+function setBorderPathProgress(selectedTimer, progress) {
+  if (!selectedTimer) return;
+
+  selectedTimer._latestProgress = progress;
+  const borderProgress = selectedTimer._borderProgressEl;
+  const borderLength = selectedTimer._borderLength;
+  const startOffset = selectedTimer._borderStartOffset || 0;
+
+  if (!borderProgress || !Number.isFinite(borderLength)) return;
+
+  const clampedProgress = Math.min(Math.max(progress, 0), 1);
+  const visibleLength = borderLength * clampedProgress;
+  const nonWrappingGap = borderLength + 1;
+
+  if (clampedProgress <= 0) {
+    borderProgress.style.opacity = '0';
+    borderProgress.style.strokeDasharray = `0 ${nonWrappingGap}`;
+    borderProgress.style.strokeDashoffset = `${-startOffset}`;
+    return;
+  }
+
+  borderProgress.style.opacity = '1';
+
+  // Keep the gap longer than the entire path so the dash pattern cannot
+  // wrap and create a second visible segment elsewhere on the border.
+  borderProgress.style.strokeDasharray = `${visibleLength} ${nonWrappingGap}`;
+  borderProgress.style.strokeDashoffset = `${-startOffset}`;
+}
+
+function updateBorderTimerFromContainer(timerWrapper) {
+  const host = timerWrapper.parentElement;
+  const svg = timerWrapper._borderSvg;
+  const borderTrack = timerWrapper._borderTrackEl;
+  const borderProgress = timerWrapper._borderProgressEl;
+  if (!host || !svg || !borderTrack || !borderProgress) return;
+
+  const rect = host.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+
+  const styles = getComputedStyle(host);
+  const borderWidth =
+    parseFloat(styles.borderTopWidth) ||
+    parseFloat(styles.getPropertyValue('--bordersize')) ||
+    4;
+  const radius = parseFloat(styles.borderTopLeftRadius) || 25;
+  const inset = borderWidth / 2;
+  const width = Math.max(rect.width - borderWidth, 0);
+  const height = Math.max(rect.height - borderWidth, 0);
+  const rx = Math.max(radius - inset, 0);
+  const ry = Math.max(radius - inset, 0);
+  const pathData = createRoundedRectPath({
+    x: inset,
+    y: inset,
+    width,
+    height,
+    rx,
+    ry
+  });
+
+  svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+  [borderTrack, borderProgress].forEach((el) => {
+    el.setAttribute('d', pathData);
+  });
+
+  const borderLength = borderProgress.getTotalLength();
+  timerWrapper._borderLength = borderLength;
+  setBorderPathProgress(timerWrapper, timerWrapper._latestProgress ?? 0);
+}
+
+function updateBorderTimerGeometry(timerWrapper) {
+  if (!timerWrapper) return;
+
+  if (timerWrapper.dataset.timerHost === 'svg-card') {
+    const borderProgress = timerWrapper._borderProgressEl;
+    if (!borderProgress) return;
+
+    timerWrapper._borderLength = borderProgress.getTotalLength();
+    setBorderPathProgress(timerWrapper, timerWrapper._latestProgress ?? 0);
+    return;
+  }
+
+  updateBorderTimerFromContainer(timerWrapper);
+}
+
+function buildContainerBorderTimer(timerWrapper) {
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.classList.add('border-timer-svg');
+  const trackPath = document.createElementNS(svgNS, 'path');
+  trackPath.classList.add('timer-border-track');
+
+  const progressPath = document.createElementNS(svgNS, 'path');
+  progressPath.classList.add('timer-border-progress');
+
+  svg.appendChild(trackPath);
+  svg.appendChild(progressPath);
+
+  timerWrapper._borderTrackEl = trackPath;
+  timerWrapper._borderProgressEl = progressPath;
+  timerWrapper.appendChild(svg);
+  timerWrapper._borderSvg = svg;
+  timerWrapper._resizeObserver = new ResizeObserver(() => {
+    updateBorderTimerGeometry(timerWrapper);
+  });
+  if (timerWrapper.parentElement) {
+    timerWrapper._resizeObserver.observe(timerWrapper.parentElement);
+  }
+
+  updateBorderTimerGeometry(timerWrapper);
+}
+
+function buildSvgCardBorderTimer(timerWrapper, host) {
+  const svg = host?.querySelector('svg.main-image');
+  const trackPath = svg?.querySelector('.timer-border-track-svg');
+  const progressPath = svg?.querySelector('.timer-border-progress-svg');
+  if (!svg || !trackPath || !progressPath) return;
+
+  timerWrapper._borderSvg = svg;
+  timerWrapper._borderTrackEl = trackPath;
+  timerWrapper._borderProgressEl = progressPath;
+  timerWrapper.dataset.timerHost = 'svg-card';
+  timerWrapper._resizeObserver = new ResizeObserver(() => {
+    updateBorderTimerGeometry(timerWrapper);
+  });
+  timerWrapper._resizeObserver.observe(svg);
+
+  updateBorderTimerGeometry(timerWrapper);
+}
+
+function ensureBorderTimerGeometry(selectedTimer) {
+  if (!selectedTimer || selectedTimer.dataset.timerVariant !== 'border') return;
+
+  if (!selectedTimer._borderProgressEl) {
+    if (selectedTimer.dataset.timerHost === 'svg-card') {
+      buildSvgCardBorderTimer(selectedTimer, selectedTimer.parentElement);
+    } else {
+      buildContainerBorderTimer(selectedTimer);
+    }
+  } else {
+    updateBorderTimerGeometry(selectedTimer);
+  }
+}
+
 function startTimer({ timeLeft = 0, duration = 0, selectedTimer = null }) {
   if (!selectedTimer) return;
 
+  const isBorderTimer = selectedTimer.dataset.timerVariant === 'border';
   const timer = selectedTimer.querySelector('.timer');
   const mask = selectedTimer.querySelector('.mask');
   const timerWrapper = selectedTimer;
@@ -19,7 +183,13 @@ function startTimer({ timeLeft = 0, duration = 0, selectedTimer = null }) {
   if (timeLeft > duration) timeLeft = duration;
   if (timeLeft < 0) timeLeft = 0;
 
-  showContainer(timerWrapper);
+  if (isBorderTimer) {
+    ensureBorderTimerGeometry(selectedTimer);
+    selectedTimer.classList.add('is-active');
+    setBorderPathProgress(selectedTimer, 0);
+  } else {
+    showContainer(timerWrapper);
+  }
 
   let startTime = null;
   let remaining = timeLeft;
@@ -39,14 +209,17 @@ function startTimer({ timeLeft = 0, duration = 0, selectedTimer = null }) {
 
     const elapsed = (timestamp - startTime) / 1000;
     const timePassed = duration - timeLeft + elapsed;
-    const progress = Math.min(timePassed / duration, 1);
+    const progress = duration > 0 ? Math.min(timePassed / duration, 1) : 1;
     const rotateDeg = 360 * progress;
 
-    if (timer) {
+    if (isBorderTimer) {
+      ensureBorderTimerGeometry(selectedTimer);
+      setBorderPathProgress(selectedTimer, progress);
+    } else if (timer) {
       timer.style.transform = `rotate(${rotateDeg}deg)`;
     }
 
-    if (mask) {
+    if (!isBorderTimer && mask) {
       if (progress < 0.5) {
         const localProgress = progress / 0.5;
         const rotation = 0 + localProgress * (-179.8);
@@ -91,12 +264,17 @@ function stopTimer(selectedTimer) {
   const timerNumber = selectedTimer._timerNumber || selectedTimer.querySelector('.timer-number');
   const small = selectedTimer._small ?? selectedTimer.classList.contains('small');
   const duration = selectedTimer._duration || 0;
+  const isBorderTimer = selectedTimer.dataset.timerVariant === 'border';
 
   // visually reset to full
-  if (timer) {
+  if (isBorderTimer) {
+    ensureBorderTimerGeometry(selectedTimer);
+    selectedTimer.classList.add('is-active');
+    setBorderPathProgress(selectedTimer, 1);
+  } else if (timer) {
     timer.style.transform = 'rotate(360deg)';
   }
-  if (mask) {
+  if (!isBorderTimer && mask) {
     mask.style.transform = 'rotate(-180deg)';
     mask.style.background = getComputedStyle(document.documentElement)
       .getPropertyValue('--backgroundcolour').trim();
@@ -108,7 +286,11 @@ function stopTimer(selectedTimer) {
   }
 
   // keep active state
-  showContainer(selectedTimer);
+  if (isBorderTimer) {
+    selectedTimer.classList.add('is-active');
+  } else {
+    showContainer(selectedTimer);
+  }
 }
 
 function createCancelableTimeout(ms) {
@@ -180,20 +362,46 @@ function cancelPlayerTimeout() {
   if (playerTimeOut?.cancel) playerTimeOut.cancel();
 }
 
-function AddTimerToContainer(selectContainer) {
+function AddTimerToContainer(selectContainer, { variant = 'border' } = {}) {
   if (!selectContainer) return;
+  const hasDirectTimer = Array.from(selectContainer.children).some(
+    child => child.classList?.contains('timer-wrapper')
+  );
+  if (hasDirectTimer) return;
 
   const timerWrapper = document.createElement('div');
-  timerWrapper.className = 'timer-wrapper small';
+  timerWrapper.dataset.timerVariant = variant;
 
-  const timer = document.createElement('div');
-  timer.className = 'timer';
+  if (variant === 'legacy') {
+    timerWrapper.className = 'timer-wrapper small';
 
-  const mask = document.createElement('div');
-  mask.className = 'mask';
+    const timer = document.createElement('div');
+    timer.className = 'timer';
 
-  timer.appendChild(mask);
-  timerWrapper.appendChild(timer);
+    const mask = document.createElement('div');
+    mask.className = 'mask';
 
-  selectContainer.appendChild(timerWrapper);
+    timer.appendChild(mask);
+    timerWrapper.appendChild(timer);
+    selectContainer.appendChild(timerWrapper);
+    return;
+  }
+
+  timerWrapper.className = 'timer-wrapper border-timer';
+
+  if (selectContainer.classList?.contains('main-image-container')) {
+    timerWrapper.dataset.timerHost = 'svg-card';
+    selectContainer.appendChild(timerWrapper);
+    return;
+  }
+
+  timerWrapper.classList.add('container-shape');
+  selectContainer.classList.add('has-border-timer');
+
+  const firstChild = selectContainer.firstElementChild;
+  if (firstChild) {
+    selectContainer.insertBefore(timerWrapper, firstChild);
+  } else {
+    selectContainer.appendChild(timerWrapper);
+  }
 }

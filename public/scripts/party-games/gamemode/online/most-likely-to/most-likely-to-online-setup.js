@@ -281,7 +281,6 @@ async function SetPageSettings() {
   });
 
   // Timers
-  AddTimerToContainer(gameContainerPrivate.querySelector('.main-image-container'));
   AddTimerToContainer(selectUserContainer);
   AddTimerToContainer(waitingForPlayersContainer);
   AddTimerToContainer(resultsChartContainer);

@@ -143,6 +143,14 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             cardContainerDualStack.insertAdjacentHTML('afterbegin', withDualStackHTML);
         }
 
+        if (placeholderCardContainer?.dataset.online === "true" && typeof AddTimerToContainer === 'function') {
+            [cardContainerPrivate, cardContainerPublic, cardContainerAnswer, cardContainerDualStack]
+                .filter(Boolean)
+                .forEach((container) => {
+                    AddTimerToContainer(container.querySelector('.main-image-container'));
+                });
+        }
+
         return fetch('/html-templates/party-games/card-container/gamemode-text-container.html');
     })
     .then(response => response.text())

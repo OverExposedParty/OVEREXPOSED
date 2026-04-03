@@ -31,6 +31,13 @@ async function SetPageSettings() {
   });
 
   AddTimerToContainer(waitingForPlayersContainer);
+  AddTimerToContainer(displayRoleContainer);
+  AddTimerToContainer(selectUserDayPhaseContainer);
+  AddTimerToContainer(selectUserNightPhaseContainer);
+  AddTimerToContainer(selectCivilianWatchContainer);
+  AddTimerToContainer(displayCivilianWatchResponseContainer);
+  AddTimerToContainer(displayTownVoteContainer);
+  AddTimerToContainer(displayPlayerKilledContainer);
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,

@@ -246,6 +246,11 @@ body.party-missing-state .main-container > :not(.online-status-container) {
     --container-visible-display: flex;
 }
 
+.selected-user-container.has-border-timer,
+.online-status-container.has-border-timer {
+    border-color: transparent;
+}
+
 .selected-user-container.pop-up {
     border: var(--bordersize) solid var(--secondarybackgroundcolour);
     position: fixed;

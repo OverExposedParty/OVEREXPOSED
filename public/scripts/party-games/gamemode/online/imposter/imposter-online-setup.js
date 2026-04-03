@@ -111,7 +111,6 @@ async function SetPageSettings() {
   });
 
   AddTimerToContainer(selectUserContainer);
-  AddTimerToContainer(cardContainerPrivate.querySelector('.main-image-container'));
   AddTimerToContainer(resultsChartContainer);
   AddTimerToContainer(waitingForPlayerContainer);
   AddTimerToContainer(selectPunishmentContainer);

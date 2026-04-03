@@ -8,6 +8,10 @@
   --container-visible-display: flex;
 }
 
+.timer-wrapper[data-timer-variant="legacy"] {
+  display: var(--container-display, none);
+}
+
 .timer-wrapper.small {
   position: absolute;
   top: 0.5rem;
@@ -89,6 +93,47 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.timer-wrapper.border-timer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.timer-wrapper.border-timer.is-active {
+  opacity: 1;
+}
+
+.timer-wrapper.border-timer .border-timer-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.timer-wrapper.border-timer .timer-border-progress {
+  fill: none;
+  stroke: var(--primarypagecolour);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.timer-wrapper.border-timer .timer-border-track {
+  fill: none;
+  stroke: var(--secondarypagecolour);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.timer-wrapper.border-timer.container-shape .timer-border-track,
+.timer-wrapper.border-timer.container-shape .timer-border-progress {
+  stroke-width: var(--bordersize);
 }
 
 @keyframes mask {

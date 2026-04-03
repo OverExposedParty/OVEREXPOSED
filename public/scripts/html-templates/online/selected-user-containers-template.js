@@ -48,8 +48,29 @@ let partyDisbandedContainer;
 
 const cssFilesSelectUserContainers = ['/css/general/online/timer.css'];
 cssFilesSelectUserContainers.forEach(href => {
-    LoadStylesheet(href);
+    LoadStylesheet(href, { cacheBustKey: 'WEBSITE_VERSION' });
 });
+
+function getOnlineGamemodeCacheBustKey(templateName) {
+    switch (templateName) {
+        case 'truth-or-dare':
+            return 'PARTY_GAMES_ONLINE_TRUTH_OR_DARE';
+        case 'paranoia':
+            return 'PARTY_GAMES_ONLINE_PARANOIA';
+        case 'never-have-i-ever':
+            return 'PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER';
+        case 'most-likely-to':
+            return 'PARTY_GAMES_ONLINE_MOST_LIKELY_TO';
+        case 'would-you-rather':
+            return 'PARTY_GAMES_ONLINE_WOULD_YOU_RATHER';
+        case 'imposter':
+            return 'PARTY_GAMES_ONLINE_IMPOSTER';
+        case 'mafia':
+            return 'PARTY_GAMES_ONLINE_MAFIA';
+        default:
+            return 'WEBSITE_VERSION';
+    }
+}
 
 async function loadTemplatesAndScripts() {
     try {
@@ -93,8 +114,9 @@ async function loadTemplatesAndScripts() {
         );
 
         const template = placeHolderSelectedUser.dataset.template;
+        const cacheBustKey = getOnlineGamemodeCacheBustKey(template);
 
-        await LoadScript(`/scripts/party-games/gamemode/online/general/party-timer.js`);
+        await LoadScript(`/scripts/party-games/gamemode/online/general/party-timer.js`, { cacheBustKey });
 
         // Load template-specific HTML
         if (template === 'truth-or-dare') {

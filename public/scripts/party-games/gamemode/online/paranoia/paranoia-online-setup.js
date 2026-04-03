@@ -208,7 +208,6 @@ async function SetPageSettings() {
   wireEventListeners();
 
   AddTimerToContainer(waitingForPlayerContainer);
-  AddTimerToContainer(gameContainerPrivate.querySelector('.main-image-container'));
   AddTimerToContainer(selectUserContainer);
 
   const initialPartyData = await waitForOnlinePartySnapshot({

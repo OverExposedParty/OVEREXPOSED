@@ -132,7 +132,6 @@ async function SetPageSettings() {
   AddTimerToContainer(waitingForPlayerContainer);
   AddTimerToContainer(selectUserContainer);
   AddTimerToContainer(selectQuestionTypeContainer);
-  AddTimerToContainer(cardContainerPublic.querySelector('.main-image-container'));
   AddTimerToContainer(selectPunishmentContainer);
 
   console.log(cardContainerPublic);
