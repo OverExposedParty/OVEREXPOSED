@@ -1,4 +1,5 @@
 let pickedHeads = false;
+let coinFlipInProgress = false;
 
 const headsCoinSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485 485" role="img" aria-label="Heads">
@@ -57,6 +58,15 @@ else {
 }
 
 async function tossCoinFunction() {
+    if (coinFlipInProgress) {
+        return;
+    }
+
+    coinFlipInProgress = true;
+    if (tossBtn) {
+        tossBtn.disabled = true;
+    }
+
     const randomVal = Math.random();
     const faceCoin = randomVal < 0.5 ? 'Heads' : 'Tails';
     const backgroundContainer = randomVal < 0.5 ? 'var(--backgroundcolour)' : 'var(--primarypagecolour)';
@@ -77,38 +87,41 @@ async function tossCoinFunction() {
         coinIcon.classList.remove('flip');
     }, 1000);
 
-    // online vs offline behaviour
-    if (placeholderGamemodeAddons?.dataset.online === "true") {
-        const existingData = await getExistingPartyData(partyCode);
-        if (!existingData || existingData.length === 0) {
-            console.warn('No party data found.');
-            return;
+    try {
+        // online vs offline behaviour
+        if (placeholderGamemodeAddons?.dataset.online === "true") {
+            await new Promise(resolve => setTimeout(resolve, 2500));
+
+            const latestPartyData =
+                (typeof GetCurrentPartyData === 'function'
+                    ? await GetCurrentPartyData()
+                    : null) ??
+                currentPartyData ??
+                null;
+
+            const matchedFace =
+                (pickedHeads && faceCoin === "Heads") ||
+                (!pickedHeads && faceCoin === "Tails");
+
+            await SendInstruction({
+                instruction: matchedFace
+                    ? "DISPLAY_DUAL_STACK_CARD"
+                    : "USER_HAS_PASSED:USER_CALLED_WRONG_FACE:",
+                partyData: latestPartyData,
+                updateUsersReady: false,
+                updateUsersConfirmation: false,
+                byPassHost: true
+            });
         }
-        const currentPartyData = existingData[0];
-
-        setTimeout(() => {
-            if ((pickedHeads && faceCoin == "Heads") || (!pickedHeads && faceCoin == "Tails")) {
-                SendInstruction({
-                    instruction: "DISPLAY_DUAL_STACK_CARD",
-                    partyData: currentPartyData,
-                    updateUsersReady: false,
-                    updateUsersConfirmation: false,
-                    byPassHost: true
-                });
-
-            } else {
-                SendInstruction({
-                    instruction: "USER_HAS_PASSED:USER_CALLED_WRONG_FACE:",
-                    updateUsersReady: false,
-                    updateUsersConfirmation: false,
-                    byPassHost: true
-                });
-            }
-        }, 2500);
-
-    } else {
         // offline mode just ends after showing the coin
         // (no multiplayer logic, no instructions)
+    } catch (error) {
+        console.error('Failed to complete coin flip flow:', error);
+    } finally {
+        coinFlipInProgress = false;
+        if (tossBtn) {
+            tossBtn.disabled = false;
+        }
     }
 }
 

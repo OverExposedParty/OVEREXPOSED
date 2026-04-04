@@ -48,7 +48,7 @@ let dbReconnectHooksAttached = false;
 const WAITING_ROOM_TEMPLATE_PATH = path.join(__dirname, 'public', 'pages', 'waiting-room.html');
 const WAITING_ROOM_TEMPLATE = fs.readFileSync(WAITING_ROOM_TEMPLATE_PATH, 'utf8');
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public');
-const WEBSITE_CACHE_VERSION = process.env.WEBSITE_CACHE_VERSION || '2026-03-31-3';
+const WEBSITE_CACHE_VERSION = process.env.WEBSITE_CACHE_VERSION || '2026-04-04-1';
 const DEPLOYMENT_VERSION = WEBSITE_CACHE_VERSION;
 const ONLINE_GAMEMODE_MAX_PLAYERS = {
   'truth-or-dare': 20,

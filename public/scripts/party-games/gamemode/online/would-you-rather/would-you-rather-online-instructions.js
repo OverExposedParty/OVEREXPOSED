@@ -6,10 +6,10 @@ async function DisplayPrivateCard() {
   const delay = new Date(state.timer) - Date.now();
   const durationSeconds = getTimeLimit();
 
-  startTimer({
+  startTimerFromContainer({
+    container: gameContainerPrivate,
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
   startTimer({
     timeLeft: delay / 1000,

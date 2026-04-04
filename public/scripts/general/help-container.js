@@ -8,29 +8,52 @@ const helpContainerIndexButton = document.querySelector('.help-index-button');
 
 let helpData = [];
 let currentHelpIndex = 0;
+let helpTransitionTimeout = null;
+let helpTransitionToken = 0;
+const helpImageMetadata = new Map();
 
 // ---------------------------------------------------
 //  BUILD HELP TEXT (supports images + paragraph)
 // ---------------------------------------------------
+function getHelpPageStageStyle(textObj) {
+  if (!textObj || !Array.isArray(textObj.images) || !textObj.images.length) {
+    return "";
+  }
+
+  const firstImage = textObj.images.find((img) => img?.src);
+  if (!firstImage) return "";
+
+  const dimensions = helpImageMetadata.get(firstImage.src);
+  if (!dimensions?.width || !dimensions?.height) {
+    return "";
+  }
+
+  return ` style="--tutorial-image-ratio: ${dimensions.width} / ${dimensions.height};"`;
+}
+
 function buildHelpText(textObj) {
   // Backwards-compatible: simple string
   if (typeof textObj === "string") {
-    return `<p class="help-text help-animate">${textObj}</p>`;
+    return `<div class="help-body">${textObj}</div>`;
   }
 
-  let html = `<p class="help-text help-animate">`;
+  let html = `<div class="help-body">`;
 
   // Multiple images
   if (Array.isArray(textObj.images)) {
+    html += `<div class="tutorial-image-stage"${getHelpPageStageStyle(textObj)}>`;
     textObj.images.forEach(img => {
       html += `
         <img 
           class="tutorial-image"
           src="${img.src}"
           alt="${img.alt || ''}"
+          loading="eager"
+          decoding="async"
         >
       `;
     });
+    html += `</div>`;
   }
 
   // Text paragraph
@@ -38,7 +61,7 @@ function buildHelpText(textObj) {
     html += `<span class="help-paragraph">${textObj.paragraph}</span>`;
   }
 
-  html += `</p>`;
+  html += `</div>`;
   return html;
 }
 
@@ -129,6 +152,64 @@ async function preloadImagesStructured(pages) {
 
     loadBatch();
   });
+}
+
+function getHelpPageImageUrls(page) {
+  const urls = new Set();
+
+  if (page?.text && Array.isArray(page.text.images)) {
+    page.text.images.forEach((img) => {
+      if (img?.src) urls.add(img.src);
+    });
+  }
+
+  if (page?.text && typeof page.text.paragraph === "string") {
+    const matches = page.text.paragraph.matchAll(/<img[^>]+src=["']([^"']+)["']/g);
+    for (const match of matches) urls.add(match[1]);
+  }
+
+  if (typeof page?.text === "string") {
+    const matches = page.text.matchAll(/<img[^>]+src=["']([^"']+)["']/g);
+    for (const match of matches) urls.add(match[1]);
+  }
+
+  if (typeof page?.title === "string") {
+    const matches = page.title.matchAll(/<img[^>]+src=["']([^"']+)["']/g);
+    for (const match of matches) urls.add(match[1]);
+  }
+
+  return [...urls];
+}
+
+async function ensureHelpPageAssetsReady(page) {
+  const imageUrls = getHelpPageImageUrls(page);
+  if (!imageUrls.length) return;
+
+  await Promise.all(imageUrls.map((src) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = async () => {
+      if (img.naturalWidth && img.naturalHeight) {
+        helpImageMetadata.set(src, {
+          width: img.naturalWidth,
+          height: img.naturalHeight
+        });
+      }
+
+      try {
+        if (typeof img.decode === "function") {
+          await img.decode();
+        }
+      } catch (_) {
+      }
+      resolve();
+    };
+    img.onerror = resolve;
+    img.src = src;
+
+    if (img.complete) {
+      img.onload();
+    }
+  })));
 }
 
 
@@ -305,25 +386,33 @@ function showHelpContainer(index) {
   if (!helpData.length) return;
 
   const targetIndex = (index + helpData.length) % helpData.length;
-  const duration = 180; // squish animation
+  const duration = 260;
+  const transitionToken = ++helpTransitionToken;
+  const targetPage = helpData[targetIndex];
 
-  helpText.style.transform = "scaleX(0.05)";
-  helpTitle.style.transform = "scaleX(0.05)";
+  clearTimeout(helpTransitionTimeout);
+  helpTitle.classList.add("help-is-transitioning");
+  helpText.classList.add("help-is-transitioning");
 
-  setTimeout(() => {
+  helpTransitionTimeout = setTimeout(async () => {
+    if (transitionToken !== helpTransitionToken) return;
+
+    await ensureHelpPageAssetsReady(targetPage);
+    if (transitionToken !== helpTransitionToken) return;
+
     currentHelpIndex = targetIndex;
 
-    // Title
     helpTitle.innerHTML = helpData[currentHelpIndex].title;
-
-    // Text (with images handled)
     helpText.innerHTML = buildHelpText(helpData[currentHelpIndex].text);
-
     helpNumberCounter.textContent = `(${currentHelpIndex + 1}/${helpData.length})`;
 
-    helpText.style.transform = "scaleX(1)";
-    helpTitle.style.transform = "scaleX(1)";
-
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (transitionToken !== helpTransitionToken) return;
+        helpTitle.classList.remove("help-is-transitioning");
+        helpText.classList.remove("help-is-transitioning");
+      });
+    });
   }, duration);
 }
 

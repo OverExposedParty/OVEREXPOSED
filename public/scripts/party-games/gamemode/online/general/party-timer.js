@@ -293,6 +293,51 @@ function stopTimer(selectedTimer) {
   }
 }
 
+function getTimerHostContainer(container) {
+  if (!container) return null;
+  return container.querySelector?.('.main-image-container') || container;
+}
+
+function ensureTimerElementForContainer(container, { variant = 'border' } = {}) {
+  const hostContainer = getTimerHostContainer(container);
+  if (!hostContainer) return null;
+
+  let timerElement = hostContainer.querySelector(':scope > .timer-wrapper');
+  if (!timerElement) {
+    AddTimerToContainer(hostContainer, { variant });
+    timerElement = hostContainer.querySelector(':scope > .timer-wrapper');
+  }
+
+  return timerElement;
+}
+
+function startTimerFromContainer({
+  container = null,
+  timeLeft = 0,
+  duration = 0,
+  variant = 'border',
+  maxAttempts = 20
+}) {
+  if (!container) return;
+
+  let attempts = 0;
+
+  function tryStart() {
+    const selectedTimer = ensureTimerElementForContainer(container, { variant });
+    if (selectedTimer) {
+      startTimer({ timeLeft, duration, selectedTimer });
+      return;
+    }
+
+    attempts += 1;
+    if (attempts < maxAttempts) {
+      requestAnimationFrame(tryStart);
+    }
+  }
+
+  tryStart();
+}
+
 function createCancelableTimeout(ms) {
   let timeoutId;
   let isFinished = false;

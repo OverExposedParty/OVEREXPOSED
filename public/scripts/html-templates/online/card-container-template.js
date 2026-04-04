@@ -143,6 +143,12 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             cardContainerDualStack.insertAdjacentHTML('afterbegin', withDualStackHTML);
         }
 
+        if (placeholderCardContainer?.dataset.online === "false") {
+            placeholderCardContainer
+                .querySelectorAll('.main-image-container')
+                .forEach((container) => container.classList.add('offline-card-face'));
+        }
+
         if (placeholderCardContainer?.dataset.online === "true" && typeof AddTimerToContainer === 'function') {
             [cardContainerPrivate, cardContainerPublic, cardContainerAnswer, cardContainerDualStack]
                 .filter(Boolean)

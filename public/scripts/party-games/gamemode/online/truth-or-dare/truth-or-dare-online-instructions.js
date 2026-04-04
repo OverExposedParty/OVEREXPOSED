@@ -77,12 +77,10 @@ async function DisplayPublicCard() {
   const delay = new Date(state.timer) - Date.now();
   const durationSeconds = gameRules["time-limit"];
 
-  startTimer({
+  startTimerFromContainer({
+    container: gameContainerPublic,
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: gameContainerPublic
-      .querySelector('.main-image-container')
-      .querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
   if (selectPunishmentButtonContainer.childElementCount === 0) {

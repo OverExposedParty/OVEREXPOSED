@@ -247,7 +247,8 @@ body.party-missing-state .main-container > :not(.online-status-container) {
 }
 
 .selected-user-container.has-border-timer,
-.online-status-container.has-border-timer {
+.online-status-container.has-border-timer,
+.gamemode-popup-container.has-border-timer {
     border-color: transparent;
 }
 

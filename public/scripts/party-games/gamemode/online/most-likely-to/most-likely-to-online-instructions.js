@@ -13,10 +13,10 @@ async function DisplayPrivateCard() {
 
   const durationSeconds = getTimeLimit();
 
-  startTimer({
+  startTimerFromContainer({
+    container: gameContainerPrivate,
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
   startTimer({
     timeLeft: delay / 1000,
@@ -77,6 +77,7 @@ async function DisplayVoteResults() {
   const players = currentPartyData.players || [];
 
   const delay = new Date(state.timer) - Date.now();
+  const firstDisplay = !isContainerVisible(resultsChartContainer);
 
   stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
   startTimer({
@@ -93,7 +94,7 @@ async function DisplayVoteResults() {
     return;
   }
 
-  if (!isContainerVisible(resultsChartContainer)) {
+  if (firstDisplay) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }
@@ -101,24 +102,56 @@ async function DisplayVoteResults() {
   const highestValue = getHighestVoteValue(currentPartyData);
   console.log("highestValue:", highestValue);
 
-    const highestVotedIds = GetHighestVoted(currentPartyData); // comma string
+  const highestVotedIds = GetHighestVoted(currentPartyData); // comma string
+
+  if (firstDisplay) {
+    let shouldPersistResultsState = false;
 
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
       const pState = getPlayerState(player);
       const pid    = getPlayerId(player);
+      const isHighestVoted = highestVotedIds.includes(pid);
+      const desiredReady = !isHighestVoted;
+      const desiredConfirmed = !isHighestVoted;
 
-      if (highestVotedIds.includes(pid)) {
-        pState.isReady = false;
-        pState.hasConfirmed = false;
+      if (pState.isReady !== desiredReady || pState.hasConfirmed !== desiredConfirmed) {
+        shouldPersistResultsState = true;
+      }
+
+      pState.isReady = desiredReady;
+      pState.hasConfirmed = desiredConfirmed;
+      player.isReady = desiredReady;
+      player.hasConfirmed = desiredConfirmed;
+
+      if (isHighestVoted) {
         if (highestValue > 0) {
-          pState.score = (pState.score ?? 0) + 1;
+          const nextScore = (pState.score ?? player.score ?? 0) + 1;
+          if ((pState.score ?? player.score ?? 0) !== nextScore) {
+            shouldPersistResultsState = true;
+          }
+          pState.score = nextScore;
+          player.score = nextScore;
         }
-      } else {
-        pState.isReady = true;
-        pState.hasConfirmed = true;
       }
     }
+
+    if (deviceId === hostDeviceId && shouldPersistResultsState) {
+      const config = normalizeConfig(currentPartyData);
+      const nextState = normalizeState(currentPartyData);
+      const deck = normalizeDeck(currentPartyData);
+
+      nextState.lastPinged = new Date();
+
+      await updateOnlineParty({
+        partyId: partyCode,
+        config,
+        state: nextState,
+        deck,
+        players
+      });
+    }
+  }
 
     ClearIcons();
 

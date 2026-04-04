@@ -2,6 +2,7 @@ let previousPage = {
     link: "/",
     splashScreen: "/images/splash-screens/overexposed.png"
 };
+let isTransitioningSplash = false;
 
 // Page Load Transition
 const heading = document.createElement('div');
@@ -58,26 +59,43 @@ function initSplashScreen() {
 }
 
 function transitionSplashScreen(link, splashScreen) {
+    if (isTransitioningSplash) return;
+    isTransitioningSplash = true;
+
     const container = document.createElement('div');
     container.className = 'splash-screen-container down';
     const img = document.createElement('img');
+    img.alt = 'Splash Screen';
+    img.loading = 'eager';
     img.src = splashScreen;
     container.appendChild(img);
     document.body.appendChild(container);
 
-    setTimeout(() => {
-        container.classList.remove('down');
-        container.classList.add('center');
-        playSoundEffect('splashScreenUp');
-    }, 500); // Slight delay to ensure CSS applies
+    let hasNavigated = false;
+    const navigate = () => {
+        if (hasNavigated) return;
+        hasNavigated = true;
+        window.location.href = link;
+    };
 
-    // Listen for transition end
+    container.getBoundingClientRect();
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            container.classList.remove('down');
+            container.classList.add('center');
+            playSoundEffect('splashScreenUp');
+        });
+    });
+
     container.addEventListener('transitionend', function onTransitionEnd(event) {
-        if (event.propertyName === 'top') { // Ensure we're detecting the correct transition
+        if (event.propertyName === 'top') {
             container.removeEventListener('transitionend', onTransitionEnd);
-            window.location.href = link;
+            navigate();
         }
     });
+
+    setTimeout(navigate, 1200);
 }
 
 async function getRandomFact(key) {

@@ -8,10 +8,10 @@ async function DisplayPrivateCard(instruction) {
   const delay = new Date(timerValue) - Date.now();
   const durationSeconds = getTimeLimit();
 
-  startTimer({
+  startTimerFromContainer({
+    container: gameContainerPrivate,
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
   startTimer({
     timeLeft: delay / 1000,
@@ -82,6 +82,7 @@ async function DisplayVoteResults() {
   const state = getPartyState(currentPartyData);
   const timerValue = state.timer ?? currentPartyData.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
+  const firstDisplay = !isContainerVisible(resultsChartContainer);
 
   stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
 
@@ -93,7 +94,7 @@ async function DisplayVoteResults() {
 
   const players = currentPartyData.players || [];
 
-  if (!isContainerVisible(resultsChartContainer)) {
+  if (firstDisplay) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }
@@ -128,18 +129,42 @@ async function DisplayVoteResults() {
     punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
   }
 
-  players.forEach(player => {
-    const ps = player.state ?? (player.state = {});
-    const conn = player.connection ?? {};
-    const socketId = conn.socketId ?? player.socketId;
-    const vote = ps.vote ?? player.vote;
+  if (firstDisplay) {
+    let shouldPersistResultsState = false;
 
-    if (vote === true && socketId !== "DISCONNECTED") {
-      const currentScore = ps.score ?? player.score ?? 0;
-      ps.score = currentScore + 1;
-      player.score = ps.score;
+    players.forEach(player => {
+      const ps = player.state ?? (player.state = {});
+      const conn = player.connection ?? {};
+      const socketId = conn.socketId ?? player.socketId;
+      const vote = ps.vote ?? player.vote;
+
+      if (vote === true && socketId !== "DISCONNECTED") {
+        const currentScore = ps.score ?? player.score ?? 0;
+        const nextScore = currentScore + 1;
+        if (nextScore !== currentScore) {
+          shouldPersistResultsState = true;
+        }
+        ps.score = nextScore;
+        player.score = ps.score;
+      }
+    });
+
+    if (deviceId === hostDeviceId && shouldPersistResultsState) {
+      const config = normalizeConfig(currentPartyData);
+      const nextState = normalizeState(currentPartyData);
+      const deck = normalizeDeck(currentPartyData);
+
+      nextState.lastPinged = new Date();
+
+      await updateOnlineParty({
+        partyId: partyCode,
+        config,
+        state: nextState,
+        deck,
+        players
+      });
     }
-  });
+  }
 
   const drinkPunishmentEnabled =
     rulesObj["drink-punishment"] === true || rulesObj["drink-punishment"] === "true";

@@ -88,10 +88,10 @@ async function DisplayPrivateCard(instruction) {
   const timerValue = state.timer ?? currentPartyData.timer;
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerFromContainer({
+    container: gameContainerPrivate,
     timeLeft: delay / 1000,
-    duration: gameRules["time-limit"],
-    selectedTimer: gameContainerPrivate.querySelector('.timer-wrapper')
+    duration: gameRules["time-limit"]
   });
   startTimer({
     timeLeft: delay / 1000,
@@ -232,18 +232,20 @@ async function PunishmentOffer(instruction) {
   if (index === -1) index = playerTurn;
 
   const target = players[index];
+  const isHostClient = deviceId === hostDeviceId;
 
   if (parsedInstructions.reason === "PASS") {
-    if (getPlayerId(target) === deviceId) {
+    if (isHostClient) {
       await SendInstruction({
         instruction: "USER_HAS_PASSED:USER_PASSED_PUNISHMENT",
+        partyData: currentPartyData,
         updateUsersReady: false,
         updateUsersConfirmation: false
       });
     }
   } else if (parsedInstructions.reason === "CONFIRM") {
-    if (getPlayerId(target) === deviceId) {
-      // Reset readiness
+    if (isHostClient) {
+      // Reset everyone, then keep the punished player marked as already done.
       players.forEach(p => {
         const s = getPlayerState(p);
         s.isReady = false;
@@ -263,8 +265,7 @@ async function PunishmentOffer(instruction) {
 
       await SendInstruction({
         instruction: "HAS_USER_DONE_PUNISHMENT:" + parsedInstructions.secondReason,
-        updateUsersReady: false,
-        updateUsersConfirmation: false
+        partyData: currentPartyData
       });
     }
   }

@@ -130,10 +130,10 @@ async function DisplayPrivateCard() {
   const delay      = new Date(timerValue) - Date.now();
   const timeLimit  = getTimeLimit("imposter-time-limit");
 
-  startTimer({
+  startTimerFromContainer({
+    container: cardContainerPrivate,
     timeLeft: delay / 1000,
-    duration: timeLimit,
-    selectedTimer: cardContainerPrivate.querySelector('.timer-wrapper')
+    duration: timeLimit
   });
 
   startTimer({

@@ -203,6 +203,10 @@
     position: relative;
 }
 
+.main-image-container.offline-card-face {
+    --cardbordercolour: var(--primarypagecolour);
+}
+
 .main-image {
     width: 100%;
     height: 100%;

@@ -154,7 +154,12 @@ async function SetUserConfirmation({
   reason = null,
   userInstruction = null
 }) {
-  const players = currentPartyData.players || [];
+  const latestPartyData = await GetCurrentPartyData();
+  if (latestPartyData) {
+    currentPartyData = latestPartyData;
+  }
+
+  const players = currentPartyData?.players || [];
   const index = players.findIndex(player => getPlayerId(player) === selectedDeviceId);
 
   if (index === -1) {
@@ -171,6 +176,7 @@ async function SetUserConfirmation({
   player.isReady = true;
   player.hasConfirmed = option; // legacy mirror
   conn.lastPing = new Date();
+  player.lastPing = conn.lastPing;
 
   if (userInstruction != null) {
     await SendInstruction({
