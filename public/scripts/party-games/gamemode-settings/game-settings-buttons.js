@@ -9,6 +9,7 @@ let onlineButton;
 
 let fetchedPacks = false;
 let fetchedSettings = false;
+let gamemodeSettingsInitialized = false;
 
 const packsSettingsTab = document.getElementById('packs-settings');
 const rulesSettingsTab = document.getElementById('rules-settings');
@@ -19,6 +20,28 @@ function normalizeRestrictions(restrictions) {
         return restrictions.map(restriction => String(restriction).trim()).filter(Boolean);
     }
     return [];
+}
+
+async function initializeGamemodeSettingsWhenReady() {
+    if (gamemodeSettingsInitialized) return;
+
+    const timeoutMs = 5000;
+    const startTime = Date.now();
+
+    while (
+        typeof window.SetGamemodeContainer !== 'function' ||
+        !packsContainer ||
+        !rulesContainer ||
+        !placeholderGamemodeSettings
+    ) {
+        if (Date.now() - startTime >= timeoutMs) {
+            throw new Error('Gamemode settings scripts did not finish initialising in time.');
+        }
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    gamemodeSettingsInitialized = true;
+    await SetGamemodeContainer();
 }
 
 fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
@@ -217,7 +240,10 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
 
         fetchedSettings = true;
         if (fetchedPacks && fetchedSettings) {
-            SetGamemodeContainer();
+            initializeGamemodeSettingsWhenReady().catch(error => {
+                gamemodeSettingsInitialized = false;
+                console.error('Error initialising gamemode settings:', error);
+            });
         }
     })
     .catch(error => console.error('Error loading JSON:', error));

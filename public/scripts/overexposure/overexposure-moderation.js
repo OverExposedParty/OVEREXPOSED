@@ -126,6 +126,188 @@ sharePostCopyButton.addEventListener("click", async () => {
     }
 });
 
+let snapKitReadyPromise = null;
+let snapchatShareProxyButton = null;
+
+function getCurrentShareDetails() {
+    const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
+    const selectedCard = selectedCardId
+        ? document.querySelector(`.floating-button[data-id="${selectedCardId}"]`)
+        : null;
+    const shareUrl = sharePostUrlInput.dataset.fullUrl || `${window.location.origin}${window.location.pathname}`;
+    const shareTitle = (
+        selectedCard?.getAttribute("data-title") ||
+        sharePostBodyTitle.textContent ||
+        ""
+    ).trim();
+    const titleAndLinkMessage = [shareTitle, shareUrl].filter(Boolean).join("\n\n").trim();
+
+    return {
+        shareUrl,
+        shareTitle,
+        titleAndLinkMessage
+    };
+}
+
+function openShareWindow(url) {
+    if (!url) return;
+    window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function showShareActionFeedback(button, message) {
+    if (!button || !message) return;
+
+    const rect = button.getBoundingClientRect();
+    displayFloatingText(
+        message,
+        rect.left + window.scrollX + (rect.width / 2),
+        rect.top + window.scrollY
+    );
+}
+
+async function ensureSnapKitLoaded() {
+    if (window.snap?.creativekit) {
+        return window.snap;
+    }
+
+    if (snapKitReadyPromise) {
+        return snapKitReadyPromise;
+    }
+
+    snapKitReadyPromise = new Promise((resolve, reject) => {
+        const existingScript = document.getElementById("snapkit-creative-kit-sdk");
+
+        if (existingScript) {
+            existingScript.addEventListener("load", () => resolve(window.snap), { once: true });
+            existingScript.addEventListener("error", () => reject(new Error("Failed to load Snap Kit SDK.")), { once: true });
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.id = "snapkit-creative-kit-sdk";
+        script.async = true;
+        script.src = "https://sdk.snapkit.com/js/v1/create.js";
+        script.addEventListener("load", () => resolve(window.snap), { once: true });
+        script.addEventListener("error", () => reject(new Error("Failed to load Snap Kit SDK.")), { once: true });
+        document.head.appendChild(script);
+    }).catch((error) => {
+        snapKitReadyPromise = null;
+        throw error;
+    });
+
+    return snapKitReadyPromise;
+}
+
+function getSnapchatProxyButton() {
+    if (snapchatShareProxyButton) {
+        return snapchatShareProxyButton;
+    }
+
+    snapchatShareProxyButton = document.createElement("button");
+    snapchatShareProxyButton.type = "button";
+    snapchatShareProxyButton.className = "snapchat-share-button";
+    snapchatShareProxyButton.tabIndex = -1;
+    snapchatShareProxyButton.setAttribute("aria-hidden", "true");
+    snapchatShareProxyButton.style.position = "fixed";
+    snapchatShareProxyButton.style.left = "-9999px";
+    snapchatShareProxyButton.style.width = "1px";
+    snapchatShareProxyButton.style.height = "1px";
+    snapchatShareProxyButton.style.opacity = "0";
+    snapchatShareProxyButton.style.pointerEvents = "none";
+    document.body.appendChild(snapchatShareProxyButton);
+
+    return snapchatShareProxyButton;
+}
+
+async function shareToSnapchat() {
+    const { shareUrl } = getCurrentShareDetails();
+    const proxyButton = getSnapchatProxyButton();
+    proxyButton.setAttribute("data-share-url", shareUrl);
+
+    await ensureSnapKitLoaded();
+
+    const initializeShareButtons =
+        window.snap?.creativekit?.initializeShareButtons ||
+        window.snap?.creativekit?.initalizeShareButtons;
+
+    if (typeof initializeShareButtons !== "function") {
+        throw new Error("Snap Kit share button initializer is unavailable.");
+    }
+
+    initializeShareButtons(document.getElementsByClassName("snapchat-share-button"));
+    proxyButton.click();
+}
+
+async function shareViaNativeOrClipboard(button, platformName, platformUrl) {
+    const { shareUrl, shareTitle, titleAndLinkMessage } = getCurrentShareDetails();
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: shareTitle || document.title,
+                text: titleAndLinkMessage || shareTitle || document.title,
+                url: shareUrl
+            });
+            return;
+        } catch (error) {
+            if (error?.name === "AbortError") {
+                return;
+            }
+        }
+    }
+
+    try {
+        const copied = await copyTextToClipboard(shareUrl);
+        if (copied) {
+            showShareActionFeedback(button, `Link copied for ${platformName}`);
+        }
+    } catch (error) {
+        console.error(`Failed to copy ${platformName} share URL:`, error);
+    }
+
+    openShareWindow(platformUrl);
+}
+
+shareWhatsAppButton?.addEventListener("click", () => {
+    const { titleAndLinkMessage } = getCurrentShareDetails();
+    openShareWindow(`https://wa.me/?text=${encodeURIComponent(titleAndLinkMessage)}`);
+});
+
+shareXButton?.addEventListener("click", () => {
+    const { shareUrl, shareTitle } = getCurrentShareDetails();
+    const tweetText = shareTitle || document.title;
+    openShareWindow(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`);
+});
+
+shareSnapchatButton?.addEventListener("click", async () => {
+    try {
+        await shareToSnapchat();
+    } catch (error) {
+        console.error("Failed to share via Snapchat:", error);
+        await shareViaNativeOrClipboard(
+            shareSnapchatButton,
+            "Snapchat",
+            "https://www.snapchat.com/"
+        );
+    }
+});
+
+shareInstagramButton?.addEventListener("click", async () => {
+    await shareViaNativeOrClipboard(
+        shareInstagramButton,
+        "Instagram",
+        "https://www.instagram.com/"
+    );
+});
+
+shareDiscordButton?.addEventListener("click", async () => {
+    await shareViaNativeOrClipboard(
+        shareDiscordButton,
+        "Discord",
+        "https://discord.com/channels/@me"
+    );
+});
+
 deletePostButton.addEventListener("click", () => {
     const selectedCardId = overexposureContainer.getAttribute('data-selected-card');
     if (!selectedCardId) return;

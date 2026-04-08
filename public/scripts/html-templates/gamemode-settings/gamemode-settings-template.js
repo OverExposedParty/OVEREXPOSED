@@ -125,22 +125,19 @@ fetch('/html-templates/gamemode-settings.html')
         }
       }
     }
-    if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
-      const scriptGameSettingsButton = document.createElement('script');
-      scriptGameSettingsButton.src = versionAssetUrl('/scripts/party-games/gamemode-settings/game-settings-buttons.js');
-      document.body.appendChild(scriptGameSettingsButton);
-
-      const scriptGameSettings = document.createElement('script');
-      scriptGameSettings.src = versionAssetUrl('/scripts/party-games/gamemode-settings/gamemode-settings.js');
-      scriptGameSettings.defer = true;
-      document.body.appendChild(scriptGameSettings);
-    }
-
     packsContainer = document.querySelector('.packs-container');
     rulesContainer = document.querySelector('.rules-settings-container');
     onlineSettingsContainer = document.querySelector('.online-game-settings-container');
 
     userCount = document.querySelector('.user-count');
+
+    if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
+      return LoadScript('/scripts/party-games/gamemode-settings/game-settings-buttons.js', {
+        cacheBustKey: "PARTY_GAMES_SETTINGS"
+      }).then(() => LoadScript('/scripts/party-games/gamemode-settings/gamemode-settings.js', {
+        cacheBustKey: "PARTY_GAMES_SETTINGS"
+      }));
+    }
 
   }).then(() => {
     if (placeholderGamemodeSettings.dataset.template != "waiting-room") {

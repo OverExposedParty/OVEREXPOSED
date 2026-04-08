@@ -129,6 +129,7 @@ function SetGameSettingsButtons() {
 
     // Toggle buttons (packs + rules)
     placeholderGamemodeSettings.querySelectorAll('.button-toggle').forEach(button => {
+        const alreadyBound = button.dataset.listenerBound === 'true';
         const key = button.getAttribute('data-key');
         let savedState = localStorage.getItem(key) || 'true';
 
@@ -165,6 +166,11 @@ function SetGameSettingsButtons() {
             }
         }
 
+        if (alreadyBound) {
+            return;
+        }
+
+        button.dataset.listenerBound = 'true';
         button.addEventListener('click', () => {
             if (button.disabled) return;
 
@@ -224,6 +230,7 @@ function SetGameSettingsButtons() {
 
     // Increment containers (numeric settings)
     placeholderGamemodeSettings.querySelectorAll('.increment-container').forEach(container => {
+        const alreadyBound = container.dataset.listenerBound === 'true';
         const key = container.getAttribute('data-key');
         const countDisplay = container.querySelector('.count-display');
         const incrementBtn = container.querySelector('.increment');
@@ -261,6 +268,12 @@ function SetGameSettingsButtons() {
             UpdateSettings();
         }
 
+        if (alreadyBound) {
+            return;
+        }
+
+        container.dataset.listenerBound = 'true';
+
         incrementBtn.addEventListener('click', () => {
             if (count + increment <= max) updateCount(count + increment);
         });
@@ -270,7 +283,8 @@ function SetGameSettingsButtons() {
         });
     });
 
-    if (onlineButton) {
+    if (onlineButton && onlineButton.dataset.listenerBound !== 'true') {
+        onlineButton.dataset.listenerBound = 'true';
         onlineButton.addEventListener('click', async () => {
             if (onlineButton.classList.contains('active')) {
                 userCustomisationIconButton.classList.remove('disabled');
