@@ -485,9 +485,9 @@ async function ResetTruthOrDareQuestion({ force = false, nextPlayer = true, incr
   }
 }
 
-async function PartySkip() {
+async function PartySkip({ nextPlayer = true } = {}) {
   await ResetTruthOrDareQuestion({
     force: true,
-    nextPlayer: false
+    nextPlayer
   });
 }

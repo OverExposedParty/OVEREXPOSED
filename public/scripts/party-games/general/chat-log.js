@@ -133,8 +133,11 @@ function GetCommand(message) {
         return; // stop here
     }
 
-    // For all other commands, block if dev mode isn't unlocked
-    if (!devModeUnlocked) {
+    const commandName = command.command.toLowerCase();
+    const hostCommands = new Set(["party", "kick", "help"]);
+
+    // Keep developer-only commands behind the dev unlock, but allow normal host commands through.
+    if (!devModeUnlocked && !hostCommands.has(commandName)) {
         CreateChatMessage("[CONSOLE]", "COMMANDS NOT AVAILABLE AT THIS TIME.", "error", Date.now());
         return;
     }
@@ -143,6 +146,48 @@ function GetCommand(message) {
         CreateChatMessage("[CONSOLE]", "You are not the host of this party.", "error", Date.now());
         return;
     }
+
+    const runSkipCommand = async ({ nextPlayer = true } = {}) => {
+        if (isPlaying) {
+            await PartySkip({ nextPlayer });
+            if (typeof sendPartyChat === 'function') {
+                await sendPartyChat({
+                    username: "[CONSOLE]",
+                    message: `${onlineUsername} has skipped the round${nextPlayer ? " and moved to the next player" : ""}.`,
+                    eventType: "message"
+                });
+            }
+        } else {
+            CreateChatMessage("[CONSOLE]", "UNABLE TO SKIP. YOU ARE NOT IN A GAME", "error", Date.now());
+        }
+    };
+
+    const runRestartCommand = async () => {
+        const inOnlineGamemodePage =
+            isPlaying === true &&
+            typeof currentPartyData !== 'undefined' &&
+            currentPartyData &&
+            (currentPartyData.state?.isPlaying ?? currentPartyData.isPlaying) === true;
+
+        if (!inOnlineGamemodePage) {
+            CreateChatMessage("[CONSOLE]", "UNABLE TO RESTART. YOU MUST BE IN AN ONLINE GAMEMODE PAGE", "error", Date.now());
+            return;
+        }
+
+        if (typeof PartyRestart !== 'function') {
+            CreateChatMessage("[CONSOLE]", "UNABLE TO RESTART THIS GAMEMODE.", "error", Date.now());
+            return;
+        }
+
+        await PartyRestart();
+        if (typeof sendPartyChat === 'function') {
+            await sendPartyChat({
+                username: "[CONSOLE]",
+                message: `${onlineUsername} has restarted the game.`,
+                eventType: "message"
+            });
+        }
+    };
 
     const commands = {
         kick: {
@@ -158,7 +203,7 @@ function GetCommand(message) {
             }
         },
         party: {
-            description: "Party management. Subcommands: delete, create",
+            description: "Party management. Subcommands: delete, create, skip, skipround, restart",
             run: async (cmd) => {
                 if (cmd.action?.toLowerCase() === "delete") {
                     DeleteParty();
@@ -182,12 +227,13 @@ function GetCommand(message) {
                     }
                 }
                 else if (cmd.action?.toLowerCase() === "skip") {
-                    if (isPlaying) {
-                        await PartySkip();
-                        //CreateChatMessage("[CONSOLE]", "UNABLE TO SKIP. YOU ARE NOT IN A GAME", "error", Date.now());
-                    } else {
-                        CreateChatMessage("[CONSOLE]", "UNABLE TO SKIP. YOU ARE NOT IN A GAME", "error", Date.now());
-                    }
+                    await runSkipCommand({ nextPlayer: true });
+                }
+                else if (cmd.action?.toLowerCase() === "skipround") {
+                    await runSkipCommand({ nextPlayer: false });
+                }
+                else if (cmd.action?.toLowerCase() === "restart") {
+                    await runRestartCommand();
                 }
                 else {
                     CreateChatMessage("[CONSOLE]", "Invalid party command.", "error", Date.now());
@@ -206,7 +252,7 @@ function GetCommand(message) {
         }
     };
 
-    const handler = commands[command.command.toLowerCase()];
+    const handler = commands[commandName];
     if (handler) {
         handler.run(command);
     } else {

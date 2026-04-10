@@ -9,7 +9,7 @@ window.CivilianWatchAfterDialogue = async function () {
 
   const me = players[meIndex];
   me.state ||= {};
-  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "selecting", option: "N/A", optionList: [], timer: null };
+  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "selecting", option: "N/A", optionList: [] };
 
   phaseIndex = readPhaseIndex(me, 1);
   setPhaseIndex(me, phaseIndex);
@@ -42,9 +42,67 @@ window.CivilianWatchAfterDialogue = async function () {
   selectCivilianWatchConfirmButton.classList.remove("disabled");;
 };
 
+function isCivilianWatchOutcomeState(state) {
+  return state === "advance" || state === "no-hint" || state === "small-hint";
+}
+
+function renderCivilianWatchOutcome({ player, selectedOption, remainingMs }) {
+  const optionNumber = findOptionNumberFromStoredOption(player);
+  if (optionNumber == null) return false;
+
+  displayCivilianWatchResponseText.innerHTML = computeResponseText({
+    scenarioObject,
+    phaseIndex,
+    optionNumber,
+    selectedOption,
+  });
+
+  setActiveContainers(displayCivilianWatchResponseContainer);
+
+  startPhaseContainerTimer({
+    remainingMs,
+    durationMs: dialogueDelay,
+    timerSelector: displayCivilianWatchResponseContainer.querySelector(".timer-wrapper"),
+  });
+
+  scheduleFromExistingTimer({
+    timerValue: Date.now() + remainingMs,
+    remainingMs,
+    functionToCall: "CivilianWatchAfterDialogue",
+  });
+
+  return true;
+}
+
 async function InitializeCivilianWatch(completed = false) {
   await mafiaHintsReady;
   scenarioObject = await loadRandomScenario();
+
+  const players = currentPartyData?.players || [];
+  const me = players.find(p => p?.identity?.computerId === deviceId);
+  if (!me) return;
+
+  me.state ||= {};
+  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "selecting", option: "N/A", optionList: [] };
+
+  phaseIndex = readPhaseIndex(me, 1);
+  setPhaseIndex(me, phaseIndex);
+
+  const selectedOption = String(me.state.phase.state || "");
+  const timerValueMs = parseTimerMs(getPlayerPhaseTimer(me));
+  const remainingMs = timerValueMs == null ? null : timerValueMs - Date.now();
+
+  if (isCivilianWatchOutcomeState(selectedOption)) {
+    if (remainingMs != null && remainingMs > 0) {
+      if (renderCivilianWatchOutcome({ player: me, selectedOption, remainingMs })) return;
+    } else {
+      me.state.phaseTimer = null;
+      await SendPlayerDataToParty(me);
+      await CivilianWatchAfterDialogue();
+      return;
+    }
+  }
+
   CivilianWatchContainerUpdate(completed);
   setActiveContainers(selectCivilianWatchContainer);
 }
@@ -89,7 +147,7 @@ selectCivilianWatchConfirmButton.addEventListener("click", async () => {
 
   const me = currentPartyData.players[index];
   me.state ||= {};
-  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "selecting", option: "N/A", optionList: [], timer: null };
+  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "selecting", option: "N/A", optionList: [] };
 
   phaseIndex = readPhaseIndex(me, 1);
   setPhaseIndex(me, phaseIndex);
@@ -120,13 +178,12 @@ selectCivilianWatchConfirmButton.addEventListener("click", async () => {
 
   setPlayerTimeout({
     delay: dialogueDelay,
-    playerTimer: "state.phase.timer",
+    playerTimer: "state.phaseTimer",
     functionToCall: "CivilianWatchAfterDialogue",
   });
 
-  const timerValueMs = parseTimerMs(me.state.phase.timer);
   startPhaseContainerTimer({
-    remainingMs: timerValueMs - Date.now(),
+    remainingMs: dialogueDelay,
     durationMs: dialogueDelay,
     timerSelector: displayCivilianWatchResponseContainer.querySelector(".timer-wrapper"),
   });

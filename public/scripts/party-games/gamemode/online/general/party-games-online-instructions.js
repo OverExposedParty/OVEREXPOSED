@@ -248,7 +248,8 @@ async function ResetQuestion({
   instruction = "DISPLAY_PRIVATE_CARD",
   incrementScore = 0,
   timer = null,
-  playerIndex = null
+  playerIndex = null,
+  nextPlayer = false
 }) {
   if (deviceId !== currentPartyData.state.hostComputerId) return;
 
@@ -301,6 +302,12 @@ async function ResetQuestion({
     currentPartyData.timer = timer; // legacy
   }
 
+  if (nextPlayer && playerCount > 0 && state.playerTurn !== undefined && state.playerTurn !== null) {
+    const nextTurn = (state.playerTurn + 1) % playerCount;
+    state.playerTurn = nextTurn;
+    currentPartyData.playerTurn = nextTurn; // legacy mirror
+  }
+
   config.userInstructions = instruction;
   state.lastPinged = new Date();
   await updateOnlineParty({
@@ -309,6 +316,71 @@ async function ResetQuestion({
     state,
     deck,
     players
+  });
+}
+
+async function PartyRestart() {
+  if (!currentPartyData) return;
+  if (deviceId !== hostDeviceId) return;
+
+  const config = normalizeConfig(currentPartyData);
+  const state = normalizeState(currentPartyData);
+  const deck = normalizeDeck(currentPartyData);
+  const players = currentPartyData.players || [];
+  const gamemode = config.gamemode || currentPartyData.gamemode;
+
+  let restartInstruction = "DISPLAY_PRIVATE_CARD";
+
+  if (gamemode === "truth-or-dare") {
+    restartInstruction = "DISPLAY_SELECT_QUESTION_TYPE";
+  } else if (gamemode === "paranoia") {
+    restartInstruction = "DISPLAY_PRIVATE_CARD:READING_CARD";
+  } else if (gamemode === "imposter") {
+    restartInstruction =
+      typeof resetGamemodeInstruction === "string" && resetGamemodeInstruction
+        ? resetGamemodeInstruction
+        : "DISPLAY_PRIVATE_CARD";
+  }
+
+  deck.currentCardIndex = 0;
+  deck.currentCardSecondIndex = 0;
+  deck.alternativeQuestionIndex = 0;
+  deck.questionType = "truth";
+
+  state.isPlaying = true;
+  state.playerTurn = 0;
+  state.round = 0;
+  state.roundPlayerTurn = 0;
+  state.vote = null;
+  state.lastPinged = new Date();
+
+  players.forEach(player => {
+    const pState = getPlayerState(player);
+    pState.isReady = false;
+    pState.hasConfirmed = false;
+    pState.vote = null;
+    pState.score = 0;
+
+    player.isReady = false;
+    player.hasConfirmed = false;
+    player.vote = null;
+    player.score = 0;
+  });
+
+  currentPartyData.config = config;
+  currentPartyData.state = state;
+  currentPartyData.deck = deck;
+  currentPartyData.players = players;
+
+  await SendInstruction({
+    instruction: restartInstruction,
+    partyData: currentPartyData,
+    updateUsersReady: false,
+    updateUsersConfirmation: false,
+    updateUsersVote: null,
+    fetchInstruction: true,
+    timer: Date.now() + getTimeLimit() * 1000,
+    byPassHost: true
   });
 }
 

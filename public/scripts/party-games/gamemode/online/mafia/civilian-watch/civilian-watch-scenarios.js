@@ -13,12 +13,35 @@ function setPhaseIndex(player, next) {
   return clamped;
 }
 
+function getPlayerPhaseTimer(player) {
+  const phaseTimer = player?.state?.phaseTimer;
+  if (phaseTimer != null) return phaseTimer;
+
+  const legacyTimer = player?.state?.phase?.timer;
+  if (legacyTimer != null) {
+    player.state.phaseTimer = legacyTimer;
+    delete player.state.phase.timer;
+    return legacyTimer;
+  }
+
+  return null;
+}
+
+function migrateLegacyPhaseTimer(player) {
+  const legacyTimer = player?.state?.phase?.timer;
+  if (player?.state?.phaseTimer != null || legacyTimer == null) return false;
+
+  player.state.phaseTimer = legacyTimer;
+  delete player.state.phase.timer;
+  return true;
+}
+
 function computeResponseText({ scenarioObject, phaseIndex, optionNumber, selectedOption }) {
   const areaKey = `area-${phaseIndex}`;
   const optionObj = scenarioObject?.data?.[areaKey]?.[0]?.options?.[optionNumber];
   const outcomeText = optionObj?.[selectedOption];
   const finalText = outcomeText || `(missing key: ${selectedOption})`;
-  return selectedOption === "advance" ? injectMafiaHint(finalText) : finalText;
+  return /\[HINT(?::[^\]]*)?\]/i.test(finalText) ? injectMafiaHint(finalText) : finalText;
 }
 
 function writeOptionListToPlayerPhase(player) {
@@ -49,7 +72,8 @@ async function loadRandomScenario() {
 
   const me = players[meIndex];
   me.state ||= {};
-  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "N/A", option: "N/A", optionList: [], timer: null };
+  me.state.phase ||= { scenarioFileName: "N/A", index: 1, state: "N/A", option: "N/A", optionList: [] };
+  migrateLegacyPhaseTimer(me);
 
   const phase = me.state.phase;
   let scenarioFileName = phase.scenarioFileName;

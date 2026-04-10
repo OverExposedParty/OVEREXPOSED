@@ -571,6 +571,6 @@ async function ResetParanoiaQuestion({
   });
 }
 
-async function PartySkip() {
-  await ResetParanoiaQuestion({ nextPlayer: false });
+async function PartySkip({ nextPlayer = true } = {}) {
+  await ResetParanoiaQuestion({ nextPlayer });
 }

@@ -2,6 +2,7 @@ let partyUserCount = 0;
 window.currentOnlineShuffleSeed = window.currentOnlineShuffleSeed ?? null;
 
 async function ToggleOnlineMode(toggle) {
+  console.log("[ToggleOnlineMode] toggle=", toggle);
   if (toggle === true) {
     if(partyCode) return;
     hostedParty = true;
@@ -51,7 +52,7 @@ async function ToggleOnlineMode(toggle) {
       };
     }
 
-    const players = {
+    const players = [{
       identity: {
         computerId: deviceId,
         username: "",
@@ -62,7 +63,7 @@ async function ToggleOnlineMode(toggle) {
         lastPing: new Date()
       },
       state: baseState
-    };
+    }];
 
     const config = {
       gamemode: partyGameMode,

@@ -283,15 +283,24 @@ function SetGameSettingsButtons() {
         });
     });
 
-    if (onlineButton && onlineButton.dataset.listenerBound !== 'true') {
-        onlineButton.dataset.listenerBound = 'true';
+    if (onlineButton && onlineButton.dataset.onlineListenerBound !== 'true') {
+        onlineButton.dataset.onlineListenerBound = 'true';
         onlineButton.addEventListener('click', async () => {
-            if (onlineButton.classList.contains('active')) {
-                userCustomisationIconButton.classList.remove('disabled');
-                await ToggleOnlineMode(true);
-            } else {
-                userCustomisationIconButton.classList.add('disabled');
-                await ToggleOnlineMode(false);
+            const enableOnline = onlineButton.classList.contains('active');
+
+            try {
+                if (enableOnline) {
+                    userCustomisationIconButton.classList.remove('disabled');
+                    await ToggleOnlineMode(true);
+                } else {
+                    userCustomisationIconButton.classList.add('disabled');
+                    await ToggleOnlineMode(false);
+                }
+            } catch (error) {
+                console.error('Failed to toggle online mode:', error);
+                onlineButton.classList.toggle('active', !enableOnline);
+                SetButtonStyle(onlineButton, false);
+                userCustomisationIconButton.classList.toggle('disabled', !onlineButton.classList.contains('active'));
             }
         });
     }

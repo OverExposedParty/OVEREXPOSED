@@ -478,7 +478,15 @@ function GetVoteResults(currentPartyData) {
   wrapper.appendChild(bSection);
 }
 
-async function PartySkip() {
+async function PartySkip({ nextPlayer = true } = {}) {
+  if (!nextPlayer) {
+    await ResetQuestion({
+      nextPlayer: false,
+      timer: Date.now() + getTimeLimit() * 1000
+    });
+    return;
+  }
+
   await SendInstruction({
     instruction: "RESET_QUESTION:"
   });

@@ -303,13 +303,12 @@ async function DisplayDayPhaseVote() {
 
   setActiveContainers(selectUserDayPhaseContainer);
 
-  const usersButtons = selectUserDayPhaseButtonContainer.querySelectorAll('button');
-
   if (myState.hasConfirmed) {
     selectUserDayPhaseConfirmButton.classList.add('disabled');
   } else {
     selectUserDayPhaseConfirmButton.classList.remove('disabled');
   }
+  const usersButtons = selectUserDayPhaseButtonContainer.querySelectorAll('button');
 
   usersButtons.forEach(usersButton => {
     const btnId = usersButton.id;

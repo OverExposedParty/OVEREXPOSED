@@ -50,96 +50,107 @@ function selectPlayerContainer(parent, id) {
   return parent.querySelector(`.player-container[data-player-id="${safeId}"]`)
 }
 
+function getVisibleRole(role, status, mePlayer, id) {
+  if (mePlayer?.identity?.computerId === id) {
+    return role || "N/A"
+  }
+
+  if (revealRoleOnDeath && status === "dead") {
+    return role || "N/A"
+  }
+
+  if (mePlayer?.state?.status === "dead" && revealRolesToDeadPlayers) {
+    return role || "N/A"
+  }
+
+  return "?????"
+}
+
+function formatBoardLabel(value) {
+  return (value || "UNKNOWN").toUpperCase()
+}
+
 async function createPlayerContainer({ role, username, status, id, userIcon, mePlayer }) {
   const playerContainer = document.createElement("div")
   playerContainer.className = "player-container"
   playerContainer.setAttribute("data-player-id", id)
 
-  const roleText = document.createElement("div")
-  roleText.className = "player-inner-text-role"
-
-  if (mePlayer?.identity?.computerId === id) {
-    roleText.textContent = role || "N/A"
-  } else if (revealRoleOnDeath && status === "dead") {
-    roleText.textContent = role || "N/A"
-  } else if (mePlayer?.state?.status === "dead" && revealRolesToDeadPlayers) {
-    roleText.textContent = role || "N/A"
-  } else {
-    roleText.textContent = "?????"
-  }
-
-  playerContainer.appendChild(roleText)
+  const avatarContainer = document.createElement("div")
+  avatarContainer.className = "player-avatar"
+  playerContainer.appendChild(avatarContainer)
 
   let finalIcon = userIcon || "0000:0000:0000:0000"
 
   if (status === "dead") {
     playerContainer.classList.add("dead")
-    playerBoard.classList.add("dead")
     finalIcon = AddDeadEyesToString(finalIcon)
   }
 
   await createUserIconPartyGames({
-    container: playerContainer,
+    container: avatarContainer,
     userId: id,
-    userCustomisationString: finalIcon,
-    size: "large"
+    userCustomisationString: finalIcon
   })
 
   const info = document.createElement("div")
   info.className = "player-info"
 
-  const userContainer = document.createElement("div")
+  const userContainer = document.createElement("span")
   userContainer.className = "player-username"
-
-  const userValue = document.createElement("span")
-  userValue.className = "value"
-  userValue.textContent = ` ${username}`
-  userContainer.appendChild(userValue)
+  userContainer.textContent = formatBoardLabel(username)
   info.appendChild(userContainer)
 
-  const statusContainer = document.createElement("div")
-  statusContainer.className = "player-status"
+  const separator = document.createElement("span")
+  separator.className = "player-info-separator"
+  separator.textContent = "|"
+  info.appendChild(separator)
 
-  const statusValue = document.createElement("span")
-  statusValue.className = "value"
-  statusValue.textContent = ` ${status}`
-  statusContainer.appendChild(statusValue)
-  info.appendChild(statusContainer)
+  const roleText = document.createElement("span")
+  roleText.className = "player-inner-text-role"
+  roleText.textContent = formatBoardLabel(getVisibleRole(role, status, mePlayer, id))
+  info.appendChild(roleText)
 
   playerContainer.appendChild(info)
 
   return playerContainer
 }
 
-function updatePlayerContainer(container, { role, username, status, id, userIcon }) {
+function updatePlayerContainer(container, { role, username, status, id, userIcon }, mePlayer) {
   const roleText = container.querySelector(".player-inner-text-role")
-  if (roleText && roleText.textContent !== role) {
-    roleText.textContent = role || "N/A"
+  const nextVisibleRole = formatBoardLabel(getVisibleRole(role, status, mePlayer, id))
+  if (roleText && roleText.textContent !== nextVisibleRole) {
+    roleText.textContent = nextVisibleRole
   }
 
-  const userValue = container.querySelector(".player-username .value")
-  if (userValue && userValue.textContent.trim() !== username) {
-    userValue.textContent = ` ${username}`
+  const userValue = container.querySelector(".player-username")
+  const nextUsername = formatBoardLabel(username)
+  if (userValue && userValue.textContent !== nextUsername) {
+    userValue.textContent = nextUsername
   }
 
-  const statusValue = container.querySelector(".player-status .value")
-  if (statusValue && statusValue.textContent.trim() !== status) {
-    statusValue.textContent = ` ${status}`
-  }
+  const iconContainer = container.querySelector(".player-avatar") || container
 
   if (status === "dead") {
     container.classList.add("dead")
     const deadIcon = AddDeadEyesToString(userIcon || "0000:0000:0000:0000")
     EditUserIconPartyGames({
-      container,
+      container: iconContainer,
       userId: id,
       userCustomisationString: deadIcon
+    })
+  } else {
+    container.classList.remove("dead")
+    EditUserIconPartyGames({
+      container: iconContainer,
+      userId: id,
+      userCustomisationString: userIcon || "0000:0000:0000:0000"
     })
   }
 }
 
 async function upsertPlayerContainer(parent, player) {
   let container = selectPlayerContainer(parent, player.id)
+  const mePlayer = currentPartyData.players.find(p => p.identity.computerId === deviceId)
 
   if (!container) {
     container = await createPlayerContainer({
@@ -148,11 +159,11 @@ async function upsertPlayerContainer(parent, player) {
       status: player.status,
       id: player.id,
       userIcon: player.userIcon,
-      mePlayer: currentPartyData.players.find(p => p.identity.computerId === deviceId)
+      mePlayer
     })
     parent.appendChild(container)
   } else {
-    updatePlayerContainer(container, player)
+    updatePlayerContainer(container, player, mePlayer)
   }
 }
 
@@ -185,10 +196,12 @@ function renderPlayers(players, boardTitle) {
   const myPlayer = players[index]
   const myIcon = myPlayer?.identity?.userIcon
   const myStatus = myPlayer?.state?.status
+  playerBoard.classList.toggle("dead", myStatus === "dead")
 
   if (myStatus === "dead") {
     SetPlayerBoardButtonDead(myIcon)
   } else {
+    playerBoardButton.classList.remove("dead")
     UpdatePlayerBoardButton({
       userCustomisationString: myIcon,
       userId: myPlayer?.identity?.computerId

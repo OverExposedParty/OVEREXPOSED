@@ -335,8 +335,20 @@ function postToBothEndpoints(payload, endpoint1, endpoint2) {
   };
 
   return Promise.all([
-    fetch(endpoint1, options).then(res => res.json()),
-    fetch(endpoint2, options).then(res => res.json())
+    fetch(endpoint1, options).then(async (res) => {
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `Request failed for ${endpoint1} with status ${res.status}`);
+      }
+      return data;
+    }),
+    fetch(endpoint2, options).then(async (res) => {
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `Request failed for ${endpoint2} with status ${res.status}`);
+      }
+      return data;
+    })
   ])
     .then(([data1, data2]) => {
       // Both POSTs succeeded

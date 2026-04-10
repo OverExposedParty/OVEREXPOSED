@@ -9,6 +9,16 @@
             "pack-difficulty": "chill, deep, cheeky, creative",
             "pack-restriction": "sfw",
             "pack-active": true
+        },
+        {
+            "pack-name": "friendship-test",
+            "pack-path": "/json-files/party-games/questions/would-you-rather/friendship-test.json",
+            "pack-card": "/images/blank-cards/would-you-rather-blank-card.svg",
+            "pack-colour": "#7CFFB2",
+            "pack-secondary-colour": "#55B97F",
+            "pack-difficulty": "brutal, chaotic, fiery, deep",
+            "pack-restriction": "sfw",
+            "pack-active": true
         }
     ]
 }

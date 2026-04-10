@@ -337,6 +337,6 @@ async function ResetImposterQuestion({ nextPlayer = true } = {}) {
   });
 }
 
-async function PartySkip() {
-  await ResetImposterQuestion({ nextPlayer: true });
+async function PartySkip({ nextPlayer = true } = {}) {
+  await ResetImposterQuestion({ nextPlayer });
 }

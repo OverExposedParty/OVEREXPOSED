@@ -41,8 +41,7 @@ async function buildMafiaHints() {
       items.forEach(item => {
         const id = item.id;
         const name = item.name ?? item.word ?? item["item-name"] ?? null;
-        const hint = item["mafia-hint"] ?? null;
-        result[id] = { hint, name };
+        result[id] = { name };
       });
     }
   });
@@ -66,10 +65,6 @@ function getMafiaItemName(id) {
   return mafiaHints[id]?.name ?? null;
 }
 
-function getMafiaHint(id) {
-  return mafiaHints[id]?.hint ?? null;
-}
-
 function getHintIdsFromPlayer(player) {
   const parsed = parseCustomisationString(player?.identity?.userIcon);
 
@@ -79,7 +74,7 @@ function getHintIdsFromPlayer(player) {
       ? Object.values(parsed)
       : [];
 
-  return ids.filter(id => id && mafiaHints?.[id]?.hint);
+  return ids.filter(id => id && mafiaHints?.[id]?.name);
 }
 
 function injectMafiaHint(text) {
@@ -95,7 +90,7 @@ function injectMafiaHint(text) {
     if (inner) {
       const matches = inner.match(/[A-Za-z0-9_-]+/g);
       if (matches?.length) {
-        ids = matches.filter(id => mafiaHints?.[id]?.hint);
+        ids = matches.filter(id => mafiaHints?.[id]?.name);
       }
     }
 
@@ -103,10 +98,10 @@ function injectMafiaHint(text) {
     if (!ids.length) return match;
 
     const randomId = ids[Math.floor(Math.random() * ids.length)];
-    const hint = mafiaHints[randomId]?.hint;
-    if (!hint) return match;
+    const itemName = mafiaHints[randomId]?.name;
+    if (!itemName) return match;
     // 👇 inline color, CSS handles font weight
-    return `<span class="mafia-hint" style="color: ${getMafiaHintPackColour(randomId)};">${hint}</span>`;
+    return `<span class="mafia-hint" style="color: ${getMafiaHintPackColour(randomId)};">${itemName}</span>`;
   });
 }
 

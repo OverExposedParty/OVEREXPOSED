@@ -7,122 +7,203 @@
   max-width: 1080px;
   height: 80vh;
   background: var(--backgroundcolour);
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 24px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
   box-sizing: border-box;
-
   display: var(--container-display, none);
   flex-direction: column;
   z-index: 800;
   --container-visible-display: flex;
 }
-.player-board.dead .player-board-header{
-  background-color: #666666;
+
+.player-board.dead .player-board-header {
+  background-color: #7f6a92;
 }
 
 .player-board-header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  background-color: var(--primarypagecolour);
-  border-radius: 12px 12px 0 0;
-  padding: 10px 0;
+  background: linear-gradient(135deg, #8f46d5 0%, #a95ce0 100%);
+  border-radius: 24px 24px 0 0;
+  padding: 14px 20px;
   width: 100%;
+  box-sizing: border-box;
 }
 
-/* Title always stays in the middle column */
 .player-board-title {
   grid-column: 2;
   justify-self: center;
-  font-weight: bold;
-  font-size: 32px;
+  font-weight: 900;
+  font-size: clamp(1.5rem, 2vw, 2rem);
   text-align: center;
+  letter-spacing: 0.04em;
+  color: #1f0d2f;
 }
 
-/* My Role button lives in the right column */
 .player-board-role-btn {
   grid-column: 3;
   justify-self: end;
-  padding: 4px 10px;
-  font-weight: bold;
+  padding: 6px 12px;
+  font-weight: 800;
   cursor: pointer;
   user-select: none;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, transform 0.25s ease;
   color: var(--backgroundcolour);
 }
 
 .player-board-role-btn:hover {
-  color: var(--secondarypagecolour);
+  color: #2a103f;
+  transform: translateY(-1px);
 }
 
-/* Grid of player cards */
 .players-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
-  grid-auto-flow: row;
-  gap: 0px;
-  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  align-content: start;
   overflow-y: auto;
   flex: 1;
-  margin-top: 10px;
-
-  justify-content: center;
-  justify-items: center;
+  padding: 18px;
+  box-sizing: border-box;
 }
 
-/* Single player card */
 .player-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 10px;
+  gap: 18px;
+  min-height: 96px;
+  padding: 16px 22px;
   box-sizing: border-box;
-  border-radius: 10px;
-  background: var(--primarypagecolour);
-  text-align: center;
-  width: max-content;
-  height: max-content;
-}
-
-/* Role text ("MAFIOSO", etc.) */
-.player-inner-text-role {
-  font-size: 0.9rem;
-  font-weight: bold;
-  letter-spacing: 0.08em;
-}
-
-/* Info under avatar */
-.player-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font-size: 1rem;
-}
-
-.player-username .value,
-.player-status .value {
-  font-weight: 600;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #8f46d5 0%, #a95ce0 100%);
+  color: #241131;
+  text-align: left;
+  width: 100%;
+  overflow: visible;
 }
 
 .player-container.dead {
-  background-color: #666666;
+  background: #666666;
+  color: var(--backgroundcolour);
 }
 
-/* Responsive grid */
+.player-avatar {
+  width: 108px;
+  height: 108px;
+  flex: 0 0 108px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  margin: -10px 0;
+}
+
+.player-avatar .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-avatar .icon,
+.player-avatar .image-stack {
+  width: 87px;
+  height: 87px;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.player-username,
+.player-inner-text-role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-info-separator {
+  flex: 0 0 auto;
+  opacity: 0.72;
+}
+
+.player-inner-text-role {
+  opacity: 0.94;
+}
+
 @media (max-width: 1000px) {
   .players-container {
-    grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
-    gap: 10px;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 600px) {
+  .player-board {
+    width: calc(100% - 24px);
+    height: 78vh;
+  }
+
+  .player-board-header {
+    padding: 12px 14px;
+  }
+
+  .player-board-title {
+    font-size: 1.25rem;
+  }
+
+  .player-board-role-btn {
+    font-size: 0.9rem;
+    padding: 4px 6px;
+  }
+
   .players-container {
-    grid-template-columns: repeat(auto-fit, minmax(120px, max-content));
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .player-container {
+    min-height: 84px;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 28px;
+  }
+
+  .player-avatar {
+    width: 96px;
+    height: 96px;
+    flex-basis: 96px;
+    margin: -8px 0;
+  }
+
+  .player-avatar .icon,
+  .player-avatar .image-stack {
+    width: 75px;
+    height: 75px;
+  }
+
+  .player-info {
     gap: 10px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (orientation: portrait) {
+  .players-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (orientation: portrait) and (max-width: 720px) {
+  .players-container {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -149,11 +230,13 @@
   justify-content: center;
   transition: 0.2s;
 }
-.player-board-button:hover{
+
+.player-board-button:hover {
   transform: scale(1.1);
 }
-.player-board-button.dead{
-border-color: #666666;
+
+.player-board-button.dead {
+  border-color: #666666;
 }
 
 .mafia-hint {
