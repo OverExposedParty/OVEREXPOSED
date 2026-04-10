@@ -13,9 +13,9 @@ function getInitialAssetVersion() {
 // Update these values manually when you want to force browsers to fetch new script files.
 // Leave a value empty to fall back to the version already on the core-template.js URL.
 const MANUAL_SCRIPT_VERSIONS = Object.freeze({
-  WEBSITE_CACHE_VERSION: '2026-04-04-1',
-  WEBSITE_VERSION: '2026-04-04-1',
-  GAME_SETTINGS_VERSION: '2026-04-04-1'
+  WEBSITE_CACHE_VERSION: '2026-04-10-1',
+  WEBSITE_VERSION: '2026-04-10-1',
+  GAME_SETTINGS_VERSION: '2026-04-10-1'
 });
 
 function resolveScriptVersion(manualVersion) {
@@ -133,6 +133,56 @@ function versionAssetUrl(assetUrl, { cacheBustKey = null } = {}) {
 
 window.versionAssetUrl = versionAssetUrl;
 
+function updateExistingAssetUrls(root = document) {
+  const selectors = [
+    'script[src]',
+    'link[href]',
+    'img[src]',
+    'source[src]',
+    'source[srcset]'
+  ];
+
+  root.querySelectorAll(selectors.join(', ')).forEach(el => {
+    if (el.hasAttribute('src')) {
+      const src = el.getAttribute('src');
+      const versionedSrc = versionAssetUrl(src);
+      if (versionedSrc !== src) {
+        el.setAttribute('src', versionedSrc);
+      }
+    }
+
+    if (el.hasAttribute('href')) {
+      const href = el.getAttribute('href');
+      const versionedHref = versionAssetUrl(href);
+      if (versionedHref !== href) {
+        el.setAttribute('href', versionedHref);
+      }
+    }
+
+    if (el.hasAttribute('srcset')) {
+      const srcset = el.getAttribute('srcset');
+      if (!srcset) return;
+
+      const versionedSrcset = srcset
+        .split(',')
+        .map(entry => {
+          const parts = entry.trim().split(/\s+/);
+          if (parts.length === 0) return entry;
+          parts[0] = versionAssetUrl(parts[0]);
+          return parts.join(' ');
+        })
+        .join(', ');
+
+      if (versionedSrcset !== srcset) {
+        el.setAttribute('srcset', versionedSrcset);
+      }
+    }
+  });
+}
+
+window.updateExistingAssetUrls = updateExistingAssetUrls;
+updateExistingAssetUrls();
+
 function findStylesheetElByBaseHref(baseHref) {
   const base = stripQuery(baseHref);
 
@@ -230,7 +280,17 @@ window.fetch = (input, init) => {
   }
 
   if (input instanceof Request) {
-    return nativeFetch(input, init);
+    try {
+      const versionedUrl = versionAssetUrl(input.url);
+      if (versionedUrl === input.url) {
+        return nativeFetch(input, init);
+      }
+
+      const clonedRequest = new Request(versionedUrl, input);
+      return nativeFetch(clonedRequest, init);
+    } catch {
+      return nativeFetch(input, init);
+    }
   }
 
   return nativeFetch(input, init);
