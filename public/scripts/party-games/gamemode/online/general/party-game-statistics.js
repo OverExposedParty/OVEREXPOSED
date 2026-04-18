@@ -189,9 +189,6 @@ function SetPartyGameStatisticsGameOver() {
     showContainer(gameOverContainer);
     removeElementIfExists(settingsElementClassArray, partyGameStatisticsContainer);
     addElementIfNotExists(permanantElementClassArray, partyGameStatisticsContainer);
-    if (deviceId == hostDeviceId) {
-        DeleteParty();
-    }
 }
 
 function CreatePartyGameStatisticsButton(gamemode) {
