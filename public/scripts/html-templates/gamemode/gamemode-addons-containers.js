@@ -17,7 +17,7 @@ if (placeholderGamemodeAddons.dataset.online === "false") {
 
     gamemodeAddonContains.forEach(addon => {
         const isEnabled = localStorage.getItem(`${addon}`) === "true";
-        console.log(`${addon}: ${isEnabled}`);
+        debugLog(`${addon}: ${isEnabled}`);
         if (isEnabled) AddGamemodeContainers(addon);
     });
 }

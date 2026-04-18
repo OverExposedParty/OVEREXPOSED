@@ -126,6 +126,15 @@ async function FetchInstructions() {
 
   const userInstructions = getUserInstructions(currentPartyData);
   const state = getPartyState(currentPartyData);
+  const phase = state?.phase ?? null;
+
+  if (phase === 'imposter-choose-punishment') {
+    ChoosingPunishment(state.playerTurn);
+    return;
+  } else if (phase === 'imposter-show-punishment') {
+    DisplayPunishmentToUser();
+    return;
+  }
 
   if (userInstructions === "DISPLAY_VOTE_RESULTS") {
     DisplayVoteResults();
@@ -135,8 +144,6 @@ async function FetchInstructions() {
     NextQuestion();
   } else if (userInstructions.includes("USER_HAS_PASSED")) {
     UserHasPassed(userInstructions);
-  } else if (userInstructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
-    UserSelectedForPunishment(userInstructions);
   } else if (userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
     DisplayPrivateCard(userInstructions);
   } else if (userInstructions.includes("DISPLAY_START_TIMER")) {
@@ -145,18 +152,6 @@ async function FetchInstructions() {
     DisplayAnswerContainer();
   } else if (userInstructions.includes("WAITING_FOR_PLAYER")) {
     WaitingForPlayer(userInstructions);
-  } else if (userInstructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(state.playerTurn);
-  } else if (userInstructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(state.playerTurn);
-  } else if (userInstructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser();
-  } else if (userInstructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(userInstructions);
-  } else if (userInstructions.includes("HAS_USER_DONE_PUNISHMENT")) {
-    HasUserDonePunishment(userInstructions);
-  } else if (userInstructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
-    AnswerToUserDonePunishment(userInstructions);
   } else if (userInstructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
   } else if (userInstructions.includes("RESET_QUESTION")) {

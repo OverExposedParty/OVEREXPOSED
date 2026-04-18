@@ -121,10 +121,27 @@ async function FetchInstructions() {
   }
 
   await UpdatePartyGameStatistics();
+  const state = getPartyState(currentPartyData);
+  const phase = state?.phase ?? null;
   const instructions = getUserInstructions(currentPartyData);
 
+  if (phase === "most-likely-to-tiebreaker") {
+    await TieBreakerPunishmentOffer();
+    return;
+  }
+
+  if (phase === "most-likely-to-choose-punishment") {
+    await ChoosingPunishment();
+    return;
+  }
+
+  if (phase === "most-likely-to-show-punishment") {
+    await ChosePunishment();
+    return;
+  }
+
   if (!instructions || typeof instructions !== "string") {
-    console.log("No instructions to process.");
+    debugLog("No instructions to process.");
     return;
   }
 
@@ -134,29 +151,11 @@ async function FetchInstructions() {
   else if (instructions.includes("DISPLAY_VOTE_RESULTS")) {
     DisplayVoteResults();
   }
-  else if (instructions.includes("TIE_BREAKER_PUNISHMENT_OFFER")) {
-    TieBreakerPunishmentOffer(instructions);
-  }
   else if (instructions.includes("WAITING_FOR_PLAYER")) {
     WaitingForPlayer(instructions);
   }
-  else if (instructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(instructions);
-  }
-  else if (instructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(instructions);
-  }
-  else if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(instructions);
-  }
-  else if (instructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(instructions);
-  }
   else if (instructions.includes("HAS_USER_DONE_PUNISHMENT")) {
     HasUserDonePunishment(instructions);
-  }
-  else if (instructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
-    AnswerToUserDonePunishment();
   }
   else if (instructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();

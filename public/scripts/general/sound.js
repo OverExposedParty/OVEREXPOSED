@@ -20,14 +20,14 @@ async function loadSound(key, url) {
         const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
         soundBuffers[key] = decodedBuffer;
-        console.log(`✅ Sound loaded: ${key}`);
+        debugLog(`✅ Sound loaded: ${key}`);
     } catch (error) {
         console.error(`❌ Error loading sound: ${key}`, error);
     }
 }
 
 async function playSoundEffect(soundKey) {
-    console.log("🎵 Playing sound effect:", soundKey);
+    debugLog("🎵 Playing sound effect:", soundKey);
     if (!audioContext) {
         console.warn("Audio context is not initialized.");
         return;

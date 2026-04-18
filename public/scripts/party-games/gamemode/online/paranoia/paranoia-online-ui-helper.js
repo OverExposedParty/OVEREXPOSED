@@ -41,7 +41,7 @@ function updateTextContainer(text, cardType, punishment) {
     setNsfwCardBadge('#dual-stack-view', matchedPack.packRestriction === 'nsfw');
     setNsfwCardBadge('#private-view', matchedPack.packRestriction === 'nsfw');
   } else {
-    console.log("Pack not found");
+    debugLog("Pack not found");
     setNsfwCardBadge('#dual-stack-view', false);
     setNsfwCardBadge('#private-view', false);
   }

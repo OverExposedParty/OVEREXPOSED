@@ -2,7 +2,7 @@ let partyUserCount = 0;
 window.currentOnlineShuffleSeed = window.currentOnlineShuffleSeed ?? null;
 
 async function ToggleOnlineMode(toggle) {
-  console.log("[ToggleOnlineMode] toggle=", toggle);
+  debugLog("[ToggleOnlineMode] toggle=", toggle);
   if (toggle === true) {
     if(partyCode) return;
     hostedParty = true;
@@ -10,7 +10,7 @@ async function ToggleOnlineMode(toggle) {
     onlineSettingsTab.classList.remove('disabled');
 
     const newShuffleSeed = Math.floor(Math.random() * 256);
-    console.log("[ToggleOnlineMode] generated shuffleSeed=", newShuffleSeed);
+    debugLog("[ToggleOnlineMode] generated shuffleSeed=", newShuffleSeed);
     window.currentOnlineShuffleSeed = newShuffleSeed;
     partyCode = await reserveUniquePartyCode();
     inputPartyCode.value = partyCode;
@@ -72,7 +72,7 @@ async function ToggleOnlineMode(toggle) {
       userInstructions: "",
       shuffleSeed: newShuffleSeed
     };
-    console.log("[ToggleOnlineMode] initial config.shuffleSeed=", config.shuffleSeed);
+    debugLog("[ToggleOnlineMode] initial config.shuffleSeed=", config.shuffleSeed);
 
     const state = {
       isPlaying: false,
@@ -121,6 +121,9 @@ async function ToggleOnlineMode(toggle) {
   } else {
     window.currentOnlineShuffleSeed = null;
     inputPartyCode.value = "";
+    if (typeof clearPlayerCountRestrictionError === 'function') {
+      clearPlayerCountRestrictionError();
+    }
     if (typeof togglePartyQrCode === 'function') {
       togglePartyQrCode(false);
     }
@@ -143,8 +146,11 @@ async function ToggleOnlineMode(toggle) {
 
     // Re-evaluate rule visibility after partyCode is cleared.
     SetGamemodeButtons();
-    UpdateSettings();
+    await UpdateSettings();
     allUsersReady = undefined;
+    if (typeof clearPlayerCountRestrictionError === 'function') {
+      clearPlayerCountRestrictionError();
+    }
     updateStartGameButton();
     toggleUserCustomisationIcon(false);
   }

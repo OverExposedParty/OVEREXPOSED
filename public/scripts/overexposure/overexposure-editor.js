@@ -198,7 +198,7 @@ submitPostYes.addEventListener("click", async () => {
                 if (noPlaceDiv) noPlaceDiv.remove();
                 button.remove();
             });
-            console.log("Draft data saved successfully:", response);
+            debugLog("Draft data saved successfully:", response);
             playSoundEffect('postUploaded');
         } catch (error) {
             console.error("Error saving draft data:", error);

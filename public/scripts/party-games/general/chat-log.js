@@ -189,6 +189,28 @@ function GetCommand(message) {
         }
     };
 
+    const runBypassStartCommand = async () => {
+        if (!partyCode) {
+            CreateChatMessage("[CONSOLE]", "UNABLE TO START. NO PARTY EXISTS.", "error", Date.now());
+            return;
+        }
+
+        if (typeof startOnlineGame !== 'function') {
+            CreateChatMessage("[CONSOLE]", "UNABLE TO START. YOU MUST BE IN GAMEMODE SETTINGS.", "error", Date.now());
+            return;
+        }
+
+        await startOnlineGame({ bypassPlayerRestrictions: true });
+
+        if (typeof sendPartyChat === 'function') {
+            await sendPartyChat({
+                username: "[CONSOLE]",
+                message: `${onlineUsername} bypassed player restrictions and started the game.`,
+                eventType: "message"
+            });
+        }
+    };
+
     const commands = {
         kick: {
             description: "Kick a user from the party. Usage: /kick <userId>",
@@ -203,7 +225,7 @@ function GetCommand(message) {
             }
         },
         party: {
-            description: "Party management. Subcommands: delete, create, skip, skipround, restart",
+            description: "Party management. Subcommands: delete, create, bypass, forcestart, skip, skipround, restart",
             run: async (cmd) => {
                 if (cmd.action?.toLowerCase() === "delete") {
                     DeleteParty();
@@ -234,6 +256,12 @@ function GetCommand(message) {
                 }
                 else if (cmd.action?.toLowerCase() === "restart") {
                     await runRestartCommand();
+                }
+                else if (
+                    cmd.action?.toLowerCase() === "bypass" ||
+                    cmd.action?.toLowerCase() === "forcestart"
+                ) {
+                    await runBypassStartCommand();
                 }
                 else {
                     CreateChatMessage("[CONSOLE]", "Invalid party command.", "error", Date.now());

@@ -29,6 +29,10 @@ const luckyCoinFlipContainer = document.querySelector('#lucky-coin-flip-containe
 const coinIcon = document.querySelector('.coin');
 const tossBtn = document.querySelector('#coin-button');
 
+function closeCoinFlipView() {
+    hideContainer(luckyCoinFlipContainer);
+}
+
 tossBtn.addEventListener('click', () => {
     tossCoinFunction();
 });
@@ -92,26 +96,55 @@ async function tossCoinFunction() {
         if (placeholderGamemodeAddons?.dataset.online === "true") {
             await new Promise(resolve => setTimeout(resolve, 2500));
 
-            const latestPartyData =
-                (typeof GetCurrentPartyData === 'function'
-                    ? await GetCurrentPartyData()
-                    : null) ??
-                currentPartyData ??
-                null;
-
             const matchedFace =
                 (pickedHeads && faceCoin === "Heads") ||
                 (!pickedHeads && faceCoin === "Tails");
 
-            await SendInstruction({
-                instruction: matchedFace
-                    ? "DISPLAY_DUAL_STACK_CARD"
-                    : "USER_HAS_PASSED:USER_CALLED_WRONG_FACE:",
-                partyData: latestPartyData,
-                updateUsersReady: false,
-                updateUsersConfirmation: false,
-                byPassHost: true
-            });
+            if (
+                placeholderGamemodeAddons?.dataset.gamemode === "paranoia" &&
+                typeof performOnlinePartyAction === "function"
+            ) {
+                const updatedParty = await performOnlinePartyAction({
+                    action: 'paranoia-resolve-coin-flip',
+                    payload: {
+                        matchedFace
+                    },
+                    syncInstructions: false
+                });
+
+                if (updatedParty) {
+                    currentPartyData = updatedParty;
+                }
+
+                closeCoinFlipView();
+
+                if (matchedFace === true && typeof DisplayDualStackCard === 'function') {
+                    await DisplayDualStackCard();
+                } else if (matchedFace !== true && typeof UserHasPassed === 'function') {
+                    await UserHasPassed("USER_HAS_PASSED:USER_CALLED_WRONG_FACE:");
+                } else if (typeof FetchInstructions === 'function') {
+                    await FetchInstructions();
+                }
+            } else {
+                const latestPartyData =
+                    (typeof GetCurrentPartyData === 'function'
+                        ? await GetCurrentPartyData()
+                        : null) ??
+                    currentPartyData ??
+                    null;
+
+                closeCoinFlipView();
+
+                await SendInstruction({
+                    instruction: matchedFace
+                        ? "DISPLAY_DUAL_STACK_CARD"
+                        : "USER_HAS_PASSED:USER_CALLED_WRONG_FACE:",
+                    partyData: latestPartyData,
+                    updateUsersReady: false,
+                    updateUsersConfirmation: false,
+                    byPassHost: true
+                });
+            }
         }
         // offline mode just ends after showing the coin
         // (no multiplayer logic, no instructions)

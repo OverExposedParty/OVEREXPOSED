@@ -51,7 +51,7 @@ async function SetPageSettings() {
   // existingData[0] should already match new schema
   currentPartyData = initialPartyData;
 
-  console.log("initialisePage");
+  debugLog("initialisePage");
   await initialisePage();
 }
 
@@ -116,7 +116,7 @@ const index = players.findIndex(
   const meConn = ensureConnection(me);
   meConn.socketId = socket.id;
   me.socketId = socket.id;
-  console.log("Socket ID set to: " + meConn.socketId);
+  debugLog("Socket ID set to: " + meConn.socketId);
 
   if (state.isPlaying === true) {
     // gameRules: new object format (like other modes)
@@ -176,33 +176,17 @@ const index = players.findIndex(
       const roles         = await GetRoles(players.length);
       const shuffledRoles = getShuffledRoles(roles);
 
-      players.forEach((player, i) => {
-        const pState = getPlayerState(player);
-        pState.role  = shuffledRoles[i] || null;
+      const updatedParty = await performOnlinePartyAction({
+        action: 'mafia-start-game',
+        payload: {
+          shuffledRoles,
+          timer: new Date(Date.now() + mafiaDisplayRoleTimer)
+        }
       });
 
-      const resetPlayers = ResetVotes(players);
-
-      const newState = {
-        ...state,
-        phase: "night"
-      };
-
-      currentPartyData = {
-        ...party,
-        config,
-        state: newState,
-        players: resetPlayers
-      };
-
-      await SendInstruction({
-        instruction: "DISPLAY_ROLE",
-        updateUsersReady: false,
-        updateUsersConfirmation: false,
-        partyData: party,
-        fetchInstruction: true,
-        timer: new Date(Date.now() + mafiaDisplayRoleTimer)
-      });
+      if (updatedParty) {
+        currentPartyData = updatedParty;
+      }
     } else {
       const syncedPartyState = await syncStartupPartyState();
 
@@ -224,7 +208,7 @@ const index = players.findIndex(
         currentPartyData = partyWithInstruction;
       }
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     await AddUserIcons();

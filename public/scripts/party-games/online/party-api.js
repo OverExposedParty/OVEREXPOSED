@@ -24,8 +24,18 @@ async function GetCurrentPartyData({
   for (let attempt = 0; attempt <= retries; attempt++) {
     const existingData = await getExistingPartyData(partyCode);
     const latestParty = existingData?.[0];
+    const latestInstructions = typeof getUserInstructions === 'function'
+      ? getUserInstructions(latestParty)
+      : latestParty?.config?.userInstructions ?? latestParty?.state?.userInstructions ?? latestParty?.userInstructions ?? '';
 
     if (!latestParty) {
+      debugLog('[OE_DEBUG][GetCurrentPartyData] no latest party', {
+        partyCode,
+        requireInstructions,
+        attempt,
+        retries,
+        hasFallbackParty: Boolean(fallbackParty)
+      });
       if (attempt < retries) {
         await new Promise(resolve => setTimeout(resolve, delayMs));
         continue;
@@ -40,30 +50,43 @@ async function GetCurrentPartyData({
     }
 
     if (!requireInstructions) {
+      debugLog('[OE_DEBUG][GetCurrentPartyData] returning latest party (no instruction requirement)', {
+        partyCode,
+        attempt,
+        hasInstructions: typeof latestInstructions === 'string' && latestInstructions.trim() !== '',
+        phase: latestParty?.state?.phase ?? latestParty?.phase ?? null,
+        playerTurn: latestParty?.state?.playerTurn ?? latestParty?.playerTurn ?? null
+      });
       return latestParty;
     }
-
-    const latestInstructions = typeof getUserInstructions === 'function'
-      ? getUserInstructions(latestParty)
-      : latestParty?.config?.userInstructions ?? latestParty?.state?.userInstructions ?? latestParty?.userInstructions ?? '';
 
     if (typeof latestInstructions === 'string' && latestInstructions.trim() !== '') {
+      debugLog('[OE_DEBUG][GetCurrentPartyData] returning latest party with instructions', {
+        partyCode,
+        attempt,
+        instructions: latestInstructions,
+        phase: latestParty?.state?.phase ?? latestParty?.phase ?? null,
+        playerTurn: latestParty?.state?.playerTurn ?? latestParty?.playerTurn ?? null
+      });
       return latestParty;
-    }
-
-    const fallbackInstructions = fallbackParty
-      ? (typeof getUserInstructions === 'function'
-        ? getUserInstructions(fallbackParty)
-        : fallbackParty?.config?.userInstructions ?? fallbackParty?.state?.userInstructions ?? fallbackParty?.userInstructions ?? '')
-      : '';
-
-    if (typeof fallbackInstructions === 'string' && fallbackInstructions.trim() !== '') {
-      return fallbackParty;
     }
 
     if (attempt < retries) {
+      debugLog('[OE_DEBUG][GetCurrentPartyData] latest party missing instructions, retrying', {
+        partyCode,
+        attempt,
+        retries,
+        phase: latestParty?.state?.phase ?? latestParty?.phase ?? null,
+        playerTurn: latestParty?.state?.playerTurn ?? latestParty?.playerTurn ?? null
+      });
       await new Promise(resolve => setTimeout(resolve, delayMs));
     } else {
+      debugLog('[OE_DEBUG][GetCurrentPartyData] returning latest party without instructions after retries', {
+        partyCode,
+        attempt,
+        phase: latestParty?.state?.phase ?? latestParty?.phase ?? null,
+        playerTurn: latestParty?.state?.playerTurn ?? latestParty?.playerTurn ?? null
+      });
       return latestParty;
     }
   }
@@ -86,6 +109,114 @@ async function reserveUniquePartyCode() {
   return data.partyCode;
 }
 
+function normaliseOnlinePartyActionPayload(payload = {}) {
+  const nextPayload = { ...payload };
+  const partyData = nextPayload.partyData;
+
+  if (partyData && typeof partyData === 'object') {
+    if (partyData.config && nextPayload.configPatch === undefined) {
+      nextPayload.configPatch = partyData.config;
+    }
+
+    if (partyData.state && nextPayload.statePatch === undefined) {
+      nextPayload.statePatch = partyData.state;
+    }
+
+    if (partyData.deck && nextPayload.deckPatch === undefined) {
+      nextPayload.deckPatch = partyData.deck;
+    }
+
+    if (Array.isArray(partyData.players) && nextPayload.playerUpdates === undefined) {
+      nextPayload.playerUpdates = partyData.players.map((player) => ({
+        computerId: player?.identity?.computerId ?? player?.computerId ?? null,
+        identity: player?.identity,
+        connection: player?.connection,
+        state: player?.state,
+        isReady: player?.isReady,
+        hasConfirmed: player?.hasConfirmed,
+        vote: player?.vote,
+        score: player?.score,
+        socketId: player?.socketId,
+        lastPing: player?.lastPing
+      }));
+    }
+
+    delete nextPayload.partyData;
+  }
+
+  return nextPayload;
+}
+
+async function syncOnlinePartyInstructionsAfterAction() {
+  if (typeof FetchInstructions !== 'function') {
+    return;
+  }
+
+  if (!isPlaying) {
+    return;
+  }
+
+  if (!window.onlineGameUiReady) {
+    window.pendingOnlineInstructionSync = true;
+    return;
+  }
+
+  if (typeof runOnlineFetchInstructions === 'function') {
+    await runOnlineFetchInstructions({ reason: 'action' });
+  } else {
+    await FetchInstructions();
+  }
+}
+
+async function performOnlinePartyAction({
+  partyType = sessionPartyType,
+  partyId = partyCode,
+  action,
+  actorId = typeof deviceId === 'string' ? deviceId : null,
+  payload = {},
+  syncInstructions = true
+} = {}) {
+  if (!partyId) {
+    throw new Error('partyId is required for party actions');
+  }
+
+  if (!action) {
+    throw new Error('action is required for party actions');
+  }
+
+  const res = await fetch(`/api/${partyType}/action?partyCode=${partyId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      partyId,
+      action,
+      actorId,
+      payload: normaliseOnlinePartyActionPayload({
+        ...payload,
+        socketId: typeof socket?.id === 'string' ? socket.id : payload.socketId
+      })
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data.error || `Failed to perform party action: ${action}`);
+  }
+
+  if (data.updated) {
+    currentPartyData = data.updated;
+
+    if (syncInstructions) {
+      await syncOnlinePartyInstructionsAfterAction();
+    }
+  }
+
+  return data.updated ?? null;
+}
+
 async function getPartyChatLog() {
   try {
     const res = await fetch(`/api/chat/${partyCode}`);
@@ -103,18 +234,20 @@ function updateOnlineParty({
   config,
   state,
   deck,
-  players
+  players,
+  bypassPlayerRestrictions = false
 }) {
   const isDeckGame = !partyType?.startsWith('party-game-mafia');
-      console.log("config:", config);
+      debugLog("config:", config);
   const payload = {
     partyId,
     ...(isDeckGame && deck !== undefined && { deck }),
     ...(config !== undefined && { config }),
     ...(state !== undefined && { state }),
-    ...(players !== undefined && { players })
+    ...(players !== undefined && { players }),
+    ...(bypassPlayerRestrictions && { bypassPlayerRestrictions: true })
   };
-    console.log("players", players);
+    debugLog("players", players);
   return postToBothEndpoints(
     payload,
     `/api/${partyType}?partyCode=${partyId}`,
@@ -123,6 +256,7 @@ function updateOnlineParty({
 }
 
 async function addUserToParty({
+  partyType = sessionPartyType,
   partyId,
   newComputerId,
   newUsername,
@@ -133,56 +267,30 @@ async function addUserToParty({
   newUserSocketId = null
 }) {
   try {
-    const existingData = await getExistingPartyData(partyId);
-    const currentPartyData = existingData[0] || {};
-
-    const players = currentPartyData.players || [];
-
-    // Check if user already exists by computerId (now nested under identity)
-    const existingIndex = players.findIndex(
-      p => p.identity?.computerId === newComputerId
-    );
-
-    if (existingIndex !== -1) {
-      // User exists, update their info instead
-      return UpdateUserPartyData({
+    const res = await fetch(`/api/${partyType}/join-user?partyCode=${partyId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         partyId,
-        computerId: newComputerId,
+        newComputerId,
         newUsername,
         newUserIcon,
         newScore,
         newUserReady,
         newUserConfirmation,
         newUserSocketId
-      });
+      })
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to join party');
     }
 
-    // Create new nested player object
-    const newPlayer = {
-      identity: {
-        computerId: newComputerId,
-        username: newUsername,
-        userIcon: newUserIcon ?? '0000:0100:0200:0300'
-      },
-      connection: {
-        socketId: newUserSocketId,
-        lastPing: new Date()
-      },
-      state: {
-        isReady: newUserReady,
-        hasConfirmed: newUserConfirmation,
-        // for Truth or Dare; Mafia can just ignore or schema can include it
-        score: newScore ?? 0
-      }
-      // Mafia's nightPhase / role / status defaults will be filled in server-side
-    };
-
-    const updatedPlayers = [...players, newPlayer];
-
-    return updateOnlineParty({
-      partyId,
-      players: updatedPlayers
-    });
+    return data;
   } catch (err) {
     console.error('❌ Append failed:', err);
     throw err;
@@ -210,66 +318,40 @@ async function UpdateUserPartyData({
   newUserReady,
   newUserConfirmation,
   newScore,
-  newUserSocketId
+  newUserSocketId,
+  playerPatch,
+  partyType = sessionPartyType
 }) {
   try {
-    const existingData = await getExistingPartyData(partyId);
-
-    if (!existingData || existingData.length === 0) {
-      throw new Error('No party data found.');
-    }
-
-    const currentPartyData = existingData[0];
-    const players = currentPartyData.players || [];
-
-    const index = players.findIndex(
-      player => player.identity?.computerId === computerId
-    );
-
-    if (index === -1) {
-      throw new Error(`Computer ID "${computerId}" not found in party.`);
-    }
-
-    const player = players[index];
-
-    if (newUsername !== undefined) {
-      player.identity = player.identity || {};
-      player.identity.username = newUsername;
-    }
-
-    if (newUserIcon !== undefined) {
-      player.identity = player.identity || {};
-      player.identity.userIcon = newUserIcon;
-    }
-
-    if (newUserReady !== undefined) {
-      player.state = player.state || {};
-      player.state.isReady = newUserReady;
-    }
-
-    if (newUserConfirmation !== undefined) {
-      player.state = player.state || {};
-      player.state.hasConfirmed = newUserConfirmation;
-    }
-
-    if (newScore !== undefined) {
-      player.state = player.state || {};
-      player.state.score = newScore;
-    }
-
-    if (newUserSocketId !== undefined) {
-      player.connection = player.connection || {};
-      player.connection.socketId = newUserSocketId;
-    }
-
-    player.connection = player.connection || {};
-    player.connection.lastPing = new Date();
-
-
-    return updateOnlineParty({
-      partyId,
-      players
+    const res = await fetch(`/api/${partyType}/patch-player?partyCode=${partyId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        partyId,
+        computerId,
+        newUsername,
+        newUserIcon,
+        newUserReady,
+        newUserConfirmation,
+        newScore,
+        newUserSocketId,
+        playerPatch
+      })
     });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.error || `Failed to patch player "${computerId}"`);
+    }
+
+    if (data.updated) {
+      currentPartyData = data.updated;
+    }
+
+    return data;
   } catch (err) {
     console.error('❌ Update by computerId failed:', err);
     throw err;
@@ -278,7 +360,12 @@ async function UpdateUserPartyData({
 
 async function removeUserFromParty(partyId, computerIdToRemove, partyType = sessionPartyType) {
   const url = `/api/${partyType}/remove-user`;
-  const payload = { partyId, computerIdToRemove };
+  const payload = {
+    partyId,
+    computerIdToRemove,
+    actorComputerId: typeof deviceId === 'string' ? deviceId : null,
+    actorSocketId: typeof socket?.id === 'string' ? socket.id : null
+  };
 
   const res = await fetch(url, {
     method: 'POST',
@@ -323,7 +410,7 @@ async function checkAndDeleteEmptyParty(partyId) {
     if (isEmpty) {
       await DeleteParty(partyId);
     } else {
-      console.log(`Party "${partyId}" still has users. No action taken.`);
+      debugLog(`Party "${partyId}" still has users. No action taken.`);
     }
   } catch (err) {
     console.error('❌ Error checking or deleting empty party:', err);
@@ -338,75 +425,52 @@ function DeleteParty() {
 
   socket.emit('delete-party', partyCode);
   partyCode = null;
-  console.log('🚀 Party deleted');
+  debugLog('🚀 Party deleted');
   navigator.sendBeacon(`/api/${sessionPartyType}/delete`, blob);
 }
 
-async function setIsPlayingForParty(partyId, newIsPlayingValue) {
+async function startOnlinePartyGame(partyId, { bypassPlayerRestrictions = false } = {}) {
   try {
-    const existingData = await getExistingPartyData(partyId);
-
-    if (!existingData || existingData.length === 0) {
-      throw new Error(`No party found with ID ${partyId}`);
-    }
-
-    const currentPartyData = existingData[0];
-
-    const currentState =
-      currentPartyData.state ??
-      {
-        isPlaying: currentPartyData.isPlaying,
-        lastPinged: currentPartyData.lastPinged,
-        phase: currentPartyData.phase,
-        timer: currentPartyData.timer,
-        playerTurn: currentPartyData.playerTurn,
-        currentCardIndex: currentPartyData.currentCardIndex,
-        currentCardSecondIndex: currentPartyData.currentCardSecondIndex,
-        questionType: currentPartyData.questionType
-      };
-
-    const updatedState = {
-      ...currentState,
-      isPlaying: newIsPlayingValue,
-      lastPinged: Date.now(),
-      hostComputerIdList: getAllDeviceIDs(currentPartyData)
-    };
-
-    await updateOnlineParty({
+    await performOnlinePartyAction({
       partyId,
-      state: updatedState
+      action: 'start-game',
+      payload: {
+        bypassPlayerRestrictions
+      },
+      syncInstructions: false
     });
 
-    console.log(`✅ isPlaying updated to ${newIsPlayingValue} for party ${partyId}`);
+    debugLog(`✅ Online game started for party ${partyId}`);
   } catch (error) {
-    console.error('❌ Failed to update isPlaying:', error);
+    console.error('❌ Failed to start online game:', error);
+    throw error;
   }
 }
 
 async function userPingToParty(deviceId, partyId) {
   try {
-    const existingData = await getExistingPartyData(partyId);
-    if (!existingData || existingData.length === 0) {
-      throw new Error('No party data found.');
-    }
-
-    const currentPartyData = existingData[0];
-    const players = currentPartyData.players || [];
-
-    const index = players.findIndex(
-      player => player.identity?.computerId === deviceId
-    );
-    if (index === -1) {
-      throw new Error(`Device ID "${deviceId}" not found in party.`);
-    }
-
-    players[index].connection = players[index].connection || {};
-    players[index].connection.lastPing = new Date();
-
-    return updateOnlineParty({
-      partyId,
-      players
+    const res = await fetch(`/api/${sessionPartyType}/patch-player?partyCode=${partyId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        partyId,
+        computerId: deviceId
+      })
     });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.error || `Failed to ping device "${deviceId}"`);
+    }
+
+    if (data.updated) {
+      currentPartyData = data.updated;
+    }
+
+    return data;
   } catch (err) {
     console.error('❌ Failed to ping user in party:', err);
     throw err;

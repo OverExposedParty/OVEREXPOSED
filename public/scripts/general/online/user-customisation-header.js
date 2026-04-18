@@ -3,7 +3,7 @@ let userCustomisationIconButton;
 
 function getCurrentHeaderCustomisation() {
     const saved = localStorage.getItem("user-customisation");
-    console.log(saved);
+    debugLog(saved);
     if (saved) {
         try {
             const obj = JSON.parse(saved);
@@ -26,7 +26,7 @@ function getCurrentHeaderCustomisation() {
             // fall through to blank
         }
     }
-    console.log(blankUserCustomisation)
+    debugLog(blankUserCustomisation)
     return blankUserCustomisation;
 }
 
@@ -35,7 +35,7 @@ function renderUserCustomisationHeaderIcon() {
     userCustomisationIconButton.innerHTML = "";
 
     const current = getCurrentHeaderCustomisation();
-    console.log('Rendering header icon with customisation:', current);
+    debugLog('Rendering header icon with customisation:', current);
     const stack = CreateImageStack(current);
     userCustomisationIconButton.appendChild(stack);
 }

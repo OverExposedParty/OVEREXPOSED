@@ -57,7 +57,7 @@ const index = players.findIndex(
     hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
   }
 
-  console.log("hostDeviceId:", hostDeviceId);
+  debugLog("hostDeviceId:", hostDeviceId);
 
   const myConnectionSocket = me.connection?.socketId ?? me.socketId;
   if (myConnectionSocket === "DISCONNECTED") {
@@ -75,10 +75,10 @@ const index = players.findIndex(
   await joinParty(partyCode);
 
   if (state.isPlaying === true) {
-    // Build "who's most likely to" buttons for all other players
+    // Build "who's most likely to" buttons for every player
     for (let i = 0; i < players.length; i++) {
       const pid = getPlayerId(players[i]);
-      if (pid !== deviceId) {
+      if (pid) {
         const userButton = createUserButton(pid, getPlayerUsername(players[i]));
         selectUserButtonContainer.appendChild(userButton);
       }
@@ -153,10 +153,11 @@ const index = players.findIndex(
     });
 
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`,
+      { cacheBustKey: "PARTY_GAMES_ONLINE_MOST_LIKELY_TO" }
     );
 
-    console.log("timer:", getTimeLimit());
+    debugLog("timer:", getTimeLimit());
 
     const instructions = getUserInstructions(party);
 
@@ -165,7 +166,6 @@ const index = players.findIndex(
         instruction: "DISPLAY_PRIVATE_CARD",
         updateUsersReady: false,
         updateUsersConfirmation: false,
-        partyData: party,
         fetchInstruction: true,
         timer: Date.now() + getTimeLimit() * 1000
       });
@@ -190,7 +190,7 @@ const index = players.findIndex(
         currentPartyData = partyWithInstruction;
       }
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     SetPartyGameStatistics();
@@ -223,6 +223,8 @@ async function SetPageSettings() {
     const selectedId = selectNumberContainer.getAttribute('selected-id');
     if (!selectedId) return;
 
+    DisplayWaitingForPlayers();
+
     await SetVote({ option: selectedId });
 
     const selectNumberButtons = selectNumberContainer
@@ -237,18 +239,22 @@ async function SetPageSettings() {
     if (!selectedId) return;
 
     hideContainer(selectPunishmentContainer);
+    const punishmentType = selectedId === 'drink-wheel'
+      ? 'MOST_LIKELY_TO_DRINK_WHEEL'
+      : selectedId === 'take-a-shot'
+        ? 'TAKE_A_SHOT'
+        : selectedId;
 
-    if (selectedId === 'drink-wheel') {
-      await SendInstruction({
-        instruction: `CHOSE_PUNISHMENT:MOST_LIKELY_TO_DRINK_WHEEL:${deviceId}`,
-        byPassHost: true
-      });
-    } else if (selectedId === 'take-a-shot') {
-      completePunishmentContainer.setAttribute("punishment-type", "take-a-shot");
-      await SendInstruction({
-        instruction: `CHOSE_PUNISHMENT:TAKE_A_SHOT:${deviceId}`,
-        byPassHost: true
-      });
+    const updatedParty = await performOnlinePartyAction({
+      action: 'most-likely-to-select-punishment',
+      payload: {
+        punishmentType,
+        phaseTimer: Date.now() + getTimeLimit() * 1000
+      }
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
     }
 
     const selectPunishmentButtons = document
@@ -260,16 +266,18 @@ async function SetPageSettings() {
 
   // Player confirms they did the punishment
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const instructions = getUserInstructions(currentPartyData);
-    const parsedInstructions = parseInstruction(instructions);
     hideContainer(completePunishmentContainer);
 
-    await SetUserConfirmation({
-      selectedDeviceId: deviceId,
-      option: true,
-      reason: "CONFIRM:" + parsedInstructions.reason,
-      userInstruction: "PUNISHMENT_OFFER"
+    const updatedParty = await performOnlinePartyAction({
+      action: 'most-likely-to-complete-punishment',
+      payload: {
+        roundTimer: Date.now() + getTimeLimit() * 1000
+      }
     });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
   });
   // Legacy "yes/no" confirmations if you still use them
   ConfirmPunishmentButtonYes.addEventListener('click', () => {

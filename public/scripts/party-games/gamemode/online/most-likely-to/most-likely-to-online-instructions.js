@@ -4,6 +4,63 @@ function formatMostLikelyToQuestionForSelection(question = "") {
     .trim();
 }
 
+function formatMostLikelyToPunishmentText(punishmentType = "") {
+  const normalisedPunishment = String(punishmentType || "")
+    .replace(/-/g, "_")
+    .trim()
+    .toUpperCase();
+
+  if (normalisedPunishment === "TAKE_A_SHOT") {
+    return "Take a shot.";
+  }
+
+  if (normalisedPunishment === "DOWN_IT") {
+    return "Down your drink!";
+  }
+
+  if (normalisedPunishment) {
+    return "Take " + normalisedPunishment.replace(/_/g, " ").toLowerCase() + ".";
+  }
+
+  return "Complete your punishment.";
+}
+
+function getMostLikelyToPhaseState() {
+  const state = getPartyState(currentPartyData);
+  return {
+    phase: state?.phase ?? null,
+    phaseData: state?.phaseData ?? {}
+  };
+}
+
+async function scheduleMostLikelyToPhaseAction({ delay = 0, action, payload = {} } = {}) {
+  const state = getPartyState(currentPartyData);
+  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
+
+  if (deviceId !== authoritativeHostId || delay == null || !action) return;
+
+  if (timeout?.cancel) {
+    timeout.cancel();
+  }
+
+  timeout = createCancelableTimeout(delay);
+
+  try {
+    await timeout.promise;
+
+    const updatedParty = await performOnlinePartyAction({
+      action,
+      payload
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+  } catch (error) {
+    console.error('Most Likely To phase action failed:', error);
+  }
+}
+
 async function DisplayPrivateCard() {
   const state   = getPartyState(currentPartyData);
   const deck    = getPartyDeck(currentPartyData);
@@ -18,15 +75,17 @@ async function DisplayPrivateCard() {
     timeLeft: delay / 1000,
     duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: selectUserContainer,
+    label: 'selectUserContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: selectUserContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
   SetTimeOut({
@@ -75,15 +134,17 @@ async function DisplayPrivateCard() {
 async function DisplayVoteResults() {
   const state   = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
+  const authoritativeHostId = state.hostComputerId ?? hostDeviceId;
 
   const delay = new Date(state.timer) - Date.now();
   const firstDisplay = !isContainerVisible(resultsChartContainer);
 
-  stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
-  startTimer({
+  stopTimerForContainer(waitingForPlayersContainer, 'waitingForPlayersContainer');
+  startTimerWithContainer({
+    container: resultsChartContainer,
+    label: 'resultsChartContainer',
     timeLeft: delay / 1000,
-    duration: resultTimerDuration / 1000,
-    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+    duration: resultTimerDuration / 1000
   });
 
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
@@ -100,118 +161,63 @@ async function DisplayVoteResults() {
   }
 
   const highestValue = getHighestVoteValue(currentPartyData);
-  console.log("highestValue:", highestValue);
-
-  const highestVotedIds = GetHighestVoted(currentPartyData); // comma string
+  debugLog("highestValue:", highestValue);
 
   if (firstDisplay) {
-    let shouldPersistResultsState = false;
-
-    for (let i = 0; i < players.length; i++) {
-      const player = players[i];
-      const pState = getPlayerState(player);
-      const pid    = getPlayerId(player);
-      const isHighestVoted = highestVotedIds.includes(pid);
-      const desiredReady = !isHighestVoted;
-      const desiredConfirmed = !isHighestVoted;
-
-      if (pState.isReady !== desiredReady || pState.hasConfirmed !== desiredConfirmed) {
-        shouldPersistResultsState = true;
-      }
-
-      pState.isReady = desiredReady;
-      pState.hasConfirmed = desiredConfirmed;
-      player.isReady = desiredReady;
-      player.hasConfirmed = desiredConfirmed;
-
-      if (isHighestVoted) {
-        if (highestValue > 0) {
-          const nextScore = (pState.score ?? player.score ?? 0) + 1;
-          if ((pState.score ?? player.score ?? 0) !== nextScore) {
-            shouldPersistResultsState = true;
-          }
-          pState.score = nextScore;
-          player.score = nextScore;
-        }
-      }
-    }
-
-    if (deviceId === hostDeviceId && shouldPersistResultsState) {
-      const config = normalizeConfig(currentPartyData);
-      const nextState = normalizeState(currentPartyData);
-      const deck = normalizeDeck(currentPartyData);
-
-      nextState.lastPinged = new Date();
-
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: nextState,
-        deck,
-        players
+    if (deviceId === authoritativeHostId) {
+      const updatedParty = await performOnlinePartyAction({
+        action: 'most-likely-to-resolve-vote-results'
       });
+
+      if (updatedParty) {
+        currentPartyData = updatedParty;
+      }
     }
   }
 
     ClearIcons();
 
-    if (selectPunishmentButtonContainer.childElementCount === 0) {
-      SetTimeOut({
+    if (firstDisplay) {
+      scheduleMostLikelyToPhaseAction({
         delay,
-        instruction: "RESET_QUESTION",
-        nextDelay: null
+        action: 'most-likely-to-advance-from-results',
+        payload: {
+          phaseTimer: Date.now() + getTimeLimit() * 1000,
+          roundTimer: Date.now() + getTimeLimit() * 1000
+        }
       });
-    } else {
-      if (highestValue < 0) {
-        const updateInstruction =
-          "TIE_BREAKER_PUNISHMENT_OFFER:" + highestVotedIds;
-        SetTimeOut({
-          delay,
-          instruction: updateInstruction,
-          nextDelay: getTimeLimit() * 1000
-        });
-      }
-      else if (highestValue === 0) {
-        SetTimeOut({
-          delay,
-          instruction: "RESET_QUESTION",
-          nextDelay: null
-        });
-      }
-      else {
-        SetTimeOut({
-          delay,
-          instruction: "CHOOSING_PUNISHMENT:" + highestVotedIds,
-          nextDelay: getTimeLimit() * 1000
-        });
-      }
     }
 }
 
-async function TieBreakerPunishmentOffer(instruction) {
+async function TieBreakerPunishmentOffer() {
   const state   = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
-
-  const parsedInstructions = parseInstruction(instruction);
+  const authoritativeHostId = state.hostComputerId ?? hostDeviceId;
+  const { phaseData } = getMostLikelyToPhaseState();
   const delay = new Date(state.timer) - Date.now();
 
   const durationSeconds = getTimeLimit();
 
-  startTimer({
+  startTimerWithContainer({
+    container: selectNumberContainer,
+    label: 'selectNumberContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: selectNumberContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
-  SetTimeOut({
+  scheduleMostLikelyToPhaseAction({
     delay,
-    instruction: "CHOOSING_PUNISHMENT:" + GetStringAtIndex(parsedInstructions.reason, 0),
-    nextDelay: null
+    action: 'most-likely-to-handle-phase-timeout',
+    payload: {
+      phaseTimer: Date.now() + getTimeLimit() * 1000,
+      roundTimer: Date.now() + getTimeLimit() * 1000
+    }
   });
 
   const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
@@ -221,8 +227,12 @@ async function TieBreakerPunishmentOffer(instruction) {
   }
   const myState = getPlayerState(players[myIndex]);
 
-  if (parsedInstructions.reason.includes(deviceId)) {
-    const count = CountParsedString(parsedInstructions.reason);
+  const tiedIds = Array.isArray(phaseData?.tiedIds)
+    ? phaseData.tiedIds.filter(Boolean)
+    : [];
+
+  if (tiedIds.includes(deviceId)) {
+    const count = tiedIds.length;
 
     for (let i = 0; i < count; i++) {
       if (selectNumberButtonContainer.querySelectorAll('button').length < count) {
@@ -257,18 +267,22 @@ async function TieBreakerPunishmentOffer(instruction) {
         }
       }
     } else {
-      const allConfirmed = players.every(p => getPlayerState(p).hasConfirmed);
-      if (allConfirmed) {
-        const randomInt = Math.floor(
-          Math.random() * -getHighestVoteValue(currentPartyData)
-        );
-        await SendInstruction({
-          instruction:
-            "CHOOSING_PUNISHMENT:" +
-            GetStringAtIndex(parsedInstructions.reason, randomInt),
-          updateUsersReady: false,
-          updateUsersConfirmation: false
+      const allConfirmed = tiedIds.every((tiedId) => {
+        const tiedPlayer = players.find(p => getPlayerId(p) === tiedId);
+        return tiedPlayer ? getPlayerState(tiedPlayer).hasConfirmed === true : false;
+      });
+      if (allConfirmed && deviceId === authoritativeHostId) {
+        const updatedParty = await performOnlinePartyAction({
+          action: 'most-likely-to-resolve-tiebreaker',
+          payload: {
+            tiedIds,
+            timer: Date.now() + getTimeLimit() * 1000
+          }
         });
+
+        if (updatedParty) {
+          currentPartyData = updatedParty;
+        }
       } else {
         DisplayWaitingForPlayers();
       }
@@ -329,49 +343,41 @@ async function DisplayPunishmentToUser(instruction) {
   }
 }
 
-async function PunishmentOffer(instruction) {
-  const parsedInstructions = parseInstruction(instruction);
-
-  if (parsedInstructions.reason === "CONFIRM") {
-    const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-    await ResetQuestion({
-      icons,
-      timer: Date.now() + getTimeLimit() * 1000
-    });
-  }
-}
-
-async function ChoosingPunishment(instruction) {
+async function ChoosingPunishment() {
   const state   = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
-
-  const parsedInstructions = parseInstructionDeviceId(instruction);
+  const { phaseData } = getMostLikelyToPhaseState();
+  const targetId = phaseData?.targetId ?? null;
   const delay = new Date(state.timer) - Date.now();
 
   const durationSeconds = getTimeLimit();
 
-  startTimer({
+  startTimerWithContainer({
+    container: selectPunishmentContainer,
+    label: 'selectPunishmentContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: selectPunishmentContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayerContainer,
+    label: 'waitingForPlayerContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
-  SetTimeOut({
+  scheduleMostLikelyToPhaseAction({
     delay,
-    instruction: `RESET_QUESTION:PLAYER_TURN_PASSED:${parsedInstructions.reason}`,
-    nextDelay: resultTimerDuration
+    action: 'most-likely-to-handle-phase-timeout',
+    payload: {
+      roundTimer: Date.now() + getTimeLimit() * 1000
+    }
   });
 
   const index = players.findIndex(
-    p => getPlayerId(p) === parsedInstructions.deviceId
+    p => getPlayerId(p) === targetId
   );
 
-  if (parsedInstructions.deviceId === deviceId) {
+  if (targetId === deviceId) {
     setActiveContainers(selectPunishmentContainer);
   }
   else if (index !== -1) {
@@ -384,27 +390,31 @@ async function ChoosingPunishment(instruction) {
   }
 }
 
-async function ChosePunishment(instruction) {
+async function ChosePunishment() {
   const players = currentPartyData.players || [];
-  const parsedInstructions = parseInstruction(instruction);
+  const { phaseData } = getMostLikelyToPhaseState();
+  const targetId = phaseData?.targetId ?? null;
+  const punishmentType = phaseData?.punishmentType ?? '';
 
   const index = players.findIndex(
-    p => getPlayerId(p) === parsedInstructions.deviceId
+    p => getPlayerId(p) === targetId
   );
 
-  if (parsedInstructions.deviceId === deviceId) {
-    if (parsedInstructions.reason === "MOST_LIKELY_TO_DRINK_WHEEL") {
+  if (targetId === deviceId) {
+    if (punishmentType === "MOST_LIKELY_TO_DRINK_WHEEL") {
+      if (typeof resetDrinkWheelState === 'function') {
+        resetDrinkWheelState();
+      }
       setActiveContainers(drinkWheelContainer);
-    } else if (parsedInstructions.reason === "TAKE_A_SHOT") {
-      punishmentText.textContent = "Take a shot.";
+    } else {
+      punishmentText.textContent = formatMostLikelyToPunishmentText(punishmentType);
+      completePunishmentContainer.setAttribute("punishment-type", punishmentType);
       setActiveContainers(completePunishmentContainer);
     }
   } else if (index !== -1) {
-    let currentWaitingForPlayerText = "";
-    if (parsedInstructions.reason === "MOST_LIKELY_TO_DRINK_WHEEL") {
+    let currentWaitingForPlayerText = "Reading punishment...";
+    if (punishmentType === "MOST_LIKELY_TO_DRINK_WHEEL") {
       currentWaitingForPlayerText = "Spinning drink wheel...";
-    } else if (parsedInstructions.reason === "TAKE_A_SHOT") {
-      currentWaitingForPlayerText = "Reading punishment...";
     }
 
     SetWaitingForPlayer({
@@ -413,52 +423,6 @@ async function ChosePunishment(instruction) {
       player: players[index]
     });
     setActiveContainers(waitingForPlayerContainer);
-  }
-}
-
-async function UserSelectedForPunishment(instruction) {
-  const players = currentPartyData.players || [];
-  const parsedInstructions = parseInstructionDeviceId(instruction);
-
-  const index = players.findIndex(
-    p => getPlayerId(p) === parsedInstructions.deviceId
-  );
-
-  if (parsedInstructions.deviceId === deviceId) {
-    setActiveContainers(selectPunishmentContainer);
-  }
-  else if (index !== -1) {
-    SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
-      waitingForRoomText: "Choosing Punishment...",
-      player: players[index]
-    });
-    setActiveContainers(waitingForPlayerContainer);
-  }
-}
-
-async function AnswerToUserDonePunishment() {
-  const players = currentPartyData.players || [];
-  const icons   = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
-  if (myIndex === -1) {
-    console.warn("Device not found in players.");
-    return;
-  }
-
-  const myState = getPlayerState(players[myIndex]);
-
-  if (myState.isReady === true) {
-    DisplayWaitingForPlayers();
-
-    const totalReady = players.filter(p => getPlayerState(p).isReady).length;
-    if (totalReady === players.length) {
-      await ResetQuestion({
-        icons,
-        timer: Date.now() + getTimeLimit() * 1000
-      });
-    }
   }
 }
 

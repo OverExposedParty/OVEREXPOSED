@@ -2,7 +2,7 @@
 
 // Join / leave / kick via socket
 async function joinParty(code) {
-  console.log(`Joining party: ${code}`);
+  debugLog(`Joining party: ${code}`);
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       socket.off('joined-party', handleJoinedParty);
@@ -21,109 +21,80 @@ async function joinParty(code) {
 }
 
 async function leaveParty(code) {
-  const currentPartyData = await GetCurrentPartyData();
-
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(
-    player => player.identity?.computerId === deviceId
-  );
-
-  if (index !== -1) {
-    players[index].connection = players[index].connection || {};
-    players[index].connection.socketId = null;
-  }
-
-  // ✅ New layout only: config/state must exist
-  const currentConfig = currentPartyData.config;
-  const currentState = currentPartyData.state;
-
-  const updatedState = {
-    ...currentState,
-    lastPinged: Date.now()
-  };
-
-  await updateOnlineParty({
+  await UpdateUserPartyData({
     partyId: code,
-    config: currentConfig,
-    state: updatedState,
-    players
+    computerId: deviceId,
+    newUserSocketId: null
   });
 
-  console.log(`Leaving party: ${code}`);
+  debugLog(`Leaving party: ${code}`);
   socket.emit('leave-party', code);
 }
 
 async function kickUser(code) {
-  const currentPartyData = await GetCurrentPartyData();
-
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(
-    player => player.identity?.computerId === deviceId
-  );
-
-  if (index !== -1) {
-    players[index].connection = players[index].connection || {};
-    players[index].connection.socketId = null;
-  }
-
-  // ✅ New layout only: config/state must exist
-  const currentConfig = currentPartyData.config;
-  const currentState = currentPartyData.state;
-
-  const updatedState = {
-    ...currentState,
-    lastPinged: Date.now()
-  };
-
-  await updateOnlineParty({
+  await UpdateUserPartyData({
     partyId: code,
-    config: currentConfig,
-    state: updatedState,
-    players
+    computerId: deviceId,
+    newUserSocketId: null
   });
 
-  console.log(`Kicking self from party: ${code}`);
+  debugLog(`Kicking self from party: ${code}`);
   socket.emit('kick-user', code);
 }
 
 // --- Socket events ---
 
 socket.on('joined-party', (data) => {
-  console.log(data.message);
+  debugLog(data.message);
 });
 
 socket.on('left-party', (code) => {
-  console.log(`✅ You left party: ${code}`);
+  debugLog(`✅ You left party: ${code}`);
   if (typeof togglePartyQrCode === 'function') {
     togglePartyQrCode(false);
   }
   PartyDisbanded();
 });
 
+function showKickedFromPartyState() {
+  if (typeof togglePartyQrCode === 'function') {
+    togglePartyQrCode(false);
+  }
+
+  if (typeof KickUser === 'function') {
+    KickUser();
+    return;
+  }
+
+  const kickedContainer = document.getElementById('user-kicked');
+  if (kickedContainer && typeof setActiveContainers === 'function') {
+    setActiveContainers(kickedContainer);
+  }
+}
+
 socket.on('kicked-from-party', (code) => {
-  console.log(`🥾 You were kicked from party: ${code}`);
+  debugLog(`🥾 You were kicked from party: ${code}`);
+  showKickedFromPartyState();
 });
 
 socket.on('user-joined', ({ socketId }) => {
-  console.log(`👋 User joined: ${socketId}`);
+  debugLog(`👋 User joined: ${socketId}`);
 });
 
 socket.on('user-left', ({ socketId }) => {
-  console.log(`👋 User left: ${socketId}`);
+  debugLog(`👋 User left: ${socketId}`);
 });
 
 socket.on('user-kicked', ({ socketId }) => {
-  console.log(`🥾 User kicked: ${socketId}`);
+  debugLog(`🥾 User kicked: ${socketId}`);
 });
 
 socket.on('user-disconnected', ({ socketId }) => {
-  console.log(`❌ User disconnected: ${socketId}`);
+  debugLog(`❌ User disconnected: ${socketId}`);
 });
 
 socket.on('party-deleted', ({ partyCode: deletedCode }) => {
-  console.log(`🛑 Party ${deletedCode} has been disbanded.`);
+  debugLog(`🛑 Party ${deletedCode} has been disbanded.`);
   if (typeof togglePartyQrCode === 'function') {
     togglePartyQrCode(false);
   }
@@ -139,8 +110,12 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
 
     const codeToUse = partyCode || emittedPartyCode?.partyId;
     let party = null;
+    const emittedPartyMatchesCurrentCode =
+      emittedPartyCode?.partyId &&
+      codeToUse &&
+      emittedPartyCode.partyId === codeToUse;
 
-    if (source === sessionPartyType && emittedPartyCode?.partyId === codeToUse) {
+    if (emittedPartyMatchesCurrentCode) {
       party = emittedPartyCode;
     } else {
       const res = await fetch(`/api/${sessionPartyType}?partyCode=${codeToUse}`);
@@ -169,7 +144,8 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
         p => p.identity?.computerId === deviceId
       );
       if (playerIndex === -1) {
-        await kickUser(codeToUse);
+        showKickedFromPartyState();
+        socket.emit('kick-user', codeToUse);
         return;
       }
 
@@ -185,11 +161,22 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
 
     const latestPing = state.lastPinged;
     if (new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
-      console.log('🟢 Party data changed!');
+      debugLog('[OE_DEBUG][party-updated] received fresh party update', {
+        source,
+        codeToUse,
+        isPlaying,
+        waitingForHost,
+        onlineGameUiReady: window.onlineGameUiReady,
+        latestPing,
+        phase: state?.phase ?? null,
+        playerTurn: state?.playerTurn ?? null,
+        instructions: config?.userInstructions ?? state?.userInstructions ?? ''
+      });
+      debugLog('🟢 Party data changed!');
       if (state.isPlaying) {
         if (waitingForHost) {
           loadingPage = true;
-          console.log("start");
+          debugLog("start");
           const baseUrl = window.location.origin;
           const gm = config.gamemode;
           transitionSplashScreen(
@@ -202,11 +189,25 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
           currentPartyData = party;
 
           if (!window.onlineGameUiReady) {
+            debugLog('[OE_DEBUG][party-updated] UI not ready, deferring FetchInstructions', {
+              phase: state?.phase ?? null,
+              playerTurn: state?.playerTurn ?? null,
+              instructions: config?.userInstructions ?? state?.userInstructions ?? ''
+            });
             window.pendingOnlineInstructionSync = true;
             return;
           }
 
-          await FetchInstructions();
+          debugLog('[OE_DEBUG][party-updated] calling FetchInstructions', {
+            phase: state?.phase ?? null,
+            playerTurn: state?.playerTurn ?? null,
+            instructions: config?.userInstructions ?? state?.userInstructions ?? ''
+          });
+          if (typeof runOnlineFetchInstructions === 'function') {
+            await runOnlineFetchInstructions({ reason: 'socket' });
+          } else {
+            await FetchInstructions();
+          }
         }
       }
       lastKnownPing = latestPing;
@@ -218,7 +219,7 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
 
 // Chat updates
 socket.on("chat-updated", ({ type, chatLog, documentKey }) => {
-  console.log("💬 Chat updated:", type, chatLog);
+  debugLog("💬 Chat updated:", type, chatLog);
 
   if (type === "delete") {
     // CreateChatMessage("[CONSOLE]", "Party disbanded.", "error", Date.now());

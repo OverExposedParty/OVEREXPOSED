@@ -8,7 +8,7 @@ let numberOfDareQuestions = 0;
 
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
   try {
-    console.log(`[loadJSONFiles] gamemode=${gamemode}, shuffleSeed=`, seedShuffle);
+    debugLog(`[loadJSONFiles] gamemode=${gamemode}, shuffleSeed=`, seedShuffle);
 
     // Reset question state on every load so reconnects/re-inits don't duplicate
     // the deck differently per client.
@@ -48,7 +48,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
         .map(pack => pack["pack-path"]);
     }
 
-    console.log("Files to Fetch:", filesToFetch);
+    debugLog("Files to Fetch:", filesToFetch);
 
     const responses = await Promise.all(filesToFetch.map(file => fetch(file)));
 
@@ -116,7 +116,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     }
 
     numberOfQuestions = allQuestions.length;
-    console.log(`Loaded ${numberOfQuestions} questions`);
+    debugLog(`Loaded ${numberOfQuestions} questions`);
     SetScriptLoaded("/scripts/party-games/general/load-questions.js");
 
   } catch (error) {

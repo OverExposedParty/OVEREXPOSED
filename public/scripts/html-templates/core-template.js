@@ -10,12 +10,38 @@ function getInitialAssetVersion() {
   }
 }
 
+function isOnlineDebugEnabled() {
+  try {
+    return (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.localStorage.getItem('oe-debug') === 'true'
+    );
+  } catch {
+    return false;
+  }
+}
+
+window.OE_DEBUG = isOnlineDebugEnabled();
+
+window.debugLog = (...args) => {
+  if (window.OE_DEBUG) {
+    console.log(...args);
+  }
+};
+
+window.debugWarn = (...args) => {
+  if (window.OE_DEBUG) {
+    console.warn(...args);
+  }
+};
+
 // Update these values manually when you want to force browsers to fetch new script files.
 // Leave a value empty to fall back to the version already on the core-template.js URL.
 const MANUAL_SCRIPT_VERSIONS = Object.freeze({
-  WEBSITE_CACHE_VERSION: '2026-04-10-1',
-  WEBSITE_VERSION: '2026-04-10-1',
-  GAME_SETTINGS_VERSION: '2026-04-10-1'
+  WEBSITE_CACHE_VERSION: '2026-04-17-1',
+  WEBSITE_VERSION: '2026-04-17-1',
+  GAME_SETTINGS_VERSION: '2026-04-17-1'
 });
 
 function resolveScriptVersion(manualVersion) {
@@ -266,7 +292,7 @@ async function loadScriptsByZIndex(scriptsObj, core = false) {
   const groups = groupScriptsByZIndex(scriptsObj);
 
   for (const [zIndex, scripts] of groups) {
-    console.log(`Loading script layer zIndex=${zIndex} (${scripts.length} script(s))`);
+    debugLog(`Loading script layer zIndex=${zIndex} (${scripts.length} script(s))`);
     await Promise.all(
       scripts.map(([src, config]) => LoadScript(src, config, core))
     );
@@ -404,8 +430,8 @@ async function SetScriptLoaded(script) {
 
   splashScreenContainer.querySelector("p").textContent = `(${loaded}/${total})`;
 
-  console.log(baseScript);
-  console.log(`(${loaded}/${total}) scripts loaded`);
+  debugLog(baseScript);
+  debugLog(`(${loaded}/${total}) scripts loaded`);
 
   if (loaded === total && !pageLoaded) {
     pageLoaded = true;

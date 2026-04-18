@@ -1,6 +1,6 @@
 function GetQuestion({ cardTitle, currentPartyData }) {
-  const config = currentPartyData.config;
-  const deck = currentPartyData.deck;
+  const config = getPartyConfig(currentPartyData);
+  const deck = getPartyDeck(currentPartyData);
 
   const questionType = deck.questionType;
   const shuffleSeed = config.shuffleSeed;
@@ -19,6 +19,38 @@ function GetQuestion({ cardTitle, currentPartyData }) {
   }
 }
 
+function getTruthOrDareInstructionFallback() {
+  const instructions = getUserInstructions(currentPartyData);
+  if (typeof instructions === 'string' && instructions.trim() !== '') {
+    return instructions;
+  }
+
+  const state = getPartyState(currentPartyData);
+  if (state?.phase === 'truth-or-dare-choose-punishment') {
+    return 'DISPLAY_CHOOSE_PUNISHMENT';
+  }
+
+  if (state?.phase === 'truth-or-dare-show-punishment') {
+    return 'DISPLAY_SHOW_PUNISHMENT';
+  }
+
+  return 'DISPLAY_SELECT_QUESTION_TYPE';
+}
+
+async function syncTruthOrDarePartyAndRender(updatedParty) {
+  if (!updatedParty) {
+    return false;
+  }
+
+  currentPartyData = updatedParty;
+
+  if (typeof FetchInstructions === 'function') {
+    await runOnlineFetchInstructions({ reason: 'reset-question' });
+  }
+
+  return true;
+}
+
 async function FetchInstructions() {
   currentPartyData = await GetCurrentPartyData({ requireInstructions: true, retries: 8, delayMs: 150 });
   if (!currentPartyData) {
@@ -26,9 +58,41 @@ async function FetchInstructions() {
     return;
   }
 
-
-  await UpdatePartyGameStatistics();
-  const instructions = currentPartyData.config.userInstructions
+  try {
+    if (typeof scoreboardContainer !== 'undefined' && scoreboardContainer) {
+      await UpdatePartyGameStatistics();
+    }
+  } catch (error) {
+    console.warn('Truth or Dare statistics update skipped during render:', error);
+  }
+  const phase = getPartyState(currentPartyData)?.phase ?? null;
+  const instructions = getTruthOrDareInstructionFallback();
+  const state = getPartyState(currentPartyData);
+  const players = currentPartyData.players || [];
+  const turnIndex = state?.playerTurn ?? 0;
+  const turnPlayer = players[turnIndex];
+  const turnPlayerId = turnPlayer?.identity?.computerId ?? turnPlayer?.computerId ?? null;
+  debugLog('[OE_DEBUG][truth-or-dare][FetchInstructions][players]', {
+    playersLength: players.length,
+    playerIds: players.map(player => player?.identity?.computerId ?? player?.computerId ?? null)
+  });
+  debugLog('[OE_DEBUG][truth-or-dare][FetchInstructions]', {
+    deviceId,
+    hostDeviceId,
+    phase,
+    instructions,
+    playerTurn: turnIndex,
+    turnPlayerId,
+    isCurrentTurn: turnPlayerId === deviceId
+  });
+  if (phase === 'truth-or-dare-choose-punishment') {
+    ChoosingPunishment();
+    return;
+  }
+  else if (phase === 'truth-or-dare-show-punishment') {
+    DisplayPunishmentToUser(instructions);
+    return;
+  }
   if (instructions.includes("DISPLAY_SELECT_QUESTION_TYPE")) {
     DisplaySelectQuestionType();
   }
@@ -44,16 +108,6 @@ async function FetchInstructions() {
   else if (instructions.includes("DISPLAY_CONFIRM_INPUT")) {
     DisplayConfirmInput(instructions);
   }
-  else if (instructions.includes("CHOSE_PUNISHMENT")) {
-    console.log(currentPartyData.state.playerTurn);
-    ChosePunishment(currentPartyData.state.playerTurn);
-  }
-  else if (instructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment();
-  }
-  else if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(instructions);
-  }
   else if (instructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
   }
@@ -68,5 +122,5 @@ async function FetchInstructions() {
       await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, byPassHost: false });
     }
   }
-  console.log(`FETCHING ${instructions}`);
+  debugLog(`FETCHING ${instructions}`);
 }

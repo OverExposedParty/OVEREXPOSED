@@ -3,6 +3,24 @@ let partyRulesSettings;
 
 const resultTimerDuration = 5000;
 
+async function refreshCurrentPartyData({
+  requireInstructions = false,
+  retries = 2,
+  delayMs = 150
+} = {}) {
+  const latestPartyData = await GetCurrentPartyData({
+    requireInstructions,
+    retries,
+    delayMs
+  });
+
+  if (latestPartyData) {
+    currentPartyData = latestPartyData;
+  }
+
+  return currentPartyData ?? null;
+}
+
 async function SendInstruction({
   instruction = null,
   updateUsersReady = null,
@@ -14,110 +32,67 @@ async function SendInstruction({
   timer = null,
   byPassHost = false
 }) {
-  if (deviceId !== hostDeviceId && !byPassHost) return;
-  currentPartyData = partyData;
+  if (!byPassHost) {
+    let authoritativeHostId = hostDeviceId;
 
-  if (partyData == null) {
-    const existingData = await getExistingPartyData(partyCode);
-    if (!existingData || existingData.length === 0) {
-      console.warn('No party data found.');
-      return;
+    try {
+      const latestPartyData = await GetCurrentPartyData({ retries: 1 });
+      if (latestPartyData) {
+        currentPartyData = latestPartyData;
+        authoritativeHostId = latestPartyData.state?.hostComputerId ?? hostDeviceId;
+        if (authoritativeHostId) {
+          hostDeviceId = authoritativeHostId;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to verify host before sending instruction:', error);
     }
-    currentPartyData = existingData[0];
+
+    if (String(deviceId) !== String(authoritativeHostId)) return null;
   }
 
-  const players = currentPartyData.players || [];
-  const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
-
-  if (meIndex === -1) {
-    console.warn('Device ID not found in players.');
-    return;
+  if (timer !== null && timeout?.cancel) {
+    timeout.cancel();
   }
 
-  // Normalise config/state/deck
-  let config = normalizeConfig(currentPartyData);
-  let state = normalizeState(currentPartyData);
-  const deck = normalizeDeck(currentPartyData);
+  let updatedParty = null;
 
-  // Update this player's connection
-  const me = players[meIndex];
-  const meConn = ensureConnection(me);
-  meConn.lastPing = new Date();
-  if (!meConn.socketId) {
-    meConn.socketId = socket.id;
-  }
-
-  // Update all players' ready
-  if (updateUsersReady !== null) {
-    players.forEach(player => {
-      const pState = getPlayerState(player);
-      pState.isReady = updateUsersReady;
-      player.isReady = updateUsersReady; // legacy mirror
+  try {
+    updatedParty = await performOnlinePartyAction({
+      action: 'send-instruction',
+      payload: {
+        instruction,
+        updateUsersReady,
+        updateUsersConfirmation,
+        updateUsersVote,
+        partyData,
+        isPlaying,
+        timer,
+        byPassHost
+      }
     });
-  }
-
-  // Update all players' confirmation
-  if (updateUsersConfirmation !== null) {
-    players.forEach(player => {
-      const pState = getPlayerState(player);
-      pState.hasConfirmed = updateUsersConfirmation;
-      player.hasConfirmed = updateUsersConfirmation; // legacy mirror
-    });
-  }
-
-  // Update all players' vote
-  if (updateUsersVote !== null) {
-    players.forEach(player => {
-      const pState = getPlayerState(player);
-      pState.vote = updateUsersVote;
-      player.vote = updateUsersVote; // legacy mirror
-    });
-  }
-
-  // Timer lives in state
-  if (timer !== null) {
-    state.timer = timer;
-    currentPartyData.timer = timer; // legacy mirror
-    if (timeout?.cancel) {
-      timeout.cancel();
+  } catch (error) {
+    if (!byPassHost && error?.message === 'Only the host can perform this action.') {
+      const latestPartyData = await GetCurrentPartyData({ retries: 1 }).catch(() => null);
+      const authoritativeHostId = latestPartyData?.state?.hostComputerId ?? null;
+      if (authoritativeHostId) {
+        hostDeviceId = authoritativeHostId;
+      }
+      return null;
     }
+
+    throw error;
   }
 
-  // Use existing userInstructions if instruction param is null
-  const existingInstruction =
-    config.userInstructions ??
-    state.userInstructions ??
-    currentPartyData.userInstructions ??
-    null;
-
-  if (instruction == null) {
-    instruction = existingInstruction;
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
-
-  console.log("🧪 Instruction Received:", instruction);
-
-  // Update game-level state
-  state.isPlaying = isPlaying;
-  state.lastPinged = new Date();
-
-  // ✅ keep the in-memory object in sync too
-  currentPartyData.config = config;
-  currentPartyData.state = state;
-  if (instruction != null) {
-    config.userInstructions = instruction;
-  }
-  console.log("🧪 Instruction Sent:", instruction);
-  await updateOnlineParty({
-    partyId: partyCode,
-    config,
-    state,
-    deck,
-    players
-  });
 
   if (fetchInstruction) {
     FetchInstructions();
   }
+
+  return updatedParty;
 }
 
 
@@ -154,84 +129,34 @@ async function SetUserConfirmation({
   reason = null,
   userInstruction = null
 }) {
-  const latestPartyData = await GetCurrentPartyData();
-  if (latestPartyData) {
-    currentPartyData = latestPartyData;
-  }
+  const updatedParty = await performOnlinePartyAction({
+    action: 'set-user-confirmation',
+    payload: {
+      selectedDeviceId,
+      option,
+      reason,
+      userInstruction
+    }
+  });
 
-  const players = currentPartyData?.players || [];
-  const index = players.findIndex(player => getPlayerId(player) === selectedDeviceId);
-
-  if (index === -1) {
-    console.warn('Player not found for device ID:', selectedDeviceId);
-    return;
-  }
-
-  const player = players[index];
-  const pState = getPlayerState(player);
-  const conn = ensureConnection(player);
-
-  pState.isReady = true;
-  pState.hasConfirmed = option;
-  player.isReady = true;
-  player.hasConfirmed = option; // legacy mirror
-  conn.lastPing = new Date();
-  player.lastPing = conn.lastPing;
-
-  if (userInstruction != null) {
-    await SendInstruction({
-      instruction: `${userInstruction}:${reason}`,
-      partyData: currentPartyData,
-      byPassHost: true
-    });
-  } else {
-    await SendInstruction({
-      partyData: currentPartyData,
-      byPassHost: true
-    });
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
 async function setUserBool(selectedDeviceId, userConfirmation = null, userReady = null, setInstruction = null) {
-  const players = currentPartyData.players || [];
-  const player = players.find(p => getPlayerId(p) === selectedDeviceId);
+  const updatedParty = await performOnlinePartyAction({
+    action: 'set-user-bool',
+    payload: {
+      selectedDeviceId,
+      userConfirmation,
+      userReady,
+      setInstruction
+    }
+  });
 
-  if (!player) {
-    console.warn('Player not found for device ID:', selectedDeviceId);
-    return;
-  }
-
-  const pState = getPlayerState(player);
-
-  if (userConfirmation !== null) {
-    pState.hasConfirmed = userConfirmation;
-    player.hasConfirmed = userConfirmation; // legacy
-  }
-
-  if (userReady !== null) {
-    pState.isReady = userReady;
-    player.isReady = userReady; // legacy
-  }
-
-  const instructionString =
-    currentPartyData.state?.userInstructions ??
-    currentPartyData.userInstructions ??
-    "";
-
-  if (instructionString.includes(setInstruction) || setInstruction === null) {
-    const config = normalizeConfig(currentPartyData);
-    const state = normalizeState(currentPartyData);
-    const deck = normalizeDeck(currentPartyData);
-
-    state.lastPinged = new Date();
-
-    await updateOnlineParty({
-      partyId: partyCode,
-      config,
-      state,
-      deck,
-      players
-    });
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
@@ -251,137 +176,42 @@ async function ResetQuestion({
   playerIndex = null,
   nextPlayer = false
 }) {
-  if (deviceId !== currentPartyData.state.hostComputerId) return;
-
-  const players = currentPartyData.players || [];
-  const config = normalizeConfig(currentPartyData);
-  const state = normalizeState(currentPartyData);
-  const deck = normalizeDeck(currentPartyData);
-
-  const playerCount = players.length;
-
-  // Move to next card
-  deck.currentCardIndex = (deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0) + 1;
-  currentPartyData.currentCardIndex = deck.currentCardIndex; // legacy mirror
-  // Add score for current or specific player
-  if (state.playerTurn !== undefined && state.playerTurn !== null) {
-    const idx = state.playerTurn;
-    const p = players[idx];
-    if (p) {
-      const pState = getPlayerState(p);
-      pState.score = (pState.score ?? p.score ?? 0) + incrementScore;
-      p.score = pState.score; // legacy mirror
+  const updatedParty = await performOnlinePartyAction({
+    action: 'reset-question',
+    payload: {
+      instruction,
+      incrementScore,
+      timer,
+      playerIndex,
+      nextPlayer
     }
-  } else if (playerIndex !== null) {
-    const p = players[playerIndex];
-    if (p) {
-      const pState = getPlayerState(p);
-      pState.score = (pState.score ?? p.score ?? 0) + incrementScore;
-      p.score = pState.score; // legacy mirror
-    }
-  }
-
-  // Reset each player's status and icon
-  for (let i = 0; i < playerCount; i++) {
-    const p = players[i];
-    const pState = getPlayerState(p);
-    pState.isReady = false;
-    pState.hasConfirmed = false;
-    pState.vote = null;
-    p.isReady = false;
-    p.hasConfirmed = false;
-    p.vote = null; // legacy
-    if (icons !== null && icons[i]) {
-      icons[i].classList.remove('yes');
-      icons[i].classList.remove('no');
-    }
-  }
-
-  if (timer !== null) {
-    state.timer = timer;
-    currentPartyData.timer = timer; // legacy
-  }
-
-  if (nextPlayer && playerCount > 0 && state.playerTurn !== undefined && state.playerTurn !== null) {
-    const nextTurn = (state.playerTurn + 1) % playerCount;
-    state.playerTurn = nextTurn;
-    currentPartyData.playerTurn = nextTurn; // legacy mirror
-  }
-
-  config.userInstructions = instruction;
-  state.lastPinged = new Date();
-  await updateOnlineParty({
-    partyId: partyCode,
-    config,
-    state,
-    deck,
-    players
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
+
+  if (icons !== null) {
+    for (let i = 0; i < icons.length; i++) {
+      icons[i]?.classList.remove('yes');
+      icons[i]?.classList.remove('no');
+    }
+  }
 }
 
 async function PartyRestart() {
-  if (!currentPartyData) return;
-  if (deviceId !== hostDeviceId) return;
+  const updatedParty = await performOnlinePartyAction({
+    action: 'party-restart',
+    payload: {
+      resetGamemodeInstruction:
+        typeof resetGamemodeInstruction === 'string' ? resetGamemodeInstruction : null
+    }
+  });
 
-  const config = normalizeConfig(currentPartyData);
-  const state = normalizeState(currentPartyData);
-  const deck = normalizeDeck(currentPartyData);
-  const players = currentPartyData.players || [];
-  const gamemode = config.gamemode || currentPartyData.gamemode;
-
-  let restartInstruction = "DISPLAY_PRIVATE_CARD";
-
-  if (gamemode === "truth-or-dare") {
-    restartInstruction = "DISPLAY_SELECT_QUESTION_TYPE";
-  } else if (gamemode === "paranoia") {
-    restartInstruction = "DISPLAY_PRIVATE_CARD:READING_CARD";
-  } else if (gamemode === "imposter") {
-    restartInstruction =
-      typeof resetGamemodeInstruction === "string" && resetGamemodeInstruction
-        ? resetGamemodeInstruction
-        : "DISPLAY_PRIVATE_CARD";
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+    await runOnlineFetchInstructions({ reason: 'party-restart' });
   }
-
-  deck.currentCardIndex = 0;
-  deck.currentCardSecondIndex = 0;
-  deck.alternativeQuestionIndex = 0;
-  deck.questionType = "truth";
-
-  state.isPlaying = true;
-  state.playerTurn = 0;
-  state.round = 0;
-  state.roundPlayerTurn = 0;
-  state.vote = null;
-  state.lastPinged = new Date();
-
-  players.forEach(player => {
-    const pState = getPlayerState(player);
-    pState.isReady = false;
-    pState.hasConfirmed = false;
-    pState.vote = null;
-    pState.score = 0;
-
-    player.isReady = false;
-    player.hasConfirmed = false;
-    player.vote = null;
-    player.score = 0;
-  });
-
-  currentPartyData.config = config;
-  currentPartyData.state = state;
-  currentPartyData.deck = deck;
-  currentPartyData.players = players;
-
-  await SendInstruction({
-    instruction: restartInstruction,
-    partyData: currentPartyData,
-    updateUsersReady: false,
-    updateUsersConfirmation: false,
-    updateUsersVote: null,
-    fetchInstruction: true,
-    timer: Date.now() + getTimeLimit() * 1000,
-    byPassHost: true
-  });
 }
 
 function countWords(str) {
@@ -439,54 +269,17 @@ function ResetVotes(players, gamemodeMafia = false) {
 }
 
 async function SetVote({ option, sendInstruction = null, hover = false }) {
-  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (!data || data.length === 0) return;
+  const updatedParty = await performOnlinePartyAction({
+    action: 'set-vote',
+    payload: {
+      option,
+      sendInstruction,
+      hover
+    }
+  });
 
-  const party = data[0];
-  const players = party.players || [];
-  const index = players.findIndex(player => getPlayerId(player) === deviceId);
-  if (index === -1) return;
-
-  const player = players[index];
-  const pState = getPlayerState(player);
-
-  pState.vote = option;
-  pState.isReady = true;
-  player.vote = option; // legacy
-  player.isReady = true;
-
-  if (hover === false) {
-    pState.hasConfirmed = true;
-    player.hasConfirmed = true;
-  }
-
-  const config = normalizeConfig(party);
-  const state = normalizeState(party);
-  const deck = normalizeDeck(party);
-
-  state.lastPinged = new Date();
-
-  if (sendInstruction != null) {
-    await SendInstruction({
-      instruction: sendInstruction,
-      partyData: {
-        ...party,
-        config,
-        state,
-        deck,
-        players
-      },
-      byPassHost: true
-    });
-  } else {
-    await updateOnlineParty({
-      partyId: partyCode,
-      config,
-      state,
-      deck,
-      players
-    });
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
@@ -507,37 +300,16 @@ function ResetBoolVotes(players) {
 }
 
 async function SetBoolVote(bool) {
-  const response = await fetch(`/api/${sessionPartyType}?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (!data || data.length === 0) return;
-
-  const party = data[0];
-  const players = party.players || [];
-  const index = players.findIndex(player => getPlayerId(player) === deviceId);
-  if (index === -1) return;
-
-  const player = players[index];
-  const pState = getPlayerState(player);
-
-  pState.vote = bool;
-  pState.hasConfirmed = true;
-
-  player.vote = bool; // legacy
-  player.hasConfirmed = true;
-
-  const config = normalizeConfig(party);
-  const state = normalizeState(party);
-  const deck = normalizeDeck(party);
-
-  state.lastPinged = new Date();
-
-  await updateOnlineParty({
-    partyId: partyCode,
-    config,
-    state,
-    deck,
-    players
+  const updatedParty = await performOnlinePartyAction({
+    action: 'set-bool-vote',
+    payload: {
+      bool
+    }
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
 }
 
 function SetWaitingForPlayer({ waitingForRoomTitle, waitingForRoomText, player }) {
@@ -551,6 +323,68 @@ function SetWaitingForPlayer({ waitingForRoomTitle, waitingForRoomText, player }
     userId: id,
     userCustomisationString: icon
   });
+}
+
+function SetPlayerHasPassed({ playerHasPassedTitleText, playerHasPassedReasonText, player }) {
+  playerHasPassedTitle.textContent = playerHasPassedTitleText;
+  playerHasPassedText.textContent = playerHasPassedReasonText;
+
+  if (!player) return;
+
+  EditUserIconPartyGames({
+    container: playerHasPassedContainer,
+    userId: getPlayerId(player),
+    userCustomisationString: getPlayerIcon(player)
+  });
+}
+
+function getOnlineTimerWrapper(container, label = 'unknown-container') {
+  if (!container) {
+    debugWarn('[OE_DEBUG][online-ui][missing-container]', {
+      gamemode,
+      label
+    });
+    return null;
+  }
+
+  const timerWrapper = container.querySelector('.timer-wrapper');
+  if (!timerWrapper) {
+    debugWarn('[OE_DEBUG][online-ui][missing-timer-wrapper]', {
+      gamemode,
+      label,
+      containerId: container.id ?? null,
+      containerClassName: container.className ?? null
+    });
+    return null;
+  }
+
+  return timerWrapper;
+}
+
+function startTimerWithContainer({
+  container,
+  label,
+  timeLeft,
+  duration
+}) {
+  const timerWrapper = getOnlineTimerWrapper(container, label);
+  if (!timerWrapper) return false;
+
+  startTimer({
+    timeLeft,
+    duration,
+    selectedTimer: timerWrapper
+  });
+
+  return true;
+}
+
+function stopTimerForContainer(container, label) {
+  const timerWrapper = getOnlineTimerWrapper(container, label);
+  if (!timerWrapper) return false;
+
+  stopTimer(timerWrapper);
+  return true;
 }
 
 const nsfwBadgeEnabledGamemodes = new Set([
@@ -595,7 +429,7 @@ function DisplayCard(card, questionObject) {
       setOnlineNsfwCardBadge(card, matchedPack.packRestriction === 'nsfw');
     }
   } else {
-    console.log("Pack not found");
+    debugLog("Pack not found");
     if (showNsfwBadge) {
       setOnlineNsfwCardBadge(card, false);
     }
@@ -605,7 +439,7 @@ function DisplayCard(card, questionObject) {
 
 async function ChoosingPunishment(index = null) {
   timeout?.cancel();
-  stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
+  stopTimerForContainer(waitingForPlayerContainer, 'waitingForPlayerContainer');
 
   const players = currentPartyData.players || [];
   const state = normalizeState(currentPartyData);
@@ -638,7 +472,7 @@ async function ChoosingPunishment(index = null) {
 
 async function ChosePunishment(index = null) {
   timeout?.cancel();
-  stopTimer(waitingForPlayerContainer.querySelector('.timer-wrapper'));
+  stopTimerForContainer(waitingForPlayerContainer, 'waitingForPlayerContainer');
 
   const players = currentPartyData.players || [];
   let parsedInstructions = parseInstruction(
@@ -653,7 +487,7 @@ async function ChosePunishment(index = null) {
 
   const id = getPlayerId(target);
   const username = getPlayerUsername(target);
-  console.log(parsedInstructions.reason);
+  debugLog(parsedInstructions.reason);
   if (deviceId == id) {
     if (parsedInstructions.reason == "DRINK_WHEEL") {
       setActiveContainers(drinkWheelContainer);
@@ -780,7 +614,7 @@ function getPlayerIcon(player) {
 }
 
 function getPlayerState(player) {
-  return player.state;
+  return player?.state ?? player ?? {};
 }
 
 function ensureConnection(player) {
@@ -794,7 +628,7 @@ function ensureConnection(player) {
 }
 
 function getPlayerId(player) {
-  return player?.identity?.computerId ?? null;
+  return player?.identity?.computerId ?? player?.computerId ?? null;
 }
 
 function getPlayerUsername(player) {

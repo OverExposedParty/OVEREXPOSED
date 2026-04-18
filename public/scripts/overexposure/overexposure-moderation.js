@@ -348,7 +348,7 @@ deletePostSubmit.addEventListener("click", async () => {
         });
 
         const data = await res.json();
-        console.log("🗑 Delete response:", data);
+        debugLog("🗑 Delete response:", data);
 
         if (!res.ok) {
             alert(data.error || "Failed to delete post. Check your delete code.");
@@ -420,5 +420,5 @@ function toggleFlagPost({ toggle = false, confessionId = null }) {
             window.refreshActiveTooltip(flagPostButton);
         }
     }
-    console.log("Toggle flag post:", toggle, confessionId);
+    debugLog("Toggle flag post:", toggle, confessionId);
 }

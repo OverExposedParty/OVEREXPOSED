@@ -14,7 +14,7 @@ function updateTextContainer(text, cardType) {
     textContainerPrivate.style.color = matchedPack.packColour;
     document.querySelector('#private-view .card-type-text').style.color = matchedPack.packColour;
   } else {
-    console.log("Pack not found");
+    debugLog("Pack not found");
   }
 
   document.querySelector('#private-view .card-type-text').textContent = cardType;

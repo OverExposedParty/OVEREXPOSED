@@ -37,6 +37,8 @@ const stateSchema = new mongoose.Schema({
   lastPinged: { type: Date, default: Date.now },
   playerTurn: { type: Number, required: true },
   timer:      { type: Date, default: null },
+  phase:      { type: String, default: null },
+  phaseData:  { type: mongoose.Schema.Types.Mixed, default: null },
   hostComputerId:    { type: String, default: null },
   hostComputerIdList:{ type: [String], default: [] }
 }, { _id: false });

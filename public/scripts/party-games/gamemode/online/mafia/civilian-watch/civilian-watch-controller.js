@@ -62,7 +62,10 @@ function renderCivilianWatchOutcome({ player, selectedOption, remainingMs }) {
   startPhaseContainerTimer({
     remainingMs,
     durationMs: dialogueDelay,
-    timerSelector: displayCivilianWatchResponseContainer.querySelector(".timer-wrapper"),
+    timerSelector: getOnlineTimerWrapper(
+      displayCivilianWatchResponseContainer,
+      "displayCivilianWatchResponseContainer"
+    ),
   });
 
   scheduleFromExistingTimer({
@@ -185,6 +188,9 @@ selectCivilianWatchConfirmButton.addEventListener("click", async () => {
   startPhaseContainerTimer({
     remainingMs: dialogueDelay,
     durationMs: dialogueDelay,
-    timerSelector: displayCivilianWatchResponseContainer.querySelector(".timer-wrapper"),
+    timerSelector: getOnlineTimerWrapper(
+      displayCivilianWatchResponseContainer,
+      "displayCivilianWatchResponseContainer"
+    ),
   });
 });

@@ -1,24 +1,32 @@
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.error-box').forEach(errorBoxButton => {
-        errorBoxButton.querySelector('.drawer-button').addEventListener('click', () => {
-            errorBoxButton.classList.toggle('hidden');
-            if (errorBoxButton.classList.contains('hidden')) {
-                errorBoxButton.querySelector('.drawer-button').textContent = "<";
-            }
-        });
+document.addEventListener('click', (event) => {
+    const drawerButton = event.target.closest('.error-box .drawer-button');
+    if (!drawerButton) return;
 
-        errorBoxButton.querySelector('.drawer-button').addEventListener('mouseenter', () => {
-            if (!errorBoxButton.classList.contains('hidden')) {
-                errorBoxButton.querySelector('.drawer-button').textContent = ">";
-            }
-        });
+    const errorBox = drawerButton.closest('.error-box');
+    if (!errorBox) return;
 
-        errorBoxButton.querySelector('.drawer-button').addEventListener('mouseleave', () => {
-            if (!errorBoxButton.classList.contains('hidden')) {
-                errorBoxButton.querySelector('.drawer-button').textContent = "<";
-            }
-        });
-    });
+    errorBox.classList.toggle('hidden');
+    drawerButton.textContent = "<";
+});
+
+document.addEventListener('mouseover', (event) => {
+    const drawerButton = event.target.closest('.error-box .drawer-button');
+    if (!drawerButton) return;
+
+    const errorBox = drawerButton.closest('.error-box');
+    if (!errorBox || errorBox.classList.contains('hidden')) return;
+
+    drawerButton.textContent = ">";
+});
+
+document.addEventListener('mouseout', (event) => {
+    const drawerButton = event.target.closest('.error-box .drawer-button');
+    if (!drawerButton) return;
+
+    const errorBox = drawerButton.closest('.error-box');
+    if (!errorBox || errorBox.classList.contains('hidden')) return;
+
+    drawerButton.textContent = "<";
 });
 
 function CheckErrors() {

@@ -2,15 +2,15 @@ function CheckUsernameIsValid(username) {
     const isValidCharacters = /^[A-Z0-9_]+$/.test(username);
 
     if (username === '') {
-        console.log('Username is empty');
+        debugLog('Username is empty');
         return false;
     }
     if (username.length > usernameMaxLength) {
-        console.log('Username is too long');
+        debugLog('Username is too long');
         return false;
     }
     if (!isValidCharacters) {
-        console.log('Username must not contain spaces or special characters');
+        debugLog('Username must not contain spaces or special characters');
         return false;
     }
     return true;

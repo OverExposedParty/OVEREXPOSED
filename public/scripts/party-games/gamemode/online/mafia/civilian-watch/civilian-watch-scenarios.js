@@ -96,7 +96,16 @@ async function loadRandomScenario() {
     });
 
     setPhaseIndex(me, 1);
-    await updateOnlineParty({ partyId: partyCode, players: currentPartyData.players });
+    const updatedPartyAfterScenarioPick = await performOnlinePartyAction({
+      action: 'sync-party-state',
+      payload: {
+        playerUpdates: [me]
+      }
+    });
+
+    if (updatedPartyAfterScenarioPick) {
+      currentPartyData = updatedPartyAfterScenarioPick;
+    }
   } else {
     picked = scenarios.find(s => s["file-name"] === scenarioFileName);
     setPhaseIndex(me, readPhaseIndex(me, 1));
@@ -104,7 +113,16 @@ async function loadRandomScenario() {
 
   const scenarioData = await fetch(`/json-files/party-games/mafia/civilian-watch/scenarios/${scenarioFileName}.json`).then(r => r.json());
   writeOptionListToPlayerPhase(me);
-  await updateOnlineParty({ partyId: partyCode, players: currentPartyData.players });
+  const updatedPartyAfterOptionWrite = await performOnlinePartyAction({
+    action: 'sync-party-state',
+    payload: {
+      playerUpdates: [me]
+    }
+  });
+
+  if (updatedPartyAfterOptionWrite) {
+    currentPartyData = updatedPartyAfterOptionWrite;
+  }
 
   return { meta: picked, data: scenarioData };
 }

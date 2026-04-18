@@ -13,15 +13,17 @@ async function DisplayPrivateCard(instruction) {
     timeLeft: delay / 1000,
     duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: selectOptionContainer,
+    label: 'selectOptionContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: selectOptionContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
   SetTimeOut({
@@ -84,110 +86,76 @@ async function DisplayVoteResults() {
   const delay = new Date(timerValue) - Date.now();
   const firstDisplay = !isContainerVisible(resultsChartContainer);
 
-  stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
+  stopTimerForContainer(waitingForPlayersContainer, 'waitingForPlayersContainer');
 
-  startTimer({
+  startTimerWithContainer({
+    container: resultsChartContainer,
+    label: 'resultsChartContainer',
     timeLeft: delay / 1000,
-    duration: resultTimerDuration / 1000,
-    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+    duration: resultTimerDuration / 1000
   });
 
-  const players = currentPartyData.players || [];
-
   if (firstDisplay) {
-    GetVoteResults(currentPartyData);
-    setActiveContainers(resultsChartContainer);
-  }
-
-  const haveVoteCount = players.filter(p => {
-    const ps = p.state ?? p;
-    return ps.vote === true;
-  }).length;
-
-  const haveNotVoteCount = players.filter(p => {
-    const ps = p.state ?? p;
-    return ps.vote === false;
-  }).length;
-
-  const config = getPartyConfig(currentPartyData);
-  const rawGameRules = config.gameRules || {};
-  const rulesObj =
-    rawGameRules instanceof Map ? Object.fromEntries(rawGameRules) : rawGameRules;
-
-  let punishmentInstruction;
-
-  const oddManOutEnabled =
-    rulesObj["odd-man-out"] === true || rulesObj["odd-man-out"] === "true";
-
-  const hasOddManOut =
-    (haveVoteCount === 1 && haveNotVoteCount > 1) ||
-    (haveNotVoteCount === 1 && haveVoteCount > 1);
-
-  if (oddManOutEnabled && hasOddManOut) {
-    punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
-  } else {
-    punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
-  }
-
-  if (firstDisplay) {
-    let shouldPersistResultsState = false;
-
-    players.forEach(player => {
-      const ps = player.state ?? (player.state = {});
-      const conn = player.connection ?? {};
-      const socketId = conn.socketId ?? player.socketId;
-      const vote = ps.vote ?? player.vote;
-
-      if (vote === true && socketId !== "DISCONNECTED") {
-        const currentScore = ps.score ?? player.score ?? 0;
-        const nextScore = currentScore + 1;
-        if (nextScore !== currentScore) {
-          shouldPersistResultsState = true;
-        }
-        ps.score = nextScore;
-        player.score = ps.score;
+    scheduleNeverHaveIEverPhaseAction({
+      delay,
+      action: 'never-have-i-ever-resolve-vote-results',
+      payload: {
+        roundTimer: Date.now() + gameRules["time-limit"] * 1000,
+        nextPlayer: true
       }
     });
 
-    if (deviceId === hostDeviceId && shouldPersistResultsState) {
-      const config = normalizeConfig(currentPartyData);
-      const nextState = normalizeState(currentPartyData);
-      const deck = normalizeDeck(currentPartyData);
-
-      nextState.lastPinged = new Date();
-
-      await updateOnlineParty({
-        partyId: partyCode,
-        config,
-        state: nextState,
-        deck,
-        players
-      });
+    try {
+      GetVoteResults(currentPartyData);
+    } catch (error) {
+      console.error('Never Have I Ever vote results render failed:', error);
     }
+
+    setActiveContainers(resultsChartContainer);
+  }
+}
+
+function getNeverHaveIEverPhaseState() {
+  const state = getPartyState(currentPartyData);
+  return {
+    phase: state?.phase ?? null,
+    phaseData: state?.phaseData ?? {}
+  };
+}
+
+async function scheduleNeverHaveIEverPhaseAction({ delay = 0, action, payload = {} } = {}) {
+  const state = getPartyState(currentPartyData);
+  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
+
+  if (deviceId !== authoritativeHostId || delay == null || !action) return;
+
+  if (timeout?.cancel) {
+    timeout.cancel();
   }
 
-  const drinkPunishmentEnabled =
-    rulesObj["drink-punishment"] === true || rulesObj["drink-punishment"] === "true";
+  timeout = createCancelableTimeout(delay);
 
-  const punishmentEnabled = drinkPunishmentEnabled || oddManOutEnabled;
+  try {
+    await timeout.promise;
 
-  if (punishmentEnabled) {
-    SetTimeOut({
-      delay,
-      instruction: punishmentInstruction,
-      nextDelay: null,
-      newUserConfirmed: false,
-      newUserReady: false
+    const updatedParty = await performOnlinePartyAction({
+      action,
+      payload
     });
-  } else {
-    SetTimeOut({
-      delay,
-      instruction: "RESET_QUESTION",
-      nextDelay: null,
-      newUserConfirmed: false,
-      newUserReady: false
-    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+  } catch (error) {
+    console.error('Never Have I Ever phase action failed:', error);
   }
+}
+
+function getNeverHaveIEverTargetIds() {
+  const { phaseData } = getNeverHaveIEverPhaseState();
+  return Array.isArray(phaseData?.targetIds)
+    ? phaseData.targetIds.filter(Boolean)
+    : [];
 }
 
 async function ensureDrinkWheelContainer() {
@@ -214,7 +182,8 @@ async function ensureDrinkWheelContainer() {
 
 async function ChosePunishment(instruction) {
   const players = currentPartyData.players || [];
-  const parsed = parseInstruction(instruction);
+  const { phase } = getNeverHaveIEverPhaseState();
+  const targetIds = getNeverHaveIEverTargetIds();
 
   const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
   if (myIndex === -1) return;
@@ -222,84 +191,20 @@ async function ChosePunishment(instruction) {
   const myPlayer = players[myIndex];
   const myState = myPlayer.state ?? myPlayer;
 
-  const allConfirmed = players.every(p => {
-    const ps = p.state ?? p;
-    return ps.hasConfirmed === true;
-  });
+  if (phase === 'never-have-i-ever-spin-odd-man-out') {
+    const oddManOutId = targetIds[0] ?? null;
+    const oddPlayer = players.find(player => getPlayerId(player) === oddManOutId);
+    if (!oddPlayer) return;
 
-  const haveVoteCount = players.filter(p => {
-    const ps = p.state ?? p;
-    return ps.vote === true;
-  }).length;
-
-  const haveNotVoteCount = players.filter(p => {
-    const ps = p.state ?? p;
-    return ps.vote === false;
-  }).length;
-
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-  if (allConfirmed) {
-      await ResetQuestion({
-        icons,
-        timer: Date.now() + getTimeLimit() * 1000
-      });
-  } else if (parsed.reason === "TAKE_A_SIP") {
-    if (haveVoteCount === 0) {
-        await ResetQuestion({
-          icons,
-          timer: Date.now() + getTimeLimit() * 1000
-        });
-    } else {
-      const myVote = myState.vote ?? myPlayer.vote;
-
-      if (myVote === true) {
-        completePunishmentText.textContent = "Take a sip.";
-        completePunishmentContainer.setAttribute("punishment-type", parsed.reason);
-
-        const hasConfirmed = myState.hasConfirmed ?? myPlayer.hasConfirmed;
-
-        if (!hasConfirmed) {
-          setActiveContainers(completePunishmentContainer);
-        } else {
-          DisplayWaitingForPlayers();
-        }
-      } else if (myVote !== true && !(myState.hasConfirmed ?? myPlayer.hasConfirmed)) {
-        await SetUserConfirmation({
-          selectedDeviceId: deviceId,
-          option: true
-        });
-      } else {
-        DisplayWaitingForPlayers();
-      }
-    }
-  } else if (parsed.reason === "ODD_MAN_OUT") {
-    let oddManOutIndex;
-
-    if (haveVoteCount === 1) {
-      oddManOutIndex = players.findIndex(p => {
-        const ps = p.state ?? p;
-        return ps.vote === true;
-      });
-    } else {
-      oddManOutIndex = players.findIndex(p => {
-        const ps = p.state ?? p;
-        return ps.vote === false;
-      });
-    }
-
-    if (oddManOutIndex === -1) return;
-
-    const oddPlayer = players[oddManOutIndex];
-
-    if (myIndex === oddManOutIndex) {
-      console.log("You are the odd man out, spinning the wheel.");
+    if (oddManOutId === deviceId) {
       const drinkWheelContainer = await ensureDrinkWheelContainer();
 
       if (drinkWheelContainer) {
+        if (typeof resetDrinkWheelState === 'function') {
+          resetDrinkWheelState();
+        }
         setActiveContainers(drinkWheelContainer);
       } else {
-        console.warn("Drink wheel container was not available for odd man out.");
         SetWaitingForPlayer({
           waitingForRoomTitle: "Preparing punishment...",
           waitingForRoomText: "Loading drink wheel..."
@@ -314,6 +219,21 @@ async function ChosePunishment(instruction) {
       });
       setActiveContainers(waitingForPlayerContainer);
     }
+    return;
+  }
+
+  if (targetIds.includes(deviceId)) {
+    completePunishmentText.textContent = "Take a sip.";
+    completePunishmentContainer.setAttribute("punishment-type", "TAKE_A_SIP");
+
+    const hasConfirmed = myState.hasConfirmed ?? myPlayer.hasConfirmed;
+    if (!hasConfirmed) {
+      setActiveContainers(completePunishmentContainer);
+    } else {
+      DisplayWaitingForPlayers();
+    }
+  } else {
+    DisplayWaitingForPlayers();
   }
 }
 
@@ -341,119 +261,19 @@ async function WaitingForPlayer(instruction) {
 }
 
 async function DisplayPunishmentToUser(instruction) {
-  const parsed = parseInstruction(instruction);
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(p => getPlayerId(p) === parsed.deviceId);
-  if (index === -1) return;
-
-  const player = players[index];
-
-  if (parsed.deviceId === deviceId) {
-    if (parsed.reason === "DOWN_IT") {
-      completePunishmentText.textContent = "Down your drink!";
-    } else {
-      completePunishmentText.textContent = "Take " + parsed.reason.replaceAll("_", " ").toLowerCase();
-    }
-    setActiveContainers(completePunishmentContainer);
-  } else {
-    SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + (player.identity?.username ?? player.username),
-      waitingForRoomText: "Showing player punishment...",
-      player
-    });
-    setActiveContainers(waitingForPlayerContainer);
-  }
+  return;
 }
 
 async function PunishmentOffer(instruction) {
-  const parsed = parseInstructionSecondReason(instruction);
-  const players = currentPartyData.players || [];
-
-  if (parsed.reason === "PASS") {
-    if (parsed.deviceId === deviceId) {
-      await SendInstruction({
-        instruction: "USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + deviceId,
-        partyData: currentPartyData
-      });
-    }
-  } else if (parsed.reason === "CONFIRM") {
-    if (deviceId === parsed.deviceId) {
-      players.forEach(p => {
-        const ps = p.state ?? (p.state = {});
-        ps.isReady = false;
-        ps.hasConfirmed = false;
-        p.isReady = false;
-        p.hasConfirmed = false;
-      });
-
-      const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-      if (myIndex !== -1) {
-        const me = players[myIndex];
-        const meState = me.state ?? (me.state = {});
-
-        if (icons[myIndex]) {
-          icons[myIndex].classList.add('yes');
-        }
-        meState.isReady = true;
-        meState.hasConfirmed = true;
-        me.isReady = true;
-        me.hasConfirmed = true;
-      }
-
-      await SendInstruction({
-        instruction: "HAS_USER_DONE_PUNISHMENT:" + parsed.secondReason + ":" + deviceId,
-        partyData: currentPartyData
-      });
-    }
-  }
+  return;
 }
 
 async function UserSelectedForPunishment(instruction) {
-  const parsed = parseInstructionDeviceId(instruction);
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(p => getPlayerId(p) === parsed.deviceId);
-  if (index === -1) return;
-
-  const player = players[index];
-
-  if (parsed.deviceId === deviceId) {
-    setActiveContainers(selectPunishmentContainer);
-  } else {
-    waitingForPlayerTitle.textContent = "Waiting for " + (player.identity?.username ?? player.username);
-    waitingForPlayerText.textContent = "Choosing Punishment...";
-    setActiveContainers(waitingForPlayerContainer);
-  }
+  return;
 }
 
 async function AnswerToUserDonePunishment() {
-  const players = currentPartyData.players || [];
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-  const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
-  if (myIndex === -1) return;
-
-  const me = players[myIndex];
-  const meState = me.state ?? me;
-
-  if (meState.isReady === true) {
-    DisplayWaitingForPlayers();
-
-    const allReady = players.every(p => {
-      const ps = p.state ?? p;
-      return ps.isReady === true;
-    });
-
-    if (allReady) {
-      await ResetQuestion({
-        icons,
-        timer: Date.now() + getTimeLimit() * 1000
-      });
-    }
-  }
+  return;
 }
 
 function GetVoteResults(currentPartyData) {
@@ -474,6 +294,10 @@ function GetVoteResults(currentPartyData) {
   });
 
   const wrapper = document.getElementById("tableWrapper");
+  if (!wrapper) {
+    console.warn('Never Have I Ever results wrapper not found.');
+    return;
+  }
   wrapper.innerHTML = "";
   wrapper.className = "vote-results-wrapper";
 

@@ -9,7 +9,7 @@ if (hostname === 'overexposed.app') {
 }
 
 socket.on('connect', () => {
-    console.log('Socket connected successfully');
+    debugLog('Socket connected successfully');
 });
 
 socket.on('connect_error', (err) => {
@@ -18,11 +18,11 @@ socket.on('connect_error', (err) => {
 
 storageObserver.addListener((key, oldValue, newValue) => {
     if (key === 'settings-nsfw') {
-        //console.log(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
+        //debugLog(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
         if (oldValue !== newValue) {
             eighteenPlusEnabled = newValue;
             SetNSFW();
-            //console.log(`Value changed! Now NSFW is set to: ${newValue}`);
+            //debugLog(`Value changed! Now NSFW is set to: ${newValue}`);
         }
     }
 });
@@ -32,7 +32,7 @@ async function fetchConfessions() {
         const response = await fetch('/api/confessions');
         const data = await response.json();
 
-        console.log("📥 Confessions from MongoDB:", data);
+        debugLog("📥 Confessions from MongoDB:", data);
 
         const idFromURL = getIDFromURL();
         let idFound = false;
@@ -54,7 +54,7 @@ async function fetchConfessions() {
         });
         CardBoundsToggle(cardBoundsCheckbox.checked);
         if (!idFound) {
-            console.log(`ID ${idFromURL} not found`);
+            debugLog(`ID ${idFromURL} not found`);
             cleanOverexposureUrl();
         }
 
@@ -70,7 +70,7 @@ async function updateConfessions() {
         const response = await fetch('/api/confessions');
         const data = await response.json();
 
-        console.log("📥 Confessions from MongoDB:", data);
+        debugLog("📥 Confessions from MongoDB:", data);
 
         // Build a Set of all confession IDs currently in the database
         const confessionIds = new Set(data.map(confession => confession.id));
@@ -87,7 +87,7 @@ async function updateConfessions() {
             if (isDraft) return;
 
             if (!confessionIds.has(id)) {
-                console.log(`🗑 Removing floating button not in DB: ${id}`);
+                debugLog(`🗑 Removing floating button not in DB: ${id}`);
 
                 // Remove paired .no-place div
                 const noPlace = document.querySelector(`.no-place[data-id="${id}"]`);
@@ -110,7 +110,7 @@ async function updateConfessions() {
             const existingButton = document.querySelector(`.floating-button[data-id="${confession.id}"]`);
 
             if (!existingButton) {
-                console.log(`➕ Creating new floating button for confession: ${confession.id}`);
+                debugLog(`➕ Creating new floating button for confession: ${confession.id}`);
                 createFloatingButton(null, [
                     confession.title,
                     confession.text,
@@ -139,7 +139,7 @@ async function saveDataToMongoDB(draftData) {
 
         const confession = { title, text, id, date, userIcon, x, y, tag };
 
-        console.log("📤 Saving confession", confession);
+        debugLog("📤 Saving confession", confession);
         const response = await fetch('/api/confessions', {
             method: 'POST',
             headers: {
@@ -148,7 +148,7 @@ async function saveDataToMongoDB(draftData) {
             body: JSON.stringify(confession)
         });
         const result = await response.json();
-        console.log("✅ Response from MongoDB:", result);
+        debugLog("✅ Response from MongoDB:", result);
         if (!response.ok) {
             throw new Error(result.error || 'Failed to save confession');
         }
@@ -156,7 +156,7 @@ async function saveDataToMongoDB(draftData) {
         const { confession: savedConfession, deleteCode } = result;
 
         // 👉 THIS is the code you show to the user
-        console.log("🧾 Delete code for this confession:", deleteCode);
+        debugLog("🧾 Delete code for this confession:", deleteCode);
 
         // Simple version: just alert it
         //alert(`Your delete code for this post is: ${deleteCode}\n\nSave this code if you want to delete it later.`);
@@ -212,5 +212,5 @@ async function deleteConfession(confessionId, deleteCode) {
     });
 
     const data = await res.json();
-    console.log(data);
+    debugLog(data);
 }

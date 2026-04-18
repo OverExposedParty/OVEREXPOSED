@@ -32,7 +32,7 @@ async function waitForOnlineCore() {
         window.onlineGameUiReady = true;
         await flushPendingOnlineInstructionSync();
         if (typeof FetchInstructions === 'function' && isPlaying) {
-            await FetchInstructions();
+            await runOnlineFetchInstructions({ reason: 'startup' });
         }
         SetScriptLoaded('/scripts/party-games/gamemode/online/would-you-rather/would-you-rather-online.js');
 

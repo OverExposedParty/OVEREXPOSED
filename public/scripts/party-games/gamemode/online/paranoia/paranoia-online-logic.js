@@ -10,12 +10,47 @@ async function FetchInstructions() {
   const config = getPartyConfig(currentPartyData);
   const state  = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
+  const phase = state?.phase ?? null;
 
   const instructions = getUserInstructions(currentPartyData);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
 
+  if (phase === 'paranoia-choose-punishment') {
+    ChoosingPunishment();
+    return;
+  }
+
+  if (phase === 'paranoia-show-punishment') {
+    if (instructions === "NEXT_QUESTION") {
+      NextQuestion();
+      return;
+    }
+
+    if (instructions.includes("USER_HAS_PASSED")) {
+      UserHasPassed(instructions);
+      return;
+    }
+
+    if (instructions.includes("DISPLAY_DUAL_STACK_CARD")) {
+      DisplayDualStackCard();
+      return;
+    }
+
+    if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
+      DisplayPunishmentToUser(instructions);
+      return;
+    }
+    ChosePunishment();
+    return;
+  }
+
+  if (phase === 'paranoia-confirm-punishment') {
+    HasUserDonePunishment();
+    return;
+  }
+
   if (!instructions || typeof instructions !== 'string') {
-    console.log("No instructions to process.");
+    debugLog("No instructions to process.");
     return;
   }
 
@@ -31,38 +66,11 @@ async function FetchInstructions() {
   else if (instructions.includes("USER_HAS_PASSED")) {
     UserHasPassed(instructions);
   }
-  else if (instructions.includes("USER_SELECTED_FOR_PUNISHMENT")) {
-    UserSelectedForPunishment(instructions);
-  }
-  else if (instructions.includes("DISPLAY_PRIVATE_CARD")) {
-    DisplayPrivateCard(instructions);
-  }
-  else if (instructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(instructions);
-  }
-  else if (instructions.includes("CHOOSING_PUNISHMENT")) {
-    if (instructions.includes("TIME_EXPIRED")) {
-      ChoosingPunishment(playerTurn);
-    } else {
-      const turnPlayer = players[playerTurn];
-      const voteId = turnPlayer?.vote ?? turnPlayer?.state?.vote;
-      const chosenIndex = players.findIndex(
-        p => getPlayerId(p) === voteId
-      );
-      ChoosingPunishment(chosenIndex);
-    }
-  }
   else if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
     DisplayPunishmentToUser(instructions);
   }
-  else if (instructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(instructions);
-  }
-  else if (instructions.includes("HAS_USER_DONE_PUNISHMENT")) {
-    HasUserDonePunishment(instructions);
-  }
-  else if (instructions.includes("ANSWER_TO_USER_DONE_PUNISHMENT")) {
-    AnswerToUserDonePunishment(instructions);
+  else if (instructions.includes("DISPLAY_PRIVATE_CARD")) {
+    DisplayPrivateCard(instructions);
   }
   else if (instructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();

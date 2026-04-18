@@ -61,7 +61,7 @@ async function initialisePage() {
     hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
   }
 
-  console.log("hostDeviceId:", hostDeviceId);
+  debugLog("hostDeviceId:", hostDeviceId);
 
   const myConnectionSocket = me.connection?.socketId ?? me.socketId;
   if (myConnectionSocket === "DISCONNECTED") {
@@ -150,7 +150,7 @@ async function initialisePage() {
         currentPartyData = partyWithInstruction;
       }
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     SetPartyGameStatistics();
@@ -187,31 +187,15 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    // NEW SCHEMA: userInstructions is in config
-    let parsedInstructions = parseInstruction(currentPartyData.config.userInstructions);
+    const updatedParty = await performOnlinePartyAction({
+      action: 'would-you-rather-complete-punishment',
+      payload: {
+        roundTimer: Date.now() + getTimeLimit() * 1000
+      }
+    });
 
-    if (parsedInstructions.instruction === "DISPLAY_PUNISHMENT_TO_USER") {
-      // NEW SCHEMA: vote lives under player.state.vote
-      const aVoteCount = currentPartyData.players.filter(
-        player => player.state.vote === "A"
-      ).length;
-
-      const bVoteCount = currentPartyData.players.filter(
-        player => player.state.vote === "B"
-      ).length;
-
-      const winningVote =
-        aVoteCount === bVoteCount
-          ? null
-          : aVoteCount > bVoteCount
-            ? "A"
-            : "B";
-
-      await SendInstruction({
-        instruction: "RESET_QUESTION:" + winningVote
-      });
-    } else {
-      await setUserBool(deviceId, true, true);
+    if (updatedParty) {
+      currentPartyData = updatedParty;
     }
   });
 
@@ -235,6 +219,6 @@ async function SetPageSettings() {
     currentPartyData.config.selectedPacks,
     currentPartyData.config.shuffleSeed
   );
-  console.log("Loaded JSON files");
+  debugLog("Loaded JSON files");
   await initialisePage();
 }

@@ -40,10 +40,17 @@ async function handleConfirmPlayerClick() {
   const selectedId = selectUserButtonContainer.getAttribute('selected-id');
   if (!selectedId) return;
 
-  await SetVote({
-    option: selectedId,
-    sendInstruction: "CHOOSING_PUNISHMENT"
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-select-target',
+    payload: {
+      targetId: selectedId,
+      phaseTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
 
   const selectUserButtons = document
     .getElementById('select-user-container')
@@ -62,25 +69,23 @@ async function handleConfirmPunishmentClick() {
 
   hideContainer(selectPunishmentContainer);
 
-  if (selectedId === 'lucky-coin-flip') {
-    console.log("paranoia-coin-flip");
-    await SendInstruction({
-      instruction: "CHOSE_PUNISHMENT:COIN_FLIP",
-      byPassHost: true
-    });
-  }
-  else if (selectedId === 'drink-wheel') {
-    await SendInstruction({
-      instruction: "CHOSE_PUNISHMENT:DRINK_WHEEL",
-      byPassHost: true
-    });
-  }
-  else if (selectedId === 'take-a-shot') {
-    completePunishmentContainer.setAttribute("punishment-type", "take-a-shot");
-    await SendInstruction({
-      instruction: "CHOSE_PUNISHMENT:TAKE_A_SHOT",
-      byPassHost: true
-    });
+  const punishmentType = selectedId === 'lucky-coin-flip'
+    ? 'COIN_FLIP'
+    : selectedId === 'drink-wheel'
+      ? 'DRINK_WHEEL'
+      : selectedId === 'take-a-shot'
+        ? 'TAKE_A_SHOT'
+        : selectedId;
+
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-select-punishment',
+    payload: {
+      punishmentType
+    }
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 
   const selectPunishmentButtons = document
@@ -97,63 +102,69 @@ async function handleConfirmPunishmentClick() {
 async function handleCompletePunishmentPassClick() {
   hideContainer(completePunishmentContainer);
 
-  const players = currentPartyData.players || [];
-  const state = getPartyState(currentPartyData);
-  const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const turnPlayer = players[playerTurn];
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-pass-punishment',
+    payload: {
+      roundTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
+  });
 
-  if (getPlayerId(turnPlayer) === deviceId) {
-    await SendInstruction({
-      instruction: "RESET_PARANOIA_QUESTION:PLAYER_TURN_PASSED:2",
-      byPassHost: true
-    });
-  }
-  else {
-    await SetUserConfirmation({
-      selectedDeviceId: deviceId,
-      option: false,
-      reason: "PASS",
-      userInstruction: "PUNISHMENT_OFFER"
-    });
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
 async function handleCompletePunishmentConfirmClick() {
-  const instructions = getUserInstructions(currentPartyData);
-  const parsedInstructions = parseInstruction(instructions);
-
   setActiveContainers(waitingForPlayersContainer);
 
-  await SetUserConfirmation({
-    selectedDeviceId: deviceId,
-    option: true,
-    reason: "CONFIRM:" + parsedInstructions.reason,
-    userInstruction: "PUNISHMENT_OFFER"
+  const state = getPartyState(currentPartyData);
+  const completionReason = state?.phaseData?.punishmentType ?? "QUESTION";
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-begin-punishment-confirmation',
+    payload: {
+      completionReason
+    }
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
 }
 
 function handlePickHeadsClick() {
-  hideContainer(pickHeadsOrTailsContainer);
-  showContainer(luckyCoinFlipContainer);
+  setActiveContainers(luckyCoinFlipContainer);
   pickedHeads = true;
 }
 
 function handlePickTailsClick() {
-  hideContainer(pickHeadsOrTailsContainer);
-  showContainer(luckyCoinFlipContainer);
+  setActiveContainers(luckyCoinFlipContainer);
   pickedHeads = false;
 }
 
 async function handlePunishmentYesClick() {
-  await SetUserConfirmation({
-    selectedDeviceId: deviceId,
-    option: true
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-submit-punishment-vote',
+    payload: {
+      option: true,
+      roundTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
 }
 
 async function handlePunishmentNoClick() {
-  await SetUserConfirmation({
-    selectedDeviceId: deviceId,
-    option: false
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-submit-punishment-vote',
+    payload: {
+      option: false,
+      roundTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
   });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
 }

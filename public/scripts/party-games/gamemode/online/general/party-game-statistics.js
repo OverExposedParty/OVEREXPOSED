@@ -17,7 +17,7 @@ fetch('/html-templates/party-games/party-game-statistics.html')
         partyGameStatisticsEndGameButton = partyGameStatisticsContainer.querySelector('#end-game');
 
         partyGameStatisticsEndGameButton.addEventListener('click', async () => {
-            console.log("END GAME BUTTON PRESSED");
+            debugLog("END GAME BUTTON PRESSED");
 
             if (deviceId == hostDeviceId && isPlaying == true) {
                 await SendInstruction({
@@ -95,7 +95,7 @@ async function UpdatePartyGameStatistics() {
 }
 
 function SetPartyGameStatisticsGameOver() {
-    console.log("GAME IS OVER - SHOWING STATISTICS");
+    debugLog("GAME IS OVER - SHOWING STATISTICS");
     const playersByStanding = GetPlayersByStanding();
 
     // Podium icons
@@ -111,7 +111,7 @@ function SetPartyGameStatisticsGameOver() {
                 userId: id,
                 userCustomisationString: icon
             });
-            console.log(`podium place ${i + 1}:`, podiumContainer);
+            debugLog(`podium place ${i + 1}:`, podiumContainer);
         }
         else {
             podiumContainer.innerHTML = "";

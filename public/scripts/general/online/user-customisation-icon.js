@@ -91,21 +91,52 @@ async function createUserIconPartyGames({ container, userId, userCustomisationSt
     container.appendChild(userIcon);
 }
 
-function createUserIcon({ userId, username, checked = false }) {
-  const userIcon = document.createElement('div');
-  userIcon.className = 'user-icon';
-  userIcon.setAttribute('data-user-id', userId);
+function getPartyHostComputerId(partyData = currentPartyData) {
+  return partyData?.state?.hostComputerId || hostDeviceId || null;
+}
 
-  // Name + close button
+function canCurrentUserKickPlayers(partyData = currentPartyData) {
+  const partyHostId = getPartyHostComputerId(partyData);
+  return Boolean(hostedParty || (partyHostId && String(partyHostId) === String(deviceId)));
+}
+
+function setUserIconKickButton(userIcon, { canKick = false } = {}) {
+  if (!userIcon) return;
+
+  const existingCloseBtn = userIcon.querySelector('.close-btn');
+  const userId = userIcon.getAttribute('data-user-id');
+
+  if (!canKick || !userId || String(userId) === String(deviceId)) {
+    existingCloseBtn?.remove();
+    return;
+  }
+
+  if (existingCloseBtn) return;
+
   const closeBtn = document.createElement('span');
   closeBtn.className = 'close-btn';
   closeBtn.textContent = '×';
   closeBtn.addEventListener('click', () => {
-    if (userIcon.getAttribute('data-user-id') != deviceId) {
-      RemoveUserFromParty(userIcon.getAttribute('data-user-id'));
-      userIcon.remove();
-    }
+    const targetUserId = userIcon.getAttribute('data-user-id');
+    if (!targetUserId || String(targetUserId) === String(deviceId)) return;
+    if (!canCurrentUserKickPlayers()) return;
+
+    RemoveUserFromParty(targetUserId);
+    userIcon.remove();
   });
+
+  const nameContainer = userIcon.querySelector('.name-container');
+  if (nameContainer?.nextSibling) {
+    userIcon.insertBefore(closeBtn, nameContainer.nextSibling);
+  } else {
+    userIcon.appendChild(closeBtn);
+  }
+}
+
+function createUserIcon({ userId, username, checked = false, canKick = false }) {
+  const userIcon = document.createElement('div');
+  userIcon.className = 'user-icon';
+  userIcon.setAttribute('data-user-id', userId);
 
   const nameContainer = document.createElement('div');
   nameContainer.className = 'name-container';
@@ -123,7 +154,8 @@ function createUserIcon({ userId, username, checked = false }) {
   }
 
   nameContainer.append(nameSpan, checkmark);
-  userIcon.append(nameContainer, closeBtn);
+  userIcon.append(nameContainer);
+  setUserIconKickButton(userIcon, { canKick });
 
   // Image stack from blank customisation
   userIcon.appendChild(CreateImageStack(blankUserCustomisation));
@@ -209,6 +241,7 @@ function deleteUserIcon(userId) {
 
 async function UpdateUserIcons(partyData) {
   const userIconDivs = document.querySelectorAll('.user-icon');
+  const canKickPlayers = canCurrentUserKickPlayers(partyData);
 
   // ✅ New layout only
   const currentIds = partyData.players.map(player => player.identity.computerId);
@@ -232,9 +265,15 @@ async function UpdateUserIcons(partyData) {
       createUserIcon({
         userId: computerId,
         username,
-        checked: isSelf && isReady
+        checked: isSelf && isReady,
+        canKick: canKickPlayers
       });
     }
+
+    setUserIconKickButton(
+      document.querySelector(`.user-icon[data-user-id="${computerId}"]`),
+      { canKick: canKickPlayers }
+    );
 
     // Always apply latest customisation/ready/name
     editUserIcon({

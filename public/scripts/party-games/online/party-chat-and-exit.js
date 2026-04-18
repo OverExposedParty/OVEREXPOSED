@@ -19,7 +19,7 @@ async function sendPartyChat({ username = "[CONSOLE]", message, eventType = "mes
 
     const result = await response.json();
     if (result.success) {
-      console.log("Message sent!");
+      debugLog("Message sent!");
       if (chatLogInput) chatLogInput.value = "";
     } else {
       console.error("Failed to send message:", result.error);
@@ -34,7 +34,7 @@ async function DeletePartyChat() {
   try {
     const res = await fetch(`/api/chat/${partyCode}`, { method: 'DELETE' });
     const data = await res.json();
-    console.log(data);
+    debugLog(data);
   } catch (err) {
     console.error('Error deleting chat:', err);
   }
@@ -62,12 +62,12 @@ function removeUserOnExit() {
   if (sessionPartyType === "waiting-room") {
     const blob = new Blob([JSON.stringify(waitingRoomPayload)], { type: "application/json" });
     const success = navigator.sendBeacon(`/api/waiting-room/remove-user`, blob);
-    console.log("🚀 Beacon to waiting-room queued:", success, waitingRoomPayload);
+    debugLog("🚀 Beacon to waiting-room queued:", success, waitingRoomPayload);
   }
 
   const blobSession = new Blob([JSON.stringify(sessionPayload)], { type: "application/json" });
   const successSession = navigator.sendBeacon(`/api/${sessionPartyType}/remove-user`, blobSession);
-  console.log("🚀 Beacon to session queued:", successSession, sessionPayload);
+  debugLog("🚀 Beacon to session queued:", successSession, sessionPayload);
 }
 
 function disconnectUserOnExit() {
@@ -80,7 +80,7 @@ function disconnectUserOnExit() {
 
   const blobSession = new Blob([JSON.stringify(sessionPayload)], { type: "application/json" });
   const successSession = navigator.sendBeacon(`/api/${sessionPartyType}/disconnect-user`, blobSession);
-  console.log("🚀 Beacon to session queued:", successSession, sessionPayload);
+  debugLog("🚀 Beacon to session queued:", successSession, sessionPayload);
 }
 
 // Use both visibilitychange and beforeunload for maximum reliability
@@ -89,9 +89,19 @@ window.addEventListener("beforeunload", disconnectUserOnExit);
 function RemoveUserFromParty(computerIdToRemove) {
   let payload = {};
   if (partyCode && computerIdToRemove && loadingPage == false) {
-    payload = { partyId: partyCode, computerIdToRemove };
+    if (computerIdToRemove !== deviceId && typeof canCurrentUserKickPlayers === 'function' && !canCurrentUserKickPlayers()) {
+      console.warn("Only the host can remove players from the party.");
+      return;
+    }
 
-    console.log("🚀 Sending beacon on unload:", payload);
+    payload = {
+      partyId: partyCode,
+      computerIdToRemove,
+      actorComputerId: deviceId,
+      actorSocketId: typeof socket?.id === 'string' ? socket.id : null
+    };
+
+    debugLog("🚀 Sending beacon on unload:", payload);
 
     const data = JSON.stringify(payload);
     const blob = new Blob([data], { type: "application/json" });

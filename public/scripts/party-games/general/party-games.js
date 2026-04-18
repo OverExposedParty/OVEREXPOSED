@@ -88,7 +88,7 @@ function updateTextContainer(text, cardType, punishment) {
         document.querySelector('.card-type-text').style.color = matchedPack.packColour;
         setNsfwCardBadge(matchedPack.packRestriction === 'nsfw');
     } else {
-        console.log("Pack not found");
+        debugLog("Pack not found");
         setNsfwCardBadge(false);
     }
 

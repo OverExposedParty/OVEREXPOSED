@@ -53,7 +53,7 @@ function isClickInsideContainer(event, containerTargets) {
 }
 
 function displayFloatingText(message, x, y) {
-    console.log("x: " + x + "y " + y);
+    debugLog("x: " + x + "y " + y);
     const floatingText = document.createElement("div");
     floatingText.textContent = message;
     floatingText.style.position = "absolute";

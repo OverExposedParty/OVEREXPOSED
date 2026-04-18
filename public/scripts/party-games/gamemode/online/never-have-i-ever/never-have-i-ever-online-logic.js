@@ -11,11 +11,22 @@ async function FetchInstructions() {
   const config  = getPartyConfig(currentPartyData);
   const state   = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
+  const phase = state?.phase ?? null;
 
   const instructions = getUserInstructions(currentPartyData);
 
+  if (phase === 'never-have-i-ever-spin-odd-man-out') {
+    ChosePunishment();
+    return;
+  }
+
+  if (phase === 'never-have-i-ever-show-punishment') {
+    ChosePunishment();
+    return;
+  }
+
   if (!instructions || typeof instructions !== 'string') {
-    console.log("No instructions to process.");
+    debugLog("No instructions to process.");
     return;
   }
 
@@ -30,18 +41,6 @@ async function FetchInstructions() {
   else if (instructions.includes("WAITING_FOR_PLAYER")) {
     WaitingForPlayer(instructions);
   }
-  else if (instructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(instructions);
-  }
-  else if (instructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(instructions);
-  }
-  else if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(instructions);
-  }
-  else if (instructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(instructions);
-  }
   else if (instructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
   }
@@ -53,5 +52,5 @@ async function FetchInstructions() {
     });
   }
 
-  console.log(`FETCHING ${instructions}`);
+  debugLog(`FETCHING ${instructions}`);
 }

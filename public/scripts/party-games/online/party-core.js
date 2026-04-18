@@ -8,6 +8,8 @@ let lastKnownPing = 0;
 let onlineUsername = 'N/A';
 window.onlineGameUiReady = false;
 window.pendingOnlineInstructionSync = false;
+window.onlineInstructionSyncInFlight = false;
+window.lastOnlineInstructionSnapshotSignature = null;
 
 const { protocol, hostname } = window.location;
 let socket;
@@ -47,14 +49,14 @@ let partyCode =
   window.location.pathname
     .match(/\/([A-Za-z0-9]{3}-[A-Za-z0-9]{3})(?:\/|$)/)?.[1] ?? null;
 
-console.log("PARTY CODE: " + partyCode);
+debugLog("PARTY CODE: " + partyCode);
 
 
 // Basic Socket.IO client init
 socket = io();
 
 socket.on('connect', () => {
-  console.log('Socket connected successfully');
+  debugLog('Socket connected successfully');
 });
 
 socket.on('connect_error', (err) => {
@@ -102,7 +104,7 @@ function getOrCreateDeviceID() {
 
 // const deviceId = generateDeviceFingerprint().trim();
 const deviceId = getOrCreateDeviceID();
-console.log("Device ID: " + deviceId);
+debugLog("Device ID: " + deviceId);
 
 // Lightweight canvas fingerprinting
 function getCanvasFingerprint() {
@@ -440,8 +442,80 @@ async function flushPendingOnlineInstructionSync() {
 
   window.pendingOnlineInstructionSync = false;
 
-  if (typeof FetchInstructions === 'function') {
+  await runOnlineFetchInstructions({ reason: 'pending' });
+}
+
+function getOnlineInstructionSnapshotSignature(party) {
+  const partyData = party || (typeof currentPartyData !== 'undefined' ? currentPartyData : null);
+
+  if (!partyData || typeof partyData !== 'object') {
+    return '';
+  }
+
+  const config = partyData.config || {};
+  const state = partyData.state || {};
+  const instruction =
+    config.userInstructions ??
+    state.userInstructions ??
+    partyData.userInstructions ??
+    '';
+  const players = Array.isArray(partyData.players) ? partyData.players : [];
+  const playerSignature = players.map((player) => {
+    const identity = player.identity || {};
+    const playerState = player.state || {};
+    const connection = player.connection || {};
+
+    return [
+      identity.computerId ?? player.computerId ?? '',
+      playerState.isReady ?? player.isReady ?? '',
+      playerState.hasConfirmed ?? player.hasConfirmed ?? '',
+      playerState.vote ?? player.vote ?? '',
+      playerState.score ?? player.score ?? '',
+      connection.socketId ?? player.socketId ?? ''
+    ].join(':');
+  }).join('|');
+
+  return [
+    partyData.partyId ?? partyCode ?? '',
+    config.gamemode ?? partyData.gamemode ?? '',
+    state.lastPinged ?? partyData.lastPinged ?? '',
+    state.phase ?? partyData.phase ?? '',
+    state.playerTurn ?? partyData.playerTurn ?? '',
+    state.timer ?? partyData.timer ?? '',
+    instruction,
+    playerSignature
+  ].join('||');
+}
+
+async function runOnlineFetchInstructions({ force = false, reason = '' } = {}) {
+  if (typeof FetchInstructions !== 'function') {
+    return false;
+  }
+
+  const signatureBeforeRender = getOnlineInstructionSnapshotSignature();
+
+  if (!force && signatureBeforeRender && signatureBeforeRender === window.lastOnlineInstructionSnapshotSignature) {
+    return false;
+  }
+
+  if (window.onlineInstructionSyncInFlight) {
+    window.pendingOnlineInstructionSync = true;
+    return false;
+  }
+
+  window.onlineInstructionSyncInFlight = true;
+
+  try {
     await FetchInstructions();
+    window.lastOnlineInstructionSnapshotSignature = getOnlineInstructionSnapshotSignature();
+    return true;
+  } finally {
+    window.onlineInstructionSyncInFlight = false;
+
+    if (window.pendingOnlineInstructionSync && window.onlineGameUiReady && isPlaying) {
+      window.pendingOnlineInstructionSync = false;
+      await runOnlineFetchInstructions({ reason: reason || 'queued' });
+    }
   }
 }
 
@@ -517,60 +591,50 @@ async function CheckGamePage() {
   });
 }
 
-// Checks if this client should become host based on hostComputerIdList ordering
+// Refreshes this player's connection and returns the server-selected host.
 async function checkAndMaybeBecomeHost({ party, deviceId, onlineUsername }) {
   const players = party.players || [];
-  const config = party.config ?? party;
   const state = party.state ?? party;
-  const deck = party.deck ?? party;
 
   if (!state) return null;
 
-  const hostList = Array.isArray(state.hostComputerIdList)
-    ? state.hostComputerIdList
-    : [];
+  const myIndex = players.findIndex(
+    player => player.identity?.computerId === deviceId || player.computerId === deviceId
+  );
 
-  const currentHostId = state.hostComputerId || null;
-
-  const hostIndex = currentHostId ? hostList.indexOf(currentHostId) : -1;
-  const myIndex = hostList.indexOf(deviceId);
-
-  if (myIndex === -1) return currentHostId;
-
-  let resolvedHostId = currentHostId;
-
-  if (hostIndex === -1 || myIndex < hostIndex) {
-    resolvedHostId = deviceId;
-    state.hostComputerId = deviceId;
-
-    await updateOnlineParty({
-      partyId: party.partyId || party.partyCode || partyCode,
-      config,
-      state,
-      deck,
-      players
-    });
-
-    if (typeof sendPartyChat === "function" && onlineUsername) {
-      sendPartyChat({
-        username: "[CONSOLE]",
-        message: `${onlineUsername} is now the host.`,
-        eventType: "connect"
-      });
-    }
+  if (myIndex === -1) {
+    return state.hostComputerId || null;
   }
 
-  return resolvedHostId;
+  try {
+    const data = await UpdateUserPartyData({
+      partyId: party.partyId || party.partyCode || partyCode,
+      computerId: deviceId,
+      newUserSocketId: typeof socket?.id === 'string' ? socket.id : null
+    });
+
+    const updatedHostId = data?.updated?.state?.hostComputerId;
+    if (updatedHostId) {
+      return updatedHostId;
+    }
+  } catch (error) {
+    console.error('Failed to refresh host connection:', error);
+  }
+
+  return state.hostComputerId || null;
 }
 
 async function SendPlayerDataToParty(player) {
-  const existingData = await getExistingPartyData(partyCode);
-  const updatedPartyData = existingData[0];
-  console.log(updatedPartyData.players);
-  const playerIndex = updatedPartyData.players.findIndex(p => getPlayerId(p) === deviceId);
-  if (playerIndex === -1) return;
-  updatedPartyData.players[playerIndex] = player;
+  const playerId = getPlayerId(player) || deviceId;
+  if (!playerId) return;
 
-  updatedPartyData.state.lastPinged = Date.now();
-  await updateOnlineParty({ partyId: partyCode, players: updatedPartyData.players, state: updatedPartyData.state });
+  const data = await UpdateUserPartyData({
+    partyId: partyCode,
+    computerId: playerId,
+    playerPatch: player
+  });
+
+  if (data?.updated) {
+    currentPartyData = data.updated;
+  }
 }

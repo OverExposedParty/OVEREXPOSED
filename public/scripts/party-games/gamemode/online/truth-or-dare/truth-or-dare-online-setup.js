@@ -24,22 +24,24 @@ async function SetPageSettings() {
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     if (selectPunishmentContainer.getAttribute('select-id')) {
       hideContainer(selectPunishmentContainer);
-      if (selectPunishmentContainer.getAttribute('select-id') == 'drink-wheel') {
-        await SendInstruction({
-          instruction: `CHOSE_PUNISHMENT:${formatDashedString({
-            input: selectPunishmentContainer.getAttribute('select-id'),
-            seperator: '_'
-          }).toUpperCase()}:` + deviceId,
-          byPassHost: true
-        });
-      }
-      else if (selectPunishmentContainer.getAttribute('select-id') == 'take-a-shot') {
-        completePunishmentContainer.setAttribute("punishment-type", "take-a-shot")
-        await SendInstruction({
-          instruction: "CHOSE_PUNISHMENT:TAKE_A_SHOT:" + deviceId,
-          byPassHost: true
-        });
-      }
+      const punishmentType = selectPunishmentContainer.getAttribute('select-id') == 'drink-wheel'
+        ? 'DRINK_WHEEL'
+        : selectPunishmentContainer.getAttribute('select-id') == 'take-a-shot'
+          ? 'TAKE_A_SHOT'
+          : formatDashedString({
+              input: selectPunishmentContainer.getAttribute('select-id'),
+              seperator: '_'
+            }).toUpperCase();
+
+      const updatedParty = await performOnlinePartyAction({
+        action: 'truth-or-dare-select-punishment',
+        payload: {
+          punishmentType,
+          phaseTimer: Date.now() + gameRules["time-limit"] * 1000
+        }
+      });
+
+      await syncTruthOrDarePartyAndRender(updatedParty);
       const selectPunishmentButtons = document.getElementById('select-punishment-container').querySelectorAll('.selected-user-container .button-container button');
       selectPunishmentButtons.forEach(button => {
         button.classList.remove('active');
@@ -49,67 +51,65 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    await ResetTruthOrDareQuestion({ force: true, nextPlayer: true });
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-complete-punishment',
+      payload: {
+        roundTimer: Date.now() + gameRules["time-limit"] * 1000
+      }
+    });
+
+    await syncTruthOrDarePartyAndRender(updatedParty);
   });
 
   selectQuestionTypeButtonTruth.addEventListener('click', async () => {
-    // deck.currentCardIndex++, deck.questionType = "truth"
-    currentPartyData.deck = currentPartyData.deck || {};
-    currentPartyData.deck.currentCardIndex = (currentPartyData.deck.currentCardIndex ?? 0) + 1;
-    currentPartyData.deck.questionType = "truth";
-
-    await SendInstruction({
-      partyData: currentPartyData,
-      instruction: "DISPLAY_PUBLIC_CARD",
-      updateUsersReady: false,
-      updateUsersConfirmation: false,
-      timer: Date.now() + gameRules["time-limit"] * 1000,
-      byPassHost: true
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-select-question-type',
+      payload: {
+        questionType: 'truth',
+        timer: Date.now() + gameRules["time-limit"] * 1000
+      }
     });
+
+    await syncTruthOrDarePartyAndRender(updatedParty);
   });
 
   selectQuestionTypeButtonDare.addEventListener('click', async () => {
-    currentPartyData.deck = currentPartyData.deck || {};
-    currentPartyData.deck.currentCardSecondIndex = (currentPartyData.deck.currentCardSecondIndex ?? 0) + 1;
-    currentPartyData.deck.questionType = "dare";
-
-    await SendInstruction({
-      partyData: currentPartyData,
-      instruction: "DISPLAY_PUBLIC_CARD",
-      updateUsersReady: false,
-      updateUsersConfirmation: false,
-      timer: Date.now() + gameRules["time-limit"] * 1000,
-      byPassHost: true
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-select-question-type',
+      payload: {
+        questionType: 'dare',
+        timer: Date.now() + gameRules["time-limit"] * 1000
+      }
     });
+
+    await syncTruthOrDarePartyAndRender(updatedParty);
   });
 
   gameContainerPublicButtonPass.addEventListener('click', async () => {
-    if (selectPunishmentButtonContainer.childElementCount == 0) {
-      await SendInstruction({
-        instruction: "RESET_QUESTION",
-        byPassHost: true
-      });
-      return;
-    }
-    else {
-      await SendInstruction({
-        instruction: "CHOOSING_PUNISHMENT",
-        byPassHost: true
-      });
-    }
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-pass-question',
+      payload: {
+        phaseTimer: Date.now() + gameRules["time-limit"] * 1000,
+        roundTimer: Date.now() + gameRules["time-limit"] * 1000
+      }
+    });
+
+    await syncTruthOrDarePartyAndRender(updatedParty);
   });
 
   gameContainerPublicButtonAnswer.addEventListener('click', async () => {
     if (textBoxSetting == false) {
       await SendInstruction({
         instruction: "DISPLAY_COMPLETE_QUESTION",
-        byPassHost: true
+        byPassHost: true,
+        fetchInstruction: true
       });
     }
     else {
       await SendInstruction({
         instruction: "DISPLAY_CONFIRM_INPUT",
-        byPassHost: true
+        byPassHost: true,
+        fetchInstruction: true
       });
     }
   });
@@ -117,7 +117,8 @@ async function SetPageSettings() {
   answerQuestionSubmitButton.addEventListener('click', async () => {
     await SendInstruction({
       instruction: "DISPLAY_ANSWER_CARD:" + answerQuestionAnswer.value,
-      byPassHost: true
+      byPassHost: true,
+      fetchInstruction: true
     });
   });
 
@@ -134,9 +135,6 @@ async function SetPageSettings() {
   AddTimerToContainer(selectQuestionTypeContainer);
   AddTimerToContainer(selectPunishmentContainer);
 
-  console.log(cardContainerPublic);
-  console.log(cardContainerPublic.querySelector('.main-image-container'));
-
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
     requirePlaying: true
@@ -149,9 +147,9 @@ async function SetPageSettings() {
   currentPartyData = initialPartyData;
 
   // Use config for selectedPacks & shuffleSeed (fallback to flat for legacy)
-  const config = currentPartyData.config ?? currentPartyData;
+  const config = getPartyConfig(currentPartyData);
   await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
-  console.log("initialisePage");
+  debugLog("initialisePage");
   await initialisePage();
 }
 
@@ -163,9 +161,8 @@ async function initialisePage() {
   if (party) {
 
     const players = party.players || [];
-    const config = party.config ?? party;
-    const state = party.state ?? party;
-    const deck = party.deck ?? party;
+    const config = getPartyConfig(party);
+    const state = getPartyState(party);
 
     isPlaying = true;
 
@@ -195,7 +192,15 @@ async function initialisePage() {
       hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
     }
 
-    console.log("hostDeviceId:", hostDeviceId);
+    debugLog("hostDeviceId:", hostDeviceId);
+    debugLog('[OE_DEBUG][truth-or-dare][initialisePage]', {
+      deviceId,
+      hostDeviceId,
+      onlineUsername,
+      userInstructions: getUserInstructions(party),
+      phase: state?.phase ?? null,
+      playerTurn: state?.playerTurn ?? null
+    });
 
     const myConnectionSocket = me.connection?.socketId ?? me.socketId;
     if (myConnectionSocket === "DISCONNECTED") {
@@ -269,47 +274,63 @@ async function initialisePage() {
     }
     await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`);
 
-    const userInstructions = config.userInstructions;
+    const userInstructions = getUserInstructions(party);
     if (!gameRules["time-limit"]) {
       gameRules["time-limit"] = 120;
     }
 
     if (deviceId == hostDeviceId && userInstructions === "") {
+      debugLog('[OE_DEBUG][truth-or-dare][initialisePage] host seeding initial instruction', {
+        deviceId,
+        hostDeviceId,
+        userInstructions,
+        phase: state?.phase ?? null,
+        playerTurn: state?.playerTurn ?? null
+      });
       await SendInstruction({
         instruction: "DISPLAY_SELECT_QUESTION_TYPE",
         updateUsersReady: false,
         updateUsersConfirmation: false,
-        partyData: party,
         fetchInstruction: true,
         timer: Date.now() + gameRules["time-limit"] * 1000,
       });
     }
-    else {
-      const syncedPartyState = await syncStartupPartyState();
+    
+    const syncedPartyState = await syncStartupPartyState();
 
-      if (syncedPartyState) {
-        currentPartyData = {
-          ...syncedPartyState.party,
-          config: syncedPartyState.config,
-          state: syncedPartyState.state,
-          deck: syncedPartyState.deck,
-          players: syncedPartyState.players
-        };
-      }
-
-      const partyWithInstruction = await waitForPartyInstruction({
-        retries: 20,
-        delayMs: 250
-      });
-
-      if (partyWithInstruction) {
-        currentPartyData = partyWithInstruction;
-      }
-
-      await FetchInstructions();
+    if (syncedPartyState) {
+      currentPartyData = {
+        ...syncedPartyState.party,
+        config: syncedPartyState.config,
+        state: syncedPartyState.state,
+        deck: syncedPartyState.deck,
+        players: syncedPartyState.players
+      };
     }
 
-    SetPartyGameStatistics();
+    const partyWithInstruction = await waitForPartyInstruction({
+      retries: 20,
+      delayMs: 250
+    });
+
+    if (partyWithInstruction) {
+      currentPartyData = partyWithInstruction;
+    }
+
+    debugLog('[OE_DEBUG][truth-or-dare][initialisePage] before FetchInstructions', {
+      phase: currentPartyData?.state?.phase ?? currentPartyData?.phase ?? null,
+      playerTurn: currentPartyData?.state?.playerTurn ?? currentPartyData?.playerTurn ?? null,
+      instructions: getUserInstructions(currentPartyData)
+    });
+    await runOnlineFetchInstructions({ reason: 'setup' });
+
+    try {
+      if (typeof scoreboardContainer !== 'undefined' && scoreboardContainer) {
+        SetPartyGameStatistics();
+      }
+    } catch (error) {
+      console.warn('Truth or Dare statistics setup skipped during startup:', error);
+    }
     await AddUserIcons();
 
     const firstPlayer = players[0];

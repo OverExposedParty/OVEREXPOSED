@@ -13,6 +13,7 @@ let helpContainerFile = "waiting-room-error.json";
 let minPlayerCount;
 let waitingRoomPartyCodeObserver = null;
 let waitingRoomDisbandMonitor = null;
+const WAITING_ROOM_DISBAND_FALLBACK_INTERVAL_MS = 10000;
 
 function hasRestriction(restrictionValue, expectedRestriction) {
   if (!restrictionValue || !expectedRestriction) return false;
@@ -144,7 +145,7 @@ async function checkPartyExists() {
     const state = partyData.state;
 
     partyGameMode = config.gamemode;
-    console.log("config.gameRules:", config.gameRules);
+    debugLog("config.gameRules:", config.gameRules);
     maxPlayerCount = partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
     helpContainerFile = "party-games-online/waiting-rooms/" + partyGameMode + '.json';
 
@@ -276,7 +277,7 @@ function startWaitingRoomDisbandMonitor() {
     } catch (error) {
       console.error('Failed to monitor waiting room party state:', error);
     }
-  }, 1500);
+  }, WAITING_ROOM_DISBAND_FALLBACK_INTERVAL_MS);
 }
 
 async function initWaitingRoom() {

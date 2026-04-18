@@ -38,7 +38,7 @@ function updateTextContainer(text, cardType) {
     document.querySelector('#private-view .card-type-text').style.color = matchedPack.packColour;
     setNsfwCardBadge('#private-view', matchedPack.packRestriction === 'nsfw');
   } else {
-    console.log("Pack not found");
+    debugLog("Pack not found");
     setNsfwCardBadge('#private-view', false);
   }
 

@@ -64,7 +64,7 @@ async function initialisePage() {
     hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
   }
 
-  console.log("hostDeviceId:", hostDeviceId);
+  debugLog("hostDeviceId:", hostDeviceId);
 
   const myConnectionSocket = me.connection?.socketId ?? me.socketId;
   if (myConnectionSocket === "DISCONNECTED") {
@@ -78,7 +78,7 @@ async function initialisePage() {
   me.connection = me.connection || {};
   me.connection.socketId = socket.id;
   me.socketId = socket.id;
-  console.log("Socket ID set to: " + me.connection.socketId);
+  debugLog("Socket ID set to: " + me.connection.socketId);
 
   await joinParty(partyCode);
 
@@ -168,7 +168,6 @@ async function initialisePage() {
         instruction: "DISPLAY_PRIVATE_CARD:READING_CARD",
         updateUsersReady: false,
         updateUsersConfirmation: false,
-        partyData: party,
         fetchInstruction: true,
         timer: Date.now() + gameRules["time-limit"] * 1000,
       });
@@ -194,7 +193,7 @@ async function initialisePage() {
         currentPartyData = partyWithInstruction;
       }
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     SetPartyGameStatistics();

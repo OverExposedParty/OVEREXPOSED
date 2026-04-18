@@ -11,15 +11,17 @@ async function DisplayPrivateCard() {
     timeLeft: delay / 1000,
     duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: selectOptionContainer,
+    label: 'selectOptionContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: selectOptionContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
-    duration: durationSeconds,
-    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+    duration: durationSeconds
   });
 
   SetTimeOut({
@@ -72,82 +74,80 @@ async function DisplayPrivateCard() {
   }
 }
 
+function getWouldYouRatherPhaseState() {
+  const state = getPartyState(currentPartyData);
+  return {
+    phase: state?.phase ?? null,
+    phaseData: state?.phaseData ?? {}
+  };
+}
+
+async function scheduleWouldYouRatherPhaseAction({ delay = 0, action, payload = {} } = {}) {
+  const state = getPartyState(currentPartyData);
+  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
+
+  if (deviceId !== authoritativeHostId || delay == null || !action) return;
+
+  if (timeout?.cancel) {
+    timeout.cancel();
+  }
+
+  timeout = createCancelableTimeout(delay);
+
+  try {
+    await timeout.promise;
+
+    const updatedParty = await performOnlinePartyAction({
+      action,
+      payload
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+  } catch (error) {
+    console.error('Would You Rather phase action failed:', error);
+  }
+}
+
+function getWouldYouRatherTargetIds() {
+  const { phaseData } = getWouldYouRatherPhaseState();
+  return Array.isArray(phaseData?.targetIds)
+    ? phaseData.targetIds.filter(Boolean)
+    : [];
+}
+
+function getWouldYouRatherWinningVote() {
+  const { phaseData } = getWouldYouRatherPhaseState();
+  return phaseData?.winningVote ?? null;
+}
+
 async function DisplayVoteResults() {
   const state = getPartyState(currentPartyData);
-  const players = currentPartyData.players || [];
 
   const delay = new Date(state.timer) - Date.now();
+  const firstDisplay = !isContainerVisible(resultsChartContainer);
 
-  stopTimer(waitingForPlayersContainer.querySelector('.timer-wrapper'));
-  startTimer({
+  stopTimerForContainer(waitingForPlayersContainer, 'waitingForPlayersContainer');
+  startTimerWithContainer({
+    container: resultsChartContainer,
+    label: 'resultsChartContainer',
     timeLeft: delay / 1000,
-    duration: resultTimerDuration / 1000,
-    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+    duration: resultTimerDuration / 1000
   });
 
-  if (!isContainerVisible(resultsChartContainer)) {
+  if (firstDisplay) {
     GetVoteResults(currentPartyData);
     setActiveContainers(resultsChartContainer);
   }
 
-  const aVoteCount = players.filter(
-    p => getPlayerState(p).vote === "A"
-  ).length;
-
-  const bVoteCount = players.filter(
-    p => getPlayerState(p).vote === "B"
-  ).length;
-
-  let punishmentInstruction;
-
-  const config = getPartyConfig(currentPartyData);
-  const rawGameRules = config.gameRules || {};
-  const gameRules =
-    rawGameRules instanceof Map ? Object.fromEntries(rawGameRules) : rawGameRules;
-
-  const oddManOutEnabled =
-    gameRules["odd-man-out"] === true || gameRules["odd-man-out"] === "true";
-
-  if (
-    (
-      aVoteCount === 1 &&
-      !(bVoteCount <= 1)
-    ) ||
-    (
-      bVoteCount === 1 &&
-      !(aVoteCount <= 1)
-    ) &&
-    oddManOutEnabled
-  ) {
-    punishmentInstruction = "CHOSE_PUNISHMENT:ODD_MAN_OUT";
-  }
-  else {
-    punishmentInstruction = "CHOSE_PUNISHMENT:TAKE_A_SIP";
-  }
-
-  if (gameRules["drink-punishment"]) {
-    SetTimeOut({
-      delay: delay,
-      instruction: punishmentInstruction,
-      nextDelay: null,
-      newUserConfirmed: false,
-      newUserReady: false
-    });
-  }
-  else {
-    const winningVote =
-      aVoteCount === bVoteCount
-        ? null
-        : aVoteCount > bVoteCount
-          ? "A"
-          : "B";
-
-    SetTimeOut({
-      delay: delay,
-      instruction: "RESET_QUESTION:" + winningVote,
-      nextDelay: null,
-      newUserConfirmed: false,
-      newUserReady: false
+  if (firstDisplay) {
+    scheduleWouldYouRatherPhaseAction({
+      delay,
+      action: 'would-you-rather-resolve-vote-results',
+      payload: {
+        roundTimer: Date.now() + getTimeLimit() * 1000
+      }
     });
   }
 }
@@ -178,73 +178,17 @@ async function WaitingForPlayer(instruction) {
 }
 
 async function DisplayPunishmentToUser(instruction) {
-  const parsedInstructions = parseInstruction(instruction);
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(
-    p => getPlayerId(p) === parsedInstructions.deviceId
-  );
-
-  if (parsedInstructions.deviceId === deviceId) {
-    completePunishmentText.textContent =
-      "take " + parsedInstructions.reason.replace("_", " ");
-    setActiveContainers(completePunishmentContainer);
-  }
-  else if (index !== -1) {
-    SetWaitingForPlayer({
-      waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[index]),
-      waitingForRoomText: "Showing player punishment...",
-      player: players[index]
-    });
-    setActiveContainers(waitingForPlayerContainer);
-  }
+  return;
 }
 
 async function PunishmentOffer(instruction) {
-  const parsedInstructions = parseInstructionSecondReason(instruction);
-
-  if (parsedInstructions.reason === "PASS") {
-    if (parsedInstructions.deviceId === deviceId) {
-      await SendInstruction({
-        instruction: "USER_HAS_PASSED:USER_PASSED_PUNISHMENT:" + deviceId,
-        partyData: currentPartyData
-      });
-    }
-  } else if (parsedInstructions.reason === "CONFIRM") {
-    if (deviceId === parsedInstructions.deviceId) {
-      const players = currentPartyData.players || [];
-
-      players.forEach(p => {
-        const ps = getPlayerState(p);
-        ps.isReady = false;
-        ps.hasConfirmed = false;
-      });
-
-      const myIndex = players.findIndex(
-        p => getPlayerId(p) === deviceId
-      );
-      const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-      if (myIndex !== -1) {
-        if (icons[myIndex]) {
-          icons[myIndex].classList.add('yes');
-        }
-        const myState = getPlayerState(players[myIndex]);
-        myState.isReady = true;
-        myState.hasConfirmed = true;
-      }
-
-      await SendInstruction({
-        instruction: "HAS_USER_DONE_PUNISHMENT:" + parsedInstructions.secondReason + ":" + deviceId,
-        partyData: currentPartyData
-      });
-    }
-  }
+  return;
 }
 
 async function ChosePunishment(instruction) {
-  const parsedInstructions = parseInstruction(instruction);
   const players = currentPartyData.players || [];
+  const { phase, phaseData } = getWouldYouRatherPhaseState();
+  const targetIds = getWouldYouRatherTargetIds();
 
   const myIndex = players.findIndex(
     p => getPlayerId(p) === deviceId
@@ -253,156 +197,60 @@ async function ChosePunishment(instruction) {
 
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
 
-  const aVoteCount = players.filter(
-    p => getPlayerState(p).vote === "A"
-  ).length;
-
-  const bVoteCount = players.filter(
-    p => getPlayerState(p).vote === "B"
-  ).length;
-
-  const nullVoteCount = players.filter(
-    p => getPlayerState(p).vote === null
-  ).length;
-
   const myState = getPlayerState(players[myIndex]);
-  const currentVote = myState.vote;
 
-  const allConfirmed = players.every(
-    p => getPlayerState(p).hasConfirmed === true
-  );
-
-  if (allConfirmed) {
-    const winningVote =
-      aVoteCount === bVoteCount
-        ? null
-        : aVoteCount > bVoteCount
-          ? "A"
-          : "B";
-
-    await SendInstruction({
-      instruction: "RESET_QUESTION:" + winningVote
-    });
-  }
-  else if (parsedInstructions.reason === "TAKE_A_SIP") {
-    if ((aVoteCount === bVoteCount && nullVoteCount === 0)) {
-      await SendInstruction({
-        instruction: "RESET_QUESTION"
-      });
+  players.forEach((player, i) => {
+    const pState = getPlayerState(player);
+    if (pState.hasConfirmed && icons[i]) {
+      icons[i].classList.add('yes');
     }
-    else if (
-      (currentVote === "A" && bVoteCount > aVoteCount) ||
-      (currentVote === "B" && aVoteCount > bVoteCount) ||
-      (currentVote == null)
-    ) {
-      completePunishmentText.textContent = "Take a sip.";
-      completePunishmentContainer.setAttribute("punishment-type", parsedInstructions.reason);
+  });
 
-      if (!myState.hasConfirmed) {
-        setActiveContainers(completePunishmentContainer);
-      } else {
-        DisplayWaitingForPlayers();
+  if (phase === 'would-you-rather-spin-odd-man-out') {
+    const oddManOutId = targetIds[0] ?? null;
+    const oddManOutPlayer = players.find(player => getPlayerId(player) === oddManOutId);
+    if (!oddManOutPlayer) return;
+
+    if (oddManOutId === deviceId) {
+      if (typeof resetDrinkWheelState === 'function') {
+        resetDrinkWheelState();
       }
-    }
-    else {
-      if (myState.hasConfirmed === false) {
-        SetUserConfirmation({
-          selectedDeviceId: deviceId,
-          option: true
-        });
-      }
-      else {
-        DisplayWaitingForPlayers();
-      }
-    }
-  }
-  else if (parsedInstructions.reason === "ODD_MAN_OUT") {
-    let oddManOutIndex;
-
-    if (aVoteCount === 1) {
-      oddManOutIndex = players.findIndex(
-        p => getPlayerState(p).vote === "A"
-      );
-    }
-    else {
-      oddManOutIndex = players.findIndex(
-        p => getPlayerState(p).vote === "B"
-      );
-    }
-
-    if (oddManOutIndex === -1) return;
-
-    if (myIndex === oddManOutIndex) {
-      console.log("You are the odd man out, spinning the wheel.");
       setActiveContainers(drinkWheelContainer);
-    }
-    else {
+    } else {
       SetWaitingForPlayer({
-        waitingForRoomTitle: "Waiting for " + getPlayerUsername(players[oddManOutIndex]),
+        waitingForRoomTitle: "Waiting for " + getPlayerUsername(oddManOutPlayer),
         waitingForRoomText: "Spinning drink wheel...",
-        player: players[oddManOutIndex]
+        player: oddManOutPlayer
       });
       setActiveContainers(waitingForPlayerContainer);
     }
+    return;
+  }
+
+  if (targetIds.includes(deviceId)) {
+    const punishmentType = String(phaseData?.punishmentType ?? 'TAKE_A_SIP');
+    completePunishmentText.textContent =
+      punishmentType === 'TAKE_A_SIP'
+        ? 'Take a sip.'
+        : 'Take ' + punishmentType.replace(/_/g, ' ').toLowerCase() + '.';
+    completePunishmentContainer.setAttribute('punishment-type', punishmentType);
+
+    if (!myState.hasConfirmed) {
+      setActiveContainers(completePunishmentContainer);
+    } else {
+      DisplayWaitingForPlayers();
+    }
+  } else {
+    DisplayWaitingForPlayers();
   }
 }
 
 async function UserSelectedForPunishment(instruction) {
-  const parsedInstructions = parseInstructionDeviceId(instruction);
-  const players = currentPartyData.players || [];
-
-  const index = players.findIndex(
-    p => getPlayerId(p) === parsedInstructions.deviceId
-  );
-
-  if (parsedInstructions.deviceId === deviceId) {
-    setActiveContainers(selectPunishmentContainer);
-  }
-  else if (index !== -1) {
-    waitingForPlayerTitle.textContent = "Waiting for " + getPlayerUsername(players[index]);
-    waitingForPlayerText.textContent = "Choosing Punishment...";
-    setActiveContainers(waitingForPlayerContainer);
-  }
+  return;
 }
 
 async function AnswerToUserDonePunishment() {
-  const players = currentPartyData.players || [];
-  const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
-
-  const myIndex = players.findIndex(
-    p => getPlayerId(p) === deviceId
-  );
-  if (myIndex === -1) return;
-
-  const myState = getPlayerState(players[myIndex]);
-
-  if (myState.isReady === true) {
-    DisplayWaitingForPlayers();
-
-    const allReady = players.every(
-      p => getPlayerState(p).isReady === true
-    );
-
-    if (allReady) {
-      const aVoteCount = players.filter(
-        p => getPlayerState(p).vote === "A"
-      ).length;
-      const bVoteCount = players.filter(
-        p => getPlayerState(p).vote === "B"
-      ).length;
-
-      const winningVote =
-        aVoteCount === bVoteCount
-          ? null
-          : aVoteCount > bVoteCount
-            ? "A"
-            : "B";
-
-      await SendInstruction({
-        instruction: "RESET_QUESTION:" + winningVote
-      });
-    }
-  }
+  return;
 }
 
 function GetVoteResults(currentPartyData) {

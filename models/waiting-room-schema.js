@@ -41,7 +41,9 @@ const waitingRoomConfigSchema = new mongoose.Schema({
 
 const waitingRoomStateSchema = new mongoose.Schema({
   isPlaying:  { type: Boolean, required: true },
-  lastPinged: { type: Date, default: Date.now }
+  lastPinged: { type: Date, default: Date.now },
+  hostComputerId: { type: String, default: null },
+  hostComputerIdList: { type: [String], default: [] }
 }, { _id: false });
 
 const WaitingRoomSchema = new mongoose.Schema({

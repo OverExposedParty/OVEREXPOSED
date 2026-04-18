@@ -102,8 +102,8 @@ async function GetRoles(playerCount) {
       const parts = entry.split(':').map(s => s.trim());
       const key = parts[0].replace("mafia-", '');
       const count = parseInt(parts[1], 10);
-      console.log("key", key, "count", count);
-      console.log("validRoles", validRoles);
+      debugLog("key", key, "count", count);
+      debugLog("validRoles", validRoles);
 
       if (validRoles.includes(key)) {
         const times = Number.isFinite(count) && count > 0 ? count : 1;

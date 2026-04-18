@@ -70,7 +70,16 @@ async function setPlayerTimeout({ delay = 0, clearIcons = false, playerTimer = n
 
   setByPath(player, playerTimer, timerValue);
 
-  await updateOnlineParty({ partyId: partyCode, players: currentPartyData.players });
+  const updatedPartyAfterTimerStart = await performOnlinePartyAction({
+    action: 'sync-party-state',
+    payload: {
+      playerUpdates: [player]
+    }
+  });
+
+  if (updatedPartyAfterTimerStart) {
+    currentPartyData = updatedPartyAfterTimerStart;
+  }
 
   if (playerTimeOut?.cancel) playerTimeOut.cancel();
   playerTimeOut = createCancelableTimeout(timerValueMs - Date.now());
@@ -86,7 +95,16 @@ async function setPlayerTimeout({ delay = 0, clearIcons = false, playerTimer = n
 
   setByPath(player, playerTimer, null);
 
-  await updateOnlineParty({ partyId: partyCode, players: currentPartyData.players });
+  const updatedPartyAfterTimerEnd = await performOnlinePartyAction({
+    action: 'sync-party-state',
+    payload: {
+      playerUpdates: [player]
+    }
+  });
+
+  if (updatedPartyAfterTimerEnd) {
+    currentPartyData = updatedPartyAfterTimerEnd;
+  }
 }
 
 function startPhaseContainerTimer({ remainingMs, durationMs, timerSelector }) {

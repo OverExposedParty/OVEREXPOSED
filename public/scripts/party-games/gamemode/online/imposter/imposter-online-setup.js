@@ -26,28 +26,17 @@ async function SetPageSettings() {
   });
 
   displayUserAnswerButton.addEventListener('click', async () => {
-    const players = currentPartyData.players || [];
-    const index = players.findIndex(player => getPlayerId(player) === deviceId);
-
-    if (index === -1) return;
-
-    const state = currentPartyData.state || {};
-    const playerCount = players.length;
-
-    const currentRoundPlayerTurn = state.roundPlayerTurn ?? 0;
-    const nextRoundPlayerTurn = (currentRoundPlayerTurn + 1) % playerCount;
-
-    state.roundPlayerTurn = nextRoundPlayerTurn;
-
-    if (index > nextRoundPlayerTurn) {
-      state.round = (state.round ?? 0) + 1;
-    }
-
-    currentPartyData.state = state;
-
-    await SendInstruction({
-      partyData: currentPartyData
+    const updatedParty = await performOnlinePartyAction({
+      action: 'imposter-advance-answer-turn',
+      payload: {
+        roundsLimit: rounds,
+        timer: Date.now() + getTimeLimit() * 1000
+      }
     });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
   });
 
   selectUserConfirmPlayerButton.addEventListener('click', async () => {
@@ -70,24 +59,23 @@ async function SetPageSettings() {
       hideContainer(selectPunishmentContainer);
 
       const selectedId = selectPunishmentContainer.getAttribute('select-id');
+      const punishmentType = selectedId === 'lucky-coin-flip'
+        ? 'COIN_FLIP'
+        : selectedId === 'drink-wheel'
+          ? 'DRINK_WHEEL'
+          : selectedId === 'take-a-shot'
+            ? 'TAKE_A_SHOT'
+            : selectedId;
 
-      if (selectedId === 'lucky-coin-flip') {
-        console.log("paranoia-coin-flip");
-        await SendInstruction({
-          instruction: "CHOSE_PUNISHMENT:COIN_FLIP",
-          byPassHost: true
-        });
-      } else if (selectedId === 'drink-wheel') {
-        await SendInstruction({
-          instruction: "CHOSE_PUNISHMENT:DRINK_WHEEL",
-          byPassHost: true
-        });
-      } else if (selectedId === 'take-a-shot') {
-        completePunishmentContainer.setAttribute("punishment-type", "take-a-shot");
-        await SendInstruction({
-          instruction: "CHOSE_PUNISHMENT:TAKE_A_SHOT",
-          byPassHost: true
-        });
+      const updatedParty = await performOnlinePartyAction({
+        action: 'imposter-select-punishment',
+        payload: {
+          punishmentType
+        }
+      });
+
+      if (updatedParty) {
+        currentPartyData = updatedParty;
       }
 
       const selectPunishmentButtons = document
@@ -102,12 +90,18 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    await SendInstruction({
-      instruction: "RESET_QUESTION:NEXT_PLAYER",
-      updateUsersReady: false,
-      updateUsersConfirmation: false,
-      byPassHost: true
+    const updatedParty = await performOnlinePartyAction({
+      action: 'imposter-complete-punishment',
+      payload: {
+        roundTimer: Date.now() + getTimeLimit() * 1000,
+        resetInstruction: resetGamemodeInstruction,
+        alternativeQuestionIndex: Math.floor(Math.random() * 255)
+      }
     });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
   });
 
   AddTimerToContainer(selectUserContainer);
@@ -183,7 +177,7 @@ async function initialisePage() {
     hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
   }
 
-  console.log("hostDeviceId:", hostDeviceId);
+  debugLog("hostDeviceId:", hostDeviceId);
 
   const myConnectionSocket = me.connection?.socketId ?? me.socketId;
   if (myConnectionSocket === "DISCONNECTED") {
@@ -198,7 +192,7 @@ async function initialisePage() {
   const meConn = ensureConnection(me); 
   meConn.socketId = socket.id;
   me.socketId = socket.id;
-  console.log("Socket ID set to: " + meConn.socketId);
+  debugLog("Socket ID set to: " + meConn.socketId);
 
   if (state.isPlaying === true) {
     if (timeBased === false) {
@@ -310,7 +304,7 @@ async function initialisePage() {
         currentPartyData = partyWithInstruction;
       }
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     currentPartyData = { ...party, config, state, deck };

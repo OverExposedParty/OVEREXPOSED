@@ -4,6 +4,7 @@
 let gamemodeSettings = {};      // key -> true or number
 let gamemodeSelectedPacks = []; // array of pack keys
 let allUsersReady = undefined;
+let onlinePlayerCountRestrictionsMet = true;
 
 let eighteenPlusEnabled = localStorage.getItem('settings-nsfw') === 'true';
 
@@ -18,9 +19,66 @@ const qrCodeButton = document.getElementById('qr-code-button');
 // ─────────────────────────────────────────────
 // Start button enabling / disabling
 // ─────────────────────────────────────────────
+function getCurrentPlayerCountRestrictions() {
+    return partyGamesInformation?.[partyGameMode]?.playerCountRestrictions || {};
+}
+
+function getPlayerCountRestrictionError(playerCount) {
+    const restrictions = getCurrentPlayerCountRestrictions();
+    const minPlayers = Number(restrictions.minPlayers);
+    const maxPlayers = Number(restrictions.maxPlayers);
+
+    if (Number.isFinite(minPlayers) && playerCount < minPlayers) {
+        return `- ${minPlayers - playerCount} more player${minPlayers - playerCount === 1 ? '' : 's'} needed`;
+    }
+
+    if (Number.isFinite(maxPlayers) && playerCount > maxPlayers) {
+        return `- Too many players (${playerCount}/${maxPlayers})`;
+    }
+
+    return '';
+}
+
+function setPlayerCountRestrictionError(message) {
+    if (errorNotEnoughPlayers) {
+        const errorText = errorNotEnoughPlayers.querySelector('.error-text');
+        if (errorText) {
+            errorText.textContent = message || '- Insufficient players';
+        }
+    }
+
+    setError(errorNotEnoughPlayers, Boolean(message));
+}
+
+function clearPlayerCountRestrictionError() {
+    onlinePlayerCountRestrictionsMet = true;
+
+    if (errorNotEnoughPlayers) {
+        errorNotEnoughPlayers.classList.remove('hidden');
+    }
+
+    setPlayerCountRestrictionError('');
+}
+
+async function refreshOnlinePlayerCountRestrictions() {
+    if (!partyCode) {
+        clearPlayerCountRestrictionError();
+        return true;
+    }
+
+    const existingData = await getExistingPartyData(partyCode);
+    const latestParty = existingData?.[0];
+    const playerCount = Array.isArray(latestParty?.players) ? latestParty.players.length : 0;
+    const errorMessage = getPlayerCountRestrictionError(playerCount);
+
+    onlinePlayerCountRestrictionsMet = errorMessage === '';
+    setPlayerCountRestrictionError(errorMessage);
+    return onlinePlayerCountRestrictionsMet;
+}
+
 function updateStartGameButton(allReady) {
     if (typeof allReady !== 'undefined') {
-        if (allReady && CheckErrors()) {
+        if (allReady && onlinePlayerCountRestrictionsMet && CheckErrors()) {
             startGameButton.classList.remove('disabled');
         } else {
             startGameButton.classList.add('disabled');
@@ -200,7 +258,7 @@ function SetGameSettingsButtons() {
                     if (isActive) {
                         if (!gamemodeSelectedPacks.includes(key)) {
                             gamemodeSelectedPacks.push(key);
-                            console.log('selected', gamemodeSelectedPacks);
+                            debugLog('selected', gamemodeSelectedPacks);
                         }
                     } else {
                         gamemodeSelectedPacks = gamemodeSelectedPacks.filter(k => k !== key);
@@ -348,6 +406,10 @@ if (qrCodeButton) {
 }
 
 startGameButton.addEventListener('click', () => {
+    if (startGameButton.classList.contains('disabled')) {
+        return;
+    }
+
     const nsfwPacksActive = Array.from(nsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
     const nsfwgameRulesActive = Array.from(gameRulesNsfwButtons).some(button => button.classList.contains('active') && button.classList.contains('nsfw'));
 
@@ -382,10 +444,37 @@ function removeSettingsExtensionFromCurrentURL() {
     return currentURL;
 }
 
-async function startOnlineGame() {
-    loadingPage = true;
-    await setIsPlayingForParty(partyCode, true);
-    transitionSplashScreen(removeSettingsExtensionFromCurrentURL() + "/" + partyCode, `/images/splash-screens/${startGameButton.id}.png`);
+function closeStartWarningIfOpen() {
+    if (!warningBox || !isContainerVisible(warningBox)) {
+        return;
+    }
+
+    removeElementIfExists(elementClassArray, warningBox);
+    hideContainer(warningBox);
+    toggleOverlay(false);
+}
+
+async function startOnlineGame({ bypassPlayerRestrictions = false } = {}) {
+    if (partyCode && !bypassPlayerRestrictions) {
+        const playerCountIsValid = await refreshOnlinePlayerCountRestrictions();
+        if (!playerCountIsValid) {
+            closeStartWarningIfOpen();
+            updateStartGameButton(allUsersReady);
+            return;
+        }
+    }
+
+    try {
+        loadingPage = true;
+        await startOnlinePartyGame(partyCode, { bypassPlayerRestrictions });
+        transitionSplashScreen(removeSettingsExtensionFromCurrentURL() + "/" + partyCode, `/images/splash-screens/${startGameButton.id}.png`);
+    } catch (error) {
+        loadingPage = false;
+        console.error('Failed to start online game:', error);
+        await refreshOnlinePlayerCountRestrictions();
+        closeStartWarningIfOpen();
+        updateStartGameButton(allUsersReady);
+    }
 }
 
 // ─────────────────────────────────────────────
@@ -395,6 +484,9 @@ async function SetGamemodeContainer() {
     SetGameSettingsButtons();
     if (partyCode) {
         allUsersReady = await GetAllUsersReady();
+        await refreshOnlinePlayerCountRestrictions();
+    } else {
+        clearPlayerCountRestrictionError();
     }
     updateStartGameButton(allUsersReady);
     SetGamemodeButtons(true);
@@ -403,6 +495,9 @@ async function SetGamemodeContainer() {
 async function UpdateGamemodeContainer() {
     if (partyCode) {
         allUsersReady = await GetAllUsersReady();
+        await refreshOnlinePlayerCountRestrictions();
+    } else {
+        clearPlayerCountRestrictionError();
     }
     updateStartGameButton(allUsersReady);
     SetGamemodeButtons();
@@ -531,7 +626,7 @@ async function UpdateSettings() {
                     ?? window.currentOnlineShuffleSeed
                     ?? Math.floor(Math.random() * 256)
             };
-            console.log('[UpdateSettings] preserving shuffleSeed=', mergedConfig.shuffleSeed, {
+            debugLog('[UpdateSettings] preserving shuffleSeed=', mergedConfig.shuffleSeed, {
                 oldConfigShuffleSeed: oldConfig.shuffleSeed,
                 currentPartyDataShuffleSeed: currentPartyData.shuffleSeed,
                 currentOnlineShuffleSeed: window.currentOnlineShuffleSeed

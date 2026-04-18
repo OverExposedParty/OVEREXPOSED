@@ -27,7 +27,7 @@
 
     // === Wire-up ===
     await fetchConfessions();
-    console.log("Fetched confessions");
+    debugLog("Fetched confessions");
 
     titleTextInput.addEventListener("input", togglePublishButton);
     contentsTextArea.addEventListener("input", togglePublishButton);

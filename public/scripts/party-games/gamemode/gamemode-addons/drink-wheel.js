@@ -5,7 +5,7 @@ let spinning = false;
 let spinDisabled = false;
 
 if (placeholderGamemodeAddons?.dataset.online === "false") {
-    console.log(spinButton);
+    debugLog(spinButton);
     if (spinButton) {
         spinButton.addEventListener('click', toggleDrinkWheel);
     }
@@ -138,6 +138,19 @@ function updateSpinHoverState() {
     spinEl.classList.toggle('can-spin', canSpin);
 }
 
+function resetDrinkWheelState() {
+    spinning = false;
+    spinDisabled = false;
+    spinButtonClicked = false;
+    angVel = 0;
+
+    spinEl.textContent = 'SPIN';
+    const { primary, secondaryBackground } = getCurrentPageColours();
+    spinEl.style.backgroundColor = primary;
+    spinEl.style.color = secondaryBackground;
+    updateSpinHoverState();
+}
+
 function frame() {
     if (!angVel && spinButtonClicked) {
         const finalSector = sectors[getIndex()];
@@ -203,9 +216,6 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
     events.addListener("spinEnd", async (sector) => {
         spinning = false;
 
-        const existingData = await getExistingPartyData(partyCode);
-        const currentPartyData = existingData[0] || {};
-
         if (spinEl.textContent === "DOWN IT") {
             if (placeholderGamemodeAddons.dataset.gamemode === "paranoia") {
                 completePunishmentText.textContent = "In order to find out the question you have to down your drink.";
@@ -226,12 +236,125 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
         }
 
         await new Promise(resolve => setTimeout(resolve, 500));
-        await SendInstruction({
-            instruction: "DISPLAY_PUNISHMENT_TO_USER:" + (spinEl.textContent).replace(/\s+/g, "_").toUpperCase() + ":" + deviceId,
-            byPassHost: true
-        });
 
-        spinDisabled = false;
+        if (
+            placeholderGamemodeAddons?.dataset.gamemode === "paranoia" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'paranoia-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof ChosePunishment === 'function') {
+                await ChosePunishment();
+            } else if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else if (
+            placeholderGamemodeAddons?.dataset.gamemode === "would-you-rather" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'would-you-rather-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else if (
+            placeholderGamemodeAddons?.dataset.gamemode === "never-have-i-ever" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'never-have-i-ever-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else if (
+            placeholderGamemodeAddons?.dataset.gamemode === "most-likely-to" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'most-likely-to-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else if (
+            placeholderGamemodeAddons?.dataset.gamemode === "truth-or-dare" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'truth-or-dare-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else if (
+            placeholderGamemodeAddons?.dataset.gamemode === "imposter" &&
+            typeof performOnlinePartyAction === "function"
+        ) {
+            const updatedParty = await performOnlinePartyAction({
+                action: 'imposter-resolve-drink-wheel',
+                payload: {
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                }
+            });
+
+            if (updatedParty) {
+                currentPartyData = updatedParty;
+            }
+
+            if (typeof FetchInstructions === 'function') {
+                await FetchInstructions();
+            }
+        } else {
+            await SendInstruction({
+                instruction: "DISPLAY_PUNISHMENT_TO_USER:" + (spinEl.textContent).replace(/\s+/g, "_").toUpperCase() + ":" + deviceId,
+                byPassHost: true
+            });
+        }
+
+        spinDisabled = true;
         updateSpinHoverState();
     });
 } else {

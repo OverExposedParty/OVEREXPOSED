@@ -16,7 +16,7 @@ fetch('/html-templates/other/cookie-banner.html')
             removeElementIfExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
             toggleOverlay(false);
             acceptCookies();
-            console.log(permanantElementClassArray);
+            debugLog(permanantElementClassArray);
             placeHolderCookieConsentBanner.remove();
         });
         placeHolderCookieConsentBanner.querySelector('#decline-cookies').addEventListener('click', () => {
@@ -24,7 +24,7 @@ fetch('/html-templates/other/cookie-banner.html')
             removeElementIfExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));
             toggleOverlay(false);
             declineCookies()
-            console.log(permanantElementClassArray);
+            debugLog(permanantElementClassArray);
             placeHolderCookieConsentBanner.remove();
         });
         addElementIfNotExists(permanantElementClassArray, placeHolderCookieConsentBanner.querySelector('.cookie-banner'));

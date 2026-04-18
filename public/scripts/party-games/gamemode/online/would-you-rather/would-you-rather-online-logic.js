@@ -9,6 +9,18 @@ async function FetchInstructions() {
 
   // NEW SCHEMA: use config.userInstructions
   const instructions = getUserInstructions(currentPartyData);
+  const state = getPartyState(currentPartyData);
+  const phase = state?.phase ?? null;
+
+  if (phase === 'would-you-rather-spin-odd-man-out') {
+    ChosePunishment();
+    return;
+  }
+
+  if (phase === 'would-you-rather-show-punishment') {
+    ChosePunishment();
+    return;
+  }
 
   if (instructions.includes("DISPLAY_PRIVATE_CARD")) {
     DisplayPrivateCard(instructions);
@@ -19,40 +31,10 @@ async function FetchInstructions() {
   else if (instructions.includes("WAITING_FOR_PLAYER")) {
     WaitingForPlayer(instructions);
   }
-  else if (instructions.includes("CHOSE_PUNISHMENT")) {
-    ChosePunishment(instructions);
-  }
-  else if (instructions.includes("CHOOSING_PUNISHMENT")) {
-    ChoosingPunishment(instructions);
-  }
-  else if (instructions.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-    DisplayPunishmentToUser(instructions);
-  }
-  else if (instructions.includes("PUNISHMENT_OFFER")) {
-    PunishmentOffer(instructions);
-  }
   else if (instructions.includes("GAME_OVER")) {
     SetPartyGameStatisticsGameOver();
   }
   else if (instructions.includes("RESET_QUESTION")) {
-    if (hostDeviceId != deviceId) return;
-
-    const parsedInstructions = parseInstruction(instructions);
-
-    if (parsedInstructions.reason == "A" || parsedInstructions.reason == "B") {
-      for (let i = 0; i < currentPartyData.players.length; i++) {
-        const player = currentPartyData.players[i];
-
-        // NEW SCHEMA: vote/score under state, socketId under connection
-        if (
-          player.state.vote == parsedInstructions.reason &&
-          player.connection.socketId !== "DISCONNECTED"
-        ) {
-          player.state.score++;
-        }
-      }
-    }
-
     await ResetQuestion({
       nextPlayer: true,
       timer: Date.now() + getTimeLimit() * 1000

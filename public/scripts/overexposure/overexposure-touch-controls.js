@@ -76,7 +76,7 @@ function handleTouchHold(event) {
         isClickInsideContainer(event, document.querySelectorAll('.no-place')) ||
         isClickInsideContainer(event, document.querySelectorAll('.floating-button'))
     ) {
-        console.log("radius exceeded / invalid area");
+        debugLog("radius exceeded / invalid area");
         showFloatingText(event, "Card cannot be placed here");
         if (creatingCard) {
             creatingCard.remove();

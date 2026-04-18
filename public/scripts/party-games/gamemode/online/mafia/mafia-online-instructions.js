@@ -8,6 +8,34 @@ const dayTimer = dayTimerSeconds * 1000;
 const mafiaDisplayRoleTimer = 7500;
 const displayPlayerKilledTimer = 7500;
 
+async function scheduleMafiaHostAction({ delay = 0, action, payload = {} } = {}) {
+  const state = getPartyState(currentPartyData);
+  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
+
+  if (deviceId !== authoritativeHostId || delay == null || !action) return;
+
+  if (timeout?.cancel) {
+    timeout.cancel();
+  }
+
+  timeout = createCancelableTimeout(delay);
+
+  try {
+    await timeout.promise;
+
+    const updatedParty = await performOnlinePartyAction({
+      action,
+      payload
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+  } catch (error) {
+    console.error('Mafia host action failed:', error);
+  }
+}
+
 async function DisplayRole() {
   const state = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
@@ -15,16 +43,20 @@ async function DisplayRole() {
   const timerValue = state.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: displayRoleContainer,
+    label: 'displayRoleContainer',
     timeLeft: delay / 1000,
-    duration: mafiaDisplayRoleTimer / 1000,
-    selectedTimer: displayRoleContainer.querySelector('.timer-wrapper')
+    duration: mafiaDisplayRoleTimer / 1000
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_NIGHT_PHASE",
-    nextDelay: nightTimer
+    action: 'send-instruction',
+    payload: {
+      instruction: 'DISPLAY_NIGHT_PHASE',
+      timer: new Date(Date.now() + nightTimer)
+    }
   });
 
   const index = players.findIndex(p => getPlayerId(p) === deviceId);
@@ -51,13 +83,24 @@ async function DisplayNightPhase() {
 
   const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
   if (myIndex === -1) return;
-  const allVotesSubmitted = await sendInstructionIfAllVotesSubmitted({
-    players,
-    instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
-    partyData: currentPartyData,
-    checkStatus: true
+  const allVotesSubmitted = players.every(p => {
+    const playerState = getPlayerState(p);
+    if (p.state?.status !== 'alive') return true;
+    return !!playerState?.hasConfirmed;
   });
-  if (allVotesSubmitted) return;
+  if (allVotesSubmitted) {
+    const updatedParty = await performOnlinePartyAction({
+      action: 'mafia-resolve-night',
+      payload: {
+        timer: new Date(Date.now() + displayPlayerKilledTimer)
+      }
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+    return;
+  }
   else if (currentPartyData.players[myIndex].state.status === "dead") {
     DisplayPlayerDeadPLayerBoard();
     return;
@@ -68,26 +111,31 @@ async function DisplayNightPhase() {
   const timerValue = state.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: selectCivilianWatchContainer,
+    label: 'selectCivilianWatchContainer',
     timeLeft: delay / 1000,
-    duration: nightTimerSeconds,
-    selectedTimer: selectCivilianWatchContainer.querySelector('.timer-wrapper')
+    duration: nightTimerSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
-    duration: nightTimerSeconds,
-    selectedTimer: waitingForPlayersContainer.querySelector('.timer-wrapper')
+    duration: nightTimerSeconds
   });
-  startTimer({
+  startTimerWithContainer({
+    container: selectUserNightPhaseContainer,
+    label: 'selectUserNightPhaseContainer',
     timeLeft: delay / 1000,
-    duration: nightTimerSeconds,
-    selectedTimer: selectUserNightPhaseContainer.querySelector('.timer-wrapper')
+    duration: nightTimerSeconds
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_NIGHT_PHASE_PART_TWO",
-    nextDelay: null
+    action: 'mafia-resolve-night',
+    payload: {
+      timer: new Date(Date.now() + displayPlayerKilledTimer)
+    }
   });
 
   const index = players.findIndex(p => getPlayerId(p) === deviceId);
@@ -105,7 +153,7 @@ async function DisplayNightPhase() {
       !isContainerVisible(selectCivilianWatchContainer) &&
       !isContainerVisible(displayCivilianWatchResponseContainer)
     ) {
-      console.log("completed", myState.phase.state === "completed");
+      debugLog("completed", myState.phase.state === "completed");
       waitForFunction("InitializeCivilianWatch", async () => {
         await InitializeCivilianWatch(myState.phase.state === "completed");
       })
@@ -145,28 +193,7 @@ async function DisplayNightPhase() {
 }
 
 async function DisplayNightPhasePartTwo() {
-
-  const state = getPartyState(currentPartyData);
-  const players = currentPartyData.players || [];
-
-  const newState = {
-    ...state,
-    phase: "day"
-  };
-
-  const mafiaVote = GetMafiaVote();
-  console.log("mafiaVote", mafiaVote);
-
-  const resetPlayers = ResetVotes(players);
-
-  currentPartyData.state = newState;
-  currentPartyData.players = resetPlayers;
-
-  await SendInstruction({
-    instruction: "DISPLAY_PLAYER_KILLED:" + mafiaVote,
-    partyData: currentPartyData,
-    timer: new Date(Date.now() + displayPlayerKilledTimer)
-  });
+  return;
 }
 
 async function DisplayPlayerKilled(instruction) {
@@ -176,16 +203,20 @@ async function DisplayPlayerKilled(instruction) {
   const timerValue = state.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: displayPlayerKilledContainer,
+    label: 'displayPlayerKilledContainer',
     timeLeft: delay / 1000,
-    duration: displayPlayerKilledTimer / 1000,
-    selectedTimer: displayPlayerKilledContainer.querySelector('.timer-wrapper')
+    duration: displayPlayerKilledTimer / 1000
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_PLAYER_KILLED_PART_TWO",
-    nextDelay: null
+    action: 'mafia-finish-player-killed',
+    payload: {
+      killedId: parsedInstructions.reason,
+      timer: new Date(Date.now() + dayTimer)
+    }
   });
 
   const parsedInstructions = parseInstruction(instruction);
@@ -215,24 +246,19 @@ async function DisplayPlayerKilled(instruction) {
 }
 
 async function DisplayPlayerKilledPartTwo() {
-  const players = currentPartyData.players || [];
-  const resetPlayers = ResetVotes(players);
+  const userInstructions = getUserInstructions(currentPartyData);
+  const parsedInstructions = parseInstruction(userInstructions);
 
-  currentPartyData.players = resetPlayers;
-
-  const checkGameOver = await CheckGameOver();
-
-  if (checkGameOver != null) {
-    await SendInstruction({
-      instruction: checkGameOver,
-      partyData: currentPartyData
-    });
-  } else {
-    await SendInstruction({
-      instruction: "DISPLAY_DAY_PHASE_DISCUSSION",
-      partyData: currentPartyData,
+  const updatedParty = await performOnlinePartyAction({
+    action: 'mafia-finish-player-killed',
+    payload: {
+      killedId: parsedInstructions.reason,
       timer: new Date(Date.now() + dayTimer)
-    });
+    }
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
@@ -250,12 +276,15 @@ async function DisplayDayPhaseDiscussion() {
     selectedTimer: displayDayTimerContainer
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_DAY_PHASE_VOTE",
-    nextDelay: dayTimer
+    action: 'send-instruction',
+    payload: {
+      instruction: 'DISPLAY_DAY_PHASE_VOTE',
+      timer: new Date(Date.now() + dayTimer)
+    }
   });
-  console.log(currentPartyData.players[myIndex].state.status);
+  debugLog(currentPartyData.players[myIndex].state.status);
   if (currentPartyData.players[myIndex].state.status === "dead") {
     DisplayPlayerDeadPLayerBoard();
     return;
@@ -269,14 +298,25 @@ async function DisplayDayPhaseVote() {
 
   const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
   if (myIndex === -1) return;
-  const allVotesSubmitted = await sendInstructionIfAllVotesSubmitted({
-    players,
-    instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
-    partyData: currentPartyData,
-    checkStatus: true
+  const allVotesSubmitted = players.every(p => {
+    const playerState = getPlayerState(p);
+    if (p.state?.status !== 'alive') return true;
+    return !!playerState?.hasConfirmed;
   });
-  console.log("allVotesSubmitted: ", allVotesSubmitted);
-  if (allVotesSubmitted) return;
+  debugLog("allVotesSubmitted: ", allVotesSubmitted);
+  if (allVotesSubmitted) {
+    const updatedParty = await performOnlinePartyAction({
+      action: 'mafia-resolve-day-vote',
+      payload: {
+        timer: new Date(Date.now() + displayPlayerKilledTimer)
+      }
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+    return;
+  }
   else if (currentPartyData.players[myIndex].state.status === "dead") {
     DisplayPlayerDeadPLayerBoard();
     return;
@@ -287,16 +327,19 @@ async function DisplayDayPhaseVote() {
   const timerValue = state.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: selectUserDayPhaseContainer,
+    label: 'selectUserDayPhaseContainer',
     timeLeft: delay / 1000,
-    duration: dayTimerSeconds,
-    selectedTimer: selectUserDayPhaseContainer.querySelector('.timer-wrapper')
+    duration: dayTimerSeconds
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_DAY_PHASE_VOTE_PART_TWO",
-    nextDelay: dayTimer
+    action: 'mafia-resolve-day-vote',
+    payload: {
+      timer: new Date(Date.now() + displayPlayerKilledTimer)
+    }
   });
 
   const myState = getPlayerState(players[myIndex]);
@@ -332,18 +375,7 @@ async function DisplayDayPhaseVote() {
 }
 
 async function DisplayDayPhaseVotePartTwo() {
-
-  const players = currentPartyData.players || [];
-  const townVote = await GetTownVote();
-
-  const resetPlayers = ResetVotes(players);
-  currentPartyData.players = resetPlayers;
-
-  await SendInstruction({
-    instruction: "DISPLAY_TOWN_VOTE:" + townVote,
-    partyData: currentPartyData,
-    timer: new Date(Date.now() + displayPlayerKilledTimer)
-  });
+  return;
 }
 
 async function DisplayTownVote(instruction) {
@@ -353,16 +385,20 @@ async function DisplayTownVote(instruction) {
   const timerValue = state.timer ?? Date.now();
   const delay = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: displayTownVoteContainer,
+    label: 'displayTownVoteContainer',
     timeLeft: delay / 1000,
-    duration: displayPlayerKilledTimer / 1000,
-    selectedTimer: displayTownVoteContainer.querySelector('.timer-wrapper')
+    duration: displayPlayerKilledTimer / 1000
   });
 
-  SetTimeOut({
+  await scheduleMafiaHostAction({
     delay,
-    instruction: "DISPLAY_TOWN_VOTE_PART_TWO",
-    nextDelay: null
+    action: 'mafia-finish-town-vote',
+    payload: {
+      votedOutId: parsedInstructions.reason,
+      timer: new Date(Date.now() + nightTimer)
+    }
   });
 
   const parsedInstructions = parseInstruction(instruction);
@@ -391,20 +427,19 @@ async function DisplayTownVote(instruction) {
 }
 
 async function DisplayTownVotePartTwo() {
+  const userInstructions = getUserInstructions(currentPartyData);
+  const parsedInstructions = parseInstruction(userInstructions);
 
-  const checkGameOver = await CheckGameOver();
-
-  if (checkGameOver != null) {
-    await SendInstruction({
-      instruction: checkGameOver,
-      partyData: currentPartyData
-    });
-  } else {
-    await SendInstruction({
-      instruction: "DISPLAY_NIGHT_PHASE",
-      partyData: currentPartyData,
+  const updatedParty = await performOnlinePartyAction({
+    action: 'mafia-finish-town-vote',
+    payload: {
+      votedOutId: parsedInstructions.reason,
       timer: new Date(Date.now() + nightTimer)
-    });
+    }
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
 }
 
@@ -432,25 +467,3 @@ function DisplayPlayerDeadPLayerBoard() {
   }
 }
 
-async function sendInstructionIfAllVotesSubmitted({
-  players,
-  instruction,
-  partyData,
-  checkStatus
-}) {
-  const allVotesSubmitted = players.every(p => {
-    const playerState = getPlayerState(p);
-
-    // If we're only checking alive players, ignore dead ones
-    if (checkStatus && p.state?.status !== 'alive') return true;
-
-    // For relevant players, require confirmation
-    return !!playerState?.hasConfirmed;
-  });
-
-  if (allVotesSubmitted) {
-    await SendInstruction({ instruction, partyData });
-  }
-
-  return allVotesSubmitted;
-}

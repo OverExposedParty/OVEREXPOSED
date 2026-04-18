@@ -29,7 +29,7 @@ async function ensureQuestionsLoadedForCurrentConfig(config = {}) {
 
   await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
   loadedQuestionConfigSignature = nextSignature;
-  console.log("Loaded JSON files for synced config");
+  debugLog("Loaded JSON files for synced config");
 }
 
 async function initialisePage() {
@@ -81,7 +81,7 @@ async function initialisePage() {
     hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
   }
 
-  console.log("hostDeviceId:", hostDeviceId);
+  debugLog("hostDeviceId:", hostDeviceId);
 
   const myConnectionSocket = me.connection?.socketId ?? me.socketId;
   if (myConnectionSocket === "DISCONNECTED") {
@@ -137,7 +137,6 @@ async function initialisePage() {
         instruction: "DISPLAY_PRIVATE_CARD",
         updateUsersReady: false,
         updateUsersConfirmation: false,
-        partyData: party,
         fetchInstruction: true,
         timer: Date.now() + gameRules["time-limit"] * 1000,
       });
@@ -164,7 +163,7 @@ async function initialisePage() {
 
       await ensureQuestionsLoadedForCurrentConfig(getPartyConfig(currentPartyData));
 
-      await FetchInstructions();
+      await runOnlineFetchInstructions({ reason: 'setup' });
     }
 
     SetPartyGameStatistics();
@@ -189,17 +188,16 @@ async function SetPageSettings() {
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {
-    const instructions = getUserInstructions(currentPartyData);
-    const parsedInstructions = parseInstruction(instructions);
+    const updatedParty = await performOnlinePartyAction({
+      action: 'never-have-i-ever-complete-punishment',
+      payload: {
+        roundTimer: Date.now() + gameRules["time-limit"] * 1000,
+        nextPlayer: true
+      }
+    });
 
-    if (parsedInstructions.instruction.includes("DISPLAY_PUNISHMENT_TO_USER")) {
-      await SendInstruction({
-        instruction: "RESET_QUESTION",
-        timer: Date.now() + gameRules["time-limit"] * 1000,
-        byPassHost: true
-      });
-    } else {
-      await setUserBool(deviceId, true, true);
+    if (updatedParty) {
+      currentPartyData = updatedParty;
     }
   });
 

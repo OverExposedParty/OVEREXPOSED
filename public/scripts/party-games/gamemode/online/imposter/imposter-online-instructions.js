@@ -7,10 +7,11 @@ async function DisplayStartTimer() {
   const delay      = new Date(timerValue) - Date.now();
   const timeLimit  = getTimeLimit("imposter-time-limit");
 
-  startTimer({
+  startTimerWithContainer({
+    container: displayStartTimerContainer,
+    label: 'displayStartTimerContainer',
     timeLeft: delay / 1000,
-    duration: timeLimit,
-    selectedTimer: displayStartTimerContainer.querySelector('.timer-wrapper')
+    duration: timeLimit
   });
 
   SetTimeOut({
@@ -55,6 +56,42 @@ async function DisplayStartTimer() {
   }
 }
 
+function getImposterPhaseState() {
+  const state = getPartyState(currentPartyData);
+  return {
+    phase: state?.phase ?? null,
+    phaseData: state?.phaseData ?? {}
+  };
+}
+
+async function scheduleImposterPhaseAction({ delay = 0, action, payload = {} } = {}) {
+  const state = getPartyState(currentPartyData);
+  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
+
+  if (deviceId !== authoritativeHostId || delay == null || !action) return;
+
+  if (timeout?.cancel) {
+    timeout.cancel();
+  }
+
+  timeout = createCancelableTimeout(delay);
+
+  try {
+    await timeout.promise;
+
+    const updatedParty = await performOnlinePartyAction({
+      action,
+      payload
+    });
+
+    if (updatedParty) {
+      currentPartyData = updatedParty;
+    }
+  } catch (error) {
+    console.error('Imposter phase action failed:', error);
+  }
+}
+
 async function DisplayAnswerContainer() {
   if (timeout?.cancel) timeout.cancel();
 
@@ -69,18 +106,17 @@ async function DisplayAnswerContainer() {
   const currentRoundTurnIdx = state.roundPlayerTurn ?? 0;
 
   if (currentRound >= rounds) {
-      state.round           = 0;
-      state.roundPlayerTurn = 0;
-
-      currentPartyData.state = state;
-
-      await SendInstruction({
-        partyData: currentPartyData,
-        instruction: "DISPLAY_PRIVATE_CARD",
-        updateUsersReady: true,
-        updateUsersConfirmation: false,
-        timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000
+      const updatedParty = await performOnlinePartyAction({
+        action: 'imposter-advance-answer-turn',
+        payload: {
+          roundsLimit: rounds,
+          timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000
+        }
       });
+
+      if (updatedParty) {
+        currentPartyData = updatedParty;
+      }
     return;
   }
 
@@ -136,10 +172,11 @@ async function DisplayPrivateCard() {
     duration: timeLimit
   });
 
-  startTimer({
+  startTimerWithContainer({
+    container: selectUserContainer,
+    label: 'selectUserContainer',
     timeLeft: delay / 1000,
-    duration: timeLimit,
-    selectedTimer: selectUserContainer.querySelector('.timer-wrapper')
+    duration: timeLimit
   });
 
   SetTimeOut({
@@ -191,10 +228,11 @@ async function DisplayVoteResults() {
   const timerValue = state.timer ?? Date.now();
   const delay      = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: resultsChartContainer,
+    label: 'resultsChartContainer',
     timeLeft: delay / 1000,
-    duration: resultTimerDuration / 1000,
-    selectedTimer: resultsChartContainer.querySelector('.timer-wrapper')
+    duration: resultTimerDuration / 1000
   });
 
   SetTimeOut({
@@ -208,7 +246,6 @@ async function DisplayVoteResultsPartTwo() {
   const state   = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
 
-  let instruction = "";
   const highestValue   = getHighestVoteValue(currentPartyData);
   const imposterIndex  = state.playerTurn ?? 0;
   const imposter       = players[imposterIndex];
@@ -224,12 +261,6 @@ async function DisplayVoteResultsPartTwo() {
       waitingForRoomText: `${imposterUsername} was the Imposter`,
       player: imposter
     });
-
-    if (CheckSettingsExists("drink-punishment")) {
-      instruction = "CHOOSING_PUNISHMENT";
-    } else {
-      instruction = "RESET_QUESTION:NEXT_PLAYER";
-    }
   } else {
     SetWaitingForPlayer({
       waitingForRoomTitle: "Imposter wins",
@@ -237,7 +268,6 @@ async function DisplayVoteResultsPartTwo() {
       player: imposter
     });
 
-    instruction = "RESET_QUESTION:NEXT_PLAYER";
   }
 
   setActiveContainers(waitingForPlayerContainer);
@@ -245,49 +275,54 @@ async function DisplayVoteResultsPartTwo() {
   const timerValue = state.timer ?? Date.now();
   const delay      = new Date(timerValue) - Date.now();
 
-  startTimer({
+  startTimerWithContainer({
+    container: waitingForPlayerContainer,
+    label: 'waitingForPlayerContainer',
     timeLeft: delay / 1000,
-    duration: resultTimerDuration / 1000,
-    selectedTimer: waitingForPlayerContainer.querySelector('.timer-wrapper')
+    duration: resultTimerDuration / 1000
   });
 
-  SetTimeOut({
+  scheduleImposterPhaseAction({
     delay,
-    instruction
+    action: 'imposter-resolve-vote-outcome',
+    payload: {
+      phaseTimer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
+      roundTimer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
+      resetInstruction: resetGamemodeInstruction,
+      alternativeQuestionIndex: Math.floor(Math.random() * 255)
+    }
   });
 }
 
 async function DisplayPunishmentToUser() {
   const players = currentPartyData.players || [];
   const state   = getPartyState(currentPartyData);
-
-  const userInstructions   = getUserInstructions(currentPartyData);
-  const parsedInstructions = parseInstruction(userInstructions);
+  const { phaseData } = getImposterPhaseState();
 
   const imposterIndex = state.playerTurn ?? 0;
   const imposter      = players[imposterIndex];
 
   if (!imposter) return;
 
-  const imposterState = getPlayerState(imposter);
-  const punishedId    = imposterState.vote;
+  const punishedId    = phaseData?.targetId ?? getPlayerId(imposter);
+  const punishmentType = String(phaseData?.punishmentType ?? '').toUpperCase();
 
   const punishedIndex  = players.findIndex(p => getPlayerId(p) === punishedId);
   const punishedPlayer = punishedIndex !== -1 ? players[punishedIndex] : null;
 
   if (punishedId === deviceId) {
-    if (parsedInstructions.reason === "DOWN_IT") {
+    if (punishmentType === "DOWN_IT" || punishmentType === "DOWN-IT") {
       completePunishmentText.textContent =
         "In order to find out the question you have to down your drink.";
       completePunishmentContainer.setAttribute("punishment-type", "down-drink");
     } else {
       completePunishmentText.textContent =
         "In order to find out the question you have to take " +
-        parsedInstructions.reason.replace('_', ' ') +
+        punishmentType.replace('_', ' ') +
         ".";
       completePunishmentContainer.setAttribute(
         "punishment-type",
-        parsedInstructions.reason
+        punishmentType
       );
     }
 
@@ -309,32 +344,19 @@ async function ResetImposterQuestion({ nextPlayer = true } = {}) {
 
   ClearIcons();
 
-  const players = currentPartyData.players || [];
-  const state   = getPartyState(currentPartyData);
-  const deck    = getPartyDeck(currentPartyData);
+  const updatedParty = await performOnlinePartyAction({
+    action: 'imposter-reset-round',
+    payload: {
+      nextPlayer,
+      timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
+      resetInstruction: resetGamemodeInstruction,
+      alternativeQuestionIndex: Math.floor(Math.random() * 255)
+    }
+  });
 
-  deck.currentCardIndex = (deck.currentCardIndex ?? 0) + 1;
-
-  if (nextPlayer && players.length > 0) {
-    state.playerTurn = Math.floor(Math.random() * players.length);
+  if (updatedParty) {
+    currentPartyData = updatedParty;
   }
-
-  players.forEach(player => {
-    const pState = getPlayerState(player);
-    pState.isReady      = false;
-    pState.hasConfirmed = false;
-    pState.vote         = null;
-  });
-
-  currentPartyData.state = state;
-  currentPartyData.deck  = deck;
-
-  await SendInstruction({
-    instruction: resetGamemodeInstruction,
-    partyData: currentPartyData,
-    timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
-    alternativeQuestionIndex: Math.floor(Math.random() * 255)
-  });
 }
 
 async function PartySkip({ nextPlayer = true } = {}) {
