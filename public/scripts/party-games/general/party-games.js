@@ -56,10 +56,20 @@ function updateTextContainer(text, cardType, punishment) {
 
     const punishmentEnabled = localStorage.getItem(`${gamemode}-drink-punishment`) === 'true';
 
-    // Update the innerHTML to include the question text and optionally the punishment
-    textContainer.innerHTML =
-        `<span class="question-text">${text}</span>` +
-        (punishmentEnabled && punishment ? `<span class="punishment-text">Punishment: ${punishment}</span>` : '');
+    const questionText = document.createElement('span');
+    questionText.className = 'question-text';
+    questionText.textContent = text;
+
+    const nextChildren = [questionText];
+
+    if (punishmentEnabled && punishment) {
+        const punishmentText = document.createElement('span');
+        punishmentText.className = 'punishment-text';
+        punishmentText.textContent = `Punishment: ${punishment}`;
+        nextChildren.push(punishmentText);
+    }
+
+    textContainer.replaceChildren(...nextChildren);
 
     if (!textContainer.classList.contains('text-container')) {
         textContainer.classList.add('text-container-small');

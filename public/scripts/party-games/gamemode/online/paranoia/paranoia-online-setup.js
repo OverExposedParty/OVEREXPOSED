@@ -1,10 +1,6 @@
 // ----------------------
 // URL + basic DOM setup
 // ----------------------
-const url = window.location.href;
-const segments = url.split('/');
-partyCode = segments.pop() || segments.pop(); // handle trailing slash
-
 const gameContainerDualStack = document.querySelector('#dual-stack-view.card-container');
 const buttonNextQuestion = document.getElementById('button-next-question');
 
@@ -22,65 +18,15 @@ let textBoxSetting = false;
 // Initialise page (data + UI bootstrapping)
 // ----------------------
 async function initialisePage() {
-  const party = await waitForOnlinePartySnapshot({
-    requirePlayer: true,
+  const session = await bootstrapOnlineGamePage({
     requirePlaying: true
   });
-  if (!party) {
-    ShowPartyDoesNotExistState();
+  if (!session) {
     return;
   }
-  const players = party.players || [];
-  const config = getPartyConfig(party);
-  const state = getPartyState(party);
-  const deck = getPartyDeck(party);
-
-  isPlaying = true;
-
-  const index = players.findIndex(
-    player => player.identity?.computerId === deviceId || player.computerId === deviceId
-  );
-  if (index === -1) {
-    console.warn('Current device not found in players.');
-    ShowGameAlreadyStartedState();
-    return;
-  }
-
-  const me = players[index];
-  onlineUsername = me.identity?.username || me.username;
-
-  // 🔽 NEW: determine correct host based on hostComputerIdList
-  const resolvedHostId = await checkAndMaybeBecomeHost({
-    party,
-    deviceId,
-    onlineUsername
-  });
-
-  // Fallback to first player if no host resolved
-  if (resolvedHostId) {
-    hostDeviceId = resolvedHostId;
-  } else {
-    const fallbackHost = players[0];
-    hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
-  }
+  const { party, players, config, state, deck } = session;
 
   debugLog("hostDeviceId:", hostDeviceId);
-
-  const myConnectionSocket = me.connection?.socketId ?? me.socketId;
-  if (myConnectionSocket === "DISCONNECTED") {
-    sendPartyChat({
-      username: "[CONSOLE]",
-      message: `${onlineUsername} has reconnected.`,
-      eventType: "connect"
-    });
-  }
-
-  me.connection = me.connection || {};
-  me.connection.socketId = socket.id;
-  me.socketId = socket.id;
-  debugLog("Socket ID set to: " + me.connection.socketId);
-
-  await joinParty(partyCode);
 
   if (state.isPlaying === true) {
     for (let i = 0; i < players.length; i++) {
@@ -207,7 +153,12 @@ async function SetPageSettings() {
   wireEventListeners();
 
   AddTimerToContainer(waitingForPlayerContainer);
+  AddTimerToContainer(waitingForPlayersContainer);
   AddTimerToContainer(selectUserContainer);
+  AddTimerToContainer(selectPunishmentContainer);
+  AddTimerToContainer(pickHeadsOrTailsContainer);
+  AddTimerToContainer(completePunishmentContainer);
+  AddTimerToContainer(confirmPunishmentContainer);
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,

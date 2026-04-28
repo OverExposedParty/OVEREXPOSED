@@ -59,6 +59,9 @@ if (placeholderGamemodeAddons?.dataset.online === "false") {
 }
 else {
     gameContainers.push(luckyCoinFlipContainer);
+    if (typeof AddTimerToContainer === 'function') {
+        AddTimerToContainer(luckyCoinFlipContainer);
+    }
 }
 
 async function tossCoinFunction() {
@@ -107,7 +110,8 @@ async function tossCoinFunction() {
                 const updatedParty = await performOnlinePartyAction({
                     action: 'paranoia-resolve-coin-flip',
                     payload: {
-                        matchedFace
+                        matchedFace,
+                        phaseTimer: Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000)
                     },
                     syncInstructions: false
                 });

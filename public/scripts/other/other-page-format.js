@@ -42,7 +42,11 @@ function CreateNewSection(container, section) {
     textDiv.className = 'text-container';
 
     const p = document.createElement('p');
-    p.innerHTML = section.text;
+    if (typeof window.setSanitizedHtml === 'function') {
+        window.setSanitizedHtml(p, section.text);
+    } else {
+        p.textContent = String(section.text ?? '');
+    }
 
     textDiv.appendChild(p);
 

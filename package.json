@@ -7,8 +7,12 @@
     "node": ">=20.10.0 <23"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "obfuscate": "javascript-obfuscator public/js --output public/js/obfuscated --recursive"
+    "test": "node --test",
+    "lint": "eslint \"*.js\" \"server/**/*.js\" \"models/**/*.js\" \"utils/**/*.js\" \"scripts/**/*.js\" \"tests/**/*.js\"",
+    "format:check": "prettier --check \"package.json\" \"eslint.config.js\" \".prettierrc.json\" \"server/**/*.js\" \"models/**/*.js\" \"utils/**/*.js\" \"scripts/**/*.js\" \"tests/**/*.js\" \".github/workflows/**/*.yml\"",
+    "build": "node scripts/quality/build-smoke.js",
+    "check": "npm run lint && npm run format:check && npm test && npm run build",
+    "obfuscate": "javascript-obfuscator public/scripts --output public/scripts/obfuscated --recursive"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +32,10 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "javascript-obfuscator": "^4.1.1"
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.5.0",
+    "javascript-obfuscator": "^4.1.1",
+    "prettier": "^3.8.3"
   }
 }

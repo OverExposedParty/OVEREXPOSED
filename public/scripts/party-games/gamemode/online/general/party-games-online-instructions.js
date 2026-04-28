@@ -312,12 +312,54 @@ async function SetBoolVote(bool) {
   }
 }
 
+function formatWaitingForPlayerActionText(text) {
+  if (typeof text !== 'string') return '';
+
+  const trimmedText = text.trim();
+  const actionMatch = trimmedText
+    .replace(/\.+$/, '')
+    .match(/^waiting for .+? to (.+)$/i);
+
+  if (!actionMatch) return trimmedText;
+
+  const actionText = actionMatch[1].replace(/\s+/g, ' ').trim();
+  const lowerActionText = actionText.toLowerCase();
+
+  if (lowerActionText === 'spin the drink wheel') return 'Spinning drink wheel...';
+  if (lowerActionText === 'down their drink') return 'Downing drink...';
+
+  if (lowerActionText.startsWith('take ')) {
+    return `Taking ${actionText.slice(5)}...`;
+  }
+
+  const words = actionText.split(' ');
+  const firstWord = words.shift()?.toLowerCase() ?? '';
+  const actionVerbs = {
+    answer: 'Answering',
+    choose: 'Choosing',
+    decide: 'Deciding',
+    down: 'Downing',
+    flip: 'Flipping',
+    perform: 'Performing',
+    read: 'Reading',
+    select: 'Selecting',
+    show: 'Showing',
+    spin: 'Spinning',
+    write: 'Writing'
+  };
+
+  if (!actionVerbs[firstWord]) return trimmedText;
+
+  const actionObject = words.join(' ').replace(/^the\s+/i, '');
+  return `${actionVerbs[firstWord]}${actionObject ? ` ${actionObject}` : ''}...`;
+}
+
 function SetWaitingForPlayer({ waitingForRoomTitle, waitingForRoomText, player }) {
   const id = getPlayerId(player);
   const icon = getPlayerIcon(player);
 
   waitingForPlayerTitle.textContent = waitingForRoomTitle;
-  waitingForPlayerText.textContent = waitingForRoomText;
+  waitingForPlayerText.textContent = formatWaitingForPlayerActionText(waitingForRoomText);
   EditUserIconPartyGames({
     container: waitingForPlayerContainer,
     userId: id,
@@ -651,6 +693,92 @@ function getPartyDeck(party) {
   return party.deck ?? party;
 }
 
+function findOnlinePlayerIndex(players = [], currentDeviceId = deviceId) {
+  return players.findIndex(
+    (player) => getPlayerId(player) === currentDeviceId
+  );
+}
+
+async function bootstrapOnlineGamePage({
+  requirePlaying = true,
+  updateCurrentPartyData = false,
+  joinRoom = true,
+  announceReconnect = true
+} = {}) {
+  const party = await waitForOnlinePartySnapshot({
+    requirePlayer: true,
+    requirePlaying
+  });
+
+  if (!party) {
+    ShowPartyDoesNotExistState();
+    return null;
+  }
+
+  if (updateCurrentPartyData) {
+    currentPartyData = party;
+  }
+
+  const players = party.players || [];
+  const config = getPartyConfig(party);
+  const state = getPartyState(party);
+  const deck = getPartyDeck(party);
+
+  if (players.length === 0) {
+    console.warn('No players in party.');
+    return null;
+  }
+
+  isPlaying = !!state.isPlaying;
+
+  const index = findOnlinePlayerIndex(players);
+  if (index === -1) {
+    console.warn('Current device not found in players.');
+    ShowGameAlreadyStartedState();
+    return null;
+  }
+
+  const me = players[index];
+  onlineUsername = getPlayerUsername(me);
+
+  const resolvedHostId = await checkAndMaybeBecomeHost({
+    party,
+    deviceId,
+    onlineUsername
+  });
+
+  hostDeviceId = resolvedHostId || getPlayerId(players[0]) || '';
+
+  const myConnectionSocket = me.connection?.socketId ?? me.socketId;
+  if (announceReconnect && myConnectionSocket === 'DISCONNECTED') {
+    sendPartyChat({
+      username: '[CONSOLE]',
+      message: `${onlineUsername} has reconnected.`,
+      eventType: 'connect'
+    });
+  }
+
+  const meConn = ensureConnection(me);
+  meConn.socketId = socket.id;
+  me.socketId = socket.id;
+
+  if (joinRoom) {
+    await joinParty(partyCode);
+  }
+
+  return {
+    party,
+    players,
+    config,
+    state,
+    deck,
+    index,
+    me,
+    resolvedHostId: hostDeviceId,
+    onlineUsername
+  };
+}
+
 function getUserInstructions(party) {
   const config = getPartyConfig(party);
   const state = getPartyState(party);
@@ -663,9 +791,13 @@ function getUserInstructions(party) {
   );
 }
 
-function getTimeLimit() {
+function getTimeLimit(key = "time-limit") {
   if (!gameRules) return 120;
-  const raw = gameRules["time-limit"];
+  let raw = gameRules[key];
+
+  if ((raw === undefined || raw === null || raw === "") && key !== "time-limit") {
+    raw = gameRules["time-limit"];
+  }
 
   if (raw === undefined || raw === null || raw === "") {
     return 120;
@@ -675,3 +807,5 @@ function getTimeLimit() {
   if (Number.isNaN(n)) return 120;
   return n;
 }
+
+window.bootstrapOnlineGamePage = bootstrapOnlineGamePage;

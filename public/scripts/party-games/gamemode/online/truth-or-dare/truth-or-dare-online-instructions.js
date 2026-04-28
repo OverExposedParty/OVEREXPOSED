@@ -2,6 +2,17 @@ function getTruthOrDarePlayerId(player) {
   return getPlayerId(player) ?? player?.computerId ?? player?.identity?.computerId ?? null;
 }
 
+function getTruthOrDareTurnPlayer(players = [], state = {}, turnIndex = state?.playerTurn ?? 0) {
+  const order = Array.isArray(state?.playerTurnOrder) ? state.playerTurnOrder : [];
+  const playerId = order[turnIndex];
+
+  if (playerId) {
+    return players.find(player => getTruthOrDarePlayerId(player) === playerId) ?? null;
+  }
+
+  return players[turnIndex] ?? null;
+}
+
 function hideTruthOrDareDrinkWheel() {
   document
     .querySelectorAll('#drink-wheel-container')
@@ -18,6 +29,38 @@ function getTruthOrDareResolvedPunishmentType(instruction, phaseData = {}) {
     ?? phaseData?.punishmentType
     ?? ''
   ).toUpperCase();
+}
+
+function getTruthOrDarePhaseDuration() {
+  return Number(gameRules?.["time-limit"] || 120);
+}
+
+function getTruthOrDarePhaseDelay() {
+  const state = getPartyState(currentPartyData);
+  const timerValue = state?.timer ?? currentPartyData?.timer ?? null;
+  if (!timerValue) return getTruthOrDarePhaseDuration() * 1000;
+
+  return Math.max(new Date(timerValue) - Date.now(), 0);
+}
+
+function ensureTruthOrDareTimer(container) {
+  if (!container) return false;
+  if (!container.querySelector(':scope > .timer-wrapper') && typeof AddTimerToContainer === 'function') {
+    AddTimerToContainer(container);
+  }
+  return Boolean(container.querySelector(':scope > .timer-wrapper'));
+}
+
+function startTruthOrDarePhaseTimer(container, label, delay = getTruthOrDarePhaseDelay()) {
+  if (!container) return false;
+  ensureTruthOrDareTimer(container);
+
+  return startTimerWithContainer({
+    container,
+    label,
+    timeLeft: delay / 1000,
+    duration: getTruthOrDarePhaseDuration()
+  });
 }
 
 async function DisplaySelectQuestionType() {
@@ -52,7 +95,7 @@ async function DisplaySelectQuestionType() {
   });
 
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   if (!currentPlayer) return;
 
   const currentPlayerId = getTruthOrDarePlayerId(currentPlayer);
@@ -121,7 +164,7 @@ async function DisplayPublicCard() {
 
   const index = players.findIndex(p => getTruthOrDarePlayerId(p) === deviceId);
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
 
   if (index === -1 || !currentPlayer) {
     console.warn("Device ID not found in players or current player missing");
@@ -209,7 +252,7 @@ async function ChoosingPunishment() {
   });
 
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   if (!currentPlayer) {
     console.error('Player not found for current turn index:', turnIndex);
     return;
@@ -244,12 +287,13 @@ async function DisplayPunishmentToUser(instruction) {
   const state = currentPartyData.state ?? currentPartyData;
   const players = currentPartyData.players || [];
   const { phaseData } = getTruthOrDarePhaseState();
+  const delay = getTruthOrDarePhaseDelay();
   const currentInstruction = typeof instruction === 'string'
     ? instruction
     : getUserInstructions(currentPartyData);
 
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   debugLog('[OE_DEBUG][truth-or-dare][DisplaySelectQuestionType][pre-render]', {
     playersLength: players.length,
     turnIndex,
@@ -289,6 +333,7 @@ async function DisplayPunishmentToUser(instruction) {
       if (typeof resetDrinkWheelState === 'function') {
         resetDrinkWheelState();
       }
+      startTruthOrDarePhaseTimer(wheelContainer, 'drinkWheelContainer', delay);
       setActiveContainers(wheelContainer);
       return;
     }
@@ -302,6 +347,7 @@ async function DisplayPunishmentToUser(instruction) {
       completePunishmentText.textContent = "Take " + punishmentType.replaceAll("_", " ");
       completePunishmentContainer.setAttribute("punishment-type", punishmentType);
     }
+    startTruthOrDarePhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
     setActiveContainers(completePunishmentContainer);
   } else {
     let waitingText;
@@ -319,6 +365,7 @@ async function DisplayPunishmentToUser(instruction) {
       waitingForRoomText: waitingText,
       player: currentPlayer
     });
+    startTruthOrDarePhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
     setActiveContainers(waitingForPlayerContainer);
   }
 }
@@ -330,7 +377,7 @@ async function DisplayAnswerCard(instruction) {
 
   const state = currentPartyData.state ?? currentPartyData;
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   if (!currentPlayer) return;
 
   const currentPlayerId = getTruthOrDarePlayerId(currentPlayer);
@@ -389,7 +436,7 @@ async function DisplayConfirmInput(instruction) {
 
   const state = currentPartyData.state ?? currentPartyData;
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   if (!currentPlayer) return;
 
   const currentPlayerId = getTruthOrDarePlayerId(currentPlayer);
@@ -476,7 +523,7 @@ async function DisplayCompleteQuestion() {
   const index = players.findIndex(player => getTruthOrDarePlayerId(player) === deviceId);
   const state = currentPartyData.state ?? currentPartyData;
   const turnIndex = state.playerTurn ?? 0;
-  const currentPlayer = players[turnIndex];
+  const currentPlayer = getTruthOrDareTurnPlayer(players, state, turnIndex);
   if (!currentPlayer) return;
 
   const currentPlayerId = getTruthOrDarePlayerId(currentPlayer);

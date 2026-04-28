@@ -32,37 +32,54 @@ function getHelpPageStageStyle(textObj) {
 }
 
 function buildHelpText(textObj) {
-  // Backwards-compatible: simple string
+  const helpBody = document.createElement("div");
+  helpBody.className = "help-body";
+
   if (typeof textObj === "string") {
-    return `<div class="help-body">${textObj}</div>`;
+    if (typeof window.setSanitizedHtml === "function") {
+      window.setSanitizedHtml(helpBody, textObj);
+    } else {
+      helpBody.textContent = textObj;
+    }
+    return helpBody;
   }
 
-  let html = `<div class="help-body">`;
-
-  // Multiple images
   if (Array.isArray(textObj.images)) {
-    html += `<div class="tutorial-image-stage"${getHelpPageStageStyle(textObj)}>`;
+    const tutorialImageStage = document.createElement("div");
+    tutorialImageStage.className = "tutorial-image-stage";
+    const dimensions = textObj.images.find((img) => img?.src)
+      ? helpImageMetadata.get(textObj.images.find((img) => img?.src)?.src)
+      : null;
+    if (dimensions?.width && dimensions?.height) {
+      tutorialImageStage.style.setProperty("--tutorial-image-ratio", `${dimensions.width} / ${dimensions.height}`);
+    }
+
     textObj.images.forEach(img => {
-      html += `
-        <img 
-          class="tutorial-image"
-          src="${img.src}"
-          alt="${img.alt || ''}"
-          loading="eager"
-          decoding="async"
-        >
-      `;
+      if (!img?.src) return;
+      const image = document.createElement("img");
+      image.className = "tutorial-image";
+      image.src = img.src;
+      image.alt = img.alt || "";
+      image.loading = "eager";
+      image.decoding = "async";
+      tutorialImageStage.appendChild(image);
     });
-    html += `</div>`;
+
+    helpBody.appendChild(tutorialImageStage);
   }
 
-  // Text paragraph
   if (textObj.paragraph) {
-    html += `<span class="help-paragraph">${textObj.paragraph}</span>`;
+    const helpParagraph = document.createElement("span");
+    helpParagraph.className = "help-paragraph";
+    if (typeof window.setSanitizedHtml === "function") {
+      window.setSanitizedHtml(helpParagraph, textObj.paragraph);
+    } else {
+      helpParagraph.textContent = textObj.paragraph;
+    }
+    helpBody.appendChild(helpParagraph);
   }
 
-  html += `</div>`;
-  return html;
+  return helpBody;
 }
 
 // ---------------------------------------------------
@@ -372,8 +389,8 @@ async function FetchHelpContainer(helpContainerFile) {
     })
     .catch(err => {
       console.error('Failed to load help pages:', err);
-      helpTitle.innerHTML = 'Error';
-      helpText.innerHTML = 'Could not load help content.';
+      helpTitle.textContent = 'Error';
+      helpText.textContent = 'Could not load help content.';
       helpNumberCounter.textContent = '';
     });
 }
@@ -402,8 +419,12 @@ function showHelpContainer(index) {
 
     currentHelpIndex = targetIndex;
 
-    helpTitle.innerHTML = helpData[currentHelpIndex].title;
-    helpText.innerHTML = buildHelpText(helpData[currentHelpIndex].text);
+    if (typeof window.setSanitizedHtml === "function") {
+      window.setSanitizedHtml(helpTitle, helpData[currentHelpIndex].title);
+    } else {
+      helpTitle.textContent = helpData[currentHelpIndex].title;
+    }
+    helpText.replaceChildren(buildHelpText(helpData[currentHelpIndex].text));
     helpNumberCounter.textContent = `(${currentHelpIndex + 1}/${helpData.length})`;
 
     requestAnimationFrame(() => {

@@ -7,7 +7,7 @@ const ConfessionSchema = new mongoose.Schema({
   date: String,
   userIcon: {
     type: String,
-    default: "0000:0100:0200:0300"
+    default: '0000:0100:0200:0300'
   },
   x: String,
   y: String,

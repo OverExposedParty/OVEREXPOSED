@@ -68,7 +68,7 @@ function ToggleOverexposureContainer({ toggle = false, button = null, draft = fa
         history.pushState(null, "", nextPath);
 
         titleText.textContent = postTitle;
-        contentsContainerText.innerHTML = postText;
+        contentsContainerText.textContent = postText;
         populateSharePostDetails({
             title: postTitle,
             text: postText,

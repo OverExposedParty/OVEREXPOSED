@@ -1,7 +1,3 @@
-const url = window.location.href;
-const segments = url.split('/');
-partyCode = segments.pop() || segments.pop(); // handle trailing slash
-
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
 const buttonChoosePlayer = document.getElementById('button-choose-player');
 
@@ -30,12 +26,18 @@ async function SetPageSettings() {
       action: 'imposter-advance-answer-turn',
       payload: {
         roundsLimit: rounds,
-        timer: Date.now() + getTimeLimit() * 1000
-      }
+        timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000
+      },
+      syncInstructions: false
     });
 
     if (updatedParty) {
       currentPartyData = updatedParty;
+      if (typeof renderCurrentImposterInstructionFromState === 'function') {
+        await renderCurrentImposterInstructionFromState();
+      } else if (typeof FetchInstructions === 'function') {
+        await FetchInstructions();
+      }
     }
   });
 
@@ -93,7 +95,7 @@ async function SetPageSettings() {
     const updatedParty = await performOnlinePartyAction({
       action: 'imposter-complete-punishment',
       payload: {
-        roundTimer: Date.now() + getTimeLimit() * 1000,
+        roundTimer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
         resetInstruction: resetGamemodeInstruction,
         alternativeQuestionIndex: Math.floor(Math.random() * 255)
       }
@@ -106,7 +108,9 @@ async function SetPageSettings() {
 
   AddTimerToContainer(selectUserContainer);
   AddTimerToContainer(resultsChartContainer);
+  AddTimerToContainer(waitingForPlayersContainer);
   AddTimerToContainer(waitingForPlayerContainer);
+  AddTimerToContainer(displayUserAnswerContainer);
   AddTimerToContainer(selectPunishmentContainer);
   if (timeBased === false) AddTimerToContainer(displayStartTimerContainer);
 
@@ -133,66 +137,16 @@ async function SetPageSettings() {
 }
 
 async function initialisePage() {
-  const party = await waitForOnlinePartySnapshot({
-    requirePlayer: true,
+  const session = await bootstrapOnlineGamePage({
     requirePlaying: true
   });
-  if (!party) {
-    ShowPartyDoesNotExistState();
+  if (!session) {
     return;
   }
-  const players = party.players || [];
-  const config  = getPartyConfig(party);
-  const state   = getPartyState(party);
-  const deck    = getPartyDeck(party);
-
-  if (players.length === 0) return;
-
-  isPlaying = true;
-
-  const index = players.findIndex(
-    player => player.identity?.computerId === deviceId || player.computerId === deviceId
-  );
-  if (index === -1) {
-    console.warn('Current device not found in players.');
-    ShowGameAlreadyStartedState();
-    return;
-  }
-
-  const me = players[index];
-  onlineUsername = me.identity?.username || me.username;
-
-  // 🔽 NEW: determine correct host based on hostComputerIdList
-  const resolvedHostId = await checkAndMaybeBecomeHost({
-    party,
-    deviceId,
-    onlineUsername
-  });
-
-  // Fallback to first player if no host resolved
-  if (resolvedHostId) {
-    hostDeviceId = resolvedHostId;
-  } else {
-    const fallbackHost = players[0];
-    hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
-  }
+  const { party, players, config, state, deck, me } = session;
 
   debugLog("hostDeviceId:", hostDeviceId);
-
-  const myConnectionSocket = me.connection?.socketId ?? me.socketId;
-  if (myConnectionSocket === "DISCONNECTED") {
-    sendPartyChat({
-      username: "[CONSOLE]",
-      message: `${onlineUsername} has reconnected.`,
-      eventType: "connect"
-    });
-  }
-
-  await joinParty(partyCode);
-  const meConn = ensureConnection(me); 
-  meConn.socketId = socket.id;
-  me.socketId = socket.id;
-  debugLog("Socket ID set to: " + meConn.socketId);
+  debugLog("Socket ID set to: " + (me.connection?.socketId ?? me.socketId));
 
   if (state.isPlaying === true) {
     if (timeBased === false) {
@@ -279,7 +233,7 @@ async function initialisePage() {
         updateUsersConfirmation: false,
         fetchInstruction: true,
         // still using imposter-time-limit increment container for this mode
-        timer: Date.now() + getTimeLimit() * 1000,
+        timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
         alternativeQuestionIndex: Math.floor(Math.random() * 255)
       });
     } else {

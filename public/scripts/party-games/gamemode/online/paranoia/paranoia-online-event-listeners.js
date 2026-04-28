@@ -50,6 +50,7 @@ async function handleConfirmPlayerClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    await ChosePunishment();
   }
 
   const selectUserButtons = document
@@ -80,7 +81,8 @@ async function handleConfirmPunishmentClick() {
   const updatedParty = await performOnlinePartyAction({
     action: 'paranoia-select-punishment',
     payload: {
-      punishmentType
+      punishmentType,
+      phaseTimer: Date.now() + gameRules["time-limit"] * 1000
     }
   });
 
@@ -111,6 +113,7 @@ async function handleCompletePunishmentPassClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    await HasUserDonePunishment();
   }
 }
 
@@ -122,7 +125,8 @@ async function handleCompletePunishmentConfirmClick() {
   const updatedParty = await performOnlinePartyAction({
     action: 'paranoia-begin-punishment-confirmation',
     payload: {
-      completionReason
+      completionReason,
+      phaseTimer: Date.now() + gameRules["time-limit"] * 1000
     }
   });
 

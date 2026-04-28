@@ -85,6 +85,20 @@ async function buildGamemodeTextMarkup(gamemode, templateHtml) {
     return doc.body.innerHTML;
 }
 
+function appendCardMarkup(target, html) {
+    if (!target) return;
+    appendTrustedHtml(target, html);
+}
+
+function setCardPlaceholderText(target, gamemode) {
+    if (!target) return;
+
+    const questionText = document.createElement('div');
+    questionText.className = 'question-text placeholder';
+    questionText.textContent = gamemode.replaceAll('-', ' ').toUpperCase();
+    target.replaceChildren(questionText);
+}
+
 // First: fetch main image container
 fetch('/html-templates/party-games/card-container/main-image-container.html')
     .then(res => res.text())
@@ -130,18 +144,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         const withDualStackHTML = dualDoc.body.innerHTML;
 
         // Insert HTML into each container
-        if (cardContainerPrivate) {
-            cardContainerPrivate.insertAdjacentHTML('afterbegin', baseHTML);
-        }
-        if (cardContainerPublic) {
-            cardContainerPublic.insertAdjacentHTML('afterbegin', withStackHTML);
-        }
-        if (cardContainerAnswer) {
-            cardContainerAnswer.insertAdjacentHTML('afterbegin', withStackHTML);
-        }
-        if (cardContainerDualStack) {
-            cardContainerDualStack.insertAdjacentHTML('afterbegin', withDualStackHTML);
-        }
+        appendCardMarkup(cardContainerPrivate, baseHTML);
+        appendCardMarkup(cardContainerPublic, withStackHTML);
+        appendCardMarkup(cardContainerAnswer, withStackHTML);
+        appendCardMarkup(cardContainerDualStack, withDualStackHTML);
 
         if (placeholderCardContainer?.dataset.online === "false") {
             placeholderCardContainer
@@ -163,10 +169,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
     .then(async html => {
         const updatedHTML = await buildGamemodeTextMarkup(cardContainerGamemode, html);
 
-        cardContainerPublic?.insertAdjacentHTML('afterbegin', updatedHTML);
-        cardContainerDualStack?.insertAdjacentHTML('afterbegin', updatedHTML);
-        cardContainerPrivate?.insertAdjacentHTML('afterbegin', updatedHTML);
-        cardContainerAnswer?.insertAdjacentHTML('afterbegin', updatedHTML);
+        appendCardMarkup(cardContainerPublic, updatedHTML);
+        appendCardMarkup(cardContainerDualStack, updatedHTML);
+        appendCardMarkup(cardContainerPrivate, updatedHTML);
+        appendCardMarkup(cardContainerAnswer, updatedHTML);
 
         if (placeholderCardContainer?.dataset.online === "false") {
 
@@ -187,7 +193,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerPublicText = cardContainerPublic.querySelector('.content .main-image-container .text-container');
             gameContainerPublicCardType = cardContainerPublic.querySelector('.content .main-image-container .card-type-text');
 
-            gameContainerPublicText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            setCardPlaceholderText(gameContainerPublicText, placeholderCardContainer.dataset.gamemode);
             if (cardContainerPublic.getAttribute('data-text-size') === 'large') {
                 gameContainerPublicText.classList.add('large');
             }
@@ -199,7 +205,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
             gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
 
-            gameContainerAnswerText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            setCardPlaceholderText(gameContainerAnswerText, placeholderCardContainer.dataset.gamemode);
             if (cardContainerAnswer.getAttribute('data-text-size') === 'large') {
                 gameContainerAnswerText.classList.add('large');
             }
@@ -211,7 +217,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerPrivateText = cardContainerPrivate.querySelector('.content .main-image-container .text-container');
             gameContainerPrivateCardType = cardContainerPrivate.querySelector('.content .main-image-container .card-type-text');
 
-            gameContainerPrivateText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            setCardPlaceholderText(gameContainerPrivateText, placeholderCardContainer.dataset.gamemode);
             if (cardContainerPrivate.getAttribute('data-text-size') === 'large') {
                 gameContainerPrivateText.classList.add('large');
             }
@@ -223,7 +229,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             gameContainerDualStackText = cardContainerDualStack.querySelector('.content .main-image-container .text-container');
             gameContainerDualStackCardType = cardContainerDualStack.querySelector('.content .main-image-container .card-type-text');
 
-            gameContainerDualStackText.innerHTML = `<div class="question-text placeholder">${(placeholderCardContainer.dataset.gamemode).replaceAll('-', ' ').toUpperCase()}</div>`;
+            setCardPlaceholderText(gameContainerDualStackText, placeholderCardContainer.dataset.gamemode);
             if (cardContainerDualStack.getAttribute('data-text-size') === 'large') {
                 gameContainerDualStackText.classList.add('large');
             }

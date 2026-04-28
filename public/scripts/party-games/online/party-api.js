@@ -203,7 +203,13 @@ async function performOnlinePartyAction({
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data.error || `Failed to perform party action: ${action}`);
+    const errorMessage =
+      typeof data.error === 'string'
+        ? data.error
+        : data.error?.message ||
+          data.message ||
+          `Failed to perform party action: ${action}`;
+    throw new Error(errorMessage);
   }
 
   if (data.updated) {
@@ -215,6 +221,30 @@ async function performOnlinePartyAction({
   }
 
   return data.updated ?? null;
+}
+
+async function EndOnlineGame({
+  partyType = sessionPartyType,
+  partyId = partyCode
+} = {}) {
+  const updatedParty = await performOnlinePartyAction({
+    partyType,
+    partyId,
+    action: 'end-game',
+    syncInstructions: false
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
+
+  if (typeof runOnlineFetchInstructions === 'function') {
+    await runOnlineFetchInstructions({ force: true, reason: 'end-game' });
+  } else if (typeof FetchInstructions === 'function') {
+    await FetchInstructions();
+  }
+
+  return updatedParty;
 }
 
 async function getPartyChatLog() {

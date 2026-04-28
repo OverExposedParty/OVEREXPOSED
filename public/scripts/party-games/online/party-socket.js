@@ -134,6 +134,14 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
     const state = party.state;
     const players = party.players || [];
 
+    if (state?.hostComputerId) {
+      hostDeviceId = state.hostComputerId;
+    }
+
+    if (typeof updatePartyGameStatisticsEndGameButtonState === 'function') {
+      updatePartyGameStatisticsEndGameButtonState(party);
+    }
+
     if (!isPlaying) {
       partyUserCount = players.length;
       if (typeof updatePartyQrPlayerCount === 'function') {
@@ -160,7 +168,19 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
     }
 
     const latestPing = state.lastPinged;
-    if (new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime()) {
+    const incomingSignature =
+      typeof getOnlineInstructionSnapshotSignature === 'function'
+        ? getOnlineInstructionSnapshotSignature(party)
+        : '';
+    const pingChanged =
+      new Date(latestPing).getTime() !== new Date(lastKnownPing).getTime();
+    const snapshotChanged =
+      incomingSignature &&
+      incomingSignature !== window.lastOnlineInstructionSnapshotSignature;
+
+    if (pingChanged || snapshotChanged) {
+      const latestInstructions = config?.userInstructions ?? state?.userInstructions ?? '';
+
       debugLog('[OE_DEBUG][party-updated] received fresh party update', {
         source,
         codeToUse,
@@ -168,11 +188,32 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
         waitingForHost,
         onlineGameUiReady: window.onlineGameUiReady,
         latestPing,
+        pingChanged,
+        snapshotChanged,
         phase: state?.phase ?? null,
         playerTurn: state?.playerTurn ?? null,
-        instructions: config?.userInstructions ?? state?.userInstructions ?? ''
+        instructions: latestInstructions
       });
       debugLog('🟢 Party data changed!');
+      if (!state.isPlaying && isPlaying && String(latestInstructions).includes('GAME_OVER')) {
+        currentPartyData = party;
+
+        if (!window.onlineGameUiReady) {
+          window.pendingOnlineInstructionSync = true;
+          lastKnownPing = latestPing;
+          return;
+        }
+
+        if (typeof runOnlineFetchInstructions === 'function') {
+          await runOnlineFetchInstructions({ force: true, reason: 'socket' });
+        } else {
+          await FetchInstructions();
+        }
+
+        lastKnownPing = latestPing;
+        return;
+      }
+
       if (state.isPlaying) {
         if (waitingForHost) {
           loadingPage = true;
@@ -204,7 +245,7 @@ socket.on("party-updated", async ({ type, source, emittedPartyCode, documentKey 
             instructions: config?.userInstructions ?? state?.userInstructions ?? ''
           });
           if (typeof runOnlineFetchInstructions === 'function') {
-            await runOnlineFetchInstructions({ reason: 'socket' });
+            await runOnlineFetchInstructions({ force: true, reason: 'socket' });
           } else {
             await FetchInstructions();
           }

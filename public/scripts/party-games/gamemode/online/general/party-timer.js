@@ -166,6 +166,12 @@ function ensureBorderTimerGeometry(selectedTimer) {
 function startTimer({ timeLeft = 0, duration = 0, selectedTimer = null }) {
   if (!selectedTimer) return;
 
+  if (selectedTimer._requestId) {
+    selectedTimer._cancel = true;
+    cancelAnimationFrame(selectedTimer._requestId);
+    selectedTimer._requestId = null;
+  }
+
   const isBorderTimer = selectedTimer.dataset.timerVariant === 'border';
   const timer = selectedTimer.querySelector('.timer');
   const mask = selectedTimer.querySelector('.mask');

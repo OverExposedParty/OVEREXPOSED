@@ -1,11 +1,31 @@
+function getParanoiaTurnPlayer(players = [], state = {}, turnIndex = state?.playerTurn ?? 0) {
+  const order = Array.isArray(state?.playerTurnOrder) ? state.playerTurnOrder : [];
+  const playerId = order[turnIndex];
+
+  if (playerId) {
+    return players.find(player => getPlayerId(player) === playerId) ?? null;
+  }
+
+  return players[turnIndex] ?? null;
+}
+
+function getParanoiaTurnPlayerIndex(players = [], state = {}, turnIndex = state?.playerTurn ?? 0) {
+  const turnPlayer = getParanoiaTurnPlayer(players, state, turnIndex);
+  if (!turnPlayer) return -1;
+
+  const turnPlayerId = getPlayerId(turnPlayer);
+  return players.findIndex(player => getPlayerId(player) === turnPlayerId);
+}
+
 async function NextQuestion() {
   const players = currentPartyData.players || [];
   const state   = getPartyState(currentPartyData);
   const deck    = getPartyDeck(currentPartyData);
+  const delay = getParanoiaPhaseDelay();
 
   const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const currentPlayer = players[playerTurn];
+  const currentPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
 
   const votedId = getPlayerVote(currentPlayer);
   const votedIndex = votedId != null
@@ -26,6 +46,8 @@ async function NextQuestion() {
     if (!isContainerVisible(waitingForPlayersContainer)) {
       ClearIcons();
     }
+    startParanoiaPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
+    scheduleParanoiaRevealTimeout(delay);
     setActiveContainers(waitingForPlayersContainer);
 
     // Update player's last ping
@@ -77,6 +99,13 @@ async function NextQuestion() {
     const currentIndex = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
     selectedQuestionObj = getNextQuestion(currentIndex);
     DisplayCard(gameContainerDualStack, selectedQuestionObj);
+    startTimerFromContainer({
+      container: gameContainerDualStack,
+      timeLeft: delay / 1000,
+      duration: getParanoiaPhaseDuration()
+    });
+    startParanoiaPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
+    scheduleParanoiaRevealTimeout(delay);
     setActiveContainers(gameContainerDualStack);
   }
 }
@@ -131,6 +160,64 @@ function formatParanoiaPunishmentText(punishmentType = '') {
     .toLowerCase();
 }
 
+function getParanoiaPhaseDuration() {
+  return Number(gameRules?.["time-limit"] || 120);
+}
+
+function getParanoiaPhaseDelay() {
+  const state = getPartyState(currentPartyData);
+  const timerValue = state?.timer ?? currentPartyData?.timer ?? null;
+  if (!timerValue) return getParanoiaPhaseDuration() * 1000;
+
+  return Math.max(new Date(timerValue) - Date.now(), 0);
+}
+
+function ensureParanoiaTimer(container) {
+  if (!container) return false;
+  if (!container.querySelector(':scope > .timer-wrapper') && typeof AddTimerToContainer === 'function') {
+    AddTimerToContainer(container);
+  }
+  return Boolean(container.querySelector(':scope > .timer-wrapper'));
+}
+
+function startParanoiaPhaseTimer(container, label, delay = getParanoiaPhaseDelay()) {
+  if (!container) return false;
+  ensureParanoiaTimer(container);
+
+  return startTimerWithContainer({
+    container,
+    label,
+    timeLeft: delay / 1000,
+    duration: getParanoiaPhaseDuration()
+  });
+}
+
+function startParanoiaPhaseTimers(containers = [], delay = getParanoiaPhaseDelay()) {
+  containers.forEach(({ container, label }) => {
+    startParanoiaPhaseTimer(container, label, delay);
+  });
+}
+
+function scheduleParanoiaCurrentPhaseTimeout(delay = getParanoiaPhaseDelay()) {
+  scheduleParanoiaPhaseAction({
+    delay,
+    action: 'paranoia-handle-phase-timeout',
+    payload: {
+      roundTimer: Date.now() + getParanoiaPhaseDuration() * 1000
+    }
+  });
+}
+
+function scheduleParanoiaRevealTimeout(delay = getParanoiaPhaseDelay()) {
+  scheduleParanoiaPhaseAction({
+    delay,
+    action: 'paranoia-handle-reveal-timeout',
+    payload: {
+      roundTimer: Date.now() + getParanoiaPhaseDuration() * 1000
+    }
+  });
+}
+
 async function DisplayPrivateCard(instruction) {
   const state = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
@@ -171,7 +258,7 @@ async function DisplayPrivateCard(instruction) {
 
   const parsedInstructions = parseInstruction(instruction);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const currentPlayer = players[playerTurn];
+  const currentPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
 
   if (!currentPlayer) {
     console.warn('Current player not found in DisplayPrivateCard');
@@ -216,6 +303,7 @@ async function DisplayPrivateCard(instruction) {
 async function DisplayPunishmentToUser(instruction) {
   const players = currentPartyData.players || [];
   const parsedInstructions = parseInstruction(instruction);
+  const delay = getParanoiaPhaseDelay();
   const punishmentType = String(parsedInstructions.reason ?? '').toUpperCase();
   const punishedPlayer = players.find(
     player => getPlayerId(player) === parsedInstructions.deviceId
@@ -234,6 +322,7 @@ async function DisplayPunishmentToUser(instruction) {
       completePunishmentContainer.setAttribute("punishment-type", punishmentType);
     }
 
+    startParanoiaPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
     setActiveContainers(completePunishmentContainer);
     return;
   }
@@ -243,6 +332,7 @@ async function DisplayPunishmentToUser(instruction) {
     waitingForRoomText: "Showing player punishment...",
     player: punishedPlayer ?? null
   });
+  startParanoiaPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
   setActiveContainers(waitingForPlayerContainer);
 }
 
@@ -259,7 +349,7 @@ async function UserHasPassed(instruction) {
 
   const parsedInstructions = parseInstruction(instruction);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const turnPlayer = players[playerTurn];
+  const turnPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
   const targetId =
     parsedInstructions.deviceId ||
     phaseData?.targetId ||
@@ -299,8 +389,15 @@ async function HasUserDonePunishment(instruction) {
   const { phaseData } = getParanoiaPhaseState();
   const punishedPlayer = getParanoiaTargetPlayer();
   const meIndex = players.findIndex(p => getPlayerId(p) === deviceId);
+  const delay = getParanoiaPhaseDelay();
 
   if (!punishedPlayer || meIndex === -1) return;
+
+  startParanoiaPhaseTimers([
+    { container: confirmPunishmentContainer, label: 'confirmPunishmentContainer' },
+    { container: waitingForPlayersContainer, label: 'waitingForPlayersContainer' }
+  ], delay);
+  scheduleParanoiaCurrentPhaseTimeout(delay);
 
   const meState = getPlayerState(players[meIndex]);
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
@@ -349,8 +446,9 @@ async function ChosePunishment(instruction) {
   const players = currentPartyData.players || [];
   const state   = getPartyState(currentPartyData);
   const { phaseData } = getParanoiaPhaseState();
+  const delay = getParanoiaPhaseDelay();
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const turnPlayer = players[playerTurn];
+  const turnPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
   if (!turnPlayer) return;
 
   const target = getParanoiaTargetPlayer();
@@ -358,24 +456,47 @@ async function ChosePunishment(instruction) {
 
   const punishmentType = String(phaseData?.punishmentType ?? '').toUpperCase();
   const index = players.findIndex(player => getPlayerId(player) === getPlayerId(target));
+  const turnPlayerIndex = getParanoiaTurnPlayerIndex(players, state, playerTurn);
   currentPlayer = target;
+
+  startParanoiaPhaseTimers([
+    { container: pickHeadsOrTailsContainer, label: 'pickHeadsOrTailsContainer' },
+    {
+      container: typeof luckyCoinFlipContainer === 'undefined' ? null : luckyCoinFlipContainer,
+      label: 'luckyCoinFlipContainer'
+    },
+    {
+      container: typeof drinkWheelContainer === 'undefined' ? null : drinkWheelContainer,
+      label: 'drinkWheelContainer'
+    },
+    { container: completePunishmentContainer, label: 'completePunishmentContainer' },
+    { container: waitingForPlayerContainer, label: 'waitingForPlayerContainer' }
+  ], delay);
+  scheduleParanoiaCurrentPhaseTimeout(delay);
 
   if (getPlayerId(target) === deviceId) {
     if (punishmentType === "COIN_FLIP") {
       if (coinFlipInProgress || isContainerVisible(luckyCoinFlipContainer)) {
+        startParanoiaPhaseTimer(luckyCoinFlipContainer, 'luckyCoinFlipContainer', delay);
         setActiveContainers(luckyCoinFlipContainer);
       } else {
+        startParanoiaPhaseTimer(pickHeadsOrTailsContainer, 'pickHeadsOrTailsContainer', delay);
         setActiveContainers(pickHeadsOrTailsContainer);
       }
     }
     else if (punishmentType === "DRINK_WHEEL") {
-      if (typeof resetDrinkWheelState === 'function') {
+      const wheelIsAlreadyActive =
+        (typeof spinning !== 'undefined' && spinning === true) ||
+        isContainerVisible(drinkWheelContainer);
+
+      if (!wheelIsAlreadyActive && typeof resetDrinkWheelState === 'function') {
         resetDrinkWheelState();
       }
+      startParanoiaPhaseTimer(drinkWheelContainer, 'drinkWheelContainer', delay);
       setActiveContainers(drinkWheelContainer);
     }
     else if (punishmentType === "DOWN_IT") {
-      if (index === playerTurn) {
+      if (index === turnPlayerIndex) {
         completePunishmentText.textContent =
           "Down your drink. (if you refuse, the question will be passed to the next player and you will lose double points)";
       } else {
@@ -383,11 +504,12 @@ async function ChosePunishment(instruction) {
           "In order to find out the question you have to down your drink.";
       }
       completePunishmentContainer.setAttribute("punishment-type", "DOWN_IT");
+      startParanoiaPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
       setActiveContainers(completePunishmentContainer);
     }
     else {
       const readablePunishment = formatParanoiaPunishmentText(punishmentType);
-      if (index === playerTurn) {
+      if (index === turnPlayerIndex) {
         completePunishmentText.textContent =
           `take ${readablePunishment}. (if you refuse, the question will be passed to the next player and you will lose double points)`;
       } else {
@@ -395,6 +517,7 @@ async function ChosePunishment(instruction) {
           `In order to find out the question you have to take ${readablePunishment}.`;
       }
       completePunishmentContainer.setAttribute("punishment-type", punishmentType);
+      startParanoiaPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
       setActiveContainers(completePunishmentContainer);
     }
   } else {
@@ -413,6 +536,7 @@ async function ChosePunishment(instruction) {
       waitingForRoomText: currentWaitingForPlayerText,
       player: target
     });
+    startParanoiaPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
     setActiveContainers(waitingForPlayerContainer);
   }
 }
@@ -473,11 +597,15 @@ async function DisplayDualStackCard() {
   const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
   const meIndex = players.findIndex(player => getPlayerId(player) === deviceId);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
-  const currentPlayer = players[playerTurn];
+  const currentPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
   const revealTargetId = state?.phaseData?.revealTargetId ?? state?.phaseData?.targetId ?? null;
   const votedId = currentPlayer ? (getPlayerVote(currentPlayer) ?? revealTargetId) : revealTargetId;
   const votedPlayer = players.find(player => getPlayerId(player) === votedId) ?? null;
   const icons = waitingForPlayersIconContainer.querySelectorAll('.icon');
+  const delay = getParanoiaPhaseDelay();
+
+  startParanoiaPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
+  scheduleParanoiaRevealTimeout(delay);
 
   if (meIndex === -1) {
     console.warn("Device not found in players.");
@@ -536,6 +664,11 @@ async function DisplayDualStackCard() {
   const currentIndex = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
   selectedQuestionObj = getNextQuestion(currentIndex);
   DisplayCard(gameContainerDualStack, selectedQuestionObj);
+  startTimerFromContainer({
+    container: gameContainerDualStack,
+    timeLeft: delay / 1000,
+    duration: getParanoiaPhaseDuration()
+  });
   setActiveContainers(gameContainerDualStack);
   ClearIcons();
 }
@@ -555,14 +688,16 @@ async function ResetParanoiaQuestion({
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
 
   if (currentPlayerIndex == null) {
-    const turnPlayer = players[playerTurn];
+    const turnPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
     const votedId = getPlayerVote(turnPlayer);
 
     if (votedId == null) {
-      currentPlayerIndex = playerTurn;
+      currentPlayerIndex = getParanoiaTurnPlayerIndex(players, state, playerTurn);
     } else {
       currentPlayerIndex = players.findIndex(p => getPlayerId(p) === votedId);
-      if (currentPlayerIndex === -1) currentPlayerIndex = playerTurn;
+      if (currentPlayerIndex === -1) {
+        currentPlayerIndex = getParanoiaTurnPlayerIndex(players, state, playerTurn);
+      }
     }
   }
   await ResetQuestion({

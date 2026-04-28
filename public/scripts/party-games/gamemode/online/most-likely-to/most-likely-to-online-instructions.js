@@ -25,12 +25,50 @@ function formatMostLikelyToPunishmentText(punishmentType = "") {
   return "Complete your punishment.";
 }
 
+function getMostLikelyToPunishmentTextElement() {
+  return completePunishmentText
+    ?? completePunishmentContainer?.querySelector?.('.content-container #punishment-text')
+    ?? document.querySelector('#complete-punishment-container .content-container #punishment-text');
+}
+
 function getMostLikelyToPhaseState() {
   const state = getPartyState(currentPartyData);
   return {
     phase: state?.phase ?? null,
     phaseData: state?.phaseData ?? {}
   };
+}
+
+function getMostLikelyToPhaseDuration() {
+  return Number(getTimeLimit() || gameRules?.["time-limit"] || 120);
+}
+
+function getMostLikelyToPhaseDelay() {
+  const state = getPartyState(currentPartyData);
+  const timerValue = state?.timer ?? currentPartyData?.timer ?? null;
+  if (!timerValue) return getMostLikelyToPhaseDuration() * 1000;
+
+  return Math.max(new Date(timerValue) - Date.now(), 0);
+}
+
+function ensureMostLikelyToTimer(container) {
+  if (!container) return false;
+  if (!container.querySelector(':scope > .timer-wrapper') && typeof AddTimerToContainer === 'function') {
+    AddTimerToContainer(container);
+  }
+  return Boolean(container.querySelector(':scope > .timer-wrapper'));
+}
+
+function startMostLikelyToPhaseTimer(container, label, delay = getMostLikelyToPhaseDelay()) {
+  if (!container) return false;
+  ensureMostLikelyToTimer(container);
+
+  return startTimerWithContainer({
+    container,
+    label,
+    timeLeft: delay / 1000,
+    duration: getMostLikelyToPhaseDuration()
+  });
 }
 
 async function scheduleMostLikelyToPhaseAction({ delay = 0, action, payload = {} } = {}) {
@@ -282,6 +320,11 @@ async function TieBreakerPunishmentOffer() {
 
         if (updatedParty) {
           currentPartyData = updatedParty;
+
+          if (getPartyState(currentPartyData)?.phase === "most-likely-to-choose-punishment") {
+            await ChoosingPunishment();
+            return;
+          }
         }
       } else {
         DisplayWaitingForPlayers();
@@ -395,6 +438,7 @@ async function ChosePunishment() {
   const { phaseData } = getMostLikelyToPhaseState();
   const targetId = phaseData?.targetId ?? null;
   const punishmentType = phaseData?.punishmentType ?? '';
+  const delay = getMostLikelyToPhaseDelay();
 
   const index = players.findIndex(
     p => getPlayerId(p) === targetId
@@ -402,13 +446,22 @@ async function ChosePunishment() {
 
   if (targetId === deviceId) {
     if (punishmentType === "MOST_LIKELY_TO_DRINK_WHEEL") {
-      if (typeof resetDrinkWheelState === 'function') {
+      const wheelIsAlreadyActive =
+        (typeof spinning !== 'undefined' && spinning === true) ||
+        isContainerVisible(drinkWheelContainer);
+
+      if (!wheelIsAlreadyActive && typeof resetDrinkWheelState === 'function') {
         resetDrinkWheelState();
       }
+      startMostLikelyToPhaseTimer(drinkWheelContainer, 'drinkWheelContainer', delay);
       setActiveContainers(drinkWheelContainer);
     } else {
-      punishmentText.textContent = formatMostLikelyToPunishmentText(punishmentType);
+      const punishmentTextElement = getMostLikelyToPunishmentTextElement();
+      if (punishmentTextElement) {
+        punishmentTextElement.textContent = formatMostLikelyToPunishmentText(punishmentType);
+      }
       completePunishmentContainer.setAttribute("punishment-type", punishmentType);
+      startMostLikelyToPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
       setActiveContainers(completePunishmentContainer);
     }
   } else if (index !== -1) {
@@ -422,6 +475,8 @@ async function ChosePunishment() {
       waitingForRoomText: currentWaitingForPlayerText,
       player: players[index]
     });
+    startMostLikelyToPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
+    startMostLikelyToPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
     setActiveContainers(waitingForPlayerContainer);
   }
 }

@@ -12,6 +12,9 @@ if (placeholderGamemodeAddons?.dataset.online === "false") {
 }
 else {
     gameContainers.push(drinkWheelContainer);
+    if (typeof AddTimerToContainer === 'function') {
+        AddTimerToContainer(drinkWheelContainer);
+    }
 }
 
 if (typeof sectors === "undefined" || sectors === null) {
@@ -244,7 +247,8 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
             const updatedParty = await performOnlinePartyAction({
                 action: 'paranoia-resolve-drink-wheel',
                 payload: {
-                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase(),
+                    phaseTimer: Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000)
                 }
             });
 
@@ -264,7 +268,8 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
             const updatedParty = await performOnlinePartyAction({
                 action: 'would-you-rather-resolve-drink-wheel',
                 payload: {
-                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase(),
+                    phaseTimer: Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000)
                 }
             });
 
@@ -282,7 +287,8 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
             const updatedParty = await performOnlinePartyAction({
                 action: 'never-have-i-ever-resolve-drink-wheel',
                 payload: {
-                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase(),
+                    phaseTimer: Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000)
                 }
             });
 
@@ -297,10 +303,12 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
             placeholderGamemodeAddons?.dataset.gamemode === "most-likely-to" &&
             typeof performOnlinePartyAction === "function"
         ) {
+            const phaseTimer = Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000);
             const updatedParty = await performOnlinePartyAction({
                 action: 'most-likely-to-resolve-drink-wheel',
                 payload: {
-                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase(),
+                    phaseTimer
                 }
             });
 
@@ -308,7 +316,9 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
                 currentPartyData = updatedParty;
             }
 
-            if (typeof FetchInstructions === 'function') {
+            if (typeof ChosePunishment === 'function') {
+                await ChosePunishment();
+            } else if (typeof FetchInstructions === 'function') {
                 await FetchInstructions();
             }
         } else if (
@@ -318,7 +328,8 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
             const updatedParty = await performOnlinePartyAction({
                 action: 'truth-or-dare-resolve-drink-wheel',
                 payload: {
-                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase()
+                    punishmentType: (spinEl.textContent).replace(/\s+/g, "_").toUpperCase(),
+                    phaseTimer: Date.now() + (Number(gameRules?.["time-limit"] || 120) * 1000)
                 }
             });
 

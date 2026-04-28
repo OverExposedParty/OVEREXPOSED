@@ -2,6 +2,11 @@ let spinButton;
 let coinFlipButton;
 
 const placeholderGamemodeAddons = document.getElementById('placeholder-gamemode-addons-container');
+if (placeholderGamemodeAddons && !placeholderGamemodeAddons.dataset.gamemode) {
+    placeholderGamemodeAddons.dataset.gamemode =
+        document.getElementById('placeholder-card-container')?.dataset.gamemode ||
+        (typeof gamemode === 'string' ? gamemode : '');
+}
 const gamemodeAddonContains = ['drink-wheel','lucky-coin-flip','odd-man-out']
 if (placeholderGamemodeAddons.dataset.online === "false") {
     coinFlipButton = document.getElementById('coin-flip-button');

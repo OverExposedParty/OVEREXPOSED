@@ -51,6 +51,31 @@ let partyCode =
 
 debugLog("PARTY CODE: " + partyCode);
 
+async function waitForOnlineCore() {
+  const timeoutMs = 30000;
+
+  if (window.Ready?.when) {
+    await Ready.when('online-core', { timeout: timeoutMs });
+  }
+
+  const startTime = Date.now();
+
+  while (
+    typeof window.checkAndMaybeBecomeHost !== 'function' ||
+    typeof window.joinParty !== 'function' ||
+    typeof window.updateOnlineParty !== 'function' ||
+    typeof window.ShowPartyDoesNotExistState !== 'function' ||
+    typeof window.ShowGameAlreadyStartedState !== 'function'
+  ) {
+    if (Date.now() - startTime >= timeoutMs) {
+      throw new Error('Online core scripts did not finish loading in time.');
+    }
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+}
+
+window.waitForOnlineCore = waitForOnlineCore;
+
 
 // Basic Socket.IO client init
 socket = io();
@@ -199,12 +224,20 @@ function ensureOnlineStatusContainer({
   }
 
   container.className = "online-status-container";
-  container.innerHTML = `
-    <div class="content-container">
-      <h1>${title}</h1>
-      ${description ? `<p>${description}</p>` : ""}
-    </div>
-  `;
+  const contentContainer = document.createElement("div");
+  contentContainer.className = "content-container";
+
+  const heading = document.createElement("h1");
+  heading.textContent = title;
+  contentContainer.appendChild(heading);
+
+  if (description) {
+    const descriptionElement = document.createElement("p");
+    descriptionElement.textContent = description;
+    contentContainer.appendChild(descriptionElement);
+  }
+
+  container.replaceChildren(contentContainer);
 
   return container;
 }
@@ -481,6 +514,8 @@ function getOnlineInstructionSnapshotSignature(party) {
     state.lastPinged ?? partyData.lastPinged ?? '',
     state.phase ?? partyData.phase ?? '',
     state.playerTurn ?? partyData.playerTurn ?? '',
+    state.round ?? partyData.round ?? '',
+    state.roundPlayerTurn ?? partyData.roundPlayerTurn ?? '',
     state.timer ?? partyData.timer ?? '',
     instruction,
     playerSignature

@@ -101,6 +101,7 @@ async function DisplayVoteResults() {
       action: 'never-have-i-ever-resolve-vote-results',
       payload: {
         roundTimer: Date.now() + gameRules["time-limit"] * 1000,
+        phaseTimer: Date.now() + gameRules["time-limit"] * 1000,
         nextPlayer: true
       }
     });
@@ -158,6 +159,38 @@ function getNeverHaveIEverTargetIds() {
     : [];
 }
 
+function getNeverHaveIEverPhaseDuration() {
+  return Number(gameRules?.["time-limit"] || 120);
+}
+
+function getNeverHaveIEverPhaseDelay() {
+  const state = getPartyState(currentPartyData);
+  const timerValue = state?.timer ?? currentPartyData?.timer ?? null;
+  if (!timerValue) return getNeverHaveIEverPhaseDuration() * 1000;
+
+  return Math.max(new Date(timerValue) - Date.now(), 0);
+}
+
+function ensureNeverHaveIEverTimer(container) {
+  if (!container) return false;
+  if (!container.querySelector(':scope > .timer-wrapper') && typeof AddTimerToContainer === 'function') {
+    AddTimerToContainer(container);
+  }
+  return Boolean(container.querySelector(':scope > .timer-wrapper'));
+}
+
+function startNeverHaveIEverPhaseTimer(container, label, delay = getNeverHaveIEverPhaseDelay()) {
+  if (!container) return false;
+  ensureNeverHaveIEverTimer(container);
+
+  return startTimerWithContainer({
+    container,
+    label,
+    timeLeft: delay / 1000,
+    duration: getNeverHaveIEverPhaseDuration()
+  });
+}
+
 async function ensureDrinkWheelContainer() {
   let container = document.querySelector('#drink-wheel-container');
 
@@ -184,6 +217,7 @@ async function ChosePunishment(instruction) {
   const players = currentPartyData.players || [];
   const { phase } = getNeverHaveIEverPhaseState();
   const targetIds = getNeverHaveIEverTargetIds();
+  const delay = getNeverHaveIEverPhaseDelay();
 
   const myIndex = players.findIndex(p => getPlayerId(p) === deviceId);
   if (myIndex === -1) return;
@@ -203,12 +237,14 @@ async function ChosePunishment(instruction) {
         if (typeof resetDrinkWheelState === 'function') {
           resetDrinkWheelState();
         }
+        startNeverHaveIEverPhaseTimer(drinkWheelContainer, 'drinkWheelContainer', delay);
         setActiveContainers(drinkWheelContainer);
       } else {
         SetWaitingForPlayer({
           waitingForRoomTitle: "Preparing punishment...",
           waitingForRoomText: "Loading drink wheel..."
         });
+        startNeverHaveIEverPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
         setActiveContainers(waitingForPlayerContainer);
       }
     } else {
@@ -217,6 +253,7 @@ async function ChosePunishment(instruction) {
         waitingForRoomText: "Spinning drink wheel...",
         player: oddPlayer
       });
+      startNeverHaveIEverPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
       setActiveContainers(waitingForPlayerContainer);
     }
     return;
@@ -228,11 +265,14 @@ async function ChosePunishment(instruction) {
 
     const hasConfirmed = myState.hasConfirmed ?? myPlayer.hasConfirmed;
     if (!hasConfirmed) {
+      startNeverHaveIEverPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
       setActiveContainers(completePunishmentContainer);
     } else {
+      startNeverHaveIEverPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
       DisplayWaitingForPlayers();
     }
   } else {
+    startNeverHaveIEverPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
     DisplayWaitingForPlayers();
   }
 }

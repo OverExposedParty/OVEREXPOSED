@@ -70,7 +70,9 @@ async function FetchInstructions() {
   const state = getPartyState(currentPartyData);
   const players = currentPartyData.players || [];
   const turnIndex = state?.playerTurn ?? 0;
-  const turnPlayer = players[turnIndex];
+  const turnPlayer = typeof getTruthOrDareTurnPlayer === 'function'
+    ? getTruthOrDareTurnPlayer(players, state, turnIndex)
+    : players[turnIndex];
   const turnPlayerId = turnPlayer?.identity?.computerId ?? turnPlayer?.computerId ?? null;
   debugLog('[OE_DEBUG][truth-or-dare][FetchInstructions][players]', {
     playersLength: players.length,
@@ -113,10 +115,10 @@ async function FetchInstructions() {
   }
   else if (instructions.includes("RESET_QUESTION")) {
     if (instructions.includes("TIMER_EXPIRED:2")) {
-      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: -2, byPassHost: false });
+      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: 0, byPassHost: false });
     }
     else if (instructions.includes("TIMER_EXPIRED")) {
-      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: -1, byPassHost: false });
+      await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: 0, byPassHost: false });
     }
     else {
       await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, byPassHost: false });

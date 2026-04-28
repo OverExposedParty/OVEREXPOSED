@@ -9,7 +9,7 @@ document.head.appendChild(CookieConsentCSSlink);
 
 fetch('/html-templates/other/cookie-banner.html')
     .then(res => res.text())
-    .then(data => placeHolderCookieConsentBanner.innerHTML = data)
+    .then(data => appendTrustedHtml(placeHolderCookieConsentBanner, data, { replace: true }))
     .then(() => {
         placeHolderCookieConsentBanner.querySelector('#accept-cookies').addEventListener('click', () => {
             localStorage.setItem('cookie-consent', true);

@@ -1,3 +1,22 @@
+function getParanoiaTurnPlayer(players = [], state = {}, turnIndex = state?.playerTurn ?? 0) {
+  const order = Array.isArray(state?.playerTurnOrder) ? state.playerTurnOrder : [];
+  const playerId = order[turnIndex];
+
+  if (playerId) {
+    return players.find(player => getPlayerId(player) === playerId) ?? null;
+  }
+
+  return players[turnIndex] ?? null;
+}
+
+function getParanoiaTurnPlayerIndex(players = [], state = {}, turnIndex = state?.playerTurn ?? 0) {
+  const turnPlayer = getParanoiaTurnPlayer(players, state, turnIndex);
+  if (!turnPlayer) return -1;
+
+  const turnPlayerId = getPlayerId(turnPlayer);
+  return players.findIndex(player => getPlayerId(player) === turnPlayerId);
+}
+
 async function FetchInstructions() {
   currentPartyData = await GetCurrentPartyData({ requireInstructions: true, retries: 8, delayMs: 150 });
   if (!currentPartyData) {
@@ -76,7 +95,7 @@ async function FetchInstructions() {
     SetPartyGameStatisticsGameOver();
   }
   else if (instructions.includes("RESET_PARANOIA_QUESTION")) {
-    const turnPlayer = players[playerTurn];
+    const turnPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
     const currentPlayerIndex = players.findIndex(
       p => getPlayerId(p) === getPlayerId(turnPlayer)
     );

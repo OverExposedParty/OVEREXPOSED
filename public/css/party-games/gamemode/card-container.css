@@ -187,6 +187,19 @@
     max-width: 100%;
 }
 
+.content > .gamemode-text-container {
+    order: 1;
+}
+
+.content > .main-image-container {
+    order: 2;
+}
+
+.content > .regular-button-container,
+.content > .button-container {
+    order: 3;
+}
+
 .main-image-container {
     width: 100%;
     display: flex;

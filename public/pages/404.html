@@ -17,9 +17,6 @@
     <meta name="twitter:description" content="The page you’re looking for could not be found on OVEREXPOSED.">
     <meta name="twitter:image" content="/images/meta/og-images/page-not-found.jpg">
     <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/settings.css">
-    <link rel="stylesheet" href="/css/general/help-container.css">
-    <link rel="stylesheet" href="/css/general/rotate-device.css">
 
     <link rel="icon" type="image/x-icon" href="/images/meta/favicons/page-not-found/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/meta/favicons/page-not-found/favicon-16x16.png">
@@ -30,32 +27,30 @@
 </head>
 
 <body>
-    <header class="header" id="header">
-        <div class="icon-container extra-menu-icon">
-            <div class="extra-menu-icon">
-                <img src="/images/icons/extra-menu-icon.svg" alt="Extra Menu">
-            </div>
-        </div>
-        <div class="logo-container">
-            <a href="/">
-                <img src="/images/logo.svg" alt="OVEREXPOSED Logo" class="logo">
-            </a>
-        </div>
-        <div class="icon-container settings-icon">
-            <div class="settings-icon">
-                <img src="/images/icons/settings.svg" alt="Settings">
-            </div>
-        </div>
-    </header>
-    
-    <div class="landscape-message">
-        Please rotate your phone to continue
-        <img src="./images/icons/overexposed/rotate-phone-icon.svg" alt="Rotate Icon" class="rotate-icon">
+    <section class="sr-only" aria-label="Page not found">
+        <h1>Page not found</h1>
+        <p>The page you are looking for could not be found on OVEREXPOSED.</p>
+    </section>
+
+    <div class="splash-screen-container-static" id="splash-screen-container-static">
+        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+        <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <div class="main-container" data-template="page-not-found">
     </div>
 </body>
-<script src="/scripts/general/header.js"></script>
-<script src="/scripts/general/sound.js" ></script>
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#999999');
     document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+
+    window.pageScripts = {};
 </script>
+<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+
+</html>

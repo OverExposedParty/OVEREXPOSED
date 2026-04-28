@@ -19,10 +19,28 @@ fetch('/html-templates/party-games/party-game-statistics.html')
         partyGameStatisticsEndGameButton.addEventListener('click', async () => {
             debugLog("END GAME BUTTON PRESSED");
 
-            if (deviceId == hostDeviceId && isPlaying == true) {
-                await SendInstruction({
-                    instruction: "GAME_OVER",
-                });
+            updatePartyGameStatisticsEndGameButtonState();
+
+            if (partyGameStatisticsEndGameButton.classList.contains('disabled')) {
+                return;
+            }
+
+            try {
+                const latestPartyData = await GetCurrentPartyData({ retries: 1 });
+                if (latestPartyData) {
+                    currentPartyData = latestPartyData;
+                }
+
+                updatePartyGameStatisticsEndGameButtonState(latestPartyData);
+
+                if (partyGameStatisticsEndGameButton.classList.contains('disabled')) {
+                    console.warn('End game skipped because this device is not the current host.');
+                    return;
+                }
+
+                await EndOnlineGame();
+            } catch (error) {
+                console.error('Failed to end game:', error);
             }
         });
 
@@ -53,6 +71,26 @@ fetch('/html-templates/party-games/party-game-statistics.html')
         console.error('Error loading party game statistics template:', error);
     });
 
+function getPartyGameStatisticsHostId(partyData = currentPartyData) {
+    return partyData?.state?.hostComputerId ?? hostDeviceId ?? null;
+}
+
+function updatePartyGameStatisticsEndGameButtonState(partyData = currentPartyData) {
+    if (!partyGameStatisticsEndGameButton) return;
+
+    const authoritativeHostId = getPartyGameStatisticsHostId(partyData);
+    if (authoritativeHostId) {
+        hostDeviceId = authoritativeHostId;
+    }
+
+    const canEndGame =
+        isPlaying === true &&
+        authoritativeHostId &&
+        String(deviceId) === String(authoritativeHostId);
+
+    partyGameStatisticsEndGameButton.classList.toggle('disabled', !canEndGame);
+}
+
 function SetPartyGameStatistics() {
     if (typeof currentPartyData == "undefined" || currentPartyData == null) return;
     if (!Array.isArray(currentPartyData.players)) return;
@@ -72,9 +110,8 @@ function SetPartyGameStatistics() {
         playerStatisticContainer.textContent = `${username}: ${score} pts`;
         scoreboardContainer.appendChild(playerStatisticContainer);
     }
-    if (deviceId != hostDeviceId) {
-        partyGameStatisticsEndGameButton.classList.add('disabled');
-    }
+
+    updatePartyGameStatisticsEndGameButtonState();
 }
 
 async function UpdatePartyGameStatistics() {
@@ -92,6 +129,8 @@ async function UpdatePartyGameStatistics() {
 
         playerStatisticContainers[i].textContent = `${username}: ${score} pts`;
     }
+
+    updatePartyGameStatisticsEndGameButtonState();
 }
 
 function SetPartyGameStatisticsGameOver() {

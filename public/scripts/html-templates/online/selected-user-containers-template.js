@@ -72,13 +72,16 @@ function getOnlineGamemodeCacheBustKey(templateName) {
     }
 }
 
+async function appendTemplateToSelectedUserPlaceholder(templatePath) {
+    const html = await fetchTrustedHtml(templatePath);
+    appendTrustedHtml(placeHolderSelectedUser, html);
+    await new Promise(requestAnimationFrame);
+}
+
 async function loadTemplatesAndScripts() {
     try {
         // Load base template
-        const baseResponse = await fetch('/html-templates/online/party-games/selected-user-containers/party-games-template.html');
-        const baseData = await baseResponse.text();
-        placeHolderSelectedUser.insertAdjacentHTML('beforeend', baseData);
-        await new Promise(requestAnimationFrame);
+        await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/party-games-template.html');
 
         // Initialize base containers
         waitingForPlayerContainer = placeHolderSelectedUser.querySelector('#waiting-for-player-container');
@@ -120,10 +123,7 @@ async function loadTemplatesAndScripts() {
 
         // Load template-specific HTML
         if (template === 'truth-or-dare') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html');
 
             answerQuestionContainer = placeHolderSelectedUser.querySelector('#answer-question-container');
             answerQuestionContainerQuestionText = answerQuestionContainer.querySelector('.content-container h2');
@@ -145,10 +145,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'paranoia') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/paranoia-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/paranoia-template.html');
 
             pickHeadsOrTailsContainer = placeHolderSelectedUser.querySelector('#heads-or-tails-pick-container');
 
@@ -162,10 +159,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'never-have-i-ever') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html');
 
             selectOptionContainer = document.getElementById('select-option-container');
             selectOptionQuestionText = selectOptionContainer.querySelector('.content-container h2');
@@ -177,10 +171,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'most-likely-to') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html');
 
             selectNumberContainer = document.querySelector('#select-number-container');
             selectNumberQuestionText = selectNumberContainer.querySelector('.content-container h2');
@@ -191,10 +182,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'would-you-rather') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/would-you-rather-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/would-you-rather-template.html');
 
             selectOptionContainer = document.getElementById('select-option-container');
             selectOptionQuestionTextA = selectOptionContainer.querySelector('.content-container h2#a');
@@ -207,10 +195,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'imposter') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/imposter-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/imposter-template.html');
 
             displayStartTimerContainer = document.getElementById('start-timer-container');
             displayStartTimerText = displayStartTimerContainer.querySelector('.content-container h2');
@@ -227,10 +212,7 @@ async function loadTemplatesAndScripts() {
         }
 
         else if (template === 'mafia') {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/mafia-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/mafia-template.html');
 
             displayDayTimerContainer = placeHolderSelectedUser.querySelector('#display-day-timer-container');
 
@@ -285,10 +267,7 @@ async function loadTemplatesAndScripts() {
 
         // Player selection template
         if (playerSelectionGamemodes.includes(template)) {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/general/player-selection-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/general/player-selection-template.html');
 
             selectUserContainer = placeHolderSelectedUser.querySelector('#select-user-container');
             selectUserTitle = selectUserContainer.querySelector('.content-container h1');
@@ -303,10 +282,7 @@ async function loadTemplatesAndScripts() {
 
         // Confirm punishment template
         if (ConfirmPunishmentGamemodes.includes(template)) {
-            const response = await fetch('/html-templates/online/party-games/selected-user-containers/general/confirm-punishment-template.html');
-            const data = await response.text();
-            placeHolderSelectedUser.insertAdjacentHTML('beforeend', data);
-            await new Promise(requestAnimationFrame);
+            await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/general/confirm-punishment-template.html');
 
             confirmPunishmentContainer = placeHolderSelectedUser.querySelector('#confirm-punishment-container');
             confirmPunishmentText = confirmPunishmentContainer.querySelector('.content-container h2');

@@ -14,10 +14,17 @@ async function DisplayStartTimer() {
     duration: timeLimit
   });
 
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
+    timeLeft: delay / 1000,
+    duration: timeLimit
+  });
+
   SetTimeOut({
     delay,
     instruction: "DISPLAY_ANSWER_CONTAINER",
-    nextDelay: null
+    nextDelay: timeLimit * 1000
   });
 
   const index = players.findIndex(p => getPlayerId(p) === deviceId);
@@ -29,7 +36,8 @@ async function DisplayStartTimer() {
     await SendInstruction({
       instruction: "DISPLAY_ANSWER_CONTAINER",
       updateUsersReady: false,
-      updateUsersConfirmation: false
+      updateUsersConfirmation: false,
+      timer: Date.now() + timeLimit * 1000
     });
     return;
   }
@@ -64,7 +72,29 @@ function getImposterPhaseState() {
   };
 }
 
-async function scheduleImposterPhaseAction({ delay = 0, action, payload = {} } = {}) {
+async function renderCurrentImposterInstructionFromState() {
+  const userInstructions = getUserInstructions(currentPartyData);
+  const state = getPartyState(currentPartyData);
+  const phase = state?.phase ?? null;
+
+  if (phase === 'imposter-choose-punishment') {
+    ChoosingPunishment(state.playerTurn);
+  } else if (phase === 'imposter-show-punishment') {
+    DisplayPunishmentToUser();
+  } else if (userInstructions === "DISPLAY_VOTE_RESULTS") {
+    DisplayVoteResults();
+  } else if (userInstructions === "DISPLAY_VOTE_RESULTS_PART_TWO") {
+    await DisplayVoteResultsPartTwo();
+  } else if (userInstructions.includes("DISPLAY_PRIVATE_CARD")) {
+    DisplayPrivateCard(userInstructions);
+  } else if (userInstructions.includes("DISPLAY_START_TIMER")) {
+    DisplayStartTimer();
+  } else if (userInstructions.includes("DISPLAY_ANSWER_CONTAINER")) {
+    DisplayAnswerContainer();
+  }
+}
+
+async function scheduleImposterPhaseAction({ delay = 0, action, payload = {}, actorId = null } = {}) {
   const state = getPartyState(currentPartyData);
   const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
 
@@ -79,13 +109,30 @@ async function scheduleImposterPhaseAction({ delay = 0, action, payload = {} } =
   try {
     await timeout.promise;
 
+    const actionPayload = { ...payload };
+    if (actionPayload.nextTimerDurationMs != null) {
+      actionPayload.timer = Date.now() + Number(actionPayload.nextTimerDurationMs);
+      delete actionPayload.nextTimerDurationMs;
+    }
+    if (actionPayload.nextPhaseTimerDurationMs != null) {
+      actionPayload.phaseTimer = Date.now() + Number(actionPayload.nextPhaseTimerDurationMs);
+      delete actionPayload.nextPhaseTimerDurationMs;
+    }
+    if (actionPayload.nextRoundTimerDurationMs != null) {
+      actionPayload.roundTimer = Date.now() + Number(actionPayload.nextRoundTimerDurationMs);
+      delete actionPayload.nextRoundTimerDurationMs;
+    }
+
     const updatedParty = await performOnlinePartyAction({
       action,
-      payload
+      payload: actionPayload,
+      actorId: actorId ?? deviceId,
+      syncInstructions: false
     });
 
     if (updatedParty) {
       currentPartyData = updatedParty;
+      await renderCurrentImposterInstructionFromState();
     }
   } catch (error) {
     console.error('Imposter phase action failed:', error);
@@ -98,6 +145,24 @@ async function DisplayAnswerContainer() {
   const state   = getPartyState(currentPartyData);
   const deck    = getPartyDeck(currentPartyData);
   const players = currentPartyData.players || [];
+
+  const timerValue = state.timer ?? Date.now();
+  const delay      = new Date(timerValue) - Date.now();
+  const timeLimit  = getTimeLimit("imposter-time-limit");
+
+  startTimerWithContainer({
+    container: displayUserAnswerContainer,
+    label: 'displayUserAnswerContainer',
+    timeLeft: delay / 1000,
+    duration: timeLimit
+  });
+
+  startTimerWithContainer({
+    container: waitingForPlayerContainer,
+    label: 'waitingForPlayerContainer',
+    timeLeft: delay / 1000,
+    duration: timeLimit
+  });
 
   const index = players.findIndex(p => getPlayerId(p) === deviceId);
   if (index === -1) return;
@@ -119,6 +184,18 @@ async function DisplayAnswerContainer() {
       }
     return;
   }
+
+  scheduleImposterPhaseAction({
+    delay,
+    action: 'imposter-advance-answer-turn',
+    actorId: getPlayerId(players[currentRoundTurnIdx]),
+    payload: {
+      roundsLimit: rounds,
+      expectedRound: currentRound,
+      expectedRoundPlayerTurn: currentRoundTurnIdx,
+      nextTimerDurationMs: timeLimit * 1000
+    }
+  });
 
   if (index === currentRoundTurnIdx) {
     const cardIndex = deck.currentCardIndex ?? 0;
@@ -143,7 +220,7 @@ async function DisplayAnswerContainer() {
 
     SetWaitingForPlayer({
       waitingForRoomTitle: "Waiting for " + username,
-      waitingForRoomText: "Choosing Punishment...",
+      waitingForRoomText: "Answering prompt...",
       player: currentPlayer
     });
 
@@ -175,6 +252,13 @@ async function DisplayPrivateCard() {
   startTimerWithContainer({
     container: selectUserContainer,
     label: 'selectUserContainer',
+    timeLeft: delay / 1000,
+    duration: timeLimit
+  });
+
+  startTimerWithContainer({
+    container: waitingForPlayersContainer,
+    label: 'waitingForPlayersContainer',
     timeLeft: delay / 1000,
     duration: timeLimit
   });
@@ -286,8 +370,8 @@ async function DisplayVoteResultsPartTwo() {
     delay,
     action: 'imposter-resolve-vote-outcome',
     payload: {
-      phaseTimer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
-      roundTimer: Date.now() + getTimeLimit("imposter-time-limit") * 1000,
+      nextPhaseTimerDurationMs: getTimeLimit("imposter-time-limit") * 1000,
+      nextRoundTimerDurationMs: getTimeLimit("imposter-time-limit") * 1000,
       resetInstruction: resetGamemodeInstruction,
       alternativeQuestionIndex: Math.floor(Math.random() * 255)
     }

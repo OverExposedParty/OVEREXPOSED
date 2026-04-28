@@ -1,7 +1,10 @@
 const overlay = document.createElement('div');
 overlay.classList.add('overlay');
 overlay.id = 'overlay';
-overlay.innerHTML = '<p class="overlay-text">Tap empty area to close</p>';
+const overlayText = document.createElement('p');
+overlayText.className = 'overlay-text';
+overlayText.textContent = 'Tap empty area to close';
+overlay.appendChild(overlayText);
 document.body.appendChild(overlay);
 
 function syncHeaderIconActiveStates() {

@@ -97,9 +97,19 @@ async function scheduleWouldYouRatherPhaseAction({ delay = 0, action, payload = 
   try {
     await timeout.promise;
 
+    const actionPayload = { ...payload };
+    if (actionPayload.nextPhaseTimerDurationMs != null) {
+      actionPayload.phaseTimer = Date.now() + Number(actionPayload.nextPhaseTimerDurationMs);
+      delete actionPayload.nextPhaseTimerDurationMs;
+    }
+    if (actionPayload.nextRoundTimerDurationMs != null) {
+      actionPayload.roundTimer = Date.now() + Number(actionPayload.nextRoundTimerDurationMs);
+      delete actionPayload.nextRoundTimerDurationMs;
+    }
+
     const updatedParty = await performOnlinePartyAction({
       action,
-      payload
+      payload: actionPayload
     });
 
     if (updatedParty) {
@@ -120,6 +130,38 @@ function getWouldYouRatherTargetIds() {
 function getWouldYouRatherWinningVote() {
   const { phaseData } = getWouldYouRatherPhaseState();
   return phaseData?.winningVote ?? null;
+}
+
+function getWouldYouRatherPhaseDuration() {
+  return Number(getTimeLimit() || gameRules?.["time-limit"] || 120);
+}
+
+function getWouldYouRatherPhaseDelay() {
+  const state = getPartyState(currentPartyData);
+  const timerValue = state?.timer ?? currentPartyData?.timer ?? null;
+  if (!timerValue) return getWouldYouRatherPhaseDuration() * 1000;
+
+  return Math.max(new Date(timerValue) - Date.now(), 0);
+}
+
+function ensureWouldYouRatherTimer(container) {
+  if (!container) return false;
+  if (!container.querySelector(':scope > .timer-wrapper') && typeof AddTimerToContainer === 'function') {
+    AddTimerToContainer(container);
+  }
+  return Boolean(container.querySelector(':scope > .timer-wrapper'));
+}
+
+function startWouldYouRatherPhaseTimer(container, label, delay = getWouldYouRatherPhaseDelay()) {
+  if (!container) return false;
+  ensureWouldYouRatherTimer(container);
+
+  return startTimerWithContainer({
+    container,
+    label,
+    timeLeft: delay / 1000,
+    duration: getWouldYouRatherPhaseDuration()
+  });
 }
 
 async function DisplayVoteResults() {
@@ -146,7 +188,8 @@ async function DisplayVoteResults() {
       delay,
       action: 'would-you-rather-resolve-vote-results',
       payload: {
-        roundTimer: Date.now() + getTimeLimit() * 1000
+        nextRoundTimerDurationMs: getTimeLimit() * 1000,
+        nextPhaseTimerDurationMs: getTimeLimit() * 1000
       }
     });
   }
@@ -189,6 +232,7 @@ async function ChosePunishment(instruction) {
   const players = currentPartyData.players || [];
   const { phase, phaseData } = getWouldYouRatherPhaseState();
   const targetIds = getWouldYouRatherTargetIds();
+  const delay = getWouldYouRatherPhaseDelay();
 
   const myIndex = players.findIndex(
     p => getPlayerId(p) === deviceId
@@ -215,6 +259,7 @@ async function ChosePunishment(instruction) {
       if (typeof resetDrinkWheelState === 'function') {
         resetDrinkWheelState();
       }
+      startWouldYouRatherPhaseTimer(drinkWheelContainer, 'drinkWheelContainer', delay);
       setActiveContainers(drinkWheelContainer);
     } else {
       SetWaitingForPlayer({
@@ -222,9 +267,20 @@ async function ChosePunishment(instruction) {
         waitingForRoomText: "Spinning drink wheel...",
         player: oddManOutPlayer
       });
+      startWouldYouRatherPhaseTimer(waitingForPlayerContainer, 'waitingForPlayerContainer', delay);
       setActiveContainers(waitingForPlayerContainer);
     }
     return;
+  }
+
+  if (phase === 'would-you-rather-show-punishment') {
+    scheduleWouldYouRatherPhaseAction({
+      delay,
+      action: 'would-you-rather-handle-phase-timeout',
+      payload: {
+        nextRoundTimerDurationMs: getTimeLimit() * 1000
+      }
+    });
   }
 
   if (targetIds.includes(deviceId)) {
@@ -236,11 +292,14 @@ async function ChosePunishment(instruction) {
     completePunishmentContainer.setAttribute('punishment-type', punishmentType);
 
     if (!myState.hasConfirmed) {
+      startWouldYouRatherPhaseTimer(completePunishmentContainer, 'completePunishmentContainer', delay);
       setActiveContainers(completePunishmentContainer);
     } else {
+      startWouldYouRatherPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
       DisplayWaitingForPlayers();
     }
   } else {
+    startWouldYouRatherPhaseTimer(waitingForPlayersContainer, 'waitingForPlayersContainer', delay);
     DisplayWaitingForPlayers();
   }
 }

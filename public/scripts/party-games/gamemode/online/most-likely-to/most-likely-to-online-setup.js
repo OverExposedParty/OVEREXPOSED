@@ -1,7 +1,3 @@
-const url = window.location.href;
-const segments = url.split('/');
-partyCode = segments.pop() || segments.pop(); // handle trailing slash
-
 const resultsChartContainer = document.getElementById('results-container');
 
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
@@ -12,67 +8,16 @@ gameContainers.push(
   resultsChartContainer
 );
 
-const punishmentText = document
-  .querySelector('#complete-punishment-container .content-container #punishment-text');
-
 async function initialisePage() {
-  const party = await waitForOnlinePartySnapshot({
-    requirePlayer: true,
+  const session = await bootstrapOnlineGamePage({
     requirePlaying: true
   });
-  if (!party) {
-    ShowPartyDoesNotExistState();
+  if (!session) {
     return;
   }
-  const players = party.players || [];
-  const config = getPartyConfig(party);
-  const state = getPartyState(party);
-
-  isPlaying = true;
-
-const index = players.findIndex(
-    player => player.identity?.computerId === deviceId || player.computerId === deviceId
-  );
-  if (index === -1) {
-    console.warn('Current device not found in players.');
-    ShowGameAlreadyStartedState();
-    return;
-  }
-
-  const me = players[index];
-  onlineUsername = me.identity?.username || me.username;
-
-  // 🔽 NEW: determine correct host based on hostComputerIdList
-  const resolvedHostId = await checkAndMaybeBecomeHost({
-    party,
-    deviceId,
-    onlineUsername
-  });
-
-  // Fallback to first player if no host resolved
-  if (resolvedHostId) {
-    hostDeviceId = resolvedHostId;
-  } else {
-    const fallbackHost = players[0];
-    hostDeviceId = fallbackHost?.identity?.computerId || fallbackHost?.computerId;
-  }
+  const { party, players, config, state } = session;
 
   debugLog("hostDeviceId:", hostDeviceId);
-
-  const myConnectionSocket = me.connection?.socketId ?? me.socketId;
-  if (myConnectionSocket === "DISCONNECTED") {
-    sendPartyChat({
-      username: "[CONSOLE]",
-      message: `${onlineUsername} has reconnected.`,
-      eventType: "connect"
-    });
-  }
-
-  if (!me.connection) me.connection = {};
-  me.connection.socketId = socket.id;
-  me.socketId = socket.id;
-
-  await joinParty(partyCode);
 
   if (state.isPlaying === true) {
     // Build "who's most likely to" buttons for every player
@@ -295,6 +240,7 @@ async function SetPageSettings() {
   AddTimerToContainer(selectNumberContainer);
   AddTimerToContainer(selectPunishmentContainer);
   AddTimerToContainer(waitingForPlayerContainer);
+  AddTimerToContainer(completePunishmentContainer);
 
   // Load current party (new schema only)
   const initialPartyData = await waitForOnlinePartySnapshot({
