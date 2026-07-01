@@ -4,6 +4,7 @@
 # Node dependencies
 node_modules/
 docs/
+.tmp-chrome-debug/
 
 # Logs
 logs
