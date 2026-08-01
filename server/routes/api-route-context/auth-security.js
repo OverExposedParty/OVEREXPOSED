@@ -23,10 +23,10 @@ function createAuthSecurityContext(context) {
 
   const maxStoredAccountSessions = 10;
 
-  const legalTermsVersion = process.env.LEGAL_TERMS_VERSION || '2026-07-11';
+  const legalTermsVersion = process.env.LEGAL_TERMS_VERSION || '2026-08-01';
 
   const legalPrivacyPolicyVersion =
-    process.env.LEGAL_PRIVACY_POLICY_VERSION || '2026-07-11';
+    process.env.LEGAL_PRIVACY_POLICY_VERSION || '2026-08-01';
 
   const oeIconPattern =
     /^[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+$/;

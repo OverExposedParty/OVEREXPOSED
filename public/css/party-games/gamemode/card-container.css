@@ -226,6 +226,80 @@
     object-fit: contain;
 }
 
+/* Reserve independent rows for the online OE and the card copy. */
+.card-content-grid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 60%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+}
+
+.card-content-grid.has-oe {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 2;
+    transform: translate(-50%, -50%);
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+}
+
+.oe-wrapper {
+    display: none;
+}
+
+.card-content-grid.has-oe .oe-wrapper {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+.card-content-grid .oe-wrapper > .icon.large {
+    position: relative;
+    top: auto;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.card-content-grid .oe-wrapper .image-stack {
+    width: 100%;
+    height: 100%;
+}
+
+.card-content-grid .oe-wrapper .image-stack img {
+    object-fit: contain;
+}
+
+.card-content-grid .text-container {
+    position: static;
+    width: 100%;
+    height: 100%;
+    transform: none;
+}
+
+.card-content-grid.has-oe .text-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 .card-type-text {
     position: absolute;
     bottom: 2.5%;

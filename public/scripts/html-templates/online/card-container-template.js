@@ -179,7 +179,10 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             const stackDoc = parser.parseFromString(stackHTML, 'text/html');
             const stackEl = stackDoc.body.firstElementChild;
             const container = mainDoc.querySelector('.main-image-container');
-            container.appendChild(stackEl);
+            const cardContentGrid = container.querySelector('.card-content-grid');
+            const oeWrapper = cardContentGrid.querySelector('.oe-wrapper');
+            oeWrapper.appendChild(stackEl);
+            cardContentGrid.classList.add('has-oe');
         }
         const withStackHTML = mainDoc.body.innerHTML;
 

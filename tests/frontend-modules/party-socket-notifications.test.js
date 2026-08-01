@@ -179,3 +179,30 @@ test('voluntary leave events trigger the host lobby sound for another player', (
   assert.equal(leftSoundCount, 1);
   assert.equal(popups.length, 1);
 });
+
+test('gameplay pages ignore waiting-room projection updates after game over', async () => {
+  const { handlers, sandbox } = createPartySocketSandbox();
+  let statisticsUpdateCount = 0;
+
+  sandbox.isPlaying = false;
+  sandbox.isCurrentOnlineGamemodePartyRoute = () => true;
+  sandbox.updatePartyGameStatisticsEndGameButtonState = () => {
+    statisticsUpdateCount += 1;
+  };
+
+  await handlers.get('party-updated')({
+    source: 'waiting-room',
+    emittedPartyCode: {
+      partyId: 'ABC-123',
+      config: { gamemode: 'truth-or-dare' },
+      state: {
+        isPlaying: false,
+        phase: 'lobby',
+        hostComputerId: 'current-player'
+      },
+      players: []
+    }
+  });
+
+  assert.equal(statisticsUpdateCount, 0);
+});

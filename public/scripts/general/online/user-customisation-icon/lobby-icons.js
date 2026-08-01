@@ -165,8 +165,11 @@ function deleteUserIcon(userId) {
 async function UpdateUserIcons(partyData) {
   const players = Array.isArray(partyData?.players) ? partyData.players : [];
   const usersContainer =
-    onlineSettingsContainer?.querySelector('.container-section#users') ||
-    document.getElementById('users');
+    document.querySelector(
+      '.online-game-settings-container .container-section#users'
+    ) || document.getElementById('users');
+  if (!usersContainer) return;
+
   const canKickPlayers = canCurrentUserKickPlayers(partyData);
 
   if (window.OELobbyPlayerList?.render && usersContainer) {
@@ -195,7 +198,7 @@ async function UpdateUserIcons(partyData) {
       usersContainer.classList.remove('small');
     }
 
-    userCount.textContent = `(${players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
+    updateLobbyUserCount(players.length);
     return;
   }
 
@@ -291,15 +294,27 @@ async function UpdateUserIcons(partyData) {
   }
 
   if (players.length > 4) {
-    onlineSettingsContainer
-      .querySelector('.container-section#users')
-      .classList.add('small');
+    usersContainer.classList.add('small');
   } else {
-    onlineSettingsContainer
-      .querySelector('.container-section#users')
-      .classList.remove('small');
+    usersContainer.classList.remove('small');
   }
 
-  userCount.textContent = `(${players.length}/${partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers})`;
+  updateLobbyUserCount(players.length);
 }
 
+function updateLobbyUserCount(playerCount) {
+  const countElement = document.querySelector('.user-count');
+  if (!countElement) return;
+
+  const currentGamemode =
+    typeof partyGameMode === 'undefined' ? '' : partyGameMode;
+  const gamemodeInformation =
+    typeof partyGamesInformation === 'undefined'
+      ? null
+      : partyGamesInformation[currentGamemode];
+  const maxPlayers = gamemodeInformation?.playerCountRestrictions?.maxPlayers;
+
+  if (Number.isFinite(maxPlayers)) {
+    countElement.textContent = `(${playerCount}/${maxPlayers})`;
+  }
+}

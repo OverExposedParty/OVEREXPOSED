@@ -120,6 +120,7 @@
   position: relative;
   height: 100%;
   aspect-ratio: 1;
+  overflow: visible;
 }
 
 .main-image-container .icon {
@@ -159,7 +160,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 0;
+  object-fit: contain;
   z-index: 1;
 }
 

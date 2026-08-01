@@ -290,7 +290,13 @@ socket.on(
   'party-updated',
   async ({ type, source, emittedPartyCode, documentKey }) => {
     try {
-      if (isPlaying && source === 'waiting-room') {
+      const isOnGameplayRoute =
+        typeof isCurrentOnlineGamemodePartyRoute === 'function' &&
+        isCurrentOnlineGamemodePartyRoute(emittedPartyCode);
+      if (
+        source === 'waiting-room' &&
+        (isPlaying || isOnGameplayRoute)
+      ) {
         return;
       }
 
@@ -336,6 +342,7 @@ socket.on(
       if (state?.hostComputerId) {
         hostDeviceId = state.hostComputerId;
       }
+      currentPartyData = party;
 
       if (
         state?.isPlaying === false &&
@@ -344,7 +351,6 @@ socket.on(
         typeof isCurrentOnlineGamemodePartyRoute === 'function' &&
         isCurrentOnlineGamemodePartyRoute(party)
       ) {
-        currentPartyData = party;
         redirectOnlinePartyToLobby(party, {
           forceWaitingRoom:
             String(state.hostComputerId || '') !== String(deviceId)

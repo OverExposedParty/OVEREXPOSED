@@ -122,3 +122,49 @@ test('getUserIconString prefers the signed-in account OE icon', () => {
     'base-blue:cap:wide-eyes:smile'
   );
 });
+
+test('UpdateUserIcons does not require the gamemode settings globals', async () => {
+  const usersContainer = {
+    classList: {
+      add() {},
+      remove() {}
+    },
+    querySelectorAll() {
+      return [];
+    }
+  };
+  let rendered = false;
+  const context = {
+    canCurrentUserKickPlayers() {
+      return false;
+    },
+    deviceId: 'host-device',
+    document: {
+      getElementById(id) {
+        return id === 'users' ? usersContainer : null;
+      },
+      querySelector() {
+        return null;
+      }
+    },
+    window: {
+      OELobbyPlayerList: {
+        render(container, players) {
+          rendered = container === usersContainer && players.length === 0;
+        }
+      }
+    }
+  };
+
+  vm.runInNewContext(
+    fs.readFileSync(
+      path.join(scriptsDirectory, 'user-customisation-icon/lobby-icons.js'),
+      'utf8'
+    ),
+    context,
+    { filename: 'user-customisation-icon/lobby-icons.js' }
+  );
+
+  await context.UpdateUserIcons({ players: [] });
+  assert.equal(rendered, true);
+});
