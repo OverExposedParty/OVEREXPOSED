@@ -1,5 +1,8 @@
 function GetVoteResults(currentPartyData) {
-  const players = currentPartyData.players;
+  const players =
+    typeof getMostLikelyToCurrentParticipants === 'function'
+      ? getMostLikelyToCurrentParticipants(currentPartyData)
+      : currentPartyData.players;
 
   const values = [];
   const voteComputerIds = [];
@@ -71,11 +74,18 @@ function GetVoteResults(currentPartyData) {
 }
 
 function GetVoteCount(currentPartyData, computerId) {
-  return currentPartyData.players.filter(p => p.state.vote === computerId).length;
+  const players =
+    typeof getMostLikelyToCurrentParticipants === 'function'
+      ? getMostLikelyToCurrentParticipants(currentPartyData)
+      : currentPartyData.players;
+  return players.filter(p => p.state.vote === computerId).length;
 }
 
 function getHighestVoteValue(currentPartyData) {
-  const players = currentPartyData.players;
+  const players =
+    typeof getMostLikelyToCurrentParticipants === 'function'
+      ? getMostLikelyToCurrentParticipants(currentPartyData)
+      : currentPartyData.players;
   const voteCounts = {};
 
   players.forEach(p => {
@@ -94,7 +104,10 @@ function getHighestVoteValue(currentPartyData) {
 }
 
 function GetHighestVoted(currentPartyData) {
-  const players = currentPartyData.players;
+  const players =
+    typeof getMostLikelyToCurrentParticipants === 'function'
+      ? getMostLikelyToCurrentParticipants(currentPartyData)
+      : currentPartyData.players;
   const highestVoteValue = Math.abs(getHighestVoteValue(currentPartyData));
 
   return players
@@ -124,6 +137,28 @@ async function FetchInstructions() {
   const state = getPartyState(currentPartyData);
   const phase = state?.phase ?? null;
   const instructions = getUserInstructions(currentPartyData);
+
+  if (
+    showRoundLateJoinContainerIfNeeded({
+      partyData: currentPartyData,
+      gamemode: 'most-likely-to'
+    })
+  ) {
+    stopMostLikelyToTimerWarning();
+    return;
+  }
+
+  syncMostLikelyToFlowSounds(state, instructions);
+
+  const phaseOwnsActionTimer =
+    phase === "most-likely-to-tiebreaker" ||
+    phase === "most-likely-to-choose-punishment";
+  if (
+    !String(instructions || '').includes("DISPLAY_PRIVATE_CARD") &&
+    !phaseOwnsActionTimer
+  ) {
+    stopMostLikelyToTimerWarning();
+  }
 
   if (phase === "most-likely-to-tiebreaker") {
     await TieBreakerPunishmentOffer();

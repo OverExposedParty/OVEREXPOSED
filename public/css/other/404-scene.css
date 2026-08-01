@@ -1,0 +1,92 @@
+.error-404-scene {
+    --tabletop-y: 78svh;
+    --desk-width: max(150vw, 150%);
+    --computer-width: min(60vw, 72svh);
+    --computer-seat-overlap: clamp(1.25rem, 2.4vw, 2.5rem);
+    --scene-darkness-filter: brightness(0.25) saturate(0.5);
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+}
+
+.error-desk {
+    position: absolute;
+    top: var(--tabletop-y);
+    left: 50%;
+    z-index: 1;
+    width: var(--desk-width);
+    height: auto;
+    transform: translateX(-50%);
+    filter: var(--scene-darkness-filter);
+}
+
+.error-monitor-setup {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100svh - var(--tabletop-y) - var(--computer-seat-overlap));
+    z-index: 2;
+    display: flex;
+    width: var(--computer-width);
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+    isolation: isolate;
+    transform: translateX(-50%);
+}
+
+.error-monitor,
+.error-monitor-base {
+    display: block;
+    flex: none;
+    height: auto;
+}
+
+.error-monitor {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    filter: var(--scene-darkness-filter);
+}
+
+.error-monitor-base {
+    position: relative;
+    z-index: 1;
+    width: 72%;
+    margin-top: -16%;
+    filter: var(--scene-darkness-filter);
+}
+
+.monitor-base-shadow {
+    fill: #050505;
+}
+
+.monitor-base {
+    fill: #101010;
+}
+
+.desk-shadow {
+    fill: #3d2500;
+}
+
+.desk-surface {
+    fill: #69461b;
+}
+
+#screen {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@media (orientation: portrait) {
+    .error-404-scene {
+        --tabletop-y: 76svh;
+        --computer-width: min(90vw, 64svh);
+    }
+}
+
+@media (min-width: 1200px) and (orientation: landscape) {
+    .error-404-scene {
+        --tabletop-y: 80svh;
+        --computer-width: min(60vw, 70svh);
+    }
+}

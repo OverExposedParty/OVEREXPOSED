@@ -1,0 +1,52 @@
+@media (orientation: portrait) {
+
+    .container,
+    .title-container {
+        width: 85vw;
+        min-width: auto;
+    }
+
+    .container {
+        height: 75%;
+    }
+
+    .contents-container-text {
+        font-size: 13px;
+    }
+
+    .warning-container button {
+        border: 4px solid var(--warningcolour);
+        padding: 5px 10px;
+        font-size: 10px;
+        min-width: 60px;
+    }
+
+    .floating-container p {
+        font-size: 12.5px;
+        line-height: 1.7;
+        margin-bottom: 10px;
+    }
+
+    .floating-container h2 {
+        font-size: 22px;
+        line-height: 1.7;
+        margin-bottom: 0px;
+    }
+
+    .title-text {
+        font-size: 16px;
+    }
+
+    .tag-text {
+        font-size: 2.5dvw;
+    }
+
+    .tag-container button {
+        height: 2.5dvw;
+        width: 2.5dvw;
+    }
+
+    .warning-container button {
+        font-size: 1dvh;
+    }
+}

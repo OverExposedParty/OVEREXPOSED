@@ -1,0 +1,414 @@
+.account-friends-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.account-friends-search-input {
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: var(--primarypagecolour);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.account-friends-search-input::placeholder {
+  color: #777777;
+  opacity: 1;
+}
+
+.account-friends-search-input:focus-visible {
+  outline: var(--bordersize) solid var(--secondarypagecolour);
+  outline-offset: calc(var(--bordersize) * -1);
+}
+
+.account-friends-search-button {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: var(--primarypagecolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.account-friends-search-button:focus-visible {
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friends-search-button:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.account-friends-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.account-friends-tab {
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: var(--primarypagecolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.account-friends-tab.is-active,
+.account-friends-tab:focus-visible {
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friends-tab:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.account-friends-tab:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.account-friends-tab:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.account-friends-tab:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.account-friends-list {
+  display: grid;
+  gap: 8px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.account-friends-search-result-header {
+  min-height: 34px;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: #999999;
+  font-size: 11px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.account-friends-search-result-header.is-error {
+  color: var(--warningcolour);
+}
+
+.account-friends-search-clear {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primarypagecolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.account-friends-search-clear:focus-visible {
+  color: var(--secondarypagecolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friends-search-clear:hover {
+    color: var(--secondarypagecolour);
+    outline: none;
+  }
+}
+
+.account-friend-card {
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  overflow: hidden;
+}
+
+.account-friend-summary {
+  width: 100%;
+  min-height: 62px;
+  padding: 8px 10px;
+  border: 0;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 18px;
+  gap: 10px;
+  align-items: center;
+  background-color: transparent;
+  color: var(--primarypagecolour);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.account-friend-summary:focus-visible {
+  color: var(--secondarypagecolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friend-summary:hover {
+    color: var(--secondarypagecolour);
+    outline: none;
+  }
+}
+
+.account-friend-oe-icon {
+  width: 54px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  justify-self: center;
+  border-radius: calc(var(--account-inner-radius) * 0.75);
+  background-color: transparent;
+  color: var(--backgroundcolour);
+  font-size: 13px;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.account-friend-oe-icon.is-blocked {
+  background-color: transparent;
+}
+
+.account-friend-oe-icon .image-stack {
+  position: relative;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  align-self: center;
+  justify-self: center;
+}
+
+.account-friend-oe-icon .image-stack img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.account-friend-oe-icon .image-stack img:nth-child(1) {
+  z-index: 0;
+}
+
+.account-friend-oe-icon .image-stack img:nth-child(2) {
+  z-index: 3;
+}
+
+.account-friend-oe-icon .image-stack img:nth-child(3) {
+  z-index: 1;
+}
+
+.account-friend-oe-icon .image-stack img:nth-child(4) {
+  z-index: 2;
+}
+
+.account-friend-identity {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
+}
+
+.account-friend-username,
+.account-friend-status {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-friend-username {
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.account-friend-status {
+  color: #999999;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.account-friend-status.is-online {
+  color: var(--successcolour);
+}
+
+.account-friend-dropdown-arrow {
+  width: 0;
+  height: 0;
+  justify-self: center;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid currentColor;
+  transition: transform 0.2s;
+}
+
+.account-friend-card.is-expanded .account-friend-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.account-friend-details {
+  padding: 0 10px 10px;
+}
+
+.account-friend-meta {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.account-friend-meta .account-profile-row {
+  min-height: 30px;
+  padding: 6px 14px;
+  background-color: var(--backgroundcolour);
+}
+
+.account-friend-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.account-friend-action {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--backgroundcolour);
+  color: var(--primarypagecolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.account-friend-action:focus-visible {
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friend-action:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.account-friend-action:disabled {
+  color: #777777;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.account-friend-action:disabled:focus-visible {
+  background-color: var(--backgroundcolour);
+  color: #777777;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friend-action:disabled:hover {
+    background-color: var(--backgroundcolour);
+    color: #777777;
+  }
+}
+
+.account-friend-action.danger {
+  color: var(--warningcolour);
+}
+
+.account-friend-action.danger:focus-visible {
+  background-color: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-friend-action.danger:hover {
+    background-color: var(--warningcolour);
+    color: var(--backgroundcolour);
+  }
+}
+
+.account-friend-action:nth-child(odd):not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.account-friend-action:nth-child(even) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.account-friend-action:nth-child(odd):last-child {
+  grid-column: 1 / -1;
+}
+
+.account-friends-empty {
+  min-height: 88px;
+  padding: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}

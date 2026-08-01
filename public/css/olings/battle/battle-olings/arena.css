@@ -1,0 +1,109 @@
+.oling-battle-container__screen,
+.oling-battle-screen,
+.oling-battle-arena {
+  position: relative;
+  flex: 1;
+  margin: 2cqw;
+  margin-bottom: 0;
+  border-radius: 2cqw 2cqw 0 0;
+  background: var(--backgroundcolour);
+  cursor: pointer;
+}
+
+.oling-battle-arena {
+  isolation: isolate;
+  overflow: hidden;
+  background: #7256b7;
+}
+
+.oling-battle-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.oling-battle-scene-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(0, 0, 0) scale(var(--battle-scene-scale, 1.015));
+  transform-origin: center;
+}
+
+.oling-battle-scene-layer.is-far-background {
+  z-index: 0;
+  --battle-shake-distance: 0.35cqw;
+}
+
+.oling-battle-scene-layer.is-background {
+  z-index: 1;
+  --battle-shake-distance: 0.65cqw;
+}
+
+.oling-battle-scene-layer.is-stage {
+  z-index: 2;
+  --battle-shake-distance: 1cqw;
+}
+
+.oling-battle-scene-layer.is-foreground {
+  z-index: 5;
+  --battle-shake-distance: 1.45cqw;
+}
+
+.oling-battle-scene-layer.is-shaking {
+  animation: oling-battle-scene-shake 360ms cubic-bezier(0.22, 0.72, 0.25, 1);
+}
+
+@keyframes oling-battle-scene-shake {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(var(--battle-scene-scale, 1.015));
+  }
+
+  16% {
+    transform: translate3d(
+        var(--battle-shake-distance),
+        calc(0px - var(--battle-shake-distance)),
+        0
+      )
+      scale(var(--battle-scene-scale, 1.015));
+  }
+
+  34% {
+    transform: translate3d(
+        calc(0px - var(--battle-shake-distance)),
+        var(--battle-shake-distance),
+        0
+      )
+      scale(var(--battle-scene-scale, 1.015));
+  }
+
+  56% {
+    transform: translate3d(
+        var(--battle-shake-distance),
+        calc(0px - var(--battle-shake-distance)),
+        0
+      )
+      scale(var(--battle-scene-scale, 1.015));
+  }
+
+  78% {
+    transform: translate3d(
+        calc(0px - var(--battle-shake-distance)),
+        0,
+        0
+      )
+      scale(var(--battle-scene-scale, 1.015));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oling-battle-scene-layer.is-shaking {
+    animation: none;
+  }
+}
+

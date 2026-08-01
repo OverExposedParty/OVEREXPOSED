@@ -1,0 +1,161 @@
+.online-public-profile-dialog {
+  overflow: visible;
+  background: transparent;
+}
+
+.online-public-profile-account.account-container {
+  --container-display: grid;
+  position: relative;
+  top: auto;
+  left: auto;
+  width: min(420px, calc(100vw - 32px));
+  display: grid;
+  transform: none;
+  transform-origin: center;
+  z-index: auto;
+}
+
+.online-public-profile-account .account-title {
+  text-transform: uppercase;
+}
+
+.online-public-profile-name-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.online-public-profile-name-row .account-subtitle {
+  min-width: 0;
+  margin: 0;
+}
+
+.online-public-profile-friend-button {
+  justify-self: center;
+  min-height: 0;
+  margin: 0;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.online-public-profile-friend-button:focus-visible {
+  background: color-mix(in srgb, var(--primarypagecolour) 82%, #ffffff);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .online-public-profile-friend-button:hover {
+    background: color-mix(in srgb, var(--primarypagecolour) 82%, #ffffff);
+    outline: none;
+  }
+}
+
+.online-public-profile-friend-button:disabled {
+  background: color-mix(in srgb, var(--primarypagecolour) 26%, transparent);
+  color: color-mix(in srgb, var(--primarypagecolour) 70%, transparent);
+  cursor: not-allowed;
+}
+
+.online-public-profile-account .account-preview-section {
+  aspect-ratio: 4 / 3;
+}
+
+.online-public-profile-account .account-preview-icon {
+  height: 100%;
+}
+
+.online-public-profile-account .account-preview-icon .icon {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.online-public-profile-account .account-preview-icon .icon .image-stack,
+.online-public-profile-account .account-preview-icon .image-stack {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+}
+
+.online-public-profile-account .account-preview-icon .image-stack img {
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.online-public-profile-actions.account-button-container {
+  min-height: 210px;
+}
+
+.online-public-profile-footer.account-footer {
+  min-height: 72px;
+}
+
+.online-public-profile-footer .account-footer-grid {
+  cursor: default;
+}
+
+.online-public-profile-footer .account-footer-grid:focus-visible,
+.online-public-profile-footer .account-footer-grid.touchhover {
+  background-color: var(--backgroundcolour);
+  color: var(--primarypagecolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .online-public-profile-footer .account-footer-grid:hover {
+    background-color: var(--backgroundcolour);
+    color: var(--primarypagecolour);
+    outline: none;
+  }
+}
+
+.online-public-profile-footer-blank {
+  pointer-events: none;
+}
+
+.online-public-profile-hint-grid.has-account-hint {
+  padding: 0 12px;
+  font-size: 12px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.online-public-achievement-list.account-achievement-list {
+  max-height: none;
+  padding-right: 0;
+}
+
+.online-public-achievement-card.account-achievement-card {
+  min-height: 76px;
+}
+
+.online-public-achievements-empty {
+  min-height: 120px;
+  padding: 18px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed color-mix(in srgb, var(--primarypagecolour) 52%, transparent);
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}

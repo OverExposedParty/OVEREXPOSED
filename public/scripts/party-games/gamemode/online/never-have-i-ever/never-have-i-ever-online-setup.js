@@ -65,9 +65,20 @@ async function initialisePage() {
       );
     });
 
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+    const instructionLoadOptions = {
+      cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER"
+    };
+
+    await LoadScript(`${instructionsBasePath}/never-have-i-ever-online-instructions/phase-tools.js`, instructionLoadOptions);
+    await LoadScript(`${instructionsBasePath}/never-have-i-ever-online-instructions/private-card.js`, instructionLoadOptions);
+    await LoadScript(`${instructionsBasePath}/never-have-i-ever-online-instructions/vote-flow.js`, instructionLoadOptions);
+    await LoadScript(`${instructionsBasePath}/never-have-i-ever-online-instructions/punishment-flow.js`, instructionLoadOptions);
+    await LoadScript(`${instructionsBasePath}/never-have-i-ever-online-instructions/round-actions.js`, instructionLoadOptions);
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`,
-      { cacheBustKey: "PARTY_GAMES_ONLINE_NEVER_HAVE_I_EVER" }
+      `${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`,
+      instructionLoadOptions
     );
 
     const instructions = getUserInstructions(party);
@@ -116,6 +127,8 @@ async function initialisePage() {
 
 
 async function SetPageSettings() {
+  if (!(await registerRoundLateJoinIfRequested())) return;
+
   buttonChooseOption.addEventListener('click', async () => {
     // setUserBool already refactored to use nested player.state
     await setUserBool(deviceId, null, true);
@@ -123,10 +136,12 @@ async function SetPageSettings() {
 
   selectOptionConfirmButtonYes.addEventListener('click', async () => {
     await SetVote({ option: true });
+    stopNeverHaveIEverVoteTimerWarning();
   });
 
   selectOptionConfirmButtonNo.addEventListener('click', async () => {
     await SetVote({ option: false });
+    stopNeverHaveIEverVoteTimerWarning();
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {

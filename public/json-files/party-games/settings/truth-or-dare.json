@@ -1,48 +1,70 @@
 {
-    "truth-or-dare-settings": [
-        {
-            "settings-name": "take-a-shot",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw", "online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "drink-wheel",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "text-box",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        }
-    ]
+  "truth-or-dare-settings": [
+    {
+      "settings-name": "prompt-heist",
+      "settings-description": "When a player refuses their Truth or Dare, the other players briefly receive the opportunity to steal and complete the abandoned prompt.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "access": {
+        "type": "feature",
+        "feature": "party-games.prompt-heist"
+      },
+      "applies-to": [
+        "truth-or-dare"
+      ],
+      "game-rule-time-limit": 5
+    },
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many Truth or Dare prompts will be played for each player before the game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "truth-or-dare"
+      ],
+      "button-initial-value": 15,
+      "button-increment-value": 5,
+      "button-minimum-value": 5,
+      "button-maximum-value": 40
+    },
+    {
+      "settings-name": "drink-wheel",
+      "settings-description": "Allows a player who refuses their prompt to choose a randomly selected drinking punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "truth-or-dare"
+      ]
+    },
+    {
+      "settings-name": "take-a-shot",
+      "settings-description": "Allows a player who refuses their prompt to take a shot as their punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw",
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "truth-or-dare"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,65 @@
+@media (max-width: 760px) {
+  .oe-panel-video-cropper {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+  }
+
+  .oe-panel-video-crop-frame {
+    grid-row: auto;
+  }
+
+  .oe-panel-social-edit {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oe-panel-game-pack-form-row.is-two-column,
+  .oe-panel-game-pack-form-row.is-three-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.oe-panel-social-creation-status {
+  min-height: 1em;
+  margin: 0;
+  color: var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  font-size: clamp(0.46rem, 0.8vw, 0.66rem);
+  line-height: 1.2;
+}
+
+@media (max-width: 760px) {
+  .oe-panel-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .oe-panel-sidebar {
+    height: 100%;
+  }
+
+  .oe-panel-sidebar-title-container {
+    flex-basis: 16%;
+    padding: 1rem;
+  }
+
+  .oe-panel-sidebar-nav {
+    flex: 1 1 auto;
+  }
+
+  .oe-panel-sidebar-button {
+    min-height: 0;
+  }
+
+  .oe-panel-content-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  .oe-panel-content-container {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+
+  .oe-panel-table-header,
+  .oe-panel-table-header:has(.oe-panel-table-platform-filter) {
+    grid-template-columns: 1fr;
+  }
+}

@@ -155,6 +155,20 @@ function assertOptionalObjectArray(value, fieldName) {
   }
 }
 
+function assertAllowedPayloadFields(payload, action, allowedFields) {
+  const allowed = new Set(allowedFields);
+  const unsupportedField = Object.keys(payload).find(
+    (field) => !allowed.has(field)
+  );
+  if (!unsupportedField) return;
+
+  throw createValidationError({
+    message: `payload.${unsupportedField} is not allowed for ${action}`,
+    code: 'invalid_party_action_payload',
+    details: { field: `payload.${unsupportedField}`, action }
+  });
+}
+
 function validateSharedPayloadFields(payload = {}) {
   assertOptionalString(payload.socketId, 'payload.socketId', {
     maxLength: 200
@@ -167,17 +181,28 @@ function validateSharedPayloadFields(payload = {}) {
   assertOptionalFiniteNumber(payload.timer, 'payload.timer');
   assertOptionalFiniteNumber(payload.roundTimer, 'payload.roundTimer');
   assertOptionalFiniteNumber(payload.phaseTimer, 'payload.phaseTimer');
+  assertOptionalFiniteNumber(payload.heistTimer, 'payload.heistTimer');
+  assertOptionalFiniteNumber(
+    payload.timezoneOffsetMinutes,
+    'payload.timezoneOffsetMinutes'
+  );
   assertOptionalFiniteNumber(
     payload.nextRoundTimerDurationMs,
     'payload.nextRoundTimerDurationMs'
   );
   assertOptionalFiniteNumber(payload.incrementScore, 'payload.incrementScore');
   assertOptionalFiniteNumber(payload.playerIndex, 'payload.playerIndex');
-  assertOptionalFiniteNumber(payload.roundsLimit, 'payload.roundsLimit');
-  assertOptionalFiniteNumber(payload.expectedRound, 'payload.expectedRound');
   assertOptionalFiniteNumber(
-    payload.expectedRoundPlayerTurn,
-    'payload.expectedRoundPlayerTurn'
+    payload.speakingRoundsLimit,
+    'payload.speakingRoundsLimit'
+  );
+  assertOptionalFiniteNumber(
+    payload.expectedSpeakingRound,
+    'payload.expectedSpeakingRound'
+  );
+  assertOptionalFiniteNumber(
+    payload.expectedSpeakingPlayerTurn,
+    'payload.expectedSpeakingPlayerTurn'
   );
   assertOptionalFiniteNumber(
     payload.alternativeQuestionIndex,
@@ -197,6 +222,7 @@ function validateSharedPayloadFields(payload = {}) {
   assertOptionalBoolean(payload.userConfirmation, 'payload.userConfirmation');
   assertOptionalBoolean(payload.userReady, 'payload.userReady');
   assertOptionalBoolean(payload.matchedFace, 'payload.matchedFace');
+  assertOptionalBoolean(payload.isNsfwDare, 'payload.isNsfwDare');
   assertOptionalString(payload.instruction, 'payload.instruction');
   assertOptionalString(payload.sendInstruction, 'payload.sendInstruction');
   assertOptionalString(payload.setInstruction, 'payload.setInstruction');
@@ -234,7 +260,6 @@ function validateSharedPayloadFields(payload = {}) {
     maxLength: 120
   });
   assertOptionalStringArray(payload.tiedIds, 'payload.tiedIds');
-  assertOptionalStringArray(payload.shuffledRoles, 'payload.shuffledRoles');
   assertOptionalPlainObject(payload.configPatch, 'payload.configPatch');
   assertOptionalPlainObject(payload.statePatch, 'payload.statePatch');
   assertOptionalPlainObject(payload.deckPatch, 'payload.deckPatch');
@@ -249,6 +274,7 @@ const ACTION_VALIDATORS = {
     validateSharedPayloadFields(payload);
   },
   'end-game': validateSharedPayloadFields,
+  'return-to-lobby': validateSharedPayloadFields,
   'set-user-confirmation': (payload) => {
     validateSharedPayloadFields(payload);
     assertRequiredString(payload.selectedDeviceId, 'payload.selectedDeviceId', {
@@ -301,6 +327,9 @@ const ACTION_VALIDATORS = {
     ]);
   },
   'truth-or-dare-pass-question': validateSharedPayloadFields,
+  'truth-or-dare-start-prompt': validateSharedPayloadFields,
+  'truth-or-dare-claim-prompt-heist': validateSharedPayloadFields,
+  'truth-or-dare-resolve-prompt-heist': validateSharedPayloadFields,
   'truth-or-dare-select-punishment': (payload) => {
     validateSharedPayloadFields(payload);
     assertRequiredString(payload.punishmentType, 'payload.punishmentType', {
@@ -335,17 +364,7 @@ const ACTION_VALIDATORS = {
   'imposter-reset-round': validateSharedPayloadFields,
   'mafia-start-game': (payload) => {
     validateSharedPayloadFields(payload);
-    if (
-      !Array.isArray(payload.shuffledRoles) ||
-      payload.shuffledRoles.length === 0
-    ) {
-      throw createValidationError({
-        message: 'payload.shuffledRoles must be a non-empty array of strings',
-        code: 'missing_shuffled_roles',
-        details: { field: 'payload.shuffledRoles' }
-      });
-    }
-    assertOptionalStringArray(payload.shuffledRoles, 'payload.shuffledRoles');
+    assertAllowedPayloadFields(payload, 'mafia-start-game', ['timer']);
   },
   'mafia-resolve-night': validateSharedPayloadFields,
   'mafia-finish-player-killed': validateSharedPayloadFields,
@@ -398,6 +417,7 @@ const ACTION_VALIDATORS = {
       maxLength: 120
     });
   },
+  'most-likely-to-pass-punishment': validateSharedPayloadFields,
   'most-likely-to-complete-punishment': validateSharedPayloadFields,
   'most-likely-to-handle-phase-timeout': validateSharedPayloadFields
 };

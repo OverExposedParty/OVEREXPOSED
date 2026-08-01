@@ -1,0 +1,71 @@
+.achievement-popup-row {
+  --achievement-primary-colour: var(--primarypagecolour);
+  --achievement-secondary-colour: var(--secondarypagecolour);
+  --achievement-text-colour: #ffffff;
+  background: var(--backgroundcolour);
+  box-shadow: none;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 64px minmax(0, 1fr);
+  padding: 8px 12px 8px 8px;
+}
+
+.achievement-popup-icon-wrap {
+  align-items: center;
+  display: flex;
+  height: 54px;
+  justify-content: center;
+  position: relative;
+  width: 54px;
+}
+
+.achievement-popup-border,
+.achievement-popup-icon {
+  display: block;
+  height: 100%;
+  inset: 0;
+  object-fit: contain;
+  position: absolute;
+  width: 100%;
+}
+
+.achievement-popup-border {
+  z-index: 1;
+}
+
+.achievement-popup-icon {
+  z-index: 2;
+}
+
+.achievement-popup-content {
+  align-self: center;
+  min-width: 0;
+}
+
+.achievement-popup-label {
+  color: var(--achievement-secondary-colour);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.achievement-popup-title {
+  color: var(--achievement-primary-colour);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.achievement-popup-description {
+  color: var(--achievement-text-colour);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 5px 0 0;
+}

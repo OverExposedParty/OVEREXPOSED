@@ -11,13 +11,15 @@ const gamemodeAddonContains = ['drink-wheel','lucky-coin-flip','odd-man-out']
 if (placeholderGamemodeAddons.dataset.online === "false") {
     coinFlipButton = document.getElementById('coin-flip-button');
     const coinFlipEnabled = localStorage.getItem(`lucky-coin-flip`) === 'true';
-    if (!coinFlipEnabled && coinFlipButton) {
-        coinFlipButton.remove();
+    if (coinFlipButton) {
+        coinFlipButton.classList.toggle('disabled', !coinFlipEnabled);
+        coinFlipButton.setAttribute('aria-disabled', String(!coinFlipEnabled));
     }
     spinButton = document.getElementById('spin-button') || document.getElementById('odd-man-out-button');
     const spinWheelEnabled = localStorage.getItem(`drink-wheel`) === 'true';
-    if (!spinWheelEnabled && spinButton) {
-        spinButton.remove();
+    if (spinButton) {
+        spinButton.classList.toggle('disabled', !spinWheelEnabled);
+        spinButton.setAttribute('aria-disabled', String(!spinWheelEnabled));
     }
 
     gamemodeAddonContains.forEach(addon => {

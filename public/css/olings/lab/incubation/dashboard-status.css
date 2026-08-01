@@ -1,0 +1,169 @@
+.oling-lab-incubate-dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+  padding: 0;
+  background: transparent;
+}
+
+.oling-lab-incubate-panel {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubate-panel.is-egg {
+  place-items: stretch;
+  background: transparent;
+}
+
+.oling-lab-incubate-panel.is-status {
+  color: var(--backgroundcolour);
+  gap: 0.4rem;
+  align-content: stretch;
+  padding: 0.55rem;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.oling-lab-incubate-panel h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubate-panel.is-status h3 {
+  text-align: center;
+  font-size: 0.76rem;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-list {
+  gap: 0.25rem;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair-item {
+  min-width: 0;
+  min-height: 2.05rem;
+  display: grid;
+  gap: 0.18rem;
+  align-content: center;
+  padding: 0.28rem 0.42rem;
+  background: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair-item span,
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair-item strong {
+  min-width: 0;
+  font-size: 0.62rem;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair-item span {
+  font-weight: 800;
+  opacity: 0.78;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-pair-item strong {
+  font-weight: 900;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-row {
+  min-height: 1.65rem;
+  gap: 0.45rem;
+  padding: 0.3rem 0.42rem;
+  background: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-detail-row span,
+.oling-lab-incubate-panel.is-status .oling-lab-detail-row strong {
+  font-size: 0.63rem;
+  line-height: 1;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-incubator-copy {
+  padding: 0.42rem;
+  background: var(--oling-lab-menu-secondary-colour);
+  font-size: 0.66rem;
+  line-height: 1.15;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-menu-inline-actions {
+  align-self: end;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action,
+.oling-lab-item-influence-inventory-actions .oling-lab-menu-action {
+  min-height: 2rem;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  place-items: center;
+  justify-content: center;
+  padding: 0 0.55rem;
+  color: #fff8ea;
+  text-align: center;
+}
+
+.oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action.is-remove-action,
+.oling-lab-item-influence-inventory-actions .oling-lab-menu-action.is-remove-action {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action.is-hatch-action {
+  background: var(--successcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action.is-hatch-action:focus-visible {
+  background: var(--successcoloursecondary);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action.is-hatch-action:hover {
+    background: var(--successcoloursecondary);
+    color: var(--backgroundcolour);
+  }
+}
+
+.oling-lab-incubate-panel.is-status
+  .oling-lab-menu-inline-actions
+  .oling-lab-menu-action:disabled,
+.oling-lab-item-influence-inventory-actions .oling-lab-menu-action:disabled {
+  background: #6e7478;
+  color: #d7dadd;
+  opacity: 1;
+}
+
+.oling-lab-incubate-panel.is-status .oling-lab-menu-action span,
+.oling-lab-item-influence-inventory-actions .oling-lab-menu-action span {
+  font-size: 0.66rem;
+}

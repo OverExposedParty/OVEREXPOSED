@@ -21,8 +21,8 @@
 
     <link rel="preload" href="/images/splash-screens/overexposed.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/general/waiting-room.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
+    <link rel="stylesheet" href="/css/general/waiting-room/waiting-room.css">
     <link rel="stylesheet" href="/css/party-games/mafia-gamemode-settings.css">
 
     <link id="favicon-ico" rel="icon" type="image/x-icon"
@@ -56,11 +56,7 @@
     </div>
 
     <div id="header-placeholder" data-key="waiting-room"></div>
-    <div id="user-customisation-placeholder" class="waiting-room"></div>
     <div id="qr-code-container-placeholder"></div>
-
-    <div class="error-container username gamemode-settings mafia-gamemode-settings " id="placeholder-error-container">
-    </div>
 
     <div class="main-container">
         <div class="main-settings-container waiting-room-container is-visible">
@@ -71,6 +67,41 @@
             </div>
             <div id="gamemode-settings-placeholder" data-template="waiting-room"></div>
             <button class="start-game-button ready-up" id="waiting-room">READY</button>
+        </div>
+
+        <div class="waiting-container late-join-briefing" id="late-join-briefing">
+            <p class="late-join-briefing-label" id="late-join-mode-label" hidden></p>
+            <h1 id="late-join-heading">JOIN THE NEXT ROUND</h1>
+            <p id="late-join-description">A round is already underway. Join now and you’ll be added to the game automatically when the next round begins.</p>
+            <div class="late-join-briefing-details">
+                <div>
+                    <strong>How it works</strong>
+                    <span id="late-join-how-it-works">Follow the prompts to play.</span>
+                </div>
+                <div>
+                    <strong>Joining late</strong>
+                    <span id="late-join-late-copy">You can watch safely until the current round ends.</span>
+                </div>
+            </div>
+            <div class="late-join-status-row" aria-label="Current game status">
+                <span id="late-join-player-count">-- PLAYERS</span>
+                <span id="late-join-round">ROUND --</span>
+                <span id="late-join-progress-label">ROUND IN PROGRESS</span>
+            </div>
+            <p class="late-join-content-warning" id="late-join-warning-row" hidden>
+                CONTENT WARNING: 18+ CONTENT ENABLED
+            </p>
+            <div class="late-join-game-list-grid">
+                <section>
+                    <h2>RULES</h2>
+                    <div class="late-join-game-list" id="late-join-rules"></div>
+                </section>
+                <section>
+                    <h2>PACKS</h2>
+                    <div class="late-join-game-list" id="late-join-packs"></div>
+                </section>
+            </div>
+            <button type="button" id="late-join-game-button">JOIN GAME</button>
         </div>
 
         <div class="waiting-container" id="party-session-in-progress">
@@ -90,7 +121,6 @@
             <h2>Party is full</h2>
         </div>
     </div>
-    <div id="enter-username-placeholder" data-template="waiting-room"></div>
 </body>
 <script>
     document.documentElement.style.setProperty('--primarypagecolour', '#999999');
@@ -99,22 +129,19 @@
     window.pageScripts = {
         "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },
 
-        "/scripts/party-games/online/online-settings.js": { addDataLoaded: true, zIndex: 1 },
+        "/scripts/party-games/online/online-settings.js": { zIndex: 1 },
+        "/scripts/general/online/session-status-prompts.js": { zIndex: 1 },
         "/scripts/html-templates/gamemode-settings/gamemode-settings-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
         "/scripts/html-templates/gamemode-settings/qr-code-container-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/online/enter-username-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/gamemode-settings/error-container-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 1 },
-
-        "/scripts/party-games/gamemode-settings/error-game-settings.js": { zIndex: 2 },
         "/scripts/party-games/general/chat-log.js": { zIndex: 2 },
-        '/scripts/general/online/user-customisation.js': { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 2 },
-        "/scripts/party-games/waiting-room/waiting-room.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 2 },
+        "/scripts/party-games/waiting-room/waiting-room-actions.js": { cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 2 },
+        "/scripts/party-games/waiting-room/waiting-room-data.js": { cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 2 },
+        "/scripts/party-games/waiting-room/waiting-room-ui.js": { cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 2 },
+        "/scripts/party-games/waiting-room/waiting-room-late-join.js": { cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 2.1 },
+        "/scripts/party-games/waiting-room/waiting-room.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_WAITING_ROOM", zIndex: 3 },
     };
 
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template/core-template.js" data-loaded="false"></script>
 
 </html>

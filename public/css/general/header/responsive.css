@@ -1,0 +1,78 @@
+@media (orientation: portrait) {
+  :root {
+    --bordersize: 4px;
+    --headerheight: 6dvh;
+  }
+
+  .header-icon-container.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    direction: rtl;
+    gap: 0;
+  }
+
+  .header-icon-container.right {
+    margin-right: 6px;
+  }
+
+  .header-icon-container.left {
+    margin-left: 6px;
+  }
+
+  .header .icon-container {
+    width: calc(var(--headerheight) * 0.82);
+    aspect-ratio: auto;
+  }
+
+  .header-icon-container.right .icon-container {
+    width: calc(var(--headerheight) * 0.68);
+  }
+
+  .social-media-container {
+    display: flex;
+  }
+
+  .extra-menu-container {
+    width: 75dvw;
+  }
+
+  .extra-menu-title {
+    font-size: 6vw;
+  }
+
+  .extra-menu-button {
+    font-size: 4vw;
+    height: 17.5%;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .extra-menu-button:hover {
+      font-size: 4.5vw;
+    }
+  }
+
+  .social-media-image-container {
+    width: 30%;
+  }
+
+  .social-media-image {
+    height: auto;
+    width: 7.5vw;
+  }
+
+  .extra-menu-icon img {
+    height: auto;
+    width: 60%;
+  }
+
+  .back-button {
+    top: calc(var(--headerheight) + 4dvh);
+    left: 5px;
+  }
+
+  .splash-screen-container p,
+  .splash-screen-container-static p {
+    font-size: 12px;
+  }
+}

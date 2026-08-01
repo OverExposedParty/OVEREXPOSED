@@ -1,0 +1,405 @@
+.account-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    width: min(420px, calc(100vw - 32px));
+    padding: 0;
+    background-color: var(--backgroundcolour);
+    border: 0;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    display: var(--container-display, none);
+    z-index: 1001;
+    text-align: center;
+    border-radius: 40px;
+    box-sizing: border-box;
+    --container-visible-display: grid;
+    --account-inner-radius: 12px;
+    --account-preview-control-height: 38.25px;
+    --account-preview-edit-button-size: 31px;
+    --opalPrimaryColour: #5B5A8A;
+    --opalSecondaryColour: #3E3D67;
+    --opalTextColour: #F5F3FF;
+    gap: 0;
+    overflow: hidden;
+}
+
+.account-title-section,
+.account-preview-section,
+.account-button-container,
+.account-footer {
+    width: 100%;
+}
+
+.account-title-section {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.account-title {
+    color: var(--primarypagecolour);
+    font-size: 30px;
+    line-height: 1;
+    margin: 0;
+}
+
+.account-identity-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+    margin-top: 8px;
+}
+
+.account-subtitle {
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.4;
+    min-width: 0;
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-level-badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 18px;
+    padding: 3px 8px 2px;
+    background-color: var(--primarypagecolour);
+    border: 0;
+    border-radius: 999px;
+    box-sizing: border-box;
+    color: var(--backgroundcolour);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+    overflow: hidden;
+    transform: translateY(-1px);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.account-level-label,
+.account-level-number {
+    display: inline;
+    min-width: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-level-label {
+    font: inherit;
+}
+
+.account-level-number {
+    font: inherit;
+}
+
+.account-level-badge[hidden] {
+    display: none;
+}
+
+.account-preview-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    padding: 0;
+    border-radius: 0;
+    background: var(--secondarybackgroundcolour) url("/images/error-404/computer/screen/background.jpg") center / cover no-repeat;
+    box-sizing: border-box;
+    text-align: left;
+    overflow: hidden;
+}
+
+.account-preview-edit-button,
+.account-preview-randomise-button {
+    position: absolute;
+    top: 16px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    transition:
+        color 0.2s,
+        transform 0.2s;
+}
+
+.account-preview-edit-button {
+    top: 8px;
+    right: 16px;
+    width: var(--account-preview-edit-button-size);
+}
+
+.account-preview-randomise-button {
+    width: 34px;
+}
+
+.account-opal-balance-button {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    min-width: 81px;
+    max-width: 148.5px;
+    height: var(--account-preview-control-height);
+    display: inline-flex;
+    align-items: center;
+    gap: 8.25px;
+    padding: 0 9.75px;
+    background: transparent;
+    border-radius: 7.5px;
+    border: 0;
+    color: var(--opalPrimaryColour);
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+    transform-origin: center;
+    transition:
+        color 0.2s,
+        transform 0.2s;
+    z-index: 2;
+}
+
+.account-opal-balance-button[hidden] {
+    display: none;
+}
+
+.account-opal-balance-icon {
+    width: 33.75px;
+    height: 33.75px;
+    flex: 0 0 auto;
+    object-fit: contain;
+    pointer-events: none;
+    transform: translateY(1px);
+    transition: none;
+}
+
+.account-opal-balance-value {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--opalTextColour);
+    font-size: 18px;
+    font-weight: 900;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    transform: none;
+    transition: none;
+    white-space: nowrap;
+}
+
+.account-opal-balance-button:focus-visible .account-opal-balance-icon,
+.account-opal-balance-button.touchhover .account-opal-balance-icon {
+    transform: translateY(1px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-opal-balance-button:hover .account-opal-balance-icon {
+      transform: translateY(1px);
+  }
+}
+
+.account-opal-balance-button:focus-visible .account-opal-balance-value,
+.account-opal-balance-button.touchhover .account-opal-balance-value {
+    transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-opal-balance-button:hover .account-opal-balance-value {
+      transform: none;
+  }
+}
+
+.account-opal-balance-button:focus-visible,
+.account-opal-balance-button.touchhover {
+    color: var(--opalPrimaryColour);
+    outline: none;
+    transform: scale(1.04);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-opal-balance-button:hover {
+      color: var(--opalPrimaryColour);
+      outline: none;
+      transform: scale(1.04);
+  }
+}
+
+.account-opal-balance-button:focus-visible {
+    outline: var(--bordersize) solid var(--opalSecondaryColour);
+    outline-offset: 3px;
+}
+
+.account-preview-randomise-button {
+    left: 16px;
+    display: none;
+}
+
+.account-container.is-editing .account-opal-balance-button,
+.account-container.has-expanded-action .account-opal-balance-button {
+    display: none;
+}
+
+.account-container.is-editing .account-preview-randomise-button {
+    display: flex;
+}
+
+.account-container.is-close-locked .account-preview-edit-button {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.account-container.is-oe-edit-disabled .account-preview-edit-button,
+.account-preview-edit-button.disabled,
+.account-preview-edit-button[aria-disabled='true'] {
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+    pointer-events: none;
+    transform: none;
+}
+
+.account-preview-edit-icon,
+.account-preview-randomise-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.account-preview-edit-icon {
+    width: 86%;
+    height: 86%;
+}
+
+.account-preview-edit-icon,
+.account-randomise-primary,
+.account-randomise-secondary {
+    fill: currentColor;
+}
+
+.account-randomise-cutout {
+    fill: var(--backgroundcolour);
+    transition: fill 0.2s;
+}
+
+.account-preview-randomise-button:focus-visible .account-randomise-cutout,
+.account-preview-randomise-button.touchhover .account-randomise-cutout {
+    fill: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-preview-randomise-button:hover .account-randomise-cutout {
+      fill: var(--backgroundcolour);
+  }
+}
+
+.account-preview-edit-button:focus-visible,
+.account-preview-edit-button.touchhover,
+.account-preview-randomise-button:focus-visible,
+.account-preview-randomise-button.touchhover {
+    color: var(--secondarypagecolour);
+    outline: none;
+    transform: scale(1.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-preview-edit-button:hover,
+  .account-preview-randomise-button:hover {
+      color: var(--secondarypagecolour);
+      outline: none;
+      transform: scale(1.08);
+  }
+}
+
+.account-container.is-oe-edit-disabled .account-preview-edit-button:focus-visible,
+.account-container.is-oe-edit-disabled .account-preview-edit-button.touchhover,
+.account-preview-edit-button.disabled:focus-visible,
+.account-preview-edit-button.disabled.touchhover,
+.account-preview-edit-button[aria-disabled='true']:focus-visible,
+.account-preview-edit-button[aria-disabled='true'].touchhover {
+    color: #666666;
+    outline: none;
+    transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-container.is-oe-edit-disabled .account-preview-edit-button:hover,
+  .account-preview-edit-button.disabled:hover,
+  .account-preview-edit-button[aria-disabled='true']:hover {
+      color: #666666;
+      outline: none;
+      transform: none;
+  }
+}
+
+.account-preview-edit-button:focus-visible,
+.account-preview-randomise-button:focus-visible {
+    outline: var(--bordersize) solid var(--secondarypagecolour);
+    outline-offset: 3px;
+}
+
+.account-preview-icon {
+    height: 100%;
+    width: auto;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    overflow: hidden;
+}
+
+.account-preview-icon .image-stack {
+    position: relative;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 1;
+}
+
+.account-preview-icon .image-stack img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    object-fit: contain;
+}
+
+.account-preview-icon .image-stack img:nth-child(1) {
+    z-index: 0;
+}
+
+.account-preview-icon .image-stack img:nth-child(2) {
+    z-index: 3;
+}
+
+.account-preview-icon .image-stack img:nth-child(3) {
+    z-index: 1;
+}
+
+.account-preview-icon .image-stack img:nth-child(4) {
+    z-index: 2;
+}
+
+.account-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0;
+    min-height: 210px;
+    overflow: hidden;
+    background-color: var(--backgroundcolour);
+}
+

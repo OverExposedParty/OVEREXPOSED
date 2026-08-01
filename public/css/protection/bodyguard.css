@@ -1,0 +1,62 @@
+.oe-bodyguard {
+  position: fixed;
+  left: clamp(0.5rem, 1.6vw, 1.25rem);
+  bottom: clamp(0.5rem, 1.6vw, 1.25rem);
+  width: clamp(78px, 9.5vw, 138px);
+  aspect-ratio: 1 / 2;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.oe-bodyguard-body,
+.oe-bodyguard-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.oe-bodyguard-body {
+  z-index: 2;
+  display: block;
+}
+
+.oe-bodyguard-face {
+  z-index: 3;
+  top: 6.5%;
+  left: 19%;
+  width: 62%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.oe-bodyguard-face .image-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.oe-bodyguard-face .image-stack img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.oe-bodyguard-face .image-stack img:nth-child(1) {
+  z-index: 0;
+}
+
+.oe-bodyguard-face .image-stack img:nth-child(2) {
+  z-index: 3;
+}
+
+.oe-bodyguard-face .image-stack img:nth-child(3) {
+  z-index: 1;
+}
+
+.oe-bodyguard-face .image-stack img:nth-child(4) {
+  z-index: 2;
+}
+

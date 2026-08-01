@@ -1,5 +1,5 @@
 function GetVoteResults(currentPartyData) {
-  const players = currentPartyData.players || [];
+  const players = getRoundLateJoinParticipants(currentPartyData);
   const values = [];
   const voteComputerIds = [];
 
@@ -69,7 +69,7 @@ function GetVoteResults(currentPartyData) {
 }
 
 function getHighestVoteValue(currentPartyData) {
-  const players = currentPartyData.players || [];
+  const players = getRoundLateJoinParticipants(currentPartyData);
   const voteCounts = {};
 
   for (let i = 0; i < players.length; i++) {
@@ -85,7 +85,7 @@ function getHighestVoteValue(currentPartyData) {
 }
 
 function GetHighestVoted(currentPartyData) {
-  const players = currentPartyData.players || [];
+  const players = getRoundLateJoinParticipants(currentPartyData);
   const highestVoteValue = Math.abs(getHighestVoteValue(currentPartyData));
 
   return players
@@ -98,7 +98,7 @@ function GetHighestVoted(currentPartyData) {
 }
 
 function GetVoteCount(currentPartyData, computerId) {
-  const players = currentPartyData.players || [];
+  const players = getRoundLateJoinParticipants(currentPartyData);
   return players.filter(player => getPlayerState(player).vote === computerId).length;
 }
 
@@ -128,7 +128,20 @@ async function FetchInstructions() {
   const state = getPartyState(currentPartyData);
   const phase = state?.phase ?? null;
 
+  if (
+    showRoundLateJoinContainerIfNeeded({
+      partyData: currentPartyData,
+      gamemode: 'imposter'
+    })
+  ) {
+    stopImposterTimerWarning();
+    return;
+  }
+
+  syncImposterInstructionSounds(state, userInstructions);
+
   if (phase === 'imposter-choose-punishment') {
+    syncImposterPunishmentTimerWarning(state, 'choose-punishment');
     ChoosingPunishment(state.playerTurn);
     return;
   } else if (phase === 'imposter-show-punishment') {

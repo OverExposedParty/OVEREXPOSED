@@ -9,13 +9,15 @@ const mafiaDialogueNoKill = ["It was a silent night."];
 
 const mafiaRoleDescription = {
   mafioso: "You are part of the mafia. Work with your teammates to eliminate the civilians.",
-  civilian: "You are a regular townsperson. Find and eliminate the mafia."
+  civilian: "You are a regular townsperson. Find and eliminate the mafia.",
+  inspector: "You are a regular townsperson. Find and eliminate the mafia."
 };
 
 const nightPhaseDialogue = {
   mafioso: "You are part of the mafia. Work with your teammates to eliminate the civilians.",
   godfather: "You are part of the mafia. Work with your teammates to eliminate the civilians.",
-  civilian: "You are a regular townsperson. Find and eliminate the mafia."
+  civilian: "You are a regular townsperson. Find and eliminate the mafia.",
+  inspector: "You are a regular townsperson. Find and eliminate the mafia."
 };
 
 const mafiaDialogueTownVote = ["The town have spoken. [Player Name] has been kicked."];

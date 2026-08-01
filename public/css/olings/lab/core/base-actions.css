@@ -1,0 +1,204 @@
+.oling-lab-action-panel {
+  --oling-lab-action-primary-colour: var(--primarypagecolour);
+  --oling-lab-action-secondary-colour: var(--secondarypagecolour);
+  position: absolute;
+  --action-panel-width: clamp(
+    7.25rem,
+    calc(var(--target-width) * var(--oling-lab-cell) - 1rem),
+    10rem
+  );
+  left: calc(
+    (var(--target-col) + var(--target-width)) * var(--oling-lab-cell) -
+      var(--action-panel-width) -
+      0.5rem
+  );
+  top: calc(var(--target-row) * var(--oling-lab-cell) + 0.5rem);
+  z-index: 18;
+  display: grid;
+  gap: 0.45rem;
+  width: var(--action-panel-width);
+  pointer-events: none;
+  animation: oling-lab-actions-slide-in 180ms ease-out both;
+}
+
+.oling-lab-action-panel.is-oling {
+  --action-panel-width: clamp(7.25rem, var(--oling-panel-size, 7rem), 10rem);
+  left: calc(
+    var(--oling-panel-x, 0px) + var(--oling-panel-size, 7rem) -
+      var(--action-panel-width)
+  );
+  top: calc(var(--oling-panel-y, 0px) - 0.4rem);
+}
+
+.oling-lab-action-panel::before {
+  position: absolute;
+  inset: -0.45rem;
+  z-index: -1;
+  content: '';
+  background: var(--backgroundcolour);
+  box-shadow: 0 0.45rem 1.25rem rgb(0 0 0 / 16%);
+}
+
+.oling-lab-expansion-purchase {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.oling-lab-expansion-purchase .oling-lab-plus.is-expansion {
+  inset: 28%;
+  width: auto;
+  height: auto;
+  border-style: solid;
+  background: rgb(184 225 255 / 72%);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-expansion-purchase:focus-visible .oling-lab-plus {
+  outline: 4px solid #b22626;
+  outline-offset: -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-expansion-purchase:hover .oling-lab-plus {
+    outline: 4px solid #b22626;
+    outline-offset: -4px;
+  }
+}
+
+.oling-lab-expansion-purchase:focus-visible {
+  outline: 0;
+}
+
+.oling-lab-expansion-price {
+  position: absolute;
+  top: calc(72% + 0.55rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  color: var(--backgroundcolour);
+  font-size: clamp(1.02rem, 2.55vw, 1.35rem);
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.oling-lab-expansion-price img {
+  width: 1.725rem;
+  height: 1.725rem;
+  object-fit: contain;
+}
+
+.oling-lab-purchase-preview {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.65rem;
+  border: 4px dashed currentColor;
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-purchase-preview-plus {
+  font-size: clamp(4rem, 18vw, 7rem);
+  font-weight: 900;
+  line-height: 0.75;
+}
+
+.oling-lab-purchase-preview-label {
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-action-panel-button {
+  display: grid;
+  place-items: center;
+  min-height: 2.7rem;
+  padding: 0.35rem 0.55rem;
+  background: var(
+    --oling-lab-action-button-colour,
+    var(--oling-lab-action-primary-colour)
+  );
+  color: var(--backgroundcolour);
+  font-size: clamp(0.68rem, 1.8vw, 0.78rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: auto;
+}
+
+.oling-lab-action-panel-button:focus-visible {
+  outline: 3px solid
+    var(
+      --oling-lab-action-button-hover-colour,
+      var(--oling-lab-action-secondary-colour)
+    );
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-action-panel-button:hover {
+    outline: 3px solid
+      var(
+        --oling-lab-action-button-hover-colour,
+        var(--oling-lab-action-secondary-colour)
+      );
+    outline-offset: 2px;
+  }
+}
+
+.oling-lab-action-panel-button:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+
+.oling-lab-action-panel-button.is-sell,
+.oling-lab-action-panel-button.is-cancel,
+.oling-lab-action-panel.is-confirming-sell .oling-lab-action-panel-button.is-confirm {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-action-panel-button.is-interact,
+.oling-lab-action-panel-button.is-confirm {
+  background: var(
+    --oling-lab-action-button-colour,
+    var(--oling-lab-action-primary-colour)
+  );
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-action-panel.is-confirming-sell::after {
+  content: 'Sell?';
+  order: -1;
+  padding: 0.55rem;
+  color: var(--backgroundcolour);
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@keyframes oling-lab-actions-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(100% + 0.5rem));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -28,7 +28,7 @@
 
     <link rel="preload" href="/images/splash-screens/mafia.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
 
     <link rel="stylesheet" href="/css/party-games/side-buttons.css">
     <link rel="stylesheet" href="/css/party-games/online.css">
@@ -95,31 +95,38 @@
 </div>
 <script>
     const gamemode = "mafia";
-    const helpContainerFile = "party-games/" + gamemode + '.json';
     const sessionPartyType = "party-game-mafia"
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     document.documentElement.style.setProperty('--primarypagecolour', '#9B56D3');
     document.documentElement.style.setProperty('--secondarypagecolour', '#6D3C95');
 
+    window.pageRequiresOnlineReady = true;
     window.pageScripts = {
   "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },
 
   "/scripts/html-templates/online/selected-user-containers-template.js": { addDataLoaded: true, zIndex: 1 },
-  "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 1 },
   "/scripts/party-games/online/online-settings.js": { addDataLoaded: true, zIndex: 1 },
   "/scripts/party-games/general/chat-log.js": { zIndex: 1 },
 
+  "/scripts/party-games/gamemode/online/general/party-game-sounds.js": { zIndex: 1.5 },
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions/session.js": { zIndex: 1.6 },
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions/actions.js": { zIndex: 1.7 },
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions/ui.js": { zIndex: 1.8 },
+  "/scripts/party-games/gamemode/online/general/party-games-online-instructions/waiting-room.js": { zIndex: 1.9 },
   "/scripts/party-games/gamemode/online/general/party-games-online-instructions.js": { zIndex: 2 },
+  "/scripts/party-games/gamemode/online/general/party-game-statistics-button.js": { zIndex: -1 },
+  "/scripts/party-games/gamemode/online/general/party-game-statistics/rewards.js": { zIndex: 1.9 },
+  "/scripts/party-games/gamemode/online/general/party-game-statistics/scoreboard.js": { zIndex: 1.9 },
+  "/scripts/party-games/gamemode/online/general/party-game-statistics/score-impact.js": { zIndex: 1.9 },
+  "/scripts/party-games/gamemode/online/general/party-game-statistics.js": { zIndex: 2 },
   "/scripts/party-games/gamemode/online/mafia/mafia-online.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_ONLINE_MAFIA", zIndex: 2 },
+  "/scripts/protection/bodyguard/bodyguard.js": { zIndex: 3 },
 };
 
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template/core-template.js" data-loaded="false"></script>
 <script>
     document.getElementById("og-url")?.setAttribute("content", window.location.href);
-    waitForFunction("FetchHelpContainer", () => {
-        FetchHelpContainer(helpContainerFile);
-    })
 </script>
 
 </html>

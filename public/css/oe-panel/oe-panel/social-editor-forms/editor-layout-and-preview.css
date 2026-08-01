@@ -1,0 +1,229 @@
+.oe-panel-social-edit-view {
+  gap: clamp(0.75rem, 1.35vw, 1.1rem);
+}
+
+.oe-panel-social-edit {
+  position: relative;
+  width: min(100%, 68rem);
+  height: 80%;
+  max-height: calc(100% - 3rem);
+  align-self: center;
+  margin-block: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.42fr);
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+  padding: clamp(1rem, 2vw, 1.6rem);
+  border: var(--bordersize) solid
+    var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  border-radius: 0.4rem;
+  background-color: rgb(255 255 255 / 4%);
+}
+
+.oe-panel-social-edit-export-progress {
+  position: absolute;
+  inset: calc(-1 * var(--bordersize));
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.oe-panel-social-edit.is-exporting .oe-panel-social-edit-export-progress {
+  opacity: 1;
+}
+
+.oe-panel-social-edit-export-progress svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.oe-panel-social-edit-export-path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: var(--bordersize);
+  vector-effect: non-scaling-stroke;
+}
+
+.oe-panel-social-edit-export-path {
+  opacity: 0;
+  stroke: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+}
+
+.oe-panel-social-edit-preview-column {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.oe-panel-social-edit-side {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.oe-panel-social-edit-preview {
+  position: relative;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+}
+
+.oe-panel-social-edit-video-frame {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  background-color: #111111;
+}
+
+.oe-panel-social-edit-text,
+.oe-panel-social-edit-watermark {
+  position: absolute;
+  z-index: 2;
+  font-weight: 800;
+  line-height: 1.16;
+  text-align: center;
+  text-shadow: 0 0.12rem 0.35rem rgb(0 0 0 / 75%);
+}
+
+.oe-panel-social-edit-text {
+  width: 42%;
+  min-width: 8%;
+  max-width: 90%;
+  height: clamp(3.4rem, 7vw, 5.4rem);
+  padding: clamp(0.35rem, 0.7vw, 0.55rem);
+  border: var(--bordersize) solid rgb(255 255 255 / 22%);
+  border-radius: 0.25rem;
+  background-color: rgb(0 0 0 / 20%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-family: 'OverExposed', 'OverExposed-Regular', sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+  cursor: default;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.oe-panel-social-edit-text-label {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  line-height: 1.16;
+  white-space: pre-wrap;
+}
+
+.oe-panel-social-edit-text-drag-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: clamp(0.8rem, 1.4vw, 1.05rem);
+  aspect-ratio: 1;
+  border: var(--bordersize) solid currentColor;
+  border-radius: 0.15rem;
+  background-color: rgb(0 0 0 / 18%);
+  cursor: grab;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s;
+  touch-action: none;
+}
+
+.oe-panel-social-edit-text:focus-within .oe-panel-social-edit-text-drag-handle,
+.oe-panel-social-edit-text-drag-handle:active {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-social-edit-text:hover .oe-panel-social-edit-text-drag-handle {
+    opacity: 1;
+  }
+}
+
+.oe-panel-social-edit-text-drag-handle:active {
+  cursor: grabbing;
+}
+
+.oe-panel-social-edit-text-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: clamp(0.25rem, 0.55vw, 0.45rem);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.oe-panel-social-edit-text-resize-handle.is-left {
+  left: 0;
+}
+
+.oe-panel-social-edit-text-resize-handle.is-right {
+  right: 0;
+}
+
+.oe-panel-social-edit-text:active {
+  cursor: grabbing;
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='left'] {
+  text-align: left;
+  transform: translate(0, -50%);
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='center'] {
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='right'] {
+  text-align: right;
+  transform: translate(-100%, -50%);
+}
+
+.oe-panel-social-edit-text[data-vertical-align='top'] {
+  transform: translate(var(--oe-panel-edit-text-shift-x, -50%), 0);
+}
+
+.oe-panel-social-edit-text[data-vertical-align='middle'] {
+  transform: translate(var(--oe-panel-edit-text-shift-x, -50%), -50%);
+}
+
+.oe-panel-social-edit-text[data-vertical-align='bottom'] {
+  transform: translate(var(--oe-panel-edit-text-shift-x, -50%), -100%);
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='left'] {
+  --oe-panel-edit-text-shift-x: 0;
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='center'] {
+  --oe-panel-edit-text-shift-x: -50%;
+}
+
+.oe-panel-social-edit-text[data-horizontal-align='right'] {
+  --oe-panel-edit-text-shift-x: -100%;
+}
+
+.oe-panel-social-edit-watermark {
+  width: 42%;
+  height: auto;
+  letter-spacing: 0;
+  opacity: 0.5;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}

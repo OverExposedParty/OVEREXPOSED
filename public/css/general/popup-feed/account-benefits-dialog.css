@@ -1,0 +1,188 @@
+.account-benefits-dialog {
+  background: var(--backgroundcolour);
+  border-radius: 24px;
+  box-sizing: border-box;
+  color: #ffffff;
+  max-height: calc(100vh - 12px);
+  max-width: min(420px, calc(100vw - 24px));
+  overflow: auto;
+  padding: 0 18px 14px;
+  position: relative;
+  text-align: center;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 220ms ease;
+  width: 420px;
+}
+
+.account-benefits-dialog-host[open] .account-benefits-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.account-benefits-dialog:focus {
+  outline: none;
+}
+
+.account-benefits-dialog-header {
+  align-items: center;
+  background: var(--primarypagecolour);
+  border-radius: 24px 24px 0 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 -18px 0;
+  min-height: 92px;
+  padding: 18px 20px;
+}
+
+.account-benefits-dialog-media {
+  aspect-ratio: 1 / 1;
+  align-items: center;
+  background: var(--secondarybackgroundcolour)
+    url('/images/olings/gui/general-background.jpg') center / cover no-repeat;
+  display: flex;
+  justify-content: center;
+  margin: 0 -18px 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.account-benefits-dialog-mascot {
+  align-items: center;
+  display: flex;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  justify-content: center;
+  margin: 0 auto;
+  width: 75%;
+}
+
+.account-benefits-dialog-mascot .icon {
+  align-items: center;
+  aspect-ratio: 1;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  width: 100%;
+}
+
+.account-benefits-dialog-mascot .icon .image-stack {
+  aspect-ratio: 1;
+  height: auto;
+  position: relative;
+  width: 100%;
+}
+
+.account-benefits-dialog-mascot .icon .image-stack img {
+  border-radius: 0;
+  inset: 0;
+  object-fit: contain;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.account-benefits-dialog-title {
+  color: var(--backgroundcolour);
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.account-benefits-dialog-intro {
+  background: var(--backgroundcolour);
+  border-radius: 8px;
+  bottom: 14px;
+  box-sizing: border-box;
+  color: var(--primarypagecolour);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  left: 50%;
+  margin: 0;
+  max-width: calc(100% - 42px);
+  padding: 8px 10px;
+  position: absolute;
+  text-shadow: 0 2px 5px rgb(0 0 0 / 35%);
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 3;
+}
+
+.account-benefits-dialog-list {
+  display: grid;
+  gap: 7px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.account-benefits-dialog-list li {
+  align-items: center;
+  background: rgb(255 255 255 / 7%);
+  border-radius: 8px;
+  color: var(--primarypagecolour);
+  display: flex;
+  font-size: 12px;
+  font-weight: 900;
+  gap: 9px;
+  line-height: 1.15;
+  min-height: 36px;
+  padding: 7px 10px;
+  text-transform: uppercase;
+}
+
+.account-benefits-dialog-list li::before {
+  background: var(--primarypagecolour);
+  border-radius: 999px;
+  content: '';
+  flex: 0 0 8px;
+  height: 8px;
+  width: 8px;
+}
+
+.account-benefits-dialog-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 12px;
+}
+
+.account-benefits-dialog-action {
+  appearance: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  min-height: 44px;
+  padding: 0 12px;
+  text-transform: uppercase;
+}
+
+.account-benefits-dialog-action.is-secondary {
+  background: rgb(255 255 255 / 9%);
+  color: var(--primarypagecolour);
+}
+
+.account-benefits-dialog-action.is-primary {
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+.account-benefits-dialog-action:focus-visible {
+  filter: brightness(1.08);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-benefits-dialog-action:hover {
+    filter: brightness(1.08);
+    outline: none;
+  }
+}

@@ -13,7 +13,23 @@ async function FetchInstructions() {
   const players = currentPartyData.players || [];
   const phase = state?.phase ?? null;
 
+  if (
+    showRoundLateJoinContainerIfNeeded({
+      partyData: currentPartyData,
+      gamemode: 'never-have-i-ever'
+    })
+  ) {
+    stopNeverHaveIEverVoteTimerWarning();
+    return;
+  }
+
   const instructions = getUserInstructions(currentPartyData);
+
+  syncNeverHaveIEverFlowSounds(state, instructions);
+
+  if (!String(instructions || '').includes("DISPLAY_PRIVATE_CARD")) {
+    stopNeverHaveIEverVoteTimerWarning();
+  }
 
   if (phase === 'never-have-i-ever-spin-odd-man-out') {
     ChosePunishment();

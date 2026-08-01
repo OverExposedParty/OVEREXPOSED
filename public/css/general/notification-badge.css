@@ -1,0 +1,33 @@
+.notification-count-badge {
+    min-width: 1.65dvh;
+    height: 1.65dvh;
+    padding: 0 0.3375dvh;
+    border: 0;
+    border-radius: 999px;
+    background: #ff4242;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-size: 0.8625dvh;
+    font-weight: 800;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.notification-count-badge[hidden] {
+    display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .notification-count-badge.is-increasing {
+        animation: notification-count-pop 240ms ease-out;
+    }
+}
+
+@keyframes notification-count-pop {
+    50% {
+        transform: scale(1.22);
+    }
+}

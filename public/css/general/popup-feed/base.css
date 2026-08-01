@@ -1,0 +1,40 @@
+.oe-popup-feed,
+.score-impact-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(410px, calc(100vw - 24px));
+  pointer-events: none;
+  position: fixed;
+  right: 12px;
+  top: 82px;
+  width: 410px;
+  z-index: 1002;
+}
+
+.oe-popup-row {
+  align-items: center;
+  background: var(--backgroundcolour);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 25%);
+  box-sizing: border-box;
+  min-height: 48px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: auto;
+  transform: translateX(calc(100% + 20px));
+  transition:
+    opacity 220ms ease,
+    transform 260ms ease;
+  width: 100%;
+}
+
+.oe-popup-row.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.oe-popup-row.is-exiting {
+  opacity: 0;
+  transform: translateX(calc(100% + 20px));
+}

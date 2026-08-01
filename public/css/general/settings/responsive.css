@@ -1,0 +1,253 @@
+@media (orientation: portrait) {
+
+    .settings-icon img {
+        height: auto;
+        width: 60%;
+    }
+
+
+  .settings-box {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(340px, calc(100vw - 24px));
+        padding: 18px;
+        border: var(--bordersize) solid var(--backgroundcolour);
+        z-index: 1005;
+        text-align: left;
+        border-radius: 26px;
+        min-width: 200px;
+
+    }
+
+    .settings-box #settings-title {
+        margin-bottom: 16px;
+        font-size: 22px;
+    }
+
+    .settings-section {
+        gap: 8px;
+        padding: 12px 0;
+    }
+
+    .settings-section-title {
+        font-size: 12px;
+    }
+
+    .settings-option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 38px;
+        margin: 0;
+        padding-right: 72px;
+    }
+
+    .settings-option label {
+        font-size: 18px;
+        margin-right: 0;
+  }
+
+    .account-settings-volume-option {
+        display: grid;
+        grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+        gap: 10px;
+        align-items: center;
+        padding-right: 0;
+    }
+
+    .settings-volume-control {
+        grid-template-columns: minmax(0, 1fr) 40px;
+    }
+
+  .account-container {
+    width: min(85vw, 420px);
+    padding: 0;
+    border: 0;
+    border-radius: 32px;
+    z-index: 1005;
+    gap: 0;
+  }
+
+  .account-title-section {
+    padding: 16px;
+  }
+
+  .account-title {
+    font-size: 22px;
+  }
+
+  .account-preview-section {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .account-button-container {
+    min-height: min(42.5vw, 210px);
+  }
+
+  .account-footer {
+    min-height: min(14.5714vw, 72px);
+  }
+
+  .account-preview-edit-button,
+  .account-preview-randomise-button {
+    top: 12px;
+    width: 28px;
+  }
+
+  .account-preview-edit-button {
+    right: 12px;
+  }
+
+  .account-preview-randomise-button {
+    left: 12px;
+  }
+
+  .account-opal-balance-button {
+    top: 5px;
+    left: 12px;
+    min-width: 90px;
+    max-width: 162px;
+    height: 42px;
+    gap: 8px;
+    padding: 0 10px;
+  }
+
+  .account-opal-balance-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .account-opal-balance-value {
+    font-size: 20px;
+  }
+
+  .account-preview-icon {
+    height: 100%;
+    width: auto;
+  }
+
+  .account-action-container {
+    font-size: clamp(18px, 4vw, 24px);
+  }
+
+  .account-action-container:focus-visible,
+  .account-action-container.touchhover {
+    font-size: clamp(20px, 4.5vw, 26px);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .account-action-container:hover {
+      font-size: clamp(20px, 4.5vw, 26px);
+    }
+  }
+
+  .account-expanded-panel {
+    --account-expanded-title-padding: 16px;
+    --account-expanded-title-font-size: 18px;
+    --account-expanded-title-center: 25px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 14 / 15;
+    min-height: 0;
+  }
+
+  .account-expanded-title {
+    padding: var(--account-expanded-title-padding);
+    font-size: var(--account-expanded-title-font-size);
+  }
+
+  .account-expanded-content {
+    padding: 0 12px 12px;
+  }
+
+  .account-friends-list {
+    max-height: 295px;
+  }
+
+  .account-purchase-list {
+    max-height: 295px;
+  }
+
+  .account-expanded-back-button {
+    left: 12px;
+  }
+
+  .account-customisation-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+  }
+
+  .account-customisation-row-title {
+    font-size: 11px;
+  }
+
+  .account-footer-save-label {
+    font-size: 14px;
+  }
+
+  .account-profile-section {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .account-profile-section-title {
+    font-size: 11px;
+  }
+
+  .account-profile-row {
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    gap: 8px;
+    min-height: 28px;
+    padding: 6px 8px;
+  }
+
+  .account-profile-row.has-edit-action {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr) 22px;
+  }
+
+  .account-profile-row.has-edit-action .account-profile-label {
+    grid-column: auto;
+  }
+
+  .account-profile-label,
+  .account-profile-value,
+  .account-profile-link {
+    font-size: 11px;
+  }
+
+  .account-profile-value {
+    text-align: right;
+  }
+
+  .account-profile-link {
+    text-align: right;
+  }
+
+  .account-profile-edit-button {
+    width: 22px;
+  }
+
+  .account-profile-action-grid,
+  .account-profile-action-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .account-profile-action {
+    min-height: 34px;
+    font-size: 11px;
+  }
+
+  .account-profile-action.danger {
+    min-height: 36px;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .settings-box,
+    .account-container{
+        display: none !important;
+    }
+}

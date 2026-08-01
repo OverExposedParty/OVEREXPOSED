@@ -1,0 +1,50 @@
+.oe-session-status-prompt {
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
+  z-index: 900;
+  width: min(500px, calc(100vw - 32px));
+  min-height: 220px;
+  padding: 24px 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: var(--bordersize, 4px) solid var(--primarypagecolour, var(--primaryPageColour, #ffb5c8));
+  border-radius: 25px;
+  background: var(--secondarybackgroundcolour, var(--backgroundcolour, #101010));
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  color: var(--primarypagecolour, var(--primaryPageColour, #ffb5c8));
+  text-align: center;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+}
+
+.oe-session-status-prompt.is-visible {
+  display: flex;
+}
+
+.oe-session-status-prompt .content-container {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.oe-session-status-prompt h1,
+.oe-session-status-prompt h2 {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oe-session-status-prompt p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--secondarypagecolour, var(--secondaryPageColour, currentColor));
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.4;
+}

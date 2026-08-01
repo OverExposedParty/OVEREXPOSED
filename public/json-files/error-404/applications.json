@@ -1,0 +1,33 @@
+[
+    {
+        "id": "page-not-found",
+        "name": "Page Not Found",
+        "iconFilePath": "/images/error-404/icons/application-icons/page-not-found.svg",
+        "windowFilePath": "/json-files/error-404/application-windows/page-not-found.json",
+        "active": true,
+        "loadOnLaunch": true
+    },
+    {
+        "id": "find-the-oe",
+        "name": "FIND THE OE",
+        "iconFilePath": "/images/error-404/icons/application-icons/find-the-oe.svg",
+        "windowFilePath": "/json-files/error-404/application-windows/find-the-oe.json",
+        "active": true,
+        "loadOnLaunch": false
+    },
+    {
+        "id": "tod-small-package",
+        "name": "T.O.D SMALL PACKAGE",
+        "windowFilePath": "/json-files/error-404/application-windows/tod-small-package.json",
+        "active": true,
+        "loadOnLaunch": false
+    },
+    {
+        "id": "mp3-player",
+        "name": "MP3 PLAYER",
+        "iconFilePath": "/images/error-404/icons/default-application-icons/audio.svg",
+        "windowFilePath": "/json-files/error-404/application-windows/mp3-player.json",
+        "active": false,
+        "loadOnLaunch": false
+    }
+]

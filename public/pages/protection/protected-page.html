@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Access Protected | OVEREXPOSED</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="author" content="OVEREXPOSED" />
+
+    <link
+      rel="preload"
+      href="/images/protection/splash-screen/garage-door.jpg"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/images/protection/bodyguard/body.svg"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/images/protection/bodyguard/bodyguard-one/colour.svg"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/images/protection/bodyguard/bodyguard-one/hair.svg"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/images/protection/bodyguard/bodyguard-one/eyes.svg"
+      as="image"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/images/protection/bodyguard/bodyguard-one/mouth.svg"
+      as="image"
+      fetchpriority="high"
+    />
+    <style id="protected-page-critical">
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #202020;
+        color: #FFF0E8;
+      }
+
+      .protected-page {
+        display: none;
+      }
+
+      .protected-splash {
+        position: fixed;
+        inset: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 9999;
+        display: grid;
+        min-height: 100dvh;
+        place-items: center;
+        padding: clamp(1rem, 5vw, 4rem);
+        box-sizing: border-box;
+        background: #202020;
+        isolation: isolate;
+        transition: none;
+        transform: none;
+        overflow: hidden;
+      }
+
+      .protected-splash.center,
+      .protected-splash.down,
+      .protected-splash.up {
+        top: 0;
+      }
+
+      .protected-splash > img {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        display: block;
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        object-fit: cover;
+        object-position: center;
+        filter: brightness(0.64);
+      }
+
+      .protected-splash::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        content: '';
+        background: rgba(32, 32, 32, 0.32);
+      }
+
+      .protected-page-message {
+        position: relative;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: min(48rem, 100%);
+        text-align: center;
+      }
+
+      .protected-page-eyebrow {
+        order: 1;
+        position: static;
+        width: auto;
+        margin: 0 0 1rem;
+        padding: 0;
+        color: #FFF0E8;
+        font: 900 clamp(0.72rem, 1.4vw, 0.95rem) Arial, sans-serif;
+        letter-spacing: 0;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .protected-page-message h1 {
+        order: 2;
+        margin: 0;
+        color: #FFF0E8;
+        font: 900 clamp(2.2rem, 7vw, 5.2rem) / 0.92 Arial, sans-serif;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .protected-page-message p:not(.protected-page-eyebrow) {
+        order: 3;
+        position: static;
+        width: min(34rem, 100%);
+        margin: 1.25rem auto 0;
+        padding: 0;
+        color: #FFF0E8;
+        font: 300 clamp(0.85rem, 1.8vw, 1.08rem) / 1.35 Arial, sans-serif;
+        text-align: center;
+      }
+
+      .protected-page-actions {
+        order: 4;
+        position: relative;
+        z-index: 6;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1.6rem;
+      }
+
+      .protected-page-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0 1.15rem;
+        border: 2px solid transparent;
+        background: #FFF0E8;
+        color: #202020;
+        font: 900 0.9rem / 1 Arial, sans-serif;
+        letter-spacing: 0;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .protected-splash .protected-page-message > .protected-page-eyebrow,
+      .protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
+        position: static;
+        bottom: auto;
+        width: auto;
+        margin-left: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      .protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
+        width: min(34rem, 100%);
+        margin: 1.25rem auto 0;
+      }
+
+      .protected-access-page .oe-bodyguard {
+        position: fixed;
+        left: 0;
+        bottom: -3rem;
+        width: min(36rem, 82vw);
+        height: calc(min(36rem, 82vw) * 4 / 3);
+        transform: translateX(-115%) rotate(15deg);
+        transform-origin: bottom left;
+        z-index: 2;
+      }
+    </style>
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/protection/bodyguard.css" />
+    <link rel="stylesheet" href="/css/protection/protected-page.css" />
+  </head>
+
+  <body class="protected-access-page">
+    <div
+      class="splash-screen-container-static protected-splash"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/protection/splash-screen/garage-door.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div
+      class="splash-screen-container protected-splash"
+      id="splash-screen-container"
+    >
+      <img
+        src="/images/protection/splash-screen/garage-door.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <section class="protected-page-message" aria-labelledby="protected-title">
+        <p class="protected-page-eyebrow">Protected Page</p>
+        <h1 id="protected-title">__PROTECTION_TITLE__</h1>
+        <p>__PROTECTION_MESSAGE__</p>
+        <div class="protected-page-actions">
+          <a class="protected-page-action" href="__PROTECTION_LOGIN_URL__">Login</a>
+          <a class="protected-page-action" href="/">Main Menu</a>
+        </div>
+      </section>
+      <div class="oe-bodyguard" aria-hidden="true">
+        <img
+          class="oe-bodyguard-body"
+          src="/images/protection/bodyguard/body.svg"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="oe-bodyguard-face">
+          <div class="image-stack">
+            <img
+              id="colour"
+              src="/images/protection/bodyguard/bodyguard-one/colour.svg"
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+            />
+            <img
+              id="hair"
+              src="/images/protection/bodyguard/bodyguard-one/hair.svg"
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+            />
+            <img
+              id="eyes"
+              src="/images/protection/bodyguard/bodyguard-one/eyes.svg"
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+            />
+            <img
+              id="mouth"
+              src="/images/protection/bodyguard/bodyguard-one/mouth.svg"
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+    <main class="protected-page" data-reason="__PROTECTION_REASON__"></main>
+  </body>
+  <script>
+    window.allowTransition = false;
+
+    document.documentElement.style.setProperty('--primarypagecolour', '#FFF0E8');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#E3C5B5');
+
+    window.pageScripts = {
+      '/scripts/protection/bodyguard/bodyguard.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 0
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js?v=2026-06-13-03"
+    data-loaded="false"
+  ></script>
+</html>

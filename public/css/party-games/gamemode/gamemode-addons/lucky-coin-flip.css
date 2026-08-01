@@ -48,10 +48,12 @@
     backface-visibility: hidden;
 }
 
-.coin:hover {
-    transform: scale(1.1);
-    transition: transform 0.3s
-        ease-in-out;
+@media (hover: hover) and (pointer: fine) {
+    .coin:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s
+            ease-in-out;
+    }
 }
 
 @keyframes spin {
@@ -86,6 +88,8 @@
         ease-in-out;
 }
 
-.coin-container:hover {
-    transform: scale(1.02);
+@media (hover: hover) and (pointer: fine) {
+    .coin-container:hover {
+        transform: scale(1.02);
+    }
 }

@@ -5,12 +5,10 @@ const cardContainerGamemode = placeholderCardContainer.dataset.gamemode;
 const cardContainerPublic = placeholderCardContainer?.querySelector('.card-container#public-view .content') ?? null;
 const cardContainerDualStack = placeholderCardContainer?.querySelector('.card-container#dual-stack-view .content') ?? null;
 const cardContainerPrivate = placeholderCardContainer?.querySelector('.card-container#private-view .content') ?? null;
-const cardContainerAnswer = placeholderCardContainer?.querySelector('.card-container#answer-view .content') ?? null;
 
 let gameContainerPublicTitle, gameContainerPublicText, gameContainerPublicCardType;
 let gameContainerDualStackTitle, gameContainerDualStackText, gameContainerDualStackCardType;
 let gameContainerPrivateTitle, gameContainerPrivateText, gameContainerPrivateCardType;
-let gameContainerAnswerTitle, gameContainerAnswerText, gameContainerAnswerCardType;
 
 let selectedQuestionObj;
 
@@ -55,6 +53,80 @@ function tintSvgToPrimaryColour(svgElement) {
     });
 }
 
+const gamemodeTextSvgCache = new Map();
+
+function prepareGamemodeTextSvg(svgElement) {
+    // Prevent class-based rules inside title SVG (e.g. .cls-2 { opacity: 0; })
+    // from leaking and affecting other inline SVGs like the main card.
+    svgElement.querySelectorAll('style').forEach(styleEl => styleEl.remove());
+    svgElement.querySelectorAll('rect').forEach(rect => rect.remove());
+
+    svgElement.classList.add('gamemode-text-svg');
+    tintSvgToPrimaryColour(svgElement);
+    return svgElement;
+}
+
+function loadGamemodeTextSvg(svgPath) {
+    if (!gamemodeTextSvgCache.has(svgPath)) {
+        const svgPromise = fetch(svgPath)
+            .then(res => res.text())
+            .then(svgText => {
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                const svgElement = svgDoc.querySelector('svg');
+
+                if (!svgElement) {
+                    throw new Error(`No SVG element found in ${svgPath}`);
+                }
+
+                return prepareGamemodeTextSvg(svgElement);
+            });
+        gamemodeTextSvgCache.set(svgPath, svgPromise);
+    }
+
+    return gamemodeTextSvgCache.get(svgPath);
+}
+
+async function updateGamemodeTextSvgSource(svgElement, svgPath, label = '') {
+    if (!svgElement || svgElement.tagName?.toLowerCase() !== 'svg') {
+        return false;
+    }
+
+    svgElement.dataset.requestedSourcePath = svgPath;
+    if (svgElement.dataset.sourcePath === svgPath) {
+        svgElement.setAttribute('aria-label', label);
+        return true;
+    }
+
+    try {
+        const sourceSvg = await loadGamemodeTextSvg(svgPath);
+
+        // A newer selection won while this asset was loading.
+        if (svgElement.dataset.requestedSourcePath !== svgPath) {
+            return false;
+        }
+
+        [...svgElement.attributes].forEach(attribute => {
+            svgElement.removeAttribute(attribute.name);
+        });
+        [...sourceSvg.attributes].forEach(attribute => {
+            svgElement.setAttribute(attribute.name, attribute.value);
+        });
+        svgElement.replaceChildren(
+            ...[...sourceSvg.childNodes].map(node => node.cloneNode(true))
+        );
+        svgElement.classList.add('gamemode-text-svg');
+        svgElement.dataset.sourcePath = svgPath;
+        svgElement.dataset.requestedSourcePath = svgPath;
+        svgElement.setAttribute('role', 'img');
+        svgElement.setAttribute('aria-label', label);
+        return true;
+    } catch (error) {
+        console.error(`Failed to update game title SVG from ${svgPath}:`, error);
+        return false;
+    }
+}
+
 async function buildGamemodeTextMarkup(gamemode, templateHtml) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(templateHtml, 'text/html');
@@ -65,21 +137,11 @@ async function buildGamemodeTextMarkup(gamemode, templateHtml) {
     }
 
     const svgPath = getGamemodeTextSvgPath(gamemode);
-    const svgText = await fetch(svgPath).then(res => res.text());
-    const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-    const svgElement = svgDoc.querySelector('svg');
-
-    if (!svgElement) {
-        return doc.body.innerHTML;
-    }
-
-    // Prevent class-based rules inside title SVG (e.g. .cls-2 { opacity: 0; })
-    // from leaking and affecting other inline SVGs like the main card.
-    svgElement.querySelectorAll('style').forEach(styleEl => styleEl.remove());
-    svgElement.querySelectorAll('rect').forEach(rect => rect.remove());
-
-    svgElement.classList.add('gamemode-text-svg');
-    tintSvgToPrimaryColour(svgElement);
+    const svgElement = (await loadGamemodeTextSvg(svgPath)).cloneNode(true);
+    svgElement.dataset.sourcePath = svgPath;
+    svgElement.dataset.requestedSourcePath = svgPath;
+    svgElement.setAttribute('role', 'img');
+    svgElement.setAttribute('aria-label', gamemode.replaceAll('-', ' '));
     container.appendChild(svgElement);
 
     return doc.body.innerHTML;
@@ -106,17 +168,8 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         const parser = new DOMParser();
         const mainDoc = parser.parseFromString(mainHTML, 'text/html');
 
-        const mainImage = mainDoc.querySelector('.main-image');
-        if (mainImage?.tagName === 'IMG') {
-            mainImage.src = `/images/blank-cards/${cardContainerGamemode}-blank-card.svg`;
-        }
-
         // Clone base for private
         const privateDoc = parser.parseFromString(mainHTML, 'text/html');
-        const privateMainImage = privateDoc.querySelector('.main-image');
-        if (privateMainImage?.tagName === 'IMG' && mainImage?.tagName === 'IMG') {
-            privateMainImage.src = mainImage.src;
-        }
         const baseHTML = privateDoc.body.innerHTML;
 
         // For public/answer, append single stack if online
@@ -136,17 +189,12 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         const dualStackDoc = parser.parseFromString(dualStackHTML, 'text/html');
         const dualStackEl = dualStackDoc.body.firstElementChild;
         const dualDoc = parser.parseFromString(mainHTML, 'text/html');
-        const dualMainImage = dualDoc.querySelector('.main-image');
-        if (dualMainImage?.tagName === 'IMG' && mainImage?.tagName === 'IMG') {
-            dualMainImage.src = mainImage.src;
-        }
         dualDoc.querySelector('.main-image-container').appendChild(dualStackEl);
         const withDualStackHTML = dualDoc.body.innerHTML;
 
         // Insert HTML into each container
         appendCardMarkup(cardContainerPrivate, baseHTML);
         appendCardMarkup(cardContainerPublic, withStackHTML);
-        appendCardMarkup(cardContainerAnswer, withStackHTML);
         appendCardMarkup(cardContainerDualStack, withDualStackHTML);
 
         if (placeholderCardContainer?.dataset.online === "false") {
@@ -156,7 +204,7 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         }
 
         if (placeholderCardContainer?.dataset.online === "true" && typeof AddTimerToContainer === 'function') {
-            [cardContainerPrivate, cardContainerPublic, cardContainerAnswer, cardContainerDualStack]
+            [cardContainerPrivate, cardContainerPublic, cardContainerDualStack]
                 .filter(Boolean)
                 .forEach((container) => {
                     AddTimerToContainer(container.querySelector('.main-image-container'));
@@ -172,7 +220,6 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
         appendCardMarkup(cardContainerPublic, updatedHTML);
         appendCardMarkup(cardContainerDualStack, updatedHTML);
         appendCardMarkup(cardContainerPrivate, updatedHTML);
-        appendCardMarkup(cardContainerAnswer, updatedHTML);
 
         if (placeholderCardContainer?.dataset.online === "false") {
 
@@ -199,18 +246,6 @@ fetch('/html-templates/party-games/card-container/main-image-container.html')
             }
 
             gameContainerPublicCardType.textContent = '';
-        }
-        if (cardContainerAnswer != null) {
-            gameContainerAnswerTitle = cardContainerAnswer.querySelector('.content .gamemode-text-svg');
-            gameContainerAnswerText = cardContainerAnswer.querySelector('.content .main-image-container .text-container');
-            gameContainerAnswerCardType = cardContainerAnswer.querySelector('.content .main-image-container .card-type-text');
-
-            setCardPlaceholderText(gameContainerAnswerText, placeholderCardContainer.dataset.gamemode);
-            if (cardContainerAnswer.getAttribute('data-text-size') === 'large') {
-                gameContainerAnswerText.classList.add('large');
-            }
-
-            gameContainerAnswerCardType.textContent = '';
         }
         if (cardContainerPrivate != null) {
             gameContainerPrivateTitle = cardContainerPrivate.querySelector('.content .gamemode-text-svg');

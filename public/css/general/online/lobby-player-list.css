@@ -1,0 +1,235 @@
+.oe-lobby-player-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.oe-lobby-player-tile.user-icon {
+  position: relative;
+  width: 104px;
+  min-height: 104px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  color: var(--primarypagecolour, var(--primary-colour, #ffb5c8));
+  text-align: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.oe-lobby-player-tile .image-stack {
+  position: relative;
+  order: 1;
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.oe-lobby-player-tile .image-stack img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.oe-lobby-player-tile .image-stack img:nth-child(1) {
+  z-index: 0;
+}
+
+.oe-lobby-player-tile .image-stack img:nth-child(2) {
+  z-index: 3;
+}
+
+.oe-lobby-player-tile .image-stack img:nth-child(3) {
+  z-index: 1;
+}
+
+.oe-lobby-player-tile .image-stack img:nth-child(4) {
+  z-index: 2;
+}
+
+.oe-lobby-player-tile .name-container {
+  position: static;
+  order: 2;
+  max-width: 150%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: inherit;
+  transform: none;
+}
+
+.oe-lobby-player-tile .username {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 950;
+  line-height: 1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.oe-lobby-player-tile .username.long-name {
+  font-size: 9px;
+}
+
+.oe-lobby-player-tile .checkmark {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.oe-lobby-player-tile .checkmark.checked {
+  background-color: currentColor;
+}
+
+.oe-lobby-player-tile .checkmark.checked::before {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--backgroundcolour, #1f1f1f);
+  font-size: 11px;
+  line-height: 1;
+  transform: translate(-50%, -53%);
+}
+
+.oe-lobby-player-tile .checkmark.disconnected {
+  background-color: transparent;
+  display: inline-grid;
+  line-height: 1;
+  place-items: center;
+  vertical-align: middle;
+}
+
+.oe-lobby-player-tile .checkmark.disconnected::before {
+  content: none;
+  display: none;
+}
+
+.oe-lobby-player-tile .disconnect-status-icon {
+  animation: oe-disconnect-status-spin 0.8s linear infinite;
+  display: block;
+  height: 100%;
+  inset: 0;
+  margin: auto;
+  position: absolute;
+  transform-box: fill-box;
+  transform-origin: center;
+  width: 100%;
+}
+
+.oe-lobby-player-tile .disconnect-status-icon circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-dasharray: 23 12;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+@keyframes oe-disconnect-status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.oe-lobby-player-tile .close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #ff202e;
+  font: inherit;
+  font-size: 28px;
+  font-weight: 950;
+  line-height: 1;
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.oe-lobby-player-tile .close-btn:focus-visible {
+  transform: scale(1.24);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-lobby-player-tile .close-btn:hover {
+    transform: scale(1.24);
+  }
+}
+
+.container-section.small .oe-lobby-player-tile.user-icon {
+  width: 72px;
+  min-height: 72px;
+  gap: 0;
+}
+
+.container-section.small .oe-lobby-player-tile .image-stack {
+  width: 56px;
+  height: 56px;
+}
+
+.container-section.small .oe-lobby-player-tile .close-btn {
+  width: 18px;
+  height: 18px;
+  font-size: 16px;
+}
+
+.container-section.small .oe-lobby-player-tile .name-container {
+  padding: 0;
+  gap: 2.5px;
+  transform: none;
+}
+
+.container-section.small .oe-lobby-player-tile .username {
+  font-size: 6.5px;
+}
+
+.container-section.small .oe-lobby-player-tile .username.long-name {
+  font-size: 4.5px;
+}
+
+.container-section.small .oe-lobby-player-tile .checkmark {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.container-section.small .oe-lobby-player-tile .checkmark.checked::before {
+  font-size: 6px;
+}
+
+.container-section.small .oe-lobby-player-tile .checkmark.disconnected::before {
+  content: none;
+  display: none;
+}
+
+.container-section.small .oe-lobby-player-tile .disconnect-status-icon {
+  height: 100%;
+  width: 100%;
+}
+
+.container-section.small .oe-lobby-player-tile .disconnect-status-icon circle {
+  stroke-width: 4.5;
+}

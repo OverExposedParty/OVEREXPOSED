@@ -1,49 +1,67 @@
 {
-    "imposter-settings": [
-        {
-            "settings-name": "drink-punishment",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw", "online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "timer",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        },
-        {
-            "settings-name": "player-count",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["offline"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 3,
-            "button-increment-value": 1,
-            "button-minimum-value": 3,
-            "button-maximum-value": 8
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-active": true,
-            "button-type": "toggle"
-        }
-    ]
+  "imposter-settings": [
+    {
+      "settings-name": "drink-punishment",
+      "settings-description": "When the group correctly identifies the Imposter, the caught player must choose and complete a drinking punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw",
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "imposter"
+      ]
+    },
+    {
+      "settings-name": "player-count",
+      "settings-description": "Sets how many people are included when playing Imposter together on one shared device.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "offline"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "imposter"
+      ],
+      "button-initial-value": 3,
+      "button-increment-value": 1,
+      "button-minimum-value": 3,
+      "button-maximum-value": 8
+    },
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many Imposter rounds will be played before the online game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "imposter"
+      ],
+      "button-initial-value": 20,
+      "button-increment-value": 5,
+      "button-minimum-value": 5,
+      "button-maximum-value": 50
+    },
+    {
+      "settings-name": "timer",
+      "settings-description": "Adds a countdown to the clue and discussion period before the group reveals the Imposter.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "imposter"
+      ]
+    }
+  ]
 }

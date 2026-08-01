@@ -4,171 +4,449 @@
       "id": "B000",
       "name": "IMPOSTER GREEN",
       "file-path": "/images/user-customisation/colour/base-too/imposter-green.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          51,
+          139,
+          134
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B001",
       "name": "WYR MINT",
       "file-path": "/images/user-customisation/colour/base-too/wyr-mint.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          117,
+          196,
+          144
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B002",
       "name": "CLOUD WHITE",
       "file-path": "/images/user-customisation/colour/base-too/cloud-white.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          222,
+          228,
+          235
+        ],
+        "category": "light-body",
+        "tone": "light"
+      },
+      "blacklist": false
     },
     {
       "id": "B003",
       "name": "ACNE",
       "file-path": "/images/user-customisation/colour/base-too/acne.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          213,
+          148,
+          131
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B004",
       "name": "DRIVE WAY",
       "file-path": "/images/user-customisation/colour/base-too/drive-way.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          143,
+          188,
+          143
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B005",
       "name": "FISH BOWL",
       "file-path": "/images/user-customisation/colour/base-too/fish-bowl.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          182,
+          162,
+          136
+        ],
+        "category": "object-body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B006",
       "name": "CLOCK",
       "file-path": "/images/user-customisation/colour/base-too/clock.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          67,
+          66,
+          64
+        ],
+        "category": "object-body",
+        "tone": "dark"
+      },
+      "blacklist": false
     },
     {
       "id": "B100",
       "name": "PAPER BAG",
       "file-path": "/images/user-customisation/head-slot/base-too/paper-bag.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          120,
+          95,
+          69
+        ],
+        "category": "head-object",
+        "tone": "mid"
+      },
+      "blacklist": true
     },
     {
       "id": "B101",
       "name": "POT HAT",
       "file-path": "/images/user-customisation/head-slot/base-too/pot-hat.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          147,
+          135,
+          123
+        ],
+        "category": "hat",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B102",
       "name": "BEANIE",
       "file-path": "/images/user-customisation/head-slot/base-too/beanie.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          52,
+          100,
+          148
+        ],
+        "category": "hat",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B103",
       "name": "REVIVE",
       "file-path": "/images/user-customisation/head-slot/base-too/revive.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          110,
+          94,
+          27
+        ],
+        "category": "head-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B104",
       "name": "UFO",
       "file-path": "/images/user-customisation/head-slot/base-too/ufo.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          196,
+          189,
+          120
+        ],
+        "category": "head-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B105",
       "name": "HOUSE",
       "file-path": "/images/user-customisation/head-slot/base-too/house.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          232,
+          196,
+          118
+        ],
+        "category": "head-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B106",
       "name": "HARD HAT",
       "file-path": "/images/user-customisation/head-slot/base-too/hard-hat.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          246,
+          204,
+          51
+        ],
+        "category": "hat",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B200",
       "name": "STAR EYES",
       "file-path": "/images/user-customisation/eyes-slot/base-too/star-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          249,
+          206,
+          42
+        ],
+        "category": "eyes",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B201",
       "name": "SKI GOGGLES",
       "file-path": "/images/user-customisation/eyes-slot/base-too/ski-goggles.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          140,
+          147,
+          154
+        ],
+        "category": "glasses",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B202",
       "name": "COMPUTER EYES",
       "file-path": "/images/user-customisation/eyes-slot/base-too/computer-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          137,
+          155,
+          106
+        ],
+        "category": "eyes",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B203",
       "name": "TWO FACED",
       "file-path": "/images/user-customisation/eyes-slot/base-too/two-faced.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          77,
+          124,
+          159
+        ],
+        "category": "eyes",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B204",
       "name": "GLASSES NOSE DISGUISE",
       "file-path": "/images/user-customisation/eyes-slot/base-too/glasses-nose-disguise.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          128,
+          107,
+          95
+        ],
+        "category": "glasses",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B205",
       "name": "HEADLIGHTS",
       "file-path": "/images/user-customisation/eyes-slot/base-too/headlights.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          204,
+          191,
+          139
+        ],
+        "category": "object-eyes",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B206",
       "name": "BLACK EYES",
       "file-path": "/images/user-customisation/eyes-slot/base-too/black-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          49,
+          39,
+          64
+        ],
+        "category": "eyes",
+        "tone": "dark"
+      },
+      "blacklist": false
     },
     {
       "id": "B300",
       "name": "CENSORED BAR",
       "file-path": "/images/user-customisation/mouth-slot/base-too/censored-bar.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          111,
+          110,
+          111
+        ],
+        "category": "mouth-cover",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B301",
       "name": "MOUTH ZIPPED",
       "file-path": "/images/user-customisation/mouth-slot/base-too/mouth-zipped.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          161,
+          164,
+          167
+        ],
+        "category": "mouth",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B302",
       "name": "COVID MASK",
       "file-path": "/images/user-customisation/mouth-slot/base-too/covid-mask.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          147,
+          199,
+          224
+        ],
+        "category": "mask",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B303",
       "name": "DUMMY",
       "file-path": "/images/user-customisation/mouth-slot/base-too/dummy.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          202,
+          180,
+          213
+        ],
+        "category": "mouth-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B304",
       "name": "MUD DRAIN",
       "file-path": "/images/user-customisation/mouth-slot/base-too/mud-drain.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          128,
+          126,
+          122
+        ],
+        "category": "mouth-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B305",
       "name": "VOMIT",
       "file-path": "/images/user-customisation/mouth-slot/base-too/vomit.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          144,
+          147,
+          68
+        ],
+        "category": "mouth",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "B306",
       "name": "HOOVER MOUTH",
       "file-path": "/images/user-customisation/mouth-slot/base-too/hoover-mouth.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          94,
+          95,
+          104
+        ],
+        "category": "mouth-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     }
   ]
 }
-
-

@@ -1,0 +1,66 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 300px;
+  min-width: auto;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: var(--container-display, none);
+  z-index: 400;
+  overflow-y: var(--container-overflow-y, auto);
+  --container-visible-display: block;
+  --container-visible-overflow-y: hidden;
+}
+
+.back-button {
+  position: fixed;
+  top: calc(var(--headerheight) + 5dvh);
+  left: 20px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  background-color: var(--secondarybackgroundcolour);
+  border: var(--bordersize) solid var(--secondarybackgroundcolour);
+  color: var(--primarypagecolour);
+  font-size: 1.5vh;
+  padding: 5px 10px;
+  border-radius: 50px;
+  margin: 0 10px;
+  width: 10vh;
+
+  z-index: 300;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.back-button.touchhover {
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  border-color: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back-button:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    border-color: var(--primarypagecolour);
+  }
+}
+
+.back-button.inactive {
+  display: none;
+}
+
+.overlay-text {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  color: var(--primarypagecolour);
+  font-size: 15px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}

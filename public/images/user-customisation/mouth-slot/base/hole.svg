@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 550">
+<svg id="Mouth-Slot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <style>
       .cls-1 {
-        fill: #262222;
-      }
-
-      .cls-2 {
-        fill: none;
+        fill: #262323;
       }
     </style>
   </defs>
-  <g id="Layer_1-2" data-name="Layer 1">
-    <rect class="cls-2" width="450" height="550"/>
-    <path class="cls-1" d="M201.52,381.89c-3-3.04-5.62-8.97-6.01-13.22-3.02-32.96,53.63-43.79,58.54-12.72,4.36,27.56-34.06,44.67-52.53,25.94Z"/>
+  <g id="HOLE">
+    <path class="cls-1" d="M227.27,340.41c-1.68-3.93-1.94-10.41-.75-14.5,9.26-31.78,65.94-21.11,59.13,9.6-6.04,27.24-48.06,29.09-58.38,4.9Z"/>
   </g>
 </svg>

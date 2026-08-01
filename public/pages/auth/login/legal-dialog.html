@@ -1,0 +1,65 @@
+    <dialog
+      class="auth-legal-dialog oe-dialog"
+      id="auth-legal-dialog"
+      data-oe-dialog
+      data-container-close-sound="none"
+      aria-labelledby="auth-legal-dialog-title"
+    >
+      <div class="auth-legal-dialog-shell">
+        <header class="auth-legal-dialog-header">
+          <div>
+            <p class="auth-legal-dialog-kicker">BEFORE YOU SIGN UP</p>
+            <h2 id="auth-legal-dialog-title">TERMS &amp; PRIVACY</h2>
+          </div>
+        </header>
+
+        <div
+          class="auth-legal-tabs"
+          role="tablist"
+          aria-label="Legal documents"
+        >
+          <button
+            class="auth-legal-tab active"
+            id="auth-legal-terms-tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="auth-legal-content"
+            data-legal-tab="terms"
+          >
+            TERMS
+          </button>
+          <button
+            class="auth-legal-tab"
+            id="auth-legal-privacy-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="auth-legal-content"
+            data-legal-tab="privacy"
+          >
+            PRIVACY
+          </button>
+        </div>
+
+        <div
+          class="auth-legal-content"
+          id="auth-legal-content"
+          role="tabpanel"
+          aria-labelledby="auth-legal-terms-tab"
+          tabindex="0"
+        >
+          <p class="auth-legal-loading">Loading legal documents…</p>
+        </div>
+
+        <footer class="auth-legal-dialog-footer">
+          <span class="auth-legal-footer-spacer" aria-hidden="true"></span>
+          <button id="auth-legal-dialog-agree" type="button" disabled>
+            AGREE
+          </button>
+          <a href="/terms-and-privacy" target="_blank" rel="noopener noreferrer"
+            >OPEN FULL PAGE</a
+          >
+        </footer>
+      </div>
+    </dialog>

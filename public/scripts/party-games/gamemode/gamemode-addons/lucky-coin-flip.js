@@ -40,20 +40,16 @@ tossBtn.addEventListener('click', () => {
 if (placeholderGamemodeAddons?.dataset.online === "false") {
     coinFlipButton?.addEventListener('click', toggleCoinFlip);
     function toggleCoinFlip() {
-        addElementIfNotExists(elementClassArray, luckyCoinFlipContainer);
         if (!isContainerVisible(luckyCoinFlipContainer)) {
             showContainer(luckyCoinFlipContainer);
+            addElementIfNotExists(elementClassArray, luckyCoinFlipContainer);
             coinFlipButton.classList.add('active');
-            playSoundEffect('containerOpen');
             if (!isContainerVisible(overlay)) {
                 toggleOverlay(true);
             }
         } else {
             hideContainer(luckyCoinFlipContainer);
-            playSoundEffect('containerClose');
-            if (findActiveElementsWithClasses(classArray).length == 0) {
-                toggleOverlay(false);
-            }
+            removeElementIfExists(elementClassArray, luckyCoinFlipContainer);
         }
     }
 }
@@ -162,18 +158,14 @@ async function tossCoinFunction() {
     }
 }
 
-waitForFunction("loadSound", () => {
-    async function LoadDrinkWheelSoundEffects() {
-        const soundEffects = {
-            coinFlip: '/sounds/party-games/coin-flip.wav'
-        };
-
-        for (const [key, url] of Object.entries(soundEffects)) {
-            await loadSound(key, url);
+waitForFunction("playSoundEffect", () => {
+    OEAudio.register({
+        coinFlip: {
+            src: '/sounds/party-games/paranoia/coin-flip.wav',
+            group: 'party-games',
+            maxInstances: 1,
+            priority: 'normal',
+            conflictPolicy: 'queue-latest'
         }
-    }
-
-    (async () => {
-        await LoadDrinkWheelSoundEffects();
-    })();
+    });
 });

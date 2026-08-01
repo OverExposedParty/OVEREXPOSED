@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Product | OVEREXPOSED</title>
+    <meta name="description" content="OVEREXPOSED product page." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta property="og:title" content="Product | OVEREXPOSED" />
+    <meta
+      property="og:description"
+      content="OVEREXPOSED product page."
+    />
+    <meta property="og:type" content="product" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Product | OVEREXPOSED" />
+    <meta
+      name="twitter:description"
+      content="OVEREXPOSED product page."
+    />
+    <link rel="canonical" href="https://overexposed.app/shop/product" />
+    <link
+      rel="preload"
+      href="/images/splash-screens/product-shop/coming-soon.jpg"
+      as="image"
+    />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/shop/product-page/product-page.css" />
+    <link rel="stylesheet" href="/css/shop/footer/footer.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/product-shop/coming-soon.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/product-shop/coming-soon.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main class="product-page-container" data-template="shop-product"></main>
+
+    <footer class="shop-footer">
+      <div class="shop-footer-content">
+        <nav class="shop-footer-column" aria-labelledby="shop-product-footer-shop">
+          <h2 id="shop-product-footer-shop">Shop</h2>
+          <a href="/shop#oe-layers">OE Layers</a>
+          <a href="/shop#oe-eggs">OE Eggs</a>
+          <a href="/shop#oling-furniture">Oling Furniture</a>
+          <a href="/shop#oling-consumables">Oling Consumables</a>
+        </nav>
+
+        <nav class="shop-footer-column" aria-labelledby="shop-product-footer-collection">
+          <h2 id="shop-product-footer-collection">Your Collection</h2>
+          <a href="/oe-library">OE Library</a>
+          <a href="/olings/lab">Olings Lab</a>
+        </nav>
+
+        <nav class="shop-footer-column" aria-labelledby="shop-product-footer-help">
+          <h2 id="shop-product-footer-help">Help</h2>
+          <a href="/faqs">FAQs</a>
+          <a href="/terms-and-privacy">Terms &amp; Privacy</a>
+          <a href="mailto:overexposedgame@gmail.com">Contact</a>
+        </nav>
+      </div>
+
+      <div class="shop-footer-bottom">
+        <p>&copy; 2026 OVEREXPOSED</p>
+        <div class="shop-footer-bottom-links">
+          <a href="https://www.instagram.com/oe.app" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="#header">Back to top</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'up';
+
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#66CCFF'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#427BB9'
+    );
+
+    window.pageScripts = {
+      '/scripts/shop/product-page/product-page.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OTHER',
+        zIndex: 0
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

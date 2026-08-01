@@ -1,0 +1,112 @@
+{
+  "themes": {
+    "incubation": {
+      "label": "Incubation",
+      "description": "Warmth, growth, nurturing.",
+      "primaryColour": "#FFD6A5",
+      "secondaryColour": "#E8B77E"
+    },
+    "olings-lab": {
+      "label": "Olings Lab",
+      "description": "Crafting and experimentation.",
+      "primaryColour": "#B8E1FF",
+      "secondaryColour": "#84BEE8"
+    },
+    "battle-arena": {
+      "label": "Battle Arena",
+      "description": "Friendly competition.",
+      "primaryColour": "#FFB5C8",
+      "secondaryColour": "#E684A1"
+    },
+    "oling-collection": {
+      "label": "Oling Collection",
+      "description": "Browsing pets.",
+      "primaryColour": "#C9B6FF",
+      "secondaryColour": "#A18AE8"
+    },
+    "egg-shop": {
+      "label": "Egg Shop",
+      "description": "Excitement and discovery.",
+      "primaryColour": "#FFF1A8",
+      "secondaryColour": "#D8C96A"
+    },
+    "quests-adventures": {
+      "label": "Quests / Adventures",
+      "description": "Exploration.",
+      "primaryColour": "#B7F0C1",
+      "secondaryColour": "#7FD194"
+    },
+    "oling-profile": {
+      "label": "Oling Profile",
+      "description": "Personality.",
+      "primaryColour": "#FFD1E8",
+      "secondaryColour": "#E39BC1"
+    },
+    "inventory": {
+      "label": "Inventory",
+      "description": "Items, consumables, and storage.",
+      "primaryColour": "#D7F5E8",
+      "secondaryColour": "#8ED8B8"
+    },
+    "trading": {
+      "label": "Trading",
+      "description": "Swaps, gifting, and exchange.",
+      "primaryColour": "#CFF0FF",
+      "secondaryColour": "#79CBE8"
+    },
+    "achievements": {
+      "label": "Achievements",
+      "description": "Badges, milestones, and unlocks.",
+      "primaryColour": "#FFE3B8",
+      "secondaryColour": "#E6A85F"
+    },
+    "settings": {
+      "label": "Settings",
+      "description": "Calm configuration.",
+      "primaryColour": "#DDE3F0",
+      "secondaryColour": "#9FAECB"
+    },
+    "social-friends": {
+      "label": "Social / Friends",
+      "description": "Visiting labs and friend Olings.",
+      "primaryColour": "#F8C7FF",
+      "secondaryColour": "#D987E6"
+    },
+    "care-mood": {
+      "label": "Care / Mood",
+      "description": "Feeding, happiness, and comfort.",
+      "primaryColour": "#FFE0C7",
+      "secondaryColour": "#E89B70"
+    },
+    "customisation": {
+      "label": "Customisation",
+      "description": "Cosmetics, dressing, and styling.",
+      "primaryColour": "#D6C8FF",
+      "secondaryColour": "#9C84E8"
+    },
+    "rarity-special": {
+      "label": "Rarity / Special",
+      "description": "Rare finds and special moments.",
+      "primaryColour": "#F6E7FF",
+      "secondaryColour": "#C08BE8"
+    },
+    "warning": {
+      "label": "Alerts / Warning",
+      "description": "Non-destructive warnings.",
+      "primaryColour": "#FFC9B8",
+      "secondaryColour": "#E8846B"
+    },
+    "success": {
+      "label": "Success",
+      "description": "Completed and ready states.",
+      "primaryColour": "#C8F2D2",
+      "secondaryColour": "#76C98A"
+    },
+    "locked-disabled": {
+      "label": "Locked / Disabled",
+      "description": "Unavailable content.",
+      "primaryColour": "#D8D8D8",
+      "secondaryColour": "#9A9A9A"
+    }
+  }
+}

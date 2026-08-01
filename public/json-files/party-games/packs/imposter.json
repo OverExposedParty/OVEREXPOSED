@@ -1,54 +1,54 @@
 {
-    "imposter-packs": [
-        {
-            "pack-name": "foody",
-            "pack-path": "/json-files/party-games/questions/imposter/foody.json",
-            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
-            "pack-colour": "#3DA7A1",
-            "pack-secondary-colour": "#2A6E6A",
-            "pack-difficulty": "imposter/words, imposter/culture-and-lifestyle, imposter/objects-and-things, imposter/actions-and-activities",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },        
-        {
-            "pack-name": "all-time-musicians",
-            "pack-path": "/json-files/party-games/questions/imposter/all-time-musicians.json",
-            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
-            "pack-colour": "#3DA7A1",
-            "pack-secondary-colour": "#2A6E6A",
-            "pack-difficulty": "imposter/words, imposter/people-and-characters, imposter/media-and-entertainment, imposter/culture-and-lifestyle",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "brain-rotted",
-            "pack-path": "/json-files/party-games/questions/imposter/brain-rotted.json",
-            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
-            "pack-colour": "#3DA7A1",
-            "pack-secondary-colour": "#2A6E6A",
-            "pack-difficulty": "imposter/words, imposter/phrases, imposter/culture-and-lifestyle, imposter/media-and-entertainment",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "big-screen-icons",
-            "pack-path": "/json-files/party-games/questions/imposter/big-screen-icons.json",
-            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
-            "pack-colour": "#3DA7A1",
-            "pack-secondary-colour": "#2A6E6A",
-            "pack-difficulty": "imposter/words, imposter/media-and-entertainment, imposter/people-and-characters, imposter/culture-and-lifestyle",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "sports-icons",
-            "pack-path": "/json-files/party-games/questions/imposter/sports-icons.json",
-            "pack-card": "/images/blank-cards/imposter-blank-card.svg",
-            "pack-colour": "#3DA7A1",
-            "pack-secondary-colour": "#2A6E6A",
-            "pack-difficulty": "imposter/words, imposter/people-and-characters, imposter/culture-and-lifestyle, imposter/media-and-entertainment",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        }
-    ]
+  "imposter-packs": [
+    {
+      "pack-name": "all-time-musicians",
+      "pack-description": "A mix of legendary performers, modern chart-toppers, rappers, singers and global music icons from across generations and genres.",
+      "pack-path": "/json-files/party-games/questions/imposter/all-time-musicians.json",
+      "pack-colour": "#3DA7A1",
+      "pack-secondary-colour": "#2A6E6A",
+      "pack-difficulty": "imposter/words, imposter/people-and-characters, imposter/media-and-entertainment, imposter/culture-and-lifestyle",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "big-screen-icons",
+      "pack-description": "Recognisable films, television series, fictional characters, actors and entertainment franchises from the biggest and most memorable screens.",
+      "pack-path": "/json-files/party-games/questions/imposter/big-screen-icons.json",
+      "pack-colour": "#3DA7A1",
+      "pack-secondary-colour": "#2A6E6A",
+      "pack-difficulty": "imposter/words, imposter/media-and-entertainment, imposter/people-and-characters, imposter/culture-and-lifestyle",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "brain-rotted",
+      "pack-description": "Internet slang, viral phrases, meme culture and chronically online vocabulary for players whose screen time has permanently changed them.",
+      "pack-path": "/json-files/party-games/questions/imposter/brain-rotted.json",
+      "pack-colour": "#3DA7A1",
+      "pack-secondary-colour": "#2A6E6A",
+      "pack-difficulty": "imposter/words, imposter/phrases, imposter/culture-and-lifestyle, imposter/media-and-entertainment",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "foody",
+      "pack-description": "Popular meals, ingredients, snacks, restaurants and questionable culinary choices covering everything from comfort food to international favourites.",
+      "pack-path": "/json-files/party-games/questions/imposter/foody.json",
+      "pack-colour": "#3DA7A1",
+      "pack-secondary-colour": "#2A6E6A",
+      "pack-difficulty": "imposter/words, imposter/culture-and-lifestyle, imposter/objects-and-things, imposter/actions-and-activities",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "sports-icons",
+      "pack-description": "Famous athletes and sporting legends from football, basketball, boxing, tennis, athletics, wrestling and more.",
+      "pack-path": "/json-files/party-games/questions/imposter/sports-icons.json",
+      "pack-colour": "#3DA7A1",
+      "pack-secondary-colour": "#2A6E6A",
+      "pack-difficulty": "imposter/words, imposter/people-and-characters, imposter/culture-and-lifestyle, imposter/media-and-entertainment",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    }
+  ]
 }

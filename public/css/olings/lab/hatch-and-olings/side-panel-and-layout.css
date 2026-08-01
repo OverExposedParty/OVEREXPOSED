@@ -1,0 +1,44 @@
+.oling-lab-side-panel {
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-side-panel :where(h3, h4, p),
+.oling-lab-side-panel .oling-lab-detail-row :where(span, strong),
+.oling-lab-side-panel .oling-lab-detail-pair-item :where(span, strong),
+.oling-lab-side-panel .oling-lab-incubator-copy,
+.oling-lab-side-panel .oling-lab-menu-empty,
+.oling-lab-side-panel .oling-lab-set-preview :where(strong, span),
+.oling-lab-side-panel .oling-lab-menu-action:not(.is-remove-action) span {
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-side-panel .oling-lab-detail-row,
+.oling-lab-side-panel .oling-lab-detail-pair-item,
+.oling-lab-side-panel .oling-lab-incubator-copy,
+.oling-lab-side-panel .oling-lab-menu-empty,
+.oling-lab-side-panel .oling-lab-set-preview,
+.oling-lab-side-panel .oling-lab-set-preview-meta {
+  background: rgb(255 255 255 / 7%) !important;
+  background-color: rgb(255 255 255 / 7%) !important;
+  border-radius: 0.35rem;
+}
+
+.oling-lab-side-panel .oling-lab-detail-row.is-rarity-detail :where(span, strong) {
+  color: var(--oling-rarity-secondary-colour);
+}
+
+.oling-lab-side-panel .oling-lab-menu-action.is-remove-action {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-side-panel .oling-lab-menu-action.is-remove-action span {
+  color: var(--backgroundcolour);
+}
+
+@media (min-width: 1180px) {
+  :root {
+    --oling-lab-cell: min(512px, calc(var(--oling-lab-available-height) / 2));
+  }
+}

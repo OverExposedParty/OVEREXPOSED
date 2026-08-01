@@ -1,0 +1,174 @@
+.account-prompt-popup-row {
+  align-items: center;
+  background: var(--backgroundcolour);
+  border: 0;
+  color: #ffffff;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  padding: 10px 12px 10px 10px;
+}
+
+.account-prompt-popup-badge {
+  align-items: center;
+  align-self: center;
+  background: transparent;
+  color: var(--backgroundcolour);
+  display: flex;
+  font-size: 15px;
+  font-weight: 900;
+  height: 46px;
+  justify-content: center;
+  line-height: 1;
+  width: 46px;
+}
+
+.account-prompt-popup-badge .icon,
+.account-prompt-popup-badge .icon .image-stack {
+  display: grid;
+  height: 46px;
+  place-items: center;
+  width: 46px;
+}
+
+.account-prompt-popup-badge .icon .image-stack img {
+  border-radius: 0;
+  inset: 0;
+  object-fit: contain;
+}
+
+.account-prompt-popup-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.account-prompt-popup-label {
+  color: var(--secondarypagecolour);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.account-prompt-popup-title {
+  color: var(--primarypagecolour);
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-prompt-popup-message {
+  color: rgb(255 255 255 / 74%);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 4px;
+}
+
+.account-prompt-popup-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.account-prompt-popup-dismiss,
+.account-prompt-popup-create {
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.account-prompt-popup-dismiss {
+  color: var(--warningcolour);
+}
+
+.account-prompt-popup-create {
+  color: var(--primarypagecolour);
+}
+
+.account-prompt-popup-dismiss:focus-visible,
+.account-prompt-popup-create:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-prompt-popup-dismiss:hover,
+  .account-prompt-popup-create:hover {
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.oe-popup-text-action {
+  appearance: none;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oe-popup-dismiss-action {
+  color: var(--warningcolour);
+}
+
+.oe-popup-dismiss-action:focus-visible {
+  color: var(--warningcoloursecondary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-popup-dismiss-action:hover {
+    color: var(--warningcoloursecondary);
+  }
+}
+
+.oe-popup-view-action {
+  color: var(--primarypagecolour);
+}
+
+.oe-popup-view-action:focus-visible {
+  color: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-popup-view-action:hover {
+    color: var(--secondarypagecolour);
+  }
+}
+
+.oe-popup-text-action:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-popup-text-action:hover {
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

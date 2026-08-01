@@ -1,0 +1,108 @@
+.oling-lab-hatch-details-panel {
+  width: min(52%, 15rem);
+  min-width: min(52%, 15rem);
+  align-content: stretch;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-detail-list {
+  min-height: 0;
+  gap: 0.35rem;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-detail-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-detail-pair-item,
+.oling-lab-hatch-details-panel .oling-lab-incubator-copy,
+.oling-lab-hatch-details-panel .oling-lab-detail-row,
+.oling-lab-hatch-details-panel .oling-lab-menu-empty,
+.oling-lab-incubator-info-panel .oling-lab-detail-row,
+.oling-lab-incubator-info-panel .oling-lab-incubator-copy,
+.oling-lab-egg-info-panel .oling-lab-detail-row,
+.oling-lab-egg-info-panel .oling-lab-incubator-copy,
+.oling-lab-egg-info-panel .oling-lab-set-preview {
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-active-influences {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.3rem;
+}
+
+.oling-lab-active-influences h4 {
+  margin: 0;
+  font-size: 0.66rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-active-influences .oling-lab-detail-list {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-active-influences .oling-lab-detail-row {
+  min-height: 0;
+  padding: 0.32rem 0.42rem;
+  align-content: center;
+}
+
+.oling-lab-incubator-info-panel,
+.oling-lab-egg-info-panel {
+  width: min(52%, 15rem);
+  min-width: min(52%, 15rem);
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.oling-lab-incubator-info-panel .oling-lab-detail-list,
+.oling-lab-egg-info-panel .oling-lab-detail-list {
+  min-height: 0;
+  overflow-y: auto;
+  gap: 0.35rem;
+}
+
+.oling-lab-incubator-info-panel .oling-lab-detail-row,
+.oling-lab-egg-info-panel .oling-lab-detail-row {
+  min-height: 2rem;
+  padding: 0.38rem 0.45rem;
+}
+
+.oling-lab-egg-info-panel {
+  overflow-y: auto;
+  align-content: start;
+}
+
+.oling-lab-egg-info-panel .oling-lab-set-preview-grid {
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.oling-lab-egg-info-panel .oling-lab-set-preview {
+  min-height: 0;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-menu-inline-actions {
+  display: grid;
+}
+
+.oling-lab-hatch-details-panel .oling-lab-menu-action {
+  min-height: 2.1rem;
+  justify-content: center;
+  padding: 0 0.55rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oling-lab-egg-insertion-slot,
+  .oling-lab-side-panel {
+    transition-duration: 0ms;
+  }
+}

@@ -1,0 +1,156 @@
+.oling-lab-discovery-list {
+  display: grid;
+  grid-auto-rows: 3.75rem;
+  align-content: start;
+  gap: 0.45rem;
+}
+
+.oling-lab-discovery-row {
+  height: 3.75rem;
+  min-height: 3.75rem !important;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.oling-lab-discovery-row small {
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-align: right;
+}
+
+.oling-lab-gateway-overview {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+.oling-lab-gateway-overview-stage {
+  box-sizing: border-box;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  justify-self: center;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-gateway-overview-visual {
+  position: relative;
+  min-height: 8rem;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 16%);
+  overflow: hidden;
+}
+
+.oling-lab-gateway-overview-visual img {
+  width: min(72%, 13rem);
+  height: 78%;
+  object-fit: contain;
+}
+
+.oling-lab-gateway-overview-visual strong {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.oling-lab-gateway-overview-visual strong.is-active {
+  color: var(--warningcolour);
+}
+
+.oling-lab-gateway-overview-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.oling-lab-gateway-overview-cards .oling-lab-detail-row {
+  min-height: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem;
+  background: rgb(0 0 0 / 16%);
+}
+
+.oling-lab-gateway-overview-cards .oling-lab-detail-row :is(span, strong) {
+  width: 100%;
+  text-align: center;
+}
+
+.oling-lab-gateway-overview p {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.oling-lab-explorer-panel:has(.oling-lab-active-adventure-scene) {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  overflow: hidden;
+}
+
+.oling-lab-active-adventure-scene {
+  position: relative;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  background: center / cover no-repeat;
+}
+
+.oling-lab-active-adventure-oling {
+  width: auto;
+  height: min(78%, 13rem);
+  aspect-ratio: 1 / 1;
+  background: transparent !important;
+}
+
+.oling-lab-active-adventure-name {
+  position: absolute;
+  top: 0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--oling-lab-menu-primary-colour);
+  text-transform: uppercase;
+}
+
+.oling-lab-active-adventure-time {
+  position: absolute;
+  bottom: -0.55rem;
+  left: 50%;
+  z-index: 1;
+  padding: 0.45rem 0.75rem;
+  transform: translateX(-50%);
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.oling-lab-active-adventure-return {
+  justify-self: center;
+  align-self: start;
+  margin: -0.55rem 0 0;
+  min-height: 2.75rem !important;
+}

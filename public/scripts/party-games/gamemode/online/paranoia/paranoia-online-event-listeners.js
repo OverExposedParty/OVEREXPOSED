@@ -34,6 +34,7 @@ async function handleNextQuestionClick() {
     option: true,
     reason: "QUESTION",
   });
+  stopParanoiaTimerWarning();
 }
 
 async function handleConfirmPlayerClick() {
@@ -50,6 +51,7 @@ async function handleConfirmPlayerClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
     await ChosePunishment();
   }
 
@@ -70,6 +72,11 @@ async function handleConfirmPunishmentClick() {
 
   hideContainer(selectPunishmentContainer);
 
+  if (selectedId === 'pass') {
+    await handleSelectPunishmentPassClick();
+    return;
+  }
+
   const punishmentType = selectedId === 'lucky-coin-flip'
     ? 'COIN_FLIP'
     : selectedId === 'drink-wheel'
@@ -88,6 +95,33 @@ async function handleConfirmPunishmentClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
+  }
+
+  const selectPunishmentButtons = document
+    .getElementById('select-punishment-container')
+    .querySelectorAll('.selected-user-container .button-container button');
+
+  selectPunishmentButtons.forEach(button => {
+    button.classList.remove('active');
+  });
+
+  selectPunishmentContainer.setAttribute('select-id', "");
+}
+
+async function handleSelectPunishmentPassClick() {
+  hideContainer(selectPunishmentContainer);
+
+  const updatedParty = await performOnlinePartyAction({
+    action: 'paranoia-pass-punishment',
+    payload: {
+      roundTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
   }
 
   const selectPunishmentButtons = document
@@ -113,6 +147,7 @@ async function handleCompletePunishmentPassClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
     await HasUserDonePunishment();
   }
 }
@@ -132,6 +167,7 @@ async function handleCompletePunishmentConfirmClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
   }
 }
 
@@ -156,6 +192,7 @@ async function handlePunishmentYesClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
   }
 }
 
@@ -170,5 +207,6 @@ async function handlePunishmentNoClick() {
 
   if (updatedParty) {
     currentPartyData = updatedParty;
+    stopParanoiaTimerWarning();
   }
 }

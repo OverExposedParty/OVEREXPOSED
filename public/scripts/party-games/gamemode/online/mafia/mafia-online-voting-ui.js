@@ -30,11 +30,16 @@ function wireUpVoteButtons() {
   const selectUserVoteNightPlayerButtons =
     selectUserNightPhaseButtonContainer.querySelectorAll('button');
 
-  selectUserVoteDayPlayerButtons.forEach(button => {
+  selectUserVoteDayPlayerButtons.forEach((button) => {
     button.onclick = async () => {
-      selectUserVoteDayPlayerButtons.forEach(btn => btn.classList.remove('active'));
+      selectUserVoteDayPlayerButtons.forEach((btn) =>
+        btn.classList.remove('active')
+      );
       button.classList.add('active');
-      selectUserDayPhaseContainer.setAttribute('selected-id', button.getAttribute('id'));
+      selectUserDayPhaseContainer.setAttribute(
+        'selected-id',
+        button.getAttribute('id')
+      );
       await SetVote({
         option: selectUserDayPhaseContainer.getAttribute('selected-id'),
         hover: true
@@ -42,11 +47,16 @@ function wireUpVoteButtons() {
     };
   });
 
-  selectUserVoteNightPlayerButtons.forEach(button => {
+  selectUserVoteNightPlayerButtons.forEach((button) => {
     button.onclick = async () => {
-      selectUserVoteNightPlayerButtons.forEach(btn => btn.classList.remove('active'));
+      selectUserVoteNightPlayerButtons.forEach((btn) =>
+        btn.classList.remove('active')
+      );
       button.classList.add('active');
-      selectUserNightPhaseContainer.setAttribute('selected-id', button.getAttribute('id'));
+      selectUserNightPhaseContainer.setAttribute(
+        'selected-id',
+        button.getAttribute('id')
+      );
       await SetVote({
         option: selectUserNightPhaseContainer.getAttribute('selected-id'),
         hover: true
@@ -54,7 +64,9 @@ function wireUpVoteButtons() {
     };
   });
 
-  if (selectUserNightPhaseButtonContainer.querySelectorAll('button').length > 4) {
+  if (
+    selectUserNightPhaseButtonContainer.querySelectorAll('button').length > 4
+  ) {
     selectUserNightPhaseContainer.classList.add('overflow');
   } else {
     selectUserNightPhaseContainer.classList.remove('overflow');
@@ -65,30 +77,32 @@ function syncPlayerButtonsWithParty(party) {
   // Alive players set for quick lookup
   const aliveIds = new Set(
     party.players
-      .filter(p => p.state.status === 'alive')
-      .map(p => p.identity.computerId)
+      .filter((p) => p.state.status === 'alive')
+      .map((p) => p.identity.computerId)
   );
 
   // --- DAY CONTAINER: everyone alive (including yourself) ---
 
   // Remove buttons for players that are no longer alive
-  Array.from(selectUserDayPhaseButtonContainer.querySelectorAll('button'))
-    .forEach(button => {
-      const id = button.getAttribute('id');
-      if (!aliveIds.has(id)) {
-        button.remove();
-      }
-    });
+  Array.from(
+    selectUserDayPhaseButtonContainer.querySelectorAll('button')
+  ).forEach((button) => {
+    const id = button.getAttribute('id');
+    if (!aliveIds.has(id)) {
+      button.remove();
+    }
+  });
 
   // Add missing buttons for newly alive players
-  party.players.forEach(player => {
+  party.players.forEach((player) => {
     const playerDeviceId = player.identity.computerId;
     const playerName = player.identity.username;
 
     if (!aliveIds.has(playerDeviceId)) return;
 
-    const existingButton = selectUserDayPhaseButtonContainer
-      .querySelector(`button[id="${playerDeviceId}"]`);
+    const existingButton = selectUserDayPhaseButtonContainer.querySelector(
+      `button[id="${playerDeviceId}"]`
+    );
 
     if (!existingButton) {
       const newButton = createVoteButton(playerDeviceId, playerName, 'day');
@@ -99,36 +113,38 @@ function syncPlayerButtonsWithParty(party) {
   // --- NIGHT CONTAINER: other alive civilians only ---
 
   // Remove buttons whose player is no longer a valid night target
-  Array.from(selectUserNightPhaseButtonContainer.querySelectorAll('button'))
-    .forEach(button => {
-      const id = button.getAttribute('id');
-      const player = party.players.find(p => p.identity.computerId === id);
+  Array.from(
+    selectUserNightPhaseButtonContainer.querySelectorAll('button')
+  ).forEach((button) => {
+    const id = button.getAttribute('id');
+    const player = party.players.find((p) => p.identity.computerId === id);
 
-      const validNightTarget =
-        player &&
-        player.identity.computerId !== deviceId &&
-        player.state.status === 'alive' &&
-        civilianRoles.includes(player.state.role);
+    const validNightTarget =
+      player &&
+      player.identity.computerId !== deviceId &&
+      player.state.status === 'alive' &&
+      getMafiaRoleTeamKey(player.state.roleKey) === 'town';
 
-      if (!validNightTarget) {
-        button.remove();
-      }
-    });
+    if (!validNightTarget) {
+      button.remove();
+    }
+  });
 
   // Add missing buttons for valid night targets
-  party.players.forEach(player => {
+  party.players.forEach((player) => {
     const playerDeviceId = player.identity.computerId;
     const playerName = player.identity.username;
 
     const validNightTarget =
       playerDeviceId !== deviceId &&
       player.state.status === 'alive' &&
-      civilianRoles.includes(player.state.role);
+      getMafiaRoleTeamKey(player.state.roleKey) === 'town';
 
     if (!validNightTarget) return;
 
-    const existingButton = selectUserNightPhaseButtonContainer
-      .querySelector(`button[id="${playerDeviceId}"]`);
+    const existingButton = selectUserNightPhaseButtonContainer.querySelector(
+      `button[id="${playerDeviceId}"]`
+    );
 
     if (!existingButton) {
       const newButton = createVoteButton(playerDeviceId, playerName, 'night');

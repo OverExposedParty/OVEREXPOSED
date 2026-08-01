@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>OE Panel | OVEREXPOSED</title>
+    <meta name="description" content="OE Panel." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/oe-panel/oe-panel.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main class="oe-panel-layout" aria-labelledby="oe-panel-title">
+      <aside class="oe-panel-sidebar" aria-label="OE Panel navigation">
+        <div class="oe-panel-sidebar-title-container">
+          <h1 id="oe-panel-title" class="oe-panel-sidebar-title">OE Panel</h1>
+        </div>
+        <nav class="oe-panel-sidebar-nav" aria-label="Admin sections">
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Dashboard"
+          >
+            Dashboard
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Shop"
+          >
+            Shop
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="OverExposure"
+          >
+            OverExposure
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Social Media"
+          >
+            Social Media
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Emails"
+          >
+            Emails
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Party Games"
+          >
+            Party Games
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="OE Customisation"
+          >
+            OE Customisation
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="oLings"
+          >
+            oLings
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Achievements"
+          >
+            Achievements
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Users"
+          >
+            Users
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Moderation"
+          >
+            Moderation
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Analytics"
+          >
+            Analytics
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="System"
+          >
+            System
+          </button>
+          <button
+            class="extra-menu-button oe-panel-sidebar-button"
+            type="button"
+            data-oe-panel-section="Admin Logs"
+          >
+            Admin Logs
+          </button>
+        </nav>
+      </aside>
+
+      <section
+        class="oe-panel-content"
+        aria-labelledby="oe-panel-content-title"
+      >
+        <div class="oe-panel-content-title-container">
+          <h2 id="oe-panel-content-title" class="oe-panel-content-title">
+            Dashboard
+          </h2>
+        </div>
+        <div
+          class="oe-panel-content-grid"
+          id="oe-panel-content-grid"
+          aria-label="Dashboard panel containers"
+        ></div>
+      </section>
+    </main>
+  </body>
+  <script>
+    window.pageScripts = {
+      '/scripts/oe-panel/core/oe-panel-sections.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/dashboard.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/shop.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/overexposure.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/social-media.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/emails.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/party-games.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/customisation.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/achievements.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/olings.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/users.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/moderation.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/analytics.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/system.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/sections/admin-logs.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 0
+      },
+      '/scripts/oe-panel/core/oe-panel-data.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/general/online/user-customisation-icon.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-helpers.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-form.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-basic.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-data.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-time-series.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-pie-chart.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widget-alerts.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/widgets/oe-panel-widgets.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.1
+      },
+      '/scripts/oe-panel/oe-panel-gallery-database-widget/gallery-renderer.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1
+        },
+      '/scripts/oe-panel/oe-panel-gallery-database-widget/database-button-list.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1
+        },
+      '/scripts/oe-panel/oe-panel-gallery-database-widget/oe-panel-gallery-database-widget.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.2
+        },
+      '/scripts/oe-panel/oe-panel-table-widget/search-tools.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/oe-panel-table-widget/expanded-row.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/oe-panel-table-widget/series-renderer.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/oe-panel-table-widget/oe-panel-table-widget.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.2
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-core.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-alerts.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-queues.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-operations.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-embedded-widget.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-form-fields.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-admin-forms.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-pack-forms.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-submenu.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/actions/oe-panel-actions-widget.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.2
+      },
+      '/scripts/oe-panel/email-template-editor/email-template-editor-config.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.3
+        },
+      '/scripts/oe-panel/email-template-editor/email-template-editor.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.31
+      },
+      '/scripts/oe-panel/oe-panel-social-video-editor/preview.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.1
+      },
+      '/scripts/oe-panel/oe-panel-social-video-editor/export.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.2
+      },
+      '/scripts/oe-panel/oe-panel-social-video-editor/oe-panel-social-video-editor.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.3
+        },
+      '/scripts/oe-panel/oe-panel-social-video-studio/controls.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.34
+      },
+      '/scripts/oe-panel/oe-panel-social-video-studio/crop-helpers.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.35
+      },
+      '/scripts/oe-panel/oe-panel-social-video-studio/upload-view.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.36
+      },
+      '/scripts/oe-panel/oe-panel-social-video-studio/oe-panel-social-video-studio.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.4
+        },
+      '/scripts/oe-panel/oe-panel-social-creation-widget/alerts-view.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.41
+      },
+      '/scripts/oe-panel/oe-panel-social-creation-widget/idea-view.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.42
+      },
+      '/scripts/oe-panel/oe-panel-social-creation-widget/download-icon.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.43
+      },
+      '/scripts/oe-panel/oe-panel-social-creation-widget/oe-panel-social-creation-widget.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.5
+        },
+      '/scripts/oe-panel/core/oe-panel-grid.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/core/oe-panel-navigation.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1
+      },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-catalog.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-operations.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/emails.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.05
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/social.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.1
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/analytics.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.2
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/dashboard.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.3
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/overexposure.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.4
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights/party-games.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.5
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator-insights.js':
+        {
+          cacheBustKey: 'OVEREXPOSURE',
+          zIndex: 1.6
+        },
+      '/scripts/oe-panel/section-hydrator/oe-panel-section-hydrator.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 1.7
+      },
+      '/scripts/oe-panel/core/oe-panel.js': {
+        cacheBustKey: 'OVEREXPOSURE',
+        zIndex: 2
+      }
+    };
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#E88BAE'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#C3698B'
+    );
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

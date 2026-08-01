@@ -1,10 +1,20 @@
 const mongoose = require('mongoose');
 
-const { CHANGE_STREAM_BACKOFF_MS } = require('../constants');
+const { createRoomArchiver } = require('./database/room-archiver');
+const { createChangeStreamService } = require('./database/change-streams');
 
-function createDatabaseServices({ io, debugLog, models }) {
+function createDatabaseServices({ io, debugLog, models, partyOwnerLeases }) {
   const {
-    Confession,
+    OverexposurePost,
+    SocialContentItem,
+    EmailTemplate,
+    Report,
+    SupportTicket,
+    SystemConfig,
+    AdminLog,
+    Product,
+    ShopConfig,
+    Account,
     partyGameTruthOrDareSchema,
     partyGameParanoiaSchema,
     partyGameNeverHaveIEverSchema,
@@ -13,132 +23,278 @@ function createDatabaseServices({ io, debugLog, models }) {
     partyGameWouldYouRatherSchema,
     partyGameMafiaSchema,
     partyGameChatLogSchema,
-    waitingRoomSchema
+    activePartyOwnerLeaseSchema,
+    archivedRoomSchema,
+    GamePack,
+    GameRule,
+    GameRole,
+    GameMode,
+    HomepageTile,
+    Achievement,
+    AchievementRewardClaim,
+    AccountPlayedWith,
+    OlingTrait,
+    OlingEgg,
+    OlingBuildSet,
+    OlingPersonality,
+    OlingConsumable,
+    PlayerOling,
+    OlingHatchReceipt,
+    GamemodeSettingsAlert,
+    OeCustomisation,
+    waitingRoomSchema,
+    accountsConnection,
+    olingsConnection,
+    partyGamesConnection,
+    oeCustomisationConnection,
+    shopConnection,
+    moderationConnection,
+    socialConnection,
+    siteContentConnection,
+    emailConnection
   } = models;
 
   let overexposureDb = null;
-  const changeStreams = new Map();
-  const changeStreamRestartTimers = new Map();
-  const changeStreamRetryCounts = new Map();
-  const changeStreamDefinitions = [];
+  let accountsDb = null;
+  let olingsDb = null;
+  let partyGamesDb = null;
+  let oeCustomisationDb = null;
+  let shopDb = null;
+  let moderationDb = null;
+  let socialDb = null;
+  let siteContentDb = null;
+  let emailDb = null;
   let dbReconnectHooksAttached = false;
+  let restartAllChangeStreams = () => {};
 
-  function closeChangeStream(key) {
-    const stream = changeStreams.get(key);
-    if (!stream) return;
-
+  function getDatabaseUri(baseUri, dbName) {
     try {
-      stream.removeAllListeners();
-      stream.close();
-    } catch (err) {
+      const parsedUri = new URL(baseUri);
+      parsedUri.pathname = `/${dbName}`;
+      return parsedUri.toString();
+    } catch (error) {
       console.warn(
-        `⚠️ Failed to close change stream "${key}":`,
-        err.message || err
+        `⚠️ Could not derive "${dbName}" MongoDB URI from base URI:`,
+        error.message || error
       );
+      return baseUri;
     }
-
-    changeStreams.delete(key);
-  }
-
-  function scheduleChangeStreamRestart(definition, reason) {
-    const { key, label } = definition;
-
-    if (changeStreamRestartTimers.has(key)) {
-      return;
-    }
-
-    closeChangeStream(key);
-
-    const attempt = (changeStreamRetryCounts.get(key) || 0) + 1;
-    changeStreamRetryCounts.set(key, attempt);
-    const delay =
-      CHANGE_STREAM_BACKOFF_MS[
-        Math.min(attempt - 1, CHANGE_STREAM_BACKOFF_MS.length - 1)
-      ];
-
-    console.warn(
-      `🔁 Restarting "${label}" stream in ${delay}ms (reason: ${reason}, attempt: ${attempt})`
-    );
-
-    const timer = setTimeout(() => {
-      changeStreamRestartTimers.delete(key);
-      registerResilientChangeStream(definition);
-    }, delay);
-
-    changeStreamRestartTimers.set(key, timer);
-  }
-
-  function registerResilientChangeStream(definition) {
-    const { key, label, open, onChange } = definition;
-
-    closeChangeStream(key);
-
-    const pendingTimer = changeStreamRestartTimers.get(key);
-    if (pendingTimer) {
-      clearTimeout(pendingTimer);
-      changeStreamRestartTimers.delete(key);
-    }
-
-    let stream;
-    try {
-      stream = open();
-    } catch (err) {
-      console.error(`❌ Failed to open "${label}" stream:`, err);
-      scheduleChangeStreamRestart(definition, 'open-failed');
-      return;
-    }
-
-    changeStreams.set(key, stream);
-    changeStreamRetryCounts.set(key, 0);
-
-    stream.on('change', onChange);
-    stream.on('error', (err) => {
-      console.error(`❌ ${label} stream error:`, err);
-      scheduleChangeStreamRestart(definition, 'error');
-    });
-    stream.on('close', () => {
-      console.warn(`⚠️ ${label} stream closed`);
-      scheduleChangeStreamRestart(definition, 'close');
-    });
-    stream.on('end', () => {
-      console.warn(`⚠️ ${label} stream ended`);
-      scheduleChangeStreamRestart(definition, 'end');
-    });
-
-    debugLog(`👁 Watching ${label} stream`);
-  }
-
-  function restartAllChangeStreams(reason = 'manual-restart') {
-    if (!changeStreamDefinitions.length) return;
-    console.warn(`♻️ Restarting all change streams (${reason})`);
-    changeStreamDefinitions.forEach(registerResilientChangeStream);
   }
 
   function attachDbReconnectHooks() {
-    if (dbReconnectHooksAttached || !overexposureDb) return;
+    if (
+      dbReconnectHooksAttached ||
+      !overexposureDb ||
+      !accountsDb ||
+      !olingsDb ||
+      !partyGamesDb ||
+      !oeCustomisationDb ||
+      !shopDb ||
+      !moderationDb ||
+      !socialDb ||
+      !siteContentDb ||
+      !emailDb
+    )
+      return;
     dbReconnectHooksAttached = true;
 
     overexposureDb.on('disconnected', () => {
       console.warn(
-        '⚠️ MongoDB disconnected; waiting to restart streams on reconnect'
+        '⚠️ Overexposure MongoDB disconnected; waiting to restart streams on reconnect'
       );
     });
 
     overexposureDb.on('reconnected', () => {
-      restartAllChangeStreams('mongo-reconnected');
+      restartAllChangeStreams('overexposure-mongo-reconnected');
     });
 
     overexposureDb.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
+      console.error('❌ Overexposure MongoDB connection error:', err);
+    });
+
+    partyGamesDb.on('disconnected', () => {
+      console.warn(
+        '⚠️ Party Games MongoDB disconnected; waiting to restart streams on reconnect'
+      );
+    });
+
+    partyGamesDb.on('reconnected', () => {
+      restartAllChangeStreams('party-games-mongo-reconnected');
+    });
+
+    partyGamesDb.on('error', (err) => {
+      console.error('❌ Party Games MongoDB connection error:', err);
+    });
+
+    oeCustomisationDb.on('disconnected', () => {
+      console.warn('⚠️ OE Customisation MongoDB disconnected');
+    });
+
+    oeCustomisationDb.on('error', (err) => {
+      console.error('❌ OE Customisation MongoDB connection error:', err);
+    });
+
+    accountsDb.on('disconnected', () => {
+      console.warn('⚠️ Accounts MongoDB disconnected');
+    });
+
+    accountsDb.on('error', (err) => {
+      console.error('❌ Accounts MongoDB connection error:', err);
+    });
+
+    olingsDb.on('disconnected', () => {
+      console.warn('⚠️ Olings MongoDB disconnected');
+    });
+
+    olingsDb.on('error', (err) => {
+      console.error('❌ Olings MongoDB connection error:', err);
+    });
+
+    shopDb.on('disconnected', () => {
+      console.warn('⚠️ Shop MongoDB disconnected');
+    });
+
+    shopDb.on('error', (err) => {
+      console.error('❌ Shop MongoDB connection error:', err);
+    });
+
+    moderationDb.on('disconnected', () => {
+      console.warn('⚠️ Moderation MongoDB disconnected');
+    });
+
+    moderationDb.on('error', (err) => {
+      console.error('❌ Moderation MongoDB connection error:', err);
+    });
+
+    socialDb.on('disconnected', () => {
+      console.warn('⚠️ Social MongoDB disconnected');
+    });
+
+    socialDb.on('error', (err) => {
+      console.error('❌ Social MongoDB connection error:', err);
+    });
+
+    siteContentDb.on('disconnected', () => {
+      console.warn('⚠️ Site Content MongoDB disconnected');
+    });
+
+    siteContentDb.on('error', (err) => {
+      console.error('❌ Site Content MongoDB connection error:', err);
+    });
+
+    emailDb.on('disconnected', () => {
+      console.warn('⚠️ Emails MongoDB disconnected');
+    });
+
+    emailDb.on('error', (err) => {
+      console.error('❌ Emails MongoDB connection error:', err);
     });
   }
 
   async function connectDatabases() {
     try {
-      await mongoose.connect(process.env.MONGO_URI_OVEREXPOSURE);
+      const overexposureUri = process.env.MONGO_URI_OVEREXPOSURE;
+      const partyGamesUri =
+        process.env.MONGO_URI_PARTY_GAMES ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_PARTY_GAMES || 'party-games'
+        );
+      const oeCustomisationUri =
+        process.env.MONGO_URI_OE_CUSTOMISATION ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_OE_CUSTOMISATION || 'oe-customisation'
+        );
+      const accountsUri =
+        process.env.MONGO_URI_ACCOUNTS ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_ACCOUNTS || 'accounts'
+        );
+      const olingsUri =
+        process.env.MONGO_URI_OLINGS ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_OLINGS || 'olings'
+        );
+      const shopUri =
+        process.env.MONGO_URI_SHOP ||
+        getDatabaseUri(overexposureUri, process.env.MONGO_DB_SHOP || 'shop');
+      const moderationUri =
+        process.env.MONGO_URI_MODERATION ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_MODERATION || 'moderation'
+        );
+      const socialUri =
+        process.env.MONGO_URI_SOCIAL ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_SOCIAL || 'social'
+        );
+      const siteContentUri =
+        process.env.MONGO_URI_SITE_CONTENT ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_SITE_CONTENT || 'site-content'
+        );
+      const emailUri =
+        process.env.MONGO_URI_EMAILS ||
+        getDatabaseUri(
+          overexposureUri,
+          process.env.MONGO_DB_EMAILS || 'emails'
+        );
+
+      await mongoose.connect(overexposureUri);
       debugLog('✅ Connected to OVEREXPOSURE Database');
 
       overexposureDb = mongoose.connection;
+
+      await partyGamesConnection.openUri(partyGamesUri);
+      debugLog('✅ Connected to PARTY GAMES Database');
+
+      partyGamesDb = partyGamesConnection;
+
+      await oeCustomisationConnection.openUri(oeCustomisationUri);
+      debugLog('✅ Connected to OE CUSTOMISATION Database');
+
+      oeCustomisationDb = oeCustomisationConnection;
+
+      await accountsConnection.openUri(accountsUri);
+      debugLog('✅ Connected to ACCOUNTS Database');
+
+      accountsDb = accountsConnection;
+
+      await olingsConnection.openUri(olingsUri);
+      debugLog('✅ Connected to OLINGS Database');
+
+      olingsDb = olingsConnection;
+
+      await shopConnection.openUri(shopUri);
+      debugLog('✅ Connected to SHOP Database');
+
+      shopDb = shopConnection;
+
+      await moderationConnection.openUri(moderationUri);
+      debugLog('✅ Connected to MODERATION Database');
+
+      moderationDb = moderationConnection;
+
+      await socialConnection.openUri(socialUri);
+      debugLog('✅ Connected to SOCIAL Database');
+
+      socialDb = socialConnection;
+
+      await siteContentConnection.openUri(siteContentUri);
+      debugLog('✅ Connected to SITE CONTENT Database');
+
+      siteContentDb = siteContentConnection;
+
+      await emailConnection.openUri(emailUri);
+      debugLog('✅ Connected to EMAILS Database');
+
+      emailDb = emailConnection;
     } catch (err) {
       console.error('❌ Database connection error:', err);
       process.exit(1);
@@ -146,6 +302,14 @@ function createDatabaseServices({ io, debugLog, models }) {
   }
 
   async function ensureDatabaseIndexes() {
+    if (!activePartyOwnerLeaseSchema) {
+      throw new Error('Active party owner lease model is unavailable.');
+    }
+
+    // Party creation relies on these unique indexes across every server
+    // instance, so failing to create them must fail startup.
+    await activePartyOwnerLeaseSchema.createIndexes();
+
     const modelsToIndex = [
       waitingRoomSchema,
       partyGameTruthOrDareSchema,
@@ -156,7 +320,34 @@ function createDatabaseServices({ io, debugLog, models }) {
       partyGameWouldYouRatherSchema,
       partyGameMafiaSchema,
       partyGameChatLogSchema,
-      Confession
+      archivedRoomSchema,
+      GamePack,
+      GameRule,
+      GameRole,
+      GameMode,
+      Achievement,
+      AchievementRewardClaim,
+      AccountPlayedWith,
+      OlingTrait,
+      OlingEgg,
+      OlingBuildSet,
+      OlingPersonality,
+      OlingConsumable,
+      PlayerOling,
+      OlingHatchReceipt,
+      GamemodeSettingsAlert,
+      OeCustomisation,
+      OverexposurePost,
+      SocialContentItem,
+      EmailTemplate,
+      Report,
+      SupportTicket,
+      SystemConfig,
+      AdminLog,
+      Account,
+      Product,
+      ShopConfig,
+      HomepageTile
     ];
 
     await Promise.all(
@@ -171,161 +362,46 @@ function createDatabaseServices({ io, debugLog, models }) {
         }
       })
     );
+
+    await ShopConfig.updateOne(
+      { key: 'account-container' },
+      {
+        $setOnInsert: {
+          key: 'account-container',
+          accountCommercePublic: false,
+          'system.createdAt': new Date()
+        }
+      },
+      { upsert: true }
+    );
   }
 
-  async function startChangeStreams() {
-    if (!overexposureDb) {
-      throw new Error(
-        'Cannot start change streams before database connection is ready'
-      );
-    }
-
-    const waitingRoomDB = overexposureDb.collection('waiting-room');
-    const partyGameTruthOrDareDB = overexposureDb.collection(
-      'party-game-truth-or-dare'
-    );
-    const partyGameParanoiaDB = overexposureDb.collection(
-      'party-game-paranoia'
-    );
-    const partyGameNeverHaveIEverDB = overexposureDb.collection(
-      'party-game-never-have-i-ever'
-    );
-    const partyGameMostLikelyToDB = overexposureDb.collection(
-      'party-game-most-likely-to'
-    );
-    const partyGameImposterDB = overexposureDb.collection(
-      'party-game-imposter'
-    );
-    const partyGameWouldYouRatherDB = overexposureDb.collection(
-      'party-game-would-you-rather'
-    );
-    const partyGameMafiaDB = overexposureDb.collection('party-game-mafia');
-    const partyGameChatLogDB = overexposureDb.collection('party-game-chat-log');
-
-    const openWatchStream = (collection) => {
-      if (collection?.collection?.watch) {
-        return collection.collection.watch([], {
-          fullDocument: 'updateLookup'
-        });
-      }
-      return collection.watch([], { fullDocument: 'updateLookup' });
-    };
-
-    const partyChangeHandler = (label) => (change) => {
-      const partyCode = change.fullDocument?.partyId;
-      if (!partyCode) {
-        console.warn(`⚠️ ${label} change missing partyCode`);
-        return;
-      }
-
-      io.to(partyCode).emit('party-updated', {
-        type: change.operationType,
-        source: label,
-        emittedPartyCode: change.fullDocument || null,
-        documentKey: change.documentKey
-      });
-      debugLog(`🔄 ${label} change sent to ${partyCode}`);
-    };
-
-    const chatLogChangeHandler = (change) => {
-      const partyCode = change.fullDocument?.partyId;
-
-      if (!partyCode && change.operationType === 'delete') {
-        console.warn('⚠️ chat-log delete missing partyId');
-        return;
-      }
-
-      if (['insert', 'update'].includes(change.operationType)) {
-        io.to(partyCode).emit('chat-updated', {
-          type: change.operationType,
-          chatLog: change.fullDocument,
-          documentKey: change.documentKey
-        });
-        debugLog(`💬 chat-log ${change.operationType} sent to ${partyCode}`);
-      }
-
-      if (change.operationType === 'delete') {
-        io.to(partyCode).emit('chat-updated', {
-          type: 'delete',
-          chatLog: null,
-          documentKey: change.documentKey
-        });
-        debugLog(`❌ chat-log delete sent to ${partyCode}`);
-      }
-    };
-
-    changeStreamDefinitions.length = 0;
-    changeStreamDefinitions.push(
-      {
-        key: 'confessions',
-        label: 'confessions',
-        open: () => Confession.watch([], { fullDocument: 'updateLookup' }),
-        onChange: (change) => io.emit('confessions-updated', change)
-      },
-      {
-        key: 'party-game-truth-or-dare',
-        label: 'party-game-truth-or-dare',
-        open: () => openWatchStream(partyGameTruthOrDareDB),
-        onChange: partyChangeHandler('party-game-truth-or-dare')
-      },
-      {
-        key: 'party-game-paranoia',
-        label: 'party-game-paranoia',
-        open: () => openWatchStream(partyGameParanoiaDB),
-        onChange: partyChangeHandler('party-game-paranoia')
-      },
-      {
-        key: 'party-game-never-have-i-ever',
-        label: 'party-game-never-have-i-ever',
-        open: () => openWatchStream(partyGameNeverHaveIEverDB),
-        onChange: partyChangeHandler('party-game-never-have-i-ever')
-      },
-      {
-        key: 'party-game-most-likely-to',
-        label: 'party-game-most-likely-to',
-        open: () => openWatchStream(partyGameMostLikelyToDB),
-        onChange: partyChangeHandler('party-game-most-likely-to')
-      },
-      {
-        key: 'party-game-imposter',
-        label: 'party-game-imposter',
-        open: () => openWatchStream(partyGameImposterDB),
-        onChange: partyChangeHandler('party-game-imposter')
-      },
-      {
-        key: 'party-game-would-you-rather',
-        label: 'party-game-would-you-rather',
-        open: () => openWatchStream(partyGameWouldYouRatherDB),
-        onChange: partyChangeHandler('party-game-would-you-rather')
-      },
-      {
-        key: 'party-game-mafia',
-        label: 'party-game-mafia',
-        open: () => openWatchStream(partyGameMafiaDB),
-        onChange: partyChangeHandler('party-game-mafia')
-      },
-      {
-        key: 'party-game-chat-log',
-        label: 'party-game-chat-log',
-        open: () => openWatchStream(partyGameChatLogDB),
-        onChange: chatLogChangeHandler
-      },
-      {
-        key: 'waiting-room',
-        label: 'waiting-room',
-        open: () => openWatchStream(waitingRoomDB),
-        onChange: partyChangeHandler('waiting-room')
-      }
-    );
-
-    attachDbReconnectHooks();
-    restartAllChangeStreams('startup');
-  }
+  const roomArchiver = createRoomArchiver({ models, partyOwnerLeases });
+  const changeStreams = createChangeStreamService({
+    io,
+    debugLog,
+    models,
+    getConnections: () => ({
+      overexposureDb,
+      accountsDb,
+      olingsDb,
+      partyGamesDb,
+      oeCustomisationDb,
+      shopDb,
+      moderationDb,
+      socialDb,
+      siteContentDb,
+      emailDb
+    }),
+    attachDbReconnectHooks
+  });
+  restartAllChangeStreams = changeStreams.restartAllChangeStreams;
 
   return {
     connectDatabases,
     ensureDatabaseIndexes,
-    startChangeStreams
+    startRoomArchiver: roomArchiver.startRoomArchiver,
+    startChangeStreams: changeStreams.startChangeStreams
   };
 }
 

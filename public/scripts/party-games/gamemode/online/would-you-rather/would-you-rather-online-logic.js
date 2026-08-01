@@ -12,6 +12,22 @@ async function FetchInstructions() {
   const state = getPartyState(currentPartyData);
   const phase = state?.phase ?? null;
 
+  if (
+    showRoundLateJoinContainerIfNeeded({
+      partyData: currentPartyData,
+      gamemode: 'would-you-rather'
+    })
+  ) {
+    stopWouldYouRatherVoteTimerWarning();
+    return;
+  }
+
+  syncWouldYouRatherFlowSounds(state, instructions);
+
+  if (!instructions.includes("DISPLAY_PRIVATE_CARD")) {
+    stopWouldYouRatherVoteTimerWarning();
+  }
+
   if (phase === 'would-you-rather-spin-odd-man-out') {
     ChosePunishment();
     return;

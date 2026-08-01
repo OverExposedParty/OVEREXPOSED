@@ -1,0 +1,316 @@
+.user-icon {
+  position: relative;
+
+  font-size: 1vw;
+  padding: 0 10px;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  text-align: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  width: 104px;
+  color: var(--primarypagecolour);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-icon.menu-open {
+  z-index: 20;
+}
+
+.container-section.small .user-icon {
+  font-size: 0.5vw;
+  width: 72px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  gap: 5px;
+}
+
+.container-section.small .close-btn {
+  font-size: 12px;
+  top: 2px;
+  right: 2px;
+}
+
+.container-section.small .name-container {
+  bottom: 5px;
+  padding: 2.5px 5px;
+  gap: 2.5px;
+}
+
+.container-section.small .username {
+  font-size: 6.5px;
+}
+
+.container-section.small .username.long-name {
+  font-size: 4.5px;
+}
+
+.container-section.small .checkmark {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.container-section.small .checkmark.checked::before {
+  top: 0;
+  left: 1.5px;
+  font-size: 6px;
+}
+
+.container-section.small .checkmark.disconnected::before {
+  content: none;
+  display: none;
+}
+
+.container-section.small .disconnect-status-icon {
+  height: 100%;
+  width: 100%;
+}
+
+.container-section.small .disconnect-status-icon circle {
+  stroke-width: 4.5;
+}
+
+.container-section.small .user-action-menu {
+  left: 50%;
+  min-width: 138px;
+  padding: 0;
+}
+
+.container-section.small .user-action-menu-button {
+  min-height: 30px;
+  padding: 6px 14px;
+  font-size: 10px;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  color: red;
+  font-size: 24px;
+  z-index: 10;
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.close-btn:focus-visible {
+  transform: scale(1.24);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close-btn:hover {
+    transform: scale(1.24);
+  }
+}
+
+/* Image container */
+.image-stack {
+  display: flex;
+  justify-content: center;
+  /* center horizontally */
+  align-items: center;
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.main-image-container .icon {
+  position: absolute;
+  top: 18px;
+  justify-content: center;
+  /* optional, for images inside stack */
+  align-items: center;
+  /* optional, for images inside stack */
+  aspect-ratio: 1;
+}
+
+.icon-container .image-stack {
+  height: 100%;
+}
+.icon .image-stack {
+  height: 80px;
+}
+
+.icon.large .image-stack {
+  height: 180px;
+}
+
+.icon.medium .image-stack {
+  height: 47px;
+}
+
+.icon.medium .image-stack {
+  height: 30px;
+}
+
+.icon.dual-stack .image-stack {
+  height: 150px;
+}
+
+.image-stack img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.image-stack img:nth-child(1) {
+  z-index: 0;
+}
+
+.image-stack img:nth-child(2) {
+  z-index: 3;
+}
+
+.image-stack img:nth-child(3) {
+  z-index: 1;
+}
+
+.image-stack img:nth-child(4) {
+  z-index: 2;
+}
+
+.name-container {
+  position: absolute;
+  bottom: 10px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  color: var(--primarypagecolour);
+}
+
+.user-action-trigger {
+  cursor: pointer;
+}
+
+.user-action-trigger:focus-visible {
+  outline: 3px solid var(--primarypagecolour);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.user-action-menu {
+  position: absolute;
+  top: calc(100% - 8px);
+  left: 50%;
+  display: none;
+  min-width: 158px;
+  padding: 0;
+  border-radius: 12px;
+  background: var(--backgroundcolour);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+  box-sizing: border-box;
+  overflow: hidden;
+  transform: translateX(-50%);
+  z-index: 21;
+}
+
+.user-icon.menu-open .user-action-menu {
+  display: grid;
+  gap: 0;
+}
+
+.user-action-menu-button {
+  width: 100%;
+  min-height: 34px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--primarypagecolour);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-action-menu-button:focus-visible {
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button:hover {
+    background: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.user-action-menu-button:first-child:focus-visible {
+  border-radius: 12px 12px 0 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button:first-child:hover {
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.user-action-menu-button:last-child:focus-visible {
+  border-radius: 0 0 12px 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button:last-child:hover {
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+.user-action-menu-button:first-child:last-child:focus-visible {
+  border-radius: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button:first-child:last-child:hover {
+    border-radius: 12px;
+  }
+}
+
+.user-action-menu-button:disabled {
+  color: color-mix(in srgb, var(--primarypagecolour) 48%, transparent);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.user-action-menu-button:disabled:focus-visible {
+  background: transparent;
+  color: color-mix(in srgb, var(--primarypagecolour) 48%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button:disabled:hover {
+    background: transparent;
+    color: color-mix(in srgb, var(--primarypagecolour) 48%, transparent);
+  }
+}
+
+.user-action-menu-button.is-danger {
+  color: var(--warningcolour);
+}
+
+.user-action-menu-button.is-danger:focus-visible {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .user-action-menu-button.is-danger:hover {
+    background: var(--warningcolour);
+    color: var(--backgroundcolour);
+  }
+}

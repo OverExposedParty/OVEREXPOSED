@@ -1,40 +1,51 @@
 {
-    "never-have-i-ever-settings": [
-        {
-            "settings-name": "drink-punishment",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw", "online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "odd-man-out",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        }
-    ]
+  "never-have-i-ever-settings": [
+    {
+      "settings-name": "drink-punishment",
+      "settings-description": "Players who admit they have done the statement are instructed to take a sip after the answers are revealed.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw",
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "never-have-i-ever"
+      ]
+    },
+    {
+      "settings-name": "odd-man-out",
+      "settings-description": "If only one player gives a different answer from the rest of the group, that player is selected for a randomly generated drinking punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "never-have-i-ever"
+      ]
+    },
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many Never Have I Ever statements will be shown before the game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "never-have-i-ever"
+      ],
+      "button-initial-value": 20,
+      "button-increment-value": 5,
+      "button-minimum-value": 5,
+      "button-maximum-value": 40
+    }
+  ]
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #72c8f1;
+        stroke-miterlimit: 10;
+        stroke-width: 12px;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #72c8f1;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 14px;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M250,54.52c46.46,0,85.03,26.3,85.03,81.96,0,45.58-38.57,71.88-60.48,95.55q-16.66,17.97,0,35.94c21.91,23.67,60.48,49.97,60.48,95.55,0,55.66-38.57,81.96-85.03,81.96s-85.03-26.3-85.03-81.96c0-45.58,38.57-71.88,60.48-95.55q16.66-17.97,0-35.94c-21.91-23.67-60.48-49.97-60.48-95.55,0-55.66,38.57-81.96,85.03-81.96Z"/>
+  <rect class="cls-1" x="144.05" y="50" width="211.91" height="29.95" rx="10.51" ry="10.51"/>
+  <rect class="cls-1" x="144.05" y="420.05" width="211.91" height="29.95" rx="10.51" ry="10.51"/>
+</svg>

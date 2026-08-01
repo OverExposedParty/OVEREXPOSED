@@ -1,0 +1,271 @@
+.oling-lab-item-slot-row {
+  --oling-lab-item-influence-card-size: clamp(6.75rem, 23vw, 9rem);
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: center;
+  justify-items: center;
+  padding: 0.65rem;
+  transition: opacity 240ms ease;
+}
+
+.oling-lab-item-influence-slot {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  justify-self: center;
+  width: min(100%, var(--oling-lab-item-influence-card-size));
+  min-height: var(--oling-lab-item-influence-card-size);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  gap: 0.4rem;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  padding: 0.55rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-secondary-colour);
+  font: inherit;
+  cursor: pointer;
+}
+
+.oling-lab-item-influence-slot:disabled,
+.oling-lab-item-influence-slot.is-disabled {
+  cursor: default;
+  opacity: 0.68;
+}
+
+.oling-lab-item-influence-slot.is-expanded {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 1rem 1rem 4.25rem;
+  cursor: default;
+}
+
+.oling-lab-item-influence-slot.is-expanded strong {
+  bottom: 3.35rem;
+}
+
+.oling-lab-item-influence-slot.is-expanded .oling-lab-item-influence-marker {
+  top: calc(50% - 1.4rem);
+}
+
+.oling-lab-item-influence-slot.is-expanded img {
+  position: absolute;
+  top: calc(50% - 1.4rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.oling-lab-item-influence-back {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  z-index: 4;
+  width: 2.15rem;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.oling-lab-item-influence-back::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(0.8rem, 2vw, 1rem);
+  aspect-ratio: 1;
+  background-color: var(--oling-lab-menu-secondary-colour);
+  clip-path: polygon(22% 50%, 76% 8%, 76% 92%);
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s;
+}
+
+.oling-lab-item-influence-back:focus-visible::before,
+.oling-lab-item-influence-back:active::before {
+  background-color: var(--oling-lab-menu-secondary-colour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-item-influence-back:hover::before {
+    background-color: var(--oling-lab-menu-secondary-colour);
+  }
+}
+
+.oling-lab-item-influence-back:focus-visible {
+  outline: none;
+}
+
+.oling-lab-item-influence-back:focus-visible {
+  transform: scale(1.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-item-influence-back:hover {
+    transform: scale(1.08);
+  }
+}
+
+.oling-lab-panel-back {
+  position: absolute;
+  top: 1rem;
+  left: 0.65rem;
+  z-index: 4;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.oling-lab-panel-back::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(0.75rem, 1.7vw, 0.95rem);
+  aspect-ratio: 1;
+  background-color: var(--oling-lab-menu-secondary-colour);
+  clip-path: polygon(22% 50%, 76% 8%, 76% 92%);
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s;
+}
+
+.oling-lab-panel-back:focus-visible::before,
+.oling-lab-panel-back:active::before {
+  background-color: var(--oling-lab-menu-secondary-colour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-panel-back:hover::before {
+    background-color: var(--oling-lab-menu-secondary-colour);
+  }
+}
+
+.oling-lab-panel-back:focus-visible {
+  outline: none;
+}
+
+.oling-lab-panel-back:focus-visible {
+  transform: scale(1.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-panel-back:hover {
+    transform: scale(1.08);
+  }
+}
+
+.oling-lab-panel-back + h3 {
+  min-height: 2.6rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1.9rem;
+}
+
+.oling-lab-stats-toggle {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  z-index: 4;
+  box-sizing: border-box;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(22 31 36 / 62%);
+  color: var(--oling-lab-menu-secondary-colour);
+  cursor: pointer;
+}
+
+.oling-lab-stats-toggle-icon {
+  box-sizing: border-box;
+  width: 1.22rem;
+  height: 1.22rem;
+  display: grid;
+  place-items: center;
+  border: 0.16rem solid currentColor;
+  border-radius: 50%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 900;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+}
+
+.oling-lab-stats-toggle:focus-visible,
+.oling-lab-stats-toggle:active {
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-stats-toggle:hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+  }
+}
+
+.oling-lab-stats-toggle:focus-visible {
+  outline: 3px solid var(--backgroundcolour);
+  outline-offset: -3px;
+}
+
+.oling-lab-egg-insertion-stage.is-viewing-details .oling-lab-stats-toggle,
+.oling-lab-egg-insertion-stage.is-viewing-egg-info .oling-lab-stats-toggle,
+.oling-lab-egg-insertion-stage.is-viewing-incubator-info .oling-lab-stats-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oling-lab-item-influence-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: min(30%, 3.25rem);
+  transform: translate(-50%, -50%);
+  font-size: clamp(1.75rem, 8vw, 3rem);
+}
+
+.oling-lab-item-influence-slot img {
+  width: min(58%, 6rem);
+  height: min(58%, 6rem);
+  min-height: 0;
+  object-fit: contain;
+}
+
+.oling-lab-item-influence-slot strong {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.5rem;
+  left: 0.55rem;
+  min-width: 0;
+  max-width: 100%;
+  font-size: clamp(0.52rem, 1.9vw, 0.68rem);
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-items-stage.is-selecting-item-influence .oling-lab-item-slot-row {
+  opacity: 0;
+  pointer-events: none;
+}

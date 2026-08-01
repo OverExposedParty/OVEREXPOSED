@@ -3,29 +3,104 @@ const gameContainerPublicButtonContainer = gameContainerPublic.querySelector('.r
 const gameContainerPublicWaitingText = gameContainerPublicButtonContainer.querySelector('h2');
 const gameContainerPublicButtonAnswer = gameContainerPublicButtonContainer.querySelector('#answer');
 const gameContainerPublicButtonPass = gameContainerPublicButtonContainer.querySelector("#pass");
-const gameContainerAnswer = document.querySelector('#answer-view.card-container');
-const gameContainerAnswerButtonContainer = gameContainerAnswer.querySelector('.regular-button-container');
-const gameContainerAnswerButtonNextQuestion = gameContainerAnswerButtonContainer.querySelector("#next-question");
 
 gameContainers.push(
-  gameContainerPublic,
-  gameContainerAnswer
+  gameContainerPublic
 );
 
-let textBoxSetting = false;
+async function registerTruthOrDareLateJoinIfRequested() {
+  const url = new URL(window.location.href);
+  const lateJoinStorageKey = `oe-late-join:${partyCode}`;
+  const lateJoinRequested =
+    url.searchParams.get('lateJoin') === '1' ||
+    sessionStorage.getItem(lateJoinStorageKey) === '1';
+  if (!lateJoinRequested) return true;
+
+  const response = await fetch(
+    `/api/waiting-room?partyCode=${encodeURIComponent(partyCode)}`
+  );
+  const waitingRoomData = response.ok ? await response.json() : [];
+  const party = Array.isArray(waitingRoomData) ? waitingRoomData[0] : null;
+  if (!party) return false;
+
+  const players = party.players || [];
+  const existingPlayer = players.find(
+    (player) => getPlayerId(player) === deviceId
+  );
+
+  if (!existingPlayer) {
+    const resolvedUsername = await resolveOnlineUsername(players);
+    await addUserToParty({
+      partyId: partyCode,
+      newComputerId: deviceId,
+      newUsername: resolvedUsername,
+      newUserIcon: getStoredUserIconString(),
+      newUserSocketId: socket.id
+    });
+  }
+
+  url.searchParams.delete('lateJoin');
+  sessionStorage.removeItem(lateJoinStorageKey);
+  window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+  return true;
+}
+
+function getPromptHeistTimeLimit() {
+  return Number(
+    gameRules?.["prompt-heist-game-rule-time-limit"] ||
+    gameRules?.["truth-or-dare-prompt-heist-game-rule-time-limit"] ||
+    10
+  );
+}
+
+async function syncTruthOrDareActionAndRender(updatedParty) {
+  if (updatedParty) {
+    stopTruthOrDareTimerWarning();
+  }
+
+  return syncTruthOrDarePartyAndRender(updatedParty);
+}
+
+async function passTruthOrDarePrompt() {
+  const updatedParty = await performOnlinePartyAction({
+    action: 'truth-or-dare-pass-question',
+    payload: {
+      heistTimer: Date.now() + getPromptHeistTimeLimit() * 1000,
+      phaseTimer: Date.now() + gameRules["time-limit"] * 1000,
+      roundTimer: Date.now() + gameRules["time-limit"] * 1000
+    }
+  });
+
+  await syncTruthOrDareActionAndRender(updatedParty);
+}
 
 async function SetPageSettings() {
+  if (!(await registerTruthOrDareLateJoinIfRequested())) return;
+
   selectPunishmentText.textContent = "YOU CHOSE TO PASS. PICK A FORFEIT.";
 
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
-    if (selectPunishmentContainer.getAttribute('select-id')) {
+    const selectedPunishmentId = selectPunishmentContainer.getAttribute('select-id');
+    if (selectedPunishmentId) {
       hideContainer(selectPunishmentContainer);
-      const punishmentType = selectPunishmentContainer.getAttribute('select-id') == 'drink-wheel'
+      if (selectedPunishmentId === 'pass') {
+        const updatedParty = await performOnlinePartyAction({
+          action: 'truth-or-dare-handle-punishment-timeout',
+          payload: {
+            roundTimer: Date.now() + gameRules["time-limit"] * 1000
+          }
+        });
+
+        await syncTruthOrDareActionAndRender(updatedParty);
+        return;
+      }
+
+      const punishmentType = selectedPunishmentId == 'drink-wheel'
         ? 'DRINK_WHEEL'
-        : selectPunishmentContainer.getAttribute('select-id') == 'take-a-shot'
+        : selectedPunishmentId == 'take-a-shot'
           ? 'TAKE_A_SHOT'
           : formatDashedString({
-              input: selectPunishmentContainer.getAttribute('select-id'),
+              input: selectedPunishmentId,
               seperator: '_'
             }).toUpperCase();
 
@@ -37,7 +112,7 @@ async function SetPageSettings() {
         }
       });
 
-      await syncTruthOrDarePartyAndRender(updatedParty);
+      await syncTruthOrDareActionAndRender(updatedParty);
       const selectPunishmentButtons = document.getElementById('select-punishment-container').querySelectorAll('.selected-user-container .button-container button');
       selectPunishmentButtons.forEach(button => {
         button.classList.remove('active');
@@ -54,7 +129,18 @@ async function SetPageSettings() {
       }
     });
 
-    await syncTruthOrDarePartyAndRender(updatedParty);
+    await syncTruthOrDareActionAndRender(updatedParty);
+  });
+
+  completePunishmentButtonPass.addEventListener('click', async () => {
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-handle-punishment-timeout',
+      payload: {
+        roundTimer: Date.now() + gameRules["time-limit"] * 1000
+      }
+    });
+
+    await syncTruthOrDareActionAndRender(updatedParty);
   });
 
   selectQuestionTypeButtonTruth.addEventListener('click', async () => {
@@ -66,7 +152,7 @@ async function SetPageSettings() {
       }
     });
 
-    await syncTruthOrDarePartyAndRender(updatedParty);
+    await syncTruthOrDareActionAndRender(updatedParty);
   });
 
   selectQuestionTypeButtonDare.addEventListener('click', async () => {
@@ -78,48 +164,30 @@ async function SetPageSettings() {
       }
     });
 
-    await syncTruthOrDarePartyAndRender(updatedParty);
+    await syncTruthOrDareActionAndRender(updatedParty);
   });
 
   gameContainerPublicButtonPass.addEventListener('click', async () => {
+    await passTruthOrDarePrompt();
+  });
+
+  promptHeistClaimButton.addEventListener('click', async () => {
     const updatedParty = await performOnlinePartyAction({
-      action: 'truth-or-dare-pass-question',
+      action: 'truth-or-dare-claim-prompt-heist',
       payload: {
-        phaseTimer: Date.now() + gameRules["time-limit"] * 1000,
-        roundTimer: Date.now() + gameRules["time-limit"] * 1000
+        timer: Date.now() + gameRules["time-limit"] * 1000
       }
     });
 
-    await syncTruthOrDarePartyAndRender(updatedParty);
+    await syncTruthOrDareActionAndRender(updatedParty);
   });
 
   gameContainerPublicButtonAnswer.addEventListener('click', async () => {
-    if (textBoxSetting == false) {
-      await SendInstruction({
-        instruction: "DISPLAY_COMPLETE_QUESTION",
-        byPassHost: true,
-        fetchInstruction: true
-      });
-    }
-    else {
-      await SendInstruction({
-        instruction: "DISPLAY_CONFIRM_INPUT",
-        byPassHost: true,
-        fetchInstruction: true
-      });
-    }
-  });
-
-  answerQuestionSubmitButton.addEventListener('click', async () => {
-    await SendInstruction({
-      instruction: "DISPLAY_ANSWER_CARD:" + answerQuestionAnswer.value,
-      byPassHost: true,
-      fetchInstruction: true
+    const updatedParty = await performOnlinePartyAction({
+      action: 'truth-or-dare-start-prompt'
     });
-  });
 
-  gameContainerAnswerButtonNextQuestion.addEventListener('click', async () => {
-    await ResetTruthOrDareQuestion({ force: false, nextPlayer: true });
+    await syncTruthOrDareActionAndRender(updatedParty);
   });
 
   completePromptCompleted.addEventListener('click', async () => {
@@ -131,6 +199,7 @@ async function SetPageSettings() {
   AddTimerToContainer(selectQuestionTypeContainer);
   AddTimerToContainer(selectPunishmentContainer);
   AddTimerToContainer(completePunishmentContainer);
+  AddTimerToContainer(promptHeistContainer);
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
@@ -171,11 +240,6 @@ async function initialisePage() {
       gameRules = config.gameRules || {};
       const gm = config.gamemode || party.gamemode;
 
-      // 1) Direct checks for specific rules
-      if (gameRules["truth-or-dare-text-box"]) {
-        textBoxSetting = true;
-      }
-
       if (gameRules["take-a-shot"]) {
         const settingsButton = createUserButton("take-a-shot", "Take A Shot");
         selectPunishmentButtonContainer.appendChild(settingsButton);
@@ -187,7 +251,15 @@ async function initialisePage() {
         const isEnabled = value === true || value === "true";
         if (!isEnabled) return;
 
-        if (ruleKey === "take-a-shot" || ruleKey === "truth-or-dare-text-box") return;
+        // Historical parties can still contain the retired text-box rule.
+        if (
+          ruleKey === "take-a-shot" ||
+          ruleKey === "truth-or-dare-text-box" ||
+          ruleKey === "prompt-heist" ||
+          ruleKey === "truth-or-dare-prompt-heist" ||
+          ruleKey === "prompt-heist-game-rule-time-limit" ||
+          ruleKey === "truth-or-dare-prompt-heist-game-rule-time-limit"
+        ) return;
 
         if (/\d/.test(ruleKey)) return;
 
@@ -209,6 +281,8 @@ async function initialisePage() {
         selectPunishmentButtonContainer.appendChild(settingsButton);
       });
 
+      selectPunishmentButtonContainer.appendChild(createUserButton("pass", "Pass"));
+
       const selectPunishmentButtons = document
         .getElementById('select-punishment-container')
         .querySelectorAll('.selected-user-container .button-container button');
@@ -221,7 +295,34 @@ async function initialisePage() {
         });
       });
     }
-    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`);
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+    const instructionsCacheBustKey = 'PARTY_GAMES_ONLINE_TRUTH_OR_DARE';
+
+    await LoadScript(
+      `${instructionsBasePath}/truth-or-dare-online-instructions/phase-tools.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/truth-or-dare-online-instructions/prompt-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/truth-or-dare-online-instructions/punishment-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/truth-or-dare-online-instructions/answer-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/truth-or-dare-online-instructions/round-actions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
 
     const userInstructions = getUserInstructions(party);
     if (!gameRules["time-limit"]) {
@@ -281,16 +382,6 @@ async function initialisePage() {
       console.warn('Truth or Dare statistics setup skipped during startup:', error);
     }
     await AddUserIcons();
-
-    const firstPlayer = players[0];
-    const firstId = firstPlayer.identity?.computerId || firstPlayer.computerId;
-    const firstIcon = firstPlayer.identity?.userIcon || firstPlayer.userIcon;
-
-    EditUserIconPartyGames({
-      container: podiumThirdPlace,
-      userId: firstId,
-      userCustomisationString: firstIcon
-    });
     SetScriptLoaded('/scripts/party-games/online/online-settings.js');
   } else {
     ShowPartyDoesNotExistState();

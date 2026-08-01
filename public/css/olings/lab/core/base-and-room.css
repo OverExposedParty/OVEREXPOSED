@@ -1,0 +1,356 @@
+@font-face {
+  font-family: 'LemonMilkLight';
+  src: url('/fonts/LemonMilk/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+:root {
+  --oling-lab-available-height: calc(100dvh - var(--headerheight));
+  --oling-lab-cell: min(512px, 42vw, calc(var(--oling-lab-available-height) / 2));
+  --oling-lab-grid-line: rgb(22 31 36 / 18%);
+  --oling-energy-primary-colour: #ffe566;
+  --oling-energy-secondary-colour: #c7b34d;
+}
+
+body {
+  background: #eef7f4;
+}
+
+.oling-lab-page {
+  box-sizing: border-box;
+  height: 100dvh;
+  overflow: hidden;
+  padding: var(--headerheight) 0 0;
+  background: #eef7f4;
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-toolbar {
+  position: fixed;
+  top: calc(var(--headerheight) + 0.75rem);
+  right: 0.75rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oling-lab-menu h2,
+.oling-lab-menu p {
+  margin: 0;
+}
+
+.oling-lab-save-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.oling-lab-edit-toggle,
+.oling-lab-scroll,
+.oling-lab-menu-action,
+.oling-lab-plus,
+.oling-lab-cell-hit,
+.oling-lab-item-hit,
+.oling-lab-action-panel-button {
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.oling-lab-edit-toggle {
+  min-width: 6.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  background: var(--backgroundcolour);
+  color: #f7efe3;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.oling-lab-edit-toggle[aria-pressed='true'] {
+  background: #b22626;
+  color: #ffffff;
+}
+
+.oling-lab-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.oling-lab-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #e8f1ed;
+  cursor: grab;
+  touch-action: none;
+}
+
+.oling-lab-viewport.is-panning {
+  cursor: grabbing;
+}
+
+.oling-lab-room {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--lab-columns), var(--oling-lab-cell));
+  grid-template-rows: repeat(2, var(--oling-lab-cell));
+  width: calc(var(--lab-columns) * var(--oling-lab-cell));
+  min-width: 100%;
+  height: max(100%, calc(2 * var(--oling-lab-cell)));
+  isolation: isolate;
+  align-content: end;
+  transform-origin: 0 0;
+}
+
+.oling-lab-cell {
+  position: relative;
+  border-right: 2px solid var(--oling-lab-grid-line);
+}
+
+.oling-lab-page:not(.is-editing) .oling-lab-cell {
+  border-color: transparent;
+}
+
+.oling-lab-cell.is-locked {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgb(22 31 36 / 10%) 0 12px,
+      rgb(22 31 36 / 4%) 12px 24px
+    );
+}
+
+.oling-lab-cell-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.oling-lab-plus {
+  position: absolute;
+  inset: 28%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  border: 3px dashed rgb(22 31 36 / 34%);
+  background: rgb(255 255 255 / 38%);
+  color: rgb(22 31 36 / 54%);
+  font-size: clamp(2rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.oling-lab-plus:focus-visible,
+.oling-lab-cell-hit:focus-visible {
+  outline: 4px solid #b22626;
+  outline-offset: -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-plus:hover {
+    outline: 4px solid #b22626;
+    outline-offset: -4px;
+  }
+}
+
+.oling-lab-item {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--item-col) * var(--oling-lab-cell));
+  top: calc(var(--item-row) * var(--oling-lab-cell));
+  width: calc(var(--item-width) * var(--oling-lab-cell));
+  height: calc(var(--item-height) * var(--oling-lab-cell));
+  pointer-events: auto;
+}
+
+.oling-lab-item.is-selected {
+  z-index: 15;
+}
+
+.oling-lab-furniture-art {
+  position: absolute;
+  left: calc((var(--furniture-grid-x) / 512) * 100%);
+  top: calc((var(--furniture-grid-y) / 512) * 100%);
+  width: calc((var(--furniture-grid-width) / 512) * 100%);
+  height: calc((var(--furniture-grid-height) / 512) * 100%);
+}
+
+.oling-lab-furniture-art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: auto;
+}
+
+.oling-lab-item-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.oling-lab-item-hit:focus-visible {
+  outline: 4px solid #b22626;
+  outline-offset: -4px;
+}
+
+.oling-lab-item.is-selected::before {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  content: '';
+  box-sizing: border-box;
+  border: 3px solid #b22626;
+  background: rgb(255 248 234 / 20%);
+  pointer-events: none;
+}
+
+.oling-lab-roamer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  display: block;
+  width: var(--oling-size, 7rem);
+  height: var(--oling-size, 7rem);
+  padding: 0;
+  transform: translate3d(var(--oling-x, 0), var(--oling-y, 0), 0);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.oling-lab-roamer.is-selected {
+  z-index: 17;
+}
+
+/* Keep an Oling visible above the bed or doorway it is currently using. */
+.oling-lab-roamer.is-attached-to-selected-furniture {
+  z-index: 16;
+}
+
+.oling-lab-roamer::before {
+  position: absolute;
+  inset: 6%;
+  z-index: 5;
+  content: '';
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  background: transparent;
+  pointer-events: none;
+}
+
+.oling-lab-roamer.is-selected::before,
+.oling-lab-roamer:focus-visible::before {
+  border-color: #b22626;
+  background: rgb(255 248 234 / 20%);
+}
+
+.oling-lab-roamer:focus-visible {
+  outline: 0;
+}
+
+.oling-lab-oling-preview.is-roaming {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.oling-lab-oling-preview.is-roaming .oling-lab-oling-layer {
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+}
+
+.oling-lab-roamer:not(.is-selected):not(.is-sleeping) .oling-lab-oling-preview.is-roaming {
+  animation: oling-lab-float 2.8s ease-in-out infinite alternate;
+}
+
+.oling-lab-roamer:not(.is-selected).is-sleeping .oling-lab-oling-preview.is-roaming {
+  animation: oling-lab-sleep-breathe 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes oling-lab-float {
+  from {
+    transform: translateY(-3%);
+  }
+
+  to {
+    transform: translateY(4%);
+  }
+}
+
+@keyframes oling-lab-sleep-breathe {
+  from {
+    transform: translateY(-0.4%);
+  }
+
+  to {
+    transform: translateY(0.6%);
+  }
+}
+
+.oling-lab-contained-item {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.oling-lab-contained-item > img {
+  position: relative;
+  z-index: 2;
+}
+
+.oling-lab-egg-marker {
+  position: absolute;
+  left: calc((var(--egg-x) / 512) * 100%);
+  top: calc((var(--egg-y) / 512) * 100%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 18%;
+  min-width: 2.4rem;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: transparent;
+}
+
+.oling-lab-egg-marker img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.oling-lab-page.is-editing .oling-lab-item::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: rgb(178 38 38 / 9%);
+  outline: 2px solid rgb(178 38 38 / 35%);
+  outline-offset: -2px;
+}

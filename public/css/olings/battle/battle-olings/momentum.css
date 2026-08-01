@@ -1,0 +1,189 @@
+.oling-battle-container__footer,
+.oling-battle-footer,
+.oling-battle-command-panel {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 18%;
+  display: grid;
+  place-items: center;
+  border-radius: 0;
+  background: var(--primaryPageColour, #ffb5c8);
+}
+
+.battle-momentum-bar {
+  position: relative;
+  width: 80%;
+  aspect-ratio: 6.6 / 1;
+}
+
+.battle-crest-container {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 1;
+  width: 25%;
+  height: 42%;
+  display: grid;
+  place-items: center;
+  border-radius: 2.4cqw 2.4cqw 0 0;
+  background: #353535;
+  transform: translateX(-50%);
+}
+
+.battle-crest-container img {
+  width: 68%;
+  height: 62%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.player-oling-head-marker {
+  position: absolute;
+  top: 0;
+  left: var(--player-marker-position, 50%);
+  z-index: 3;
+  width: clamp(
+    calc(59.5px * var(--oling-battle-zoom-compensation, 1)),
+    15.75%,
+    calc(84px * var(--oling-battle-zoom-compensation, 1))
+  );
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.player-marker-stem {
+  position: absolute;
+  top: 0;
+  left: var(--player-marker-position, 50%);
+  z-index: 2;
+  width: clamp(
+    calc(8.75px * var(--oling-battle-zoom-compensation, 1)),
+    2.625%,
+    calc(14px * var(--oling-battle-zoom-compensation, 1))
+  );
+  height: 72%;
+  border-radius: 999px;
+  color: var(--oling-battle-marker-colour, #3d4248);
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.player-marker-stem::after {
+  content: '';
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 50%;
+  width: 100%;
+  aspect-ratio: 1.5 / 1;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: translateX(-50%);
+}
+
+.player-oling-head-marker-art {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.player-oling-head-marker-art.oling-flight-motion-root {
+  --oling-flight-motion-duration: 0.32s;
+}
+
+.player-oling-head-marker-art .oling-battle-layer {
+  transform: scale(1.65);
+}
+
+.momentum-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 1.4cqw;
+  border-radius: 999px;
+  background: #353535;
+  box-sizing: border-box;
+}
+
+.momentum-track {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  border-radius: inherit;
+}
+
+.momentum-track .disruption-zone,
+.momentum-track .critical-zone {
+  flex: 13;
+}
+
+.momentum-track .strike-zone {
+  flex: 4;
+}
+
+.momentum-track .critical-zone {
+  flex: 6;
+}
+
+.momentum-track .disruption-zone {
+  background: var(--disruption-zone-colour);
+}
+
+.momentum-track .strike-zone {
+  background: var(--strike-zone-colour);
+}
+
+.momentum-track .critical-zone {
+  background: var(--critical-zone-colour);
+}
+
+.battle-momentum-bar.is-full-disruption .momentum-track > span {
+  background: var(--disruption-zone-colour);
+}
+
+.hit-tracker-bar {
+  position: absolute;
+  right: 0;
+  bottom: -20%;
+  left: 50%;
+  z-index: 4;
+  width: 74%;
+  height: 42%;
+  margin: 0;
+  padding: 0 4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.3%;
+  border-radius: 999px;
+  background: #353535;
+  box-sizing: border-box;
+  list-style: none;
+  transform: translateX(-50%);
+}
+
+.hit-tracker-marker {
+  width: 5%;
+  aspect-ratio: 0.62 / 1;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--hit-tracker-default-colour);
+}
+
+.hit-tracker-marker.is-critical {
+  background: var(--critical-zone-colour);
+}
+
+.hit-tracker-marker.is-strike {
+  background: var(--strike-zone-colour);
+}
+
+.hit-tracker-marker.is-disruption {
+  background: var(--disruption-zone-colour);
+}
+

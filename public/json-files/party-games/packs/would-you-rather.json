@@ -1,24 +1,24 @@
 {
-    "would-you-rather-packs": [
-        {
-            "pack-name": "the-great-debate",
-            "pack-path": "/json-files/party-games/questions/would-you-rather/the-great-debate.json",
-            "pack-card": "/images/blank-cards/would-you-rather-blank-card.svg",
-            "pack-colour": "#7CFFB2",
-            "pack-secondary-colour": "#55B97F",
-            "pack-difficulty": "chill, deep, cheeky, creative",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "friendship-test",
-            "pack-path": "/json-files/party-games/questions/would-you-rather/friendship-test.json",
-            "pack-card": "/images/blank-cards/would-you-rather-blank-card.svg",
-            "pack-colour": "#7CFFB2",
-            "pack-secondary-colour": "#55B97F",
-            "pack-difficulty": "brutal, chaotic, fiery, deep",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        }
-    ]
+  "would-you-rather-packs": [
+    {
+      "pack-name": "friendship-test",
+      "pack-description": "Difficult friendship dilemmas involving honesty, loyalty, jealousy, conflict and sacrifice that reveal what kind of friend each player would be.",
+      "pack-path": "/json-files/party-games/questions/would-you-rather/friendship-test.json",
+      "pack-colour": "#7CFFB2",
+      "pack-secondary-colour": "#55B97F",
+      "pack-difficulty": "brutal, chaotic, fiery, deep",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "the-great-debate",
+      "pack-description": "Thought-provoking and ridiculous choices about life, relationships, abilities and everyday inconveniences designed to divide opinions and start arguments.",
+      "pack-path": "/json-files/party-games/questions/would-you-rather/the-great-debate.json",
+      "pack-colour": "#7CFFB2",
+      "pack-secondary-colour": "#55B97F",
+      "pack-difficulty": "chill, deep, cheeky, creative",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    }
+  ]
 }

@@ -1,0 +1,133 @@
+.account-security-intro,
+.account-security-status {
+  margin: 0 0 12px;
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.account-security-status.is-error {
+  color: var(--warningcolour);
+}
+
+.account-security-session-list {
+  display: grid;
+  gap: 8px;
+}
+
+.account-security-session {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  text-align: left;
+}
+
+.account-security-session.is-current {
+  box-shadow: inset 3px 0 0 var(--secondarypagecolour);
+}
+
+.account-security-session-summary {
+  min-width: 0;
+}
+
+.account-security-session-title {
+  margin: 0;
+  color: var(--primarypagecolour);
+  font-size: 13px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.account-security-session-type,
+.account-security-session-activity,
+.account-security-session-created {
+  display: block;
+  margin: 4px 0 0;
+  color: #999999;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.account-security-session-activity {
+  color: var(--secondarypagecolour);
+}
+
+.account-security-current-label,
+.account-security-legacy-label {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  font-size: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-security-legacy-label {
+  background-color: transparent;
+  color: #999999;
+}
+
+.account-security-session-action,
+.account-security-logout-others {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.account-security-session-action:focus-visible,
+.account-security-logout-others:focus-visible {
+  background-color: var(--secondarypagecolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-security-session-action:hover,
+  .account-security-logout-others:hover {
+    background-color: var(--secondarypagecolour);
+    outline: none;
+  }
+}
+
+.account-security-logout-others {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 12px;
+  background-color: var(--warningcolour);
+}
+
+.account-security-session-action:disabled,
+.account-security-logout-others:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (orientation: portrait) {
+  .account-security-session {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .account-security-session-title {
+    font-size: 12px;
+  }
+
+  .account-security-session-action {
+    padding: 0 8px;
+    font-size: 10px;
+  }
+}

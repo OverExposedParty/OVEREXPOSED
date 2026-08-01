@@ -14,6 +14,54 @@ gameContainers.push(
 
 let textBoxSetting = false;
 
+function getParanoiaPunishmentChoiceButtons() {
+  return Array.from(
+    selectPunishmentButtonContainer?.querySelectorAll('button') || []
+  );
+}
+
+function getParanoiaSelectablePunishmentButtons() {
+  return getParanoiaPunishmentChoiceButtons().filter(
+    button => button.getAttribute('id') !== 'pass'
+  );
+}
+
+function getParanoiaCurrentParticipants(partyData = currentPartyData) {
+  return typeof getRoundLateJoinParticipants === 'function'
+    ? getRoundLateJoinParticipants(partyData)
+    : partyData?.players || [];
+}
+
+function renderParanoiaTargetButtons(partyData = currentPartyData) {
+  if (!selectUserButtonContainer || !partyData) return;
+
+  const participants = getParanoiaCurrentParticipants(partyData);
+  selectUserButtonContainer.replaceChildren();
+  selectUserButtonContainer.setAttribute('selected-id', '');
+
+  participants.forEach((player) => {
+    const pId = getPlayerId(player);
+    const pName = getPlayerUsername(player);
+
+    if (!pId || pId === deviceId) return;
+
+    const userButton = createUserButton(pId, pName);
+    userButton.addEventListener('click', () => {
+      selectUserButtonContainer
+        .querySelectorAll('button')
+        .forEach(btn => btn.classList.remove('active'));
+      userButton.classList.add('active');
+      selectUserButtonContainer.setAttribute('selected-id', pId);
+    });
+    selectUserButtonContainer.appendChild(userButton);
+  });
+
+  selectUserButtonContainer.classList.toggle(
+    'overflow',
+    selectUserButtonContainer.children.length > 4
+  );
+}
+
 // ----------------------
 // Initialise page (data + UI bootstrapping)
 // ----------------------
@@ -29,16 +77,7 @@ async function initialisePage() {
   debugLog("hostDeviceId:", hostDeviceId);
 
   if (state.isPlaying === true) {
-    for (let i = 0; i < players.length; i++) {
-      const p = players[i];
-      const pId = getPlayerId(p);
-      const pName = getPlayerUsername(p);
-
-      if (pId && pId !== deviceId) {
-        const userButton = createUserButton(pId, pName);
-        selectUserButtonContainer.appendChild(userButton);
-      }
-    }
+    renderParanoiaTargetButtons(party);
 
     gameRules = config.gameRules || {};
     const gm = config.gamemode || party.gamemode;
@@ -73,24 +112,13 @@ async function initialisePage() {
       selectPunishmentButtonContainer.appendChild(settingsButton);
     });
 
-    const selectUserButtons = document
-      .getElementById('select-user-container')
-      .querySelectorAll('.selected-user-container .button-container button');
+    if (!selectPunishmentButtonContainer.querySelector('#pass')) {
+      selectPunishmentButtonContainer.appendChild(createUserButton("pass", "Pass"));
+    }
+
     const selectPunishmentButtons = document
       .getElementById('select-punishment-container')
       .querySelectorAll('.selected-user-container .button-container button');
-
-    selectUserButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        selectUserButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        selectUserButtonContainer.setAttribute('selected-id', button.getAttribute('id'));
-      });
-    });
-
-    if (selectUserButtonContainer.children && selectUserButtonContainer.children.length > 4) {
-      selectUserButtonContainer.classList.add('overflow');
-    }
 
     selectPunishmentButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -100,7 +128,30 @@ async function initialisePage() {
       });
     });
 
-    await LoadScript(`/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`);
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+    const instructionsCacheBustKey = 'PARTY_GAMES_ONLINE_PARANOIA';
+
+    await LoadScript(
+      `${instructionsBasePath}/paranoia-online-instructions/phase-tools.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/paranoia-online-instructions/question-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/paranoia-online-instructions/punishment-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/paranoia-online-instructions/round-actions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
 
     selectPunishmentTitle.textContent = "You've been selected";
     selectPunishmentText.textContent = "Select a punishment to find out the question";
@@ -150,6 +201,8 @@ async function initialisePage() {
 
 
 async function SetPageSettings() {
+  if (!(await registerRoundLateJoinIfRequested())) return;
+
   wireEventListeners();
 
   AddTimerToContainer(waitingForPlayerContainer);

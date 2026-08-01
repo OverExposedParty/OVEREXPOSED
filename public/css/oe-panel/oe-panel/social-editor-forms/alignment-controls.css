@@ -1,0 +1,46 @@
+.oe-panel-social-edit-text-input:focus {
+  outline: var(--bordersize) solid
+    var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  outline-offset: 2px;
+}
+
+.oe-panel-social-edit-align-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.25rem, 0.45vw, 0.35rem);
+}
+
+.oe-panel-social-edit-align-button {
+  min-width: 0;
+  min-height: clamp(1.35rem, 2.1vw, 1.7rem);
+  padding: clamp(0.25rem, 0.5vw, 0.38rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.42rem, 0.68vw, 0.58rem);
+  line-height: 1;
+}
+
+.oe-panel-social-edit-align-button[aria-pressed='true'],
+.oe-panel-social-edit-align-button:focus-visible {
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-social-edit-align-button:hover {
+    background-color: var(
+      --oe-panel-widget-primary-colour,
+      var(--primarypagecolour)
+    );
+    color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+    outline: none;
+  }
+}

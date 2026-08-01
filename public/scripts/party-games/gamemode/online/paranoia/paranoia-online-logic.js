@@ -34,6 +34,32 @@ async function FetchInstructions() {
   const instructions = getUserInstructions(currentPartyData);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
 
+  if (
+    showRoundLateJoinContainerIfNeeded({
+      partyData: currentPartyData,
+      gamemode: 'paranoia'
+    })
+  ) {
+    stopParanoiaTimerWarning();
+    return;
+  }
+
+  syncParanoiaFlowSounds(state, instructions);
+
+  const phaseOwnsActionTimer =
+    phase === 'paranoia-choose-punishment' ||
+    phase === 'paranoia-show-punishment' ||
+    phase === 'paranoia-confirm-punishment';
+  const instructionOwnsActionTimer =
+    String(instructions || '').includes('DISPLAY_PRIVATE_CARD') ||
+    String(instructions || '').includes('DISPLAY_DUAL_STACK_CARD') ||
+    String(instructions || '').includes('DISPLAY_PUNISHMENT_TO_USER') ||
+    instructions === 'NEXT_QUESTION';
+
+  if (!phaseOwnsActionTimer && !instructionOwnsActionTimer) {
+    stopParanoiaTimerWarning();
+  }
+
   if (phase === 'paranoia-choose-punishment') {
     ChoosingPunishment();
     return;

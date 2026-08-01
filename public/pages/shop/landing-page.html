@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Shop | OVEREXPOSED</title>
+    <meta
+      name="description"
+      content="Shop OVEREXPOSED products and merchandise."
+    />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta property="og:title" content="Shop | OVEREXPOSED" />
+    <meta
+      property="og:description"
+      content="Shop OVEREXPOSED products and merchandise."
+    />
+    <meta property="og:url" content="https://overexposed.app/shop/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Shop | OVEREXPOSED" />
+    <meta
+      name="twitter:description"
+      content="Shop OVEREXPOSED products and merchandise."
+    />
+    <link rel="canonical" href="https://overexposed.app/shop/" />
+    <link
+      rel="preload"
+      href="/images/shop/backgrounds/shop-background.jpg"
+      as="image"
+    />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/shop/landing-page/landing-page.css" />
+    <link rel="stylesheet" href="/css/olings/lab/lab.css?v=2026-06-21-93" />
+    <link rel="stylesheet" href="/css/shop/footer/footer.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/product-shop/coming-soon.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/product-shop/coming-soon.jpg"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main class="main-container" data-template="shop">
+      <section
+        class="shop-section-container"
+        data-section-type="hero"
+        data-section-image-source="/images/shop/backgrounds/shop-background.jpg"
+        data-section-image-alt="OverExposed shop background"
+        data-section-header="OLINGS ARE OUT"
+        data-section-description="Hatch your own Oling and start building your collection."
+        data-section-action-label="Shop Eggs"
+        data-section-action-href="#oe-eggs"
+        data-section-primary-colour="#FFF0E8"
+        data-section-secondary-colour="#FFD7C7"
+      ></section>
+      <section
+        class="shop-section-container"
+        data-section-type="category-switcher"
+        data-section-header="Shop Categories"
+      ></section>
+      <section
+        id="oe-layers"
+        class="shop-section-container"
+        data-section-type="product-grid"
+        data-section-category="layers"
+        data-section-header="OE Layers"
+        data-section-products-endpoint="/api/shop/products"
+        data-section-filters="All,Colour,Head,Eyes,Mouth,Packs"
+        data-section-background-colour="#DDF3F1"
+        data-section-secondary-colour="#BFE7E3"
+      ></section>
+      <section
+        id="oe-eggs"
+        class="shop-section-container"
+        data-section-type="product-grid"
+        data-section-category="eggs"
+        data-section-header="OE Eggs"
+        data-section-products-endpoint="/api/shop/products"
+        data-section-filters="All,Base,Limited,Event,Rare"
+        data-section-background-colour="#E8FFF1"
+        data-section-secondary-colour="#CFF4DC"
+      ></section>
+      <section
+        id="oling-furniture"
+        class="shop-section-container"
+        data-section-type="product-grid"
+        data-section-category="furniture"
+        data-section-header="Oling Furniture"
+        data-section-products-endpoint="/api/shop/products"
+        data-section-filters="All,Ceiling Light,Common"
+        data-section-background-colour="#F0F4FF"
+        data-section-secondary-colour="#CBD8FF"
+      ></section>
+      <section
+        id="oling-consumables"
+        class="shop-section-container"
+        data-section-type="product-grid"
+        data-section-category="consumables"
+        data-section-header="Oling Consumables"
+        data-section-products-endpoint="/api/shop/products"
+        data-section-filters="All"
+        data-section-background-colour="#FFF0E8"
+        data-section-secondary-colour="#FFD7C7"
+      ></section>
+    </main>
+
+    <footer class="shop-footer">
+      <div class="shop-footer-content">
+        <nav class="shop-footer-column" aria-labelledby="shop-footer-shop">
+          <h2 id="shop-footer-shop">Shop</h2>
+          <a href="/shop#oe-layers">OE Layers</a>
+          <a href="/shop#oe-eggs">OE Eggs</a>
+          <a href="/shop#oling-furniture">Oling Furniture</a>
+          <a href="/shop#oling-consumables">Oling Consumables</a>
+        </nav>
+
+        <nav class="shop-footer-column" aria-labelledby="shop-footer-collection">
+          <h2 id="shop-footer-collection">Your Collection</h2>
+          <a href="/oe-library">OE Library</a>
+          <a href="/olings/lab">Olings Lab</a>
+        </nav>
+
+        <nav class="shop-footer-column" aria-labelledby="shop-footer-help">
+          <h2 id="shop-footer-help">Help</h2>
+          <a href="/faqs">FAQs</a>
+          <a href="/terms-and-privacy">Terms &amp; Privacy</a>
+          <a href="mailto:overexposedgame@gmail.com">Contact</a>
+        </nav>
+      </div>
+
+      <div class="shop-footer-bottom">
+        <p>&copy; 2026 OVEREXPOSED</p>
+        <div class="shop-footer-bottom-links">
+          <a href="https://www.instagram.com/oe.app" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="#header">Back to top</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'up';
+
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#FFF0E8'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#FFD7C7'
+    );
+
+    window.pageScripts = {
+      '/scripts/olings/lab/olings/preview.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.1
+      },
+      '/scripts/olings/lab/olings/build.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.2
+      },
+      '/scripts/olings/lab/olings/inspect.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.3
+      },
+      '/scripts/olings/lab/olings/reveal.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.4
+      },
+      '/scripts/olings/lab/olings/lab-olings.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.5
+      },
+      '/scripts/shop/landing-page/landing-page.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 0
+      },
+      '/scripts/shop/landing-page/core.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1
+      },
+      '/scripts/shop/landing-page/hatch-preview/product-data.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.1
+      },
+      '/scripts/shop/landing-page/hatch-preview/hatch-ui.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.2
+      },
+      '/scripts/shop/landing-page/hatch-preview/preview-runtime.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.3
+      },
+      '/scripts/shop/landing-page/hatch-preview.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.4
+      },
+      '/scripts/shop/landing-page/catalog.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.5
+      },
+      '/scripts/shop/landing-page/sections.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.6
+      },
+      '/scripts/shop/landing-page/purchase/account-purchase.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.61
+      },
+      '/scripts/shop/landing-page/purchase/product-copy.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.62
+      },
+      '/scripts/shop/landing-page/purchase/dialog-elements.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.63
+      },
+      '/scripts/shop/landing-page/purchase/info-drawer.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.64
+      },
+      '/scripts/shop/landing-page/purchase/receipt.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.65
+      },
+      '/scripts/shop/landing-page/purchase/dialog.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.66
+      },
+      '/scripts/shop/landing-page/purchase.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1.7
+      },
+      '/scripts/shop/landing-page/start.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OTHER',
+        zIndex: 2
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js?v=2026-06-19-02"
+    data-loaded="false"
+  ></script>
+</html>

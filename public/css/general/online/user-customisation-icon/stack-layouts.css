@@ -1,0 +1,26 @@
+.image-stack-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 50px;
+}
+
+.dual-image-stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-stack-container .colon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+  line-height: 3;
+  color: var(--primarypagecolour);
+}

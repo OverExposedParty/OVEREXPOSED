@@ -1,0 +1,79 @@
+.oling-lab-item-influence-expanded-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.oling-lab-items-stage.is-selecting-item-influence
+  .oling-lab-item-influence-expanded-layer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.oling-lab-side-panel {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: 10;
+  box-sizing: border-box;
+  width: min(46%, 13rem);
+  min-width: min(46%, 13rem);
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.55rem;
+  padding: 0.65rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+  backdrop-filter: blur(5px);
+  box-shadow: -0.75rem 0 1.4rem rgb(0 0 0 / 24%);
+  transform: translateX(105%);
+  transition: transform 240ms ease;
+  will-change: transform;
+}
+
+.oling-lab-side-panel.is-open {
+  transform: translateX(0);
+}
+
+.oling-lab-item-influence-inventory-panel {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.oling-lab-item-influence-inventory-grid {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 0.45rem;
+  padding-right: 0.15rem;
+}
+
+.oling-lab-item-influence-inventory-grid .oling-lab-menu-action {
+  min-height: 5.4rem;
+  grid-template-columns: 4.2rem minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem;
+}
+
+.oling-lab-item-influence-inventory-grid .oling-lab-menu-action img,
+.oling-lab-item-influence-inventory-grid .oling-lab-menu-placeholder {
+  width: 4.2rem;
+  height: 4.2rem;
+}
+
+.oling-lab-item-influence-inventory-grid .oling-lab-menu-action span {
+  font-size: 0.68rem;
+}
+
+.oling-lab-item-influence-inventory-panel .oling-lab-menu-empty {
+  min-height: 100%;
+  padding: 0.75rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+}

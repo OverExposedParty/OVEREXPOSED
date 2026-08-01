@@ -1,0 +1,65 @@
+@media (max-width: 520px) {
+  .oe-popup-feed,
+  .score-impact-feed {
+    left: 12px;
+    right: 12px;
+    top: 76px;
+    width: auto;
+  }
+
+  .opal-reward-popup-row {
+    grid-template-columns: 50px minmax(0, 1fr);
+  }
+
+  .opal-reward-popup-hint {
+    display: none;
+  }
+
+  .account-prompt-popup-row {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+
+  .account-prompt-popup-actions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+
+  .account-benefits-dialog {
+    padding: 0 14px 14px;
+  }
+
+  .account-benefits-dialog-header {
+    margin: 0 -14px;
+    min-height: 82px;
+    padding: 16px 14px;
+  }
+
+  .account-benefits-dialog-media {
+    margin: 0 -14px 10px;
+  }
+
+  .account-benefits-dialog-title {
+    font-size: 26px;
+  }
+
+  .account-benefits-dialog-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .opal-reward-dialog {
+    --opal-reward-dialog-gap: 14px;
+    padding: 14px 14px 22px;
+  }
+
+  .opal-reward-dialog-label {
+    font-size: 21px;
+    margin: -14px -14px 14px;
+    padding: 16px 10px;
+  }
+
+  .opal-reward-dialog-summary-row {
+    font-size: 13px;
+    min-height: 44px;
+    padding: 0 14px;
+  }
+}

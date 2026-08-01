@@ -1,0 +1,112 @@
+/* Extra Menu Container */
+.extra-menu-container {
+  height: calc(100dvh - var(--headerheight));
+  margin-top: var(--headerheight);
+  width: 30vw;
+  background-color: var(--backgroundcolour);
+  left: var(--container-left, -100%);
+  position: fixed;
+  transition: left 0.7s ease;
+  z-index: 900;
+  --container-visible-left: 0;
+}
+
+.extra-menu-title {
+  background-color: var(--backgroundcolour);
+  height: 20%;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primarypagecolour);
+  margin: 0;
+}
+
+.extra-menu-container .extra-menu-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 70%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.extra-menu-button {
+  flex: 1;
+  width: 100%;
+  background-color: var(--backgroundcolour);
+  font-size: 24px;
+  color: var(--primarypagecolour);
+  outline: none;
+  border: 0;
+  transition:
+    color 0.3s,
+    background-color 0.3s,
+    font-size 0.3s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .extra-menu-button:hover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    font-size: 28px;
+  }
+}
+
+.social-media-container {
+  display: flex;
+  position: absolute;
+  outline: none;
+  border: 0;
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+  justify-content: left;
+}
+
+.social-media-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  background-color: var(--backgroundcolour);
+  transition: background-color 0.3s;
+}
+
+.social-media-image-container a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.social-media-image {
+  transition: transform 0.3s;
+}
+
+.social-media-icon {
+  height: 56.25%;
+  width: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social-media-icon:hover,
+  .social-media-image-container:hover .social-media-icon {
+    transform: scale(1.1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social-media-image-container:hover {
+    background-color: var(--primarypagecolour);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social-media-image-container:hover .svg-primary-fill {
+    fill: var(--backgroundcolour);
+  }
+}

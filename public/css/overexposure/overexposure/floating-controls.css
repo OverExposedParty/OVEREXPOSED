@@ -1,0 +1,125 @@
+.floating-container p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-top: 0;
+    margin-bottom: 10px;
+    display: var(--container-display, none);
+}
+
+.floating-container p.active {
+    display: block;
+}
+
+.floating-container h2 {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+
+.floating-button {
+    position: absolute;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: transform 0.2s;
+}
+
+.floating-button.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.floating-button.touchhover .floating-image {
+    transform: scale(1.1);
+}
+
+.floating-button.touchhover .button-text {
+    transform: translate(-50%, -55%) scale(1.1);
+}
+
+.floating-button .floating-image {
+    width: var(--cardWidth);
+    transition: transform 0.2s, opacity 0.2s;
+    pointer-events: none;
+    user-select: none;
+}
+
+.floating-card-template .card-base-fill {
+    fill: #202020;
+}
+
+.floating-card-template .card-accent-fill {
+    fill: var(--card-tag-colour, var(--primarypagecolour));
+}
+
+.floating-card-template .card-accent-stroke {
+    fill: none;
+    stroke: var(--card-tag-colour, var(--primarypagecolour));
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 5.05px;
+}
+
+.floating-button p.card-type-text {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+
+    transform: scale(1);
+    transform-origin: center center;
+    transition: transform 0.2s, right 0.2s, bottom 0.2s;
+
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    text-align: right;
+
+    pointer-events: none;
+    user-select: none;
+    z-index: 5;
+    display: block;
+}
+
+
+.floating-button.touchhover p.card-type-text {
+    transform: scale(1.1);
+    right: 0px;
+    bottom: -10px;
+}
+
+.button-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    width: 80%;
+    /* Adjust as needed */
+    color: var(--primarypagecolour);
+    font-size: 16px;
+    pointer-events: none;
+    transition: transform 0.2s;
+    /* Smooth transition for text */
+
+    user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .floating-button:hover .floating-image {
+        transform: scale(1.1);
+    }
+
+    .floating-button:hover p.card-type-text {
+        transform: scale(1.1);
+        right: 0px;
+        bottom: -10px;
+    }
+
+    .floating-button:hover .button-text {
+        transform: translate(-50%, -55%) scale(1.1);
+    }
+}
+

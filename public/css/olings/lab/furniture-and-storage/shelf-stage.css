@@ -1,0 +1,139 @@
+.oling-lab-shelf-stage {
+  min-height: 0;
+}
+
+.oling-lab-shelf-stage {
+  aspect-ratio: 1;
+}
+
+.oling-lab-shelf-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.oling-lab-shelf-viewport.is-panning {
+  cursor: grabbing;
+}
+
+.oling-lab-shelf-grid {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  will-change: width, height, transform;
+}
+
+.oling-lab-shelf-artboard {
+  position: absolute;
+  overflow: visible;
+}
+
+.oling-lab-shelf-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.oling-lab-shelf-slot {
+  position: absolute;
+  left: var(--shelf-slot-x);
+  top: var(--shelf-slot-y);
+  width: var(--shelf-slot-width);
+  height: var(--shelf-slot-height);
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  border: 4px dashed var(--backgroundcolour);
+  border-radius: 0.25rem;
+  display: grid;
+  place-items: center;
+  padding: 0.06rem;
+  background: transparent;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.oling-lab-shelf-slot:focus-visible {
+  border-color: var(--oling-lab-menu-secondary-colour);
+  background: transparent;
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-shelf-slot:hover {
+    border-color: var(--oling-lab-menu-secondary-colour);
+    background: transparent;
+    outline: none;
+  }
+}
+
+.oling-lab-shelf-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0.12rem 0.1rem rgb(0 0 0 / 38%));
+}
+
+.oling-lab-shelf-zoom-controls {
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  z-index: 5;
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  background: var(--backgroundcolour);
+  box-shadow: 0 0.2rem 0.7rem rgb(0 0 0 / 24%);
+}
+
+.oling-lab-shelf-zoom-controls button {
+  min-width: 2.15rem;
+  min-height: 2.15rem;
+  border: 0;
+  padding: 0 0.55rem;
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.oling-lab-shelf-stage.is-viewing-shelf-slot .oling-lab-shelf-zoom-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oling-lab-shelf-panel {
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
+}
+
+.oling-lab-shelf-picker {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 0.45rem;
+}
+
+.oling-lab-shelf-picker .oling-lab-menu-action {
+  min-height: 6rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 0.4rem;
+}
+
+.oling-lab-shelf-picker .oling-lab-menu-action img,
+.oling-lab-shelf-picker .oling-lab-menu-placeholder {
+  width: 100%;
+  height: 3.8rem;
+  object-fit: contain;
+}

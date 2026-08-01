@@ -1,0 +1,654 @@
+{
+  "traits": [
+    {
+      "key": "base-round-body",
+      "name": "Round Body",
+      "collection": "base",
+      "theme": "round-origin",
+      "layer": "body",
+      "rarity": "common",
+      "body": {
+        "health": 100,
+        "defense": 6,
+        "speedMultiplier": 1,
+        "luck": 1
+      },
+      "flavor": "A dependable little shape."
+    },
+    {
+      "key": "base-sprout-body",
+      "name": "Sprout Body",
+      "collection": "base",
+      "theme": "sprout-origin",
+      "layer": "body",
+      "rarity": "common",
+      "body": {
+        "health": 90,
+        "defense": 4,
+        "speedMultiplier": 1.15,
+        "luck": 2
+      },
+      "flavor": "Small, quick, and eager."
+    },
+    {
+      "key": "base-moss-body",
+      "name": "Moss Body",
+      "collection": "base",
+      "theme": "moss",
+      "layer": "body",
+      "rarity": "common",
+      "body": {
+        "health": 105,
+        "defense": 7,
+        "speedMultiplier": 0.95,
+        "luck": 2
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/moss-body.svg"
+      },
+      "flavor": "Soft, steady, and hard to shake."
+    },
+    {
+      "key": "base-dot-eyes",
+      "name": "Dot Eyes",
+      "collection": "base",
+      "theme": "round-origin",
+      "layer": "eyes",
+      "rarity": "common",
+      "modifiers": {
+        "accuracyBonus": 0.03,
+        "critChance": 0.02
+      },
+      "flavor": "Simple eyes that rarely overthink things."
+    },
+    {
+      "key": "base-bright-eyes",
+      "name": "Bright Eyes",
+      "collection": "base",
+      "theme": "sprout-origin",
+      "layer": "eyes",
+      "rarity": "common",
+      "modifiers": {
+        "accuracyBonus": 0.05,
+        "dodgeChance": 0.01
+      },
+      "flavor": "Always watching for an opening."
+    },
+    {
+      "key": "base-moss-eyes",
+      "name": "Moss Eyes",
+      "collection": "base",
+      "theme": "moss",
+      "layer": "eyes",
+      "rarity": "common",
+      "modifiers": {
+        "accuracyBonus": 0.04,
+        "dodgeChance": 0.02
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/moss-eyes.svg"
+      },
+      "flavor": "Calm eyes with excellent hiding instincts."
+    },
+    {
+      "key": "base-bite-mouth",
+      "name": "Bite Mouth",
+      "collection": "base",
+      "theme": "round-origin",
+      "layer": "mouth",
+      "rarity": "common",
+      "attack": {
+        "name": "Quick Bite",
+        "type": "bite",
+        "damage": 10,
+        "baseCooldown": 0.75,
+        "accuracy": 0.9,
+        "effect": {},
+        "animation": "bite"
+      },
+      "flavor": "Fast, direct, and a little rude."
+    },
+    {
+      "key": "base-spit-mouth",
+      "name": "Spit Mouth",
+      "collection": "base",
+      "theme": "sprout-origin",
+      "layer": "mouth",
+      "rarity": "common",
+      "attack": {
+        "name": "Pebble Spit",
+        "type": "spit",
+        "damage": 16,
+        "baseCooldown": 1.6,
+        "accuracy": 0.86,
+        "effect": {},
+        "animation": "spit"
+      },
+      "flavor": "Takes its time, then absolutely commits."
+    },
+    {
+      "key": "base-moss-mouth",
+      "name": "Moss Mouth",
+      "collection": "base",
+      "theme": "moss",
+      "layer": "mouth",
+      "rarity": "common",
+      "attack": {
+        "name": "Moss Munch",
+        "type": "bite",
+        "damage": 12,
+        "baseCooldown": 1.05,
+        "accuracy": 0.9,
+        "effect": {},
+        "animation": "bite"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/moss-mouth.svg"
+      },
+      "flavor": "A quiet little chomp from the undergrowth."
+    },
+    {
+      "key": "base-soft-ears",
+      "name": "Soft Ears",
+      "collection": "base",
+      "theme": "round-origin",
+      "layer": "headwear",
+      "rarity": "common",
+      "passive": {
+        "type": "minor_xp_bonus",
+        "amount": 0.03
+      },
+      "flavor": "Perks up whenever something interesting happens."
+    },
+    {
+      "key": "base-tiny-horns",
+      "name": "Tiny Horns",
+      "collection": "base",
+      "theme": "sprout-origin",
+      "layer": "headwear",
+      "rarity": "common",
+      "passive": {
+        "type": "minor_shield_chance",
+        "chance": 0.02
+      },
+      "flavor": "Not intimidating yet, but trying very hard."
+    },
+    {
+      "key": "base-soft-wings",
+      "name": "Soft Wings",
+      "collection": "base",
+      "theme": "round-origin",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "common",
+      "modifiers": {
+        "speedMultiplierBonus": 0.04,
+        "dodgeChance": 0.02
+      },
+      "flavor": "Gentle wings that keep it just out of reach."
+    },
+    {
+      "key": "base-sprout-wings",
+      "name": "Sprout Wings",
+      "collection": "base",
+      "theme": "sprout-origin",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "common",
+      "modifiers": {
+        "speedMultiplierBonus": 0.08,
+        "cooldownReduction": 0.03
+      },
+      "flavor": "Fluttery little wings that are mostly enthusiasm."
+    },
+    {
+      "key": "base-moss-wings",
+      "name": "Moss Wings",
+      "collection": "base",
+      "theme": "moss",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "common",
+      "modifiers": {
+        "speedMultiplierBonus": 0.03,
+        "dodgeChance": 0.03
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/moss-wings.svg"
+      },
+      "flavor": "Leafy little wings built for quiet drifting."
+    },
+    {
+      "key": "base-vampire-body",
+      "name": "Vampire Body",
+      "collection": "base",
+      "theme": "vampire",
+      "layer": "body",
+      "rarity": "common",
+      "body": {
+        "health": 95,
+        "defense": 5,
+        "speedMultiplier": 1.08,
+        "luck": 2
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/vampire-body.svg"
+      },
+      "flavor": "A dramatic little shape with midnight posture."
+    },
+    {
+      "key": "base-vampire-eyes",
+      "name": "Vampire Eyes",
+      "collection": "base",
+      "theme": "vampire",
+      "layer": "eyes",
+      "rarity": "common",
+      "modifiers": {
+        "accuracyBonus": 0.04,
+        "critChance": 0.03
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/vampire-eyes.svg"
+      },
+      "flavor": "Sharp eyes that enjoy the suspense."
+    },
+    {
+      "key": "base-vampire-mouth",
+      "name": "Vampire Mouth",
+      "collection": "base",
+      "theme": "vampire",
+      "layer": "mouth",
+      "rarity": "common",
+      "attack": {
+        "name": "Tiny Fang",
+        "type": "bite",
+        "damage": 13,
+        "baseCooldown": 0.95,
+        "accuracy": 0.9,
+        "effect": {},
+        "animation": "bite"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/vampire-mouth.svg"
+      },
+      "flavor": "Small fangs, big theatre."
+    },
+    {
+      "key": "base-vampire-wings",
+      "name": "Vampire Wings",
+      "collection": "base",
+      "theme": "vampire",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "common",
+      "modifiers": {
+        "speedMultiplierBonus": 0.07,
+        "dodgeChance": 0.02
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/vampire-wings.svg"
+      },
+      "flavor": "Fluttery wings with excellent entrance timing."
+    },
+    {
+      "key": "base-stone-body",
+      "name": "Stone Body",
+      "collection": "base",
+      "theme": "stone",
+      "layer": "body",
+      "rarity": "uncommon",
+      "body": {
+        "health": 120,
+        "defense": 11,
+        "speedMultiplier": 0.82,
+        "luck": 1
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/stone-body.svg"
+      },
+      "flavor": "Heavy, patient, and absolutely not rushing."
+    },
+    {
+      "key": "base-stone-eyes",
+      "name": "Stone Eyes",
+      "collection": "base",
+      "theme": "stone",
+      "layer": "eyes",
+      "rarity": "uncommon",
+      "modifiers": {
+        "accuracyBonus": 0.02,
+        "dodgeChance": 0.01
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/stone-eyes.svg"
+      },
+      "flavor": "Unblinking eyes with ancient patience."
+    },
+    {
+      "key": "base-stone-mouth",
+      "name": "Stone Mouth",
+      "collection": "base",
+      "theme": "stone",
+      "layer": "mouth",
+      "rarity": "uncommon",
+      "attack": {
+        "name": "Pebble Crunch",
+        "type": "bite",
+        "damage": 18,
+        "baseCooldown": 1.45,
+        "accuracy": 0.86,
+        "effect": {},
+        "animation": "bite"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/stone-mouth.svg"
+      },
+      "flavor": "A gravelly little warning."
+    },
+    {
+      "key": "base-stone-wings",
+      "name": "Stone Wings",
+      "collection": "base",
+      "theme": "stone",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "uncommon",
+      "modifiers": {
+        "speedMultiplierBonus": 0.01,
+        "dodgeChance": 0.01
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/stone-wings.svg"
+      },
+      "flavor": "Wings that fly mostly through determination."
+    },
+    {
+      "key": "base-bone-body",
+      "name": "Bone Body",
+      "collection": "base",
+      "theme": "bone",
+      "layer": "body",
+      "rarity": "uncommon",
+      "body": {
+        "health": 112,
+        "defense": 9,
+        "speedMultiplier": 0.95,
+        "luck": 2
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/bone-body.svg"
+      },
+      "flavor": "Light, sturdy, and full of old secrets."
+    },
+    {
+      "key": "base-bone-eyes",
+      "name": "Bone Eyes",
+      "collection": "base",
+      "theme": "bone",
+      "layer": "eyes",
+      "rarity": "uncommon",
+      "modifiers": {
+        "accuracyBonus": 0.04,
+        "critChance": 0.02
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/bone-eyes.svg"
+      },
+      "flavor": "Hollow little eyes that never miss a rattle."
+    },
+    {
+      "key": "base-bone-mouth",
+      "name": "Bone Mouth",
+      "collection": "base",
+      "theme": "bone",
+      "layer": "mouth",
+      "rarity": "uncommon",
+      "attack": {
+        "name": "Bone Snap",
+        "type": "bite",
+        "damage": 17,
+        "baseCooldown": 1.2,
+        "accuracy": 0.88,
+        "effect": {},
+        "animation": "bite"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/bone-mouth.svg"
+      },
+      "flavor": "A dry little clack with purpose."
+    },
+    {
+      "key": "base-bone-wings",
+      "name": "Bone Wings",
+      "collection": "base",
+      "theme": "bone",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "uncommon",
+      "modifiers": {
+        "speedMultiplierBonus": 0.04,
+        "dodgeChance": 0.02
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/bone-wings.svg"
+      },
+      "flavor": "Ribbed wings with a surprisingly graceful glide."
+    },
+    {
+      "key": "base-magma-body",
+      "name": "Magma Body",
+      "collection": "base",
+      "theme": "magma",
+      "layer": "body",
+      "rarity": "rare",
+      "body": {
+        "health": 110,
+        "defense": 8,
+        "speedMultiplier": 1.02,
+        "luck": 3
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/magma-body.svg"
+      },
+      "flavor": "A hot little core wrapped in molten confidence."
+    },
+    {
+      "key": "base-magma-eyes",
+      "name": "Magma Eyes",
+      "collection": "base",
+      "theme": "magma",
+      "layer": "eyes",
+      "rarity": "rare",
+      "modifiers": {
+        "accuracyBonus": 0.05,
+        "critChance": 0.04
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/magma-eyes.svg"
+      },
+      "flavor": "Glowing eyes with volcanic focus."
+    },
+    {
+      "key": "base-magma-mouth",
+      "name": "Magma Mouth",
+      "collection": "base",
+      "theme": "magma",
+      "layer": "mouth",
+      "rarity": "rare",
+      "attack": {
+        "name": "Ember Burst",
+        "type": "spit",
+        "damage": 20,
+        "baseCooldown": 1.35,
+        "accuracy": 0.87,
+        "effect": {},
+        "animation": "spit"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/magma-mouth.svg"
+      },
+      "flavor": "A tiny eruption with excellent timing."
+    },
+    {
+      "key": "base-magma-wings",
+      "name": "Magma Wings",
+      "collection": "base",
+      "theme": "magma",
+      "layer": "flight",
+      "flightType": "wings",
+      "flightMotion": "flutter",
+      "flightSpeed": 1,
+      "rarity": "rare",
+      "modifiers": {
+        "speedMultiplierBonus": 0.06,
+        "cooldownReduction": 0.03
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/magma-wings.svg"
+      },
+      "flavor": "Heat-shimmer wings that move before the smoke clears."
+    },
+    {
+      "key": "base-trash-body",
+      "name": "Trash Body",
+      "collection": "base",
+      "theme": "trash",
+      "layer": "body",
+      "rarity": "epic",
+      "body": {
+        "health": 118,
+        "defense": 7,
+        "speedMultiplier": 1.05,
+        "luck": 5
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/trash-body.svg"
+      },
+      "flavor": "Chaotic, resilient, and somehow thriving."
+    },
+    {
+      "key": "base-trash-eyes",
+      "name": "Trash Eyes",
+      "collection": "base",
+      "theme": "trash",
+      "layer": "eyes",
+      "rarity": "epic",
+      "modifiers": {
+        "accuracyBonus": 0.05,
+        "dodgeChance": 0.04,
+        "critChance": 0.03
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/trash-eyes.svg"
+      },
+      "flavor": "Eyes that see treasure where everyone else sees trouble."
+    },
+    {
+      "key": "base-trash-mouth",
+      "name": "Trash Mouth",
+      "collection": "base",
+      "theme": "trash",
+      "layer": "mouth",
+      "rarity": "epic",
+      "attack": {
+        "name": "Junk Chomp",
+        "type": "bite",
+        "damage": 23,
+        "baseCooldown": 1.25,
+        "accuracy": 0.86,
+        "effect": {},
+        "animation": "bite"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/trash-mouth.svg"
+      },
+      "flavor": "A messy bite with suspiciously good results."
+    },
+    {
+      "key": "base-trash-balloons",
+      "name": "Trash Balloons",
+      "collection": "base",
+      "theme": "trash",
+      "layer": "flight",
+      "flightType": "balloons",
+      "flightMotion": "sway",
+      "flightSpeed": 1,
+      "rarity": "epic",
+      "modifiers": {
+        "speedMultiplierBonus": 0.07,
+        "dodgeChance": 0.05
+      },
+      "assets": {
+        "image": "/images/olings/builds/flight/base/balloons.svg"
+      },
+      "flavor": "A questionable flight plan that keeps working."
+    },
+    {
+      "key": "base-lava-body",
+      "name": "Lava Body",
+      "collection": "base",
+      "theme": "lava",
+      "layer": "body",
+      "rarity": "common",
+      "body": {
+        "health": 100,
+        "defense": 6,
+        "speedMultiplier": 1,
+        "luck": 2
+      },
+      "assets": {
+        "image": "/images/olings/builds/body/base/molten-rock-body.svg"
+      },
+      "flavor": "A warm little core with a rocky shell."
+    },
+    {
+      "key": "base-lava-eyes",
+      "name": "Lava Eyes",
+      "collection": "base",
+      "theme": "lava",
+      "layer": "eyes",
+      "rarity": "common",
+      "modifiers": {
+        "accuracyBonus": 0.04,
+        "critChance": 0.02
+      },
+      "assets": {
+        "image": "/images/olings/builds/eyes/base/lava-eyes.svg"
+      },
+      "flavor": "Glowing eyes with a very short fuse."
+    },
+    {
+      "key": "base-lava-mouth",
+      "name": "Lava Mouth",
+      "collection": "base",
+      "theme": "lava",
+      "layer": "mouth",
+      "rarity": "common",
+      "attack": {
+        "name": "Ember Spit",
+        "type": "spit",
+        "damage": 15,
+        "baseCooldown": 1.25,
+        "accuracy": 0.88,
+        "effect": {},
+        "animation": "spit"
+      },
+      "assets": {
+        "image": "/images/olings/builds/mouth/base/lava-mouth.svg"
+      },
+      "flavor": "A tiny burst of volcanic attitude."
+    }
+  ]
+}

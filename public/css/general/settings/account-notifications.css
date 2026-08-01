@@ -1,0 +1,189 @@
+.account-notification-list {
+  display: grid;
+  gap: 8px;
+}
+
+.account-notification-card {
+  position: relative;
+  min-height: 74px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  box-sizing: border-box;
+  color: var(--primarypagecolour);
+  text-align: left;
+  overflow: hidden;
+}
+
+.account-notification-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  border-radius: var(--account-inner-radius) 0 0 var(--account-inner-radius);
+  background-color: #666666;
+  pointer-events: none;
+}
+
+.account-notification-card.is-unread::before {
+  background-color: var(--primarypagecolour);
+}
+
+.account-notification-visual {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  justify-self: center;
+  border-radius: calc(var(--account-inner-radius) * 0.75);
+  overflow: hidden;
+}
+
+.account-notification-achievement-icon,
+.account-notification-achievement-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.account-notification-achievement-icon {
+  inset: 13%;
+  z-index: 2;
+  width: 74%;
+  height: 74%;
+}
+
+.account-notification-achievement-border {
+  inset: 0;
+  z-index: 1;
+}
+
+.account-notification-visual.is-oe .image-stack {
+  position: relative;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.account-notification-visual.is-oe .image-stack img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.account-notification-visual.is-oe .image-stack img:nth-child(1) {
+  z-index: 0;
+}
+
+.account-notification-visual.is-oe .image-stack img:nth-child(2) {
+  z-index: 3;
+}
+
+.account-notification-visual.is-oe .image-stack img:nth-child(3) {
+  z-index: 1;
+}
+
+.account-notification-visual.is-oe .image-stack img:nth-child(4) {
+  z-index: 2;
+}
+
+.account-notification-visual.is-fallback,
+.account-notification-visual.is-oe.has-fallback {
+  background-color: var(--tertiarybackgroundcolour, #2a2a2a);
+  color: var(--primarypagecolour);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.account-notification-fallback-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.account-notification-content {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.account-notification-meta,
+.account-notification-time {
+  color: #8d8d8d;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.account-notification-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--primarypagecolour);
+  font-size: 13px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-notification-body {
+  color: #b0b0b0;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.account-notification-action {
+  min-width: 54px;
+  min-height: 30px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 8px;
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.account-notification-action:focus-visible {
+  background-color: var(--secondarypagecolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-notification-action:hover {
+    background-color: var(--secondarypagecolour);
+    outline: none;
+  }
+}
+
+.account-notification-action:focus-visible {
+  outline: var(--bordersize) solid var(--primarypagecolour);
+  outline-offset: 2px;
+}
+
+.account-notification-status {
+  margin: auto;
+  padding: 24px;
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.account-notification-error {
+  color: var(--warningcolour);
+}

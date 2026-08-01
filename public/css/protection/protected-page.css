@@ -1,0 +1,193 @@
+@font-face {
+  font-family: 'LemonMilkLight';
+  src: url('/fonts/LemonMilk/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #202020;
+  color: #fff0e8;
+}
+
+.protected-page {
+  display: none;
+}
+
+.protected-splash {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: clamp(1rem, 5vw, 4rem);
+  background: #202020;
+  isolation: isolate;
+  transition: none;
+  transform: none;
+}
+
+.protected-splash.center,
+.protected-splash.down,
+.protected-splash.up {
+  top: 0;
+}
+
+.protected-splash > img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.64);
+}
+
+.protected-splash::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: rgba(32, 32, 32, 0.32);
+}
+
+.protected-page-message {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(48rem, 100%);
+  text-align: center;
+}
+
+.protected-page-eyebrow {
+  order: 1;
+  position: static;
+  width: auto;
+  margin: 0 0 1rem;
+  padding: 0;
+  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.protected-page-message h1 {
+  order: 2;
+  margin: 0;
+  font-size: clamp(2.2rem, 7vw, 5.2rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.protected-page-message p:not(.protected-page-eyebrow) {
+  order: 3;
+  position: static;
+  width: min(34rem, 100%);
+  margin: 1.25rem auto 0;
+  padding: 0;
+  font-family: 'LemonMilkLight', Arial, sans-serif;
+  font-size: clamp(0.85rem, 1.8vw, 1.08rem);
+  font-weight: 300;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.protected-page-actions {
+  order: 4;
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.protected-page-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1.15rem;
+  border: 2px solid transparent;
+  background: #fff0e8;
+  color: #202020;
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.protected-page-action:focus-visible {
+  border-color: var(--secondarypagecolour);
+  background: var(--secondarypagecolour);
+  color: #202020;
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .protected-page-action:hover {
+    border-color: var(--secondarypagecolour);
+    background: var(--secondarypagecolour);
+    color: #202020;
+    outline: none;
+  }
+}
+
+.protected-splash .protected-page-message > .protected-page-eyebrow,
+.protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
+  position: static;
+  bottom: auto;
+  width: auto;
+  margin-left: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
+  width: min(34rem, 100%);
+  margin: 1.25rem auto 0;
+}
+
+.protected-access-page .oe-bodyguard {
+  left: 0;
+  bottom: -3rem;
+  width: min(36rem, 82vw);
+  height: calc(min(36rem, 82vw) * 4 / 3);
+  animation: protected-bodyguard-peek 0.7s ease-out 0.45s forwards;
+  transform: translateX(-115%) rotate(15deg);
+  transform-origin: bottom left;
+  z-index: 2;
+}
+
+@keyframes protected-bodyguard-peek {
+  from {
+    transform: translateX(-115%) rotate(15deg);
+  }
+
+  to {
+    transform: translateX(calc(clamp(-10rem, -14vw, -4rem) - 5vw))
+      rotate(15deg);
+  }
+}
+

@@ -1,0 +1,235 @@
+.oe-panel-social-edit-panels {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+  overflow: auto;
+}
+
+.oe-panel-social-edit-save {
+  width: 100%;
+  min-height: clamp(1.8rem, 2.8vw, 2.2rem);
+  margin-top: auto;
+  padding: clamp(0.4rem, 0.75vw, 0.55rem) clamp(0.75rem, 1.2vw, 0.95rem);
+  border: 0;
+  border-radius: 0.3rem;
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.52rem, 0.82vw, 0.7rem);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.oe-panel-social-edit-save:focus-visible {
+  background-color: var(
+    --oe-panel-widget-secondary-colour,
+    var(--secondarypagecolour)
+  );
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-social-edit-save:hover {
+    background-color: var(
+      --oe-panel-widget-secondary-colour,
+      var(--secondarypagecolour)
+    );
+    outline: none;
+  }
+}
+
+.oe-panel-social-edit-save:disabled {
+  background-color: rgb(255 255 255 / 12%);
+  color: rgb(255 255 255 / 42%);
+  cursor: not-allowed;
+}
+
+.oe-panel-social-edit-panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.6rem, 1vw, 0.8rem);
+  border-radius: 0.35rem;
+  background-color: rgb(255 255 255 / 7%);
+}
+
+.oe-panel-social-edit-panel-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(0.4rem, 0.7vw, 0.55rem);
+  align-items: center;
+}
+
+.oe-panel-social-edit-panel-title {
+  margin: 0;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.56rem, 0.88vw, 0.74rem);
+  line-height: 1.1;
+}
+
+.oe-panel-social-edit-panel-toggle {
+  width: clamp(0.65rem, 1vw, 0.85rem);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  clip-path: polygon(50% 78%, 8% 24%, 92% 24%);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.oe-panel-social-edit-panel-toggle[aria-expanded='true'] {
+  transform: rotate(180deg);
+}
+
+.oe-panel-social-edit-panel-toggle:focus-visible {
+  background-color: var(
+    --oe-panel-widget-secondary-colour,
+    var(--secondarypagecolour)
+  );
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-social-edit-panel-toggle:hover {
+    background-color: var(
+      --oe-panel-widget-secondary-colour,
+      var(--secondarypagecolour)
+    );
+    outline: none;
+  }
+}
+
+.oe-panel-social-edit-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.45rem, 0.75vw, 0.65rem);
+  margin-top: clamp(0.45rem, 0.75vw, 0.65rem);
+}
+
+.oe-panel-social-edit-panel-body[hidden] {
+  display: none;
+}
+
+.oe-panel-social-edit-select,
+.oe-panel-social-edit-control input,
+.oe-panel-social-edit-text-input {
+  width: 100%;
+}
+
+.oe-panel-social-edit-select {
+  min-height: clamp(1.45rem, 2.3vw, 1.8rem);
+  padding: clamp(0.25rem, 0.55vw, 0.4rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-family: 'OverExposed', 'OverExposed-Regular', inherit;
+  font-weight: 400;
+  font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+}
+
+.oe-panel-social-edit-control,
+.oe-panel-social-edit-align-group,
+.oe-panel-social-edit-meta-field {
+  display: grid;
+  gap: clamp(0.2rem, 0.4vw, 0.3rem);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.48rem, 0.78vw, 0.66rem);
+  line-height: 1.1;
+}
+
+.oe-panel-social-edit-control input {
+  accent-color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+}
+
+.oe-panel-social-edit-slider-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(0.3rem, 0.55vw, 0.45rem);
+  align-items: center;
+}
+
+.oe-panel-social-edit-slider-reset {
+  min-height: clamp(1.3rem, 2vw, 1.6rem);
+  padding: clamp(0.22rem, 0.45vw, 0.34rem) clamp(0.38rem, 0.65vw, 0.5rem);
+  border: 0;
+  border-radius: 0.22rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.4rem, 0.64vw, 0.54rem);
+  line-height: 1;
+}
+
+.oe-panel-social-edit-slider-reset:focus-visible {
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-social-edit-slider-reset:hover {
+    background-color: var(
+      --oe-panel-widget-primary-colour,
+      var(--primarypagecolour)
+    );
+    color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+    outline: none;
+  }
+}
+
+.oe-panel-social-edit-text-input {
+  min-height: clamp(3.25rem, 5.5vw, 4.75rem);
+  max-height: clamp(3.25rem, 5.5vw, 4.75rem);
+  padding: clamp(0.35rem, 0.65vw, 0.5rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font: inherit;
+  font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+  line-height: 1.25;
+  resize: none;
+}
+
+.oe-panel-social-edit-meta-input {
+  width: 100%;
+  min-height: clamp(1.45rem, 2.3vw, 1.8rem);
+  padding: clamp(0.3rem, 0.55vw, 0.42rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font: inherit;
+  font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+  line-height: 1.2;
+}
+
+.oe-panel-social-edit-meta-input.is-multiline {
+  min-height: clamp(3rem, 5vw, 4.4rem);
+  resize: none;
+}
+
+.oe-panel-social-edit-meta-input:focus {
+  outline: var(--bordersize) solid
+    var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  outline-offset: 2px;
+}
+
+.oe-panel-social-idea-form .oe-panel-social-edit-meta-input:focus {
+  outline: none;
+}

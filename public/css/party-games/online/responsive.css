@@ -1,0 +1,27 @@
+/* Mobile and potrait windows */
+@media (orientation: portrait) {
+    .button-container button {
+        width: 100%;
+        font-size: 1.5vh;
+    }
+
+    .regular-button-container button {
+        font-size: 100%;
+    }
+
+    .select-button {
+        font-size: 1.5vh;
+    }
+
+    .content-container h1 {
+        font-size: 200%;
+    }
+
+    .content-container h2 {
+        font-size: 5, 5vw;
+    }
+
+    .user-confirmed-section .icon {
+        font-size: 2vh;
+    }
+}

@@ -1,0 +1,145 @@
+.oling-lab-place-items-grid .oling-lab-menu-action {
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+}
+
+.oling-lab-menu-action {
+  position: relative;
+  min-height: 9.5rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+  text-align: left;
+}
+
+.oling-lab-menu-action.is-hatch-action {
+  background: var(--successcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-menu-action.is-hatch-action:focus-visible {
+  background: var(--successcoloursecondary);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-menu-action.is-hatch-action:hover {
+    background: var(--successcoloursecondary);
+    color: var(--backgroundcolour);
+  }
+}
+
+.oling-lab-menu-action.is-hatch-action > span,
+.oling-lab-menu-action.is-hatch-action:focus-visible > span {
+  color: var(--backgroundcolour) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-menu-action.is-hatch-action:hover > span {
+    color: var(--backgroundcolour) !important;
+  }
+}
+
+.oling-lab-menu-action:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.oling-lab-menu-action.is-selected {
+  outline: 3px solid #b22626;
+  outline-offset: -3px;
+  background: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-menu-action img {
+  width: 100%;
+  height: 6rem;
+  object-fit: contain;
+}
+
+.oling-lab-menu-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 6rem;
+  background: color-mix(
+    in srgb,
+    var(--oling-lab-menu-primary-colour),
+    transparent 28%
+  );
+  color: var(--backgroundcolour);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.oling-lab-menu-action span {
+  min-width: 0;
+  font-size: 0.85rem;
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-lab-menu-action[data-badge]::after {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  padding: 0.35rem 0.45rem;
+  content: attr(data-badge);
+  background: #b22626;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-menu-section {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.oling-lab-menu-section h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-menu-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.oling-lab-menu-section-header .oling-lab-menu-action {
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  grid-template-rows: none;
+  padding: 0 0.7rem;
+  background: var(--backgroundcolour);
+  color: #fff8ea;
+}
+
+.oling-lab-menu-section-header .oling-lab-menu-action span {
+  font-size: 0.68rem;
+}
+
+.oling-lab-menu-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.oling-lab-menu-inline-actions .oling-lab-menu-action {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.85rem;
+}

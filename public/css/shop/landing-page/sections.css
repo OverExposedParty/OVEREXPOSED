@@ -1,0 +1,203 @@
+.shop-product-grid-section {
+  min-height: calc(100dvh - var(--headerheight));
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 4rem);
+}
+
+.shop-featured-section {
+  --shop-section-primary-colour: var(--backgroundcolour);
+  --shop-section-secondary-colour: #427bb9;
+  --shop-section-background-colour: #f7f7f2;
+
+  background: var(--shop-section-background-colour);
+  color: var(--shop-section-primary-colour);
+}
+
+.shop-product-grid-section {
+  --shop-section-background-colour: #ffffff;
+  --shop-section-secondary-colour: var(--secondarypagecolour);
+
+  background: var(--shop-section-background-colour);
+}
+
+.shop-product-grid-section[data-section-category='eggs'] {
+  --shop-section-background-colour: #e8fff1;
+  --shop-section-secondary-colour: #cff4dc;
+}
+
+.shop-product-grid-section[data-section-category='consumables'] {
+  --shop-section-background-colour: #fff0e8;
+  --shop-section-secondary-colour: #ffd7c7;
+}
+
+.shop-product-grid-section[data-section-category='furniture'] {
+  --shop-section-background-colour: #f0f4ff;
+  --shop-section-secondary-colour: #cbd8ff;
+}
+
+.shop-section-heading,
+.shop-filter-bar,
+.shop-search-container,
+.shop-featured-grid,
+.shop-product-grid {
+  width: min(100%, 88rem);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.shop-section-heading {
+  margin-bottom: 1.25rem;
+}
+
+.shop-section-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.shop-section-heading h2,
+.shop-section-toggle-title {
+  margin: 0;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.shop-section-heading h2 {
+  font-size: clamp(2.25rem, 6vw, 5rem);
+}
+
+.shop-section-heading--toggle {
+  margin-bottom: 1rem;
+}
+
+.shop-section-toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3rem;
+  gap: 1rem;
+  align-items: end;
+  width: 100%;
+  min-height: 4.5rem;
+  border: 0;
+  border-bottom: 3px solid currentColor;
+  padding: 0 0 1rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.shop-section-toggle-text {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.shop-section-toggle-title {
+  display: block;
+  font-size: clamp(2.25rem, 6vw, 5rem);
+  overflow-wrap: anywhere;
+}
+
+.shop-section-toggle-indicator {
+  display: grid;
+  align-self: end;
+  place-items: center;
+  width: 3rem;
+  aspect-ratio: 1;
+  border: 2px solid currentColor;
+  margin-bottom: 0.1rem;
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.shop-section-body {
+  display: grid;
+}
+
+.shop-section-container.is-collapsed .shop-section-heading--toggle {
+  margin-bottom: 0;
+}
+
+.shop-section-container.is-collapsed.shop-featured-section,
+.shop-section-container.is-collapsed.shop-product-grid-section {
+  min-height: 0;
+  padding-top: clamp(1rem, 2.5vw, 1.5rem);
+  padding-bottom: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.shop-section-container.is-collapsed .shop-section-body {
+  display: none;
+}
+
+.shop-featured-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.shop-filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 0 1.25rem;
+}
+
+.shop-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.shop-filter-button {
+  flex: 0 0 auto;
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+  border-color: var(--backgroundcolour);
+  background: transparent;
+  cursor: pointer;
+}
+
+.shop-filter-button.active,
+.shop-filter-button:focus-visible {
+  background: var(--backgroundcolour);
+  color: var(--shop-section-background-colour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop-filter-button:hover {
+    background: var(--backgroundcolour);
+    color: var(--shop-section-background-colour);
+  }
+}
+
+.shop-search-container {
+  padding: 0 0 1.25rem;
+}
+
+.shop-search-input {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 2px solid var(--backgroundcolour);
+  border-radius: 0;
+  padding: 0 0.9rem;
+  background: rgb(255 255 255 / 42%);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.shop-search-input::placeholder {
+  color: color-mix(in srgb, var(--backgroundcolour), transparent 45%);
+  opacity: 1;
+}
+
+.shop-search-input:focus-visible {
+  outline: 3px solid var(--shop-section-secondary-colour);
+  outline-offset: 2px;
+}

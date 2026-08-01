@@ -1,54 +1,54 @@
 {
-    "truth-or-dare-packs": [
-        {
-            "pack-name": "ice-breaker",
-            "pack-path": "/json-files/party-games/questions/truth-or-dare/ice-breaker.json",
-            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
-            "pack-colour": "#66CCFF",
-            "pack-secondary-colour": "#427BB9",
-            "pack-difficulty": "chill, funny, creative, cheeky",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "cheeky-confessions",
-            "pack-path": "/json-files/party-games/questions/truth-or-dare/cheeky-confessions.json",
-            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
-            "pack-colour": "#66CCFF",
-            "pack-secondary-colour": "#427BB9",
-            "pack-difficulty": "chill, flirty, cheeky, funny",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "troubled-teens",
-            "pack-path": "/json-files/party-games/questions/truth-or-dare/troubled-teens.json",
-            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
-            "pack-colour": "#66CCFF",
-            "pack-secondary-colour": "#427BB9",
-            "pack-difficulty": "brutal, flirty, fiery, funny",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "adult-confessions",
-            "pack-path": "/json-files/party-games/questions/truth-or-dare/adult-confessions.json",
-            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
-            "pack-colour": "#66CCFF",
-            "pack-secondary-colour": "#427BB9",
-            "pack-difficulty": "naughty, sexual, flirty",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "risky-revelations",
-            "pack-path": "/json-files/party-games/questions/truth-or-dare/risky-revelations.json",
-            "pack-card": "/images/blank-cards/truth-or-dare-blank-card.svg",
-            "pack-colour": "#66CCFF",
-            "pack-secondary-colour": "#427BB9",
-            "pack-difficulty": "sexual, naughty, fiery",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        }
-    ]
+  "truth-or-dare-packs": [
+    {
+      "pack-name": "adult-confessions",
+      "pack-description": "Mature truths and daring challenges covering attraction, relationships, embarrassing experiences, guilty pleasures and secrets usually kept private.",
+      "pack-path": "/json-files/party-games/questions/truth-or-dare/adult-confessions.json",
+      "pack-colour": "#66CCFF",
+      "pack-secondary-colour": "#427BB9",
+      "pack-difficulty": "naughty, sexual, flirty",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "cheeky-confessions",
+      "pack-description": "Playful confessions and light-hearted dares built around awkward moments, personal quirks, harmless flirting and embarrassing group challenges.",
+      "pack-path": "/json-files/party-games/questions/truth-or-dare/cheeky-confessions.json",
+      "pack-colour": "#66CCFF",
+      "pack-secondary-colour": "#427BB9",
+      "pack-difficulty": "chill, flirty, cheeky, funny",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "ice-breaker",
+      "pack-description": "Approachable questions, funny hypotheticals and easy challenges designed to start conversations and help a group become more comfortable.",
+      "pack-path": "/json-files/party-games/questions/truth-or-dare/ice-breaker.json",
+      "pack-colour": "#66CCFF",
+      "pack-secondary-colour": "#427BB9",
+      "pack-difficulty": "chill, funny, creative, cheeky",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "risky-revelations",
+      "pack-description": "An explicit collection of sexual confessions, intimate experiences, provocative challenges and high-risk dares for groups with very few boundaries.",
+      "pack-path": "/json-files/party-games/questions/truth-or-dare/risky-revelations.json",
+      "pack-colour": "#66CCFF",
+      "pack-secondary-colour": "#427BB9",
+      "pack-difficulty": "sexual, naughty, fiery",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "troubled-teens",
+      "pack-description": "Secrets, crushes, friendship drama, rebellious moments and chaotic challenges inspired by the embarrassing decisions of teenage life.",
+      "pack-path": "/json-files/party-games/questions/truth-or-dare/troubled-teens.json",
+      "pack-colour": "#66CCFF",
+      "pack-secondary-colour": "#427BB9",
+      "pack-difficulty": "brutal, flirty, fiery, funny",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    }
+  ]
 }

@@ -1,0 +1,369 @@
+.settings-icon {
+    cursor: pointer;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.settings-icon img {
+    height: auto;
+    width: 50%;
+}
+
+.settings-box h2,
+.settings-box h3,
+.settings-box label {
+    color: var(--primarypagecolour);
+    transition: color 0.2s ease;
+}
+
+.settings-section {
+    display: grid;
+    gap: 10px;
+    padding: 14px 0;
+    border-top: 2px solid color-mix(in srgb, var(--primarypagecolour) 24%, transparent);
+}
+
+.settings-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.settings-section:last-child {
+    padding-bottom: 0;
+}
+
+.settings-section-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.account-settings-section .settings-section-title {
+    color: var(--secondarypagecolour);
+    font-size: 12px;
+    line-height: 1;
+    text-align: left;
+}
+
+.account-settings-section {
+    padding: 0;
+    border-top: 0;
+    margin-bottom: 16px;
+}
+
+.settings-section-options {
+    display: grid;
+    gap: 8px;
+}
+
+.settings-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    margin: 0;
+    padding: 0 80px 0 0;
+    box-sizing: border-box;
+}
+
+.settings-option[hidden] {
+    display: none !important;
+}
+
+.settings-option label {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-right: 0;
+}
+
+.account-settings-section .settings-option {
+    min-height: 34px;
+    padding: 8px 10px;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+}
+
+.account-settings-section .account-settings-option {
+    padding-right: 48px;
+}
+
+.account-settings-section .settings-option label {
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    line-height: 1;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.account-settings-volume-option {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 10px;
+    align-items: center;
+    padding-right: 0;
+}
+
+.account-settings-section .settings-volume-label {
+    color: var(--secondarypagecolour);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    justify-self: start;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.settings-volume-control {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34px;
+    gap: 8px;
+    align-items: center;
+}
+
+.settings-volume-slider {
+    --volume-fill: 100%;
+    width: 100%;
+    min-width: 0;
+    height: 18px;
+    accent-color: var(--primarypagecolour);
+    background: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.settings-volume-slider::-webkit-slider-runnable-track {
+    height: 4px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(
+        to right,
+        var(--primarypagecolour) 0%,
+        var(--primarypagecolour) var(--volume-fill),
+        #545454 var(--volume-fill),
+        #545454 100%
+    );
+}
+
+.settings-volume-slider::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--primarypagecolour);
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.settings-volume-slider::-moz-range-track {
+    height: 4px;
+    border: 0;
+    border-radius: 999px;
+    background: #545454;
+}
+
+.settings-volume-slider::-moz-range-progress {
+    height: 4px;
+    border: 0;
+    border-radius: 999px;
+    background-color: var(--primarypagecolour);
+}
+
+.settings-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--primarypagecolour);
+    cursor: pointer;
+}
+
+.settings-volume-value {
+    color: var(--primarypagecolour);
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    text-align: right;
+}
+
+.account-settings-debug-option {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 10px;
+    padding-right: 10px;
+}
+
+.account-settings-debug-control {
+    width: 100%;
+    min-width: 0;
+    height: 26px;
+    padding: 0 8px;
+    border: 1px solid color-mix(in srgb, var(--primarypagecolour) 35%, transparent);
+    border-radius: 7px;
+    box-sizing: border-box;
+    color: var(--primarypagecolour);
+    background: var(--backgroundcolour);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.input-autosuggestion-shell {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 26px;
+    border: 1px solid color-mix(in srgb, var(--primarypagecolour) 35%, transparent);
+    border-radius: 7px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: var(--backgroundcolour);
+}
+
+.input-autosuggestion-shell .account-settings-debug-control {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    border: 0;
+    background: transparent;
+}
+
+.input-autosuggestion-value {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--primarypagecolour) 38%, transparent);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: normal;
+    text-align: left;
+    white-space: pre;
+    pointer-events: none;
+}
+
+.input-autosuggestion-value[hidden] {
+    display: none;
+}
+
+.input-autosuggestion-shell:focus-within {
+    outline: 2px solid var(--primarypagecolour);
+    outline-offset: 2px;
+}
+
+.input-autosuggestion-shell .account-settings-debug-control:focus-visible {
+    outline: none;
+}
+
+.account-settings-debug-control:focus-visible {
+    outline: 2px solid var(--primarypagecolour);
+    outline-offset: 2px;
+}
+
+.account-settings-debug-label {
+    color: var(--primarypagecolour);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.account-settings-debug-usage {
+    color: var(--secondarypagecolour);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.toggle-switch {
+    position: absolute;
+    right: 0;
+    width: 6vh;
+    height: 3.5vh;
+    margin-right: 0;
+}
+
+.account-settings-section .toggle-switch {
+    right: 10px;
+    width: 36px;
+    height: 20px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #545454;
+    transition: background-color 0.2s ease;
+    border-radius: 3vh;
+}
+
+.account-settings-section .slider {
+    border-radius: 999px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 2.5vh;
+    width: 2.5vh;
+    left: 0.25vh;
+    bottom: 0.25vh;
+    background-color: white;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+}
+
+.settings-box #settings-title {
+    margin: 0 0 18px;
+    font-size: 30px;
+    line-height: 1;
+    text-align: center;
+}
+
+.account-settings-section .slider:before {
+    width: 14px;
+    height: 14px;
+    left: 3px;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+}
+
+.settings-box .settings-content {
+    height: auto;
+    display: grid;
+}
+
+input:checked+.slider {
+    background-color: var(--primarypagecolour);
+}
+
+input:checked+.slider:before {
+    transform: translateX(2.5vh);
+}
+
+.account-settings-section input:checked+.slider:before {
+    transform: translate(16px, -50%);
+}
+

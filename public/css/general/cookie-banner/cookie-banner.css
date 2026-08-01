@@ -1,0 +1,138 @@
+.cookie-banner {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "header actions"
+    "content actions";
+  gap: 0.45rem 1rem;
+  align-items: center;
+  width: 100vw;
+  max-width: 100vw;
+  padding: 0.85rem clamp(0.9rem, 2vw, 1.4rem);
+  background: var(--backgroundcolour);
+  border-top: 2px solid var(--primarypagecolour);
+  box-shadow: 0 -10px 28px rgb(0 0 0 / 32%);
+  color: #ffffff;
+}
+
+.cookie-container h2,
+.cookie-container p {
+  margin: 0;
+}
+
+.cookie-header {
+  grid-area: header;
+  color: var(--primarypagecolour);
+}
+
+.cookie-header h2 {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.cookie-content {
+  grid-area: content;
+  max-width: 68rem;
+}
+
+.cookie-content p {
+  color: #e0e5eb;
+  font-family: Arial, sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.cookie-content a {
+  color: var(--primarypagecolour);
+  text-underline-offset: 0.2rem;
+}
+
+.cookie-content a:focus-visible {
+  color: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cookie-content a:hover {
+    color: var(--secondarypagecolour);
+  }
+}
+
+.cookie-button-container {
+  grid-area: actions;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.cookie-banner button {
+  min-width: 7.5rem;
+  min-height: 2.5rem;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.cookie-banner button#accept-cookies {
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+.cookie-banner button#decline-cookies {
+  background: transparent;
+  color: var(--secondarypagecolour);
+  outline: 2px solid var(--secondarypagecolour);
+  outline-offset: -2px;
+}
+
+.cookie-banner button#accept-cookies:focus-visible {
+  background: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cookie-banner button#accept-cookies:hover {
+    background: var(--secondarypagecolour);
+  }
+}
+
+.cookie-banner button#decline-cookies:focus-visible {
+  background: var(--secondarypagecolour);
+  color: var(--backgroundcolour);
+  outline-color: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cookie-banner button#decline-cookies:hover {
+    background: var(--secondarypagecolour);
+    color: var(--backgroundcolour);
+    outline-color: var(--secondarypagecolour);
+  }
+}
+
+@media (max-width: 520px) {
+  .cookie-banner {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "content"
+      "actions";
+    padding: 0.85rem;
+  }
+
+  .cookie-button-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .cookie-banner button {
+    min-width: 0;
+  }
+}

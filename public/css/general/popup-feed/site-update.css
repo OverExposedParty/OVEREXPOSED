@@ -1,0 +1,115 @@
+.site-update-popup-row {
+  appearance: none;
+  background: var(--backgroundcolour);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  color: #ffffff;
+  cursor: default;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 42px minmax(0, 1fr);
+  min-height: 64px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.site-update-popup-row.is-ready {
+  cursor: pointer;
+}
+
+.site-update-popup-row.is-ready:focus-visible {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 8%), transparent 44%),
+    var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-update-popup-row.is-ready:hover {
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 8%), transparent 44%),
+      var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.site-update-popup-status {
+  align-self: center;
+  background: var(--secondarypagecolour);
+  border-radius: 8px;
+  display: block;
+  height: 38px;
+  position: relative;
+  width: 38px;
+}
+
+.site-update-popup-status::before,
+.site-update-popup-status::after {
+  background: var(--primarypagecolour);
+  border-radius: 999px;
+  content: '';
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.site-update-popup-status::before {
+  animation: site-update-popup-spin 0.8s linear infinite;
+  background: transparent;
+  border: 4px solid var(--primarypagecolour);
+  border-top-color: transparent;
+  box-sizing: border-box;
+  height: 20px;
+  width: 20px;
+}
+
+.site-update-popup-status::after {
+  display: none;
+}
+
+.site-update-popup-row.is-ready .site-update-popup-status::before {
+  animation: none;
+  background: transparent;
+  border: solid var(--primarypagecolour);
+  border-radius: 1px;
+  border-width: 0 5px 5px 0;
+  height: 18px;
+  transform: translate(-50%, -60%) rotate(45deg);
+  width: 9px;
+}
+
+.site-update-popup-row.is-ready .site-update-popup-status::after {
+  display: none;
+}
+
+@keyframes site-update-popup-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.site-update-popup-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.site-update-popup-title {
+  color: var(--primarypagecolour);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.site-update-popup-message {
+  color: rgb(255 255 255 / 82%);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 5px;
+  text-transform: uppercase;
+}

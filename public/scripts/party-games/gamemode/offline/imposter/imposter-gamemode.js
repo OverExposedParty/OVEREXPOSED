@@ -51,7 +51,7 @@ fetch('/html-templates/party-games/offline/imposter/imposter-template.html')
 
         for (let i = 1; i <= playerCount; i++) {
             const button = document.createElement('button');
-            button.classList.add('player-button');
+            button.classList.add('player-button', 'sound-option');
             button.textContent = `Player ${i}`;
             button.id = `Player ${i}`;
             selectPlayerButtonContainer.appendChild(button);

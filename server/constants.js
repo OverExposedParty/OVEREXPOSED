@@ -3,7 +3,7 @@ const path = require('path');
 const ROOT_DIRECTORY = path.resolve(__dirname, '..');
 const PUBLIC_DIRECTORY = path.join(ROOT_DIRECTORY, 'public');
 const WEBSITE_CACHE_VERSION =
-  process.env.WEBSITE_CACHE_VERSION || '2026-04-26-1';
+  process.env.WEBSITE_CACHE_VERSION || '2026-07-19-01';
 const DEPLOYMENT_VERSION = WEBSITE_CACHE_VERSION;
 const ONE_YEAR_IN_SECONDS = 31536000;
 const PARTY_CODE_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -50,8 +50,12 @@ const STATIC_ASSET_EXTENSIONS = new Set([
   '.ttf',
   '.otf',
   '.mp3',
+  '.mp4',
   '.wav',
   '.ogg',
+  '.glb',
+  '.gltf',
+  '.bin',
   '.json'
 ]);
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -70,6 +74,7 @@ const DEFAULT_SCRIPT_SRC = [
 ];
 const DEFAULT_CONNECT_SRC = [
   "'self'",
+  'blob:',
   'https://www.google-analytics.com',
   'https://*.google-analytics.com',
   'https://docs.google.com',

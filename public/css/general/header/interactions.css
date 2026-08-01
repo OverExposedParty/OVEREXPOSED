@@ -1,0 +1,102 @@
+:root {
+  --button-press-scale: 0.96;
+  --button-release-scale: 1.02;
+  --button-press-duration: 80ms;
+  --button-release-duration: 110ms;
+  --button-settle-duration: 90ms;
+}
+
+:where(
+    button,
+    input[type='button'],
+    input[type='reset'],
+    input[type='submit'],
+    [role='button']
+  ) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scale: 1;
+  transition-property: scale;
+  transition-duration: var(--button-settle-duration);
+  transition-timing-function: ease-out;
+}
+
+:where(
+    button,
+    input[type='button'],
+    input[type='reset'],
+    input[type='submit'],
+    [role='button']
+  ):active:not(:disabled):not([aria-disabled='true']):not(.disabled):not(
+    .inactive
+  ):not([data-press-feedback='none']):not(.tool-tip[data-tooltip]),
+:where(
+    button,
+    input[type='button'],
+    input[type='reset'],
+    input[type='submit'],
+    [role='button']
+  ).is-pressed:not(:disabled):not([aria-disabled='true']):not(.disabled):not(
+    .inactive
+  ) {
+  scale: var(--button-press-scale);
+  transition-property: scale;
+  transition-duration: var(--button-press-duration);
+  transition-timing-function: ease-in;
+}
+
+:where(
+    button,
+    input[type='button'],
+    input[type='reset'],
+    input[type='submit'],
+    [role='button']
+  ).is-press-releasing:not(:disabled):not([aria-disabled='true']):not(
+    .disabled
+  ):not(.inactive) {
+  scale: var(--button-release-scale);
+  transition-property: scale;
+  transition-duration: var(--button-release-duration);
+  transition-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+:where(
+    button,
+    input[type='button'],
+    input[type='reset'],
+    input[type='submit'],
+    [role='button']
+  ).is-press-settling:not(:disabled):not([aria-disabled='true']):not(
+    .disabled
+  ):not(.inactive) {
+  scale: 1;
+  transition-property: scale;
+  transition-duration: var(--button-settle-duration);
+  transition-timing-function: ease-out;
+}
+
+@media (pointer: coarse) {
+  :where(
+      button,
+      input[type='button'],
+      input[type='reset'],
+      input[type='submit'],
+      [role='button']
+    ) {
+    min-inline-size: 44px !important;
+    min-block-size: 44px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(
+      button,
+      input[type='button'],
+      input[type='reset'],
+      input[type='submit'],
+      [role='button']
+    ) {
+    scale: 1 !important;
+    transition-duration: 0ms !important;
+  }
+}

@@ -8,28 +8,27 @@
         content="connect-src 'self' https://overexposed.app:3000 https://www.google-analytics.com https://*.google-analytics.com https://cdn.socket.io;
              script-src 'self' https://code.responsivevoice.org/ https://www.googletagmanager.com https://cdn.socket.io https://overexposed.app:3000 'unsafe-inline';">
 
-    <title>Customize Your OE Avatar | OVEREXPOSED</title>
+    <title>OE Library | OVEREXPOSED</title>
     <meta name="description"
-        content="Customize your Overexposed Entity (OE) on OVEREXPOSED. Change your avatar's look with different skins, headwear, eyewear, and mouths to personalize your experience.">
+        content="Browse, manage, and unlock Overexposed Entity (OE) customisation items on OVEREXPOSED.">
     <meta name="author" content="OVEREXPOSED">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Customize Your OE Avatar | OVEREXPOSED">
+    <meta property="og:title" content="OE Library | OVEREXPOSED">
     <meta property="og:description"
-        content="Customize your Overexposed Entity (OE) on OVEREXPOSED. Change your avatar's look with different skins, headwear, eyewear, and mouths to personalize your experience.">
+        content="Browse, manage, and unlock Overexposed Entity (OE) customisation items on OVEREXPOSED.">
     <meta property="og:image" content="/images/meta/og-images/overexposed-entities-customisation.jpg">
-    <meta property="og:url" content="https://overexposed.app/oes-customisation/">
+    <meta property="og:url" content="https://overexposed.app/oe-library/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Customize Your OE Avatar | OVEREXPOSED">
+    <meta name="twitter:title" content="OE Library | OVEREXPOSED">
     <meta name="twitter:description"
-        content="Customize your Overexposed Entity (OE) on OVEREXPOSED. Change your avatar's look with different skins, headwear, eyewear, and mouths to personalize your experience.">
+        content="Browse, manage, and unlock Overexposed Entity (OE) customisation items on OVEREXPOSED.">
     <meta name="twitter:image" content="/images/meta/og-images/overexposed-entities-customisation.jpg">
-    <link rel="canonical" href="https://overexposed.app/oes-customisation/">
+    <link rel="canonical" href="https://overexposed.app/oe-library/">
 
     <link rel="preload" href="/images/splash-screens/oes-customisation.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
-    <link rel="stylesheet" href="/css/other/settings-shell.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
     <link rel="stylesheet" href="/css/other/oes-customisation-page.css">
 
     <link rel="icon" type="image/x-icon" href="/images/meta/favicons/oes-customisation/favicon.ico">
@@ -42,10 +41,10 @@
 </head>
 
 <body>
-    <section class="sr-only" aria-label="OEs customisation SEO content">
-        <h1>OEs Customisation</h1>
-        <h2>Customize Your Avatar</h2>
-        <p>Customize Overexposed Entities (OEs) in your browser on OVEREXPOSED. Personalise your avatar by choosing different skins, headwear, eyewear, and mouths to create a unique character. OEs let players customise how their avatar appears while playing party games on OVEREXPOSED.</p>
+    <section class="sr-only" aria-label="OE library SEO content">
+        <h1>OE Library</h1>
+        <h2>Browse OE Customisation</h2>
+        <p>Browse Overexposed Entity (OE) customisation items, manage disabled OEs, and view locked or unlocked avatar parts on OVEREXPOSED.</p>
     </section>
     <div class="splash-screen-container-static" id="splash-screen-container-static">
         <img src="/images/splash-screens/oes-customisation.png" alt="Splash Screen">
@@ -56,38 +55,46 @@
     </div>
 
     <div id="header-placeholder"></div>
-    <div id="user-customisation-placeholder"></div>
 
-    <div class="main-container">
-        <div class="main-settings-container">
-            <div class="settings-tab-container">
-                <button id="packs-settings" class="settings-tab active">Packs</button>
-                <button id="oes-settings" class="settings-tab ">OEs</button>
+    <main class="oe-library-page" data-template="oes-customisation">
+        <header class="oe-library-header">
+            <div>
+                <h1>OE Library</h1>
+                <p class="oe-library-status" aria-live="polite">Loading OEs...</p>
             </div>
-            <div id="gamemode-settings-placeholder" data-template="oes-customisation">
-                <div class="packs-container is-visible">
-                    <div class="header-container">
-                        <h2>OEs Packs</h2>
-                    </div>
-                    <div class="packs-content-container">
-                        <div class="button-container">
-                        </div>
-                    </div>
-                </div>
+        </header>
 
-                <div class="oes-settings-container ">
-                    <div class="header-container">
-                        <h2>OEs IMAGES</h2>
-                    </div>
-                    <div class="oes-content-container">
-                        <div class="button-container">
-                        </div>
-                    </div>
-                </div>
-
+        <section class="oe-library-toolbar" aria-label="OE library filters">
+            <label class="oe-library-search">
+                <span class="sr-only">Search OEs</span>
+                <input id="oe-library-search" type="search" placeholder="Search OEs">
+            </label>
+            <div class="oe-library-collection-filter" id="oe-library-collection-filter">
+                <button class="oe-library-collection-button" id="oe-library-collection-button" type="button"
+                    aria-expanded="false" aria-controls="oe-library-collection-menu">
+                    All collections
+                </button>
+                <div class="oe-library-collection-menu" id="oe-library-collection-menu" hidden></div>
             </div>
-        </div>
-    </div>
+            <select id="oe-library-slot-filter" class="oe-library-select" aria-label="Filter by slot">
+                <option value="all">All slots</option>
+                <option value="colour">Colours</option>
+                <option value="head-slot">Head</option>
+                <option value="eyes-slot">Eyes</option>
+                <option value="mouth-slot">Mouth</option>
+            </select>
+            <select id="oe-library-ownership-filter" class="oe-library-select" aria-label="Filter by ownership">
+                <option value="all">All ownership</option>
+                <option value="unlocked">Unlocked</option>
+                <option value="locked">Locked</option>
+                <option value="disabled">Disabled</option>
+            </select>
+            <button id="oe-library-show-locked" class="oe-library-lock-toggle" type="button"
+                aria-pressed="true" aria-label="Hide locked OEs"></button>
+        </section>
+
+        <section class="oe-library-grid" aria-label="OE items"></section>
+    </main>
 
     <button class="back-button">BACK</button>
 </body>
@@ -96,14 +103,13 @@
     document.documentElement.style.setProperty('--primarypagecolour', '#F6C86D');
     document.documentElement.style.setProperty('--secondarypagecolour', '#C29B50');
 
-        window.pageScripts = {
-        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, zIndex: 0 },
-        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 0 },
-        "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 0 },
-        '/scripts/general/online/user-customisation.js': { addDataLoaded: true, zIndex: 1 },
-        "/scripts/other/oes-customisation.js": { addDataLoaded: true, zIndex: 1 }
+    window.pageScripts = {
+        "/scripts/other/oes-customisation/library-data.js": { zIndex: 0 },
+        "/scripts/other/oes-customisation/purchase-dialog.js": { zIndex: 0.1 },
+        "/scripts/other/oes-customisation/library-view.js": { zIndex: 0.2 },
+        "/scripts/other/oes-customisation/oes-customisation.js": { addDataLoaded: true, zIndex: 1 }
     };
 
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template/core-template.js" data-loaded="false"></script>
 </html>

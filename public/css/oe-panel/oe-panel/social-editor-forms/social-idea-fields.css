@@ -1,0 +1,87 @@
+.oe-panel-social-form-title-container {
+  display: grid;
+  align-items: center;
+  min-height: clamp(2.1rem, 3.8vw, 3rem);
+  width: min(100%, 70rem);
+  padding: 0;
+  justify-self: center;
+  align-self: center;
+}
+
+.oe-panel-social-form-title {
+  margin: 0;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.85rem, 1.35vw, 1.15rem);
+  line-height: 1.1;
+}
+
+.oe-panel-social-platform-field {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.oe-panel-social-type-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.75vw, 0.6rem);
+  align-items: end;
+}
+
+.oe-panel-social-platform-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.oe-panel-social-platform-row .oe-panel-social-edit-meta-field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.22rem, 0.4vw, 0.34rem);
+  min-height: clamp(1.45rem, 2.3vw, 1.8rem);
+  padding: clamp(0.25rem, 0.5vw, 0.38rem);
+  border-right: 1px solid rgb(255 255 255 / 12%);
+  background-color: transparent;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.oe-panel-social-platform-row .oe-panel-social-edit-meta-field input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oe-panel-social-platform-row .oe-panel-social-edit-meta-field.is-selected {
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+}
+
+.oe-panel-social-platform-row .oe-panel-social-edit-meta-field:last-child {
+  border-right: 0;
+}
+
+.oe-panel-social-edit-meta-field.is-hidden {
+  display: none;
+}
+
+.oe-panel-social-idea-create-view .oe-panel-social-idea-form {
+  width: min(100%, 70rem);
+  justify-self: center;
+  align-self: center;
+}

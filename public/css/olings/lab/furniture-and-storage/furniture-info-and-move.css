@@ -1,0 +1,130 @@
+
+.oling-lab-tab-panel:has(
+    :is(
+      .oling-lab-egg-insertion-stage,
+      .oling-lab-content-stage,
+      .oling-lab-furniture-move-stage
+    )
+  ) {
+  overflow: hidden;
+  padding-block: 0.75rem;
+}
+
+.oling-lab-furniture-info {
+  min-height: 0;
+}
+
+.oling-lab-furniture-hero {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  place-items: center;
+  padding: 1rem;
+  background: transparent;
+  color: var(--oling-lab-menu-secondary-colour);
+  text-align: center;
+}
+
+.oling-lab-furniture-hero img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.oling-lab-furniture-hero strong {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 0.95rem;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-lab-furniture-info-panel {
+  width: min(52%, 15rem);
+  min-width: min(52%, 15rem);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.oling-lab-furniture-info-panel .oling-lab-detail-list {
+  min-height: 0;
+  overflow-y: auto;
+  gap: 0.35rem;
+}
+
+.oling-lab-furniture-info-panel .oling-lab-detail-row {
+  min-height: 2rem;
+  padding: 0.38rem 0.45rem;
+  background: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-egg-insertion-stage.is-viewing-furniture-info .oling-lab-stats-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oling-lab-move-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--move-columns, 3), minmax(3.75rem, 1fr));
+  grid-template-rows: repeat(2, minmax(3.5rem, 1fr));
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+}
+
+.oling-lab-content-stage,
+.oling-lab-furniture-move-stage {
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  align-self: start;
+}
+
+.oling-lab-content-stage > .oling-lab-menu-empty,
+.oling-lab-furniture-move-stage > :is(.oling-lab-menu-empty, .oling-lab-move-grid) {
+  box-sizing: border-box;
+  min-height: 0;
+  height: 100%;
+}
+
+.oling-lab-move-cell {
+  min-height: 3.5rem;
+  border: 0;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oling-lab-move-cell.is-current {
+  background: var(--backgroundcolour);
+  color: #fff8ea;
+}
+
+.oling-lab-move-cell.is-occupied {
+  background: rgb(22 31 36 / 72%);
+  color: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-move-cell.is-unavailable {
+  background: #6e7478;
+  color: #d7dadd;
+}
+
+.oling-lab-move-cell:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.oling-lab-menu-inline-actions .oling-lab-menu-action.is-remove-action {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}

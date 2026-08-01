@@ -1,0 +1,188 @@
+.oe-panel-game-pack-create-view {
+  overflow-y: auto;
+}
+
+.oe-panel-game-pack-form {
+  width: min(100%, 70rem);
+  min-width: 0;
+  max-height: none;
+  align-self: center;
+  overflow: visible;
+}
+
+.oe-panel-game-pack-form-row {
+  min-width: 0;
+  display: grid;
+  gap: clamp(0.35rem, 0.75vw, 0.6rem);
+  align-items: end;
+}
+
+.oe-panel-game-pack-form-row.is-two-column {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.oe-panel-game-pack-form-row.is-three-column {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.oe-panel-oe-svg-upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  color: rgb(255 255 255 / 68%);
+  font-size: clamp(0.48rem, 0.85vw, 0.68rem);
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.oe-panel-oe-svg-upload-preview {
+  display: grid;
+  place-items: center;
+  width: clamp(4.2rem, 8vw, 6.4rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 0.45rem;
+  background-color: rgb(255 255 255 / 8%);
+  color: var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  cursor: pointer;
+}
+
+.oe-panel-oe-svg-upload-preview img {
+  display: block;
+  max-width: 92%;
+  max-height: 92%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.oe-panel-oe-svg-upload-preview-text {
+  padding: 0.4rem;
+  font-size: clamp(0.46rem, 0.8vw, 0.62rem);
+  text-align: center;
+}
+
+.oe-panel-oe-svg-upload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.oe-panel-game-pack-questions-field {
+  min-width: 0;
+  display: grid;
+  gap: clamp(0.35rem, 0.75vw, 0.6rem);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.48rem, 0.78vw, 0.66rem);
+  line-height: 1.1;
+}
+
+.oe-panel-game-pack-questions-label {
+  text-align: center;
+}
+
+.oe-panel-game-pack-question-list {
+  min-width: 0;
+  display: grid;
+  gap: clamp(0.35rem, 0.75vw, 0.6rem);
+}
+
+.oe-panel-game-pack-question-row {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: clamp(1.35rem, 2.2vw, 1.8rem) minmax(0, 1fr) clamp(
+      1.35rem,
+      2.2vw,
+      1.8rem
+    );
+  align-items: center;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.oe-panel-game-pack-question-number {
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.46rem, 0.74vw, 0.62rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.oe-panel-game-pack-question-row .oe-panel-social-edit-meta-input {
+  padding-right: clamp(0.3rem, 0.55vw, 0.42rem);
+  padding-left: 0;
+  background-color: transparent;
+}
+
+.oe-panel-game-pack-question-clear {
+  width: clamp(1rem, 1.65vw, 1.32rem);
+  min-height: clamp(1rem, 1.65vw, 1.32rem);
+  justify-self: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.18rem;
+  background-color: transparent;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.5rem, 0.84vw, 0.7rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.oe-panel-game-pack-question-clear:focus-visible {
+  background-color: transparent;
+  color: var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-game-pack-question-clear:hover {
+    background-color: transparent;
+    color: var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+    outline: none;
+  }
+}
+
+.oe-panel-game-pack-add-question {
+  width: 100%;
+  min-height: clamp(1.55rem, 2.35vw, 1.9rem);
+  padding: clamp(0.32rem, 0.62vw, 0.46rem);
+  border: 0;
+  border-radius: 0.3rem;
+  background-color: rgb(255 255 255 / 10%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.oe-panel-game-pack-add-question:focus-visible {
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-game-pack-add-question:hover {
+    background-color: var(
+      --oe-panel-widget-primary-colour,
+      var(--primarypagecolour)
+    );
+    color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+    outline: none;
+  }
+}

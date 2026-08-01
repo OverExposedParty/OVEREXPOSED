@@ -1,0 +1,71 @@
+{
+    "title": "T.O.D SMALL PACKAGE",
+    "window": {
+        "width": 62,
+        "height": 60,
+        "x": 24,
+        "y": 16,
+        "openExpanded": true,
+        "titlebarColour": "#66ccff",
+        "titlebarTextColour": "#202020",
+        "backgroundColour": "#202020"
+    },
+    "elements": [
+        {
+            "type": "application",
+            "id": "tod-small-package-app",
+            "label": "T.O.D Small Package application",
+            "applicationType": "prototype-application",
+            "script": "/scripts/other/applications/tod-small-package.js",
+            "config": {
+                "productName": "T.O.D SMALL PACKAGE",
+                "modelLabel": "SMALL PACKAGE",
+                "modelDescription": "Prototype 3D model of the OVEREXPOSED NSFW Expansion box. Displays current artwork, layout, and proportions",
+                "background": {
+                    "url": "/images/error-404/computer/screen/background.jpg"
+                },
+                "panelBackgroundColour": "#202020",
+                "panelTextColour": "#66CCFF",
+                "panelEmailAddressInput": "#333333",
+                "panelButtonColours": {
+                    "default": {
+                        "background": "#202020",
+                        "text": "#66CCFF"
+                    },
+                    "hover": {
+                        "background": "#427BB9",
+                        "text": "#202020"
+                    },
+                    "selected": {
+                        "background": "#66CCFF",
+                        "text": "#202020"
+                    }
+                },
+                "modelFilePath": "/models/nsfw-expansion/nsfw-expansion-package.glb",
+                "modelFrameRate": 24,
+                "modelFrameOffset": 0,
+                "newsletterTitle": "JOIN THE DROP",
+                "newsletterPlaceholder": "email address",
+                "newsletterStorageKey": "tod-small-package-newsletter",
+                "animations": [
+                    {
+                        "id": "box",
+                        "frame": 1
+                    },
+                    {
+                        "id": "card",
+                        "frame": 96
+                    },
+                    {
+                        "id": "skip-card",
+                        "frame": 144
+                    },
+                    {
+                        "id": "make-a-dare-card",
+                        "frame": 192
+                    }
+                ]
+            }
+        }
+    ]
+}

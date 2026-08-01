@@ -1,0 +1,158 @@
+
+@media (max-width: 760px) {
+  :root {
+    --oling-lab-cell: min(512px, 72vw, calc(var(--oling-lab-available-height) / 2));
+  }
+
+  .oling-lab-page {
+    padding-inline: 0;
+  }
+
+  .oling-lab-toolbar {
+    top: calc(var(--headerheight) + 0.5rem);
+    right: 0.5rem;
+  }
+
+  .oling-lab-scroll {
+    display: grid;
+    width: 2.35rem;
+    height: 3.25rem;
+  }
+
+  .oling-lab-incubator-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .oling-lab-incubate-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .oling-lab-action-panel {
+    --action-panel-width: clamp(
+      7.25rem,
+      calc(var(--target-width) * var(--oling-lab-cell) - 0.75rem),
+      8.5rem
+    );
+  }
+
+  .oling-lab-oling-action-grid {
+    min-height: 18rem;
+  }
+}
+
+@media (orientation: portrait) {
+  .oling-lab-oling-action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The gateway carousel keeps its GUI container but no preview spotlight. */
+.oling-lab-explorer-oling-slot .oling-lab-explorer-oling-preview {
+  background: transparent !important;
+}
+
+.oling-lab-explorer-adventure-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+}
+
+.oling-lab-explorer-adventure-back {
+  position: static !important;
+  grid-column: 1;
+  justify-self: start;
+  transform: none !important;
+}
+
+.oling-lab-explorer-adventure-requirements .oling-lab-detail-row :is(span, strong) {
+  width: 100%;
+  text-align: center;
+}
+
+.oling-lab-explorer-adventure-header h3 { grid-column: 2; }
+
+.oling-lab-explorer-oling-slot {
+  display: block;
+}
+
+.oling-lab-explorer-oling-slot .oling-lab-explorer-oling-preview {
+  position: absolute;
+  top: 0.35rem;
+  bottom: 1.75rem;
+  left: 50%;
+  width: auto;
+  max-width: calc(100% - 4rem);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  transform: translateX(-50%);
+}
+
+.oling-lab-explorer-oling-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.oling-lab-explorer-oling-arrow.is-previous { left: 0.45rem; }
+.oling-lab-explorer-oling-arrow.is-next { right: 0.45rem; }
+.oling-lab-explorer-oling-slot > strong { position: absolute; right: 0; bottom: 0.4rem; left: 0; color: var(--oling-lab-menu-primary-colour); text-align: center; }
+
+.oling-lab-explorer-adventure-header h3,
+.oling-lab-explorer-adventure-back {
+  align-self: center;
+}
+
+.oling-lab-explorer-adventure-header {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  grid-template-rows: 1fr !important;
+  align-items: center !important;
+}
+
+.oling-lab-explorer-adventure-header h3 {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+
+.oling-lab-explorer-adventure-back {
+  display: grid;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  grid-template-rows: 1fr !important;
+  place-items: center;
+}
+
+.oling-lab-explorer-adventure-requirements .oling-lab-detail-row {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  justify-items: center !important;
+  align-content: center;
+  text-align: center !important;
+}
+
+.oling-lab-explorer-adventure-requirements .oling-lab-detail-row :is(span, strong) {
+  width: 100%;
+  text-align: center !important;
+}
+
+.oling-lab-oling-hero .oling-lab-oling-name-editor {
+  right: 3.4rem;
+  left: 3.4rem;
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 1.75rem;
+  transform: none;
+}
+
+.oling-lab-oling-hero .oling-lab-oling-name-editor strong { position: absolute; left: 50%; display: block; width: max-content; max-width: 100%; line-height: 1.75rem; transform: translateX(-50%); text-align: center; }
+.oling-lab-oling-hero .oling-lab-oling-name-editor button { position: absolute; top: 0; right: auto; left: calc(50% + var(--oling-name-control-offset, 2rem)); width: 1.75rem; min-width: 1.75rem; height: 1.75rem; min-height: 1.75rem; display: grid; place-items: center; padding: 0; transform: none; background: transparent; color: var(--oling-lab-menu-primary-colour); font-size: 1.25rem; line-height: 1; }
+.oling-lab-oling-hero .oling-lab-oling-name-editor button.is-cancel { left: calc(50% + var(--oling-name-control-offset, 2rem)); }
+.oling-lab-oling-hero .oling-lab-oling-name-editor button.is-save { left: calc(50% + var(--oling-name-control-offset, 2rem) + 2rem); }
+.oling-lab-oling-hero .oling-lab-oling-name-editor button.is-cancel { right: 2rem; }
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) { height: 2.25rem; }
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) input { display: block; width: 16rem; height: 2.25rem; margin-inline: auto; }
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) button { top: 0; width: 2.25rem; min-width: 2.25rem; height: 2.25rem; min-height: 2.25rem; }
+

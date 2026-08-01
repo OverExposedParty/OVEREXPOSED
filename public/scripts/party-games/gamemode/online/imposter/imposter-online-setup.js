@@ -9,23 +9,28 @@ gameContainers.push(
 );
 
 const timeBased = false;
-const rounds = 5;
+const speakingRounds = 5;
 let resetGamemodeInstruction = "DISPLAY_PRIVATE_CARD";
 
 async function SetPageSettings() {
+  if (!(await registerRoundLateJoinIfRequested())) return;
+
   buttonChoosePlayer.addEventListener('click', async () => {
     await setUserBool(deviceId, null, true);
   });
 
   displayStartButton.addEventListener('click', async () => {
-    await setUserBool(deviceId, true, null);
+    const updatedParty = await setUserBool(deviceId, true, null);
+    if (updatedParty) {
+      stopImposterTimerWarning();
+    }
   });
 
   displayUserAnswerButton.addEventListener('click', async () => {
     const updatedParty = await performOnlinePartyAction({
       action: 'imposter-advance-answer-turn',
       payload: {
-        roundsLimit: rounds,
+        speakingRoundsLimit: speakingRounds,
         timer: Date.now() + getTimeLimit("imposter-time-limit") * 1000
       },
       syncInstructions: false
@@ -33,6 +38,7 @@ async function SetPageSettings() {
 
     if (updatedParty) {
       currentPartyData = updatedParty;
+      stopImposterTimerWarning();
       if (typeof renderCurrentImposterInstructionFromState === 'function') {
         await renderCurrentImposterInstructionFromState();
       } else if (typeof FetchInstructions === 'function') {
@@ -46,6 +52,7 @@ async function SetPageSettings() {
       await SetVote({
         option: selectUserButtonContainer.getAttribute('selected-id')
       });
+      stopImposterTimerWarning();
       const selectUserButtons = document
         .getElementById('select-user-container')
         .querySelectorAll('.selected-user-container .button-container button');
@@ -78,6 +85,7 @@ async function SetPageSettings() {
 
       if (updatedParty) {
         currentPartyData = updatedParty;
+        stopImposterTimerWarning();
       }
 
       const selectPunishmentButtons = document
@@ -103,6 +111,7 @@ async function SetPageSettings() {
 
     if (updatedParty) {
       currentPartyData = updatedParty;
+      stopImposterTimerWarning();
     }
   });
 
@@ -154,9 +163,15 @@ async function initialisePage() {
     }
 
     // Build user selection buttons
+    const roundParticipantIds = new Set((state.roundParticipantIds || []).map(String));
     players.forEach(player => {
       const id = getPlayerId(player);
-      if (id !== deviceId) {
+      const playerState = getPlayerState(player);
+      if (
+        id !== deviceId &&
+        playerState.participationStatus !== 'pending_next_round' &&
+        (roundParticipantIds.size === 0 || roundParticipantIds.has(String(id)))
+      ) {
         const username  = getPlayerUsername(player);
         const userButton = createUserButton(id, username);
         selectUserButtonContainer.appendChild(userButton);
@@ -220,9 +235,15 @@ async function initialisePage() {
       });
     });
 
-    await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
-    );
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+
+    await LoadScript(`${instructionsBasePath}/imposter-online-instructions/phase-tools.js`);
+    await LoadScript(`${instructionsBasePath}/imposter-online-instructions/answer-flow.js`);
+    await LoadScript(`${instructionsBasePath}/imposter-online-instructions/vote-flow.js`);
+    await LoadScript(`${instructionsBasePath}/imposter-online-instructions/punishment-flow.js`);
+    await LoadScript(`${instructionsBasePath}/imposter-online-instructions/round-actions.js`);
+    await LoadScript(`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`);
 
     const currentInstructions = getUserInstructions(party);
 

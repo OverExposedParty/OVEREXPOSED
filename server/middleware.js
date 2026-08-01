@@ -22,6 +22,7 @@ const { debugLog, isProduction } = require('./logger');
 function configureMiddleware(app) {
   app.use(attachRequestContext);
   app.use(expressJsonSafe());
+  app.use(expressUrlencodedSafe());
   app.use(compression({ threshold: 1024 }));
   app.use((req, res, next) => {
     res.locals.cspNonce = generateCspNonce();
@@ -103,6 +104,11 @@ function expressJsonSafe() {
   return express.json();
 }
 
+function expressUrlencodedSafe() {
+  const express = require('express');
+  return express.urlencoded({ extended: false });
+}
+
 function expressStaticSafe() {
   const express = require('express');
   return express.static(PUBLIC_DIRECTORY, {
@@ -129,6 +135,11 @@ function buildCorsOptions() {
         return;
       }
 
+      if (!isProduction && isPrivateDevelopmentOrigin(origin)) {
+        callback(null, true);
+        return;
+      }
+
       const error = new Error(`Origin ${origin} is not allowed by CORS`);
       error.status = 403;
       error.code = 'cors_origin_denied';
@@ -149,6 +160,30 @@ function getAllowedOrigins() {
 
   const baseOrigins = configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;
   return new Set(baseOrigins);
+}
+
+function isPrivateDevelopmentOrigin(origin) {
+  let parsedOrigin;
+
+  try {
+    parsedOrigin = new URL(origin);
+  } catch {
+    return false;
+  }
+
+  if (!['http:', 'https:'].includes(parsedOrigin.protocol)) return false;
+
+  const hostname = parsedOrigin.hostname.toLowerCase();
+  if (hostname === 'localhost' || hostname.endsWith('.localhost')) return true;
+  if (/^127(?:\.\d{1,3}){3}$/.test(hostname)) return true;
+  if (/^10(?:\.\d{1,3}){3}$/.test(hostname)) return true;
+  if (/^192\.168(?:\.\d{1,3}){2}$/.test(hostname)) return true;
+
+  const private172Match = hostname.match(/^172\.(\d{1,3})(?:\.\d{1,3}){2}$/);
+  if (!private172Match) return false;
+
+  const secondOctet = Number(private172Match[1]);
+  return secondOctet >= 16 && secondOctet <= 31;
 }
 
 function buildScriptSrc(cspNonce = null) {

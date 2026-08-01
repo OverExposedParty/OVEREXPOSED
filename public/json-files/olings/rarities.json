@@ -1,0 +1,38 @@
+{
+  "common": {
+    "label": "Common",
+    "primaryColour": "#D7D4E8",
+    "secondaryColour": "#87839D",
+    "textColour": "#F4F2FF"
+  },
+  "uncommon": {
+    "label": "Uncommon",
+    "primaryColour": "#7CFFB2",
+    "secondaryColour": "#55B97F",
+    "textColour": "#EFFFF6"
+  },
+  "rare": {
+    "label": "Rare",
+    "primaryColour": "#66CCFF",
+    "secondaryColour": "#427BB9",
+    "textColour": "#EAF8FF"
+  },
+  "epic": {
+    "label": "Epic",
+    "primaryColour": "#C18AFF",
+    "secondaryColour": "#7F5AB8",
+    "textColour": "#F7EFFF"
+  },
+  "legendary": {
+    "label": "Legendary",
+    "primaryColour": "#FFB86B",
+    "secondaryColour": "#C9823F",
+    "textColour": "#FFF4E4"
+  },
+  "mythic": {
+    "label": "Mythic",
+    "primaryColour": "#FF6F91",
+    "secondaryColour": "#C14362",
+    "textColour": "#FFF0F4"
+  }
+}

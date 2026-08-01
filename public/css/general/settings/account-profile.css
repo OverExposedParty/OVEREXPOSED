@@ -1,0 +1,381 @@
+.account-expanded-panel {
+    --account-expanded-title-padding: 20px;
+    --account-expanded-title-font-size: 22px;
+    --account-expanded-title-center: 31px;
+    --account-expanded-back-size: clamp(0.55rem, 1vw, 0.8rem);
+    position: relative;
+    height: 525px;
+    min-height: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: var(--backgroundcolour);
+}
+
+.account-expanded-back-button {
+    position: absolute;
+    top: var(--account-expanded-title-center);
+    left: 16px;
+    width: var(--account-expanded-back-size);
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: transform 0.2s;
+}
+
+.account-expanded-back-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--primarypagecolour);
+    clip-path: polygon(22% 50%, 76% 8%, 76% 92%);
+    transition: background-color 0.2s;
+}
+
+.account-expanded-back-button:focus-visible::before,
+.account-expanded-back-button.touchhover::before {
+    background-color: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-expanded-back-button:hover::before {
+      background-color: var(--secondarypagecolour);
+  }
+}
+
+.account-expanded-back-button.touchhover {
+    outline: none;
+    transform: translateY(-50%) scale(1.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-expanded-back-button:hover {
+      outline: none;
+      transform: translateY(-50%) scale(1.08);
+  }
+}
+
+.account-expanded-back-button:focus-visible {
+    outline: var(--bordersize) solid var(--secondarypagecolour);
+    outline-offset: 3px;
+}
+
+.account-expanded-title {
+    margin: 0;
+    padding: var(--account-expanded-title-padding);
+    color: var(--primarypagecolour);
+    font-size: var(--account-expanded-title-font-size);
+    line-height: 1;
+    text-align: center;
+}
+
+.account-expanded-content {
+    min-height: 0;
+    flex: 1 1 auto;
+    padding: 0 20px 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    color: var(--primarypagecolour);
+}
+
+.account-expanded-content:has(.account-friends-list) {
+    display: block;
+}
+
+.account-profile-section {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.account-profile-section-title {
+    margin: 0;
+    color: var(--secondarypagecolour);
+    font-size: 12px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.account-profile-row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 12px;
+    align-items: center;
+    min-height: 34px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+}
+
+.account-profile-row.has-edit-action {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1fr) 28px;
+}
+
+.account-profile-label,
+.account-profile-value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.account-profile-label {
+    color: #999999;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.account-profile-value {
+    color: var(--primarypagecolour);
+    text-align: right;
+}
+
+.account-profile-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--secondarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.2;
+    text-decoration: underline;
+    text-align: right;
+}
+
+.account-profile-link:focus-visible {
+    color: var(--primarypagecolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-link:hover {
+      color: var(--primarypagecolour);
+      outline: none;
+  }
+}
+
+.account-profile-row-success .account-profile-value {
+    color: var(--successcolour);
+}
+
+.account-profile-row-warning .account-profile-value {
+    color: var(--secondarypagecolour);
+}
+
+.account-profile-provider-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+}
+
+.account-profile-provider {
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 10 / 7;
+    padding: 0;
+    border: 0;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        color 0.2s,
+        opacity 0.2s;
+}
+
+.account-profile-provider:focus-visible {
+    background-color: var(--secondarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-provider:hover {
+      background-color: var(--secondarypagecolour);
+      color: var(--backgroundcolour);
+      outline: none;
+  }
+}
+
+.account-profile-provider.is-linked {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+}
+
+.account-profile-provider:disabled {
+    cursor: default;
+}
+
+.account-profile-provider:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.account-profile-provider:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.account-profile-provider:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.account-profile-provider-icon {
+    width: 58%;
+    height: 58%;
+    fill: currentColor;
+}
+
+.account-profile-provider-icon-google {
+    width: 62%;
+    height: 62%;
+}
+
+.account-profile-action-grid,
+.account-profile-action-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.account-profile-action {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+    transition:
+        background-color 0.2s,
+        color 0.2s,
+        opacity 0.2s;
+}
+
+.account-profile-edit-button {
+    width: 28px;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    border: 0;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: var(--primarypagecolour);
+    cursor: pointer;
+}
+
+.account-profile-edit-button:focus-visible {
+    color: var(--secondarypagecolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-edit-button:hover {
+      color: var(--secondarypagecolour);
+      outline: none;
+  }
+}
+
+.account-profile-edit-button:disabled {
+    color: #666666;
+    cursor: default;
+}
+
+.account-profile-edit-icon {
+    width: 41%;
+    height: 41%;
+    fill: currentColor;
+}
+
+.account-profile-action:focus-visible,
+.account-profile-action.touchhover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-action:hover {
+      background-color: var(--primarypagecolour);
+      color: var(--backgroundcolour);
+      outline: none;
+  }
+}
+
+.account-profile-action.full-width,
+.account-profile-action.danger {
+    justify-self: stretch;
+    width: 100%;
+    min-height: 42px;
+    margin-top: 4px;
+    grid-column: 1 / -1;
+}
+
+.account-profile-action.full-width {
+    color: var(--primarypagecolour);
+}
+
+.account-profile-action.full-width:focus-visible,
+.account-profile-action.full-width.touchhover {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-action.full-width:hover {
+      background-color: var(--primarypagecolour);
+      color: var(--backgroundcolour);
+  }
+}
+
+.account-profile-action.danger {
+    color: var(--warningcolour);
+}
+
+.account-profile-action.danger:focus-visible,
+.account-profile-action.danger.touchhover {
+    background-color: var(--warningcolour);
+    color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-action.danger:hover {
+      background-color: var(--warningcolour);
+      color: var(--backgroundcolour);
+  }
+}
+
+.account-profile-action:disabled:not(.danger) {
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.account-profile-action:disabled:not(.danger):focus-visible,
+.account-profile-action:disabled:not(.danger).touchhover {
+    background-color: var(--secondarybackgroundcolour);
+    color: #666666;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-profile-action:disabled:not(.danger):hover {
+      background-color: var(--secondarybackgroundcolour);
+      color: #666666;
+  }
+}
+

@@ -1,0 +1,33 @@
+{
+    "title": "MP3 PLAYER",
+    "window": {
+        "width": 48,
+        "height": 42,
+        "x": 28,
+        "y": 18,
+        "openExpanded": true,
+        "titlebarColour": "#101010",
+        "titlebarTextColour": "#66ccff",
+        "backgroundColour": "#101010"
+    },
+    "elements": [
+        {
+            "type": "application",
+            "id": "mp3-player-app",
+            "label": "MP3 player application",
+            "applicationType": "mp3-application",
+            "script": "/scripts/other/applications/mp3-application.js",
+            "config": {
+                "title": "MP3 PLAYER",
+                "artist": "ADD AN MP3 FILE PATH",
+                "audioFilePath": "",
+                "backgroundColour": "#101010",
+                "textColour": "#f5f5f5",
+                "accentColour": "#66ccff",
+                "mutedColour": "#9a9a9a",
+                "controlBackgroundColour": "#202020",
+                "initialVolume": 0.75
+            }
+        }
+    ]
+}

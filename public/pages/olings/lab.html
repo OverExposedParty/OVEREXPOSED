@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Olings Lab | OVEREXPOSED</title>
+    <meta name="description" content="Arrange and manage your Olings Lab." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link
+      rel="stylesheet"
+      href="/css/shop/landing-page/landing-page.css?v=2026-06-20-01"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/olings/shared/oling-flight-motion.css?v=2026-06-27-02"
+    />
+    <link rel="stylesheet" href="/css/olings/lab/lab.css?v=2026-07-16-20" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div id="header-placeholder"></div>
+
+    <main class="oling-lab-page" data-template="oling-lab">
+      <section class="oling-lab-toolbar" aria-label="Olings Lab controls">
+        <p id="oling-lab-save-status" class="oling-lab-save-status">
+          Loading lab...
+        </p>
+        <button
+          class="oling-lab-edit-toggle"
+          id="oling-lab-edit-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          Edit
+        </button>
+      </section>
+
+      <section class="oling-lab-stage" aria-label="Olings Lab room">
+        <button
+          class="oling-lab-scroll oling-lab-scroll--left"
+          id="oling-lab-scroll-left"
+          type="button"
+          aria-label="Scroll lab left"
+        >
+          ‹
+        </button>
+        <div class="oling-lab-viewport" id="oling-lab-viewport">
+          <div
+            class="oling-lab-room"
+            id="oling-lab-room"
+            aria-live="polite"
+          ></div>
+        </div>
+        <button
+          class="oling-lab-scroll oling-lab-scroll--right"
+          id="oling-lab-scroll-right"
+          type="button"
+          aria-label="Scroll lab right"
+        >
+          ›
+        </button>
+      </section>
+    </main>
+
+    <div class="oling-lab-menu-backdrop" id="oling-lab-menu-backdrop" hidden>
+      <section
+        class="oling-lab-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="oling-lab-menu-title"
+      >
+        <nav
+          class="oling-lab-menu-tabs"
+          id="oling-lab-menu-tabs"
+          aria-label="Menu sections"
+          hidden
+        ></nav>
+        <header class="oling-lab-menu-header">
+          <h2 id="oling-lab-menu-title">Lab Item</h2>
+        </header>
+        <div class="oling-lab-menu-content" id="oling-lab-menu-content"></div>
+        <footer
+          class="oling-lab-menu-footer"
+          id="oling-lab-menu-footer"
+        ></footer>
+      </section>
+    </div>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'up';
+
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#BEE7FF'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#7CBDE8'
+    );
+
+    window.pageScripts = {
+      '/scripts/olings/shared/oling-flight-motion.js': {
+        cacheBustKey: 'OLING_FLIGHT_MOTION',
+        zIndex: 0
+      },
+      '/scripts/olings/lab/olings/preview.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.1
+      },
+      '/scripts/olings/lab/olings/build.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.2
+      },
+      '/scripts/olings/lab/olings/inspect.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.3
+      },
+      '/scripts/olings/lab/olings/reveal.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.4
+      },
+      '/scripts/olings/lab/olings/lab-olings.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.5
+      },
+      '/scripts/olings/lab/shared/placement-svg.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.9
+      },
+      '/scripts/olings/lab/room/lab-roaming-targets.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.95
+      },
+      '/scripts/olings/lab/room/lab-rest-visuals.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.98
+      },
+      '/scripts/olings/lab/room/lab-roaming.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/room/lab-camera.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/data/lab-data.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/ui/lab-menu-shell.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/incubator/lab-incubator-core.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/incubator/lab-incubator-info.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/incubator/lab-incubator-incubation.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/incubator/lab-incubator-influences.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/incubator/lab-incubator.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/data/lab-purchases.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-placement/grid-state.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-placement/mutations.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-placement/art-and-placement.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-placement/lab-furniture-placement.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/ui/lab-ui.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/action-panels.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/placement-menu.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/furniture-tabs.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/slot-tabs.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/shelf-inventory.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/shelf-storage.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/furniture-menus/lab-furniture-menus.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/ui/lab-hatch-controls.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/ui/lab-rest-and-interactions.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/explorer-gateway/render-tools.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/explorer-gateway/lab-explorer-gateway.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/room/lab-renderer.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/data/lab-data-flow.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/core/lab-runtime.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 2
+      },
+      '/scripts/olings/lab/core/lab-startup.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 3
+      },
+      '/scripts/olings/lab/core/lab.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 4
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js?v=2026-07-16-20"
+    data-loaded="false"
+  ></script>
+</html>

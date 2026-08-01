@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="ACHIEVEMENTS" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512">
+  <!-- Generator: Adobe Illustrator 29.8.7, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #55b97f;
+      }
+
+      .st1 {
+        fill: #7cffb2;
+      }
+    </style>
+  </defs>
+  <path class="st0" d="M258.9,258.6h-.3v-121.7c2.5,0,5,.2,7.5.4,139.8,11,164.1,211.9,12.6,240.7-96.9,18.4-144.4-50.5-143-119.4h123.2Z"/>
+  <path class="st1" d="M252.8,131.1v121.7h-122.9c1.2-62.2,42.3-124.2,122.9-121.7Z"/>
+</svg>

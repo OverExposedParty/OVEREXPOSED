@@ -1,70 +1,107 @@
 <div class="selected-user-container pop-up" id="party-game-statistics-container">
+    <div class="game-over-tab-container" id="game-over-tabs" role="tablist" aria-label="Game over views" hidden>
+        <button class="game-over-tab active" id="game-over-results-tab" type="button" role="tab"
+            aria-selected="true" aria-controls="game-over-results-panel">RESULTS</button>
+        <button class="game-over-tab" id="game-over-opals-tab" type="button" role="tab"
+            aria-selected="false" aria-controls="game-over-opals-panel">OPALS</button>
+        <button class="game-over-tab" id="game-over-xp-tab" type="button" role="tab"
+            aria-selected="false" aria-controls="game-over-xp-panel">XP</button>
+    </div>
     <div class="content-container">
         <h1>Party Game Statistics</h1>
     </div>
-    <div class="content-container">
-        <div id="scoreboard-container"> </div>
+    <div class="game-over-view-stack">
+        <div class="content-container game-over-view" id="game-over-results-panel" role="tabpanel"
+            aria-labelledby="game-over-results-tab">
+            <div id="scoreboard-container"> </div>
+        </div>
+        <div class="content-container game-over-view" id="game-over-opals-panel" role="tabpanel"
+            aria-labelledby="game-over-opals-tab" hidden>
+            <div class="game-over-reward-list">
+                <div class="game-over-reward-empty" id="game-over-reward-empty" hidden>
+                    <strong>Rewards unavailable</strong>
+                    <span id="game-over-reward-empty-reason">Sign in to earn Opal rewards.</span>
+                </div>
+                <div class="game-over-reward-row" hidden>
+                    <span>Game completed</span>
+                    <span class="game-over-reward-amount">
+                        <img src="/images/icons/currency/opal.svg" alt="">
+                        <strong id="game-over-reward-completed">0</strong>
+                    </span>
+                </div>
+                <div class="game-over-reward-row" hidden>
+                    <span>Active participation</span>
+                    <span class="game-over-reward-amount">
+                        <img src="/images/icons/currency/opal.svg" alt="">
+                        <strong id="game-over-reward-participation">0</strong>
+                    </span>
+                </div>
+                <div class="game-over-reward-row" hidden>
+                    <span>Objective bonus</span>
+                    <span class="game-over-reward-amount">
+                        <img src="/images/icons/currency/opal.svg" alt="">
+                        <strong id="game-over-reward-objective">0</strong>
+                    </span>
+                </div>
+                <div class="game-over-reward-row game-over-cap-reduction" id="game-over-cap-reduction" hidden>
+                    <span id="game-over-cap-reduction-label">Daily cap reduction</span>
+                    <span class="game-over-reward-amount">
+                        <img src="/images/icons/currency/opal.svg" alt="">
+                        <strong id="game-over-cap-reduction-amount">0</strong>
+                    </span>
+                </div>
+                <div class="game-over-reward-total" hidden>
+                    <span>Total earned</span>
+                    <span class="game-over-reward-amount">
+                        <img src="/images/icons/currency/opal.svg" alt="">
+                        <strong id="game-over-reward-total">0</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="content-container game-over-view" id="game-over-xp-panel" role="tabpanel"
+            aria-labelledby="game-over-xp-tab" hidden>
+            <div class="game-over-reward-list">
+                <div class="game-over-reward-empty" id="game-over-xp-empty" hidden>
+                    <strong>XP unavailable</strong>
+                    <span id="game-over-xp-empty-reason">Sign in to earn XP.</span>
+                </div>
+                <div class="game-over-reward-row" id="game-over-xp-level-row" hidden>
+                    <span>Current level</span>
+                    <span class="game-over-reward-amount">
+                        <strong id="game-over-xp-current-level">1</strong>
+                    </span>
+                </div>
+                <div class="game-over-reward-row game-over-level-up" id="game-over-xp-level-up" hidden>
+                    <span>Level up!</span>
+                    <span class="game-over-reward-amount">
+                        <strong><span id="game-over-xp-level-before">1</span> → <span
+                                id="game-over-xp-level-after">2</span></strong>
+                    </span>
+                </div>
+                <div class="game-over-xp-progress" id="game-over-xp-progress" hidden>
+                    <div class="game-over-xp-progress-heading">
+                        <span>Next level progress</span>
+                        <strong id="game-over-xp-progress-text">0 / 500 XP</strong>
+                    </div>
+                    <div class="game-over-xp-progress-track" id="game-over-xp-progress-track" role="progressbar"
+                        aria-label="Progress to next level" aria-valuemin="0" aria-valuemax="500" aria-valuenow="0">
+                        <span id="game-over-xp-progress-fill"></span>
+                    </div>
+                </div>
+                <div class="game-over-reward-total" id="game-over-xp-total-row" hidden>
+                    <span>Total earned</span>
+                    <span class="game-over-reward-amount">
+                        <strong id="game-over-xp-total">0xp</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="content-container">
         <button class="select-button" id="end-game">END GAME</button>
-    </div>
-</div>
-
-<div class="selected-user-container pop-up " id="game-over-container">
-    <div class="content-container">
-        <h1>GAME OVER</h1>
-    </div>
-    <div class="content-container game-over-content">
-
-        <img src="/images/game-end-screen/stage.png" alt="Game Over Screen" class="game-over-image">
-        <div class="podium-point" id="first-place">
-            <div class="icon ">
-                <div class="image-stack">
-                    <img src="/images/user-customisation/colour/blank/blank-colour.svg"
-                        class="user-customisation-character layer-colour" alt="Colour Slot">
-                    <img src="/images/user-customisation/head-slot/blank/no-head-slot.svg"
-                        class="user-customisation-character layer-head-slot" alt="Head Slot">
-                    <img src="/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg"
-                        class="user-customisation-character layer-eyes-slot" alt="Eyes Slot">
-                    <img src="/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg"
-                        class="user-customisation-character layer-mouth-slot" alt="Mouth Slot">
-                </div>
-            </div>
-        </div>
-        <div class="podium-point" id="second-place">
-            <div class="icon ">
-                <div class="image-stack">
-                    <img src="/images/user-customisation/colour/blank/blank-colour.svg"
-                        class="user-customisation-character layer-colour" alt="Colour Slot">
-                    <img src="/images/user-customisation/head-slot/blank/no-head-slot.svg"
-                        class="user-customisation-character layer-head-slot" alt="Head Slot">
-                    <img src="/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg"
-                        class="user-customisation-character layer-eyes-slot" alt="Eyes Slot">
-                    <img src="/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg"
-                        class="user-customisation-character layer-mouth-slot" alt="Mouth Slot">
-                </div>
-            </div>
-        </div>
-        <div class="podium-point" id="third-place">
-            <div class="icon ">
-                <div class="image-stack">
-                    <img src="/images/user-customisation/colour/blank/blank-colour.svg"
-                        class="user-customisation-character layer-colour" alt="Colour Slot">
-                    <img src="/images/user-customisation/head-slot/blank/no-head-slot.svg"
-                        class="user-customisation-character layer-head-slot" alt="Head Slot">
-                    <img src="/images/user-customisation/eyes-slot/blank/no-eyes-slot.svg"
-                        class="user-customisation-character layer-eyes-slot" alt="Eyes Slot">
-                    <img src="/images/user-customisation/mouth-slot/blank/no-mouth-slot.svg"
-                        class="user-customisation-character layer-mouth-slot" alt="Mouth Slot">
-                </div>
-            </div>
-        </div>
-
-        <div class="game-over-scores-container" id="game-over-scores-container">
-
-        </div>
-    </div>
-    <div class="content-container">
-        <button class="select-button" id="button-main-menu">MAIN MENU</button>
+        <button class="select-button" id="statistics-game-settings" hidden>BACK TO GAME SETTINGS</button>
+        <p id="statistics-waiting-for-host" hidden>WAITING FOR HOST...</p>
+        <button class="select-button" id="statistics-main-menu" hidden>MAIN MENU</button>
     </div>
 </div>

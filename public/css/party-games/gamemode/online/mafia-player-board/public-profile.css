@@ -1,0 +1,171 @@
+.player-public-profile-dialog {
+  overflow: visible;
+  background: transparent;
+}
+
+.player-public-profile {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: min(760px, calc(100vh - 36px));
+  overflow-y: auto;
+  border-radius: 24px;
+  background: var(--backgroundcolour);
+  color: #241131;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+}
+
+.player-public-profile-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(36, 17, 49, 0.08);
+  color: #241131;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.player-public-profile-close:focus-visible {
+  background: rgba(143, 70, 213, 0.16);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .player-public-profile-close:hover {
+    background: rgba(143, 70, 213, 0.16);
+    outline: none;
+  }
+}
+
+.player-public-profile-content {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+.player-public-profile-header {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding-right: 38px;
+}
+
+.player-public-profile-avatar {
+  width: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-public-profile-avatar .icon,
+.player-public-profile-avatar .image-stack {
+  width: 94px;
+  height: 94px;
+}
+
+.player-public-profile-heading {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.player-public-profile-heading h2,
+.player-public-profile-heading p {
+  margin: 0;
+}
+
+.player-public-profile-heading h2 {
+  overflow-wrap: anywhere;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.player-public-profile-heading p {
+  overflow-wrap: anywhere;
+  font-weight: 800;
+  opacity: 0.72;
+}
+
+.player-public-profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.player-public-profile-meta span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(143, 70, 213, 0.14);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.player-public-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.player-public-profile-stat {
+  display: grid;
+  gap: 4px;
+  min-height: 74px;
+  align-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(143, 70, 213, 0.12);
+  text-align: center;
+}
+
+.player-public-profile-stat strong,
+.player-public-profile-stat span {
+  overflow-wrap: anywhere;
+}
+
+.player-public-profile-stat strong {
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.player-public-profile-stat span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.74;
+}
+
+.player-public-profile-details {
+  display: grid;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.player-public-profile-details p {
+  margin: 0;
+  font-weight: 800;
+}
+
+.player-public-profile-state {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.player-public-profile-state.error {
+  color: #8f2338;
+}

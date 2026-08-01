@@ -1,0 +1,114 @@
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('/fonts/LemonMilk/LEMONMILK-Medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body,
+html * {
+  font-family: 'LemonMilk', Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+a {
+  color: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    color: var(--secondarypagecolour);
+  }
+}
+
+:root {
+  --primarypagecolour: #9d8aff;
+  --secondarypagecolour: #7f71b2;
+  --backgroundcolour: #202020;
+  --secondarybackgroundcolour: #131313;
+  --warningcolour: #ff3333;
+  --warningcoloursecondary: #b22626;
+  --successcolour: #33cc66;
+  --successcoloursecondary: #26994d;
+  --disabledcolour: #777777;
+  --bordersize: 5px;
+  --headerheight: 5vh;
+  --cardRatio: 1/1.64044950946;
+}
+
+/* Customize the scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: transparent;
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background-color: var(--primarypagecolour);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--secondarypagecolour);
+  }
+}
+
+/* Scrollbar corner */
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.svg-primary-fill {
+  fill: var(--primarypagecolour);
+}
+.svg-secondary-fill {
+  fill: var(--secondarypagecolour);
+}
+.svg-background-fill {
+  fill: var(--backgroundcolour);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.is-visible {
+  --container-display: var(--container-visible-display, initial);
+  --container-left: var(--container-visible-left, initial);
+  --container-min-height: var(--container-visible-min-height, initial);
+  --container-overflow-y: var(--container-visible-overflow-y, initial);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-image: url('/images/background-tile.png');
+  background-size: 384px 414px;
+  background-position: top left;
+  background-repeat: repeat;
+  background-color: var(--secondarybackgroundcolour);
+  touch-action: manipulation;
+}
+
+html.splash-transition-active,
+html.splash-transition-active body {
+  overflow: hidden;
+}

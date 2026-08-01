@@ -35,7 +35,7 @@
     <link rel="preload" href="/images/splash-screens/overexposure.png" as="image">
 
     <link rel="stylesheet" href="/css/overexposure/overexposure.css">
-    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
 
     <link rel="icon" type="image/x-icon" href="/images/meta/favicons/overexposure/confessions/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16"
@@ -81,8 +81,15 @@
         <p></p>
     </div>
 
+    <div class="chat-box overexposure-console" id="overexposure-console" hidden>
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+        </div>
+        <div class="chat-messages">
+        </div>
+    </div>
+
     <div id="header-placeholder"></div>
-    <div id="user-customisation-placeholder"></div>
 
     <button class="back-button">HOME</button>
 
@@ -112,9 +119,9 @@
                                 d="M404.5,588.72l193.4-.06c29.21,4.06,29.57,45.24.42,49.74l-193.88-.04c-28.55-4.77-28.47-44.86.06-49.64Z" />
                         </svg>
                     </button>
-                    <button id="flag-post-button" class="tool-tip" data-tooltip="Flag post" aria-pressed="false">
-                        <span class="sr-only" id="flag-post-button-label">Flag post</span>
-                        <svg class="moderation-icon flag-post-icon" xmlns="http://www.w3.org/2000/svg"
+                    <button id="report-post-button" class="tool-tip" data-tooltip="Report post">
+                        <span class="sr-only" id="report-post-button-label">Report post</span>
+                        <svg class="moderation-icon report-post-icon" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 640 640" aria-hidden="true" focusable="false">
                             <path fill="currentColor"
                                 d="M150.18,19.19c1.62-.1,3.66-.1,5.28,0,2.06.13,4.05.25,6.02.94l328.26,119.41c39,16.87,40.19,72.14,2.73,91.19l-300.09,109.68c-5.02,2.58-6.79,7.06-7.2,12.48l-.04,239.87c-6.15,39.16-62.33,37.36-64.74-3.76V49.64c1.3-15.92,13.49-29.44,29.77-30.45Z" />
@@ -216,17 +223,23 @@
         <h2>ENABLE NSFW mode in settings</h2>
     </div>
 
-    <div class="warning-container" id="post-incomplete-container">
+    <div class="warning-container" id="post-incomplete-container" data-container-open-sound="postIncomplete">
         <h2>Failed to post</h2>
         <p>*Make sure no names are used</p>
     </div>
 
     <div class="warning-container" id="delete-post-container">
-        <h2>DELETE POST</h2>
-        <p>Enter delete code</p>
-        <input type="text" maxlength="7" placeholder="XXX-XXX" />
-        <div class="warning-button-container">
-            <button>DELETE</button>
+        <div class="delete-post-header">
+            <h2>DELETE POST</h2>
+        </div>
+        <div class="delete-post-form">
+            <label class="delete-post-field">
+                <span>Enter delete code</span>
+                <input type="text" maxlength="7" placeholder="XXX-XXX" />
+            </label>
+            <div class="warning-button-container">
+                <button>DELETE</button>
+            </div>
         </div>
     </div>
 
@@ -270,7 +283,8 @@
             <div class="share-post-url-container">
                 <input type="text" class="share-post-url-input" id="share-post-url-input"
                     value="example-share-link" readonly>
-                <button id="share-post-copy-button" type="button" class="tool-tip" data-tooltip="COPY LINK">
+                <button id="share-post-copy-button" type="button" class="tool-tip" data-tooltip="COPY LINK"
+                    data-press-feedback="linger">
                     <span class="sr-only">Copy full link</span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 206.78 262.84" aria-hidden="true"
                         focusable="false">
@@ -339,7 +353,6 @@
 
     document.documentElement.style.setProperty('--primarypagecolour', defaultColours.primary);
     document.documentElement.style.setProperty('--secondarypagecolour', defaultColours.secondary);
-    const helpContainerFile = "overexposure.json";
 
     window.pageScripts = {
         "https://code.responsivevoice.org/responsivevoice.js?key=H0rPOKnv": { zIndex: 1 },
@@ -347,23 +360,12 @@
         "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js": { zIndex: 1 },
         "https://unpkg.com/compromise": { zIndex: 1 },
         "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 1 },
-        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, zIndex: 10 },
-        "/scripts/overexposure/camera-view.js": { zIndex: 10 },
-        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, zIndex: 20 },
-        "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 20 },
-        '/scripts/general/online/user-customisation.js': { addDataLoaded: true, zIndex: 30 },
-        "/scripts/overexposure/overexposure-init.js": { addDataLoaded: true, cacheBustKey: "OVEREXPOSURE", zIndex: 40 },
+        "/scripts/overexposure/controls/camera-view.js": { zIndex: 10 },
+        "/scripts/overexposure/overexposure-init/overexposure-init.js": { addDataLoaded: true, cacheBustKey: "OVEREXPOSURE", zIndex: 40 },
 
 
     };
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
-
-
-<script>
-    // waitForFunction("FetchHelpContainer", () => {
-    //FetchHelpContainer(helpContainerFile);
-    // })
-</script>
+<script src="/scripts/html-templates/core-template/core-template.js" data-loaded="false"></script>
 
 </html>

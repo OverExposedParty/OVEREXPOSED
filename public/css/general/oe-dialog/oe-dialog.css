@@ -1,0 +1,28 @@
+.oe-dialog {
+  max-width: none;
+  max-height: none;
+  border: 0;
+  padding: 0;
+}
+
+.oe-dialog::backdrop {
+  background: rgb(0 0 0 / 78%);
+  backdrop-filter: blur(4px);
+}
+
+.oe-dialog-content-host {
+  overflow: visible;
+  background: transparent;
+}
+
+body.oe-dialog-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oe-dialog,
+  .oe-dialog * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,143 @@
+@media (max-width: 1000px) {
+  .players-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .player-board {
+    width: calc(100% - 24px);
+    height: 78vh;
+  }
+
+  .player-board-header {
+    padding: 12px 14px;
+  }
+
+  .player-board-title {
+    font-size: 1.25rem;
+  }
+
+  .player-board-role-btn {
+    font-size: 0.9rem;
+    padding: 4px 6px;
+  }
+
+  .players-container {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .player-container {
+    min-height: 84px;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 28px;
+  }
+
+  .player-avatar {
+    width: 96px;
+    height: 96px;
+    flex-basis: 96px;
+    margin: -8px 0;
+  }
+
+  .player-avatar .icon,
+  .player-avatar .image-stack {
+    width: 75px;
+    height: 75px;
+  }
+
+  .player-info {
+    gap: 10px;
+    font-size: 0.95rem;
+  }
+
+  .player-action-menu {
+    left: 88px;
+    min-width: 160px;
+  }
+
+  .player-public-profile {
+    border-radius: 18px;
+  }
+
+  .player-public-profile-content {
+    padding: 18px;
+  }
+
+  .player-public-profile-header {
+    grid-template-columns: 86px 1fr;
+    gap: 12px;
+    padding-right: 30px;
+  }
+
+  .player-public-profile-avatar {
+    width: 86px;
+    height: 86px;
+  }
+
+  .player-public-profile-avatar .icon,
+  .player-public-profile-avatar .image-stack {
+    width: 72px;
+    height: 72px;
+  }
+
+  .player-public-profile-heading h2 {
+    font-size: 1.35rem;
+  }
+
+  .player-public-profile-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (orientation: portrait) {
+  .players-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (orientation: portrait) and (max-width: 720px) {
+  .players-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.player-board-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-board-button {
+  width: 64px;
+  height: 64px;
+  border: var(--bordersize) solid var(--primarypagecolour);
+  border-radius: 50%;
+  background: var(--backgroundcolour);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .player-board-button:hover {
+    transform: scale(1.1);
+  }
+}
+
+.player-board-button.dead {
+  border-color: #666666;
+}
+
+.mafia-hint {
+  font-weight: 600;
+}

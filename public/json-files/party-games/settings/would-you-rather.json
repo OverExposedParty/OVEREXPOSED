@@ -1,32 +1,36 @@
 {
-    "would-you-rather-settings": [
-        {
-            "settings-name": "drink-punishment",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        }
-    ]
+  "would-you-rather-settings": [
+    {
+      "settings-name": "drink-punishment",
+      "settings-description": "Players who choose the less popular option are instructed to take a sip after the group’s decisions are revealed.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "would-you-rather"
+      ]
+    },
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many Would You Rather questions will be played before the game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "would-you-rather"
+      ],
+      "button-initial-value": 30,
+      "button-increment-value": 5,
+      "button-minimum-value": 10,
+      "button-maximum-value": 60
+    }
+  ]
 }

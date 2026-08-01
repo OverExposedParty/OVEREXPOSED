@@ -1,0 +1,136 @@
+.opal-reward-popup-row {
+  --opal-reward-text-colour: var(--opalTextColour, #f5f3ff);
+  appearance: none;
+  background:
+    linear-gradient(135deg, rgb(245 243 255 / 18%), transparent 42%),
+    var(--backgroundcolour);
+  border: 0;
+  box-shadow: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  padding: 8px 10px 8px 8px;
+  text-align: left;
+  transform: translateX(calc(100% + 20px));
+  transition:
+    background 180ms ease,
+    opacity 220ms ease,
+    transform 260ms ease;
+}
+
+.opal-reward-popup-row.is-visible {
+  transform: translateX(0);
+}
+
+.opal-reward-popup-row.is-exiting {
+  transform: translateX(calc(100% + 20px));
+}
+
+.opal-reward-popup-row:focus-visible {
+  background:
+    linear-gradient(135deg, rgb(245 243 255 / 24%), transparent 42%),
+    var(--backgroundcolour);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .opal-reward-popup-row:hover {
+    background:
+      linear-gradient(135deg, rgb(245 243 255 / 24%), transparent 42%),
+      var(--backgroundcolour);
+    outline: none;
+  }
+}
+
+.opal-reward-popup-icon-wrap {
+  align-items: center;
+  background: rgb(245 243 255 / 14%);
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  position: relative;
+  width: 50px;
+}
+
+.opal-reward-popup-icon {
+  display: block;
+  height: 34px;
+  object-fit: contain;
+  width: 34px;
+}
+
+.opal-reward-popup-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.opal-reward-popup-label {
+  color: var(--opal-reward-text-colour);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.opal-reward-popup-amount {
+  color: #ffffff;
+  font-size: 14.25px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.opal-reward-popup-reason {
+  color: rgb(255 255 255 / 78%);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opal-reward-popup-hint {
+  align-self: center;
+  color: var(--opal-reward-text-colour);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.opal-reward-dialog-host,
+.account-benefits-dialog-host {
+  overflow: visible;
+  background: transparent;
+}
+
+.opal-reward-dialog {
+  --opal-reward-text-colour: var(--opalTextColour, #f5f3ff);
+  --opal-reward-dialog-gap: 16px;
+  align-items: center;
+  aspect-ratio: 9 / 16;
+  background: var(--backgroundcolour);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  max-height: min(640px, calc(100vh - 36px));
+  max-width: min(360px, calc(100vw - 36px));
+  min-height: 0;
+  padding: 16px 18px 18px;
+  position: relative;
+  text-align: center;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 220ms ease;
+  width: min(360px, calc((100vh - 36px) * 0.5625), calc(100vw - 36px));
+}

@@ -1,0 +1,145 @@
+.header {
+  width: 100%;
+  height: var(--headerheight);
+  background-color: var(--primarypagecolour);
+  color: #202020;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  position: fixed;
+  transition: background-color 0.2s ease;
+  z-index: 1000;
+}
+
+html.shop-page .header {
+  background-color: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+html.shop-page .header.shop-header-transparent {
+  background-color: transparent;
+}
+
+.logo-container {
+  display: flex;
+  height: var(--headerheight);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo-container a {
+  display: inline-block;
+  line-height: 0;
+}
+
+.header-icon-container {
+  display: flex;
+  height: var(--headerheight);
+  width: auto;
+  position: absolute;
+  top: 0;
+}
+
+.header-icon-container.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  direction: rtl;
+  gap: 8px;
+}
+
+.header-icon-container.right {
+  align-items: flex-end;
+  margin-right: 10px;
+  right: 0;
+}
+
+.header-icon-container.right .icon-container {
+  width: calc(var(--headerheight) * 0.68);
+}
+
+.header-icon-container.left {
+  align-items: flex-start;
+  margin-left: 10px;
+  left: 0;
+}
+
+.header .icon-container {
+  height: var(--headerheight);
+  width: var(--headerheight);
+  flex: 0 0 auto;
+}
+
+.header .logo {
+  height: calc(calc(var(--headerheight) / 4) * 3);
+  width: auto;
+  max-width: 50vw;
+}
+
+.icon-container {
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: transform 220ms ease;
+  transform-origin: center center;
+}
+
+.icon-container.disabled {
+  display: none;
+  cursor: none;
+  pointer-events: none;
+}
+
+.header .icon-container.active {
+  transform: scale(1.1);
+}
+
+.icon-container img {
+  height: 60%;
+  width: auto;
+  pointer-events: none;
+}
+
+.icon-container img.small {
+  height: 50%;
+}
+
+#extra-menu-icon,
+#help-icon,
+#settings-icon {
+  height: 46%;
+  width: auto;
+}
+
+.tts-voice-button.selected {
+  border-color: var(--primarypagecolour);
+  color: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header .icon-container:hover {
+    transform: scale(1.1);
+  }
+}
+
+.icon-ring {
+  height: calc(60% - 4px);
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  border: 2px solid var(--backgroundcolour);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

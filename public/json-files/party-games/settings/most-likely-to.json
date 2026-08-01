@@ -1,40 +1,51 @@
 {
-    "most-likely-to-settings": [
-        {
-            "settings-name": "take-a-shot",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw", "online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "drink-wheel",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        }
-    ]
+  "most-likely-to-settings": [
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many Most Likely To prompts will be played before the game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "most-likely-to"
+      ],
+      "button-initial-value": 20,
+      "button-increment-value": 5,
+      "button-minimum-value": 5,
+      "button-maximum-value": 40
+    },
+    {
+      "settings-name": "drink-wheel",
+      "settings-description": "Allows the player who receives the most votes to spin for a random drinking punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "most-likely-to"
+      ]
+    },
+    {
+      "settings-name": "take-a-shot",
+      "settings-description": "Allows the player who receives the most votes to take a shot as their punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw",
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "most-likely-to"
+      ]
+    }
+  ]
 }

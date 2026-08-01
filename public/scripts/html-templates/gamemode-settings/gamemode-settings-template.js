@@ -62,7 +62,7 @@ const partyGamesInformation = {
   "would-you-rather": {
     partyType: "party-game-would-you-rather",
     playerCountRestrictions: {
-      minPlayers: 3,
+      minPlayers: 2,
       maxPlayers: 20
     },
     gamemodeColours: {
@@ -90,16 +90,26 @@ let userCount = document.querySelector('.user-count');
 let packsContainer, rulesContainer, onlineSettingsContainer;
 const placeholderGamemodeSettings = document.getElementById('gamemode-settings-placeholder');
 const cssFilesGamemodeSettings = [
+  '/css/general/online/party-code-controls.css',
   '/css/party-games/gamemode-settings-page-styles.css',
-  '/css/other/settings-shell.css',
-  '/css/party-games/online-error.css'
+  '/css/party-games/mode-selection.css',
+  '/css/other/settings-shell.css'
 ];
 
 cssFilesGamemodeSettings.forEach(href => {
   LoadStylesheet(href);
 });
 
-fetch('/html-templates/gamemode-settings.html')
+let gamemodeSettingsTemplateLoadedReported = false;
+
+function reportGamemodeSettingsTemplateLoaded() {
+  if (gamemodeSettingsTemplateLoadedReported) return;
+  gamemodeSettingsTemplateLoadedReported = true;
+  if (window.OEUsesPhasedLoader) return;
+  SetScriptLoaded('/scripts/html-templates/gamemode-settings/gamemode-settings-template.js');
+}
+
+const gamemodeSettingsTemplateReady = fetch('/html-templates/gamemode-settings.html')
   .then(response => response.text())
   .then(data => {
     return new Promise(resolve => {
@@ -131,34 +141,41 @@ fetch('/html-templates/gamemode-settings.html')
 
     userCount = document.querySelector('.user-count');
 
-    if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
-      return LoadScript('/scripts/party-games/gamemode-settings/game-settings-buttons.js', {
-        cacheBustKey: "PARTY_GAMES_SETTINGS"
-      }).then(() => LoadScript('/scripts/party-games/gamemode-settings/gamemode-settings.js', {
-        cacheBustKey: "PARTY_GAMES_SETTINGS"
-      }));
-    }
+    window.gamemodeSettings = {};
+    window.gamemodeSelectedPacks = [];
+    window.gamemodeRoleCounts = {};
+    window.allUsersReady = undefined;
+    window.onlinePlayerCountRestrictionsMet = true;
+
+    window.startGameButton = document.querySelector('.start-game-button');
+    window.warningBox = document.getElementById('warning-box');
+    window.warningStartButton = document.querySelector('.start-game-warning-button');
+    window.inputPartyCode = document.getElementById('party-code');
+    window.copyPartyCodeButton = document.getElementById('party-code-copy-button');
+    window.qrCodeButton = document.getElementById('qr-code-button');
 
   }).then(() => {
-    if (placeholderGamemodeSettings.dataset.template != "waiting-room") {
-      const storageObserver = new LocalStorageObserver();
-      storageObserver.addListener((key, oldValue, newValue) => {
-        if (key === 'settings-nsfw') {
-          debugLog(`The value of '${key}' changed from '${oldValue}' to '${newValue}'`);
-          if (oldValue !== newValue) {
-            eighteenPlusEnabled = newValue;
-            SetGamemodeButtons();
-            debugLog(`Value changed! Now NSFW is set to: ${newValue}`);
-          }
-        }
-      });
-      const helpContainerFile = "party-games-settings/" + placeholderGamemodeSettings.dataset.template + '.json';
-      waitForFunction("FetchHelpContainer", () => {
-        FetchHelpContainer(helpContainerFile);
-      })
-    }
-  }).then(() => {
+    if (placeholderGamemodeSettings.dataset.template === 'waiting-room') return;
 
+    return LoadScript(
+      '/scripts/html-templates/gamemode-settings/mode-selection-template.js',
+      { cacheBustKey: 'PARTY_GAMES_SETTINGS' }
+    )
+      .then(() =>
+        LoadScript(
+          '/scripts/party-games/gamemode-settings/play-mode-selection.js',
+          { cacheBustKey: 'PARTY_GAMES_SETTINGS' }
+        )
+      )
+      .then(() => window.initializeModeSelection());
   }).then(() => {
-    SetScriptLoaded('/scripts/html-templates/gamemode-settings/gamemode-settings-template.js');
+    reportGamemodeSettingsTemplateLoaded();
+  }).catch(error => {
+    console.error('Error loading gamemode settings template:', error);
+    reportGamemodeSettingsTemplateLoaded();
+    throw error;
   });
+
+if (window.OEReady) {
+  window.OEReady.register('gamemode-settings-template', gamemodeSettingsTemplateReady);
+}

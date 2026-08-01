@@ -1,0 +1,22 @@
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background-image: url("/images/error-404/background.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.main-container[data-template="page-not-found"] {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+}
+
+.main-container[data-template="page-not-found"] {
+    padding: 0;
+}

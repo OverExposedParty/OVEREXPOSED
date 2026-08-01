@@ -12,12 +12,47 @@ const {
   getWaitingRoomMeta,
   prepareHtmlResponse,
   renderWaitingRoomPage,
+  sendProtectedPage,
   sendVersionedHtmlFile
 } = require('../services/page-assets');
+const {
+  sendBattleOlingsPage
+} = require('../services/page-assets-battle-olings');
+const { sendLoginPage } = require('../services/page-assets-login');
+const { canAccessProtectedPage } = require('../services/page-protection');
 
-function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
-  const sendPage = (route, relativePath) => {
-    app.get(route, (req, res) => {
+function registerPageRoutes({
+  app,
+  accountModel,
+  debugLog,
+  hostedPartyModels = [],
+  waitingRoomModel
+}) {
+  const sendPage = (route, relativePath, protection = null) => {
+    app.get(route, async (req, res) => {
+      let access;
+
+      try {
+        access = await canAccessProtectedPage(req, protection, {
+          Account: accountModel,
+          PartyModels: hostedPartyModels.length
+            ? hostedPartyModels
+            : [waitingRoomModel].filter(Boolean)
+        });
+      } catch (error) {
+        console.error(
+          `[REQ ${req.id || 'unknown'}] Page protection check failed:`,
+          error
+        );
+        sendProtectedPage(req, res, { reason: 'protected' }, 403);
+        return;
+      }
+
+      if (!access.allowed) {
+        sendProtectedPage(req, res, access, 403);
+        return;
+      }
+
       const filePath = path.join(PUBLIC_DIRECTORY, relativePath);
       debugLog(`Attempting to serve file from: ${filePath}`);
 
@@ -37,6 +72,14 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
       sendVersionedHtmlFile(req, res, filePath);
     });
   };
+  const adminProtected = { type: 'admin' };
+  const accountProtected = { type: 'account' };
+  const featureProtected = (feature) => ({ type: 'feature', feature });
+  const hostedFeatureProtected = (feature) => ({
+    type: 'feature',
+    feature,
+    allowHostedParty: true
+  });
 
   sendPage('/', path.join('pages', 'homepages', 'homepage.html'));
   sendPage(
@@ -134,15 +177,23 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
   );
   sendPage(
     '/imposter/settings',
-    path.join('pages', 'party-games', 'imposter', 'imposter-settings-page.html')
+    path.join(
+      'pages',
+      'party-games',
+      'imposter',
+      'imposter-settings-page.html'
+    ),
+    featureProtected('imposter')
   );
   sendPage(
     '/imposter',
-    path.join('pages', 'party-games', 'imposter', 'imposter-page.html')
+    path.join('pages', 'party-games', 'imposter', 'imposter-page.html'),
+    featureProtected('imposter')
   );
   sendPage(
     '/imposter/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})',
-    path.join('pages', 'party-games', 'imposter', 'imposter-online-page.html')
+    path.join('pages', 'party-games', 'imposter', 'imposter-online-page.html'),
+    hostedFeatureProtected('imposter')
   );
   sendPage(
     '/would-you-rather',
@@ -151,7 +202,8 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
       'party-games',
       'would-you-rather',
       'would-you-rather-page.html'
-    )
+    ),
+    featureProtected('would-you-rather')
   );
   sendPage(
     '/would-you-rather/settings',
@@ -160,7 +212,8 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
       'party-games',
       'would-you-rather',
       'would-you-rather-settings-page.html'
-    )
+    ),
+    featureProtected('would-you-rather')
   );
   sendPage(
     '/would-you-rather/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})',
@@ -169,34 +222,97 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
       'party-games',
       'would-you-rather',
       'would-you-rather-online-page.html'
-    )
-  );
-  sendPage(
-    '/exposay/settings',
-    path.join('pages', 'party-games', 'exposay', 'exposay-settings-page.html')
+    ),
+    hostedFeatureProtected('would-you-rather')
   );
   sendPage(
     '/mafia/settings',
-    path.join('pages', 'party-games', 'mafia', 'mafia-settings-page.html')
+    path.join('pages', 'party-games', 'mafia', 'mafia-settings-page.html'),
+    featureProtected('mafia')
   );
   sendPage(
     '/mafia/:partyCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})',
-    path.join('pages', 'party-games', 'mafia', 'mafia-online-page.html')
+    path.join('pages', 'party-games', 'mafia', 'mafia-online-page.html'),
+    hostedFeatureProtected('mafia')
   );
   sendPage(
     '/overexposure',
-    path.join('pages', 'overexposure', 'overexposure.html')
+    path.join('pages', 'overexposure', 'overexposure.html'),
+    featureProtected('overexposure')
+  );
+  sendPage(
+    '/olings/lab',
+    path.join('pages', 'olings', 'lab.html'),
+    featureProtected('olings.lab')
+  );
+  const sendBattleOlingsPageRoute = (route) => {
+    app.get(route, async (req, res) => {
+      let access;
+
+      try {
+        access = await canAccessProtectedPage(req, accountProtected, {
+          Account: accountModel,
+          PartyModels: hostedPartyModels.length
+            ? hostedPartyModels
+            : [waitingRoomModel].filter(Boolean)
+        });
+      } catch (error) {
+        console.error(
+          `[REQ ${req.id || 'unknown'}] Page protection check failed:`,
+          error
+        );
+        sendProtectedPage(req, res, { reason: 'protected' }, 403);
+        return;
+      }
+
+      if (!access.allowed) {
+        sendProtectedPage(req, res, access, 403);
+        return;
+      }
+
+      sendBattleOlingsPage(req, res);
+    });
+  };
+
+  sendBattleOlingsPageRoute('/olings/battle');
+  sendBattleOlingsPageRoute(
+    '/olings/battle/:matchCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})'
+  );
+  sendPage(
+    '/shop',
+    path.join('pages', 'shop', 'landing-page.html'),
+    featureProtected('shop')
+  );
+  sendPage(
+    '/shop/:slug',
+    path.join('pages', 'shop', 'product-page.html'),
+    featureProtected('shop')
+  );
+  app.get('/sign-in', (req, res) => {
+    sendLoginPage(req, res);
+  });
+  app.get('/login', (req, res) => {
+    const query = req.url.includes('?')
+      ? req.url.slice(req.url.indexOf('?'))
+      : '';
+    res.redirect(301, `/sign-in${query}`);
+  });
+  sendPage(
+    '/reset-password',
+    path.join('pages', 'auth', 'reset-password.html')
+  );
+  sendPage('/change-email', path.join('pages', 'auth', 'change-email.html'));
+  sendPage(
+    '/oe-panel',
+    path.join('pages', 'oe-panel', 'oe-panel.html'),
+    adminProtected
   );
 
-  app.get('/overexposure/:timestamp', (req, res) => {
-    const filePath = path.join(
-      PUBLIC_DIRECTORY,
-      'pages',
-      'overexposure',
-      'overexposure.html'
-    );
-    sendVersionedHtmlFile(req, res, filePath);
-  });
+  sendPage(
+    '/overexposure/:timestamp',
+    path.join('pages', 'overexposure', 'overexposure.html'),
+    featureProtected('overexposure')
+  );
 
   sendPage('/waiting-room', path.join('pages', 'waiting-room.html'));
 
@@ -247,8 +363,15 @@ function registerPageRoutes({ app, debugLog, waitingRoomModel }) {
   );
   sendPage(
     '/oes-customisation',
-    path.join('pages', 'other', 'oes-customisation.html')
+    path.join('pages', 'other', 'oes-customisation.html'),
+    accountProtected
   );
+  sendPage(
+    '/oe-library',
+    path.join('pages', 'other', 'oes-customisation.html'),
+    accountProtected
+  );
+  sendPage('/terminal', path.join('pages', '404.html'));
 
   app.use((req, res) => {
     sendVersionedHtmlFile(

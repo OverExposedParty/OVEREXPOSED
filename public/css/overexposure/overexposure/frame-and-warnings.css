@@ -1,0 +1,178 @@
+:root {
+    --canvasHeight: 5000px;
+    --canvasWidth: 5000px;
+    --cardWidth: 200px;
+
+    --noplacepadding: 100px;
+
+    --cardtemplate: url(/images/overexposure/card-template.svg);
+
+    --confessions-primary-colour: #5DA9FF;
+    --stories-primary-colour: #B57CFF;
+    --thoughts-primary-colour: #FFB86B;
+    --feelings-primary-colour: #FFF066;
+
+    --confessions-secondary-colour: #3F7CC4;
+    --stories-secondary-colour: #8C5FD1;
+    --thoughts-secondary-colour: #C98C4F;
+    --feelings-secondary-colour: #C6B43F;
+}
+
+.create-card {
+    aspect-ratio: var(--cardRatio);
+    width: 100px;
+    position: absolute;
+    background-image: var(--cardtemplate);
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 300;
+    transition: width 1s linear;
+    pointer-events: none;
+}
+
+.create-card.grow {
+    width: 200px;
+}
+
+img {
+    pointer-events: none;
+    user-select: none;
+}
+
+highlight {
+    color: var(--backgroundcolour);
+    background-color: var(--primarypagecolour);
+    padding: 0 10px 0 10px !important;
+    border-radius: 25px;
+}
+
+.safe-zone {
+    height: 575px;
+    width: 1100px;
+    position: absolute;
+    top: 47.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.no-place {
+    width: calc(var(--cardWidth) * 1.5);
+    aspect-ratio: var(--cardRatio);
+    position: absolute;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.no-place.fade-out {
+    opacity: 0;
+}
+
+.no-place.visible,
+.safe-zone.visible {
+    background-color: #41414159;
+}
+
+#viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    touch-action: none;
+    z-index: 1;
+    /* important for pinch/drag */
+}
+
+.floating-container {
+    position: absolute;
+    width: var(--canvasWidth);
+    height: var(--canvasHeight);
+    box-shadow: 0px 5px 10px var(--warningcolour);
+    outline: 2px solid var(--warningcolour);
+
+    display: flex;
+    flex-direction: column;
+    /* Stack elements vertically */
+    justify-content: center;
+    /* Centers content vertically */
+    align-items: center;
+    /* Centers content horizontally */
+
+    text-align: center;
+    font-size: 20px;
+
+    color: var(--primarypagecolour);
+    user-select: none;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+.warning-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55dvh;
+    height: auto;
+    padding: 2%;
+    background-color: #101010;
+    border: var(--bordersize) solid #101010;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    z-index: 800;
+    text-align: center;
+
+    border-radius: 25px;
+    max-width: 60vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--warningcolour);
+    display: var(--container-display, none);
+    --container-visible-display: flex;
+}
+
+.warning-container h2 {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.warning-container p {
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+.warning-container button {
+    background-color: var(--warningcolour);
+    color: #202020;
+    border: 4px solid var(--warningcolour);
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 100%;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+
+    width: 25%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .warning-container button:hover {
+        background-color: var(--warningcoloursecondary);
+        color: #202020;
+        border-color: var(--warningcoloursecondary);
+    }
+}
+
+.warning-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.warning-container input {
+    margin: 10px 0;
+    color: var(--warningcolour);
+}
+

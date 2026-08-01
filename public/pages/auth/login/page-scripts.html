@@ -1,0 +1,38 @@
+  <script>
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#66CCFF'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#427BB9'
+    );
+
+    window.pageScripts = {
+      '/scripts/general/online/active-party-conflict-dialog.js': {
+        cacheBustKey: 'AUTH',
+        zIndex: 0
+      },
+      '/scripts/auth/login/legal-dialog.js': {
+        cacheBustKey: 'AUTH',
+        zIndex: 0
+      },
+      '/scripts/auth/login/auth-ui.js': {
+        cacheBustKey: 'AUTH',
+        zIndex: 0.1
+      },
+      '/scripts/auth/login/auth-session.js': {
+        cacheBustKey: 'AUTH',
+        zIndex: 0.2
+      },
+      '/scripts/auth/login/auth-submissions.js': {
+        cacheBustKey: 'AUTH',
+        zIndex: 0.3
+      },
+      '/scripts/auth/login/login.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'AUTH',
+        zIndex: 1
+      }
+    };
+  </script>

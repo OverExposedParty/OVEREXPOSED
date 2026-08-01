@@ -34,7 +34,16 @@ function registerPartySockets({
         debugLog(`📢 Notified room ${room} of disconnection`);
       });
 
-      await disconnectSocketPartyMemberships(socket.id);
+      try {
+        if (typeof disconnectSocketPartyMemberships === 'function') {
+          await disconnectSocketPartyMemberships(socket.id);
+        }
+      } catch (error) {
+        console.error(
+          `❌ Failed to clean up party memberships for socket ${socket.id}:`,
+          error
+        );
+      }
     });
 
     socket.on('kick-user', (partyCode) => {
@@ -44,22 +53,6 @@ function registerPartySockets({
       debugLog(`${socket.id} kicked from room ${partyCode}`);
       socket.emit('kicked-from-party', partyCode);
       socket.to(partyCode).emit('user-kicked', { socketId: socket.id });
-    });
-
-    socket.on('delete-party', (partyCode) => {
-      if (!partyCode) return;
-
-      debugLog(`🗑️ Party deleted: ${partyCode}`);
-      socket.to(partyCode).emit('party-deleted', { partyCode });
-      socket.emit('party-deleted', { partyCode });
-
-      const clientsInRoom = io.sockets.adapter.rooms.get(partyCode);
-      if (clientsInRoom) {
-        for (const clientId of clientsInRoom) {
-          const clientSocket = io.sockets.sockets.get(clientId);
-          clientSocket?.leave(partyCode);
-        }
-      }
     });
   });
 }

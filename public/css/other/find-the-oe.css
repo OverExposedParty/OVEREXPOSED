@@ -1,0 +1,276 @@
+@font-face {
+    font-family: "LemonMilkLight";
+    src: url("/fonts/LemonMilk/LEMONMILK-Light.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+.find-the-oe {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    background: #fff;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.find-the-oe-screen {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background: #fff;
+}
+
+.find-the-oe-start,
+.find-the-oe-intro,
+.find-the-oe-game-over {
+    place-items: center;
+    align-content: center;
+    text-align: center;
+}
+
+.find-the-oe-start {
+    cursor: pointer;
+}
+
+.find-the-oe-start-button {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: #000;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+.find-the-oe-start-button:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: -0.45rem;
+}
+
+.find-the-oe-start-instructions {
+    display: block;
+    max-width: min(30rem, calc(100% - 2rem));
+    margin: 0;
+    font-family: "LemonMilkLight", Arial, Helvetica, sans-serif;
+    font-size: clamp(0.425rem, 1.7vw, 0.85rem);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.find-the-oe-start-text {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: clamp(0.3rem, 1.5vw, 0.6rem);
+    left: 0;
+    margin: 0;
+    color: #000;
+    font-size: clamp(0.525rem, 1.8vw, 0.9375rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.find-the-oe-intro {
+    padding-top: var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem));
+}
+
+.find-the-oe-intro-content {
+    display: grid;
+    z-index: 2;
+    place-items: center;
+    transform: translateY(calc(var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem)) * -0.5));
+}
+
+.find-the-oe-title,
+.find-the-oe-game-over-title,
+.find-the-oe-score,
+.find-the-oe-replay {
+    margin: 0;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.find-the-oe-callout {
+    position: absolute;
+    top: calc(var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem)) + ((100% - var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem))) * 0.14));
+    left: 78%;
+    z-index: 4;
+    display: grid;
+    justify-items: center;
+    width: max-content;
+    max-width: 42%;
+    pointer-events: none;
+    transform: translate(-50%, -8%);
+}
+
+.find-the-oe-title {
+    justify-self: center;
+    max-width: 100%;
+    color: #000;
+    font-size: clamp(0.54rem, 1.69vw, 1.01rem);
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.find-the-oe-arrow {
+    justify-self: end;
+    width: min(4.6rem, 54%);
+    margin-top: 0.15rem;
+    margin-right: 50%;
+    transform: none;
+    transform-origin: 50% 50%;
+    overflow: visible;
+}
+
+.find-the-oe-arrow path {
+    fill: #000;
+    stroke: #000;
+    stroke-width: 4.8;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+}
+
+.find-the-oe-image-stack {
+    position: relative;
+    width: var(--oe-size, clamp(4.5rem, 24vw, 10rem));
+    aspect-ratio: 1;
+}
+
+.find-the-oe-image-stack.target {
+    --oe-size: clamp(5.8rem, 31vw, 13rem);
+}
+
+.find-the-oe-image-stack img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.find-the-oe-image-stack img[data-slot="colour"] {
+    z-index: 0;
+}
+
+.find-the-oe-image-stack img[data-slot="head-slot"] {
+    z-index: 3;
+}
+
+.find-the-oe-image-stack img[data-slot="eyes-slot"] {
+    z-index: 1;
+}
+
+.find-the-oe-image-stack img[data-slot="mouth-slot"] {
+    z-index: 2;
+}
+
+.find-the-oe-round {
+    padding-top: var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem));
+}
+
+.find-the-oe-timer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    height: var(--find-the-oe-timer-height, clamp(1.35rem, 8%, 2.2rem));
+    overflow: hidden;
+    background: transparent;
+}
+
+.find-the-oe-timer-fill {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform 0.1s linear;
+}
+
+.find-the-oe-arena {
+    display: grid;
+    grid-template-columns: repeat(var(--find-the-oe-row-size, 3), minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: clamp(0.35rem, 1.6vw, 0.8rem);
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: clamp(0.45rem, 1.5vw, 0.85rem);
+}
+
+.find-the-oe-piece {
+    display: grid;
+    width: auto;
+    height: min(var(--oe-size), 92%);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.find-the-oe-piece:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 0.2rem;
+}
+
+@media (pointer: coarse) {
+    .find-the-oe-piece:focus,
+    .find-the-oe-piece:focus-visible {
+        outline: none;
+    }
+}
+
+.find-the-oe-piece .find-the-oe-image-stack {
+    --oe-size: 100%;
+}
+
+.find-the-oe-game-over {
+    cursor: pointer;
+}
+
+.find-the-oe-game-over-title {
+    font-size: clamp(1.4rem, 6vw, 3.8rem);
+    font-weight: 900;
+}
+
+.find-the-oe-score {
+    font-size: clamp(2.5rem, 13vw, 7rem);
+    font-weight: 900;
+}
+
+.find-the-oe-replay {
+    position: absolute;
+    right: 0;
+    bottom: clamp(0.3rem, 1.5vw, 0.6rem);
+    left: 0;
+    color: #000;
+    font-size: clamp(0.525rem, 1.8vw, 0.9375rem);
+    font-weight: 900;
+}
+
+.find-the-oe-error {
+    margin: auto;
+    color: #000;
+    font-weight: 900;
+}

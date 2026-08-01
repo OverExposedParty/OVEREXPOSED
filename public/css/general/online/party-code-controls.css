@@ -1,0 +1,75 @@
+.party-code-action-button {
+  --party-code-control-background-value: var(
+    --party-code-control-background,
+    var(--backgroundcolour, #101010)
+  );
+  --party-code-control-primary-value: var(
+    --party-code-control-primary,
+    var(--primarypagecolour, var(--primaryPageColour, #66ccff))
+  );
+  appearance: none;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+  border: var(--bordersize, 4px) solid
+    var(--party-code-control-background-value);
+  border-radius: 8px;
+  background-color: var(--party-code-control-background-value);
+  color: var(--party-code-control-primary-value);
+  cursor: pointer;
+  font: inherit;
+}
+
+.party-code-action-button svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.party-code-action-button svg rect,
+.party-code-action-button svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-miterlimit: 10;
+  stroke-width: 14px;
+}
+
+.party-code-action-button.is-qr {
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.party-code-action-button.touchhover,
+.party-code-action-button.copy-feedback-active,
+.party-code-action-button.active {
+  border-color: var(--party-code-control-primary-value);
+  background-color: var(--party-code-control-primary-value);
+  color: var(--party-code-control-background-value);
+}
+
+.party-code-action-button.copy-feedback-fade {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .party-code-action-button:hover {
+    border-color: var(--party-code-control-primary-value);
+    background-color: var(--party-code-control-primary-value);
+    color: var(--party-code-control-background-value);
+  }
+}
+
+.party-code-action-button:focus-visible {
+  outline: 3px solid var(--party-code-control-primary-value);
+  outline-offset: 2px;
+}

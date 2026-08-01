@@ -8,6 +8,67 @@ gameContainers.push(
   resultsChartContainer
 );
 
+function clearMostLikelyToPunishmentSelection() {
+  const selectPunishmentButtons = document
+    .getElementById('select-punishment-container')
+    .querySelectorAll('.selected-user-container .button-container button');
+  selectPunishmentButtons.forEach(button => button.classList.remove('active'));
+  selectPunishmentContainer.setAttribute('select-id', "");
+}
+
+async function handleMostLikelyToSelectPunishmentPassClick() {
+  hideContainer(selectPunishmentContainer);
+
+  const updatedParty = await performOnlinePartyAction({
+    action: 'most-likely-to-pass-punishment',
+    payload: {
+      roundTimer: Date.now() + getTimeLimit() * 1000
+    }
+  });
+
+  if (updatedParty) {
+    currentPartyData = updatedParty;
+  }
+
+  stopMostLikelyToTimerWarning();
+
+  clearMostLikelyToPunishmentSelection();
+}
+
+function getMostLikelyToCurrentParticipants(partyData = currentPartyData) {
+  return typeof getRoundLateJoinParticipants === 'function'
+    ? getRoundLateJoinParticipants(partyData)
+    : partyData?.players || [];
+}
+
+function renderMostLikelyToVoteTargetButtons(partyData = currentPartyData) {
+  if (!selectUserButtonContainer || !partyData) return;
+
+  const participants = getMostLikelyToCurrentParticipants(partyData);
+  selectUserButtonContainer.replaceChildren();
+  selectUserContainer.setAttribute('selected-id', '');
+
+  participants.forEach((player) => {
+    const pid = getPlayerId(player);
+    if (!pid) return;
+
+    const userButton = createUserButton(pid, getPlayerUsername(player));
+    userButton.addEventListener('click', () => {
+      selectUserButtonContainer
+        .querySelectorAll('button')
+        .forEach(btn => btn.classList.remove('active'));
+      userButton.classList.add('active');
+      selectUserContainer.setAttribute('selected-id', pid);
+    });
+    selectUserButtonContainer.appendChild(userButton);
+  });
+
+  selectUserButtonContainer.classList.toggle(
+    'overflow',
+    selectUserButtonContainer.children.length > 4
+  );
+}
+
 async function initialisePage() {
   const session = await bootstrapOnlineGamePage({
     requirePlaying: true
@@ -20,14 +81,7 @@ async function initialisePage() {
   debugLog("hostDeviceId:", hostDeviceId);
 
   if (state.isPlaying === true) {
-    // Build "who's most likely to" buttons for every player
-    for (let i = 0; i < players.length; i++) {
-      const pid = getPlayerId(players[i]);
-      if (pid) {
-        const userButton = createUserButton(pid, getPlayerUsername(players[i]));
-        selectUserButtonContainer.appendChild(userButton);
-      }
-    }
+    renderMostLikelyToVoteTargetButtons(party);
 
     // Build punishment settings from game rules (new object/Map format)
     const rawGameRules = config.gameRules || {};
@@ -67,27 +121,13 @@ async function initialisePage() {
       selectPunishmentButtonContainer.appendChild(settingsButton);
     });
 
-    // Hook up selection buttons
-    const selectUserButtons = document
-      .getElementById('select-user-container')
-      .querySelectorAll('.selected-user-container .button-container button');
+    if (!selectPunishmentButtonContainer.querySelector('#pass')) {
+      selectPunishmentButtonContainer.appendChild(createUserButton("pass", "Pass"));
+    }
+
     const selectPunishmentButtons = document
       .getElementById('select-punishment-container')
       .querySelectorAll('.selected-user-container .button-container button');
-
-    selectUserButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        selectUserButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        selectUserContainer.setAttribute('selected-id', button.getAttribute('id'));
-      });
-    });
-
-    // Better overflow check
-    if (selectUserButtonContainer.children &&
-      selectUserButtonContainer.children.length > 4) {
-      selectUserButtonContainer.classList.add('overflow');
-    }
 
     selectPunishmentButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -97,9 +137,29 @@ async function initialisePage() {
       });
     });
 
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+    const instructionsCacheBustKey = 'PARTY_GAMES_ONLINE_MOST_LIKELY_TO';
+
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`,
-      { cacheBustKey: "PARTY_GAMES_ONLINE_MOST_LIKELY_TO" }
+      `${instructionsBasePath}/most-likely-to-online-instructions/phase-tools.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/most-likely-to-online-instructions/vote-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/most-likely-to-online-instructions/punishment-flow.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/most-likely-to-online-instructions/round-actions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
+    );
+    await LoadScript(
+      `${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`,
+      { cacheBustKey: instructionsCacheBustKey }
     );
 
     debugLog("timer:", getTimeLimit());
@@ -145,6 +205,8 @@ async function initialisePage() {
 }
 
 async function SetPageSettings() {
+  if (!(await registerRoundLateJoinIfRequested())) return;
+
   // Current user is ready to pick someone
   buttonChoosePlayer.addEventListener('click', async () => {
     await setUserBool(deviceId, null, true);
@@ -156,6 +218,7 @@ async function SetPageSettings() {
     if (!selectedId) return;
 
     await SetVote({ option: selectedId });
+    stopMostLikelyToTimerWarning();
 
     const selectUserButtons = selectUserContainer
       .querySelectorAll('.selected-user-container .button-container button');
@@ -171,6 +234,7 @@ async function SetPageSettings() {
     DisplayWaitingForPlayers();
 
     await SetVote({ option: selectedId });
+    stopMostLikelyToTimerWarning();
 
     const selectNumberButtons = selectNumberContainer
       .querySelectorAll('.selected-user-container .button-container button');
@@ -183,7 +247,13 @@ async function SetPageSettings() {
     const selectedId = selectPunishmentContainer.getAttribute('select-id');
     if (!selectedId) return;
 
+    if (selectedId === 'pass') {
+      await handleMostLikelyToSelectPunishmentPassClick();
+      return;
+    }
+
     hideContainer(selectPunishmentContainer);
+
     const punishmentType = selectedId === 'drink-wheel'
       ? 'MOST_LIKELY_TO_DRINK_WHEEL'
       : selectedId === 'take-a-shot'
@@ -202,11 +272,9 @@ async function SetPageSettings() {
       currentPartyData = updatedParty;
     }
 
-    const selectPunishmentButtons = document
-      .getElementById('select-punishment-container')
-      .querySelectorAll('.selected-user-container .button-container button');
-    selectPunishmentButtons.forEach(button => button.classList.remove('active'));
-    selectPunishmentContainer.setAttribute('select-id', "");
+    stopMostLikelyToTimerWarning();
+
+    clearMostLikelyToPunishmentSelection();
   });
 
   // Player confirms they did the punishment
@@ -264,5 +332,5 @@ async function SetPageSettings() {
 
   selectUserTitle.textContent = "WHO'S MOST LIKELY TO ";
 
-  initialisePage();
+  await initialisePage();
 }

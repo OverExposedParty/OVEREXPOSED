@@ -5,11 +5,15 @@ let gameRulesNsfwButtons = [];
 
 let packButtons = [];
 let settingsButtons = [];
-let onlineButton;
+let roleButtons = [];
+let roleCatalog = new Map();
+let gamemodeRoleCounts = {};
 
 let fetchedPacks = false;
 let fetchedSettings = false;
+let fetchedRoles = false;
 let gamemodeSettingsInitialized = false;
+let gamemodeSettingsInitializationPromise = null;
 
 const packsSettingsTab = document.getElementById('packs-settings');
 const rulesSettingsTab = document.getElementById('rules-settings');
@@ -24,30 +28,154 @@ function normalizeRestrictions(restrictions) {
 
 async function initializeGamemodeSettingsWhenReady() {
     if (gamemodeSettingsInitialized) return;
-
-    const timeoutMs = 5000;
-    const startTime = Date.now();
-
-    while (
-        typeof window.SetGamemodeContainer !== 'function' ||
-        !packsContainer ||
-        !rulesContainer ||
-        !placeholderGamemodeSettings
-    ) {
-        if (Date.now() - startTime >= timeoutMs) {
-            throw new Error('Gamemode settings scripts did not finish initialising in time.');
-        }
-        await new Promise(resolve => requestAnimationFrame(resolve));
+    if (gamemodeSettingsInitializationPromise) {
+        return gamemodeSettingsInitializationPromise;
     }
 
-    gamemodeSettingsInitialized = true;
-    await SetGamemodeContainer();
+    gamemodeSettingsInitializationPromise = (async () => {
+        const setGamemodeContainer = window.SetGamemodeContainer;
+        const missingDependencies = [];
+
+        if (typeof setGamemodeContainer !== 'function') {
+            missingDependencies.push('SetGamemodeContainer');
+        }
+        if (!packsContainer) {
+            missingDependencies.push('packsContainer');
+        }
+        if (!rulesContainer) {
+            missingDependencies.push('rulesContainer');
+        }
+        if (!placeholderGamemodeSettings) {
+            missingDependencies.push('placeholderGamemodeSettings');
+        }
+
+        if (missingDependencies.length > 0) {
+            throw new Error(
+                `Gamemode settings initialization missing: ${missingDependencies.join(', ')}`
+            );
+        }
+
+        await gameSettingsButtonsReady;
+        await setGamemodeContainer();
+        gamemodeSettingsInitialized = true;
+    })();
+
+    try {
+        await gamemodeSettingsInitializationPromise;
+    } catch (error) {
+        gamemodeSettingsInitializationPromise = null;
+        throw error;
+    }
 }
 
-fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
-    .then(response => response.json())
+window.initializeGamemodeSettingsWhenReady = initializeGamemodeSettingsWhenReady;
+
+function unwrapApiData(payload) {
+    return payload?.data || payload || {};
+}
+
+async function fetchJson(path) {
+    const response = await fetch(path);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}: ${response.status}`);
+    }
+    return response.json();
+}
+
+function getPartyContentAccessQuery() {
+    const code = String(
+        typeof partyCode === 'undefined' ? '' : partyCode
+    ).trim();
+    return code ? `?partyCode=${encodeURIComponent(code)}` : '';
+}
+
+async function fetchGamePacksData() {
+    const key = `${partyGameMode}-packs`;
+    if (partyGameMode === 'mafia') return { [key]: [] };
+    const payload = await fetchJson(
+        `/api/party-game-packs/${partyGameMode}${getPartyContentAccessQuery()}`
+    );
+    const data = unwrapApiData(payload);
+    return Array.isArray(data[key]) ? data : { [key]: [] };
+}
+
+async function fetchGameRolesData() {
+    const key = `${partyGameMode}-roles`;
+    if (partyGameMode !== 'mafia') return { [key]: [] };
+    const payload = await fetchJson(
+        `/api/party-game-roles/${partyGameMode}${getPartyContentAccessQuery()}`
+    );
+    const data = unwrapApiData(payload);
+    return Array.isArray(data[key]) ? data : { [key]: [] };
+}
+
+async function fetchGameRulesData() {
+    const key = `${partyGameMode}-settings`;
+    const payload = await fetchJson(
+        `/api/party-game-rules/${partyGameMode}${getPartyContentAccessQuery()}`
+    );
+    const data = unwrapApiData(payload);
+    return Array.isArray(data[key]) ? data : { [key]: [] };
+}
+
+function createRoleIncrementControl(role) {
+    const key = String(role["role-name"] || '').trim();
+    if (!key || role["role-fill-remaining"]) return null;
+
+    const container = document.createElement("div");
+    container.className = "increment-container role";
+    container.dataset.contentType = "role";
+    container.dataset.key = key;
+    container.id = `role-${key}`;
+    container.dataset.primaryColor =
+        role["role-colour"] || "var(--primarypagecolour)";
+    container.dataset.secondaryColor =
+        role["role-secondary-colour"] || "var(--secondarypagecolour)";
+    container.dataset.count = role["role-default-count"] ?? 0;
+    container.dataset.increment = role["role-increment"] ?? 1;
+    container.dataset.countMin = role["role-minimum"] ?? 0;
+    container.dataset.countMax = role["role-maximum"] ?? 20;
+
+    const label = document.createElement("label");
+    label.className = "settings-name";
+    label.textContent = role["role-title"] || key
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, character => character.toUpperCase());
+    label.style.color = container.dataset.primaryColor;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "count-wrapper";
+    wrapper.style.backgroundColor = container.dataset.secondaryColor;
+
+    const decrementBtn = document.createElement("button");
+    decrementBtn.className = "count-btn decrement";
+    decrementBtn.textContent = "-";
+    decrementBtn.style.backgroundColor = container.dataset.primaryColor;
+    decrementBtn.style.borderColor = container.dataset.primaryColor;
+
+    const countDisplay = document.createElement("div");
+    countDisplay.className = "count-display";
+    countDisplay.textContent = container.dataset.count;
+
+    const incrementBtn = document.createElement("button");
+    incrementBtn.className = "count-btn increment";
+    incrementBtn.textContent = "+";
+    incrementBtn.style.backgroundColor = container.dataset.primaryColor;
+    incrementBtn.style.borderColor = container.dataset.primaryColor;
+
+    wrapper.append(decrementBtn, countDisplay, incrementBtn);
+    container.append(label, wrapper);
+    packsContainer.querySelector('.button-container').appendChild(container);
+    roleButtons.push(container);
+    return container;
+}
+
+const gameSettingsButtonsReady = fetchGamePacksData()
     .then(data => {
-        data[`${partyGameMode}-packs`].forEach(pack => {
+        const packs = Array.isArray(data[`${partyGameMode}-packs`])
+            ? data[`${partyGameMode}-packs`]
+            : [];
+        packs.forEach(pack => {
             if (pack["pack-active"]) {
                 const button = document.createElement("button");
                 button.dataset.key = pack["pack-name"];
@@ -87,14 +215,38 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
         });
         fetchedPacks = true;
 
-        // Return the next fetch so it can be chained
-        return fetch(`/json-files/party-games/settings/${partyGameMode}.json`);
+        return fetchGameRolesData();
     })
-    .then(response => response.json())
     .then(data => {
-        data[`${partyGameMode}-settings`].forEach(setting => {
+        const roles = Array.isArray(data[`${partyGameMode}-roles`])
+            ? data[`${partyGameMode}-roles`]
+            : [];
+        roleCatalog = new Map();
+        roles.forEach(role => {
+            if (!role["role-active"]) return;
+            const key = String(role["role-name"] || '').trim();
+            if (!key) return;
+            roleCatalog.set(key, role);
+            createRoleIncrementControl(role);
+        });
+        fetchedRoles = true;
+
+        return fetchGameRulesData();
+    })
+    .then(data => {
+        const settings = Array.isArray(data[`${partyGameMode}-settings`])
+            ? data[`${partyGameMode}-settings`]
+            : [];
+        settings.forEach(setting => {
+            if (
+                partyGameMode === 'mafia' &&
+                roleCatalog.has(setting["settings-name"])
+            ) {
+                return;
+            }
             if (setting["settings-active"]) {
-                if (!(setting["settings-name"] === "online" && placeholderGamemodeSettings.dataset.template.includes('waiting-room'))) {
+                // Online is selected before settings and is not a game rule.
+                if (setting["settings-name"] !== "online") {
                     let button;
                     const restrictions = normalizeRestrictions(setting["settings-restriction"]);
                     if (setting["button-type"] === "toggle") {
@@ -109,6 +261,9 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         }
                         button.dataset.primaryColor = setting["settings-colour"];
                         button.dataset.secondaryColor = setting["settings-secondary-colour"];
+                        if (setting["game-rule-time-limit"] !== undefined && setting["game-rule-time-limit"] !== null) {
+                            button.dataset.gameRuleTimeLimit = setting["game-rule-time-limit"];
+                        }
                         button.classList.add('sound-toggle');
                         button.classList.add('button-toggle');
                         button.textContent = setting["settings-name"].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
@@ -129,6 +284,7 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         const container = document.createElement("div");
                         container.classList.add('button-increment');
                         container.className = "increment-container setting";
+                        container.dataset.key = setting["settings-name"];
                         if (restrictions.length > 0) {
                             container.classList.add(...restrictions);
                             container.dataset.settingsRestriction = JSON.stringify(restrictions);
@@ -136,6 +292,9 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                         container.id = setting["settings-name"];
                         container.dataset.primaryColor = setting["settings-colour"];
                         container.dataset.secondaryColor = setting["settings-secondary-colour"];
+                        if (setting["game-rule-time-limit"] !== undefined && setting["game-rule-time-limit"] !== null) {
+                            container.dataset.gameRuleTimeLimit = setting["game-rule-time-limit"];
+                        }
 
                         // Set data attributes (with sensible fallbacks)
                         container.dataset.count = setting["button-initial-value"] ?? 60;
@@ -227,29 +386,29 @@ fetch(`/json-files/party-games/packs/${partyGameMode}.json`)
                     if (restrictions.includes("online")) onlingSettingsButtons.push(button);
                     if (restrictions.includes("offline")) offlineSettingsButtons.push(button);
 
-                    if (setting["settings-name"] === "online") {
-                        button.id = "button-online";
-                        onlineButton = button;
-                    } else {
-                        button.dataset.key = setting["settings-name"];
-                        settingsButtons.push(button);
-                    }
+                    button.dataset.key = setting["settings-name"];
+                    settingsButtons.push(button);
                 }
             }
         });
 
         fetchedSettings = true;
-        if (fetchedPacks && fetchedSettings) {
-            initializeGamemodeSettingsWhenReady().catch(error => {
-                gamemodeSettingsInitialized = false;
-                console.error('Error initialising gamemode settings:', error);
-            });
-        }
     })
-    .catch(error => console.error('Error loading JSON:', error));
+    .catch(error => {
+        console.error('Error loading party game settings:', error);
+        fetchedPacks = true;
+        fetchedSettings = true;
+        fetchedRoles = true;
+        return Promise.resolve();
+    });
 
+if (window.OEReady) {
+    window.OEReady.register('game-settings-buttons', gameSettingsButtonsReady);
+}
 
 packsSettingsTab.addEventListener('click', () => {
+    if (packsSettingsTab.classList.contains('disabled')) return;
+
     if (!(packsSettingsTab.classList.contains('active'))) {
         showContainer(packsContainer);
         packsSettingsTab.classList.add('active');
@@ -262,6 +421,8 @@ packsSettingsTab.addEventListener('click', () => {
     }
 });
 rulesSettingsTab.addEventListener('click', () => {
+    if (rulesSettingsTab.classList.contains('disabled')) return;
+
     if (!(rulesSettingsTab.classList.contains('active'))) {
         hideContainer(packsContainer);
         packsSettingsTab.classList.remove('active');
@@ -274,6 +435,8 @@ rulesSettingsTab.addEventListener('click', () => {
     }
 });
 onlineSettingsTab.addEventListener('click', () => {
+    if (onlineSettingsTab.classList.contains('disabled')) return;
+
     if (!isContainerVisible(onlineSettingsContainer)) {
         hideContainer(packsContainer);
         packsSettingsTab.classList.remove('active');

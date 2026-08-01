@@ -1,0 +1,195 @@
+.oe-panel-alert-detail-view {
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.85vw, 0.7rem);
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  background-color: var(
+    --oe-panel-widget-background-colour,
+    var(--secondarybackgroundcolour)
+  );
+}
+
+.oe-panel-alert-detail-header {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(1rem, 1.6vw, 1.35rem);
+  display: flex;
+  gap: clamp(0.35rem, 0.75vw, 0.6rem);
+  align-items: center;
+}
+
+.oe-panel-alert-detail-back {
+  position: relative;
+  width: clamp(0.55rem, 1vw, 0.8rem);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.oe-panel-alert-detail-back::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(
+    --oe-panel-widget-primary-colour,
+    var(--primarypagecolour)
+  );
+  clip-path: polygon(22% 50%, 76% 8%, 76% 92%);
+  transition: background-color 0.2s;
+}
+
+.oe-panel-alert-detail-back:focus-visible::before,
+.oe-panel-alert-detail-back:active::before {
+  background-color: var(
+    --oe-panel-widget-secondary-colour,
+    var(--secondarypagecolour)
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-alert-detail-back:hover::before {
+    background-color: var(
+      --oe-panel-widget-secondary-colour,
+      var(--secondarypagecolour)
+    );
+  }
+}
+
+.oe-panel-alert-detail-back:focus-visible {
+  outline: none;
+}
+
+.oe-panel-alert-detail-title {
+  min-width: 0;
+  max-width: 32%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.68rem, 1.2vw, 1rem);
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oe-panel-back-header-current-title {
+  position: absolute;
+  left: 50%;
+  max-width: 46%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.7rem, 1.3vw, 1rem);
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.oe-panel-alert-detail-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: max-content minmax(0, 1fr);
+  gap: clamp(0.22rem, 0.5vw, 0.38rem);
+  overflow: auto;
+}
+
+.oe-panel-alert-detail-group {
+  min-width: 0;
+  padding: clamp(0.24rem, 0.55vw, 0.42rem);
+  border-radius: 0.3rem;
+  background-color: rgb(0 0 0 / 16%);
+}
+
+.oe-panel-alert-detail-group.wide {
+  grid-column: 1 / -1;
+}
+
+.oe-panel-alert-detail-group.content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.oe-panel-alert-detail-group dt {
+  margin: 0 0 clamp(0.12rem, 0.3vw, 0.22rem);
+  color: var(--oe-panel-widget-secondary-colour, var(--secondarypagecolour));
+  font-size: clamp(0.38rem, 0.7vw, 0.6rem);
+  line-height: 1;
+}
+
+.oe-panel-alert-detail-group dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.48rem, 0.85vw, 0.74rem);
+  line-height: 1.18;
+}
+
+.oe-panel-alert-detail-group.content dd {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.oe-panel-alert-detail-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.22rem, 0.5vw, 0.38rem);
+}
+
+.oe-panel-alert-detail-action {
+  min-width: 0;
+  padding: clamp(0.28rem, 0.62vw, 0.48rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 9%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.42rem, 0.75vw, 0.66rem);
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.oe-panel-alert-detail-action:focus-visible {
+  background-color: var(
+    --oe-panel-widget-secondary-colour,
+    var(--secondarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-alert-detail-action:hover {
+    background-color: var(
+      --oe-panel-widget-secondary-colour,
+      var(--secondarypagecolour)
+    );
+    color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+    outline: none;
+  }
+}
+
+.oe-panel-alert-detail-action:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.oe-panel-alert-detail-actions[data-oe-panel-action-error]::before {
+  grid-column: 1 / -1;
+  color: #ef476f;
+  content: attr(data-oe-panel-action-error);
+  font-size: clamp(0.42rem, 0.75vw, 0.66rem);
+  line-height: 1;
+}

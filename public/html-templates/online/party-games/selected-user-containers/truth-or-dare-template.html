@@ -1,22 +1,20 @@
-<div class="selected-user-container " id="select-question-type-container">
+<div class="selected-user-container " id="select-question-type-container" data-container-open-sound="partyGameChoiceMenuOpen">
     <div class="content-container">
         <h1>Truth Or Dare</h1>
     </div>
     <div class="select-button-container">
-        <button class="select-button" id="truth">Truth</button>
-        <button class="select-button" id="dare">Dare</button>
+        <button class="select-button" id="truth" data-sound="none">Truth</button>
+        <button class="select-button" id="dare" data-sound="none">Dare</button>
     </div>
 </div>
 
-<div class="selected-user-container " id="answer-question-container">
-    <div class="content-container">
-        <h2></h2>
-    </div>
-    <div class="content-container">
-        <textarea id="answer"></textarea>
-    </div>
-    <div class="select-button-container">
-        <button class="select-button" id="submit">Submit</button>
+<div class="selected-user-container next-round-join-container" id="next-round-join-container">
+    <div class="content-container next-round-join-copy">
+        <h1>GAME IN PROGRESS: YOU'LL JOIN NEXT ROUND</h1>
+        <div class="next-round-join-timeline-shell" aria-label="Current round timeline">
+            <div class="next-round-join-timeline" id="next-round-join-timeline"></div>
+        </div>
+        <p>This round has already started. You'll be added to the game automatically when the next round begins.</p>
     </div>
 </div>
 
@@ -28,6 +26,18 @@
         <h2>Did Player1 taken their 2 shots.</h2>
     </div>
     <div class="select-button-container">
-        <button class="select-button" id="completed">COMPLETED</button>
+        <button class="select-button sound-confirm" id="completed">COMPLETED</button>
+    </div>
+</div>
+
+<div class="selected-user-container " id="prompt-heist-container">
+    <div class="content-container">
+        <h1>Prompt Heist</h1>
+    </div>
+    <div class="content-container">
+        <h2></h2>
+    </div>
+    <div class="select-button-container">
+        <button class="select-button sound-confirm" id="claim-prompt">Steal Prompt</button>
     </div>
 </div>

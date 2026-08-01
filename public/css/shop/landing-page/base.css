@@ -1,0 +1,47 @@
+@font-face {
+  font-family: 'LemonMilkLight';
+  src: url('/fonts/LemonMilk/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+html.shop-page,
+body.shop-page {
+  scrollbar-color: var(--shop-scrollbar-primary-colour, var(--primarypagecolour))
+    transparent;
+}
+
+html.shop-page::-webkit-scrollbar-thumb,
+body.shop-page::-webkit-scrollbar-thumb {
+  background-color: var(
+    --shop-scrollbar-primary-colour,
+    var(--primarypagecolour)
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.shop-page::-webkit-scrollbar-thumb:hover,
+  body.shop-page::-webkit-scrollbar-thumb:hover {
+    background-color: var(
+      --shop-scrollbar-secondary-colour,
+      var(--secondarypagecolour)
+    );
+  }
+}
+
+.main-container[data-template='shop'] {
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: var(--backgroundcolour);
+  color: var(--backgroundcolour);
+  scroll-behavior: smooth;
+}
+
+.shop-section-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}

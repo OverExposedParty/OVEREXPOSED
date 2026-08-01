@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Change your OVEREXPOSED email address." />
+  <meta name="author" content="OVEREXPOSED" />
+  <title>Change Email | OVEREXPOSED</title>
+  <link rel="stylesheet" href="/css/general/header/header.css" />
+  <link rel="stylesheet" href="/css/auth/login.css" />
+</head>
+<body>
+  <div class="splash-screen-container-static" id="splash-screen-container-static">
+    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager" />
+    <p></p>
+  </div>
+
+  <div class="splash-screen-container" id="splash-screen-container">
+    <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager" />
+    <p></p>
+  </div>
+
+  <div id="header-placeholder"></div>
+
+  <main class="auth-page" data-template="auth">
+    <section class="auth-shell" aria-labelledby="auth-title">
+      <div class="auth-form-panel">
+        <h1 id="auth-title" class="auth-title">
+          <span id="auth-title-text" class="auth-title-text">CHANGE EMAIL</span>
+        </h1>
+
+        <form class="auth-form active" id="change-email-form" novalidate>
+          <div class="auth-field">
+            <label for="change-email">NEW EMAIL</label>
+            <input
+              id="change-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="254"
+              required
+            />
+          </div>
+
+          <div class="auth-field">
+            <label for="change-confirm-email">CONFIRM NEW EMAIL</label>
+            <input
+              id="change-confirm-email"
+              name="confirmEmail"
+              type="email"
+              autocomplete="email"
+              maxlength="254"
+              required
+            />
+          </div>
+
+          <div class="auth-field">
+            <label for="change-email-password">CURRENT PASSWORD</label>
+            <div class="auth-password-control">
+              <input
+                id="change-email-password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                class="auth-password-toggle"
+                type="button"
+                data-password-toggle
+                aria-controls="change-email-password"
+                aria-label="Show password"
+              >
+                <svg class="auth-password-eye auth-password-eye-open" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="auth-password-eye auth-password-eye-off" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 3l18 18" />
+                  <path d="M2.5 12s3.5-6 9.5-6c2 0 3.7.7 5.1 1.6" />
+                  <path d="M21.5 12s-3.5 6-9.5 6c-2 0-3.7-.7-5.1-1.6" />
+                  <path d="M9.9 9.9A3 3 0 0 0 14.1 14.1" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button class="auth-submit-button" type="submit">
+            UPDATE EMAIL
+          </button>
+          <a class="auth-secondary-link" href="/">BACK TO SITE</a>
+        </form>
+
+        <p class="auth-status" id="auth-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.documentElement.style.setProperty('--primarypagecolour', '#66CCFF');
+    document.documentElement.style.setProperty('--secondarypagecolour', '#427BB9');
+
+    window.pageScripts = {
+      '/scripts/auth/change-email/change-email.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'CHANGE_EMAIL',
+        zIndex: 0
+      }
+    };
+  </script>
+  <script src="/scripts/html-templates/core-template/core-template.js"></script>
+</body>
+</html>

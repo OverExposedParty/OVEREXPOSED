@@ -1,0 +1,123 @@
+
+        <section
+          class="oling-battle-container__screen oling-battle-screen oling-battle-arena"
+          role="button"
+          tabindex="0"
+          aria-label="Resolve the attack"
+          aria-hidden="true"
+        >
+          <div class="oling-battle-scene" aria-hidden="true">
+            <img
+              class="oling-battle-scene-layer is-far-background"
+              src="/images/olings/battle/backgrounds/dojo/far-background.svg"
+              alt=""
+            />
+            <img
+              class="oling-battle-scene-layer is-background"
+              src="/images/olings/battle/backgrounds/dojo/background.svg"
+              alt=""
+            />
+            <img
+              class="oling-battle-scene-layer is-stage"
+              src="/images/olings/battle/backgrounds/dojo/stage.svg"
+              alt=""
+            />
+            <img
+              class="oling-battle-scene-layer is-foreground"
+              src="/images/olings/battle/backgrounds/dojo/foreground.svg"
+              alt=""
+            />
+          </div>
+
+          <article class="oling-battle-fighter is-player-oling">
+            <div
+              class="oling-battle-health player-oling-health"
+              role="meter"
+              aria-label="Player Oling health"
+              aria-valuemin="0"
+              aria-valuemax="118"
+              aria-valuenow="118"
+              data-current-health="118"
+              data-max-health="118"
+            >
+              <span style="--health-level: 100%"></span>
+              <strong>118/118</strong>
+            </div>
+            <div
+              class="oling-battle-oling player-oling"
+              data-flight-type="balloons"
+              data-flight-motion="sway"
+              data-flight-speed="1"
+              aria-label="Player Oling"
+            >
+              <img
+                class="oling-battle-layer is-flight"
+                src="/images/olings/builds/flight/base/balloons.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-body"
+                src="/images/olings/builds/body/base/trash-body.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-eyes"
+                src="/images/olings/builds/eyes/base/trash-eyes.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-mouth"
+                src="/images/olings/builds/mouth/base/trash-mouth.svg"
+                alt=""
+              />
+            </div>
+            <h2>PLAYER OLING</h2>
+          </article>
+
+          <article class="oling-battle-fighter is-enemy-oling">
+            <div
+              class="oling-battle-health enemy-oling-health"
+              role="meter"
+              aria-label="Enemy Oling health"
+              aria-valuemin="0"
+              aria-valuemax="110"
+              aria-valuenow="110"
+              data-current-health="110"
+              data-max-health="110"
+            >
+              <span style="--health-level: 100%"></span>
+              <strong>110/110</strong>
+            </div>
+            <div
+              class="oling-battle-oling enemy-oling"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+              aria-label="Enemy Oling"
+            >
+              <img
+                class="oling-battle-layer is-flight"
+                src="/images/olings/builds/flight/base/magma-wings.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-body"
+                src="/images/olings/builds/body/base/magma-body.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-eyes"
+                src="/images/olings/builds/eyes/base/magma-eyes.svg"
+                alt=""
+              />
+              <img
+                class="oling-battle-layer is-mouth"
+                src="/images/olings/builds/mouth/base/magma-mouth.svg"
+                alt=""
+              />
+            </div>
+            <h2>ENEMY OLING</h2>
+          </article>
+
+          <p class="battle-hit-result" role="status" aria-live="polite"></p>
+        </section>

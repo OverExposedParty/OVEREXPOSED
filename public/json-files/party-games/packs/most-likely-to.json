@@ -1,54 +1,54 @@
 {
-    "most-likely-to-packs": [
-        {
-            "pack-name": "calm-and-casual",
-            "pack-path": "/json-files/party-games/questions/most-likely-to/calm-and-casual.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
-            "pack-colour": "#FFEE66",
-            "pack-secondary-colour": "#B9AA42",
-            "pack-difficulty": "chill, creative, funny, deep",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "mild-mischief",
-            "pack-path": "/json-files/party-games/questions/most-likely-to/mild-mischief.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
-            "pack-colour": "#FFEE66",
-            "pack-secondary-colour": "#B9AA42",
-            "pack-difficulty": "chill, funny, cheeky, flirty",
-            "pack-restriction": "sfw",
-            "pack-active": true 
-        },
-        {
-            "pack-name": "unsolicited-strays",
-            "pack-path": "/json-files/party-games/questions/most-likely-to/unsolicited-strays.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
-            "pack-colour": "#FFEE66",
-            "pack-secondary-colour": "#B9AA42",
-            "pack-difficulty": "chaotic, cheeky, flirty, funny",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "open-season",
-            "pack-path": "/json-files/party-games/questions/most-likely-to/open-season.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
-            "pack-colour": "#FFEE66",
-            "pack-secondary-colour": "#B9AA42",
-            "pack-difficulty": "sexual, naughty, fiery",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "unfiltered-assaults",
-            "pack-path": "/json-files/party-games/questions/most-likely-to/unfiltered-assaults.json",
-            "pack-card": "/images/blank-cards/most-likely-to-blank-card.svg",
-            "pack-colour": "#FFEE66",
-            "pack-secondary-colour": "#B9AA42",
-            "pack-difficulty": "sexual, fiery, naughty",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        }
-    ]
+  "most-likely-to-packs": [
+    {
+      "pack-name": "calm-and-casual",
+      "pack-description": "Positive ambitions, helpful qualities, everyday habits and funny personality traits for relaxed groups and easy-going conversations.",
+      "pack-path": "/json-files/party-games/questions/most-likely-to/calm-and-casual.json",
+      "pack-colour": "#FFEE66",
+      "pack-secondary-colour": "#B9AA42",
+      "pack-difficulty": "chill, creative, funny, deep",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "mild-mischief",
+      "pack-description": "Harmless chaos, embarrassing habits, secret crushes and impulsive decisions that expose the group without becoming too ruthless.",
+      "pack-path": "/json-files/party-games/questions/most-likely-to/mild-mischief.json",
+      "pack-colour": "#FFEE66",
+      "pack-secondary-colour": "#B9AA42",
+      "pack-difficulty": "chill, funny, cheeky, flirty",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "open-season",
+      "pack-description": "Adult accusations covering hookups, infidelity, public intimacy, risky relationships and the friends most likely to make scandalous decisions.",
+      "pack-path": "/json-files/party-games/questions/most-likely-to/open-season.json",
+      "pack-colour": "#FFEE66",
+      "pack-secondary-colour": "#B9AA42",
+      "pack-difficulty": "sexual, naughty, fiery",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "unfiltered-assaults",
+      "pack-description": "The most explicit and ruthless accusations, featuring extreme hookups, sexual behaviour, betrayals and choices nobody wants associated with their name.",
+      "pack-path": "/json-files/party-games/questions/most-likely-to/unfiltered-assaults.json",
+      "pack-colour": "#FFEE66",
+      "pack-secondary-colour": "#B9AA42",
+      "pack-difficulty": "sexual, fiery, naughty",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "unsolicited-strays",
+      "pack-description": "Unexpected accusations about dating disasters, irresponsible behaviour, social chaos and the person most likely to take things too far.",
+      "pack-path": "/json-files/party-games/questions/most-likely-to/unsolicited-strays.json",
+      "pack-colour": "#FFEE66",
+      "pack-secondary-colour": "#B9AA42",
+      "pack-difficulty": "chaotic, cheeky, flirty, funny",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    }
+  ]
 }

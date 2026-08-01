@@ -4,123 +4,321 @@
       "id": "2000",
       "name": "GINGERBREAD",
       "file-path": "/images/user-customisation/colour/claus-and-co/gingerbread.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          201,
+          141,
+          86
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2001",
       "name": "ELF SKIN",
       "file-path": "/images/user-customisation/colour/claus-and-co/elf-skin.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          230,
+          197,
+          163
+        ],
+        "category": "skin",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2002",
       "name": "SNOW WHITE",
       "file-path": "/images/user-customisation/colour/claus-and-co/snow-white.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          226,
+          230,
+          233
+        ],
+        "category": "light-body",
+        "tone": "light"
+      },
+      "blacklist": false
     },
     {
       "id": "2003",
       "name": "SNOW GLOBE",
       "file-path": "/images/user-customisation/colour/claus-and-co/snow-globe.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          214,
+          225,
+          232
+        ],
+        "category": "object-body",
+        "tone": "light"
+      },
+      "blacklist": false
     },
     {
       "id": "2004",
       "name": "WOOD PLANK",
       "file-path": "/images/user-customisation/colour/claus-and-co/wood-plank.svg",
-      "slot": "colour"
+      "slot": "colour",
+      "find-the-oe": {
+        "rgb": [
+          116,
+          77,
+          45
+        ],
+        "category": "body",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2100",
       "name": "CHEF HAT",
       "file-path": "/images/user-customisation/head-slot/claus-and-co/chef-hat.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          231,
+          231,
+          231
+        ],
+        "category": "hat",
+        "tone": "light"
+      },
+      "blacklist": false
     },
     {
       "id": "2101",
       "name": "CHRISTMAS HAT",
       "file-path": "/images/user-customisation/head-slot/claus-and-co/christmas-hat.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          220,
+          162,
+          158
+        ],
+        "category": "hat",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2102",
       "name": "MISTLETOE ON STRING",
       "file-path": "/images/user-customisation/head-slot/claus-and-co/mistletoe.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          182,
+          145,
+          92
+        ],
+        "category": "small-accessory",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2103",
       "name": "TOP HAT",
       "file-path": "/images/user-customisation/head-slot/claus-and-co/top-hat.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          103,
+          48,
+          46
+        ],
+        "category": "hat",
+        "tone": "dark"
+      },
+      "blacklist": false
     },
     {
       "id": "2104",
       "name": "ELF HAT AND EARS",
       "file-path": "/images/user-customisation/head-slot/claus-and-co/elf-hat-and-ears.svg",
-      "slot": "head-slot"
+      "slot": "head-slot",
+      "find-the-oe": {
+        "rgb": [
+          191,
+          156,
+          104
+        ],
+        "category": "hat",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2200",
       "name": "GINGERBREAD EYES",
       "file-path": "/images/user-customisation/eyes-slot/claus-and-co/gingerbread-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          211,
+          154,
+          176
+        ],
+        "category": "eyes",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2201",
       "name": "BUTTONS",
       "file-path": "/images/user-customisation/eyes-slot/claus-and-co/buttons.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          37,
+          36,
+          36
+        ],
+        "category": "object-eyes",
+        "tone": "dark"
+      },
+      "blacklist": false
     },
     {
       "id": "2202",
       "name": "PILL SHAPED EYES",
       "file-path": "/images/user-customisation/eyes-slot/claus-and-co/pill-shaped-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          30,
+          30,
+          30
+        ],
+        "category": "eyes",
+        "tone": "dark"
+      },
+      "blacklist": false
     },
     {
       "id": "2203",
       "name": "SNOWFLAKE EYES",
       "file-path": "/images/user-customisation/eyes-slot/claus-and-co/snowflake-eyes.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          224,
+          243,
+          253
+        ],
+        "category": "eyes",
+        "tone": "light"
+      },
+      "blacklist": false
     },
     {
       "id": "2204",
       "name": "REINDEER SLEEPING MASK",
       "file-path": "/images/user-customisation/eyes-slot/claus-and-co/reindeer-sleeping-mask.svg",
-      "slot": "eyes-slot"
+      "slot": "eyes-slot",
+      "find-the-oe": {
+        "rgb": [
+          186,
+          128,
+          103
+        ],
+        "category": "mask",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2300",
       "name": "GINGERBREAD MOUTH",
       "file-path": "/images/user-customisation/mouth-slot/claus-and-co/gingerbread-mouth.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          140,
+          204,
+          151
+        ],
+        "category": "mouth",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2301",
       "name": "SANTA BEARD",
       "file-path": "/images/user-customisation/mouth-slot/claus-and-co/santa-beard.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          169,
+          168,
+          169
+        ],
+        "category": "beard",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2302",
       "name": "TEDDY BEAR MOUTH",
       "file-path": "/images/user-customisation/mouth-slot/claus-and-co/teddy-bear-mouth.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          131,
+          110,
+          92
+        ],
+        "category": "mouth",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2303",
       "name": "CHRISTMAS LABEL",
       "file-path": "/images/user-customisation/mouth-slot/claus-and-co/christmas-label.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          158,
+          129,
+          69
+        ],
+        "category": "mouth-cover",
+        "tone": "mid"
+      },
+      "blacklist": false
     },
     {
       "id": "2304",
       "name": "SMOKING PIPE",
       "file-path": "/images/user-customisation/mouth-slot/claus-and-co/smoking-pipe.svg",
-      "slot": "mouth-slot"
+      "slot": "mouth-slot",
+      "find-the-oe": {
+        "rgb": [
+          156,
+          119,
+          91
+        ],
+        "category": "mouth-object",
+        "tone": "mid"
+      },
+      "blacklist": false
     }
   ]
 }
-
-

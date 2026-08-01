@@ -1,0 +1,8 @@
+T.O.D SMALL PACKAGE
+
+This is a read-only text file inside the 404 desktop.
+
+You can replace this file with whatever copy you want to show in the window.
+Keep it here:
+
+/public/text-files/error-404/tod-small-package.txt

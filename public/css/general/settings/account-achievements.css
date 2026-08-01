@@ -1,0 +1,480 @@
+.account-achievement-list {
+  display: grid;
+  gap: 8px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.account-achievement-section-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-achievement-filters {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.account-achievement-filter {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #777777;
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.account-achievement-filter[aria-pressed='true'] {
+  color: var(--primarypagecolour);
+  font-weight: 900;
+}
+
+.account-achievement-filter:focus-visible {
+  color: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-achievement-filter:hover {
+    color: var(--secondarypagecolour);
+  }
+}
+
+.account-achievement-filter:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--secondarypagecolour);
+  outline-offset: 3px;
+}
+
+.account-achievement-card[hidden],
+.account-achievements-empty[hidden] {
+  display: none;
+}
+
+.account-expanded-content:has(.account-achievement-list) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.account-expanded-content:has(.account-achievement-list)
+  .account-profile-section {
+  flex: 0 0 auto;
+}
+
+.account-expanded-content:has(.account-achievement-list)
+  .account-profile-section:has(.account-achievement-list) {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.account-expanded-content:has(.account-achievement-list)
+  .account-achievement-list {
+  min-height: 0;
+  flex: 1 1 auto;
+  max-height: none;
+}
+
+.account-achievement-card {
+  --achievement-rarity-primary-colour: var(--primarypagecolour);
+  --achievement-rarity-secondary-colour: var(--secondarypagecolour);
+  --achievement-primary-colour: var(--achievement-rarity-primary-colour);
+  --achievement-secondary-colour: var(--achievement-rarity-secondary-colour);
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  align-self: start;
+  height: max-content;
+  min-height: 76px;
+  padding: 10px 10px 12px;
+  box-sizing: border-box;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  overflow: hidden;
+}
+
+.account-achievement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  background-color: var(--achievement-primary-colour);
+  border-radius: var(--account-inner-radius) 0 0 var(--account-inner-radius);
+  pointer-events: none;
+}
+
+.account-achievement-card:focus {
+  outline: none;
+}
+
+.account-achievement-card.has-progress {
+  padding-bottom: 13px;
+}
+
+.account-achievement-card.is-locked {
+  --achievement-primary-colour: #8d8d8d;
+  --achievement-secondary-colour: #555555;
+  background-color: #171717;
+}
+
+.account-achievement-icon-wrap {
+  align-self: center;
+  position: relative;
+  width: 58px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+
+.account-achievement-icon,
+.account-achievement-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.account-achievement-icon {
+  inset: 13%;
+  width: 74%;
+  height: 74%;
+  z-index: 2;
+}
+
+.account-achievement-border {
+  inset: 0;
+  z-index: 1;
+}
+
+.account-achievement-card.is-locked .account-achievement-icon {
+  filter: grayscale(1) brightness(0.48);
+}
+
+.account-achievement-card.is-locked .account-achievement-border {
+  filter: grayscale(1);
+}
+
+.account-achievement-card.is-locked .account-achievement-title {
+  color: #b8b8b8;
+}
+
+.account-achievement-card.is-locked .account-achievement-meta {
+  color: var(--achievement-rarity-primary-colour);
+}
+
+.account-achievement-content {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px;
+  text-align: left;
+}
+
+.account-achievement-heading {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.account-achievement-meta,
+.account-achievement-title,
+.account-achievement-description {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-achievement-meta {
+  color: var(--achievement-primary-colour);
+  font-size: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-achievement-title {
+  color: var(--achievement-primary-colour);
+  font-size: 13px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-achievement-description {
+  color: #999999;
+  grid-column: 1 / -1;
+  font-size: 11px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.account-achievement-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  grid-column: 1 / -1;
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.account-achievement-progress-track {
+  background-color: #2a2a2a;
+  border-radius: 999px;
+  height: 5px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.account-achievement-progress-fill {
+  background-color: var(--achievement-primary-colour);
+  border-radius: inherit;
+  height: 100%;
+  min-width: 0;
+}
+
+.account-achievement-progress-label {
+  color: var(--achievement-secondary-colour);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+  min-height: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-achievement-card.is-locked .account-achievement-progress-fill {
+  background-color: #777777;
+  box-shadow: none;
+}
+
+.account-achievement-card.is-locked .account-achievement-progress-label {
+  color: #777777;
+}
+
+.account-achievement-status-controls {
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.account-achievement-status {
+  align-self: start;
+  min-width: 58px;
+  padding: 5px 7px;
+  margin-top: 1px;
+  box-sizing: border-box;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--achievement-primary-colour);
+  color: var(--backgroundcolour);
+  font-size: 9px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-achievement-card.is-locked .account-achievement-status {
+  background-color: #3b3b3b;
+  color: #b8b8b8;
+}
+
+.account-achievement-details-toggle {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--achievement-primary-colour);
+  cursor: pointer;
+}
+
+.account-achievement-details-toggle:focus-visible {
+  background-color: #292929;
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-achievement-details-toggle:hover {
+    background-color: #292929;
+    outline: none;
+  }
+}
+
+.account-achievement-details-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--achievement-primary-colour);
+}
+
+.account-achievement-dropdown-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid currentColor;
+  transition: transform 0.2s ease;
+}
+
+.account-achievement-card.is-expanded .account-achievement-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.account-achievement-details {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.account-achievement-details::before {
+  content: '';
+  display: block;
+  height: 3px;
+  border-radius: 999px;
+  background-color: var(--achievement-primary-colour);
+}
+
+.account-achievement-details[hidden] {
+  display: none;
+}
+
+.account-achievement-unlock-info {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+
+.account-achievement-detail-label,
+.account-achievement-rewards-empty {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.account-achievement-detail-label {
+  color: #999999;
+}
+
+.account-achievement-unlock-date {
+  color: var(--achievement-primary-colour);
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.account-achievement-rewards {
+  display: grid;
+  gap: 6px;
+}
+
+.account-achievement-reward-list {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+}
+
+.account-achievement-reward {
+  min-width: 0;
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.account-achievement-reward-icon {
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background-color: #292929;
+  color: var(--achievement-primary-colour);
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+img.account-achievement-reward-icon {
+  padding: 3px;
+  object-fit: contain;
+}
+
+.account-achievement-card.is-locked img.account-achievement-reward-icon {
+  filter: grayscale(1) brightness(0.75);
+}
+
+.account-achievement-reward-icon.is-xp {
+  background-color: var(--achievement-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.account-achievement-reward-text {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-achievement-reward-value,
+.account-achievement-reward-type {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-achievement-reward-value {
+  color: var(--achievement-primary-colour);
+  font-size: 11px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.account-achievement-reward-type,
+.account-achievement-rewards-empty {
+  color: #777777;
+  font-size: 9px;
+}
+
+.account-achievements-empty {
+  min-height: 88px;
+  padding: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--account-inner-radius);
+  background-color: var(--secondarybackgroundcolour);
+  color: #999999;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}

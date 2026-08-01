@@ -1,104 +1,46 @@
-const partySessionInProgressContainer = document.getElementById('party-session-in-progress');
+const partySessionInProgressContainer = document.getElementById(
+  'party-session-in-progress'
+);
 const userKickedContainer = document.getElementById('user-kicked');
-const partyDisbandedContainer = document.getElementById('party-disbanded-container');
+const partyDisbandedContainer = document.getElementById(
+  'party-disbanded-container'
+);
 const partyFullContainer = document.getElementById('party-full');
 
-const gamemodeSettingsContainer = document.querySelector('.waiting-room-container');
+const gamemodeSettingsContainer = document.querySelector(
+  '.waiting-room-container'
+);
 const readyButton = document.querySelector('.start-game-button');
+
+const WAITING_ROOM_READY_SOUND = 'gamemodeSettingsReady';
+const WAITING_ROOM_UNREADY_SOUND = 'gamemodeSettingsUnready';
+
+if (typeof window.OEAudio?.register === 'function') {
+  window.OEAudio.register({
+    [WAITING_ROOM_READY_SOUND]: {
+      src: '/sounds/gamemode-settings/ready.wav',
+      group: 'party-games',
+      preload: true,
+      priority: 'confirmation',
+      conflictPolicy: 'interrupt'
+    },
+    [WAITING_ROOM_UNREADY_SOUND]: {
+      src: '/sounds/gamemode-settings/unready.wav',
+      group: 'party-games',
+      preload: true,
+      priority: 'confirmation',
+      conflictPolicy: 'interrupt'
+    }
+  });
+}
 
 let inputPartyCode;
 let sessionPartyType;
 let partyGameMode;
-let helpContainerFile = "waiting-room-error.json";
 let minPlayerCount;
 let waitingRoomPartyCodeObserver = null;
 let waitingRoomDisbandMonitor = null;
 const WAITING_ROOM_DISBAND_FALLBACK_INTERVAL_MS = 10000;
-
-function hasRestriction(restrictionValue, expectedRestriction) {
-  if (!restrictionValue || !expectedRestriction) return false;
-  try {
-    const restrictions = JSON.parse(restrictionValue);
-    return Array.isArray(restrictions) && restrictions.includes(expectedRestriction);
-  } catch {
-    return false;
-  }
-}
-
-function setupPartyCodeActionButtons() {
-  inputPartyCode = inputPartyCode || document.getElementById('party-code');
-  const copyPartyCodeButton = document.getElementById('party-code-copy-button');
-  const qrCodeButton = document.getElementById('qr-code-button');
-  if (!inputPartyCode || !copyPartyCodeButton || !qrCodeButton) return false;
-
-  if (copyPartyCodeButton && !copyPartyCodeButton.dataset.bound) {
-    copyPartyCodeButton.dataset.bound = 'true';
-    copyPartyCodeButton.addEventListener('click', async () => {
-      flashButtonHoverState(copyPartyCodeButton, {
-        duration: 0,
-        fadeDuration: 200,
-        className: 'copy-feedback-active',
-        transitionClassName: 'copy-feedback-fade'
-      });
-
-      const codeToCopy = (inputPartyCode?.value || '').trim();
-      if (!codeToCopy) return;
-      const fullPartyUrl = `${window.location.origin}/${codeToCopy}`;
-      try {
-        const copied = await copyTextToClipboard(fullPartyUrl);
-        if (!copied) {
-          throw new Error('Clipboard copy command was not successful.');
-        }
-        if (typeof window.setTooltipSelectedState === 'function') {
-          window.setTooltipSelectedState(copyPartyCodeButton);
-        }
-      } catch (err) {
-        console.error('Failed to copy party URL:', err);
-      }
-    });
-  }
-
-  if (qrCodeButton && !qrCodeButton.dataset.bound) {
-    qrCodeButton.dataset.bound = 'true';
-    qrCodeButton.addEventListener('click', () => {
-      if (!partyCode || typeof togglePartyQrCode !== 'function') return;
-      const willShow = !qrCodeButton.classList.contains('active');
-      togglePartyQrCode(willShow, partyCode);
-    });
-  }
-  return true;
-}
-
-function bindPartyCodeActionButtonsWithRetry(attempt = 0) {
-  const maxAttempts = 80;
-  const bound = setupPartyCodeActionButtons();
-  if (bound || attempt >= maxAttempts) return;
-  setTimeout(() => bindPartyCodeActionButtonsWithRetry(attempt + 1), 50);
-}
-
-function observePartyCodeActionButtons() {
-  if (waitingRoomPartyCodeObserver) return;
-
-  if (setupPartyCodeActionButtons()) {
-    return;
-  }
-
-  waitingRoomPartyCodeObserver = new MutationObserver(() => {
-    if (!setupPartyCodeActionButtons()) return;
-    waitingRoomPartyCodeObserver.disconnect();
-    waitingRoomPartyCodeObserver = null;
-  });
-
-  waitingRoomPartyCodeObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-}
-
-gameContainers.push(
-  partySessionInProgressContainer,
-  userKickedContainer
-);
 
 const url = window.location.href;
 const segments = url.split('/');
@@ -106,49 +48,67 @@ const segments = url.split('/');
 waitingForHost = true;
 observePartyCodeActionButtons();
 
-function waitForScriptDataLoaded(scriptPath, { timeout = 5000 } = {}) {
-  const basePath = scriptPath.split('?')[0];
+const waitingRoomLateJoinBriefing = window.createWaitingRoomLateJoinBriefing({
+  getPartyCode: () => partyCode,
+  getPartyGameMode: () => partyGameMode,
+  getMaxPlayerCount: () => maxPlayerCount,
+  getGamemodeSettingsContainer: () => gamemodeSettingsContainer,
+  promptWaitingRoomUserForCustomOeIcon
+});
 
-  return new Promise((resolve, reject) => {
-    const start = performance.now();
+const lateJoinBriefingContainer =
+  waitingRoomLateJoinBriefing.briefingContainer;
 
-    function tick() {
-      const script = [...document.scripts].find((candidate) => {
-        const src = candidate.getAttribute('src') || '';
-        return src.split('?')[0] === basePath;
-      });
+gameContainers.push(
+  partySessionInProgressContainer,
+  userKickedContainer,
+  lateJoinBriefingContainer
+);
 
-      if (script?.dataset.loaded === 'true') {
-        resolve();
-        return;
-      }
-
-      if (performance.now() - start > timeout) {
-        reject(new Error(`Timed out waiting for ${basePath} to finish loading.`));
-        return;
-      }
-
-      requestAnimationFrame(tick);
-    }
-
-    tick();
+function ShowWaitingRoomStartupError() {
+  window.PartyChatReady?.then((partyChat) => {
+    partyChat?.setAvailable?.(false);
   });
+
+  document.documentElement.style.setProperty('--primarypagecolour', '#999999');
+  document.documentElement.style.setProperty(
+    '--secondarypagecolour',
+    '#666666'
+  );
+
+  const statusContainer =
+    typeof ensureOnlineStatusContainer === 'function'
+      ? ensureOnlineStatusContainer({
+          id: 'waiting-room-startup-error',
+          title: 'Unable to join party',
+          description: 'Refresh and try joining again.'
+        })
+      : null;
+
+  setActiveContainers();
+  if (statusContainer) {
+    showContainer(statusContainer);
+  } else {
+    ShowPartyDoesNotExistState();
+  }
+  document.title = 'WAITING ROOM | ERROR';
 }
 
 async function checkPartyExists() {
-  const response = await fetch(`/api/waiting-room?partyCode=${partyCode}`);
-  const data = await response.json();
-  if (data.length > 0) {
-    const partyData = data[0];
-
+  const partyData = await getWaitingRoomPartyData({
+    retries: 12,
+    delayMs: 250,
+    requireUsable: true
+  });
+  if (partyData) {
     const config = partyData.config;
     const state = partyData.state;
 
     partyGameMode = config.gamemode;
-    debugLog("config.gameRules:", config.gameRules);
-    maxPlayerCount = partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
-    helpContainerFile = "party-games-online/waiting-rooms/" + partyGameMode + '.json';
-
+    rememberWaitingRoomGamemode(partyCode, partyGameMode);
+    debugLog('config.gameRules:', config.gameRules);
+    maxPlayerCount =
+      partyGamesInformation[partyGameMode].playerCountRestrictions.maxPlayers;
     CreateGameSettingsButtonsScript();
     inputPartyCode = document.getElementById('party-code');
     bindPartyCodeActionButtonsWithRetry();
@@ -166,267 +126,202 @@ async function checkPartyExists() {
       changeFavicon(partyGameMode);
     }
 
+    if (
+      state.isPlaying === false &&
+      typeof getHostedOnlineSettingsAccess === 'function' &&
+      typeof redirectOnlinePartyToLobby === 'function'
+    ) {
+      const access = await getHostedOnlineSettingsAccess(partyData);
+      if (access.isHost) {
+        redirectOnlinePartyToLobby(partyData);
+        return;
+      }
+    }
+
     if (state.isPlaying === false) {
       const players = partyData.players || [];
 
       const playerIndex = players.findIndex(
-        p => p.identity?.computerId === deviceId
+        (p) => p.identity?.computerId === deviceId
       );
       const playerCount = players.length;
+      const resolvedUsername = await resolveOnlineUsername(players);
+      const resolvedUserIcon = getStoredUserIconString();
 
       if (playerCount >= maxPlayerCount) {
         if (playerIndex !== -1) {
-          addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
-          toggleOverlay(true);
-          setActiveContainers(enterUsernameContainer);
-
           await UpdateUserPartyData({
             partyId: partyCode,
             computerId: deviceId,
+            newUsername: resolvedUsername,
+            newUserIcon: resolvedUserIcon,
             newUserReady: false,
             newUserConfirmation: false,
             newUserSocketId: socket.id
           });
+          onlineUsername = resolvedUsername;
+          showContainer(gamemodeSettingsContainer);
         } else {
           setActiveContainers(partyFullContainer);
-          document.title = "WAITING ROOM | ERROR";
+          document.title = 'WAITING ROOM | ERROR';
         }
       } else {
-        addElementIfNotExists(permanantElementClassArray, enterUsernameContainer);
-        toggleOverlay(true);
-        setActiveContainers(enterUsernameContainer);
-
         if (playerIndex !== -1) {
           await UpdateUserPartyData({
             partyId: partyCode,
             computerId: deviceId,
-            newUsername: "-",
+            newUsername: resolvedUsername,
+            newUserIcon: resolvedUserIcon,
             newUserReady: false,
             newUserConfirmation: false,
             newUserSocketId: socket.id
           });
         } else {
-          await addUserToParty({
-            partyId: partyCode,
-            newComputerId: deviceId,
-            newUsername: "-",
-            newUserIcon: "0000:0100:0200:0300",
-            newUserSocketId: socket.id
-          });
+          try {
+            await addUserToParty({
+              partyId: partyCode,
+              newComputerId: deviceId,
+              newUsername: resolvedUsername,
+              newUserIcon: resolvedUserIcon,
+              newUserSocketId: socket.id
+            });
+          } catch (error) {
+            const latestPartyData = await getWaitingRoomPartyData().catch(
+              () => null
+            );
+            const hasJoined = latestPartyData?.players?.some(
+              (player) => player.identity?.computerId === deviceId
+            );
+            if (!hasJoined) throw error;
+            console.warn(
+              'Join request reported an error after the player was added:',
+              error
+            );
+          }
+
+          try {
+            const partyChat = await window.PartyChatReady;
+            await partyChat?.sendMessage({
+              username: '[CONSOLE]',
+              message: `${resolvedUsername} has joined the party.`,
+              eventType: 'connect'
+            });
+          } catch (error) {
+            console.warn('Failed to send waiting room join chat message:', error);
+          }
         }
+        onlineUsername = resolvedUsername;
+        showContainer(gamemodeSettingsContainer);
       }
 
       await joinParty(partyCode);
+      currentPartyData = await getWaitingRoomPartyData();
+      if (currentPartyData && typeof UpdateUserIcons === 'function') {
+        await UpdateUserIcons(currentPartyData);
+      }
+      promptWaitingRoomUserForCustomOeIcon();
       startWaitingRoomDisbandMonitor();
+    } else if (
+      waitingRoomLateJoinBriefing.isActiveRoundLateJoinGamemode(partyGameMode)
+    ) {
+      const players = partyData.players || [];
+      const existingPlayer = players.find(
+        (player) => player.identity?.computerId === deviceId
+      );
+
+      if (!existingPlayer && players.length >= maxPlayerCount) {
+        setActiveContainers(partyFullContainer);
+        document.title = 'WAITING ROOM | PARTY FULL';
+      } else if (!existingPlayer) {
+        await waitingRoomLateJoinBriefing.showActiveGameBriefing(partyData);
+        startWaitingRoomDisbandMonitor();
+        return;
+      } else {
+        const resolvedUsername = await resolveOnlineUsername(players);
+        const resolvedUserIcon = getStoredUserIconString();
+
+        await addUserToParty({
+          partyId: partyCode,
+          newComputerId: deviceId,
+          newUsername: resolvedUsername,
+          newUserIcon: resolvedUserIcon,
+          newUserSocketId: socket.id
+        });
+
+        onlineUsername = resolvedUsername;
+        await joinParty(partyCode);
+        loadingPage = true;
+        transitionSplashScreen(
+          `/${formatPackName(partyGameMode)}/${partyCode}`,
+          `/images/splash-screens/${formatPackName(partyGameMode)}.png`
+        );
+        return;
+      }
     } else {
       if (partyGameMode) {
-        changeFavicon(partyGameMode, "in-game-locked");
+        changeFavicon(partyGameMode, 'in-game-locked');
       }
       setActiveContainers(partySessionInProgressContainer);
-      document.title = "WAITING ROOM | ERROR";
-      addElementIfNotExists(permanantElementClassArray, partySessionInProgressContainer);
+      document.title = 'WAITING ROOM | ERROR';
+      addElementIfNotExists(
+        permanantElementClassArray,
+        partySessionInProgressContainer,
+        { sound: false }
+      );
     }
 
-    waitForFunction("FetchHelpContainer", () => {
-      FetchHelpContainer(helpContainerFile);
-    });
     SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   } else {
     ShowPartyDoesNotExistState();
-    document.title = "WAITING ROOM | PARTY DOES NOT EXIST";
+    document.title = 'WAITING ROOM | PARTY DOES NOT EXIST';
     SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   }
-}
-
-async function getWaitingRoomPartyData() {
-  const response = await fetch(`/api/waiting-room?partyCode=${partyCode}`);
-  const data = await response.json();
-
-  if (!Array.isArray(data) || data.length === 0) {
-    return null;
-  }
-
-  return data[0];
-}
-
-function stopWaitingRoomDisbandMonitor() {
-  if (!waitingRoomDisbandMonitor) {
-    return;
-  }
-
-  clearInterval(waitingRoomDisbandMonitor);
-  waitingRoomDisbandMonitor = null;
-}
-
-function startWaitingRoomDisbandMonitor() {
-  stopWaitingRoomDisbandMonitor();
-
-  waitingRoomDisbandMonitor = setInterval(async () => {
-    if (!partyCode) {
-      stopWaitingRoomDisbandMonitor();
-      return;
-    }
-
-    try {
-      const waitingRoomPartyData = await getWaitingRoomPartyData();
-
-      if (!waitingRoomPartyData) {
-        stopWaitingRoomDisbandMonitor();
-        PartyDisbanded();
-      }
-    } catch (error) {
-      console.error('Failed to monitor waiting room party state:', error);
-    }
-  }, WAITING_ROOM_DISBAND_FALLBACK_INTERVAL_MS);
 }
 
 async function initWaitingRoom() {
   try {
-    await waitForScriptDataLoaded('/scripts/party-games/online/online-settings.js');
+    if (window.OEReady?.waitFor) {
+      await window.OEReady.waitFor(['online-settings'], {
+        timeoutMs: 30000
+      });
+    } else {
+      await waitForScriptDataLoaded(
+        '/scripts/party-games/online/online-settings.js',
+        { timeout: 30000 }
+      );
+    }
+    await waitForOnlineCore();
     await checkPartyExists();
   } catch (error) {
     console.error('Failed to initialise waiting room:', error);
-    ShowPartyDoesNotExistState();
-    document.title = "WAITING ROOM | ERROR";
+    ShowWaitingRoomStartupError();
     SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
   }
 }
 
 initWaitingRoom();
 
-function KickUser() {
-  hideContainer(gamemodeSettingsContainer);
-  setActiveContainers(userKickedContainer);
-}
-
-function replaceFaviconLink(linkId, href) {
-  const existingLink = document.getElementById(linkId);
-  if (!existingLink) {
-    return;
-  }
-
-  const nextLink = existingLink.cloneNode(true);
-  nextLink.href = versionAssetUrl(href, { cacheBustKey: "PARTY_GAMES_WAITING_ROOM" });
-  existingLink.replaceWith(nextLink);
-}
-
-function changeFavicon(gamemode, variant = "lobby") {
-  const faviconBasePath = `/images/meta/favicons/party-games/${gamemode}/${variant}`;
-  replaceFaviconLink('favicon-ico', `${faviconBasePath}/favicon.ico`);
-  replaceFaviconLink('favicon-16', `${faviconBasePath}/favicon-16x16.png`);
-  replaceFaviconLink('favicon-32', `${faviconBasePath}/favicon-32x32.png`);
-  replaceFaviconLink('favicon-apple', `${faviconBasePath}/apple-touch-icon.png`);
-  replaceFaviconLink('favicon-manifest', `${faviconBasePath}/site.webmanifest`);
-}
-
-function setDisbandedFavicons() {
-  const faviconBasePath = '/images/meta/favicons/party-games/party-does-not-exist';
-  replaceFaviconLink('favicon-ico', `${faviconBasePath}/favicon.ico`);
-  replaceFaviconLink('favicon-16', `${faviconBasePath}/favicon-16x16.png`);
-  replaceFaviconLink('favicon-32', `${faviconBasePath}/favicon-32x32.png`);
-  replaceFaviconLink('favicon-apple', `${faviconBasePath}/apple-touch-icon.png`);
-  replaceFaviconLink('favicon-manifest', `${faviconBasePath}/site.webmanifest`);
-}
-
-function SetGamemodeContainer() {
-  UpdateGamemodeContainer();
-  onlineSettingsTab.classList.remove('disabled');
-  rulesContainer.querySelectorAll('button').forEach(button => {
-    if (hasRestriction(button.dataset.settingsRestriction, "offline")) {
-      button.classList.add('inactive');
-    }
-  });
-  rulesContainer.querySelectorAll('.increment-container').forEach(button => {
-    if (hasRestriction(button.dataset.settingsRestriction, "offline")) {
-      button.classList.add('inactive');
-    }
-  });
-  inputPartyCode = inputPartyCode || document.getElementById('party-code');
-  if (inputPartyCode) {
-    inputPartyCode.value = partyCode;
-  }
-  bindPartyCodeActionButtonsWithRetry();
-}
-
-function CreateGameSettingsButtonsScript() {
-  const script = document.createElement("script");
-  script.src = versionAssetUrl("/scripts/party-games/gamemode-settings/game-settings-buttons.js");
-  script.type = "text/javascript";
-  document.body.appendChild(script);
-}
-
-async function UpdateGamemodeContainer() {
-  if (!partyCode) {
-    return;
-  }
-  currentPartyData = await getWaitingRoomPartyData();
-  if (!currentPartyData) return;
-
-  const config = currentPartyData.config;
-
-  const selectedPacks = Array.isArray(config.selectedPacks) ? config.selectedPacks : [];
-  const selectedRoles = Array.isArray(config.selectedRoles) ? config.selectedRoles : [];
-  const gameRules = config.gameRules || {};
-
-  packsContainer.querySelectorAll('button').forEach(button => {
-    const key = button.dataset.key;
-    const inPacks = selectedPacks.includes(key);
-    const inRoles = selectedRoles.includes(key);
-
-    if (inPacks || inRoles) {
-      button.classList.add('active');
-    } else {
-      button.classList.remove('active');
-    }
-    SetButtonStyle(button, false);
-  });
-
-  rulesContainer.querySelectorAll('.increment-container').forEach(button => {
-    const key = button.dataset.key;
-    const value = gameRules[key];
-
-    if (typeof value === 'number') {
-      button.dataset.count = value;
-      const display = button.querySelector('.count-display');
-      if (display) {
-        display.textContent = value;
-      }
-    }
-  });
-
-  rulesContainer.querySelectorAll('button').forEach(button => {
-    const key = button.dataset.key;
-    const raw = gameRules[key];
-    const isActive = raw === true || raw === 'true';
-    button.classList.toggle('active', isActive);
-    SetButtonStyle(button, false);
-  });
-}
-
-function PartyDisbanded() {
-  stopWaitingRoomDisbandMonitor();
-  document.documentElement.style.setProperty('--primarypagecolour', '#999999');
-  document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
-  setDisbandedFavicons();
-  hideContainer(gamemodeSettingsContainer);
-  hideContainer(partySessionInProgressContainer);
-  hideContainer(userKickedContainer);
-  hideContainer(partyFullContainer);
-  showContainer(partyDisbandedContainer);
-}
-
+readyButton.dataset.sound = 'none';
 readyButton.addEventListener('click', async () => {
-  readyButton.classList.toggle('active');
-  if (readyButton.classList.contains('active')) {
-    newReady = true;
-  } else {
-    newReady = false;
+  if (!partyCode) return;
+
+  const wasReady = readyButton.classList.contains('active');
+  const newReady = !wasReady;
+  readyButton.classList.toggle('active', newReady);
+
+  const updated = await UpdateUserReady({
+    partyId: partyCode,
+    computerId: deviceId,
+    newReady
+  });
+
+  if (!updated) {
+    readyButton.classList.toggle('active', wasReady);
+    playInteractionSound('error');
+    return;
   }
-  if (partyCode) {
-    await UpdateUserReady({
-      partyId: partyCode,
-      computerId: deviceId,
-      newReady: newReady,
-    });
-  }
+
+  playSoundEffect(
+    newReady ? WAITING_ROOM_READY_SOUND : WAITING_ROOM_UNREADY_SOUND
+  );
 });

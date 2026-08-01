@@ -1,0 +1,30 @@
+{
+    "title": "PAGE NOT FOUND",
+    "window": {
+        "width": 58,
+        "height": 56,
+        "x": 22,
+        "y": 14,
+        "openExpanded": true,
+        "titlebarColour": "#202020",
+        "titlebarTextColour": "#ffffff",
+        "backgroundColour": "#000000"
+    },
+    "elements": [
+        {
+            "type": "heading",
+            "text": "404",
+            "colour": "#ffffff"
+        },
+        {
+            "type": "paragraph",
+            "text": "This page could not be found.",
+            "colour": "#ffffff"
+        },
+        {
+            "type": "paragraph",
+            "text": "The address may be wrong, or the page may have moved somewhere more dramatic.",
+            "colour": "#ffffff"
+        }
+    ]
+}

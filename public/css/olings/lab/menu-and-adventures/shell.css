@@ -1,0 +1,217 @@
+.oling-lab-scroll {
+  position: absolute;
+  top: 50%;
+  z-index: 8;
+  display: none;
+  place-items: center;
+  width: 3rem;
+  height: 4rem;
+  transform: translateY(-50%);
+  background: var(--backgroundcolour);
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.oling-lab-scroll--left {
+  left: 0;
+}
+
+.oling-lab-scroll--right {
+  right: 0;
+}
+
+.oling-lab-menu-backdrop {
+  position: fixed;
+  inset: var(--headerheight) 0 0;
+  z-index: 1000;
+  display: var(--container-display, none);
+  place-items: center;
+  padding: 1rem;
+  background: transparent;
+  pointer-events: auto;
+  --container-visible-display: grid;
+}
+
+.oling-lab-menu-backdrop[hidden]:not(.is-visible) {
+  display: none;
+}
+
+.shop-hatch-preview-backdrop {
+  z-index: 1010;
+}
+
+.shop-hatch-preview-menu .oling-lab-menu-content {
+  padding: 0;
+}
+
+.shop-hatch-preview-menu .oling-lab-tab-panel {
+  overflow: visible;
+  padding: 0;
+}
+
+.shop-hatch-preview-menu
+  :where(
+    .oling-lab-tab-menu,
+    .oling-lab-tab-panel,
+    .oling-lab-menu-section,
+    .oling-lab-hatch-reveal-summary,
+    .oling-lab-hatch-build,
+    .oling-lab-egg-insertion-stage
+  ) {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.shop-hatch-preview-menu
+  :where(.oling-lab-hatch-build, .oling-lab-egg-insertion-stage) {
+  aspect-ratio: auto;
+}
+
+.shop-hatch-preview-menu .oling-lab-side-panel {
+  width: 100%;
+  min-width: 100%;
+}
+
+.oling-lab-menu {
+  --oling-lab-menu-primary-colour: #fff8ea;
+  --oling-lab-menu-secondary-colour: #d7fbff;
+  --oling-lab-top-tab-height: 2.55rem;
+  --oling-lab-menu-header-height: 6rem;
+  --oling-lab-menu-footer-height: 4.75rem;
+  --oling-lab-menu-max-content-height: calc(
+    100dvh - var(--headerheight) - 2rem - var(--oling-lab-menu-header-height) -
+      var(--oling-lab-top-tab-height) - var(--oling-lab-menu-footer-height)
+  );
+  width: min(
+    42rem,
+    100%,
+    calc(var(--oling-lab-menu-max-content-height) * 4 / 3)
+  );
+  height: auto;
+  overflow: hidden;
+  display: grid;
+  position: relative;
+  grid-template-areas:
+    'tabs'
+    'header'
+    'content'
+    'footer';
+  grid-template-rows: var(--oling-lab-top-tab-height) auto auto auto;
+  background: transparent;
+  color: var(--backgroundcolour);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 28%);
+}
+
+.oling-lab-menu-header {
+  grid-area: header;
+  height: var(--oling-lab-menu-header-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  place-items: center;
+  background: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-menu h2 {
+  width: 100%;
+  padding: 0;
+  font-size: 2.1rem;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-menu-content {
+  grid-area: content;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-menu-content:has(.oling-lab-tab-menu) {
+  padding: 0;
+}
+
+.oling-lab-menu-content:has(.oling-lab-rest-panel) {
+  overflow: hidden;
+  padding: 0.75rem 1rem;
+  background: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-menu-tabs {
+  grid-area: tabs;
+  align-self: start;
+  z-index: 3;
+  width: auto;
+  height: var(--oling-lab-top-tab-height);
+  min-width: 0;
+  overflow: visible;
+  display: flex;
+  align-items: flex-end;
+  background: transparent;
+}
+
+.oling-lab-menu-tabs[hidden] {
+  display: none;
+}
+
+.oling-lab-menu-footer {
+  grid-area: footer;
+  min-width: 0;
+  height: var(--oling-lab-menu-footer-height);
+  min-height: var(--oling-lab-menu-footer-height);
+  display: grid;
+  place-items: center;
+  background: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-menu-footer > * {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.oling-lab-container-action-area {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.oling-lab-menu-footer .oling-lab-menu-action {
+  width: auto;
+  min-width: 11rem;
+  min-height: 2.75rem !important;
+  height: 2.75rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.6rem !important;
+  line-height: 1;
+  text-align: center;
+}
+
+.oling-lab-menu-footer .oling-lab-menu-action > span {
+  display: block !important;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.oling-lab-menu-footer .oling-lab-menu-action::after {
+  content: none;
+}

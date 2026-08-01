@@ -1,0 +1,23 @@
+.header .icon-container.settings-icon {
+    right: 0;
+}
+
+.settings-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(360px, calc(100vw - 32px));
+    min-width: 300px;
+    height: auto;
+    padding: 22px;
+    background-color: var(--backgroundcolour);
+    border: 6px solid var(--backgroundcolour);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    display: var(--container-display, none);
+    z-index: 1001;
+    text-align: left;
+    border-radius: 28px;
+    --container-visible-display: block;
+}
+

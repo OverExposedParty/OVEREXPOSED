@@ -1,0 +1,236 @@
+.account-purchase-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-bottom: 12px;
+}
+
+.account-purchase-tab {
+    min-width: 0;
+    min-height: 34px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.account-purchase-tab.is-active,
+.account-purchase-tab:focus-visible {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-purchase-tab:hover {
+      background-color: var(--primarypagecolour);
+      color: var(--backgroundcolour);
+      outline: none;
+  }
+}
+
+.account-purchase-tab:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.account-purchase-tab:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.account-purchase-tab:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.account-purchase-list {
+    display: grid;
+    gap: 8px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.account-purchase-card {
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    overflow: hidden;
+}
+
+.account-purchase-summary {
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 10px;
+    border: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+    gap: 10px;
+    align-items: center;
+    background-color: transparent;
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.account-purchase-summary:focus-visible {
+    color: var(--secondarypagecolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-purchase-summary:hover {
+      color: var(--secondarypagecolour);
+      outline: none;
+  }
+}
+
+.account-purchase-identity {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.account-purchase-name,
+.account-purchase-meta,
+.account-purchase-price {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.account-purchase-name {
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.account-purchase-meta {
+    color: #999999;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.account-purchase-price {
+    font-size: 12px;
+    text-align: right;
+}
+
+.account-purchase-dropdown-arrow {
+    width: 0;
+    height: 0;
+    justify-self: center;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid currentColor;
+    transition: transform 0.2s;
+}
+
+.account-purchase-card.is-expanded .account-purchase-dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.account-purchase-details {
+    display: grid;
+    gap: 6px;
+    padding: 0 10px 10px;
+}
+
+.account-purchase-details[hidden] {
+    display: none;
+}
+
+.account-purchase-details .account-profile-row {
+    min-height: 30px;
+    padding: 6px 14px;
+    background-color: var(--backgroundcolour);
+}
+
+.account-purchase-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.account-purchases-empty {
+    min-height: 88px;
+    padding: 16px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.account-receipt-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.account-receipt-action {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: var(--account-inner-radius);
+    background-color: var(--secondarybackgroundcolour);
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.account-receipt-action:focus-visible {
+    background-color: var(--primarypagecolour);
+    color: var(--backgroundcolour);
+    outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-receipt-action:hover {
+      background-color: var(--primarypagecolour);
+      color: var(--backgroundcolour);
+      outline: none;
+  }
+}
+
+.account-receipt-action.disabled,
+.account-receipt-action[aria-disabled='true'] {
+    color: #777777;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.account-receipt-action.disabled:focus-visible,
+.account-receipt-action[aria-disabled='true']:focus-visible {
+    background-color: var(--secondarybackgroundcolour);
+    color: #777777;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .account-receipt-action.disabled:hover,
+  .account-receipt-action[aria-disabled='true']:hover {
+      background-color: var(--secondarybackgroundcolour);
+      color: #777777;
+  }
+}
+

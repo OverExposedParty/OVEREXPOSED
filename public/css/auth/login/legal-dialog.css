@@ -1,0 +1,192 @@
+.auth-legal-dialog {
+  width: min(92vw, 54rem);
+  max-width: none;
+  height: min(48rem, calc(100dvh - var(--headerheight) - 2rem));
+  max-height: none;
+  position: fixed;
+  top: calc(var(--headerheight) + (100dvh - var(--headerheight)) / 2);
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 12px;
+  padding: 0;
+  background: var(--secondarybackgroundcolour);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.auth-legal-dialog::backdrop {
+  clip-path: inset(var(--headerheight) 0 0 0);
+}
+
+.auth-legal-dialog-shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.auth-legal-dialog-header,
+.auth-legal-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.auth-legal-dialog-header {
+  padding: 1.1rem 1.25rem;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+.auth-legal-dialog-header h2,
+.auth-legal-dialog-header p {
+  margin: 0;
+}
+
+.auth-legal-dialog-header h2 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1;
+}
+
+.auth-legal-dialog-kicker {
+  margin-bottom: 0.3rem !important;
+  font-family: Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.auth-legal-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  padding: 0.75rem 1.25rem 0;
+  background: var(--secondarybackgroundcolour);
+}
+
+.auth-legal-tab {
+  min-height: 2.75rem;
+  border: 0;
+  border-bottom: 3px solid currentColor;
+  background: transparent;
+  color: #aeb8c4;
+  cursor: pointer;
+  font: inherit;
+}
+
+.auth-legal-tab.active,
+.auth-legal-tab:focus-visible {
+  border-bottom-color: var(--primarypagecolour);
+  color: var(--primarypagecolour);
+}
+
+.auth-legal-tab.complete {
+  border-bottom-color: var(--successcolour);
+  color: var(--successcolour);
+}
+
+.auth-legal-content {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 1rem 1.5rem 1.5rem 1.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--primarypagecolour) var(--backgroundcolour);
+}
+
+.auth-legal-section + .auth-legal-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.auth-legal-section h3 {
+  margin: 0 0 0.65rem;
+  color: var(--primarypagecolour);
+  font-size: 1rem;
+}
+
+.auth-legal-section-copy,
+.auth-legal-loading,
+.auth-legal-error {
+  color: #e0e5eb;
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.auth-legal-section-copy a {
+  color: var(--primarypagecolour);
+}
+
+.auth-legal-section-copy a:focus-visible {
+  color: var(--secondarypagecolour);
+}
+
+.auth-legal-dialog-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  padding: 0.85rem 1.25rem;
+  border-top: 2px solid var(--backgroundcolour);
+  background: var(--secondarybackgroundcolour);
+}
+
+.auth-legal-dialog-footer a,
+.auth-legal-dialog-footer button {
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.auth-legal-dialog-footer a {
+  justify-self: end;
+  color: var(--primarypagecolour);
+  text-align: right;
+  text-underline-offset: 0.2rem;
+}
+
+.auth-legal-dialog-footer a:focus-visible {
+  color: var(--secondarypagecolour);
+}
+
+.auth-legal-dialog-footer button {
+  min-width: clamp(10rem, 28vw, 16rem);
+  min-height: 2.5rem;
+  border: 0;
+  border-radius: 16px;
+  padding: 0 1rem;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+  cursor: pointer;
+}
+
+.auth-legal-dialog-footer button:disabled {
+  background: #333333;
+  color: #777777;
+  cursor: not-allowed;
+}
+
+.auth-legal-dialog-footer button:not(:disabled):focus-visible {
+  background: var(--secondarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .auth-legal-tab:hover {
+    border-bottom-color: var(--secondarypagecolour);
+    color: var(--secondarypagecolour);
+  }
+
+  .auth-legal-tab.complete:hover {
+    border-bottom-color: var(--successcoloursecondary);
+    color: var(--successcoloursecondary);
+  }
+
+  .auth-legal-section-copy a:hover,
+  .auth-legal-dialog-footer a:hover {
+    color: var(--secondarypagecolour);
+  }
+
+  .auth-legal-dialog-footer button:not(:disabled):hover {
+    background: var(--secondarypagecolour);
+  }
+}

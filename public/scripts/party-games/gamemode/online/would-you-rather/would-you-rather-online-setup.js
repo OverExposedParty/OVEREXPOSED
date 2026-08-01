@@ -2,6 +2,7 @@ const resultsChartContainer = document.getElementById('results-container');
 
 const gameContainerPrivate = document.querySelector('#private-view.card-container');
 const buttonChooseOption = gameContainerPrivate.querySelector('#button-choose-option');
+let chooseOptionRequestInFlight = false;
 
 gameContainers.push(
   gameContainerPrivate,
@@ -57,9 +58,15 @@ async function initialisePage() {
       }
     });
 
-    await LoadScript(
-      `/scripts/party-games/gamemode/online/${cardContainerGamemode}/${cardContainerGamemode}-online-instructions.js`
-    );
+    const instructionsBasePath =
+      `/scripts/party-games/gamemode/online/${cardContainerGamemode}`;
+
+    await LoadScript(`${instructionsBasePath}/would-you-rather-online-instructions/phase-tools.js`);
+    await LoadScript(`${instructionsBasePath}/would-you-rather-online-instructions/round-actions.js`);
+    await LoadScript(`${instructionsBasePath}/would-you-rather-online-instructions/private-card.js`);
+    await LoadScript(`${instructionsBasePath}/would-you-rather-online-instructions/vote-flow.js`);
+    await LoadScript(`${instructionsBasePath}/would-you-rather-online-instructions/punishment-flow.js`);
+    await LoadScript(`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`);
 
     const instructions = getUserInstructions(party);
 
@@ -102,30 +109,54 @@ async function initialisePage() {
 }
 
 async function SetPageSettings() {
+  if (!(await registerRoundLateJoinIfRequested())) return;
+
   buttonChooseOption.addEventListener('click', async () => {
-    currentPartyData = await GetCurrentPartyData();
+    if (chooseOptionRequestInFlight) return;
+    chooseOptionRequestInFlight = true;
+    buttonChooseOption.disabled = true;
 
-    // NEW SCHEMA: currentCardIndex lives under deck
-    const currentCardIndex = currentPartyData.deck.currentCardIndex;
-    selectedQuestionObj = getNextQuestion(currentCardIndex);
+    try {
+      currentPartyData = await GetCurrentPartyData();
 
-    const splitQuestion = SplitQuestion(
-      selectedQuestionObj.question.replace("Would you rather ", "")
-    );
+      // NEW SCHEMA: currentCardIndex lives under deck
+      const currentCardIndex = currentPartyData.deck.currentCardIndex;
+      selectedQuestionObj = getNextQuestion(currentCardIndex);
 
-    selectOptionQuestionTextA.textContent = "A: " + splitQuestion.a;
-    selectOptionQuestionTextB.textContent = "B: " + splitQuestion.b;
+      const splitQuestion = SplitQuestion(
+        selectedQuestionObj.question.replace("Would you rather ", "")
+      );
 
-    setActiveContainers(selectOptionContainer);
-    setUserBool(deviceId, null, true);
+      selectOptionQuestionTextA.textContent = "A: " + splitQuestion.a;
+      selectOptionQuestionTextB.textContent = "B: " + splitQuestion.b;
+
+      setActiveContainers(selectOptionContainer);
+      const players = currentPartyData.players || [];
+      const me = players.find(player => getPlayerId(player) === deviceId);
+      if (me) {
+        const myState = getPlayerState(me);
+        myState.isReady = true;
+        me.isReady = true;
+      }
+
+      const updatedParty = await setUserBool(deviceId, null, true);
+      if (updatedParty) {
+        currentPartyData = updatedParty;
+      }
+    } finally {
+      chooseOptionRequestInFlight = false;
+      buttonChooseOption.disabled = false;
+    }
   });
 
   selectOptionConfirmButtonA.addEventListener('click', async () => {
     await SetVote({ option: "A" });
+    stopWouldYouRatherVoteTimerWarning();
   });
 
   selectOptionConfirmButtonB.addEventListener('click', async () => {
     await SetVote({ option: "B" });
+    stopWouldYouRatherVoteTimerWarning();
   });
 
   completePunishmentButtonConfirm.addEventListener('click', async () => {

@@ -1,28 +1,48 @@
-const civilianRoles = ["civilian", "mayor"];
-const mafiosoRoles = ["mafioso", "godfather"];
-const neutralRoles = ["lawyer", "serial killer"];
+const {
+  getMafiaActionExecutorKey,
+  getMafiaRoleActionKeys,
+  getMafiaRoleTeamKey,
+  MAFIA_ACTION_KEYS,
+  MAFIA_ROLE_BEHAVIOURS
+} = window.MafiaRoleBehaviours;
+const mafiaRoleKeys = Object.keys(MAFIA_ROLE_BEHAVIOURS);
+const mafiosoRoles = mafiaRoleKeys.filter(
+  (roleKey) => getMafiaRoleTeamKey(roleKey) === 'mafia'
+);
 
 async function SetPageSettings() {
   selectUserDayPhaseConfirmButton.addEventListener('click', async () => {
-    if (selectUserDayPhaseContainer.getAttribute('selected-id') != "") {
+    if (selectUserDayPhaseContainer.getAttribute('selected-id') != '') {
       await SetVote({
         option: selectUserDayPhaseContainer.getAttribute('selected-id')
       });
+      stopMafiaTimerWarning();
 
-      const selectUserVoteDayPlayerButtons = selectUserDayPhaseContainer.querySelectorAll('.selected-user-container .button-container button');
-      selectUserVoteDayPlayerButtons.forEach(btn => btn.classList.remove('active'));
-      selectUserDayPhaseContainer.setAttribute('selected-id', "");
+      const selectUserVoteDayPlayerButtons =
+        selectUserDayPhaseContainer.querySelectorAll(
+          '.selected-user-container .button-container button'
+        );
+      selectUserVoteDayPlayerButtons.forEach((btn) =>
+        btn.classList.remove('active')
+      );
+      selectUserDayPhaseContainer.setAttribute('selected-id', '');
     }
   });
 
   selectUserNightPhaseConfirmButton.addEventListener('click', async () => {
-    if (selectUserNightPhaseContainer.getAttribute('selected-id') != "") {
+    if (selectUserNightPhaseContainer.getAttribute('selected-id') != '') {
       await SetVote({
         option: selectUserNightPhaseContainer.getAttribute('selected-id')
       });
-      const selectUserVoteNightPlayerButtons = selectUserNightPhaseContainer.querySelectorAll('.selected-user-container .button-container button');
-      selectUserVoteNightPlayerButtons.forEach(btn => btn.classList.remove('active'));
-      selectUserNightPhaseContainer.setAttribute('selected-id', "");
+      stopMafiaTimerWarning();
+      const selectUserVoteNightPlayerButtons =
+        selectUserNightPhaseContainer.querySelectorAll(
+          '.selected-user-container .button-container button'
+        );
+      selectUserVoteNightPlayerButtons.forEach((btn) =>
+        btn.classList.remove('active')
+      );
+      selectUserNightPhaseContainer.setAttribute('selected-id', '');
     }
   });
 
@@ -47,7 +67,7 @@ async function SetPageSettings() {
   // existingData[0] should already match new schema
   currentPartyData = initialPartyData;
 
-  debugLog("initialisePage");
+  debugLog('initialisePage');
   await initialisePage();
 }
 
@@ -59,28 +79,30 @@ async function initialisePage() {
     return;
   }
   const { party, players, config, state, me } = session;
-  debugLog("Socket ID set to: " + (me.connection?.socketId ?? me.socketId));
+  debugLog('Socket ID set to: ' + (me.connection?.socketId ?? me.socketId));
 
   if (state.isPlaying === true) {
     // gameRules: new object format (like other modes)
     const rawGameRules = config.gameRules || {};
     const rulesObj =
-      rawGameRules instanceof Map ? Object.fromEntries(rawGameRules) : rawGameRules;
+      rawGameRules instanceof Map
+        ? Object.fromEntries(rawGameRules)
+        : rawGameRules;
 
-    gameRules = rulesObj;                    // expose globally if needed elsewhere
+    gameRules = rulesObj; // expose globally if needed elsewhere
     partyRulesSettings = Object.keys(rulesObj); // if other code still uses this
 
     // Build day/night vote buttons
-    players.forEach(player => {
-      const pState         = getPlayerState(player);
-      const isAlive        = pState.status === "alive";
+    players.forEach((player) => {
+      const pState = getPlayerState(player);
+      const isAlive = pState.status === 'alive';
       const playerDeviceId = getPlayerId(player);
-      const playerName     = getPlayerUsername(player);
-      const playerRole     = pState.role;
+      const playerName = getPlayerUsername(player);
+      const playerRoleKey = pState.roleKey;
 
       // DAY: all alive players
       if (isAlive) {
-        const userButton = createVoteButton(playerDeviceId, playerName, "day");
+        const userButton = createVoteButton(playerDeviceId, playerName, 'day');
         selectUserDayPhaseButtonContainer.appendChild(userButton);
       }
 
@@ -88,41 +110,61 @@ async function initialisePage() {
       if (
         playerDeviceId !== deviceId &&
         isAlive &&
-        civilianRoles.includes(playerRole)
+        getMafiaRoleTeamKey(playerRoleKey) === 'town'
       ) {
-        const userButton = createVoteButton(playerDeviceId, playerName, "night");
+        const userButton = createVoteButton(
+          playerDeviceId,
+          playerName,
+          'night'
+        );
         selectUserNightPhaseButtonContainer.appendChild(userButton);
       }
     });
 
     wireUpVoteButtons();
-    renderPlayers(players, "PLAYER BOARD");
+    renderPlayers(players, 'PLAYER BOARD');
 
     SetPlayerBoardButton({
       userCustomisationString: me.identity?.userIcon,
       userId: getPlayerId(me)
     });
 
-    if (selectUserNightPhaseButtonContainer.querySelectorAll('button').length > 4) {
+    if (
+      selectUserNightPhaseButtonContainer.querySelectorAll('button').length > 4
+    ) {
       selectUserNightPhaseContainer.classList.add('overflow');
     }
 
+    const instructionsBasePath = `/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}`;
+
     await LoadScript(
-      `/scripts/party-games/gamemode/online/${placeHolderSelectedUser.dataset.template}/${placeHolderSelectedUser.dataset.template}-online-instructions.js`
+      `${instructionsBasePath}/mafia-online-instructions/phase-tools.js`
     );
-    await LoadScript("/scripts/party-games/gamemode/online/mafia/mafia-dialogue.js");
-    await LoadScript("/scripts/party-games/gamemode/online/mafia/mafia-civilian-watch.js");
+    await LoadScript(
+      `${instructionsBasePath}/mafia-online-instructions/night-flow.js`
+    );
+    await LoadScript(
+      `${instructionsBasePath}/mafia-online-instructions/day-flow.js`
+    );
+    await LoadScript(
+      `${instructionsBasePath}/mafia-online-instructions/display-state.js`
+    );
+    await LoadScript(
+      `${instructionsBasePath}/${placeHolderSelectedUser.dataset.template}-online-instructions.js`
+    );
+    await LoadScript(
+      '/scripts/party-games/gamemode/online/mafia/mafia-dialogue.js'
+    );
+    await LoadScript(
+      '/scripts/party-games/gamemode/online/mafia/mafia-civilian-watch.js'
+    );
 
     const instructions = getUserInstructions(party);
 
-    if (deviceId === hostDeviceId && instructions === "") {
-      const roles         = await GetRoles(players.length);
-      const shuffledRoles = getShuffledRoles(roles);
-
+    if (deviceId === hostDeviceId && instructions === '') {
       const updatedParty = await performOnlinePartyAction({
         action: 'mafia-start-game',
         payload: {
-          shuffledRoles,
           timer: new Date(Date.now() + mafiaDisplayRoleTimer)
         }
       });
@@ -159,8 +201,6 @@ async function initialisePage() {
   }
 }
 
-
-
 async function FetchInstructions() {
   currentPartyData = await GetCurrentPartyData();
 
@@ -169,51 +209,48 @@ async function FetchInstructions() {
     return;
   }
 
-  const instructions = currentPartyData.config && currentPartyData.config.userInstructions
-    ? currentPartyData.config.userInstructions
-    : "";
-  renderPlayers(currentPartyData.players, "Player Board");
-  if (!instructions) return;
-
-   if (instructions.includes("DISPLAY_ROLE")) {
-    DisplayRole();
+  const instructions =
+    currentPartyData.config && currentPartyData.config.userInstructions
+      ? currentPartyData.config.userInstructions
+      : '';
+  renderPlayers(currentPartyData.players, 'Player Board');
+  if (!instructions) {
+    stopMafiaTimerWarning();
+    return;
   }
-  else if (instructions.includes("DISPLAY_NIGHT_PHASE")) {
-    if (instructions.includes("PART_TWO")) {
+
+  const state = getPartyState(currentPartyData);
+  syncMafiaInstructionSounds(state, instructions);
+
+  if (instructions.includes('DISPLAY_ROLE')) {
+    DisplayRole();
+  } else if (instructions.includes('DISPLAY_NIGHT_PHASE')) {
+    if (instructions.includes('PART_TWO')) {
       DisplayNightPhasePartTwo();
-    }
-    else {
+    } else {
       DisplayNightPhase();
     }
-  }
-  else if (instructions.includes("DISPLAY_PLAYER_KILLED")) {
-    if (instructions.includes("PART_TWO")) {
+  } else if (instructions.includes('DISPLAY_PLAYER_KILLED')) {
+    if (instructions.includes('PART_TWO')) {
       DisplayPlayerKilledPartTwo(instructions);
-    }
-    else {
+    } else {
       DisplayPlayerKilled(instructions);
     }
-  }
-  else if (instructions.includes("DISPLAY_DAY_PHASE_DISCUSSION")) {
+  } else if (instructions.includes('DISPLAY_DAY_PHASE_DISCUSSION')) {
     DisplayDayPhaseDiscussion();
-  }
-  else if (instructions.includes("DISPLAY_DAY_PHASE_VOTE")) {
-    if (instructions.includes("PART_TWO")) {
+  } else if (instructions.includes('DISPLAY_DAY_PHASE_VOTE')) {
+    if (instructions.includes('PART_TWO')) {
       DisplayDayPhaseVotePartTwo();
-    }
-    else {
+    } else {
       DisplayDayPhaseVote();
     }
-  }
-  else if (instructions.includes("DISPLAY_TOWN_VOTE")) {
-    if (instructions.includes("PART_TWO")) {
+  } else if (instructions.includes('DISPLAY_TOWN_VOTE')) {
+    if (instructions.includes('PART_TWO')) {
       DisplayTownVotePartTwo();
-    }
-    else {
+    } else {
       DisplayTownVote(instructions);
     }
-  }
-  else if (instructions.includes("DISPLAY_GAMEOVER")) {
+  } else if (instructions.includes('DISPLAY_GAMEOVER')) {
     DisplayGameOver(instructions);
   }
 }

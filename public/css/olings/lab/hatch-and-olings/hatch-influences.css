@@ -1,0 +1,97 @@
+.oling-lab-hatch-influences {
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  align-self: start;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.oling-lab-hatch-influence-grid {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.oling-lab-hatch-influence-card {
+  --oling-rarity-secondary-colour: var(--oling-lab-menu-secondary-colour);
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  gap: 0.2rem;
+  place-items: center;
+  padding: 0.8rem 0.4rem;
+  background: url('/images/olings/gui/general-background.jpg') center / cover no-repeat;
+  color: var(--oling-lab-menu-secondary-colour);
+  text-align: center;
+}
+
+.oling-lab-hatch-influence-card.is-empty {
+  opacity: 1;
+}
+
+.oling-lab-hatch-influence-slot-label,
+.oling-lab-hatch-influence-item-name,
+.oling-lab-hatch-influence-rarity,
+.oling-lab-hatch-influence-effect {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-hatch-influence-slot-label {
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.78rem;
+}
+
+.oling-lab-hatch-influence-visual {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.oling-lab-hatch-influence-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.oling-lab-hatch-influence-marker {
+  font-size: clamp(1.4rem, 5vw, 2.5rem);
+  font-weight: 900;
+}
+
+.oling-lab-hatch-influence-item-name {
+  font-size: 0.64rem;
+  font-weight: 900;
+}
+
+.oling-lab-hatch-influence-rarity {
+  color: var(--oling-rarity-secondary-colour);
+  font-size: 0.58rem;
+  font-weight: 900;
+}
+
+.oling-lab-hatch-influence-effect {
+  font-size: 0.58rem;
+}

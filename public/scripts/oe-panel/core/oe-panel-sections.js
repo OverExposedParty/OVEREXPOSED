@@ -1,0 +1,1 @@
+window.OE_PANEL_SECTIONS = window.OE_PANEL_SECTIONS || {};

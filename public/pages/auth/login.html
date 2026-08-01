@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Sign In or Sign Up | OVEREXPOSED</title>
+    <meta
+      name="description"
+      content="Sign in or create an OVEREXPOSED account."
+    />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, follow" />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/auth/login.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main class="auth-page" data-template="auth">
+      <section class="auth-shell" aria-labelledby="auth-title">
+        <div class="auth-form-panel">
+          <h1 id="auth-title" class="auth-title">
+            <span id="auth-title-text" class="auth-title-text">SIGN IN</span>
+          </h1>
+
+          <div
+            class="auth-mode-switch"
+            role="tablist"
+            aria-label="Account mode"
+          >
+            <button
+              class="auth-mode-button active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-auth-mode="login"
+            >
+              SIGN IN
+            </button>
+            <button
+              class="auth-mode-button"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-auth-mode="signup"
+            >
+              SIGN UP
+            </button>
+          </div>
+
+__LOGIN_AUTH_FORMS__
+          <p
+            class="auth-status"
+            id="auth-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
+      </section>
+    </main>
+
+__LOGIN_LEGAL_DIALOG__
+  </body>
+__LOGIN_PAGE_SCRIPTS__
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

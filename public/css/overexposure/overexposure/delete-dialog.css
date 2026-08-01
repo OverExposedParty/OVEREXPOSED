@@ -1,0 +1,92 @@
+#delete-post-container {
+    width: min(420px, 100%);
+    max-width: calc(100vw - 36px);
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 20px;
+    background: var(--secondarybackgroundcolour, var(--backgroundcolour));
+    color: var(--primarypagecolour);
+    align-items: stretch;
+    justify-content: flex-start;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+.delete-post-header {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 24px;
+    background: var(--warningcolour);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#delete-post-container h2 {
+    margin: 0;
+    color: var(--secondarybackgroundcolour, var(--backgroundcolour));
+    font-family: 'LemonMilk', Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.delete-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 18px 22px;
+}
+
+.delete-post-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    color: var(--warningcolour);
+    font-family: 'LemonMilk', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#delete-post-container input {
+    width: 100%;
+    min-height: 3.1rem;
+    box-sizing: border-box;
+    margin: 0;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 0.9rem;
+    background: var(--report-input-background, #1f1f1f);
+    color: var(--warningcolour);
+    font: inherit;
+    font-family: 'LemonMilk', Arial, sans-serif;
+}
+
+#delete-post-container input:focus {
+    outline: none;
+}
+
+#delete-post-container .warning-button-container {
+    margin-top: 10px;
+}
+
+#delete-post-container button {
+    width: 50%;
+    min-height: 44px;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 20px;
+    background: var(--warningcolour);
+    color: var(--backgroundcolour);
+    font-family: 'LemonMilk', Arial, sans-serif;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #delete-post-container button:hover {
+        border: 0;
+        background: var(--warningcoloursecondary);
+        color: var(--backgroundcolour);
+    }
+}
+

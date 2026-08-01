@@ -1,0 +1,34 @@
+.oling-flight-motion-layer.is-flight-motion-flutter {
+  animation: oling-flight-motion-flutter
+    var(--oling-flight-motion-duration, 0.32s) ease-in-out infinite alternate;
+}
+
+.oling-flight-motion-layer.is-flight-motion-sway {
+  transform-origin: 50% 55%;
+  animation: oling-flight-motion-sway var(--oling-flight-motion-duration, 2.4s)
+    ease-in-out infinite alternate;
+}
+
+.oling-flight-motion-root.is-flight-motion-paused .oling-flight-motion-layer {
+  animation-play-state: paused;
+}
+
+@keyframes oling-flight-motion-flutter {
+  from {
+    transform: translateY(-2.5%);
+  }
+
+  to {
+    transform: translateY(2.5%);
+  }
+}
+
+@keyframes oling-flight-motion-sway {
+  from {
+    transform: rotate(-5deg) translateX(-1%);
+  }
+
+  to {
+    transform: rotate(5deg) translateX(1%);
+  }
+}

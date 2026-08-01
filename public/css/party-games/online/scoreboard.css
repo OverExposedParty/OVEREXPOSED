@@ -1,0 +1,401 @@
+.answer-text {
+    font-size: 35%;
+    color: var(--secondarypagecolour);
+}
+
+button.party-game-statistics-button {
+    all: unset;
+    cursor: pointer;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 300;
+    transition: transform 0.5s ease;
+    transform-origin: center center;
+}
+
+button.party-game-statistics-button svg {
+    width: 50px;
+    height: 50px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    button.party-game-statistics-button:hover svg {
+        transform: scale(1.2);
+    }
+}
+
+#scoreboard-container {
+    color: var(--primarypagecolour);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+#statistics-waiting-for-host {
+    flex-basis: 100%;
+    font-weight: 800;
+    margin: 5px 0;
+}
+
+.game-over-tab-container {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: start;
+    bottom: 100%;
+    left: 8px;
+    position: absolute;
+    width: max-content;
+}
+
+.game-over-tab-container[hidden] {
+    display: none;
+}
+
+.game-over-tab {
+    background: var(--secondarybackgroundcolour);
+    border: 0;
+    border-radius: 10px 10px 0 0;
+    color: var(--primarypagecolour);
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 5px 20px;
+}
+
+.game-over-tab.active {
+    background: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+}
+
+.game-over-statistics {
+    overflow: visible;
+}
+
+.game-over-statistics .game-over-view-stack {
+    display: grid;
+}
+
+.game-over-statistics .game-over-view {
+    align-items: flex-start;
+    grid-area: 1 / 1;
+}
+
+.game-over-statistics .game-over-view[hidden] {
+    display: flex;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.game-over-view[hidden] {
+    display: none;
+}
+
+.game-over-reward-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.game-over-reward-row,
+.game-over-reward-total,
+.game-over-xp-progress,
+.game-over-reward-empty {
+    align-items: center;
+    background: rgb(255 255 255 / 8%);
+    box-sizing: border-box;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.game-over-reward-row[hidden],
+.game-over-reward-total[hidden],
+.game-over-xp-progress[hidden],
+.game-over-reward-empty[hidden] {
+    display: none;
+}
+
+.game-over-reward-empty {
+    align-items: center;
+    background: transparent;
+    border: 3px dashed var(--primarypagecolour);
+    color: var(--primarypagecolour);
+    flex-direction: column;
+    font-weight: 900;
+    gap: 8px;
+    justify-content: center;
+    min-height: 150px;
+    padding: 24px;
+    text-align: center;
+}
+
+.game-over-reward-empty span {
+    color: var(--secondarypagecolour);
+    font-size: 12px;
+    text-align: center;
+}
+
+.game-over-reward-row {
+    color: var(--primarypagecolour);
+    font-weight: 900;
+}
+
+.game-over-reward-row strong {
+    color: inherit;
+}
+
+.game-over-reward-row .game-over-reward-amount {
+    color: var(--secondarypagecolour);
+}
+
+.game-over-cap-reduction,
+.game-over-cap-reduction .game-over-reward-amount {
+    color: var(--warningcolour);
+}
+
+.game-over-level-up,
+.game-over-level-up .game-over-reward-amount {
+    color: var(--primarypagecolour);
+}
+
+.game-over-reward-total {
+    background: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+    font-weight: 900;
+    margin-top: 20px;
+    position: relative;
+}
+
+.game-over-reward-total::before {
+    background: var(--primarypagecolour);
+    border-radius: 999px;
+    content: '';
+    height: 4px;
+    left: 8px;
+    position: absolute;
+    right: 8px;
+    top: -15px;
+}
+
+.game-over-reward-amount {
+    align-items: center;
+    display: inline-flex;
+    gap: 7px;
+    justify-content: flex-end;
+    white-space: nowrap;
+}
+
+.game-over-reward-amount strong {
+    font-variant-numeric: tabular-nums;
+    min-width: 2ch;
+    text-align: left;
+}
+
+.game-over-reward-amount img {
+    height: 18px;
+    object-fit: contain;
+    width: 18px;
+}
+
+#game-over-xp-current-level {
+    color: var(--primarypagecolour);
+}
+
+.game-over-xp-progress {
+    align-items: stretch;
+    color: var(--primarypagecolour);
+    flex-direction: column;
+    gap: 10px;
+}
+
+.game-over-xp-progress-heading {
+    align-items: center;
+    display: flex;
+    font-weight: 900;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.game-over-xp-progress-heading strong {
+    color: var(--primarypagecolour);
+    font-variant-numeric: tabular-nums;
+}
+
+.game-over-xp-progress-track {
+    background: rgb(255 255 255 / 12%);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.game-over-xp-progress-track span {
+    background: var(--primarypagecolour);
+    border-radius: inherit;
+    display: block;
+    height: 100%;
+    min-width: 0;
+    transition: width 0.4s ease;
+    width: 0;
+}
+
+#scoreboard-container.many-players {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.player-statistic {
+    align-items: center;
+    background: rgb(255 255 255 / 8%);
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 50px 38px minmax(0, 1fr) auto;
+    min-height: 48px;
+    overflow: hidden;
+    padding: 0 10px 0 0;
+    transform: translateY(0);
+    width: 100%;
+}
+
+#scoreboard-container.many-players .player-statistic {
+    gap: 7px;
+    grid-template-columns: 36px 30px minmax(0, 1fr) max-content;
+    min-height: 42px;
+    padding-right: 7px;
+}
+
+.player-statistic-rank {
+    align-items: center;
+    align-self: stretch;
+    background: var(--primarypagecolour);
+    color: var(--secondarybackgroundcolour);
+    display: flex;
+    font-size: 18px;
+    font-weight: 900;
+    height: 100%;
+    justify-content: center;
+    line-height: 1;
+    min-height: 48px;
+    width: 50px;
+}
+
+#scoreboard-container.many-players .player-statistic-rank {
+    font-size: 15px;
+    min-height: 42px;
+    width: 36px;
+}
+
+.player-statistic-avatar {
+    align-items: center;
+    display: flex;
+    height: 38px;
+    justify-content: center;
+    justify-self: center;
+    overflow: hidden;
+    width: 38px;
+}
+
+#scoreboard-container.many-players .player-statistic-avatar,
+#scoreboard-container.many-players .player-statistic-avatar .icon {
+    height: 30px;
+    width: 30px;
+}
+
+.player-statistic-avatar .icon {
+    align-items: center;
+    display: flex;
+    height: 38px;
+    justify-content: center;
+    position: relative;
+    width: 38px;
+}
+
+.player-statistic-avatar .icon .image-stack {
+    align-self: center;
+    height: 32px;
+    margin: 0;
+    position: relative;
+    width: 32px;
+}
+
+#scoreboard-container.many-players .player-statistic-avatar .icon .image-stack {
+    height: 26px;
+    width: 26px;
+}
+
+.player-statistic-avatar .icon .image-stack img {
+    border-radius: 0;
+    height: 100%;
+    inset: 0;
+    object-fit: contain;
+    position: absolute;
+    width: 100%;
+}
+
+.player-statistic-name {
+    color: var(--primarypagecolour);
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#scoreboard-container.many-players .player-statistic-name {
+    font-size: 12px;
+}
+
+.player-statistic-score {
+    color: var(--secondarypagecolour);
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+#scoreboard-container.many-players .player-statistic-score {
+    font-size: 11px;
+}
+
+@media (max-width: 420px) {
+    #scoreboard-container.many-players {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #scoreboard-container.many-players .player-statistic {
+        gap: 8px;
+        grid-template-columns: 42px 34px minmax(0, 1fr) max-content;
+        min-height: 44px;
+        padding-right: 8px;
+    }
+
+    #scoreboard-container.many-players .player-statistic-rank {
+        min-height: 44px;
+        width: 42px;
+    }
+
+    #scoreboard-container.many-players .player-statistic-avatar,
+    #scoreboard-container.many-players .player-statistic-avatar .icon {
+        height: 34px;
+        width: 34px;
+    }
+
+    #scoreboard-container.many-players .player-statistic-avatar .icon .image-stack {
+        height: 30px;
+        width: 30px;
+    }
+}
+

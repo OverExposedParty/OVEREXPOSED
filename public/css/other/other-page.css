@@ -91,6 +91,8 @@
     color: var(--primarypagecolour);
 }
 
-.main-container .section-container .text-container p a:hover {
-    color: var(--secondarypagecolour);
+@media (hover: hover) and (pointer: fine) {
+    .main-container .section-container .text-container p a:hover {
+        color: var(--secondarypagecolour);
+    }
 }

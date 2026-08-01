@@ -12,7 +12,7 @@ let playerHasPassedContainer, playerHasPassedTitle, playerHasPassedText;
 let selectUserContainer, selectUserTitle, selectUserQuestionText, selectUserButtonContainer, selectUserConfirmPlayerButton;
 
 let selectQuestionTypeContainer, selectQuestionTypeContainerQuestionText, selectQuestionTypeButtonContainer, selectQuestionTypeButtonTruth, selectQuestionTypeButtonDare;
-let answerQuestionContainer, answerQuestionContainerQuestionText, answerQuestionAnswer, answerQuestionSubmitButton;
+let nextRoundJoinContainer;
 let completPromptContainer, completePromptTitle, completePromptText, completePromptCompleted;
 
 let completePunishmentContainer, completePunishmentText, completePunishmentButtonConfirm, completePunishmentButtonPass;
@@ -41,7 +41,6 @@ let selectCivilianWatchContainer, selectCivilianWatchTitle, selectCivilianWatchT
 let displayCivilianWatchResponseContainer, displayCivilianWatchResponseText;
 let displayTownVoteContainer, displayTownVoteText;
 let displayPlayerKilledContainer, displayPlayerKilledText;
-let displayGameOverContainer, displayGameOverTitle, displayGameOverText;
 
 //Party Game General
 let partyDisbandedContainer;
@@ -125,10 +124,7 @@ async function loadTemplatesAndScripts() {
         if (template === 'truth-or-dare') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/truth-or-dare-template.html');
 
-            answerQuestionContainer = placeHolderSelectedUser.querySelector('#answer-question-container');
-            answerQuestionContainerQuestionText = answerQuestionContainer.querySelector('.content-container h2');
-            answerQuestionAnswer = answerQuestionContainer.querySelector('textarea');
-            answerQuestionSubmitButton = answerQuestionContainer.querySelector("#submit");
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
 
             completPromptContainer = placeHolderSelectedUser.querySelector('#complete-prompt-container');
             completePromptTitle = completPromptContainer.querySelector('.content-container h1');
@@ -141,12 +137,23 @@ async function loadTemplatesAndScripts() {
             selectQuestionTypeButtonTruth = selectQuestionTypeButtonContainer.querySelector('#truth');
             selectQuestionTypeButtonDare = selectQuestionTypeButtonContainer.querySelector('#dare');
 
-            gameContainers.push(answerQuestionContainer, completPromptContainer, selectQuestionTypeContainer);
+            promptHeistContainer = placeHolderSelectedUser.querySelector('#prompt-heist-container');
+            promptHeistText = promptHeistContainer.querySelector('.content-container h2');
+            promptHeistClaimButton = promptHeistContainer.querySelector('#claim-prompt');
+
+            const punishmentPassButton = document.createElement("button");
+            punishmentPassButton.className = "select-button";
+            punishmentPassButton.id = "pass";
+            punishmentPassButton.textContent = "Pass";
+            completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container').appendChild(punishmentPassButton);
+
+            gameContainers.push(nextRoundJoinContainer, completPromptContainer, selectQuestionTypeContainer, promptHeistContainer);
         }
 
         else if (template === 'paranoia') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/paranoia-template.html');
 
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
             pickHeadsOrTailsContainer = placeHolderSelectedUser.querySelector('#heads-or-tails-pick-container');
 
             const punishmentPassButton = document.createElement("button");
@@ -155,35 +162,38 @@ async function loadTemplatesAndScripts() {
             punishmentPassButton.textContent = "Pass";
             completePunishmentButtonPass = completePunishmentContainer.querySelector('.select-button-container').appendChild(punishmentPassButton);
 
-            gameContainers.push(pickHeadsOrTailsContainer, completePunishmentContainer);
+            gameContainers.push(nextRoundJoinContainer, pickHeadsOrTailsContainer, completePunishmentContainer);
         }
 
         else if (template === 'never-have-i-ever') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/never-have-i-ever-template.html');
 
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
             selectOptionContainer = document.getElementById('select-option-container');
             selectOptionQuestionText = selectOptionContainer.querySelector('.content-container h2');
             selectOptionButtonContainer = selectOptionContainer.querySelector('.select-button-container');
             selectOptionConfirmButtonYes = selectOptionButtonContainer.querySelector('#yes');
             selectOptionConfirmButtonNo = selectOptionButtonContainer.querySelector('#no');
 
-            gameContainers.push(selectOptionContainer);
+            gameContainers.push(nextRoundJoinContainer, selectOptionContainer);
         }
 
         else if (template === 'most-likely-to') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/most-likely-to-template.html');
 
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
             selectNumberContainer = document.querySelector('#select-number-container');
             selectNumberQuestionText = selectNumberContainer.querySelector('.content-container h2');
             selectNumberButtonContainer = selectNumberContainer.querySelector('.selected-user-container .button-container');
             confirmNumberButton = selectNumberContainer.querySelector('.select-button-container button');
 
-            gameContainers.push(selectNumberContainer);
+            gameContainers.push(nextRoundJoinContainer, selectNumberContainer);
         }
 
         else if (template === 'would-you-rather') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/would-you-rather-template.html');
 
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
             selectOptionContainer = document.getElementById('select-option-container');
             selectOptionQuestionTextA = selectOptionContainer.querySelector('.content-container h2#a');
             selectOptionQuestionTextB = selectOptionContainer.querySelector('.content-container h2#b');
@@ -191,11 +201,13 @@ async function loadTemplatesAndScripts() {
             selectOptionConfirmButtonA = selectOptionButtonContainer.querySelector('#a');
             selectOptionConfirmButtonB = selectOptionButtonContainer.querySelector('#b');
 
-            gameContainers.push(selectOptionContainer);
+            gameContainers.push(nextRoundJoinContainer, selectOptionContainer);
         }
 
         else if (template === 'imposter') {
             await appendTemplateToSelectedUserPlaceholder('/html-templates/online/party-games/selected-user-containers/imposter-template.html');
+
+            nextRoundJoinContainer = placeHolderSelectedUser.querySelector('#next-round-join-container');
 
             displayStartTimerContainer = document.getElementById('start-timer-container');
             displayStartTimerText = displayStartTimerContainer.querySelector('.content-container h2');
@@ -206,6 +218,7 @@ async function loadTemplatesAndScripts() {
             displayUserAnswerButton = displayUserAnswerContainer.querySelector('.select-button-container .select-button');
             
             gameContainers.push(
+                nextRoundJoinContainer,
                 displayStartTimerContainer,
                 displayUserAnswerContainer
             );
@@ -247,11 +260,6 @@ async function loadTemplatesAndScripts() {
             displayPlayerKilledContainer = placeHolderSelectedUser.querySelector('#display-player-killed-container');
             displayPlayerKilledText = displayPlayerKilledContainer.querySelector('.content-container h2');
 
-            displayGameOverContainer = placeHolderSelectedUser.querySelector('#display-game-over-container');
-            displayGameOverTitle = displayGameOverContainer.querySelector('.content-container h1');
-            displayGameOverText = displayGameOverContainer.querySelector('.content-container h2');
-
-
             gameContainers.push(
                 displayDayTimerContainer,
                 displayRoleContainer,
@@ -260,8 +268,7 @@ async function loadTemplatesAndScripts() {
                 selectCivilianWatchContainer,
                 displayCivilianWatchResponseContainer,
                 displayTownVoteContainer,
-                displayPlayerKilledContainer,
-                displayGameOverContainer
+                displayPlayerKilledContainer
             );
         }
 

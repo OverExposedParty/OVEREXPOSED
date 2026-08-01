@@ -1,0 +1,118 @@
+@font-face {
+  font-family: 'OverExposed';
+  src: url('/fonts/overexposed/OverExposed-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.oling-lab-roamer.has-rest-visuals {
+  overflow: visible;
+}
+
+.oling-lab-roamer.has-rest-visuals .oling-lab-oling-preview.is-roaming {
+  position: relative;
+}
+
+.oling-lab-oling-layer.is-rest-eyes {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oling-lab-roamer.has-rest-visuals .oling-lab-oling-layer.is-eyes {
+  opacity: 0;
+}
+
+.oling-lab-roamer.has-rest-visuals .oling-lab-oling-layer.is-rest-eyes {
+  opacity: 1;
+}
+
+.oling-lab-rest-z-origin-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.oling-lab-rest-z-anchor-map {
+  display: block;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oling-lab-rest-z-origin-layer.is-debug .oling-lab-rest-z-anchor-map {
+  opacity: 1;
+}
+
+.oling-lab-rest-z-origin-layer.is-debug
+  .oling-lab-rest-z-anchor-map
+  :is([data-interaction-point], circle, ellipse, rect) {
+  fill: #ff2d55;
+  stroke: #fff;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 2px rgb(0 0 0 / 80%));
+}
+
+.oling-lab-rest-z {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 7;
+  display: block;
+  color: #6697c8;
+  font-family: 'OverExposed', 'OverExposed-Regular', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 400;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow:
+    0 1px 0 rgb(255 255 255 / 68%),
+    0 0 0.35rem rgb(255 255 255 / 44%);
+  offset-position: 0 0;
+  offset-path: var(--oling-rest-z-path, path('M 0 0 C 6 -11 17 -28 32 -46'));
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  offset-anchor: center;
+  transform: rotate(var(--oling-rest-z-rotation-start, 0deg)) scale(0.8);
+  transform-origin: center;
+  animation:
+    oling-lab-rest-z-motion var(--oling-rest-z-lifetime, 1500ms)
+      cubic-bezier(0.22, 0.61, 0.36, 1) forwards,
+    oling-lab-rest-z-grow var(--oling-rest-z-lifetime, 1500ms) ease-out forwards,
+    oling-lab-rest-z-fade var(--oling-rest-z-lifetime, 1500ms) linear forwards;
+}
+
+@keyframes oling-lab-rest-z-motion {
+  from {
+    offset-distance: 0%;
+  }
+
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes oling-lab-rest-z-grow {
+  from {
+    transform: rotate(var(--oling-rest-z-rotation-start, 0deg)) scale(0.8);
+  }
+
+  to {
+    transform: rotate(var(--oling-rest-z-rotation-end, 0deg)) scale(1.1);
+  }
+}
+
+@keyframes oling-lab-rest-z-fade {
+  0%,
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,49 +1,66 @@
 {
-    "paranoia-settings": [
-        {
-            "settings-name": "take-a-shot",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw", "online"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "drink-wheel",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "lucky-coin-flip",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-required": true,
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "time-limit",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["online"],
-            "settings-active": true,
-            "button-type": "increment",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 150
-        }
-    ]
+  "paranoia-settings": [
+    {
+      "settings-name": "lucky-coin-flip",
+      "settings-description": "Lets the selected player call a coin flip for the chance to reveal the secret question without completing a drinking punishment.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "sfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "paranoia"
+      ],
+      "settings-required": "true"
+    },
+    {
+      "settings-name": "rounds",
+      "settings-description": "Sets how many secret Paranoia questions will be played to each player before the game ends.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": [
+        "paranoia"
+      ],
+      "button-initial-value": 20,
+      "button-increment-value": 5,
+      "button-minimum-value": 5,
+      "button-maximum-value": 40
+    },
+    {
+      "settings-name": "drink-wheel",
+      "settings-description": "Allows the selected player to spin for a random drinking punishment in exchange for revealing the secret question.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "paranoia"
+      ]
+    },
+    {
+      "settings-name": "take-a-shot",
+      "settings-description": "Allows the selected player to take a shot in exchange for revealing the secret question.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": [
+        "nsfw",
+        "online"
+      ],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": [
+        "paranoia"
+      ]
+    }
+  ]
 }

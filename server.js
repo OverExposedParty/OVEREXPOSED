@@ -9,6 +9,7 @@ const { server, database } = createAppServer();
 (async () => {
   await database.connectDatabases();
   await database.ensureDatabaseIndexes();
+  database.startRoomArchiver();
   await database.startChangeStreams();
 
   server.listen(PORT, () => {

@@ -29,7 +29,7 @@
 
     <link rel="preload" href="/images/splash-screens/paranoia.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
     <link rel="stylesheet" href="/css/party-games/side-buttons.css">
     <link rel="stylesheet" href="/css/party-games/gamemode-page-styles.css">
 
@@ -61,7 +61,7 @@
 
 
     <div class="question-zoomed-container">
-        <img src="/images/blank-cards/paranoia-blank-card.svg">
+
         <h2></h2>
     </div>
 
@@ -155,7 +155,6 @@
 </body>
 <script>
     const gamemode = "paranoia";
-    const helpContainerFile = "party-games/" + gamemode + '.json';
     const formattedGamemode = gamemode.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     document.documentElement.style.setProperty('--primarypagecolour', '#9D8AFF');
@@ -169,6 +168,6 @@
     };
 
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template/core-template.js" data-loaded="false"></script>
 
 </html>

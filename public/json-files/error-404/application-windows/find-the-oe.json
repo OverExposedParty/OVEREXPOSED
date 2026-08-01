@@ -1,0 +1,21 @@
+{
+    "title": "FIND THE OE",
+    "window": {
+        "width": 62,
+        "height": 60,
+        "x": 18,
+        "y": 10,
+        "openExpanded": true,
+        "titlebarColour": "#111111",
+        "titlebarTextColour": "#ffffff",
+        "backgroundColour": "#f4f4f4"
+    },
+    "elements": [
+        {
+            "type": "application",
+            "id": "find-the-oe-game",
+            "label": "Find The OE game",
+            "script": "/scripts/other/applications/find-the-oe.js"
+        }
+    ]
+}

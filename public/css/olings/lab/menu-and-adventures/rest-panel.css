@@ -1,0 +1,151 @@
+.oling-lab-rest-panel {
+  box-sizing: border-box;
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  padding: 0;
+  background: transparent;
+}
+
+.oling-lab-rest-stage {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) 3rem;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  padding: 1.25rem;
+  background:
+    linear-gradient(rgb(16 27 30 / 86%), rgb(16 27 30 / 86%)),
+    url('/images/olings/gui/general-background.jpg') center / cover;
+}
+
+.oling-lab-rest-stage .oling-lab-rest-oling-preview {
+  grid-column: 2;
+  grid-row: 2;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  aspect-ratio: 1;
+  background: transparent;
+  overflow: visible;
+}
+
+.oling-lab-rest-stage .oling-lab-rest-oling-preview .oling-lab-oling-layer {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-rest-stage .oling-lab-rest-energy {
+  position: relative;
+  inset: auto;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: 1fr;
+  align-items: center;
+  justify-items: stretch;
+  gap: 0.55rem;
+  padding: 0.35rem 0.5rem;
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-rest-energy .oling-lab-oling-energy-icon {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+.oling-lab-rest-energy .oling-lab-oling-energy-track {
+  width: 100%;
+  height: 0.7rem;
+  min-height: 0;
+}
+
+.oling-lab-rest-energy .oling-lab-oling-energy-fill {
+  top: 0;
+  right: auto;
+  width: var(--oling-energy-level);
+  height: 100%;
+  transition: width 180ms ease;
+}
+
+.oling-lab-rest-arrow {
+  z-index: 1;
+  width: 2.5rem;
+  min-width: 0 !important;
+  min-height: 3rem !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.oling-lab-rest-arrow span {
+  display: none;
+}
+
+.oling-lab-rest-arrow::before {
+  width: 0;
+  height: 0;
+  content: '';
+  border-top: 0.65rem solid transparent;
+  border-bottom: 0.65rem solid transparent;
+}
+
+.oling-lab-rest-arrow.is-previous {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.oling-lab-rest-arrow.is-previous::before {
+  border-right: 0.9rem solid var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-rest-arrow.is-next {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.oling-lab-rest-arrow.is-next::before {
+  border-left: 0.9rem solid var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-rest-oling-name,
+.oling-lab-rest-status {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--oling-lab-menu-primary-colour);
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-rest-oling-name {
+  grid-row: 3;
+  font-size: clamp(1.1rem, 4vw, 1.45rem);
+}
+
+.oling-lab-rest-status {
+  grid-row: 4;
+  padding-top: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.oling-lab-rest-action-area {
+  box-sizing: border-box;
+  height: 100%;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  padding: 0.75rem;
+  background: transparent;
+}

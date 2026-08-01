@@ -1,0 +1,50 @@
+{
+  "common": {
+    "label": "Common",
+    "description": "Unlocked through regular play.",
+    "primaryColour": "#D7D4E8",
+    "secondaryColour": "#87839D",
+    "textColour": "#F4F2FF",
+    "popUpDuration": 3200
+  },
+  "uncommon": {
+    "label": "Uncommon",
+    "description": "Unlocked by noticing extra opportunities.",
+    "primaryColour": "#7CFFB2",
+    "secondaryColour": "#55B97F",
+    "textColour": "#EFFFF6",
+    "popUpDuration": 3400
+  },
+  "rare": {
+    "label": "Rare",
+    "description": "Unlocked through skill, timing, or persistence.",
+    "primaryColour": "#66CCFF",
+    "secondaryColour": "#427BB9",
+    "textColour": "#EAF8FF",
+    "popUpDuration": 3800
+  },
+  "epic": {
+    "label": "Epic",
+    "description": "Unlocked by doing something memorable.",
+    "primaryColour": "#C18AFF",
+    "secondaryColour": "#7F5AB8",
+    "textColour": "#F7EFFF",
+    "popUpDuration": 4400
+  },
+  "legendary": {
+    "label": "Legendary",
+    "description": "Unlocked by pulling off something exceptional.",
+    "primaryColour": "#FFB86B",
+    "secondaryColour": "#C9823F",
+    "textColour": "#FFF4E4",
+    "popUpDuration": 5200
+  },
+  "secret": {
+    "label": "Exposed",
+    "description": "Unlocked by finding something hidden.",
+    "primaryColour": "#FF6F91",
+    "secondaryColour": "#C14362",
+    "textColour": "#FFF0F4",
+    "popUpDuration": 6000
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "eggs": [
+    {
+      "key": "base-egg",
+      "name": "Base Egg",
+      "collection": "base",
+      "rarityOdds": {
+        "common": 0.7,
+        "uncommon": 0.18,
+        "rare": 0.1,
+        "epic": 0.02
+      },
+      "sets": [
+        {
+          "key": "moss",
+          "name": "Moss",
+          "rarity": "common",
+          "traits": {
+            "body": "base-moss-body",
+            "eyes": "base-moss-eyes",
+            "mouth": "base-moss-mouth",
+            "flight": "base-moss-wings"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/moss-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/moss-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/moss-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/moss-wings.svg"
+            }
+          }
+        },
+        {
+          "key": "vampire",
+          "name": "Vampire",
+          "rarity": "common",
+          "traits": {
+            "body": "base-vampire-body",
+            "eyes": "base-vampire-eyes",
+            "mouth": "base-vampire-mouth",
+            "flight": "base-vampire-wings"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/vampire-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/vampire-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/vampire-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/vampire-wings.svg"
+            }
+          }
+        },
+        {
+          "key": "stone",
+          "name": "Stone",
+          "rarity": "uncommon",
+          "traits": {
+            "body": "base-stone-body",
+            "eyes": "base-stone-eyes",
+            "mouth": "base-stone-mouth",
+            "flight": "base-stone-wings"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/stone-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/stone-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/stone-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/stone-wings.svg"
+            }
+          }
+        },
+        {
+          "key": "bone",
+          "name": "Bone",
+          "rarity": "uncommon",
+          "traits": {
+            "body": "base-bone-body",
+            "eyes": "base-bone-eyes",
+            "mouth": "base-bone-mouth",
+            "flight": "base-bone-wings"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/bone-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/bone-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/bone-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/bone-wings.svg"
+            }
+          }
+        },
+        {
+          "key": "magma",
+          "name": "Magma",
+          "rarity": "rare",
+          "traits": {
+            "body": "base-magma-body",
+            "eyes": "base-magma-eyes",
+            "mouth": "base-magma-mouth",
+            "flight": "base-magma-wings"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/magma-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/magma-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/magma-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/magma-wings.svg"
+            }
+          }
+        },
+        {
+          "key": "trash",
+          "name": "Trash",
+          "rarity": "epic",
+          "traits": {
+            "body": "base-trash-body",
+            "eyes": "base-trash-eyes",
+            "mouth": "base-trash-mouth",
+            "flight": "base-trash-balloons"
+          },
+          "metadata": {
+            "layers": {
+              "body": "/images/olings/builds/body/base/trash-body.svg",
+              "eyes": "/images/olings/builds/eyes/base/trash-eyes.svg",
+              "mouth": "/images/olings/builds/mouth/base/trash-mouth.svg",
+              "flight": "/images/olings/builds/flight/base/balloons.svg"
+            }
+          }
+        }
+      ],
+      "metadata": {
+        "hatchPool": "base-olings"
+      }
+    }
+  ]
+}

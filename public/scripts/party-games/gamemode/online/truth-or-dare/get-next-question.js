@@ -27,13 +27,8 @@ function getNextQuestion(type) {
     return { question: selectedQuestion['question'], cardType: cardType, punishment: punishment, questionAlternatives: questionAlternatives || [] };
 }
 function updateTruthOrDareText(type) {
-    if (type == 'truth') {
-        truthOrDareText.src = "/images/party-games/truth-or-dare/truth-text.svg";
-    }
-    else if (type == 'dare') {
-        truthOrDareText.src = "/images/party-games/truth-or-dare/dare-text.svg";
-    }
-    truthOrDareText.setAttribute('alt', type);
+    const svgPath = `/images/party-games/truth-or-dare/${type}-text.svg`;
+    updateGamemodeTextSvgSource(truthOrDareText, svgPath, type);
 }
 
 document.getElementById('truth-button').addEventListener('click', () => {

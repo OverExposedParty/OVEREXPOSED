@@ -1,0 +1,196 @@
+:root {
+  --critical-zone-colour: #49d47d;
+  --strike-zone-colour: #ffc95a;
+  --disruption-zone-colour: #ff686d;
+  --hit-tracker-default-colour: #d8d8d8;
+}
+
+.battle-olings-page {
+  min-height: var(--oling-battle-available-height, calc(100dvh - 84px));
+  margin-top: var(--oling-battle-header-height, var(--headerheight));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(18px * var(--oling-battle-zoom-compensation, 1));
+  box-sizing: border-box;
+}
+
+.oling-battle-container,
+.oling-battle-shell {
+  position: relative;
+  --oling-battle-primary-colour: #ffb5c8;
+  --oling-battle-secondary-colour: #e87398;
+  --primary-colour: #ffb5c8;
+  --secondary-colour: #e87398;
+  --battle-time-multiplier: 1;
+  width: min(
+    calc(var(--oling-battle-available-height, 100dvh) * 0.75 * 9 / 16),
+    calc(520px * var(--oling-battle-zoom-compensation, 1)),
+    calc(100vw - (28px * var(--oling-battle-zoom-compensation, 1)))
+  );
+  aspect-ratio: 9 / 16;
+  container-type: inline-size;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: calc(16px * var(--oling-battle-zoom-compensation, 1));
+  background: var(--primaryPageColour, #ffb5c8);
+}
+
+.oling-battle-container[hidden],
+.oling-battle-shell[hidden],
+.oling-battle-no-oling[hidden] {
+  display: none;
+}
+
+.oling-battle-no-oling {
+  width: min(460px, calc(100vw - 32px));
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: clamp(26px, 6vw, 42px);
+  border: 4px solid var(--primaryPageColour, #ffb5c8);
+  border-radius: 16px;
+  background: var(--backgroundcolour);
+  color: var(--fontcolour);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.oling-battle-no-oling:focus {
+  outline: none;
+}
+
+.oling-battle-no-oling-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--primaryPageColour, #ffb5c8);
+  color: #24141c;
+  font-size: 2.6rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.oling-battle-no-oling h1 {
+  margin: 2px 0 0;
+  color: var(--primaryPageColour, #ffb5c8);
+  font-size: clamp(1.55rem, 6vw, 2rem);
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.oling-battle-no-oling p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--secondaryPageColour, #e87398);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.oling-battle-no-oling-actions {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.oling-battle-no-oling-primary,
+.oling-battle-no-oling-secondary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 3px solid var(--primaryPageColour, #ffb5c8);
+  border-radius: 9px;
+  box-sizing: border-box;
+  color: var(--primaryPageColour, #ffb5c8);
+  font-size: 0.95rem;
+  font-weight: 950;
+  line-height: 1.15;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.oling-battle-no-oling-primary {
+  background: var(--primaryPageColour, #ffb5c8);
+  color: #24141c;
+}
+
+.oling-battle-no-oling-secondary {
+  background: transparent;
+}
+
+.oling-battle-no-oling-primary:focus-visible,
+.oling-battle-no-oling-secondary:focus-visible {
+  background: var(--secondaryPageColour, #e87398);
+  border-color: var(--secondaryPageColour, #e87398);
+  color: var(--backgroundcolour);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-no-oling-primary:hover,
+  .oling-battle-no-oling-secondary:hover {
+    background: var(--secondaryPageColour, #e87398);
+    border-color: var(--secondaryPageColour, #e87398);
+    color: var(--backgroundcolour);
+    outline: none;
+    transform: translateY(-1px);
+  }
+}
+
+.oling-battle-container__notch,
+.oling-battle-notch,
+.oling-battle-timer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 30;
+  min-width: 34%;
+  height: 8.5%;
+  display: grid;
+  place-items: center;
+  border-radius: 0 0 3.2cqw 3.2cqw;
+  background: var(--primaryPageColour, #ffb5c8);
+  color: #24141c;
+  font-size: 4.96cqw;
+  font-weight: 950;
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.oling-battle-container__notch.is-overtime,
+.oling-battle-notch.is-overtime,
+.oling-battle-timer.is-overtime {
+  animation: oling-battle-overtime-heartbeat 0.5s ease-in-out infinite;
+}
+
+@keyframes oling-battle-overtime-heartbeat {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  18% {
+    transform: translateX(-50%) scale(1.12);
+  }
+
+  34% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  52% {
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+

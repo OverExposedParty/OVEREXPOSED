@@ -1,16 +1,18 @@
-
-
 const mafiaHintsReady = buildMafiaHints()
-  .then(result => { mafiaHints = result; })
-  .catch(err => {
-    console.error("Failed to build mafia hints:", err);
+  .then((result) => {
+    mafiaHints = result;
+  })
+  .catch((err) => {
+    console.error('Failed to build mafia hints:', err);
     mafiaHints = {};
   });
 
 const mafiaHintsPackColourReady = buildMafiaHintsPackColour()
-  .then(result => { mafiaHintsPackColour = result; })
-  .catch(err => {
-    console.error("Failed to build mafia hints pack colour:", err);
+  .then((result) => {
+    mafiaHintsPackColour = result;
+  })
+  .catch((err) => {
+    console.error('Failed to build mafia hints pack colour:', err);
     mafiaHintsPackColour = {};
   });
 
@@ -18,7 +20,9 @@ function GetRandomMafioso(currentPartyData, mafiosoRolesArray) {
   if (!currentPartyData?.players) return null;
 
   const matching = currentPartyData.players.filter(
-    p => mafiosoRolesArray.includes(p?.state?.role) && p?.state?.status === "alive"
+    (p) =>
+      mafiosoRolesArray.includes(p?.state?.roleKey) &&
+      p?.state?.status === 'alive'
   );
 
   if (!matching.length) return null;
@@ -26,21 +30,28 @@ function GetRandomMafioso(currentPartyData, mafiosoRolesArray) {
 }
 
 async function buildMafiaHints() {
-  const packsMeta = await fetch("/json-files/customisation/customisation-packs.json").then(r => r.json());
+  const packsMetaPayload = await fetch('/api/oe-image-packs').then((r) =>
+    r.json()
+  );
+  const packsMeta = packsMetaPayload.data || packsMetaPayload;
   const result = {};
 
   const packPayloads = await Promise.all(
-    packsMeta.map(p => fetch(p["pack-path"]).then(r => r.json()))
+    packsMeta.map((p) =>
+      fetch(p['pack-path'])
+        .then((r) => r.json())
+        .then((payload) => payload.data || payload)
+    )
   );
 
-  packPayloads.forEach(packData => {
+  packPayloads.forEach((packData) => {
     for (const key of Object.keys(packData)) {
       const items = packData[key];
       if (!Array.isArray(items)) continue;
 
-      items.forEach(item => {
+      items.forEach((item) => {
         const id = item.id;
-        const name = item.name ?? item.word ?? item["item-name"] ?? null;
+        const name = item.name ?? item.word ?? item['item-name'] ?? null;
         result[id] = { name };
       });
     }
@@ -50,13 +61,23 @@ async function buildMafiaHints() {
 }
 
 async function buildMafiaHintsPackColour() {
-  const packsMeta = await fetch("/json-files/customisation/customisation-packs.json").then(r => r.json());
+  const packsMetaPayload = await fetch('/api/oe-image-packs').then((r) =>
+    r.json()
+  );
+  const packsMeta = packsMetaPayload.data || packsMetaPayload;
   const result = {};
 
-  packsMeta.forEach(p => {
-    const packPrefix = p["pack-prefix"] ?? p.packPrefix ?? p.packprefix ?? null;
+  packsMeta.forEach((p) => {
+    const packPrefix = p['pack-prefix'] ?? p.packPrefix ?? p.packprefix ?? null;
     if (!packPrefix) return;
-    result[packPrefix] = { "pack-colour": p["pack-colour"] ?? p.packColour ?? p["pack-color"] ?? p.packColor ?? null };
+    result[packPrefix] = {
+      'pack-colour':
+        p['pack-colour'] ??
+        p.packColour ??
+        p['pack-color'] ??
+        p.packColor ??
+        null
+    };
   });
 
   return result;
@@ -70,11 +91,11 @@ function getHintIdsFromPlayer(player) {
 
   const ids = Array.isArray(parsed)
     ? parsed
-    : parsed && typeof parsed === "object"
+    : parsed && typeof parsed === 'object'
       ? Object.values(parsed)
       : [];
 
-  return ids.filter(id => id && mafiaHints?.[id]?.name);
+  return ids.filter((id) => id && mafiaHints?.[id]?.name);
 }
 
 function injectMafiaHint(text) {
@@ -90,7 +111,7 @@ function injectMafiaHint(text) {
     if (inner) {
       const matches = inner.match(/[A-Za-z0-9_-]+/g);
       if (matches?.length) {
-        ids = matches.filter(id => mafiaHints?.[id]?.name);
+        ids = matches.filter((id) => mafiaHints?.[id]?.name);
       }
     }
 
@@ -112,5 +133,5 @@ function GetMafiaItem(string, type = 0) {
 
 function getMafiaHintPackColour(hintId) {
   const packPrefix = hintId.slice(0, 1);
-  return mafiaHintsPackColour[packPrefix]?.["pack-colour"] ?? null;
+  return mafiaHintsPackColour[packPrefix]?.['pack-colour'] ?? null;
 }

@@ -1,0 +1,74 @@
+.splash-screen-container,
+.splash-screen-container-static {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  background-color: #202020;
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.splash-screen-container img,
+.splash-screen-container-static img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+}
+
+@media (orientation: portrait) {
+  .splash-screen-container img,
+  .splash-screen-container-static img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+@media (orientation: landscape) {
+  .splash-screen-container img,
+  .splash-screen-container-static img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.splash-screen-container {
+  z-index: 9999;
+  transform: translateY(0);
+  transition: transform 0.5s ease-in-out;
+}
+
+.splash-screen-container.center {
+  transform: translateY(0);
+}
+
+.splash-screen-container.down {
+  transform: translateY(100%);
+}
+
+.splash-screen-container.up {
+  transform: translateY(-100%);
+}
+
+.splash-screen-container p,
+.splash-screen-container-static p {
+  position: absolute;
+  width: 100%;
+  font-size: 16px;
+  bottom: 0;
+  margin-left: 20px;
+  padding: 10px 5px;
+  text-align: left;
+  color: var(--splash-screen-status-colour, var(--primarypagecolour));
+  z-index: 10000;
+}
+
+.splash-screen-container.waiting-room p {
+  color: #66ccff;
+}

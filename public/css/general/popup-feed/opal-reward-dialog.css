@@ -1,0 +1,90 @@
+.opal-reward-dialog-host[open] .opal-reward-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.opal-reward-dialog:focus {
+  outline: none;
+}
+
+.opal-reward-dialog-icon-halo {
+  align-items: center;
+  background: rgb(245 243 255 / 14%);
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  aspect-ratio: 1;
+  height: auto;
+  justify-content: center;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.opal-reward-dialog-icon {
+  display: block;
+  height: min(168px, 56%);
+  object-fit: contain;
+  width: min(196px, 66%);
+}
+
+.opal-reward-dialog-label {
+  margin: 0;
+}
+
+.opal-reward-dialog-label {
+  align-self: stretch;
+  background: var(--opal-reward-text-colour);
+  border-radius: 8px 8px 0 0;
+  box-sizing: border-box;
+  color: var(--backgroundcolour);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  margin: -16px -18px var(--opal-reward-dialog-gap);
+  padding: 18px 12px;
+  text-transform: uppercase;
+}
+
+.opal-reward-dialog-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: var(--opal-reward-dialog-gap);
+  width: 100%;
+}
+
+.opal-reward-dialog-summary-separator {
+  background: var(--opal-reward-text-colour);
+  border-radius: 999px;
+  height: 4px;
+  margin: 2px 8px;
+}
+
+.opal-reward-dialog-summary-row {
+  align-items: center;
+  background: var(--opal-reward-text-colour);
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: var(--backgroundcolour);
+  display: flex;
+  font-size: 16px;
+  font-weight: 900;
+  justify-content: space-between;
+  line-height: 1;
+  min-height: 48px;
+  padding: 0 22px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.opal-reward-dialog-summary-value {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.opal-reward-dialog-summary-icon {
+  display: block;
+  height: 20px;
+  object-fit: contain;
+  width: 20px;
+}

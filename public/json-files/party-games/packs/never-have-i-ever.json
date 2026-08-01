@@ -1,54 +1,54 @@
 {
-    "never-have-i-ever-packs": [
-        {
-            "pack-name": "simple-admissions",
-            "pack-path": "/json-files/party-games/questions/never-have-i-ever/simple-admissions.json",
-            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
-            "pack-colour": "#FF9266",
-            "pack-secondary-colour": "#B96542",
-            "pack-difficulty": "chill, funny, cheeky, deep",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "rising-suspicions",
-            "pack-path": "/json-files/party-games/questions/never-have-i-ever/rising-suspicions.json",
-            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
-            "pack-colour": "#FF9266",
-            "pack-secondary-colour": "#B96542",
-            "pack-difficulty": "cheeky, funny, chaotic, brutal",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "digging-deeper",
-            "pack-path": "/json-files/party-games/questions/never-have-i-ever/digging-deeper.json",
-            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
-            "pack-colour": "#FF9266",
-            "pack-secondary-colour": "#B96542",
-            "pack-difficulty": "flirty, cheeky, naughty, brutal",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "verbal-diarrhea",
-            "pack-path": "/json-files/party-games/questions/never-have-i-ever/verbal-diarrhea.json",
-            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
-            "pack-colour": "#FF9266",
-            "pack-secondary-colour": "#B96542",
-            "pack-difficulty": "naughty, chaotic, brutal",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "raw-and-unfiltered",
-            "pack-path": "/json-files/party-games/questions/never-have-i-ever/raw-and-unfiltered.json",
-            "pack-card": "/images/blank-cards/never-have-i-ever-blank-card.svg",
-            "pack-colour": "#FF9266",
-            "pack-secondary-colour": "#B96542",
-            "pack-difficulty": "sexual, chaotic, naughty",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        }
-    ]
+  "never-have-i-ever-packs": [
+    {
+      "pack-name": "digging-deeper",
+      "pack-description": "Explore relationships, regrets, rule-breaking, secret crushes and meaningful life experiences without becoming overly explicit.",
+      "pack-path": "/json-files/party-games/questions/never-have-i-ever/digging-deeper.json",
+      "pack-colour": "#FF9266",
+      "pack-secondary-colour": "#B96542",
+      "pack-difficulty": "flirty, cheeky, naughty, brutal",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "raw-and-unfiltered",
+      "pack-description": "An explicit collection covering hookups, sexual experiences, fantasies, fetishes and intimate situations with nothing left to the imagination.",
+      "pack-path": "/json-files/party-games/questions/never-have-i-ever/raw-and-unfiltered.json",
+      "pack-colour": "#FF9266",
+      "pack-secondary-colour": "#B96542",
+      "pack-difficulty": "sexual, chaotic, naughty",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "rising-suspicions",
+      "pack-description": "Reveal questionable decisions, public mishaps, relationship drama, broken rules and the stories that make everyone slightly suspicious.",
+      "pack-path": "/json-files/party-games/questions/never-have-i-ever/rising-suspicions.json",
+      "pack-colour": "#FF9266",
+      "pack-secondary-colour": "#B96542",
+      "pack-difficulty": "cheeky, funny, chaotic, brutal",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "simple-admissions",
+      "pack-description": "Everyday experiences, harmless secrets, personal milestones and relatable habits that anyone can answer without feeling overly exposed.",
+      "pack-path": "/json-files/party-games/questions/never-have-i-ever/simple-admissions.json",
+      "pack-colour": "#FF9266",
+      "pack-secondary-colour": "#B96542",
+      "pack-difficulty": "chill, funny, cheeky, deep",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "verbal-diarrhea",
+      "pack-description": "Blunt admissions about sex, drugs, cheating, relationships, parties and reckless decisions that are normally better left unsaid.",
+      "pack-path": "/json-files/party-games/questions/never-have-i-ever/verbal-diarrhea.json",
+      "pack-colour": "#FF9266",
+      "pack-secondary-colour": "#B96542",
+      "pack-difficulty": "naughty, chaotic, brutal",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    }
+  ]
 }

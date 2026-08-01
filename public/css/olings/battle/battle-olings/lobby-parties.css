@@ -1,0 +1,242 @@
+.oling-battle-lobby-qr-panel {
+  position: absolute;
+  top: 8.5%;
+  right: 0;
+  bottom: 24%;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3cqw;
+  padding: 8cqw 5cqw 4cqw;
+  box-sizing: border-box;
+  background: transparent;
+  color: var(--primary-colour);
+  text-align: center;
+}
+
+.oling-battle-lobby-screen.is-showing-qr .oling-battle-lobby-matchup {
+  visibility: hidden;
+}
+
+.oling-battle-lobby-qr-panel[hidden] {
+  display: none;
+}
+
+.oling-battle-lobby-qr-image {
+  width: min(72cqw, 84%);
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.oling-battle-lobby-qr-code {
+  font-size: 7cqw;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.oling-battle-lobby-qr-url {
+  max-width: 100%;
+  font-size: 2.6cqw;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.oling-battle-lobby-side-label {
+  position: absolute;
+  left: 50%;
+  width: var(--lobby-asset-size);
+  top: calc(var(--lobby-asset-size) + 1.1cqw);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1cqw;
+  background: transparent;
+  color: var(--primary-colour);
+  line-height: 1;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.oling-battle-lobby-side-label .username {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: inherit;
+  font-size: 3cqw;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.oling-battle-lobby-side-label .checkmark {
+  position: relative;
+  width: 3.1cqw;
+  height: 3.1cqw;
+  flex: 0 0 auto;
+  border-radius: 0.7cqw;
+}
+
+.oling-battle-lobby-side-label .checkmark.checked {
+  background: currentColor;
+}
+
+.oling-battle-lobby-side-label .checkmark.checked::before {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--backgroundcolour);
+  font-size: 2.25cqw;
+  font-weight: 950;
+  line-height: 1;
+  transform: translate(-50%, -53%);
+}
+
+.oling-battle-lobby-party.is-enemies .oling-battle-lobby-side-label {
+  right: auto;
+  left: 50%;
+}
+
+.oling-battle-lobby-kick.close-btn {
+  position: absolute;
+  top: -2cqw;
+  right: -1.6cqw;
+  z-index: 6;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ff202e;
+  font: inherit;
+  font-size: 5.6cqw;
+  font-weight: 950;
+  line-height: 1;
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.oling-battle-lobby-kick.close-btn:focus-visible {
+  transform: scale(1.24);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-lobby-kick.close-btn:hover {
+    transform: scale(1.24);
+  }
+}
+
+.oling-battle-lobby-oe,
+.oling-battle-lobby-oling {
+  position: absolute;
+  aspect-ratio: 1;
+}
+
+.oling-battle-lobby-oe {
+  width: var(--lobby-asset-size);
+}
+
+.oling-battle-lobby-oling {
+  width: var(--lobby-oling-size);
+  z-index: 2;
+}
+
+.oling-battle-lobby-player-oling,
+.oling-battle-lobby-enemy-oling {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.oling-battle-lobby-party.is-players .oling-battle-lobby-oe {
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.oling-battle-lobby-party.is-players .oling-battle-lobby-oling {
+  left: calc(50% + (var(--lobby-asset-size) * 0.24));
+  top: 0;
+  transform: translateX(-50%);
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.oling-battle-lobby-party.is-players:has(.oling-battle-lobby-player-select-trigger:focus-visible)
+  .oling-battle-lobby-player-oling {
+  transform: translateX(-50%) scale(1.14);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-lobby-party.is-players:has(.oling-battle-lobby-player-select-trigger:hover)
+  .oling-battle-lobby-player-oling {
+    transform: translateX(-50%) scale(1.14);
+  }
+}
+
+.oling-battle-lobby-party.is-enemies .oling-battle-lobby-oling {
+  right: calc(50% + (var(--lobby-asset-size) * 0.24));
+  top: 0;
+  transform: translateX(50%);
+  transform-origin: center;
+  transition: transform 140ms ease;
+}
+
+.oling-battle-lobby-party.is-enemies.is-ai-opponent .oling-battle-lobby-oling {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.oling-battle-lobby-party.is-enemies:has(.oling-battle-lobby-enemy-select-trigger:focus-visible)
+  .oling-battle-lobby-enemy-oling {
+  transform: translateX(50%) scale(1.14);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-lobby-party.is-enemies:has(.oling-battle-lobby-enemy-select-trigger:hover)
+  .oling-battle-lobby-enemy-oling {
+    transform: translateX(50%) scale(1.14);
+  }
+}
+
+.oling-battle-lobby-party.is-enemies.is-ai-opponent:has(.oling-battle-lobby-enemy-select-trigger:focus-visible)
+  .oling-battle-lobby-enemy-oling {
+  transform: translateX(-50%) scale(1.14);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-lobby-party.is-enemies.is-ai-opponent:has(.oling-battle-lobby-enemy-select-trigger:hover)
+  .oling-battle-lobby-enemy-oling {
+    transform: translateX(-50%) scale(1.14);
+  }
+}
+
+.oling-battle-lobby-party.is-enemies .oling-battle-lobby-oe {
+  right: 50%;
+  top: 0;
+  transform: translateX(50%);
+}
+
+.oling-battle-lobby-party.is-enemies.is-ai-opponent .oling-battle-lobby-oe {
+  display: none;
+}
+
+.oling-battle-lobby-oe-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+

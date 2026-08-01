@@ -1,0 +1,179 @@
+.oe-panel-widget-action-list {
+  flex-direction: column;
+  gap: clamp(0.35rem, 0.8vw, 0.6rem);
+  align-items: stretch;
+  justify-content: flex-start;
+  background-color: var(
+    --oe-panel-widget-background-colour,
+    var(--secondarybackgroundcolour)
+  );
+  overflow-y: auto;
+}
+
+.oe-panel-action-list-title {
+  margin: 0;
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  font-size: clamp(0.7rem, 1.3vw, 1rem);
+  line-height: 1;
+  text-align: left;
+}
+
+.oe-panel-action-list {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: clamp(0.22rem, 0.5vw, 0.38rem);
+}
+
+.oe-panel-action-button {
+  min-width: 0;
+  min-height: clamp(1.45rem, 2.8vw, 2.2rem);
+  padding: clamp(0.26rem, 0.55vw, 0.42rem) clamp(0.38rem, 0.8vw, 0.58rem);
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 9%);
+  color: var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.42rem, 0.75vw, 0.66rem);
+  line-height: 0.95;
+  text-align: center;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.oe-panel-action-button:focus-visible {
+  background-color: var(
+    --oe-panel-widget-secondary-colour,
+    var(--secondarypagecolour)
+  );
+  color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-action-button:hover {
+    background-color: var(
+      --oe-panel-widget-secondary-colour,
+      var(--secondarypagecolour)
+    );
+    color: var(--oe-panel-widget-background-colour, var(--backgroundcolour));
+    outline: none;
+  }
+}
+
+.oe-panel-player-lookup-field {
+  position: relative;
+}
+
+.oe-panel-player-lookup {
+  position: relative;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.oe-panel-player-lookup-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  display: grid;
+  max-height: min(18rem, 55vh);
+  overflow-y: auto;
+  padding: 0.35rem;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 0.5rem;
+  background: rgb(24 25 31 / 98%);
+}
+
+.oe-panel-player-lookup-menu[hidden] {
+  display: none;
+}
+
+.oe-panel-player-lookup-option {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 3.1rem;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: 0.38rem;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.oe-panel-player-lookup-option:focus-visible {
+  background: rgb(255 255 255 / 8%);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-player-lookup-option:hover {
+    background: rgb(255 255 255 / 8%);
+    outline: none;
+  }
+}
+
+.oe-panel-player-lookup-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+}
+
+.oe-panel-player-lookup-avatar .icon,
+.oe-panel-player-lookup-avatar .image-stack {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.oe-panel-player-lookup-avatar .image-stack img {
+  width: 100%;
+  height: 100%;
+}
+
+.oe-panel-player-lookup-avatar-fallback {
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.oe-panel-player-lookup-identity {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+}
+
+.oe-panel-player-lookup-name,
+.oe-panel-player-lookup-account-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oe-panel-player-lookup-name {
+  font-weight: 800;
+}
+
+.oe-panel-player-lookup-account-id {
+  color: rgb(255 255 255 / 58%);
+  font-size: 0.72rem;
+  font-family: Consolas, "Liberation Mono", monospace;
+}
+
+.oe-panel-player-lookup-status {
+  min-height: 1em;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.75rem;
+}

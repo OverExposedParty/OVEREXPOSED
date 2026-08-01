@@ -1,64 +1,64 @@
 {
-    "paranoia-packs": [
-        {
-            "pack-name": "friendly-fears",
-            "pack-path": "/json-files/party-games/questions/paranoia/friendly-fears.json",
-            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
-            "pack-colour": "#9D8AFF",
-            "pack-secondary-colour": "#7F71B2",
-            "pack-difficulty": "cheeky, funny, creative, deep",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "shady-shenanigans",
-            "pack-path": "/json-files/party-games/questions/paranoia/shady-shenanigans.json",
-            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
-            "pack-colour": "#9D8AFF",
-            "pack-secondary-colour": "#7F71B2",
-            "pack-difficulty": "cheeky, funny, brutal, chaotic",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "subtle-shots",
-            "pack-path": "/json-files/party-games/questions/paranoia/subtle-shots.json",
-            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
-            "pack-colour": "#9D8AFF",
-            "pack-secondary-colour": "#7F71B2",
-            "pack-difficulty": "brutal, funny, chaotic, cheeky",
-            "pack-restriction": "sfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "hidden-agendas",
-            "pack-path": "/json-files/party-games/questions/paranoia/hidden-agendas.json",
-            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
-            "pack-colour": "#9D8AFF",
-            "pack-secondary-colour": "#7F71B2",
-            "pack-difficulty": "naughty, chaotic, flirty",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "behind-closed-doors",
-            "pack-path": "/json-files/party-games/questions/paranoia/behind-closed-doors.json",
-            "pack-card": "/images/blank-cards/paranoia-blank-card.svg",
-            "pack-colour": "#9D8AFF",
-            "pack-secondary-colour": "#7F71B2",
-            "pack-difficulty": "sexual, naughty, chaotic",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        },
-        {
-            "pack-name": "grave-danger",
-            "pack-path": "/json-files/party-games/questions/paranoia/grave-danger.json",
-            "pack-card": "/images/blank-cards/limited/grave-danger-blank-card.svg",
-            "pack-colour": "#8BA67B",
-            "pack-secondary-colour": "#3E4B36",
-            "pack-difficulty": "halloween, naughty, flirty",
-            "pack-restriction": "nsfw",
-            "pack-active": true
-        }
-    ]
+  "paranoia-packs": [
+    {
+      "pack-name": "behind-closed-doors",
+      "pack-description": "Explicit questions about private habits, sexual preferences, questionable hookups, relationship betrayals and the secrets people hide from everyone else.",
+      "pack-path": "/json-files/party-games/questions/paranoia/behind-closed-doors.json",
+      "pack-colour": "#9D8AFF",
+      "pack-secondary-colour": "#7F71B2",
+      "pack-difficulty": "sexual, naughty, chaotic",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "friendly-fears",
+      "pack-description": "Positive, funny and imaginative questions about hidden talents, future success, friendships and the qualities that make each player stand out.",
+      "pack-path": "/json-files/party-games/questions/paranoia/friendly-fears.json",
+      "pack-colour": "#9D8AFF",
+      "pack-secondary-colour": "#7F71B2",
+      "pack-difficulty": "cheeky, funny, creative, deep",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "grave-danger",
+      "pack-description": "A Halloween-themed collection of provocative costumes, haunted dates, party hookups and mischievous behaviour after dark.",
+      "pack-path": "/json-files/party-games/questions/paranoia/grave-danger.json",
+      "pack-colour": "#8BA67B",
+      "pack-secondary-colour": "#3E4B36",
+      "pack-difficulty": "halloween, naughty, flirty",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "hidden-agendas",
+      "pack-description": "Harsh and revealing questions about attraction, manipulation, infidelity, secret desires and the questionable motives hiding within the group.",
+      "pack-path": "/json-files/party-games/questions/paranoia/hidden-agendas.json",
+      "pack-colour": "#9D8AFF",
+      "pack-secondary-colour": "#7F71B2",
+      "pack-difficulty": "naughty, chaotic, flirty",
+      "pack-restriction": "nsfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "shady-shenanigans",
+      "pack-description": "Call out messy habits, secret plans, unreliable behaviour and the friends most likely to cause drama wherever they go.",
+      "pack-path": "/json-files/party-games/questions/paranoia/shady-shenanigans.json",
+      "pack-colour": "#9D8AFF",
+      "pack-secondary-colour": "#7F71B2",
+      "pack-difficulty": "cheeky, funny, brutal, chaotic",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    },
+    {
+      "pack-name": "subtle-shots",
+      "pack-description": "Personal questions about flirting, jealousy, dishonesty, bad habits and hidden rivalries that deliver insults with just enough subtlety.",
+      "pack-path": "/json-files/party-games/questions/paranoia/subtle-shots.json",
+      "pack-colour": "#9D8AFF",
+      "pack-secondary-colour": "#7F71B2",
+      "pack-difficulty": "brutal, funny, chaotic, cheeky",
+      "pack-restriction": "sfw",
+      "pack-active": true
+    }
+  ]
 }

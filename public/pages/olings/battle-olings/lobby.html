@@ -1,0 +1,198 @@
+
+        <section
+          class="oling-battle-container__screen oling-battle-screen oling-battle-lobby-screen"
+          aria-label="Oling battle lobby"
+          aria-hidden="false"
+        >
+          <div class="oling-battle-lobby-matchup">
+            <div class="oling-battle-lobby-versus" aria-hidden="true">VS</div>
+
+            <div class="oling-battle-screen-upper-half">
+              <div
+                class="oling-battle-lobby-party is-players"
+                aria-label="Players side"
+              >
+                <button
+                  class="oling-battle-lobby-player-select-trigger"
+                  type="button"
+                  aria-label="Choose player Oling"
+                ></button>
+                <div
+                  class="oling-battle-lobby-oe"
+                  aria-label="Player OE placeholder"
+                >
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/colour/base/overexposed-blue.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/eyes-slot/base/line-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/mouth-slot/base/line-smile.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/head-slot/base-too/paper-bag.svg"
+                    alt=""
+                  />
+                </div>
+                <button
+                  class="oling-battle-lobby-oling oling-battle-lobby-player-oling"
+                  type="button"
+                  aria-label="Choose player Oling"
+                >
+                  <img
+                    class="oling-battle-layer is-flight"
+                    src="/images/olings/builds/flight/base/moss-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-body"
+                    src="/images/olings/builds/body/base/moss-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/moss-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/moss-mouth.svg"
+                    alt=""
+                  />
+                </button>
+                <div class="name-container oling-battle-lobby-side-label">
+                  <span class="username">PLAYERS</span>
+                  <span class="checkmark" aria-hidden="true"></span>
+                </div>
+                <div
+                  class="oling-battle-lobby-oling-picker"
+                  aria-label="Choose your Oling"
+                  hidden
+                >
+                  <button
+                    class="oling-battle-lobby-oling-arrow is-previous"
+                    type="button"
+                    aria-label="Previous Oling"
+                  >
+                    <span>Previous</span>
+                  </button>
+                  <div
+                    class="oling-battle-lobby-oling-picker-preview"
+                    aria-live="polite"
+                  ></div>
+                  <button
+                    class="oling-battle-lobby-oling-arrow is-next"
+                    type="button"
+                    aria-label="Next Oling"
+                  >
+                    <span>Next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="oling-battle-screen-lower-half">
+              <div
+                class="oling-battle-lobby-party is-enemies is-waiting-for-player"
+                aria-label="Enemies side"
+              >
+                <div class="oling-battle-lobby-waiting" role="status">
+                  <span>WAITING FOR PLAYER</span>
+                </div>
+                <button
+                  class="oling-battle-lobby-enemy-select-trigger"
+                  type="button"
+                  aria-label="View enemy Oling"
+                ></button>
+                <button
+                  class="close-btn oling-battle-lobby-kick"
+                  type="button"
+                  aria-label="Kick player"
+                  hidden
+                >
+                  ×
+                </button>
+                <button
+                  class="oling-battle-lobby-oling oling-battle-lobby-enemy-oling"
+                  type="button"
+                  aria-label="View enemy Oling"
+                >
+                  <img
+                    class="oling-battle-layer is-flight"
+                    src="/images/olings/builds/flight/base/balloons.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-body"
+                    src="/images/olings/builds/body/base/stone-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/stone-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/stone-mouth.svg"
+                    alt=""
+                  />
+                </button>
+                <div
+                  class="oling-battle-lobby-oe"
+                  aria-label="Enemy OE placeholder"
+                >
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/colour/base/bubbly-blue.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/eyes-slot/base/swirly-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/mouth-slot/base-too/dummy.svg"
+                    alt=""
+                  />
+                  <img
+                    class="oling-battle-lobby-oe-layer"
+                    src="/images/user-customisation/head-slot/base-too/revive.svg"
+                    alt=""
+                  />
+                </div>
+                <div class="name-container oling-battle-lobby-side-label">
+                  <span class="username">ENEMIES</span>
+                  <span class="checkmark checked" aria-hidden="true"></span>
+                </div>
+              </div>
+              <article
+                class="oling-battle-lobby-oling-description oling-battle-lobby-player-description"
+                aria-live="polite"
+                hidden
+              >
+                <dl class="oling-battle-lobby-description-stats"></dl>
+              </article>
+            </div>
+          </div>
+          <section
+            class="oling-battle-lobby-qr-panel"
+            aria-label="Join battle QR code"
+            aria-hidden="true"
+            hidden
+          >
+            <img class="oling-battle-lobby-qr-image" alt="" />
+            <strong class="oling-battle-lobby-qr-code"></strong>
+            <span class="oling-battle-lobby-qr-url"></span>
+          </section>
+        </section>

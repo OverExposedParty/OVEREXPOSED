@@ -1,86 +1,54 @@
 {
-    "mafia-settings": [
-        {
-            "settings-name": "mafioso",
-            "settings-colour": "var(--mafiosoColour)",
-            "settings-secondary-colour": "var(--secondaryMafiosoColour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "role",
-            "settings-active": true,
-            "button-type": "increment",
-            "button-designation": "mafioso",
-            "button-initial-value": 1,
-            "button-increment-value": 1,
-            "button-minimum-value": 0,
-            "button-maximum-value": 15
-        },
-        {
-            "settings-name": "inspector",
-            "settings-colour": "var(--civilianColour)",
-            "settings-secondary-colour": "var(--secondaryCivilianColour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "role",
-            "settings-active": true,
-            "button-type": "increment",
-            "button-designation": "civilian",
-            "button-initial-value": 1,
-            "button-increment-value": 1,
-            "button-minimum-value": 0,
-            "button-maximum-value": 15
-        },
-        {
-            "settings-name": "day-timer",
-            "settings-colour": "var(--backgroundcolour)",
-            "settings-secondary-colour": "var(--secondarybackgroundcolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "gamemode-settings",
-            "settings-active": true,
-            "button-type": "increment",
-            "button-designation": "neautral",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 600
-        },
-        {
-            "settings-name": "night-timer",
-            "settings-colour": "var(--backgroundcolour)",
-            "settings-secondary-colour": "var(--secondarybackgroundcolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "gamemode-settings",
-            "settings-active": true,
-            "button-type": "increment",
-            "button-designation": "neautral",
-            "button-initial-value": 60,
-            "button-increment-value": 30,
-            "button-minimum-value": 30,
-            "button-maximum-value": 600
-        },
-        {
-            "settings-name": "anonymous-vote",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "gamemode-settings",
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "death-reveal",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["nsfw"],
-            "settings-type": "gamemode-settings",
-            "settings-active": true,
-            "button-type": "toggle"
-        },
-        {
-            "settings-name": "online",
-            "settings-colour": "var(--primarypagecolour)",
-            "settings-secondary-colour": "var(--secondarypagecolour)",
-            "settings-restriction": ["sfw"],
-            "settings-active": false,
-            "button-type": "toggle"
-        }
-    ]
+  "mafia-settings": [
+    {
+      "settings-name": "anonymous-vote",
+      "settings-description": "Hides each player’s individual vote so the town can see the result without knowing who voted for whom.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": ["nsfw"],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": ["mafia"]
+    },
+    {
+      "settings-name": "day-timer",
+      "settings-description": "Sets how long the town has to discuss suspicions and decide who should be eliminated during each day.",
+      "settings-colour": "var(--backgroundcolour)",
+      "settings-secondary-colour": "var(--secondarybackgroundcolour)",
+      "settings-restriction": ["nsfw"],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": ["mafia"],
+      "button-designation": "neautral",
+      "button-initial-value": 60,
+      "button-increment-value": 30,
+      "button-minimum-value": 30,
+      "button-maximum-value": 600
+    },
+    {
+      "settings-name": "death-reveal",
+      "settings-description": "Reveals the secret role of a player after they are killed or voted out.",
+      "settings-colour": "var(--primarypagecolour)",
+      "settings-secondary-colour": "var(--secondarypagecolour)",
+      "settings-restriction": ["nsfw"],
+      "settings-active": true,
+      "button-type": "toggle",
+      "applies-to": ["mafia"]
+    },
+    {
+      "settings-name": "night-timer",
+      "settings-description": "Sets how long the Mafia and other active roles have to complete their decisions during each night.",
+      "settings-colour": "var(--backgroundcolour)",
+      "settings-secondary-colour": "var(--secondarybackgroundcolour)",
+      "settings-restriction": ["nsfw"],
+      "settings-active": true,
+      "button-type": "increment",
+      "applies-to": ["mafia"],
+      "button-designation": "neautral",
+      "button-initial-value": 60,
+      "button-increment-value": 30,
+      "button-minimum-value": 30,
+      "button-maximum-value": 600
+    }
+  ]
 }

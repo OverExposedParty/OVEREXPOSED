@@ -7,7 +7,13 @@ const { createPartyRuntime } = require('./game-engine/party-runtime');
 const { registerApiRoutes } = require('./routes/api');
 const { registerPageRoutes } = require('./routes/pages');
 const { registerPartySockets } = require('./sockets/register-party-sockets');
+const {
+  registerOlingBattleSockets
+} = require('./sockets/register-oling-battle-sockets');
 const { createDatabaseServices } = require('./services/database');
+const {
+  createActivePartyOwnerLeaseService
+} = require('./services/active-party-owner-leases');
 const models = require('./models');
 const logger = require('./logger');
 
@@ -18,17 +24,21 @@ function createAppServer() {
 
   configureMiddleware(app);
 
+  const partyOwnerLeases = createActivePartyOwnerLeaseService({ models });
+
   const runtime = createPartyRuntime({
     app,
     io,
     models,
-    logger
+    logger,
+    partyOwnerLeases
   });
 
   registerApiRoutes({
     app,
     models,
-    runtime
+    runtime,
+    partyOwnerLeases
   });
 
   app.use('/api', (req, res) => {
@@ -45,9 +55,20 @@ function createAppServer() {
     disconnectSocketPartyMemberships: runtime.disconnectSocketPartyMemberships
   });
 
+  registerOlingBattleSockets({
+    io,
+    debugLog: logger.debugLog
+  });
+
   registerPageRoutes({
     app,
+    accountModel: models.Account,
     debugLog: logger.debugLog,
+    hostedPartyModels: [
+      models.waitingRoomSchema,
+      models.partyGameImposterSchema,
+      models.partyGameWouldYouRatherSchema
+    ],
     waitingRoomModel: models.waitingRoomSchema
   });
 
@@ -77,7 +98,8 @@ function createAppServer() {
   const database = createDatabaseServices({
     io,
     debugLog: logger.debugLog,
-    models
+    models,
+    partyOwnerLeases
   });
 
   return {

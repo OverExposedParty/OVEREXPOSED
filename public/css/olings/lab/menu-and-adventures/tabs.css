@@ -1,0 +1,63 @@
+.oling-lab-tab-menu {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0;
+}
+
+.oling-lab-tab-menu.has-external-tabs {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.oling-lab-tab-menu:not(.has-external-tabs) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.oling-lab-tab-list {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  overflow-x: auto;
+  display: flex;
+  align-items: end;
+  justify-content: flex-start;
+  gap: 0.15rem;
+  padding: 0;
+  background: transparent;
+}
+
+.oling-lab-tab-list::-webkit-scrollbar {
+  display: none;
+}
+
+.oling-lab-tab {
+  min-height: 2.15rem;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0.45rem 0.45rem 0 0;
+  padding: 0.35rem 0.9rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  font-size: clamp(0.62rem, 2.8vw, 0.82rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oling-lab-tab[aria-selected='true'] {
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-tab-panel {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  box-sizing: border-box;
+  padding: 1rem;
+}

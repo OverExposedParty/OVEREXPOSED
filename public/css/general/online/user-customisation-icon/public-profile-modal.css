@@ -1,0 +1,172 @@
+.online-public-profile-content {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.online-public-profile {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: min(760px, calc(100vh - 36px));
+  overflow-y: auto;
+  border-radius: 24px;
+  background: var(--backgroundcolour);
+  color: var(--primarypagecolour);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+}
+
+.online-public-profile-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primarypagecolour) 12%, transparent);
+  color: var(--primarypagecolour);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.online-public-profile-close:focus-visible {
+  background: color-mix(in srgb, var(--primarypagecolour) 20%, transparent);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .online-public-profile-close:hover {
+    background: color-mix(in srgb, var(--primarypagecolour) 20%, transparent);
+    outline: none;
+  }
+}
+
+.online-public-profile-content {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+.online-public-profile-header {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding-right: 38px;
+}
+
+.online-public-profile-avatar {
+  width: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.online-public-profile-avatar .icon,
+.online-public-profile-avatar .image-stack {
+  width: 94px;
+  height: 94px;
+}
+
+.online-public-profile-heading {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.online-public-profile-heading h2,
+.online-public-profile-heading p {
+  margin: 0;
+}
+
+.online-public-profile-heading h2 {
+  overflow-wrap: anywhere;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.online-public-profile-heading p {
+  overflow-wrap: anywhere;
+  font-weight: 800;
+  opacity: 0.72;
+}
+
+.online-public-profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.online-public-profile-meta span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primarypagecolour) 14%, transparent);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.online-public-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.online-public-profile-stat {
+  display: grid;
+  gap: 4px;
+  min-height: 74px;
+  align-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primarypagecolour) 12%, transparent);
+  text-align: center;
+}
+
+.online-public-profile-stat strong,
+.online-public-profile-stat span {
+  overflow-wrap: anywhere;
+}
+
+.online-public-profile-stat strong {
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.online-public-profile-stat span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.74;
+}
+
+.online-public-profile-details {
+  display: grid;
+  gap: 8px;
+}
+
+.online-public-profile-details p {
+  margin: 0;
+  font-weight: 800;
+}
+
+.online-public-profile-state {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.online-public-profile-state.error {
+  color: #b52b45;
+}

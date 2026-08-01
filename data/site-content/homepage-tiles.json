@@ -1,0 +1,579 @@
+{
+  "homepageTiles": [
+    {
+      "key": "truth-or-dare",
+      "kind": "gamemode",
+      "label": "Truth Or Dare",
+      "description": "Choose between answering a revealing question or completing a daring challenge. A familiar party game packed with confessions, surprises and chaotic moments.",
+      "link": "/truth-or-dare/settings",
+      "colours": {
+        "primary": "#66CCFF",
+        "secondary": "#427BB9"
+      },
+      "splashScreen": "/images/splash-screens/truth-or-dare-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/truth-or-dare.svg",
+          "alt": "Truth Or Dare"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/truth-or-dare.svg",
+          "alt": "Truth Or Dare"
+        }
+      },
+      "layout": {
+        "columns": [1, 2],
+        "rows": [1],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 1
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "key": "oe-library",
+      "kind": "page",
+      "label": "OE Library",
+      "description": "Browse and manage the customisation items available for your OE. Search by collection or slot, view locked and unlocked items, and control which customisations can be used.",
+      "link": "/oe-library",
+      "colours": {
+        "primary": "#F6C86D",
+        "secondary": "#C29B50"
+      },
+      "splashScreen": "/images/splash-screens/oes-customisation.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/oe-library.svg",
+          "alt": "OE Library"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/oe-library.svg",
+          "alt": "OE Library"
+        }
+      },
+      "layout": {
+        "columns": [3],
+        "rows": [1, 2],
+        "mobile": {
+          "cols": 1,
+          "rows": 2,
+          "order": 8
+        },
+        "size": "small"
+      },
+      "access": {
+        "type": "account"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "key": "terms-and-privacy",
+      "kind": "page",
+      "label": "Terms & Privacy",
+      "description": "Read the terms that apply when using OVEREXPOSED and learn how your information is handled. Find details about your responsibilities, privacy and the platform’s policies.",
+      "link": "/terms-and-privacy",
+      "colours": {
+        "primary": "#6A9EF6",
+        "secondary": "#507AC2"
+      },
+      "splashScreen": "/images/splash-screens/terms-and-privacy.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/terms-and-privacy.svg",
+          "alt": "Terms & Privacy"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/terms-and-privacy.svg",
+          "alt": "Terms & Privacy"
+        }
+      },
+      "layout": {
+        "columns": [4],
+        "rows": [1],
+        "mobile": {
+          "cols": 1,
+          "rows": 1,
+          "order": 9
+        },
+        "size": "small"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 3
+    },
+    {
+      "key": "imposter",
+      "kind": "gamemode",
+      "label": "Imposter",
+      "description": "Give subtle answers to your prompt while trying to identify the player who received something different. Blend in, spot suspicious responses and decide who you can trust.",
+      "link": "/imposter/settings",
+      "colours": {
+        "primary": "#3DA7A1",
+        "secondary": "#2A6E6A"
+      },
+      "splashScreen": "/images/splash-screens/imposter-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/imposter.svg",
+          "alt": "Imposter"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/imposter.svg",
+          "alt": "Imposter"
+        }
+      },
+      "layout": {
+        "columns": [5, 6],
+        "rows": [1],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 5
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "feature",
+        "feature": "imposter"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 4
+    },
+    {
+      "key": "paranoia",
+      "kind": "gamemode",
+      "label": "Paranoia",
+      "description": "Answer a secret question by selecting the player who fits it best. Curiosity, suspicion and hidden context ensure everyone wants to know what was said.",
+      "link": "/paranoia/settings",
+      "colours": {
+        "primary": "#9D8AFF",
+        "secondary": "#7F71B2"
+      },
+      "splashScreen": "/images/splash-screens/paranoia-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/paranoia.svg",
+          "alt": "Paranoia"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/paranoia.svg",
+          "alt": "Paranoia"
+        }
+      },
+      "layout": {
+        "columns": [1, 2],
+        "rows": [2],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 2
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 5
+    },
+    {
+      "key": "faqs",
+      "kind": "page",
+      "label": "FAQs",
+      "description": "Find answers to common questions about OVEREXPOSED and how its features work. Get help with playing games, managing your account and using the platform.",
+      "link": "/faqs",
+      "colours": {
+        "primary": "#FC7E93",
+        "secondary": "#C25F70"
+      },
+      "splashScreen": "/images/splash-screens/frequently-asked-questions.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/faqs.svg",
+          "alt": "FAQs"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/faqs.svg",
+          "alt": "FAQs"
+        }
+      },
+      "layout": {
+        "columns": [4],
+        "rows": [2],
+        "mobile": {
+          "cols": 1,
+          "rows": 1,
+          "order": 10
+        },
+        "size": "small"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 6
+    },
+    {
+      "key": "would-you-rather",
+      "kind": "gamemode",
+      "label": "Would You Rather",
+      "description": "Choose between two difficult, ridiculous or revealing options and compare your decision with the group. Discover who thinks like you and which choices divide everyone.",
+      "link": "/would-you-rather/settings",
+      "colours": {
+        "primary": "#7CFFB2",
+        "secondary": "#55B97F"
+      },
+      "splashScreen": "/images/splash-screens/would-you-rather-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/would-you-rather.svg",
+          "alt": "Would You Rather"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/would-you-rather.svg",
+          "alt": "Would You Rather"
+        }
+      },
+      "layout": {
+        "columns": [5, 6],
+        "rows": [2],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 6
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "feature",
+        "feature": "would-you-rather"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 7
+    },
+    {
+      "key": "never-have-i-ever",
+      "kind": "gamemode",
+      "label": "Never Have I Ever",
+      "description": "Respond honestly to revealing statements and compare your experiences with the group. Discover unexpected stories and learn how well you really know your friends.",
+      "link": "/never-have-i-ever/settings",
+      "colours": {
+        "primary": "#FF9266",
+        "secondary": "#B96542"
+      },
+      "splashScreen": "/images/splash-screens/never-have-i-ever-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/never-have-i-ever.svg",
+          "alt": "Never Have I Ever"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/never-have-i-ever.svg",
+          "alt": "Never Have I Ever"
+        }
+      },
+      "layout": {
+        "columns": [1, 2],
+        "rows": [3],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 3
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 8
+    },
+    {
+      "key": "overexposure",
+      "kind": "page",
+      "label": "Overexposure",
+      "description": "Explore anonymous secrets, confessions, stories and thoughts shared by the community. Browse the growing collection or create and publish an Overexposure of your own.",
+      "link": "/overexposure",
+      "colours": {
+        "primary": "#5DA9FF",
+        "secondary": "#3F7CC4"
+      },
+      "splashScreen": "/images/splash-screens/overexposure.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/overexposure.svg",
+          "alt": "Overexposure"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/overexposure.svg",
+          "alt": "Overexposure"
+        }
+      },
+      "layout": {
+        "columns": [3, 4],
+        "rows": [3, 4],
+        "mobile": {
+          "cols": 2,
+          "rows": 2,
+          "order": 11
+        },
+        "size": "large"
+      },
+      "access": {
+        "type": "feature",
+        "feature": "overexposure"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 9
+    },
+    {
+      "key": "mafia",
+      "kind": "gamemode",
+      "label": "Mafia",
+      "description": "Use your secret role to protect the town or secretly work against it. Discuss, deceive and investigate as the group tries to identify who can and cannot be trusted.",
+      "link": "/mafia/settings",
+      "colours": {
+        "primary": "#9B56D3",
+        "secondary": "#6D3C95"
+      },
+      "splashScreen": "/images/splash-screens/mafia-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/mafia.svg",
+          "alt": "Mafia"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/mafia.svg",
+          "alt": "Mafia"
+        }
+      },
+      "layout": {
+        "columns": [5, 6],
+        "rows": [3],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 7
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "owner"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 10
+    },
+    {
+      "key": "most-likely-to",
+      "kind": "gamemode",
+      "label": "Most Likely To",
+      "description": "Vote for the person who best matches each funny, embarrassing or outrageous prompt. See how the group views each other and discover who earns every reputation.",
+      "link": "/most-likely-to/settings",
+      "colours": {
+        "primary": "#FFEE66",
+        "secondary": "#B9AA42"
+      },
+      "splashScreen": "/images/splash-screens/most-likely-to-settings.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/most-likely-to.svg",
+          "alt": "Most Likely To"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/most-likely-to.svg",
+          "alt": "Most Likely To"
+        }
+      },
+      "layout": {
+        "columns": [1, 2],
+        "rows": [4],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 4
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 11
+    },
+    {
+      "key": "oling-lab",
+      "kind": "page",
+      "label": "Oling Lab",
+      "description": "Hatch, collect and care for your Olings inside a personal, customisable space. Arrange furniture, manage their needs.",
+      "link": "/olings/lab",
+      "colours": {
+        "primary": "#BEE7FF",
+        "secondary": "#7CBDE8"
+      },
+      "splashScreen": "/images/splash-screens/overexposed.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/olings-lab.svg",
+          "alt": "Oling Lab"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/olings-lab.svg",
+          "alt": "Oling Lab"
+        }
+      },
+      "layout": {
+        "columns": [5, 6],
+        "rows": [4],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 12
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "feature",
+        "feature": "olings.lab"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 12
+    },
+    {
+      "key": "olings-battle",
+      "kind": "page",
+      "label": "Olings Battle",
+      "description": "Choose an Oling and take it into a head-to-head battle against another player. Time your attacks, reduce your opponent’s health and put your Oling’s unique attributes to the test.",
+      "link": "/olings/battle",
+      "colours": {
+        "primary": "#FFB5C8",
+        "secondary": "#E684A1"
+      },
+      "splashScreen": "/images/splash-screens/overexposed.png",
+      "images": {
+        "desktop": {
+          "src": "",
+          "alt": "Olings Battle"
+        },
+        "mobile": {
+          "src": "",
+          "alt": "Olings Battle"
+        }
+      },
+      "layout": {
+        "columns": [1, 2, 3],
+        "rows": [5],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 13
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "account"
+      },
+      "enabled": false,
+      "status": "published",
+      "sortOrder": 13
+    },
+    {
+      "key": "oe-os",
+      "kind": "page",
+      "label": "OE OS",
+      "description": "Explore an interactive desktop containing OVEREXPOSED applications, files and hidden experiments. Open windows, inspect unusual content and uncover secrets from across the platform.",
+      "link": "/terminal",
+      "colours": {
+        "primary": "#26324A",
+        "secondary": "#101522"
+      },
+      "splashScreen": "/images/splash-screens/error-404/error-404.jpg",
+      "images": {
+        "desktop": {
+          "src": "",
+          "alt": "OE OS"
+        },
+        "mobile": {
+          "src": "",
+          "alt": "OE OS"
+        }
+      },
+      "layout": {
+        "columns": [4, 5, 6],
+        "rows": [5],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 14
+        },
+        "size": "wide"
+      },
+      "access": {
+        "type": "public"
+      },
+      "enabled": false,
+      "status": "published",
+      "sortOrder": 14
+    },
+    {
+      "key": "shop",
+      "kind": "page",
+      "label": "Shop",
+      "description": "Use your Opals to unlock OE customisation layers, Oling eggs, furniture and consumables. Browse different collections, preview available products and expand your account’s collection.",
+      "link": "/shop",
+      "colours": {
+        "primary": "#FFF0E8",
+        "secondary": "#FFD7C7"
+      },
+      "splashScreen": "/images/splash-screens/overexposed.png",
+      "images": {
+        "desktop": {
+          "src": "/images/homepage/desktop/shop.svg",
+          "alt": "Shop"
+        },
+        "mobile": {
+          "src": "/images/homepage/mobile/shop.svg",
+          "alt": "Shop"
+        }
+      },
+      "layout": {
+        "columns": [1, 2, 3, 4, 5, 6],
+        "rows": [6],
+        "mobile": {
+          "cols": 2,
+          "rows": 1,
+          "order": 15
+        },
+        "size": "full"
+      },
+      "access": {
+        "type": "feature",
+        "feature": "shop"
+      },
+      "enabled": true,
+      "status": "published",
+      "sortOrder": 15
+    }
+  ]
+}

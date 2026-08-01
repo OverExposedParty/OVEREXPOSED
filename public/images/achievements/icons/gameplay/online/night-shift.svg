@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="ACHIEVEMENTS" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 100px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #427bb9;
+        font-family: OverExposed-Regular, OverExposed;
+      }
+
+      .cls-2 {
+        font-size: 80px;
+      }
+
+      .cls-3 {
+        font-size: 60px;
+      }
+    </style>
+  </defs>
+  <text class="cls-1" transform="translate(243.23 192.2) rotate(15)"><tspan x="0" y="0">Z</tspan></text>
+  <text class="cls-2" transform="translate(215.49 303.88) rotate(-3.34)"><tspan x="0" y="0">Z</tspan></text>
+  <text class="cls-3" transform="translate(171.26 380.47) rotate(-10.37)"><tspan x="0" y="0">Z</tspan></text>
+</svg>

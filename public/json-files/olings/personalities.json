@@ -1,0 +1,135 @@
+{
+  "personalities": [
+    {
+      "key": "brave",
+      "name": "Brave",
+      "flavor": "Faces danger head-on.",
+      "effects": [{ "type": "battle_power_bonus", "amount": 0.05 }],
+      "moments": ["Your Brave Oling charged ahead with extra confidence."],
+      "metadata": { "category": "battle-focused" }
+    },
+    {
+      "key": "competitive",
+      "name": "Competitive",
+      "flavor": "Always wants to win.",
+      "effects": [{ "type": "pvp_victory_reward_bonus", "amount": 0.05 }],
+      "moments": ["Your Competitive Oling pushed for a better victory prize."],
+      "metadata": { "category": "battle-focused" }
+    },
+    {
+      "key": "protective",
+      "name": "Protective",
+      "flavor": "Stands guard for the team.",
+      "effects": [{ "type": "defense_bonus", "amount": 0.05 }],
+      "moments": ["Your Protective Oling shielded the group from harm."],
+      "metadata": { "category": "battle-focused" }
+    },
+    {
+      "key": "dramatic",
+      "name": "Dramatic",
+      "flavor": "Finds power in the big moment.",
+      "effects": [
+        {
+          "type": "low_hp_battle_power_bonus",
+          "amount": 0.1,
+          "threshold": 0.5
+        }
+      ],
+      "moments": ["Your Dramatic Oling turned the fight around at low HP."],
+      "metadata": { "category": "battle-focused" }
+    },
+    {
+      "key": "curious",
+      "name": "Curious",
+      "flavor": "Looks behind every odd little door.",
+      "effects": [{ "type": "expedition_bonus_reward_chance", "chance": 0.1 }],
+      "moments": ["Your Curious Oling discovered a bonus expedition reward."],
+      "metadata": { "category": "expedition-focused" }
+    },
+    {
+      "key": "energetic",
+      "name": "Energetic",
+      "flavor": "Never sits still.",
+      "effects": [{ "type": "adventure_energy_cost_reduction", "amount": 0.15 }],
+      "moments": ["Your Energetic Oling used less energy on its adventure."],
+      "metadata": { "category": "expedition-focused" }
+    },
+    {
+      "key": "adventurous",
+      "name": "Adventurous",
+      "flavor": "Seeks the path nobody else takes.",
+      "effects": [{ "type": "rare_expedition_event_chance", "chance": 0.1 }],
+      "moments": ["Your Adventurous Oling found a rare expedition event."],
+      "metadata": { "category": "expedition-focused" }
+    },
+    {
+      "key": "lucky",
+      "name": "Lucky",
+      "flavor": "Somehow things work out.",
+      "effects": [{ "type": "reward_quality_bonus", "amount": 0.05 }],
+      "moments": ["Your Lucky Oling nudged the reward quality upward."],
+      "metadata": { "category": "expedition-focused" }
+    },
+    {
+      "key": "friendly",
+      "name": "Friendly",
+      "flavor": "Makes friends easily.",
+      "effects": [{ "type": "oling_friendship_gain_bonus", "amount": 0.1 }],
+      "moments": ["Your Friendly Oling bonded quickly with another Oling."],
+      "metadata": { "category": "social-focused" }
+    },
+    {
+      "key": "mischievous",
+      "name": "Mischievous",
+      "flavor": "Pokes at anything that looks interesting.",
+      "effects": [{ "type": "random_expedition_event_chance", "chance": 0.15 }],
+      "moments": ["Your Mischievous Oling triggered an unexpected expedition event."],
+      "metadata": { "category": "social-focused" }
+    },
+    {
+      "key": "shy",
+      "name": "Shy",
+      "flavor": "Avoids trouble whenever possible.",
+      "effects": [{ "type": "hostile_expedition_event_chance", "amount": -0.1 }],
+      "moments": ["Your Shy Oling quietly avoided a hostile expedition event."],
+      "metadata": { "category": "utility-focused" }
+    },
+    {
+      "key": "serious",
+      "name": "Serious",
+      "flavor": "Keeps every plan steady.",
+      "effects": [{ "type": "reward_variance_reduction", "amount": 0.1 }],
+      "moments": ["Your Serious Oling kept the outcome steady and predictable."],
+      "metadata": { "category": "utility-focused" }
+    },
+    {
+      "key": "lazy",
+      "name": "Lazy",
+      "flavor": "Saves effort with impressive dedication.",
+      "effects": [{ "type": "sleep_duration_reduction", "amount": 0.15 }],
+      "moments": ["Your Lazy Oling settled in and recovered faster."],
+      "metadata": { "category": "utility-focused" }
+    },
+    {
+      "key": "mysterious",
+      "name": "Mysterious",
+      "flavor": "Hides a secret that keeps changing.",
+      "effects": [{ "type": "rotating_hidden_bonus" }],
+      "moments": ["Your Mysterious Oling seemed to benefit from something unseen."],
+      "metadata": { "category": "special" }
+    },
+    {
+      "key": "chaotic",
+      "name": "Chaotic",
+      "flavor": "Wakes up different every day.",
+      "effects": [
+        {
+          "type": "daily_random_personality",
+          "exclude": ["lucky", "mysterious", "chaotic"]
+        }
+      ],
+      "moments": ["Your Chaotic Oling acted like someone completely different today."],
+      "metadata": { "category": "special" }
+    }
+  ]
+}

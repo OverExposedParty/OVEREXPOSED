@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Battle Olings | OVEREXPOSED</title>
+    <meta name="description" content="Start an Oling battle." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link
+      rel="stylesheet"
+      href="/css/olings/shared/oling-flight-motion.css?v=2026-06-28-01"
+    />
+    <link
+      rel="stylesheet"
+      href="/css/olings/battle/battle-olings.css?v=2026-07-01-01"
+    />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div id="header-placeholder"></div>
+
+    <main
+      class="battle-olings-page"
+      data-template="battle-olings"
+      aria-label="Battle Olings"
+    >
+      <section
+        class="oling-battle-container oling-battle-shell is-lobby"
+        aria-label="Oling battle layout"
+        data-match-length="30"
+        hidden
+      >
+        <div
+          class="oling-battle-container__notch oling-battle-notch oling-battle-timer"
+          aria-label="Oling battle lobby"
+          data-match-length="30"
+        ></div>
+
+__BATTLE_OLINGS_ARENA__
+
+__BATTLE_OLINGS_LOBBY__
+
+__BATTLE_OLINGS_MOMENTUM_FOOTER__
+
+__BATTLE_OLINGS_LOBBY_FOOTER__
+
+__BATTLE_OLINGS_NO_OLING__
+    </main>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'up';
+
+    document.documentElement.style.setProperty(
+      '--primaryPageColour',
+      '#FFB5C8'
+    );
+    document.documentElement.style.setProperty(
+      '--secondaryPageColour',
+      '#E87398'
+    );
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#FFB5C8'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#E87398'
+    );
+
+    window.pageScripts = {
+      'https://cdn.socket.io/4.8.1/socket.io.min.js': {
+        zIndex: 0
+      },
+      '/scripts/olings/shared/oling-flight-motion.js': {
+        cacheBustKey: 'OLING_FLIGHT_MOTION',
+        zIndex: 0
+      },
+      '/scripts/general/online/session-status-prompts.js': {
+        zIndex: 0
+      },
+      '/scripts/olings/battle/battle-oling-ai.js': {
+        cacheBustKey: 'OLING_BATTLE_AI',
+        zIndex: 0
+      },
+      '/scripts/olings/battle/battle-olings-demo-olings.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/lobby/context.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/lobby/visuals.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/lobby/controls.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/lobby/api.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/lobby/match-sync.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/battle-olings-lobby.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/runtime/audio.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/runtime/layout.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/runtime/timing.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/runtime/interaction.js': {
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      },
+      '/scripts/olings/battle/battle-olings.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_BATTLE',
+        zIndex: 1
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js?v=2026-06-28-02"
+    data-loaded="false"
+  ></script>
+</html>

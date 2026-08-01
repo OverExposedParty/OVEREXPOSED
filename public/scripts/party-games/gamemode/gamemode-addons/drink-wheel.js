@@ -175,19 +175,17 @@ function engine() {
 }
 
 function toggleDrinkWheel() {
-    addElementIfNotExists(elementClassArray, drinkWheelContainer);
     spinDisabled = false;
     spinEl.textContent = 'SPIN';
     if (!isContainerVisible(drinkWheelContainer)) {
         showContainer(drinkWheelContainer);
+        addElementIfNotExists(elementClassArray, drinkWheelContainer);
         spinButton.classList.add('active');
-        playSoundEffect('containerOpen');
         if (!isContainerVisible(overlay)) toggleOverlay(true);
     } else {
         hideContainer(drinkWheelContainer);
+        removeElementIfExists(elementClassArray, drinkWheelContainer);
         spinButton.classList.remove('active');
-        playSoundEffect('containerClose');
-        if (findActiveElementsWithClasses(classArray).length === 0) toggleOverlay(false);
     }
 }
 
@@ -375,18 +373,14 @@ if (placeholderGamemodeAddons?.dataset.online === "true") {
     });
 }
 
-waitForFunction("loadSound", () => {
-    async function LoadDrinkWheelSoundEffects() {
-        const soundEffects = {
-            wheelSpin: '/sounds/party-games/wheel-spin.wav'
-        };
-
-        for (const [key, url] of Object.entries(soundEffects)) {
-            await loadSound(key, url);
+waitForFunction("playSoundEffect", () => {
+    OEAudio.register({
+        wheelSpin: {
+            src: '/sounds/party-games/shared/wheel-spin.wav',
+            group: 'party-games',
+            maxInstances: 1,
+            priority: 'normal',
+            conflictPolicy: 'queue-latest'
         }
-    }
-
-    (async () => {
-        await LoadDrinkWheelSoundEffects();
-    })();
+    });
 });

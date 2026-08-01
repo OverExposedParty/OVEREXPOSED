@@ -307,6 +307,15 @@ function assertRemovePlayerBody(body) {
   assertOptionalString(body.actorSocketId ?? body.socketId, 'actorSocketId', {
     maxLength: 200
   });
+  assertOptionalString(body.exitIntent, 'exitIntent', { maxLength: 40 });
+
+  if (body.exitIntent && body.exitIntent !== 'main-menu') {
+    throw createValidationError({
+      message: 'exitIntent must be main-menu',
+      code: 'invalid_exit_intent',
+      details: { field: 'exitIntent' }
+    });
+  }
 
   if (!body.computerIdToRemove) {
     throw createValidationError({

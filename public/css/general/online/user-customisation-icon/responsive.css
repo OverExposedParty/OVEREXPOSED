@@ -1,0 +1,62 @@
+@media (orientation: portrait) {
+  .online-public-profile {
+    border-radius: 18px;
+  }
+
+  .online-public-profile-content {
+    padding: 18px;
+  }
+
+  .online-public-profile-header {
+    grid-template-columns: 86px 1fr;
+    gap: 12px;
+    padding-right: 30px;
+  }
+
+  .online-public-profile-avatar {
+    width: 86px;
+    height: 86px;
+  }
+
+  .online-public-profile-avatar .icon,
+  .online-public-profile-avatar .image-stack {
+    width: 72px;
+    height: 72px;
+  }
+
+  .online-public-profile-heading h2 {
+    font-size: 1.35rem;
+  }
+
+  .online-public-profile-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .checkmark {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+  }
+
+  .checkmark.checked::before {
+    top: 50%;
+    left: 50%;
+    font-size: 7px;
+    line-height: 1;
+    transform: translate(-50%, -52%);
+  }
+
+  .checkmark.disconnected::before {
+    content: none;
+    display: none;
+  }
+
+  .disconnect-status-icon {
+    height: 100%;
+    width: 100%;
+  }
+
+  .disconnect-status-icon circle {
+    stroke-width: 4.5;
+  }
+}

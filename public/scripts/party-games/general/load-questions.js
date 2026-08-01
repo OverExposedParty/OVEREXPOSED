@@ -6,6 +6,16 @@ let numberOfQuestions = 0;
 let numberOfTruthQuestions = 0;
 let numberOfDareQuestions = 0;
 
+function addPartyCodeToQuestionContentUrl(url) {
+  const code = String(
+    typeof partyCode === 'undefined' ? '' : partyCode
+  ).trim();
+  if (!code) return url;
+
+  const separator = String(url).includes('?') ? '&' : '?';
+  return `${url}${separator}partyCode=${encodeURIComponent(code)}`;
+}
+
 async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
   try {
     debugLog(`[loadJSONFiles] gamemode=${gamemode}, shuffleSeed=`, seedShuffle);
@@ -19,13 +29,16 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
     numberOfTruthQuestions = 0;
     numberOfDareQuestions = 0;
 
-    const packsResponse = await fetch(`/json-files/party-games/packs/${gamemode}.json`);
+    const packsResponse = await fetch(
+      addPartyCodeToQuestionContentUrl(`/api/party-game-packs/${gamemode}`)
+    );
     if (!packsResponse.ok) {
       console.error(`Failed to fetch packs: ${packsResponse.statusText}`);
       return;
     }
 
-    const packsData = await packsResponse.json();
+    const packsPayload = await packsResponse.json();
+    const packsData = packsPayload.data || packsPayload;
     const packs = packsData[`${gamemode}-packs`];
 
     let filesToFetch = [];
@@ -50,7 +63,9 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
 
     debugLog("Files to Fetch:", filesToFetch);
 
-    const responses = await Promise.all(filesToFetch.map(file => fetch(file)));
+    const responses = await Promise.all(
+      filesToFetch.map(file => fetch(addPartyCodeToQuestionContentUrl(file)))
+    );
 
     const questionsArrays = await Promise.all(
       responses.map(async response => {
@@ -58,7 +73,8 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
           console.error(`Failed to fetch ${response.url}: ${response.statusText}`);
           return {};
         }
-        return await response.json();
+        const payload = await response.json();
+        return payload.data || payload;
       })
     );
 
@@ -94,11 +110,10 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
 
     packs.forEach(pack => {
       const packName = pack["pack-name"].replace(/-/g, " ").replace(/^\w/, c => c.toUpperCase());
-      const packCard = pack["pack-card"];
       const packColour = pack["pack-colour"];
       const packSecondaryColour = pack["pack-secondary-colour"];
       const packRestriction = pack["pack-restriction"] || null;
-      cardPackMap.push({ packName, packCard, packColour, packSecondaryColour, packRestriction });
+      cardPackMap.push({ packName, packColour, packSecondaryColour, packRestriction });
     });
 
     if (allQuestions.length > 0) {

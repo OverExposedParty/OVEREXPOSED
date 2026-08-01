@@ -1,0 +1,282 @@
+.oling-battle-lobby-oling-picker {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 7cqw minmax(0, 1fr) 7cqw;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 1cqw;
+  color: var(--primary-colour);
+}
+
+.oling-battle-lobby-oling-picker[hidden] {
+  display: none;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling .oling-battle-lobby-versus,
+.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-versus {
+  display: none;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling,
+.oling-battle-lobby-matchup.is-viewing-enemy {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  row-gap: 0.8cqw;
+  padding: 1.2cqw 2.6cqw 2.2cqw;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling .oling-battle-lobby-party.is-players,
+.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-party.is-players {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-battle-lobby-matchup.is-viewing-enemy {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling .oling-battle-lobby-party.is-enemies,
+.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-party.is-enemies {
+  display: none;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-oe,
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-player-oling,
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-side-label,
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-player-select-trigger,
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-kick,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-oe,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-player-oling,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-side-label,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-player-select-trigger,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players
+  > .oling-battle-lobby-kick {
+  display: none;
+}
+
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-oling-arrow {
+  display: none;
+}
+
+.oling-battle-lobby-oling-picker-preview {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  width: min(34cqw, 100%);
+  aspect-ratio: 1;
+}
+
+.oling-battle-lobby-oling-picker-preview .oling-battle-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.oling-battle-lobby-oling-arrow {
+  width: 7cqw;
+  height: 9cqw;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.oling-battle-lobby-oling-arrow span {
+  display: none;
+}
+
+.oling-battle-lobby-oling-arrow::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: 1.6cqw solid transparent;
+  border-bottom: 1.6cqw solid transparent;
+}
+
+.oling-battle-lobby-oling-arrow.is-previous {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.oling-battle-lobby-oling-arrow.is-previous::before {
+  border-right: 2.2cqw solid var(--primary-colour);
+}
+
+.oling-battle-lobby-oling-arrow.is-next {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.oling-battle-lobby-oling-arrow.is-next::before {
+  border-left: 2.2cqw solid var(--primary-colour);
+}
+
+.oling-battle-lobby-oling-description {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  display: grid;
+  align-content: center;
+  justify-items: stretch;
+  gap: 1.3cqw;
+  padding: 0 1cqw;
+  color: var(--primary-colour);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.oling-battle-lobby-oling-description[hidden] {
+  display: none;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description {
+  inset: 0;
+  z-index: 12;
+  padding: 0;
+  overflow: hidden;
+  align-content: stretch;
+  align-items: stretch;
+  justify-self: stretch;
+  align-self: stretch;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description
+  .oling-battle-lobby-description-stats,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description
+  .oling-battle-lobby-description-stats {
+  height: 100%;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-content: stretch;
+}
+
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description
+  .oling-battle-lobby-description-stats
+  div,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-screen-lower-half
+  > .oling-battle-lobby-player-description
+  .oling-battle-lobby-description-stats
+  div {
+  min-height: 0;
+}
+
+.oling-battle-lobby-description-stats {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-content: space-between;
+  gap: 0.65cqw;
+}
+
+.oling-battle-lobby-description-stats div {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.32cqw;
+  min-width: 0;
+  min-height: 4.15cqw;
+  padding: 0.5cqw 0.7cqw;
+  border-radius: 0.7cqw;
+  background: color-mix(in srgb, var(--backgroundcolour) 86%, white 14%);
+  box-sizing: border-box;
+}
+
+.oling-battle-lobby-description-stats div.is-wide {
+  grid-column: 1 / -1;
+}
+
+.oling-battle-lobby-description-stats div.is-name {
+  min-height: 4.4cqw;
+}
+
+.oling-battle-lobby-description-stats div.is-name dt {
+  display: none;
+}
+
+.oling-battle-lobby-description-stats div.is-name dd {
+  font-size: clamp(10px, 2.65cqw, 15px);
+}
+
+.oling-battle-lobby-description-stats div.is-half {
+  grid-column: span 3;
+}
+
+.oling-battle-lobby-description-stats div.is-third {
+  grid-column: span 2;
+}
+
+.oling-battle-lobby-description-stats div.is-layer {
+  min-height: 4.15cqw;
+}
+
+.oling-battle-lobby-description-stats dt,
+.oling-battle-lobby-description-stats dd {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.oling-battle-lobby-description-stats dt {
+  color: var(--primary-colour);
+  font-size: clamp(6px, 1.5cqw, 9px);
+  font-weight: 950;
+}
+
+.oling-battle-lobby-description-stats dd {
+  color: var(--primary-colour);
+  font-size: clamp(8px, 2.05cqw, 12px);
+  font-weight: 950;
+  line-height: 1;
+  white-space: normal;
+}
+

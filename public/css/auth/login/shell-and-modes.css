@@ -1,0 +1,102 @@
+html:has(.auth-page),
+body:has(.auth-page) {
+  overflow: hidden;
+}
+
+.auth-page {
+  --auth-page-y-padding: clamp(0.75rem, 2vw, 1.5rem);
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: calc(var(--headerheight) + var(--auth-page-y-padding))
+    clamp(1rem, 4vw, 4rem) var(--auth-page-y-padding);
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.auth-shell {
+  width: min(100%, 30rem);
+  display: block;
+  background: var(--secondarybackgroundcolour);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.auth-form-panel {
+  min-width: 0;
+}
+
+.auth-title,
+.auth-status {
+  margin: 0;
+}
+
+.auth-form-panel .auth-title {
+  margin: calc(0px - var(--auth-form-panel-padding))
+    calc(0px - var(--auth-form-panel-padding)) 0;
+  padding: 24px;
+  box-sizing: border-box;
+  background: var(--primarypagecolour);
+  color: var(--secondarybackgroundcolour);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.auth-title-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.auth-form-panel {
+  --auth-form-panel-padding: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: var(--auth-form-panel-padding);
+}
+
+.auth-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 3px solid var(--backgroundcolour);
+  border-radius: 20px;
+  background: var(--backgroundcolour);
+  overflow: hidden;
+}
+
+.auth-mode-button,
+.auth-submit-button,
+.auth-guest-button {
+  min-height: 3rem;
+  border: none;
+  font: inherit;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.auth-mode-button {
+  border-radius: 0;
+}
+
+.auth-mode-button {
+  color: var(--primarypagecolour);
+  background: transparent;
+}
+
+.auth-mode-button.active,
+.auth-mode-button:focus-visible {
+  color: var(--backgroundcolour);
+  background: var(--primarypagecolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .auth-mode-button:hover {
+    color: var(--backgroundcolour);
+    background: var(--primarypagecolour);
+  }
+}

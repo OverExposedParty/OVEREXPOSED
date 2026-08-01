@@ -2,60 +2,211 @@
   {
     "sectionID": "what-is-overexposed",
     "subHeading": "What is OVEREXPOSED?",
-    "text": "OVEREXPOSED is an online platform for party games that make social gatherings more fun and interactive. It offers a variety of games like Truth or Dare, Paranoia, Never Have I Ever, and Most Likely To, with different difficulty levels and question packs to suit any group. You can also customize game mode settings to tailor the experience to your group’s preferences. Whether you’re looking for lighthearted fun or edgy challenges, OVEREXPOSED brings excitement directly to your phone or computer, making every party unforgettable."
+    "text": "OVEREXPOSED is a browser-based social gaming platform. You can play party games locally on one device or create an online room where everyone joins from their own device. Accounts add persistent profiles, custom OEs, friends, achievements, statistics, XP and Opals."
   },
-  
   {
     "sectionID": "is-overexposed-free-to-play",
     "subHeading": "Is OVEREXPOSED free to play?",
-    "text": "Yes! OVEREXPOSED is completely free to play. You can enjoy all the games, question packs, and customizable settings without paying a thing. Just open it on your phone or computer and start the fun—no hidden fees, no subscriptions."
+    "text": "Yes. The publicly available party games can be played without paying or subscribing. Some account items use Opals, which are virtual rewards earned through eligible games and achievements."
   },
-  
   {
-    "sectionID": "can-i-play-on-my-phone",
-    "subHeading": "Can I play on my phone?",
-    "text": "You can play OVEREXPOSED on your phone! The platform is fully mobile-friendly, so you can enjoy all the games, question packs, and customizable settings on the go. Whether you’re at a party, hanging out with friends, or just looking for some fun, OVEREXPOSED works seamlessly on any smartphone."
+    "sectionID": "do-i-need-an-account-to-play",
+    "subHeading": "Do I need an account to play?",
+    "text": "No. Public games can be played offline or online as a guest. An account is required to save your identity, statistics, achievements, XP, Opals, friends, owned items and OE customisation across devices and sessions."
   },
-  
   {
-    "sectionID": "how-do-i-start-a-game",
-    "subHeading": "How do I start a game?",
-    "text": "Getting a game going on OVEREXPOSED is simple! Pick the game you want, choose your favorite question packs (each shows its difficulty level), adjust the game settings if you like, and press the Start Game button. Your game will launch instantly, ready for you and your friends to jump in."
+    "sectionID": "online-and-offline-play",
+    "subHeading": "What is the difference between online and offline play?",
+    "text": "Offline play uses one shared device to display prompts and control the game. In online play, the host creates a room and each player joins from their own device using the party link or code."
   },
-  
   {
-    "sectionID": "what-are-the-plans-for-the-future",
-    "subHeading": "What are the plans for the future?",
-    "text": "We’ve got exciting things lined up for OVEREXPOSED! Soon, we’ll be releasing seasonal and event-themed question packs to keep the games fresh and fun all year round. A multiplayer mode is already in closed beta, letting friends play together online, and we’re also working on a brand-new game mode to bring even more ways to play. Stay tuned—there’s plenty of fun ahead!"
+    "sectionID": "start-an-online-party",
+    "subHeading": "How do I start an online party?",
+    "text": "Choose a game from the homepage, configure its packs and rules, and enable Online mode. Share the generated party link, code or QR code with your friends. Once everyone has joined and readied up, the host can start the game."
   },
-  
   {
-    "sectionID": "do-i-have-to-drink-to-play",
+    "sectionID": "join-with-a-party-code",
+    "subHeading": "How do I join using a party code?",
+    "text": "Open the link supplied by the host or scan the party QR code. You can also visit the party address using the six-character code in the format XXX-XXX. Choose your name and OE, join the room and mark yourself as ready."
+  },
+  {
+    "sectionID": "supported-devices-and-browsers",
+    "subHeading": "Which devices and browsers are supported?",
+    "text": "OVEREXPOSED is designed for modern browsers on phones, tablets and computers. JavaScript, cookies and local storage must be enabled. For the best experience, use a current version of Chrome, Safari, Edge or Firefox."
+  },
+  {
+    "sectionID": "available-party-games",
+    "subHeading": "Which party games are currently available?",
+    "text": "The currently available games are Truth or Dare, Paranoia, Never Have I Ever and Most Likely To. More modes are coming."
+  },
+  {
+    "sectionID": "how-question-packs-work",
+    "subHeading": "How do question packs work?",
+    "text": "Packs determine which prompts, questions or topics can appear during a game. You can activate multiple packs to combine their content. Each pack displays its theme, difficulty and any content restriction before you select it."
+  },
+  {
+    "sectionID": "game-rules-and-add-ons",
+    "subHeading": "What do game rules and add-ons change?",
+    "text": "Rules control parts of the game such as round limits, timers, punishments and mode-specific mechanics. Add-ons introduce optional features such as the Drink Wheel or Lucky Coin Flip. The available options vary between games."
+  },
+  {
+    "sectionID": "change-party-settings",
+    "subHeading": "Can I change settings after creating a party?",
+    "text": "The host can change packs and rules while the party is still in the lobby. Settings are locked once active play begins so every player remains synchronised. Return to the lobby or create a new party if you want to use different settings."
+  },
+  {
+    "sectionID": "party-game-player-limits",
+    "subHeading": "How many players does each game require?",
+    "text": "Current online party limits are:<br>&nbsp;&nbsp;• Truth or Dare: 2–20 players<br>&nbsp;&nbsp;• Paranoia: 3–15 players<br>&nbsp;&nbsp;• Never Have I Ever: 2–20 players<br>&nbsp;&nbsp;• Most Likely To: 3–20 players"
+  },
+  {
+    "sectionID": "join-after-game-started",
+    "subHeading": "Can someone join after a game has started?",
+    "text": "Yes. In the currently available games, a new player can join while a question or round is underway. They can watch the current activity and will be added automatically when the next question or round begins, provided the room has space."
+  },
+  {
+    "sectionID": "host-leaving-and-control",
+    "subHeading": "Can the host leave or transfer control?",
+    "text": "There is currently no manual transfer button. If the host genuinely leaves or disconnects, OVEREXPOSED can select an eligible remaining player to keep the party running. The available controls may depend on the game and current phase."
+  },
+  {
+    "sectionID": "drinking-not-required",
     "subHeading": "Do I have to drink to play?",
-    "text": "Not at all! OVEREXPOSED is designed for fun with friends, whether or not you choose to drink. Many of the games and challenges can be enjoyed completely alcohol-free, so everyone can join in and have a great time."
+    "text": "No. Drinking is completely optional and is not required for any game. Avoid selecting drinking-related rules or add-ons, and skip any prompt that feels unsafe or uncomfortable."
   },
-  
   {
-    "sectionID": "is-the-website-safe-for-kids",
-    "subHeading": "Is the website safe for kids?",
-    "text": "We recommend that users are 13 or older, or play under parental supervision. Since OVEREXPOSED is still in beta, some content may occasionally be miscategorized, but we’re actively working to fix and adjust these issues to ensure a safe and enjoyable experience for everyone."
+    "sectionID": "account-features",
+    "subHeading": "What does creating an account unlock?",
+    "text": "An account gives you a persistent username and OE, saved statistics, achievements, XP, Opals, friends, invitations, notifications, privacy controls and access to account-owned items. Some limited features may still require additional access."
   },
-  
   {
-    "sectionID": "its-not-loading-what-should-i-do",
-    "subHeading": "It’s not loading, what should I do?",
-    "text": "If the website isn’t loading, try refreshing the page. Sometimes using your browser’s built-in back button can cause issues, so we recommend using the back buttons provided within the website itself. This usually resolves the problem quickly."
+    "sectionID": "verify-email",
+    "subHeading": "How do I verify my email?",
+    "text": "Open your account Profile and select the option to send a verification email. Follow the link in that email to complete verification. Check your spam or junk folder, and use the resend option if the message does not arrive."
   },
-  
   {
-    "sectionID": "do-i-need-to-download-anything",
-    "subHeading": "Do I need to download anything?",
-    "text": "No downloads are required! OVEREXPOSED runs entirely in your web browser, so you can play instantly on your phone, tablet, or computer without installing any apps or software."
+    "sectionID": "reset-password-or-change-email",
+    "subHeading": "How do I reset my password or change my email?",
+    "text": "Use the password-reset option on the sign-in page and enter your email address or username. To change your email, open your account Profile and request an email-change link. Both actions are completed through a secure link sent to your email."
   },
-  
   {
-    "sectionID": "can-i-play-over-discord-or-zoom",
-    "subHeading": "Can I play over Discord or Zoom?",
-    "text": "Yes! OVEREXPOSED works perfectly for virtual hangouts. You can share your screen on Discord, Zoom, or any video call platform, and everyone can join in the fun from wherever they are."
+    "sectionID": "friends-and-party-invitations",
+    "subHeading": "How do friends and party invitations work?",
+    "text": "Search for another account by username and send a friend request. The other person can accept or decline it, and sent requests can be cancelled. When you are friends and currently have an active online party, you can send them an invitation that links directly to your room."
+  },
+  {
+    "sectionID": "profile-privacy-controls",
+    "subHeading": "How do I control who can view my profile?",
+    "text": "Open your account Profile and find the Privacy section. You can control profile visibility, whether game statistics and online status are shown, and whether other people can send friend requests."
+  },
+  {
+    "sectionID": "block-or-report-user",
+    "subHeading": "How do I block or report another user?",
+    "text": "Use the Block action from the Friends or profile interface to prevent further social interaction. When a Report action is available, select a reason and add any useful details. Reports require a signed-in, verified account; contact support if no report action is available."
+  },
+  {
+    "sectionID": "sign-out-other-devices",
+    "subHeading": "How do I sign out of other devices?",
+    "text": "Open the Security section of your account. You can review active sessions, revoke an individual device or choose “Sign out all other devices” while keeping your current session active."
+  },
+  {
+    "sectionID": "opals-and-earning",
+    "subHeading": "What are Opals and how do I earn them?",
+    "text": "Opals are OVEREXPOSED’s virtual account currency. Signed-in players can earn them by completing eligible online games, participating actively, meeting game objectives and unlocking achievements. Rewards may be reduced when repeatedly earning large amounts in one day."
+  },
+  {
+    "sectionID": "achievements-and-xp",
+    "subHeading": "How do achievements and XP work?",
+    "text": "Achievements unlock automatically when your account meets their stated requirements, such as playing games, completing specific actions, adding friends or customising your OE. Eligible games and achievements award XP, which increases your account level. Some achievements also award Opals or account items."
+  },
+  {
+    "sectionID": "what-is-an-oe",
+    "subHeading": "What is an OE?",
+    "text": "Your OE is the custom character icon used to represent you across OVEREXPOSED. It is assembled from colour, head, eyes and mouth layers and appears on your profile and in online parties."
+  },
+  {
+    "sectionID": "customise-your-oe",
+    "subHeading": "How do I customise my OE?",
+    "text": "Sign in and open your account customisation controls or the OE Library. Choose the layers you want to equip and save the result to your account. You can also randomise your OE using the items and collections currently enabled."
+  },
+  {
+    "sectionID": "locked-customisation-items",
+    "subHeading": "Why are some customisation items locked?",
+    "text": "A locked item is not currently available to your account. It may need to be earned, purchased with Opals or unlocked through another feature. An item can also be unavailable because its collection is disabled or access is limited."
+  },
+  {
+    "sectionID": "view-owned-items",
+    "subHeading": "Where can I view the items I own?",
+    "text": "Open the OE Library to browse available, owned and locked OE customisation items. You can search by collection or slot and control which collections are active. Purchase and unlock records are also shown in your account’s purchase history when available."
+  },
+  {
+    "sectionID": "party-code-not-working",
+    "subHeading": "Why isn’t my party code working?",
+    "text": "Check that the code contains the correct six letters or numbers in the format XXX-XXX. The party may have ended, become full or been closed by the host. Ask the host for the latest link or QR code and try refreshing the page."
+  },
+  {
+    "sectionID": "disconnect-during-game",
+    "subHeading": "What should I do if I disconnect during a game?",
+    "text": "Reopen the same party link on the same browser and device. OVEREXPOSED uses your device and session information to reconnect you to your existing player where possible. If the room has ended or your player was removed, you may need to join a new party."
+  },
+  {
+    "sectionID": "rejoin-active-party",
+    "subHeading": "Can I rejoin an active party?",
+    "text": "Existing players can normally reconnect using the original party link. New players can join during active play in supported modes and will enter at the beginning of the next question or round. Rejoining will not be possible if the party has ended, is full or you were removed."
+  },
+  {
+    "sectionID": "cannot-start-game",
+    "subHeading": "Why can’t I start the game?",
+    "text": "Only the host can start an online game. Make sure the minimum player count has been reached, every other player is ready, at least one pack is selected and the current settings are valid. The Start control will explain which requirement is still missing."
+  },
+  {
+    "sectionID": "feature-unavailable",
+    "subHeading": "Why is a game or feature shown as unavailable?",
+    "text": "The feature may require an account, email verification, limited-access permission or a specific role. Some content can also be unavailable because of scheduling, account restrictions or your SFW/NSFW preference. An unavailable feature is not necessarily broken."
+  },
+  {
+    "sectionID": "sounds-or-notifications-not-working",
+    "subHeading": "Why aren’t sounds or notifications working?",
+    "text": "Check that sound is enabled in OVEREXPOSED’s Settings and that your device is not muted. Some browsers require you to interact with the page before allowing audio. Account notifications only appear when you are signed in and a relevant event, such as a friend request, invitation or achievement, has occurred."
+  },
+  {
+    "sectionID": "page-not-loading",
+    "subHeading": "What should I do if the page does not load correctly?",
+    "text": "Refresh the page and ensure your browser is up to date. If the problem continues, temporarily disable blocking extensions or clear the site’s cached data before trying again. Clearing site data may sign you out and reset local preferences, so use it only when necessary."
+  },
+  {
+    "sectionID": "suitable-for-children",
+    "subHeading": "Is OVEREXPOSED suitable for children?",
+    "text": "Users must be at least 13, and anyone who requires parental or guardian permission under their local law must have it. Some games and packs contain mature themes. NSFW content is intended only for adults aged 18 or over."
+  },
+  {
+    "sectionID": "mature-and-nsfw-content",
+    "subHeading": "How is mature or NSFW content handled?",
+    "text": "Mature packs and rules are labelled as NSFW. They can be disabled through the site’s content settings, and a warning is shown before starting a game containing selected NSFW content. Hosts should only enable content suitable for everyone in their group."
+  },
+  {
+    "sectionID": "report-inappropriate-content-or-behaviour",
+    "subHeading": "How do I report inappropriate content or behaviour?",
+    "text": "Use the Report action shown beside reportable content, choose the most relevant reason and provide useful context. You must be signed in with a verified account. You can also block the responsible account and email support if the issue cannot be reported through the website."
+  },
+  {
+    "sectionID": "information-collected",
+    "subHeading": "What information does OVEREXPOSED collect?",
+    "text": "Depending on the features you use, OVEREXPOSED may collect account and profile information, security and device data, game activity, statistics, friends, notifications, submitted content, reports and transaction records. Optional analytics information is collected only according to your cookie choice. Full details are available in Terms & Privacy."
+  },
+  {
+    "sectionID": "request-data-export",
+    "subHeading": "How do I request a copy of my data?",
+    "text": "Sign in, open your account Profile and select “Request data export.” The request will be added to the processing queue. Submitting a request does not immediately download a file."
+  },
+  {
+    "sectionID": "delete-account",
+    "subHeading": "How do I delete my account?",
+    "text": "Open your account Profile and select “Request account deletion.” You will be asked to type DELETE to confirm the request. The deletion is queued for processing rather than occurring immediately."
+  },
+  {
+    "sectionID": "contact-support",
+    "subHeading": "How can I contact support?",
+    "text": "Email <a href='mailto:overexposedgame@gmail.com'>overexposedgame@gmail.com</a> with a clear description of the issue and any relevant party code, username, time or screenshots. Do not include passwords, session tokens or other sensitive login information. You can also contact <a href='https://www.instagram.com/oe.app' target='_blank' rel='noopener noreferrer'>@oe.app</a> on Instagram for general enquiries."
   }
 ]

@@ -12,7 +12,7 @@
 
     <link rel="preload" href="/images/splash-screens/never-have-i-ever-settings.png" as="image">
 
-    <link rel="stylesheet" href="/css/general/header.css">
+    <link rel="stylesheet" href="/css/general/header/header.css">
 
     <link rel="icon" type="image/x-icon"
         href="/images/meta/favicons/party-games/never-have-i-ever/lobby/favicon.ico">
@@ -67,7 +67,6 @@
     </div>
 
     <div id="header-placeholder"></div>
-    <div id="user-customisation-placeholder"></div>
     <div id="qr-code-container-placeholder"></div>
 
     <div class="warning-box" id="warning-box">
@@ -78,8 +77,6 @@
     </div>
 
     <button class="back-button">back</button>
-
-    <div class="error-container username gamemode-settings" id="placeholder-error-container"></div>
 
     <div class="main-container">
         <div class=main-settings-container>
@@ -93,7 +90,6 @@
         </div>
     </div>
 
-    <div id="enter-username-placeholder"></div>
 </body>
 
 <script>
@@ -105,24 +101,37 @@
     document.documentElement.style.setProperty('--secondarypagecolour', '#B96542');
 
     window.pageScripts = {
-        "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },
-
-        "/scripts/party-games/online/online-settings.js": { addDataLoaded: true, zIndex: 1 },
-        "/scripts/html-templates/online/enter-username-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/gamemode-settings/qr-code-container-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/gamemode-settings/error-container-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/gamemode-settings/gamemode-settings-template.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/html-templates/online/html-template-user-customisation.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/general/online/user-customisation-icon.js": { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 1 },
-        "/scripts/general/online/user-customisation-header.js": { addDataLoaded: true, zIndex: 1 },
-
-        "/scripts/party-games/online/online-game-settings.js": { zIndex: 2 },
-        "/scripts/party-games/gamemode-settings/error-game-settings.js": { zIndex: 2 },
-        "/scripts/party-games/general/chat-log.js": { zIndex: 2 },
-        '/scripts/general/online/user-customisation.js': { addDataLoaded: true, cacheBustKey: "PARTY_GAMES_SETTINGS", zIndex: 2 }
+        beforeTemplate: [
+            { src: "https://cdn.socket.io/4.8.1/socket.io.min.js" },
+            { src: "/scripts/party-games/online/online-settings.js", cacheBustKey: "PARTY_GAMES_SETTINGS", readyTask: "online-settings" }
+        ],
+        templates: [
+            { src: "/scripts/html-templates/gamemode-settings/qr-code-container-template.js", cacheBustKey: "PARTY_GAMES_SETTINGS", readyTask: "qr-code-container-template" },
+            { src: "/scripts/html-templates/gamemode-settings/gamemode-settings-template.js", cacheBustKey: "PARTY_GAMES_SETTINGS", readyTask: "gamemode-settings-template" }
+        ],
+        data: [
+            { src: "/scripts/party-games/gamemode-settings/game-settings-buttons.js", cacheBustKey: "PARTY_GAMES_SETTINGS", readyTask: "game-settings-buttons" }
+        ],
+        features: [
+            { src: "/scripts/party-games/online/online-game-settings/active-lobby.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/online/online-game-settings/session-profile.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/online/online-game-settings/party-existence.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/online/online-game-settings/toggle-online-mode.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/online/online-game-settings/hosted-party-resume.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/online/online-game-settings.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings-restrictions.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings-availability.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings-controls.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings-start.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings-sync.js", cacheBustKey: "PARTY_GAMES_SETTINGS" },
+            { src: "/scripts/party-games/gamemode-settings/gamemode-settings.js", cacheBustKey: "PARTY_GAMES_SETTINGS", readyTask: "gamemode-settings-initialized" }
+        ],
+        afterReady: [
+            { src: "/scripts/party-games/general/chat-log.js", cacheBustKey: "PARTY_GAMES_SETTINGS" }
+        ]
     };
 
 </script>
-<script src="/scripts/html-templates/core-template.js" data-loaded="false"></script>
+<script src="/scripts/html-templates/core-template/core-template.js?v=2026-06-25-11" data-loaded="false"></script>
 
 </html>
