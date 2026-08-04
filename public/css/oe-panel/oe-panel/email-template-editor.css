@@ -1093,8 +1093,7 @@ input[type='checkbox'].oe-panel-email-editor-input {
   }
 }
 
-.oe-panel-email-preview-frame.readonly .oe-panel-email-preview-section,
-.oe-panel-email-preview-frame.readonly .oe-panel-email-preview-section:hover {
+.oe-panel-email-preview-frame.readonly .oe-panel-email-preview-section {
   border-color: transparent;
   cursor: default;
 }
@@ -1151,6 +1150,11 @@ input[type='checkbox'].oe-panel-email-editor-input {
     > .oe-panel-email-preview-section-label {
     opacity: 1;
     background: var(--primarypagecolour);
+  }
+
+  .oe-panel-email-preview-frame.readonly
+    .oe-panel-email-preview-section:hover {
+    border-color: transparent;
   }
 }
 

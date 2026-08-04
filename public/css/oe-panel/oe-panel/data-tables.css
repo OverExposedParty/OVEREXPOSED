@@ -539,9 +539,14 @@ a.oe-panel-data-table-cell-content:focus-visible {
   transition: opacity 120ms ease;
 }
 
-.oe-panel-data-table-expanded-action-tooltip:hover::after,
 .oe-panel-data-table-expanded-action-tooltip:focus-visible::after {
   opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-panel-data-table-expanded-action-tooltip:hover::after {
+    opacity: 1;
+  }
 }
 
 .oe-panel-data-table-expanded-action:focus-visible {

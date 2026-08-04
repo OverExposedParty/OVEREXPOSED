@@ -11,6 +11,7 @@ const panelModules = [
   'dashboard-widgets.css',
   'email-widgets.css',
   'email-template-editor.css',
+  'email-audience-editor.css',
   'pie-chart.css',
   'data-tables.css',
   'alerts-and-actions.css',
@@ -45,7 +46,7 @@ function assertBalancedStylesheet(filePath, fileName) {
 test('OE Panel stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(panelEntryPath, 'utf8');
   const imports = [
-    ...entry.matchAll(/@import url\("\.\/oe-panel\/([^"]+)"\);/g)
+    ...entry.matchAll(/@import url\(['"]\.\/oe-panel\/([^'"]+)['"]\);/g)
   ].map((match) => match[1]);
 
   assert.deepEqual(imports, panelModules);
