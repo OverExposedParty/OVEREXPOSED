@@ -336,6 +336,7 @@ test('signup plays the account-created cue after the account is ready', async ()
   });
 
   let requestCount = 0;
+  const requests = [];
   const session = {
     getFormData: () => ({
       username: 'owner',
@@ -346,8 +347,9 @@ test('signup plays the account-created cue after the account is ready', async ()
     }),
     getLocalOeIcon: () => '0000:0100:0200:0300',
     getReturnToPath: () => '',
-    postJson: async () => {
+    postJson: async (url, body) => {
       requestCount += 1;
+      requests.push({ url, body });
       return requestCount === 1 ? {} : { account: { username: 'owner' } };
     },
     redirectAfterLogin() {},
@@ -369,6 +371,8 @@ test('signup plays the account-created cue after the account is ready', async ()
   });
 
   assert.deepEqual(playedSounds, ['uiSelect', 'accountCreated']);
+  assert.equal(requests[0].url, '/api/accounts');
+  assert.equal(requests[0].body.marketingEmailOptIn, true);
 });
 
 test('password reset request plays the email-sent cue on success', async () => {

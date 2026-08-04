@@ -69,7 +69,8 @@ test('OAuth context composes its focused modules without changing its helper con
     mode: 'signup',
     returnTo: '/party-games',
     splashScreen: '/images/splash-screens/party-games.png',
-    legalConsentAccepted: true
+    legalConsentAccepted: true,
+    marketingEmailOptIn: true
   });
   const parsedState = oauth.parseOAuthState(payload);
 
@@ -80,6 +81,16 @@ test('OAuth context composes its focused modules without changing its helper con
   assert.equal(parsedState.stateId, stateId);
   assert.equal(parsedState.returnTo, '/party-games');
   assert.equal(parsedState.legalConsentAccepted, true);
+  assert.equal(parsedState.marketingEmailOptIn, true);
+  const oauthCookie = oauth.parseOAuthCookie(
+    oauth.serializeOAuthCookie({
+      stateId,
+      legalConsentAccepted: true,
+      marketingEmailOptIn: true
+    })
+  );
+  assert.equal(oauthCookie.legalConsentAccepted, true);
+  assert.equal(oauthCookie.marketingEmailOptIn, true);
   assert.equal(
     oauth.buildSocialUsername(
       { email: 'Social.User@Example.com', providerUserId: '123' },

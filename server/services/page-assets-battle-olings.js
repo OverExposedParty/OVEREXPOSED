@@ -6,10 +6,7 @@ const {
   DEPLOYMENT_VERSION,
   ONE_YEAR_IN_SECONDS
 } = require('../constants');
-const {
-  getCookieValue,
-  prepareHtmlResponse
-} = require('./page-assets');
+const { getCookieValue, prepareHtmlResponse } = require('./page-assets');
 
 const BATTLE_OLINGS_TEMPLATE_PATH = path.join(
   PUBLIC_DIRECTORY,

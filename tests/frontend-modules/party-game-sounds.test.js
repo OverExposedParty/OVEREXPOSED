@@ -193,10 +193,12 @@ test('action confirmed resolves to its shared audio key', async () => {
 
   await sounds.play('actionConfirmed');
 
-  assert.deepEqual(playedSounds, [{
-    key: 'partyGameActionConfirmed',
-    time: 100000
-  }]);
+  assert.deepEqual(playedSounds, [
+    {
+      key: 'partyGameActionConfirmed',
+      time: 100000
+    }
+  ]);
 });
 
 test('player passed resolves to its Paranoia audio key', async () => {
@@ -204,10 +206,12 @@ test('player passed resolves to its Paranoia audio key', async () => {
 
   await sounds.play('playerPassed');
 
-  assert.deepEqual(playedSounds, [{
-    key: 'partyGamePlayerPassed',
-    time: 100000
-  }]);
+  assert.deepEqual(playedSounds, [
+    {
+      key: 'partyGamePlayerPassed',
+      time: 100000
+    }
+  ]);
 });
 
 test('player select resolves to its shared audio key', async () => {
@@ -215,10 +219,12 @@ test('player select resolves to its shared audio key', async () => {
 
   await sounds.play('playerSelect');
 
-  assert.deepEqual(playedSounds, [{
-    key: 'partyGamePlayerSelect',
-    time: 100000
-  }]);
+  assert.deepEqual(playedSounds, [
+    {
+      key: 'partyGamePlayerSelect',
+      time: 100000
+    }
+  ]);
 });
 
 test('choice menu open resolves to its shared audio key', async () => {
@@ -226,10 +232,12 @@ test('choice menu open resolves to its shared audio key', async () => {
 
   await sounds.play('choiceMenuOpen');
 
-  assert.deepEqual(playedSounds, [{
-    key: 'partyGameChoiceMenuOpen',
-    time: 100000
-  }]);
+  assert.deepEqual(playedSounds, [
+    {
+      key: 'partyGameChoiceMenuOpen',
+      time: 100000
+    }
+  ]);
 });
 
 test('non-player choice menus opt into the shared choice-menu sound', () => {
@@ -321,10 +329,12 @@ test('punishment reveal resolves to its shared audio key', async () => {
 
   await sounds.play('punishmentReveal');
 
-  assert.deepEqual(playedSounds, [{
-    key: 'partyGamePunishmentReveal',
-    time: 100000
-  }]);
+  assert.deepEqual(playedSounds, [
+    {
+      key: 'partyGamePunishmentReveal',
+      time: 100000
+    }
+  ]);
 });
 
 test('Truth or Dare voice cues resolve to their mode-specific audio keys', async () => {
@@ -358,10 +368,12 @@ test('party game sequences resolve event names before using the universal engine
     priority: 'voice'
   });
 
-  assert.deepEqual(JSON.parse(JSON.stringify(playedSequences)), [{
-    keys: ['partyGameActionConfirmed', 'partyGameTruthSelected'],
-    options: { priority: 'voice' }
-  }]);
+  assert.deepEqual(JSON.parse(JSON.stringify(playedSequences)), [
+    {
+      keys: ['partyGameActionConfirmed', 'partyGameTruthSelected'],
+      options: { priority: 'voice' }
+    }
+  ]);
 });
 
 test('game complete events play the completion sound followed by the game-over voice', async () => {
@@ -370,20 +382,23 @@ test('game complete events play the completion sound followed by the game-over v
   await sounds.playOnce('gameComplete', { eventId: 'game-over-1' });
   await sounds.playOnce('gameComplete', { eventId: 'game-over-1' });
 
-  assert.deepEqual(JSON.parse(JSON.stringify(playedSequences)), [{
-    keys: ['partyGameGameComplete', 'partyGameGameOver'],
-    options: {
-      priority: 'critical',
-      conflictPolicy: 'interrupt',
-      interruptible: false,
-      forceInterrupt: true,
-      clearQueue: true
+  assert.deepEqual(JSON.parse(JSON.stringify(playedSequences)), [
+    {
+      keys: ['partyGameGameComplete', 'partyGameGameOver'],
+      options: {
+        priority: 'critical',
+        conflictPolicy: 'interrupt',
+        interruptible: false,
+        forceInterrupt: true,
+        clearQueue: true
+      }
     }
-  }]);
+  ]);
 });
 
 test('timer warning alternates sounds and accelerates toward its deadline', () => {
-  const { advanceTo, getNow, playedSounds, sounds } = createSoundHelperContext();
+  const { advanceTo, getNow, playedSounds, sounds } =
+    createSoundHelperContext();
   const startedAt = getNow();
 
   assert.equal(
@@ -408,13 +423,15 @@ test('timer warning alternates sounds and accelerates toward its deadline', () =
     [0, 800, 1600]
   );
   assert.ok(
-    warningSounds.some((sound, index) =>
-      index > 0 && sound.time - warningSounds[index - 1].time === 500
+    warningSounds.some(
+      (sound, index) =>
+        index > 0 && sound.time - warningSounds[index - 1].time === 500
     )
   );
   assert.ok(
-    warningSounds.some((sound, index) =>
-      index > 0 && sound.time - warningSounds[index - 1].time === 250
+    warningSounds.some(
+      (sound, index) =>
+        index > 0 && sound.time - warningSounds[index - 1].time === 250
     )
   );
   assert.deepEqual(playedSounds.at(-1), {
@@ -424,7 +441,8 @@ test('timer warning alternates sounds and accelerates toward its deadline', () =
 });
 
 test('timer warning can suppress the final expired sound', () => {
-  const { advanceTo, getNow, playedSounds, sounds } = createSoundHelperContext();
+  const { advanceTo, getNow, playedSounds, sounds } =
+    createSoundHelperContext();
   const startedAt = getNow();
 
   assert.equal(
@@ -455,13 +473,15 @@ test('starting the same timer twice does not restart its sequence', () => {
 
   assert.equal(pendingTimeouts.size, 1);
   advanceTo(getNow());
-  assert.deepEqual(playedSounds.map((sound) => sound.key), [
-    'partyGameTimerTick'
-  ]);
+  assert.deepEqual(
+    playedSounds.map((sound) => sound.key),
+    ['partyGameTimerTick']
+  );
 });
 
 test('stopping a timer warning cancels pending playback', () => {
-  const { advanceTo, getNow, playedSounds, sounds } = createSoundHelperContext();
+  const { advanceTo, getNow, playedSounds, sounds } =
+    createSoundHelperContext();
   const startedAt = getNow();
 
   sounds.startTimerWarning({

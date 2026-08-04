@@ -1,4 +1,6 @@
-const { getAnalyticsConfiguration } = require('../../services/google-analytics');
+const {
+  getAnalyticsConfiguration
+} = require('../../services/google-analytics');
 const {
   getRuntimeSnapshot,
   measureDatabaseConnections
@@ -9,7 +11,7 @@ function registerOePanelSystemRoutes(context) {
   const { app } = context;
 
   with (context) {
-app.get('/api/oe-panel/system', async (req, res) => {
+    app.get('/api/oe-panel/system', async (req, res) => {
       try {
         const account = await requireOePanelAccount(req, res);
         if (!account) return;

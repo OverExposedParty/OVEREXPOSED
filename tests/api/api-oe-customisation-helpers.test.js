@@ -42,7 +42,10 @@ test('OE customisation helper facade preserves its public helper contract', () =
 test('OE customisation payload helpers keep validation semantics', () => {
   const helpers = createHelpers();
 
-  assert.deepEqual(helpers.normalizeOeCustomisationStatus('Published'), 'published');
+  assert.deepEqual(
+    helpers.normalizeOeCustomisationStatus('Published'),
+    'published'
+  );
   assert.deepEqual(helpers.normalizeOeCustomisationStatus('bad'), null);
   assert.deepEqual(
     helpers.createOeCustomisationPackCreatePayload({

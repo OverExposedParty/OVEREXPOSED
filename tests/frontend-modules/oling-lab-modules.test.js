@@ -19,10 +19,7 @@ const featureScripts = [
   ['lab/data/lab-data-flow.js', 'createOlingLabDataFlow']
 ];
 const explorerGatewayScripts = [
-  [
-    'lab/explorer-gateway/render-tools.js',
-    'createOlingLabExplorerRenderTools'
-  ]
+  ['lab/explorer-gateway/render-tools.js', 'createOlingLabExplorerRenderTools']
 ];
 const roamingScripts = [
   ['lab/room/lab-roaming-targets.js', 'createOlingLabRoamingTargets']
@@ -64,14 +61,8 @@ const furnitureMenuScripts = [
   ['lab/furniture-menus/shelf-storage.js', 'createOlingLabShelfStorage']
 ];
 const furniturePlacementScripts = [
-  [
-    'lab/furniture-placement/grid-state.js',
-    'createOlingLabFurnitureGridState'
-  ],
-  [
-    'lab/furniture-placement/mutations.js',
-    'createOlingLabFurnitureMutations'
-  ],
+  ['lab/furniture-placement/grid-state.js', 'createOlingLabFurnitureGridState'],
+  ['lab/furniture-placement/mutations.js', 'createOlingLabFurnitureMutations'],
   [
     'lab/furniture-placement/art-and-placement.js',
     'createOlingLabFurnitureArtAndPlacement'
@@ -145,9 +136,7 @@ test('Oling Lab roaming support modules load before the facade', () => {
     path.join(__dirname, '../../public/pages/olings/lab.html'),
     'utf8'
   );
-  const facadeIndex = page.indexOf(
-    "'/scripts/olings/lab/room/lab-roaming.js'"
-  );
+  const facadeIndex = page.indexOf("'/scripts/olings/lab/room/lab-roaming.js'");
 
   assert.ok(facadeIndex > -1);
   roamingScripts.forEach(([fileName, factoryName]) => {
@@ -306,10 +295,7 @@ test('Oling Lab furniture menu facade composes its extracted modules', () => {
   });
   vm.runInNewContext(
     fs.readFileSync(
-      path.join(
-        scriptsDirectory,
-        'lab/furniture-menus/lab-furniture-menus.js'
-      ),
+      path.join(scriptsDirectory, 'lab/furniture-menus/lab-furniture-menus.js'),
       'utf8'
     ),
     context,

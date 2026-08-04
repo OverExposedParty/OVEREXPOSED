@@ -84,7 +84,9 @@ function getProtectedPageLoginUrl(req) {
     return '/sign-in';
   }
 
-  return `/sign-in?returnTo=${encodeURIComponent(returnTo)}`;
+  return `/sign-in?returnTo=${encodeURIComponent(
+    returnTo
+  )}&authEntryPoint=protected_page`;
 }
 
 function renderProtectedPage(access = {}, options = {}) {

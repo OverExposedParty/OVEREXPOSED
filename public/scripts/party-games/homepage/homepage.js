@@ -8,6 +8,23 @@ if (missingHomepageHandlers.length > 0) {
   );
 }
 
+function showHomepageAuthCompletion() {
+  let completion = '';
+  try {
+    completion = sessionStorage.getItem('oe-auth-completion') || '';
+    if (completion) sessionStorage.removeItem('oe-auth-completion');
+  } catch {
+    return;
+  }
+  if (completion !== 'email-verified') return;
+
+  waitForFunction('showEmailVerificationSuccessPopup', () => {
+    window.showEmailVerificationSuccessPopup();
+  });
+}
+
+showHomepageAuthCompletion();
+
 waitForFunction('playSoundEffect', () => {
   Promise.resolve(
     OEAudio.register({

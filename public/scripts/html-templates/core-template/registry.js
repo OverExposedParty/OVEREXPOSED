@@ -13,11 +13,13 @@ const cssFilesHeader = [
 ];
 
 const coreScripts = {
+  '/scripts/general/social-media-links.js': { zIndex: 0 },
   '/scripts/general/dom-and-const/dom-and-const.js': { zIndex: 0 },
   '/scripts/general/utils/utils.js': { zIndex: 0 },
   '/scripts/general/guest-identity/guest-identity.js': { zIndex: 0 },
   '/scripts/general/tool-tip/tool-tip.js': { zIndex: 0 },
   '/scripts/general/cookies/cookies.js': { zIndex: 1 },
+  '/scripts/general/analytics/analytics.js': { zIndex: 1.001 },
   '/scripts/general/notifications/account-notification-state.js': {
     zIndex: 0.99
   },

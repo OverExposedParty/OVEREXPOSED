@@ -103,10 +103,7 @@ async function getPublishedGameModes(GameMode) {
       .sort({ sortOrder: 1, gameType: 1 })
       .lean();
   } catch (error) {
-    console.warn(
-      'Falling back to JSON game modes:',
-      error.message || error
-    );
+    console.warn('Falling back to JSON game modes:', error.message || error);
   }
 
   if (gamemodes.length) return gamemodes;

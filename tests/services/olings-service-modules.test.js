@@ -54,6 +54,9 @@ test('Oling service facade preserves its public contract', () => {
 test('Oling service facade delegates to focused modules', () => {
   assert.equal(olings.serializePlayerOling, definitions.serializePlayerOling);
   assert.equal(olings.getOlingEnergy, energy.getOlingEnergy);
-  assert.equal(olings.getOrCreateOlingState, accountState.getOrCreateOlingState);
+  assert.equal(
+    olings.getOrCreateOlingState,
+    accountState.getOrCreateOlingState
+  );
   assert.equal(olings.hatchOling, interactions.hatchOling);
 });

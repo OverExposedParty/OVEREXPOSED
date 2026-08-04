@@ -38,12 +38,17 @@ test('Would You Rather setup loads instruction modules before the compatibility 
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -64,13 +69,23 @@ test('Would You Rather instruction modules preserve their public handler contrac
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(wouldYouRatherDirectory, 'would-you-rather-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(
+        wouldYouRatherDirectory,
+        'would-you-rather-online-instructions.js'
+      ),
+      'utf8'
+    ),
     context,
     { filename: 'would-you-rather-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -112,17 +127,15 @@ test('Would You Rather vote timer warning follows local confirmation state', () 
   );
 
   assert.equal(
-    context.syncWouldYouRatherVoteTimerWarning(
-      context.currentPartyData.state,
-      { hasConfirmed: false }
-    ),
+    context.syncWouldYouRatherVoteTimerWarning(context.currentPartyData.state, {
+      hasConfirmed: false
+    }),
     true
   );
   assert.equal(
-    context.syncWouldYouRatherVoteTimerWarning(
-      context.currentPartyData.state,
-      { hasConfirmed: true }
-    ),
+    context.syncWouldYouRatherVoteTimerWarning(context.currentPartyData.state, {
+      hasConfirmed: true
+    }),
     true
   );
   assert.equal(timerCalls.length, 2);
@@ -252,7 +265,10 @@ test('Would You Rather voting lifecycle starts and stops timer warnings', () => 
     'utf8'
   );
 
-  assert.match(privateCard, /syncWouldYouRatherVoteTimerWarning\(state, myState\)/);
+  assert.match(
+    privateCard,
+    /syncWouldYouRatherVoteTimerWarning\(state, myState\)/
+  );
   assert.match(voteFlow, /stopWouldYouRatherVoteTimerWarning\(\)/);
   assert.equal(
     setup.match(/stopWouldYouRatherVoteTimerWarning\(\)/g)?.length,

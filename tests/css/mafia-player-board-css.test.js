@@ -8,11 +8,7 @@ const cssDirectory = path.join(
   '../../public/css/party-games/gamemode/online'
 );
 const entryPath = path.join(cssDirectory, 'mafia-player-board.css');
-const modules = [
-  'base.css',
-  'public-profile.css',
-  'responsive-and-button.css'
-];
+const modules = ['base.css', 'public-profile.css', 'responsive-and-button.css'];
 
 test('Mafia player board stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(entryPath, 'utf8');

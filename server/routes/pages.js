@@ -301,6 +301,7 @@ function registerPageRoutes({
     '/reset-password',
     path.join('pages', 'auth', 'reset-password.html')
   );
+  sendPage('/verify-email', path.join('pages', 'auth', 'verify-email.html'));
   sendPage('/change-email', path.join('pages', 'auth', 'change-email.html'));
   sendPage(
     '/oe-panel',

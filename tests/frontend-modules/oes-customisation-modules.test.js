@@ -36,6 +36,9 @@ test('OE Library page loads support modules before its coordinator', () => {
     const moduleIndex = page.indexOf(publicPath);
 
     assert.ok(moduleIndex >= 0, `${publicPath} should be registered`);
-    assert.ok(moduleIndex < coordinatorIndex, `${publicPath} should load before the coordinator`);
+    assert.ok(
+      moduleIndex < coordinatorIndex,
+      `${publicPath} should load before the coordinator`
+    );
   });
 });

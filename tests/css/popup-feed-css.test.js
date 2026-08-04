@@ -4,7 +4,11 @@ const path = require('node:path');
 const test = require('node:test');
 
 const cssDirectory = path.join(__dirname, '../../public/css/general');
-const popupFeedEntryPath = path.join(cssDirectory, 'popup-feed', 'popup-feed.css');
+const popupFeedEntryPath = path.join(
+  cssDirectory,
+  'popup-feed',
+  'popup-feed.css'
+);
 const modules = [
   'base.css',
   'achievement.css',
@@ -19,9 +23,9 @@ const modules = [
 
 test('popup feed stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(popupFeedEntryPath, 'utf8');
-  const imports = [
-    ...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)
-  ].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)].map(
+    (match) => match[1]
+  );
 
   assert.deepEqual(imports, modules);
   assert.equal(entry.trim().split('\n').length, modules.length);

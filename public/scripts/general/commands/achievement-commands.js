@@ -213,7 +213,7 @@
 
     if (action !== 'test') {
       writeConsole(
-        'Invalid notification command. Usage: /notification test <achievement|opals|friend-request|friend-accepted|incubator-ready|account-prompt|party-disbanded>',
+        'Invalid notification command. Usage: /notification test <achievement|opals|friend-request|friend-accepted|incubator-ready|account-prompt|party-disbanded|email-verified>',
         'error'
       );
       return;
@@ -303,7 +303,9 @@
         eggName: egg.name || egg.key,
         image: getEggImage(egg)
       });
-      writeConsole(`Testing incubator-ready notification for ${egg.name || egg.key}.`);
+      writeConsole(
+        `Testing incubator-ready notification for ${egg.name || egg.key}.`
+      );
       return;
     }
 
@@ -315,6 +317,20 @@
 
       window.showAccountPromptPopup({ force: true });
       writeConsole('Testing account prompt notification.');
+      return;
+    }
+
+    if (notificationType === 'email-verified') {
+      if (typeof window.showEmailVerificationSuccessPopup !== 'function') {
+        writeConsole(
+          'Email verification notification is unavailable.',
+          'error'
+        );
+        return;
+      }
+
+      window.showEmailVerificationSuccessPopup();
+      writeConsole('Testing email verified notification.');
       return;
     }
 
@@ -339,7 +355,7 @@
     }
 
     writeConsole(
-      'Notification type not found. Use achievement, opals, friend-request, friend-accepted, incubator-ready, account-prompt, or party-disbanded.',
+      'Notification type not found. Use achievement, opals, friend-request, friend-accepted, incubator-ready, account-prompt, party-disbanded, or email-verified.',
       'error'
     );
   }
@@ -365,6 +381,7 @@
           '/notification test friend-request',
           '/notification test friend-accepted',
           '/notification test account-prompt',
+          '/notification test email-verified',
           '/notification test party-disbanded',
           '/notification test incubator-ready base-egg'
         ],
@@ -375,6 +392,7 @@
           ]);
           return [
             '/notification test account-prompt',
+            '/notification test email-verified',
             '/notification test party-disbanded',
             '/notification test opals',
             '/notification test opals 100',

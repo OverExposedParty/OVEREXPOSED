@@ -17,9 +17,7 @@ const modules = [
 test('user customisation icon stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(iconEntryPath, 'utf8');
   const imports = [
-    ...entry.matchAll(
-      /@import url\('\.\/user-customisation-icon\/([^']+)'\);/g
-    )
+    ...entry.matchAll(/@import url\('\.\/user-customisation-icon\/([^']+)'\);/g)
   ].map((match) => match[1]);
 
   assert.deepEqual(imports, modules);

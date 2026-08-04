@@ -15,10 +15,7 @@ const {
   ensureContainerSlots,
   ensureItemInventorySlots
 } = require('./inventory');
-const {
-  getUnlockedLabCellKeys,
-  getItemCells
-} = require('./expansion');
+const { getUnlockedLabCellKeys, getItemCells } = require('./expansion');
 const {
   validateContainerSlotItems,
   validateItemInventorySlots

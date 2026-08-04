@@ -24,7 +24,10 @@ test('role JSON normalization preserves hidden descriptions and fixes legacy fac
   );
 
   assert.equal(role.key, 'serial-killer');
-  assert.equal(role.description, 'A neutral role with its own victory condition.');
+  assert.equal(
+    role.description,
+    'A neutral role with its own victory condition.'
+  );
   assert.equal(role.faction, 'neutral');
 });
 
@@ -47,7 +50,10 @@ test('role API serialization exposes metadata but no executable behaviour', () =
     sortOrder: 20
   });
 
-  assert.equal(serialized['role-description'], 'Investigates suspicious players.');
+  assert.equal(
+    serialized['role-description'],
+    'Investigates suspicious players.'
+  );
   assert.equal(serialized['role-faction'], 'civilian');
   assert.equal(serialized.behaviour, undefined);
   assert.equal(serialized.actions, undefined);

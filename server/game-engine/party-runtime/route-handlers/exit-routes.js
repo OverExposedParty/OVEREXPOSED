@@ -511,7 +511,6 @@ function createPartyExitRoutes(context) {
             }
             removedSocket.leave(partyId);
           }
-
         }
 
         if (!result?.isSelfRemoval) {

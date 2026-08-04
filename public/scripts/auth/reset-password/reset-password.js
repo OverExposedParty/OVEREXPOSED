@@ -6,6 +6,9 @@ const passwordToggleButtons = document.querySelectorAll(
   '[data-password-toggle]'
 );
 const resetToken = new URLSearchParams(window.location.search).get('token');
+const emailTrackingId = new URLSearchParams(window.location.search).get(
+  'emailTrackingId'
+);
 
 function playAuthSound(soundKey) {
   if (!soundKey || typeof window.playSoundEffect !== 'function') return;
@@ -23,9 +26,7 @@ function fitAuthTitleToWidth() {
   if (!availableWidth || !measuredWidth) return;
 
   const fittedFontSize = (availableWidth / measuredWidth) * measuringFontSize;
-  const maxFontSize = window.matchMedia('(max-width: 760px)').matches
-    ? 28
-    : 40;
+  const maxFontSize = window.matchMedia('(max-width: 760px)').matches ? 28 : 40;
   authTitle.style.fontSize = `${Math.min(fittedFontSize, maxFontSize)}px`;
 }
 
@@ -141,6 +142,7 @@ async function handleResetPasswordSubmit(event) {
   try {
     const payload = await postJson('/api/accounts/password-reset/complete', {
       token: resetToken,
+      emailTrackingId,
       password: data.password,
       confirmPassword: data.confirmPassword
     });

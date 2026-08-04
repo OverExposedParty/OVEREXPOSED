@@ -39,8 +39,9 @@ test('online instructions modules load before the compatibility facade', () => {
     assert.ok(facadeIndex > -1, `${pageName} should load the facade`);
     supportScripts.forEach(([scriptPath]) => {
       assert.ok(
-        page.indexOf(`/scripts/party-games/gamemode/online/general/${scriptPath}`) <
-          facadeIndex,
+        page.indexOf(
+          `/scripts/party-games/gamemode/online/general/${scriptPath}`
+        ) < facadeIndex,
         `${pageName} should load ${scriptPath} before the facade`
       );
     });

@@ -8,6 +8,11 @@ const { registerAccountAuthRoutes } = require('./api-account-auth');
 const { registerOverexposurePostRoutes } = require('./api-overexposure-posts');
 const { registerOlingRoutes } = require('./api-olings');
 const { registerOlingBattleRoutes } = require('./api-oling-battles');
+const { registerEmailTrackingRoutes } = require('./api-email-tracking');
+const {
+  registerMarketingUnsubscribeRoutes
+} = require('./marketing-unsubscribe');
+const { registerProductAnalyticsRoutes } = require('./api-product-analytics');
 
 function registerApiRoutes({ app, models, runtime, partyOwnerLeases }) {
   const routeContext = createApiRouteContext({
@@ -18,6 +23,9 @@ function registerApiRoutes({ app, models, runtime, partyOwnerLeases }) {
   });
 
   registerPublicSurfaceRoutes(routeContext);
+  registerMarketingUnsubscribeRoutes(routeContext);
+  registerEmailTrackingRoutes(routeContext);
+  registerProductAnalyticsRoutes(routeContext);
   registerOePanelRoutes(routeContext);
   registerPublicContentRoutes({ app, models });
   registerAccountAuthRoutes(routeContext);

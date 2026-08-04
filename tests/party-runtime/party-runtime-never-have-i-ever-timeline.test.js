@@ -1,8 +1,4 @@
-const {
-  test,
-  assert,
-  createApplier
-} = require("./scenarios/helpers");
+const { test, assert, createApplier } = require('./scenarios/helpers');
 
 test('Never Have I Ever timeline only appends phases that have happened', () => {
   const { applyPartyActionToSnapshot } = createApplier();

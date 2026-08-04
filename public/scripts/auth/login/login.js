@@ -60,9 +60,17 @@
   }
 
   authModeButtons.forEach((button) => {
-    button.addEventListener('click', () =>
-      ui.setAuthMode(button.dataset.authMode)
-    );
+    button.addEventListener('click', () => {
+      if (
+        button.dataset.authMode === 'signup' &&
+        !new URLSearchParams(window.location.search).has('authEntryPoint')
+      ) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('authEntryPoint', 'auth_page_tab');
+        window.history.replaceState({}, document.title, url);
+      }
+      ui.setAuthMode(button.dataset.authMode);
+    });
   });
   submissions.bindSocialAuthButtons(socialAuthButtons);
   passwordToggleButtons.forEach(ui.initialisePasswordToggle);

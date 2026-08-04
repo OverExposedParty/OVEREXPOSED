@@ -37,12 +37,17 @@ test('Never Have I Ever setup loads instruction modules before the compatibility
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -63,13 +68,23 @@ test('Never Have I Ever instruction modules preserve their public handler contra
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(neverHaveIEverDirectory, 'never-have-i-ever-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(
+        neverHaveIEverDirectory,
+        'never-have-i-ever-online-instructions.js'
+      ),
+      'utf8'
+    ),
     context,
     { filename: 'never-have-i-ever-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -111,17 +126,15 @@ test('Never Have I Ever vote timer warning follows local confirmation state', ()
   );
 
   assert.equal(
-    context.syncNeverHaveIEverVoteTimerWarning(
-      context.currentPartyData.state,
-      { hasConfirmed: false }
-    ),
+    context.syncNeverHaveIEverVoteTimerWarning(context.currentPartyData.state, {
+      hasConfirmed: false
+    }),
     true
   );
   assert.equal(
-    context.syncNeverHaveIEverVoteTimerWarning(
-      context.currentPartyData.state,
-      { hasConfirmed: true }
-    ),
+    context.syncNeverHaveIEverVoteTimerWarning(context.currentPartyData.state, {
+      hasConfirmed: true
+    }),
     true
   );
   assert.equal(timerCalls.length, 2);
@@ -251,7 +264,10 @@ test('Never Have I Ever voting lifecycle starts and stops timer warnings', () =>
     'utf8'
   );
 
-  assert.match(privateCard, /syncNeverHaveIEverVoteTimerWarning\(state, \{ hasConfirmed \}\)/);
+  assert.match(
+    privateCard,
+    /syncNeverHaveIEverVoteTimerWarning\(state, \{ hasConfirmed \}\)/
+  );
   assert.match(voteFlow, /stopNeverHaveIEverVoteTimerWarning\(\)/);
   assert.equal(
     setup.match(/stopNeverHaveIEverVoteTimerWarning\(\)/g)?.length,

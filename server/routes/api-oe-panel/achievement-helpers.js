@@ -5,6 +5,7 @@ const {
 const {
   getAchievementIconDirectory,
   isAchievementTaxonomyValid,
+  LEGACY_ACHIEVEMENT_ICON_DIRECTORIES,
   normalizeAchievementTaxonomy,
   normalizeTaxonomySegment
 } = require('../../../models/content/achievement-taxonomy');
@@ -62,6 +63,28 @@ function createOePanelAchievementHelpers(context) {
     return `/images/achievements/icons/${iconDirectory}/${safeKey}.svg`;
   }
 
+  function normalizeAchievementImagePath(achievement = {}) {
+    const image = String(achievement.image || '').trim();
+    const defaultPath = getAchievementImagePath(achievement);
+    const legacyIconPath = image.match(
+      /^\/images\/achievements\/icons\/([^/]+)\/([^/]+\.svg)$/i
+    );
+
+    if (!image) return defaultPath;
+    if (/^\/images\/achievements\/[^/]+\.svg$/i.test(image)) {
+      return defaultPath;
+    }
+    if (legacyIconPath) {
+      const targetDirectory =
+        LEGACY_ACHIEVEMENT_ICON_DIRECTORIES[legacyIconPath[1]];
+      if (targetDirectory) {
+        return `/images/achievements/icons/${targetDirectory}/${legacyIconPath[2]}`;
+      }
+    }
+
+    return image;
+  }
+
   function getAchievementBorderPath({ rarity } = {}) {
     const borderKey =
       String(rarity || 'common')
@@ -91,7 +114,7 @@ function createOePanelAchievementHelpers(context) {
       key: achievement.key || '-',
       name: achievement.name || achievement.key || '-',
       description: achievement.description || '-',
-      image: achievement.image || getAchievementImagePath(achievement),
+      image: normalizeAchievementImagePath(achievement),
       border: getAchievementBorderPath(achievement),
       category: taxonomy.category,
       subcategory: taxonomy.subcategory,
@@ -227,12 +250,11 @@ function createOePanelAchievementHelpers(context) {
         key,
         name,
         description: String(body.description || '').trim(),
-        image:
-          String(body.image || '').trim() ||
-          getAchievementImagePath({
-            key,
-            ...taxonomy
-          }),
+        image: normalizeAchievementImagePath({
+          key,
+          ...taxonomy,
+          image: body.image
+        }),
         category: taxonomy.category,
         subcategory: taxonomy.subcategory,
         gamemode: taxonomy.gamemode,

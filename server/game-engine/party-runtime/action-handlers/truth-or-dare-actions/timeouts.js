@@ -29,10 +29,9 @@ function createTruthOrDareTimeoutHandlers() {
       });
       appendPartyAccountStatEvent(
         workingParty,
-        attachRewardProgress(
-          { gameMode: 'truth-or-dare', increments: [] },
-          [timeoutPlayer]
-        )
+        attachRewardProgress({ gameMode: 'truth-or-dare', increments: [] }, [
+          timeoutPlayer
+        ])
       );
       applyTruthOrDarePassConsequence({
         workingParty,
@@ -66,7 +65,8 @@ function createTruthOrDareTimeoutHandlers() {
       if (!allowBypass) {
         const hostId = state.hostComputerId ?? null;
         const turnPlayerId = getPartyPlayerId(timeoutPlayer);
-        const isHostActor = hostId && actorId && String(hostId) === String(actorId);
+        const isHostActor =
+          hostId && actorId && String(hostId) === String(actorId);
         const isCurrentPlayerActor =
           turnPlayerId && actorId && String(turnPlayerId) === String(actorId);
 

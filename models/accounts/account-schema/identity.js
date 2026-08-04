@@ -113,4 +113,9 @@ const coreProfileSchema = new Schema(
   { _id: false }
 );
 
-module.exports = { providerSchema, customisationPreferencesSchema, profileHistorySchema, coreProfileSchema };
+module.exports = {
+  providerSchema,
+  customisationPreferencesSchema,
+  profileHistorySchema,
+  coreProfileSchema
+};

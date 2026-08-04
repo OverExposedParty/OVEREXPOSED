@@ -8,6 +8,9 @@ const passwordToggleButtons = document.querySelectorAll(
 const changeEmailToken = new URLSearchParams(window.location.search).get(
   'token'
 );
+const emailTrackingId = new URLSearchParams(window.location.search).get(
+  'emailTrackingId'
+);
 
 function playAuthSound(soundKey) {
   if (!soundKey || typeof window.playSoundEffect !== 'function') return;
@@ -36,9 +39,7 @@ function fitAuthTitleToWidth() {
     window.getComputedStyle(authTitle).fontSize
   );
   const fittedFontSize = (availableWidth / measuredWidth) * measuringFontSize;
-  const maxFontSize = window.matchMedia('(max-width: 760px)').matches
-    ? 28
-    : 40;
+  const maxFontSize = window.matchMedia('(max-width: 760px)').matches ? 28 : 40;
   authTitle.style.fontSize = `${Math.min(fittedFontSize, maxFontSize)}px`;
 }
 
@@ -119,8 +120,7 @@ async function handleChangeEmailSubmit(event) {
   }
 
   if (
-    data.email.trim().toLowerCase() !==
-    data.confirmEmail.trim().toLowerCase()
+    data.email.trim().toLowerCase() !== data.confirmEmail.trim().toLowerCase()
   ) {
     setAuthStatus('Email addresses do not match.', 'error');
     playAuthSound('uiError');
@@ -134,6 +134,7 @@ async function handleChangeEmailSubmit(event) {
   try {
     const payload = await postJson('/api/accounts/email-change/complete', {
       token: changeEmailToken,
+      emailTrackingId,
       email: data.email,
       confirmEmail: data.confirmEmail,
       password: data.password

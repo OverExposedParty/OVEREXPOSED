@@ -329,7 +329,6 @@ async function consumeOwnedEgg({ Account }, accountId, eggKey) {
   };
 }
 
-
 module.exports = {
   getOrCreateOlingState,
   getAccountOlingState,

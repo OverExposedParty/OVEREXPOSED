@@ -24,7 +24,9 @@ function createTruthOrDarePromptFlowHandlers() {
         context,
         'Only the current player can choose truth or dare.'
       );
-      const questionType = String(payload.questionType || '').trim().toLowerCase();
+      const questionType = String(payload.questionType || '')
+        .trim()
+        .toLowerCase();
       if (questionType !== 'truth' && questionType !== 'dare') {
         const error = new Error('questionType must be truth or dare.');
         error.status = 400;
@@ -84,11 +86,14 @@ function createTruthOrDarePromptFlowHandlers() {
       } = context;
       assertTruthOrDareAction(context);
 
-      const { playerTurn, player: turnPlayer, playerId: turnPlayerId } =
-        assertCurrentTurnPlayer(
-          context,
-          'Only the current player can pass this question.'
-        );
+      const {
+        playerTurn,
+        player: turnPlayer,
+        playerId: turnPlayerId
+      } = assertCurrentTurnPlayer(
+        context,
+        'Only the current player can pass this question.'
+      );
       const promptWasAlreadyStolen = state.phaseData?.promptHeist === true;
       markSkippedAchievement();
       appendTruthOrDareTimelineEvent({
@@ -152,8 +157,7 @@ function createTruthOrDarePromptFlowHandlers() {
     },
 
     'truth-or-dare-start-prompt'(context) {
-      const { config, state, deck, appendTruthOrDareTimelineEvent } =
-        context;
+      const { config, state, deck, appendTruthOrDareTimelineEvent } = context;
       assertTruthOrDareAction(context);
 
       const { player: turnPlayer } = assertCurrentTurnPlayer(

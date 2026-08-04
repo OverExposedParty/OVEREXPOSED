@@ -21,9 +21,9 @@ const modules = [
 
 test('shop landing stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(landingEntryPath, 'utf8');
-  const imports = [
-    ...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)
-  ].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)].map(
+    (match) => match[1]
+  );
 
   assert.deepEqual(imports, modules);
   assert.equal(entry.trim().split('\n').length, modules.length);

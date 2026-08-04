@@ -58,8 +58,10 @@ const consentRecordSchema = new Schema(
     type: { type: String, trim: true, required: true },
     version: { type: String, trim: true, required: true },
     status: { type: String, enum: CONSENT_STATUSES, default: 'accepted' },
+    recordedAt: { type: Date, default: Date.now },
     acceptedAt: { type: Date, default: null },
     withdrawnAt: { type: Date, default: null },
+    source: { type: String, trim: true, maxlength: 50, default: null },
     ipAddress: { type: String, trim: true, select: false, default: null },
     userAgent: { type: String, trim: true, select: false, default: null }
   },

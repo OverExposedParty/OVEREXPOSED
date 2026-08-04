@@ -71,7 +71,9 @@ async function readJsonIfPresent(filePath) {
 
 function createAlert(result) {
   const fileText =
-    result.files.length === 1 ? result.files[0] : `${result.files.length} files`;
+    result.files.length === 1
+      ? result.files[0]
+      : `${result.files.length} files`;
   const syncAction = SYNC_ACTIONS[result.id] || {};
 
   return {
@@ -128,9 +130,7 @@ async function compareGamePacks(GamePack) {
     };
   }
 
-  const packs = await GamePack.find({})
-    .sort({ gameType: 1, slug: 1 })
-    .lean();
+  const packs = await GamePack.find({}).sort({ gameType: 1, slug: 1 }).lean();
   const comparisons = [];
   const packsByGameType = new Map();
 
@@ -179,7 +179,9 @@ async function compareGamePacks(GamePack) {
     id: 'party-game-packs',
     label: 'Party game packs',
     area: 'Party Games',
-    files: comparisons.map(({ filePath }) => path.relative(process.cwd(), filePath)),
+    files: comparisons.map(({ filePath }) =>
+      path.relative(process.cwd(), filePath)
+    ),
     status: mismatched.length ? 'out_of_sync' : 'synced',
     mismatchedFiles: mismatched.map(({ filePath }) =>
       path.relative(process.cwd(), filePath)
@@ -199,9 +201,7 @@ async function compareGameRules(GameRule) {
     };
   }
 
-  const rules = await GameRule.find({})
-    .sort({ gameType: 1, key: 1 })
-    .lean();
+  const rules = await GameRule.find({}).sort({ gameType: 1, key: 1 }).lean();
   const rulesByGameType = new Map();
 
   for (const rule of rules) {
@@ -248,7 +248,9 @@ async function compareGameRules(GameRule) {
     id: 'party-game-rules',
     label: 'Party game rules',
     area: 'Party Games',
-    files: comparisons.map(({ filePath }) => path.relative(process.cwd(), filePath)),
+    files: comparisons.map(({ filePath }) =>
+      path.relative(process.cwd(), filePath)
+    ),
     status: mismatched.length ? 'out_of_sync' : 'synced',
     mismatchedFiles: mismatched.map(({ filePath }) =>
       path.relative(process.cwd(), filePath)

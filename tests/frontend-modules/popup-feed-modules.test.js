@@ -447,6 +447,81 @@ test('status popups update in place and can be dismissed by key', () => {
   }
 });
 
+test('email verification success popup uses the confirmed account and OE', () => {
+  const dom = new JSDOM('<!doctype html><body></body>', {
+    runScripts: 'dangerously',
+    url: 'https://overexposed.app/'
+  });
+  const { window } = dom;
+  const avatarRenders = [];
+
+  window.requestAnimationFrame = (callback) => {
+    callback();
+    return 1;
+  };
+  window.fetch = async () => ({
+    ok: true,
+    json: async () => ({ data: { notifications: [] } })
+  });
+  window.localStorage.setItem(
+    'oe-account',
+    JSON.stringify({
+      id: 'verified-account',
+      username: 'Verified Player',
+      oeIcon: '1000:1100:1200:1300'
+    })
+  );
+  window.createUserIconPartyGames = (options) => {
+    avatarRenders.push(options);
+    const icon = window.document.createElement('span');
+    icon.className = 'icon';
+    options.container.appendChild(icon);
+  };
+
+  try {
+    moduleFactories.forEach(([filename]) => {
+      window.eval(
+        fs.readFileSync(path.join(scriptsDirectory, filename), 'utf8')
+      );
+    });
+    window.eval(
+      fs.readFileSync(
+        path.join(scriptsDirectory, 'popup-feed/popup-feed.js'),
+        'utf8'
+      )
+    );
+
+    const row = window.showEmailVerificationSuccessPopup();
+
+    assert.equal(row.classList.contains('is-success'), true);
+    assert.equal(row.classList.contains('has-avatar'), true);
+    assert.equal(
+      row.querySelector('.oe-status-popup-avatar')?.getAttribute('aria-label'),
+      'Your OE'
+    );
+    assert.equal(avatarRenders.length, 1);
+    assert.equal(avatarRenders[0].userId, 'verified-account');
+    assert.equal(
+      avatarRenders[0].userCustomisationString,
+      '1000:1100:1200:1300'
+    );
+    assert.equal(
+      row.querySelector('.oe-status-popup-label')?.textContent,
+      'ACCOUNT READY'
+    );
+    assert.equal(
+      row.querySelector('.oe-status-popup-title')?.textContent,
+      'Email confirmed'
+    );
+    assert.equal(
+      row.querySelector('.oe-status-popup-message')?.textContent,
+      'You are signed in and ready to continue.'
+    );
+  } finally {
+    dom.window.close();
+  }
+});
+
 test('site update popup stays silent until it transitions to ready', async () => {
   const dom = new JSDOM('<!doctype html><body></body>', {
     runScripts: 'dangerously',

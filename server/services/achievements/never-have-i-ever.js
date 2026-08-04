@@ -11,10 +11,9 @@ async function recordNeverHaveIEverResult({
 } = {}) {
   if (!Achievement || !account || !result) return [];
   if (
-    ![
-      'never-have-i-ever-round',
-      'never-have-i-ever-game-complete'
-    ].includes(result.type)
+    !['never-have-i-ever-round', 'never-have-i-ever-game-complete'].includes(
+      result.type
+    )
   ) {
     return [];
   }

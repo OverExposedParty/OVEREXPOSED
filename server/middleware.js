@@ -101,7 +101,13 @@ function configureMiddleware(app) {
 
 function expressJsonSafe() {
   const express = require('express');
-  return express.json();
+  return express.json({
+    verify(req, res, buffer) {
+      if (req.originalUrl?.startsWith('/api/webhooks/resend')) {
+        req.rawBody = buffer.toString('utf8');
+      }
+    }
+  });
 }
 
 function expressUrlencodedSafe() {

@@ -165,14 +165,10 @@ async function invoke(handler, query = {}, gamemode = 'truth-or-dare') {
 
 test('guest catalogs hide Prompt Heist while retaining public content', async () => {
   const { handlers } = createRouteHarness(null);
-  const result = await invoke(
-    handlers.get('/api/party-game-rules/:gamemode')
-  );
+  const result = await invoke(handlers.get('/api/party-game-rules/:gamemode'));
 
   assert.deepEqual(
-    result.data['truth-or-dare-settings'].map(
-      (rule) => rule['settings-name']
-    ),
+    result.data['truth-or-dare-settings'].map((rule) => rule['settings-name']),
     ['rounds']
   );
 });
@@ -181,15 +177,12 @@ test('waiting-room catalogs use the original beta host for every viewer', async 
   const { handlers } = createRouteHarness({
     access: { roles: ['beta_tester'], features: [] }
   });
-  const result = await invoke(
-    handlers.get('/api/party-game-rules/:gamemode'),
-    { partyCode: 'ABC-123' }
-  );
+  const result = await invoke(handlers.get('/api/party-game-rules/:gamemode'), {
+    partyCode: 'ABC-123'
+  });
 
   assert.deepEqual(
-    result.data['truth-or-dare-settings'].map(
-      (rule) => rule['settings-name']
-    ),
+    result.data['truth-or-dare-settings'].map((rule) => rule['settings-name']),
     ['prompt-heist', 'rounds']
   );
 });
@@ -198,10 +191,9 @@ test('all currently public packs remain visible in a regular-host room', async (
   const { handlers } = createRouteHarness({
     access: { roles: [], features: [] }
   });
-  const result = await invoke(
-    handlers.get('/api/party-game-packs/:gamemode'),
-    { partyCode: 'ABC-123' }
-  );
+  const result = await invoke(handlers.get('/api/party-game-packs/:gamemode'), {
+    partyCode: 'ABC-123'
+  });
 
   assert.deepEqual(
     result.data['truth-or-dare-packs'].map((pack) => pack['pack-name']),
@@ -214,15 +206,12 @@ test('active games retain the original host content catalog', async () => {
     { access: { roles: ['beta_tester'], features: [] } },
     { activePartyOnly: true }
   );
-  const result = await invoke(
-    handlers.get('/api/party-game-rules/:gamemode'),
-    { partyCode: 'ABC-123' }
-  );
+  const result = await invoke(handlers.get('/api/party-game-rules/:gamemode'), {
+    partyCode: 'ABC-123'
+  });
 
   assert.deepEqual(
-    result.data['truth-or-dare-settings'].map(
-      (rule) => rule['settings-name']
-    ),
+    result.data['truth-or-dare-settings'].map((rule) => rule['settings-name']),
     ['prompt-heist', 'rounds']
   );
 });

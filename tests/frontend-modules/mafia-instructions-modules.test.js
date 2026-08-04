@@ -38,12 +38,17 @@ test('Mafia setup loads instruction modules before the compatibility facade', ()
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${placeHolderSelectedUser.dataset.template}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${placeHolderSelectedUser.dataset.template}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -64,13 +69,20 @@ test('Mafia instruction modules preserve their public handler contract', () => {
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(mafiaDirectory, 'mafia-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(mafiaDirectory, 'mafia-online-instructions.js'),
+      'utf8'
+    ),
     context,
     { filename: 'mafia-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -84,17 +96,23 @@ test('Mafia elimination flows parse instructions before scheduling host actions'
     'utf8'
   );
 
-  const playerKilledStart = nightFlow.indexOf('async function DisplayPlayerKilled');
+  const playerKilledStart = nightFlow.indexOf(
+    'async function DisplayPlayerKilled'
+  );
   const townVoteStart = dayFlow.indexOf('async function DisplayTownVote');
 
   assert.ok(
-    nightFlow.indexOf('const parsedInstructions = parseInstruction(instruction);', playerKilledStart) <
-      nightFlow.indexOf('await scheduleMafiaHostAction', playerKilledStart),
+    nightFlow.indexOf(
+      'const parsedInstructions = parseInstruction(instruction);',
+      playerKilledStart
+    ) < nightFlow.indexOf('await scheduleMafiaHostAction', playerKilledStart),
     'player-killed flow should parse the instruction before scheduling its host action'
   );
   assert.ok(
-    dayFlow.indexOf('const parsedInstructions = parseInstruction(instruction);', townVoteStart) <
-      dayFlow.indexOf('await scheduleMafiaHostAction', townVoteStart),
+    dayFlow.indexOf(
+      'const parsedInstructions = parseInstruction(instruction);',
+      townVoteStart
+    ) < dayFlow.indexOf('await scheduleMafiaHostAction', townVoteStart),
     'town-vote flow should parse the instruction before scheduling its host action'
   );
 });
@@ -127,10 +145,7 @@ test('Mafia timer warning follows living-player action ownership', () => {
 
   vm.runInContext(
     fs.readFileSync(
-      path.join(
-        mafiaDirectory,
-        'mafia-online-instructions/phase-tools.js'
-      ),
+      path.join(mafiaDirectory, 'mafia-online-instructions/phase-tools.js'),
       'utf8'
     ),
     context,
@@ -170,10 +185,7 @@ test('Mafia timer warning follows living-player action ownership', () => {
   );
   assert.equal(timerCalls[1].action, 'stop');
   assert.equal(timerCalls[2].action, 'start');
-  assert.equal(
-    timerCalls[2].options.timerId,
-    'ABC-123:mafia-day-vote:123456'
-  );
+  assert.equal(timerCalls[2].options.timerId, 'ABC-123:mafia-day-vote:123456');
 });
 
 test('Mafia flow sounds follow deduplicated day and night transitions', async () => {
@@ -197,10 +209,7 @@ test('Mafia flow sounds follow deduplicated day and night transitions', async ()
 
   vm.runInContext(
     fs.readFileSync(
-      path.join(
-        mafiaDirectory,
-        'mafia-online-instructions/phase-tools.js'
-      ),
+      path.join(mafiaDirectory, 'mafia-online-instructions/phase-tools.js'),
       'utf8'
     ),
     context,
@@ -298,5 +307,8 @@ test('Mafia action lifecycle manages timer warnings', () => {
     'night vote, day vote, and empty instruction states should stop warnings'
   );
   assert.match(setup, /syncMafiaInstructionSounds\(state, instructions\)/);
-  assert.match(displayState, /async function DisplayGameOver[\s\S]*?stopMafiaTimerWarning\(\)/);
+  assert.match(
+    displayState,
+    /async function DisplayGameOver[\s\S]*?stopMafiaTimerWarning\(\)/
+  );
 });

@@ -3,6 +3,7 @@ const {
 } = require('../../../models/content/achievement-reward-contract');
 const {
   getAchievementIconDirectory,
+  LEGACY_ACHIEVEMENT_ICON_DIRECTORIES,
   normalizeAchievementTaxonomy
 } = require('../../../models/content/achievement-taxonomy');
 
@@ -47,10 +48,20 @@ function getAchievementImagePath(achievement = {}) {
 function normalizeAchievementImagePath(achievement = {}) {
   const image = normalizeString(achievement.image);
   const defaultPath = getAchievementImagePath(achievement);
+  const legacyIconPath = image.match(
+    /^\/images\/achievements\/icons\/([^/]+)\/([^/]+\.svg)$/i
+  );
 
   if (!image) return defaultPath;
   if (/^\/images\/achievements\/[^/]+\.svg$/i.test(image)) {
     return defaultPath;
+  }
+  if (legacyIconPath) {
+    const targetDirectory =
+      LEGACY_ACHIEVEMENT_ICON_DIRECTORIES[legacyIconPath[1]];
+    if (targetDirectory) {
+      return `/images/achievements/icons/${targetDirectory}/${legacyIconPath[2]}`;
+    }
   }
 
   return image;

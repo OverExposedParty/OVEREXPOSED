@@ -36,12 +36,17 @@ test('Imposter setup loads instruction modules before the compatibility facade',
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -62,13 +67,20 @@ test('Imposter instruction modules preserve their public handler contract', () =
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(imposterDirectory, 'imposter-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(imposterDirectory, 'imposter-online-instructions.js'),
+      'utf8'
+    ),
     context,
     { filename: 'imposter-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -256,8 +268,7 @@ test('Imposter flow sounds follow local and deduplicated state transitions', asy
     },
     {
       eventName: 'punishmentReveal',
-      eventId:
-        'ABC-123:imposter:punishment-reveal:0:player-2:take_a_shot'
+      eventId: 'ABC-123:imposter:punishment-reveal:0:player-2:take_a_shot'
     },
     {
       eventName: 'roundStart',
@@ -335,24 +346,15 @@ test('Imposter vote outcome sounds match the displayed result', () => {
 
 test('Imposter action lifecycle manages timer warnings', () => {
   const phaseTools = fs.readFileSync(
-    path.join(
-      imposterDirectory,
-      'imposter-online-instructions/phase-tools.js'
-    ),
+    path.join(imposterDirectory, 'imposter-online-instructions/phase-tools.js'),
     'utf8'
   );
   const answerFlow = fs.readFileSync(
-    path.join(
-      imposterDirectory,
-      'imposter-online-instructions/answer-flow.js'
-    ),
+    path.join(imposterDirectory, 'imposter-online-instructions/answer-flow.js'),
     'utf8'
   );
   const voteFlow = fs.readFileSync(
-    path.join(
-      imposterDirectory,
-      'imposter-online-instructions/vote-flow.js'
-    ),
+    path.join(imposterDirectory, 'imposter-online-instructions/vote-flow.js'),
     'utf8'
   );
   const punishmentFlow = fs.readFileSync(
@@ -371,10 +373,19 @@ test('Imposter action lifecycle manages timer warnings', () => {
     'utf8'
   );
 
-  assert.match(answerFlow, /syncImposterTimerWarning\([\s\S]*?'confirm-prompt'\s*\)/);
-  assert.match(answerFlow, /syncImposterTimerWarning\([\s\S]*?'answer-turn'\s*\)/);
+  assert.match(
+    answerFlow,
+    /syncImposterTimerWarning\([\s\S]*?'confirm-prompt'\s*\)/
+  );
+  assert.match(
+    answerFlow,
+    /syncImposterTimerWarning\([\s\S]*?'answer-turn'\s*\)/
+  );
   assert.match(answerFlow, /syncImposterTimerWarning\([\s\S]*?'vote'\s*\)/);
-  assert.match(phaseTools, /syncImposterPunishmentTimerWarning\(state, 'choose-punishment'\)/);
+  assert.match(
+    phaseTools,
+    /syncImposterPunishmentTimerWarning\(state, 'choose-punishment'\)/
+  );
   assert.match(
     punishmentFlow,
     /syncImposterPunishmentTimerWarning\(state, 'perform-punishment'\)/
@@ -384,5 +395,8 @@ test('Imposter action lifecycle manages timer warnings', () => {
     'prompt, answer, vote, punishment selection, and completion should stop warnings'
   );
   assert.match(voteFlow, /stopImposterTimerWarning\(\)/);
-  assert.match(logic, /syncImposterInstructionSounds\(state, userInstructions\)/);
+  assert.match(
+    logic,
+    /syncImposterInstructionSounds\(state, userInstructions\)/
+  );
 });

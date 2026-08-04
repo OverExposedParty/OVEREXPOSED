@@ -87,10 +87,7 @@ test('openFromError recognises supported error envelopes and renders an accessib
       '/css/general/online/active-party-conflict-dialog.css'
     ]);
     assert.equal(api.isConflict({ code: api.ERROR_CODE }), true);
-    assert.equal(
-      api.isConflict({ code: api.PARTICIPANT_ERROR_CODE }),
-      true
-    );
+    assert.equal(api.isConflict({ code: api.PARTICIPANT_ERROR_CODE }), true);
     assert.equal(
       api.isConflict({ data: { error: { code: api.ERROR_CODE } } }),
       true
@@ -145,9 +142,8 @@ test('openFromError recognises supported error envelopes and renders an accessib
       null
     );
     assert.equal(
-      dialog.querySelectorAll(
-        '.active-party-conflict-dialog-mascot-stack img'
-      ).length,
+      dialog.querySelectorAll('.active-party-conflict-dialog-mascot-stack img')
+        .length,
       4
     );
     assert.equal(
@@ -200,9 +196,7 @@ test('openFromError recognises supported error envelopes and renders an accessib
       '#427BB9'
     );
 
-    const qrButton = dialog.querySelector(
-      '.active-party-conflict-dialog-qr'
-    );
+    const qrButton = dialog.querySelector('.active-party-conflict-dialog-qr');
     const media = dialog.querySelector('.active-party-conflict-dialog-media');
     const qrImage = dialog.querySelector(
       '.active-party-conflict-dialog-qr-image'

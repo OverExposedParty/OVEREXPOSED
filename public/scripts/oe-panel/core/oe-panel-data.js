@@ -12,6 +12,10 @@
     achievements: null,
     dashboardActivity: null,
     dashboardOverview: null,
+    emailAutomations: null,
+    emailAudiences: null,
+    emailPerformance: null,
+    emailSuppressions: null,
     emailTemplates: null,
     oeCustomisation: null,
     olings: null,
@@ -199,21 +203,86 @@
   }
 
   function mapEmailTemplateRow(template) {
-    const version = Number(template.version || 1);
     const status = String(template.status || 'draft');
+    const activeUses = Array.isArray(template.activeUses)
+      ? template.activeUses
+      : [];
+    const usageLabels = activeUses.map(
+      (usage) =>
+        `${usage.name || 'Untitled Automation'} (${usage.triggerLabel || usage.trigger || 'Automation'})`
+    );
     return {
       template: template.name || 'Untitled Email Template',
       category: template.category || 'transactional',
-      version: `v${version}`,
       status: `${status.charAt(0).toUpperCase()}${status.slice(1)}`,
       templateId: template.id || template._id || '',
       key: template.key || '-',
-      subject: template.subject || '-',
-      publishedVersion: template.publishedVersion
-        ? `v${template.publishedVersion}`
+      automationTriggers: Array.isArray(template.automationTriggers)
+        ? template.automationTriggers.join(', ') || '-'
         : '-',
+      inUse: activeUses.length > 0,
+      activeUsage: usageLabels.join(', ') || 'Not in use',
+      usageTooltip: usageLabels.length
+        ? `In use by: ${usageLabels.join(', ')}`
+        : '',
+      subject: template.subject || '-',
       updatedAt: formatDateTime(template.updatedAt),
       publishedAt: formatDateTime(template.publishedAt)
+    };
+  }
+
+  function mapEmailAutomationRow(automation) {
+    const status = String(automation.status || 'inactive');
+    return {
+      automation: automation.name || 'Untitled Automation',
+      trigger: automation.triggerLabel || automation.trigger || '-',
+      template: automation.templateName || automation.templateKey || '-',
+      status: `${status.charAt(0).toUpperCase()}${status.slice(1)}`,
+      automationId: automation.id || automation._id || '',
+      triggerKey: automation.trigger || '-',
+      templateKey: automation.templateKey || '-',
+      templateStatus: automation.templateStatus || '-',
+      systemManaged: automation.systemManaged ? 'Yes' : 'No',
+      systemManagedValue: Boolean(automation.systemManaged),
+      statusKey: status,
+      updatedAt: formatDateTime(automation.updatedAt)
+    };
+  }
+
+  function mapEmailAudienceRow(audience) {
+    const type = String(audience.type || 'dynamic');
+    const status = String(audience.status || 'inactive');
+    const conditions = Array.isArray(audience.conditions)
+      ? audience.conditions
+      : [];
+    return {
+      audience: audience.name || 'Untitled Audience',
+      type: `${type.charAt(0).toUpperCase()}${type.slice(1)}`,
+      recipients: Number(audience.recipientCount || 0).toLocaleString(),
+      status: `${status.charAt(0).toUpperCase()}${status.slice(1)}`,
+      audienceId: audience.id || audience._id || '',
+      description: audience.description || '-',
+      matchMode: audience.match === 'any' ? 'Any condition' : 'All conditions',
+      marketingConsent: audience.requireMarketingConsent
+        ? 'Required'
+        : 'Not required',
+      conditionCount: `${conditions.length} condition${conditions.length === 1 ? '' : 's'}`,
+      updatedAt: formatDateTime(audience.updatedAt)
+    };
+  }
+
+  function mapEmailSuppressionRow(suppression) {
+    const reason = String(suppression.reason || 'manual');
+    return {
+      email: suppression.email || '-',
+      reason: reason
+        .split('-')
+        .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+        .join(' '),
+      source: suppression.source || 'admin',
+      date: formatDateTime(suppression.createdAt),
+      suppressionId: suppression.id || suppression._id || '',
+      note: suppression.note || '-'
     };
   }
 
@@ -396,6 +465,69 @@
     });
   }
 
+  function fetchEmailPerformanceData(options = {}) {
+    return getCached('emailPerformance', '/api/oe-panel/emails/performance', {
+      force: options.force,
+      errorMessage: 'Failed to load email performance',
+      fallback: { stats: {}, trends: { labels: [], series: {} }, failures: [] },
+      logMessage: 'Failed to load OE Panel email performance:',
+      resolve: (payload) => {
+        const data = payload.data || {};
+        return {
+          ...data,
+          failures: Array.isArray(data.failures)
+            ? data.failures.map((failure) => ({
+                ...failure,
+                date: formatDateTime(failure.date)
+              }))
+            : []
+        };
+      }
+    });
+  }
+
+  function fetchEmailAutomationsData(options = {}) {
+    return getCached('emailAutomations', '/api/oe-panel/emails/automations', {
+      force: options.force,
+      errorMessage: 'Failed to load email automations',
+      fallback: { automations: [] },
+      logMessage: 'Failed to load OE Panel email automations:',
+      resolve: (payload) => ({
+        automations: Array.isArray(payload.data?.automations)
+          ? payload.data.automations.map(mapEmailAutomationRow)
+          : []
+      })
+    });
+  }
+
+  function fetchEmailAudiencesData(options = {}) {
+    return getCached('emailAudiences', '/api/oe-panel/emails/audiences', {
+      force: options.force,
+      errorMessage: 'Failed to load email audiences',
+      fallback: { audiences: [] },
+      logMessage: 'Failed to load OE Panel email audiences:',
+      resolve: (payload) => ({
+        audiences: Array.isArray(payload.data?.audiences)
+          ? payload.data.audiences.map(mapEmailAudienceRow)
+          : []
+      })
+    });
+  }
+
+  function fetchEmailSuppressionsData(options = {}) {
+    return getCached('emailSuppressions', '/api/oe-panel/emails/suppressions', {
+      force: options.force,
+      errorMessage: 'Failed to load email suppressions',
+      fallback: { suppressions: [] },
+      logMessage: 'Failed to load OE Panel email suppressions:',
+      resolve: (payload) => ({
+        suppressions: Array.isArray(payload.data?.suppressions)
+          ? payload.data.suppressions.map(mapEmailSuppressionRow)
+          : []
+      })
+    });
+  }
+
   function fetchOverexposurePostsData(options = {}) {
     return getCached('overexposurePosts', '/api/overexposure-posts', {
       force: options.force,
@@ -442,6 +574,17 @@
     });
   }
 
+  window.addEventListener('oe-panel-email-automations-changed', () => {
+    clear('emailAutomations');
+  });
+  window.addEventListener('oe-panel-email-audiences-changed', () => {
+    clear('emailAudiences');
+  });
+  window.addEventListener('oe-panel-email-suppressions-changed', () => {
+    clear('emailSuppressions');
+    clear('emailAudiences');
+  });
+
   window.OE_PANEL_DATA = {
     clear,
     fetchAnalyticsData,
@@ -449,6 +592,10 @@
     fetchAdminLogsData,
     fetchDashboardActivityData,
     fetchDashboardOverviewData,
+    fetchEmailAutomationsData,
+    fetchEmailAudiencesData,
+    fetchEmailPerformanceData,
+    fetchEmailSuppressionsData,
     fetchEmailTemplatesData,
     fetchModerationData,
     fetchOeCustomisationData,

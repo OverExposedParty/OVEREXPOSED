@@ -1,8 +1,4 @@
-const {
-  test,
-  assert,
-  createApplier
-} = require("./scenarios/helpers");
+const { test, assert, createApplier } = require('./scenarios/helpers');
 
 test('pending Never Have I Ever players cannot vote during the current question', () => {
   const { applyPartyActionToSnapshot } = createApplier();
@@ -168,10 +164,7 @@ test('Never Have I Ever question reset activates pending players', () => {
     hasDeck: true
   });
 
-  assert.equal(
-    updated.players[1].state.participationStatus,
-    'active'
-  );
+  assert.equal(updated.players[1].state.participationStatus, 'active');
   assert.deepEqual(updated.state.roundParticipantIds, [
     'host-device',
     'late-device'

@@ -489,7 +489,6 @@ async function hatchOling({
   };
 }
 
-
 module.exports = {
   hatchOling,
   useOlingConsumable

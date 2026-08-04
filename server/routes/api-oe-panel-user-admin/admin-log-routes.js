@@ -15,7 +15,11 @@ function registerOePanelAdminLogRoutes(context) {
       if (!account) return;
 
       const now = new Date();
-      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
       const activeLogQuery = { 'metadata.archivedAt': { $exists: false } };
       const [
         logs,
@@ -74,8 +78,8 @@ function registerOePanelAdminLogRoutes(context) {
           alerts: serializedLogs
             .filter(
               (log) =>
-                ['failed'].includes(log.result)
-                || ['high', 'critical'].includes(log.severity)
+                ['failed'].includes(log.result) ||
+                ['high', 'critical'].includes(log.severity)
             )
             .slice(0, 8)
             .map((log) => ({
@@ -132,11 +136,17 @@ function registerOePanelAdminLogRoutes(context) {
         'Content-Disposition',
         `attachment; filename="admin-logs-${exportedAt.toISOString().slice(0, 10)}.json"`
       );
-      res.send(JSON.stringify({
-        exportedAt: exportedAt.toISOString(),
-        count: logs.length,
-        logs: logs.map(serializeAdminLog)
-      }, null, 2));
+      res.send(
+        JSON.stringify(
+          {
+            exportedAt: exportedAt.toISOString(),
+            count: logs.length,
+            logs: logs.map(serializeAdminLog)
+          },
+          null,
+          2
+        )
+      );
     } catch (err) {
       console.error(`[REQ ${req.id}] Failed to export admin logs:`, err);
       res.apiError({

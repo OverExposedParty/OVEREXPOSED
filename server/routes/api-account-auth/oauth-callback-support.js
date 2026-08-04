@@ -78,8 +78,8 @@ function createOAuthCallbackSupport(context) {
           ? getSignupContext(req, parsedState.signupReferrerPath)
           : null;
       const legalConsent =
-        parsedState.mode === 'signup' && parsedState.legalConsentAccepted
-          ? createSignupLegalConsent(req)
+        parsedState.mode === 'signup' && oauthContext.legalConsentAccepted
+          ? createSignupLegalConsent(req, oauthContext.marketingEmailOptIn)
           : null;
       const currentAccount = linkMode ? await getCurrentAccount(req) : null;
       if (linkMode && !currentAccount) {
@@ -102,6 +102,12 @@ function createOAuthCallbackSupport(context) {
       const activePartyGamemode = sessionResult.activePartyConflict?.gamemode;
       const returnTo = getSafeReturnToPath(parsedState.returnTo);
       const canAccessOePanel = serializeAccount(account).canAccessOePanel;
+      const analyticsRedirectParams = parsedState.authEntryPoint
+        ? {
+            authEntryPoint: parsedState.authEntryPoint,
+            flow: parsedState.mode === 'signup' ? 'signup' : 'signin'
+          }
+        : {};
 
       if (activePartyCode) {
         res.redirect(
@@ -111,7 +117,8 @@ function createOAuthCallbackSupport(context) {
             activePartyCode,
             activePartyGamemode,
             returnTo: returnTo || (canAccessOePanel ? '/oe-panel' : '/'),
-            splashScreen: getSafeSplashScreenPath(parsedState.splashScreen)
+            splashScreen: getSafeSplashScreenPath(parsedState.splashScreen),
+            ...analyticsRedirectParams
           })
         );
         return;
@@ -123,7 +130,8 @@ function createOAuthCallbackSupport(context) {
             auth: 'success',
             provider,
             returnTo,
-            splashScreen: getSafeSplashScreenPath(parsedState.splashScreen)
+            splashScreen: getSafeSplashScreenPath(parsedState.splashScreen),
+            ...analyticsRedirectParams
           })
         );
         return;
@@ -137,7 +145,8 @@ function createOAuthCallbackSupport(context) {
       res.redirect(
         buildLoginRedirect({
           auth: 'success',
-          provider
+          provider,
+          ...analyticsRedirectParams
         })
       );
     } catch (err) {
@@ -147,7 +156,14 @@ function createOAuthCallbackSupport(context) {
           auth: 'error',
           message: err.message || 'Social sign in failed',
           returnTo: getSafeReturnToPath(parsedState?.returnTo),
-          splashScreen: getSafeSplashScreenPath(parsedState?.splashScreen)
+          splashScreen: getSafeSplashScreenPath(parsedState?.splashScreen),
+          ...(parsedState?.authEntryPoint
+            ? {
+                authEntryPoint: parsedState.authEntryPoint,
+                flow: parsedState.mode === 'signup' ? 'signup' : 'signin',
+                provider
+              }
+            : {})
         })
       );
     }

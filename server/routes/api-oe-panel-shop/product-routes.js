@@ -4,9 +4,7 @@ const {
 const {
   createOePanelShopProductPresentation
 } = require('./product-presentation');
-const {
-  createOePanelShopProductPayloads
-} = require('./product-payloads');
+const { createOePanelShopProductPayloads } = require('./product-payloads');
 
 function registerOePanelShopProductRoutes(context) {
   const { app } = context;
@@ -21,7 +19,7 @@ function registerOePanelShopProductRoutes(context) {
   const { createShopProductPayload, createShopProductUpdatePayload } = payloads;
 
   with (context) {
-app.get('/api/oe-panel/shop/products', async (req, res) => {
+    app.get('/api/oe-panel/shop/products', async (req, res) => {
       try {
         const account = await requireOePanelAccount(req, res);
         if (!account) return;

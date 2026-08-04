@@ -1,10 +1,31 @@
 function registerOePanelOlingDashboardRoutes(context, helpers) {
   const { app } = context;
-  const { OlingEgg, OlingTrait, OlingPersonality, OlingBuildSet, OlingHatchReceipt, PlayerOling } = context.models || {};
-  const { OE_PANEL_OLING_LAYERS, attachOePanelBuildSetsToEggs, createOePanelRarityBalancer, createOlingSyncWarnings, formatOePanelJson, getOePanelOlingOwnerLabels, getOePanelOlingWarnings, serializeOePanelBuildSets, serializeOePanelOlingEgg, serializeOePanelOlingTrait, summarizeOePanelRolls } = helpers;
+  const {
+    OlingEgg,
+    OlingTrait,
+    OlingPersonality,
+    OlingBuildSet,
+    OlingHatchReceipt,
+    PlayerOling
+  } = context.models || {};
+  const {
+    OE_PANEL_OLING_LAYERS,
+    attachOePanelBuildSetsToEggs,
+    createOePanelRarityBalancer,
+    createOlingSyncWarnings,
+    formatOePanelJson,
+    getOePanelOlingOwnerLabels,
+    getOePanelOlingWarnings,
+    serializeOePanelBuildSets,
+    serializeOePanelOlingEgg,
+    serializeOePanelOlingTrait,
+    summarizeOePanelRolls
+  } = helpers;
 
   with (context) {
-    const { getContentSyncHealth } = require('../../services/content-sync-health');
+    const {
+      getContentSyncHealth
+    } = require('../../services/content-sync-health');
 
     app.get('/api/oe-panel/olings', async (req, res) => {
       try {
@@ -132,7 +153,6 @@ function registerOePanelOlingDashboardRoutes(context, helpers) {
         });
       }
     });
-
   }
 }
 

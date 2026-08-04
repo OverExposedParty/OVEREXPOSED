@@ -1,6 +1,10 @@
 const OverexposurePost = require('../models/content/overexposure-post');
 const SocialContentItem = require('../models/content/social-content-item-schema');
 const defaultEmailTemplateSchema = require('../models/emails/email-template-schema');
+const defaultEmailAutomationSchema = require('../models/emails/email-automation-schema');
+const defaultEmailAudienceSchema = require('../models/emails/email-audience-schema');
+const defaultEmailSuppressionSchema = require('../models/emails/email-suppression-schema');
+const defaultEmailDeliverySchema = require('../models/emails/email-delivery-schema');
 const defaultReportSchema = require('../models/moderation/report-schema');
 const defaultSupportTicketSchema = require('../models/moderation/support-ticket-schema');
 const defaultSystemConfigSchema = require('../models/moderation/system-config-schema');
@@ -42,6 +46,7 @@ const defaultOlingHatchReceiptSchema = require('../models/olings/oling-hatch-rec
 const defaultOlingStateSchema = require('../models/olings/oling-state-schema');
 const defaultOlingBattleMatchSchema = require('../models/olings/oling-battle-match-schema');
 const defaultOlingBattleEventSchema = require('../models/olings/oling-battle-event-schema');
+const AnalyticsEvent = require('../models/analytics/analytics-event-schema');
 
 const accountsConnection = mongoose.createConnection();
 const olingsConnection = mongoose.createConnection();
@@ -216,6 +221,22 @@ const EmailTemplate = bindModelToConnection(
   defaultEmailTemplateSchema,
   emailConnection
 );
+const EmailAutomation = bindModelToConnection(
+  defaultEmailAutomationSchema,
+  emailConnection
+);
+const EmailAudience = bindModelToConnection(
+  defaultEmailAudienceSchema,
+  emailConnection
+);
+const EmailSuppression = bindModelToConnection(
+  defaultEmailSuppressionSchema,
+  emailConnection
+);
+const EmailDelivery = bindModelToConnection(
+  defaultEmailDeliverySchema,
+  emailConnection
+);
 
 const PARTY_GAME_MODELS_BY_GAMEMODE = {
   'truth-or-dare': partyGameTruthOrDareSchema,
@@ -232,6 +253,11 @@ module.exports = {
   OverexposurePost,
   SocialContentItem: boundSocialContentItem,
   EmailTemplate,
+  EmailAutomation,
+  EmailAudience,
+  EmailSuppression,
+  EmailDelivery,
+  AnalyticsEvent,
   Report,
   SupportTicket,
   SystemConfig,

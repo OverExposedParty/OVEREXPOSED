@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "images": {
+    "branding/overexposed-logo.svg": {
+      "type": "branding",
+      "categories": [],
+      "defaultAlt": "OVEREXPOSED"
+    },
+    "heroes/mascot/default.png": {
+      "type": "heroes",
+      "categories": ["account-security", "onboarding"],
+      "defaultAlt": "Confirm your OVEREXPOSED email"
+    },
+    "heroes/mascot/shocked.png": {
+      "type": "heroes",
+      "categories": ["account-security"],
+      "defaultAlt": "Reset your OVEREXPOSED password"
+    }
+  }
+}

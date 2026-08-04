@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Confirm Email | OVEREXPOSED</title>
+    <meta
+      name="description"
+      content="Confirm your OVEREXPOSED email address."
+    />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link rel="stylesheet" href="/css/auth/login.css" />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/overexposed.png"
+        alt="Splash Screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main class="auth-page" data-template="auth">
+      <section class="auth-shell" aria-labelledby="auth-title">
+        <div class="auth-form-panel">
+          <h1 id="auth-title" class="auth-title">
+            <span id="auth-title-text" class="auth-title-text"
+              >CONFIRM EMAIL</span
+            >
+          </h1>
+
+          <form class="auth-form active" id="verify-email-form" novalidate>
+            <p class="auth-confirmation-copy">
+              Confirm your email address to activate your account and continue
+              to OVEREXPOSED.
+            </p>
+            <button class="auth-submit-button" type="submit">
+              CONFIRM EMAIL AND CONTINUE
+            </button>
+            <div class="auth-secondary-links">
+              <a class="auth-secondary-link" href="/sign-in">SIGN IN</a>
+              <a class="auth-secondary-link" href="/">RETURN HOME</a>
+            </div>
+          </form>
+
+          <p
+            class="auth-status"
+            id="auth-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script>
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#66CCFF'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#427BB9'
+    );
+
+    window.pageScripts = {
+      '/scripts/auth/verify-email/verify-email.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'EMAIL_VERIFICATION',
+        zIndex: 0
+      }
+    };
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

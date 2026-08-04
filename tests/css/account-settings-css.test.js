@@ -41,8 +41,5 @@ test('portrait account containers use 85% width and proportional height', () => 
     actionContainerStyles || '',
     /min-height:\s*min\(42\.5vw,\s*210px\);/
   );
-  assert.match(
-    footerStyles || '',
-    /min-height:\s*min\(14\.5714vw,\s*72px\);/
-  );
+  assert.match(footerStyles || '', /min-height:\s*min\(14\.5714vw,\s*72px\);/);
 });

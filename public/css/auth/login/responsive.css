@@ -6,119 +6,6 @@
     place-items: center;
   }
 
-  .auth-shell {
-    width: min(100%, 24rem);
-    min-height: auto;
-    border-radius: 8px;
-  }
-
-  .auth-form-panel {
-    --auth-form-panel-padding: 0.85rem;
-    gap: 0.7rem;
-  }
-
-  .auth-form-panel .auth-title {
-    padding: 16px;
-  }
-
-  .auth-mode-switch {
-    border-width: 2px;
-    border-radius: 14px;
-  }
-
-  .auth-form {
-    gap: 0.6rem;
-  }
-
-  .auth-field {
-    gap: 0.28rem;
-  }
-
-  .auth-field label,
-  .auth-check,
-  .auth-secondary-link {
-    font-size: 0.7rem;
-  }
-
-  .auth-field input {
-    min-height: 2.35rem;
-    border-width: 2px;
-    border-radius: 8px;
-    padding: 0 0.7rem;
-    font-size: 0.9rem;
-  }
-
-  .auth-password-control input {
-    padding-right: 2.75rem;
-  }
-
-  .auth-password-toggle {
-    right: 0.35rem;
-    width: 1.95rem;
-    height: 1.95rem;
-    border-radius: 7px;
-  }
-
-  .auth-password-eye {
-    width: 1.05rem;
-    height: 1.05rem;
-  }
-
-  .auth-mode-button,
-  .auth-submit-button,
-  .auth-guest-button {
-    min-height: 2.35rem;
-    font-size: 0.85rem;
-  }
-
-  .auth-submit-button {
-    margin-top: 0.15rem;
-    border-radius: 14px;
-  }
-
-  .auth-guest-button {
-    border-width: 2px;
-    border-radius: 14px;
-  }
-
-  .auth-check {
-    grid-template-columns: 1rem minmax(0, 1fr);
-    gap: 0.45rem;
-  }
-
-  .auth-check input {
-    width: 0.95rem;
-    height: 0.95rem;
-  }
-
-  .auth-divider {
-    gap: 0.55rem;
-    margin-top: 0.2rem;
-  }
-
-  .auth-divider span {
-    height: 2px;
-  }
-
-  .auth-divider p {
-    font-size: 0.7rem;
-  }
-
-  .auth-social-options {
-    gap: 0.45rem;
-  }
-
-  .auth-social-button {
-    border-width: 2px;
-    border-radius: 8px;
-  }
-
-  .auth-status {
-    min-height: 1.05rem;
-    font-size: 0.78rem;
-    line-height: 1.25;
-  }
-
   .auth-legal-dialog {
     width: 96vw;
     height: calc(100dvh - var(--headerheight) - 1rem);
@@ -151,6 +38,10 @@
 }
 
 @media (max-height: 760px) {
+  .auth-page {
+    place-items: start center;
+  }
+
   .auth-form-panel {
     --auth-form-panel-padding: clamp(0.85rem, 2.4vw, 1.25rem);
     gap: 0.7rem;

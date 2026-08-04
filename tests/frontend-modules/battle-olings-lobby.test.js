@@ -95,8 +95,9 @@ test('Oling battle modules load before battle startup in dependency order', () =
   assert.ok(lobbyModuleIndexes.every((index) => index > demoOlingsIndex));
   assert.ok(lobbyModuleIndexes.every((index) => index < lobbyIndex));
   assert.ok(
-    lobbyModuleIndexes.every((index, moduleIndex) =>
-      moduleIndex === 0 || index > lobbyModuleIndexes[moduleIndex - 1]
+    lobbyModuleIndexes.every(
+      (index, moduleIndex) =>
+        moduleIndex === 0 || index > lobbyModuleIndexes[moduleIndex - 1]
     )
   );
   assert.ok(lobbyIndex > -1);
@@ -104,8 +105,9 @@ test('Oling battle modules load before battle startup in dependency order', () =
   assert.ok(battleModuleIndexes.every((index) => index > lobbyIndex));
   assert.ok(battleModuleIndexes.every((index) => index < startupIndex));
   assert.ok(
-    battleModuleIndexes.every((index, moduleIndex) =>
-      moduleIndex === 0 || index > battleModuleIndexes[moduleIndex - 1]
+    battleModuleIndexes.every(
+      (index, moduleIndex) =>
+        moduleIndex === 0 || index > battleModuleIndexes[moduleIndex - 1]
     )
   );
   assert.ok(startupIndex > lobbyIndex);

@@ -5,10 +5,7 @@ const {
   OLING_DEFINITIONS_ROOT,
   normalizeKey
 } = require('../shared');
-const {
-  readAllOlingConsumablesFromJson,
-  readJsonList
-} = require('./catalog');
+const { readAllOlingConsumablesFromJson, readJsonList } = require('./catalog');
 const { serializeOlingConsumableForJson } = require('./serializers');
 
 async function importOlingDefinitionsFromJson({

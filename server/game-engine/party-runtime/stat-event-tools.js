@@ -1,6 +1,4 @@
-const {
-  createMafiaStatEventTools
-} = require('./mafia-stat-events');
+const { createMafiaStatEventTools } = require('./mafia-stat-events');
 
 function createPartyStatEventTools(context) {
   const {

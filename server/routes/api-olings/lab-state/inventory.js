@@ -1,7 +1,4 @@
-const {
-  STARTER_FURNITURE_KEYS,
-  OlingLabItems
-} = require('../lab-catalog');
+const { STARTER_FURNITURE_KEYS, OlingLabItems } = require('../lab-catalog');
 const { normalizeInfluenceSlots } = require('../lab-incubation');
 const { clampInteger } = require('./defaults');
 

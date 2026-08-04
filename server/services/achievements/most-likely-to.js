@@ -10,7 +10,9 @@ async function recordMostLikelyToResult({
   save = true
 } = {}) {
   if (!Achievement || !account || !result) return [];
-  if (!['most-likely-to-round', 'most-likely-to-outcome'].includes(result.type)) {
+  if (
+    !['most-likely-to-round', 'most-likely-to-outcome'].includes(result.type)
+  ) {
     return [];
   }
 
@@ -34,10 +36,10 @@ async function recordMostLikelyToResult({
   if (!playerId) return [];
 
   const votes = Array.isArray(result.votes) ? result.votes : [];
-  const votesReceived = votes.filter(
-    ({ vote }) => String(vote) === playerId
+  const votesReceived = votes.filter(({ vote }) => String(vote) === playerId);
+  const ownVote = votes.find(
+    ({ playerId: voterId }) => String(voterId) === playerId
   );
-  const ownVote = votes.find(({ playerId: voterId }) => String(voterId) === playerId);
   const winnerPlayerId = result.winnerPlayerId
     ? String(result.winnerPlayerId)
     : null;
@@ -79,7 +81,10 @@ async function recordMostLikelyToResult({
       unlocked.push(...newlyUnlocked);
     }
 
-    if (winnerPlayerId === playerId && String(ownVote?.vote || '') === playerId) {
+    if (
+      winnerPlayerId === playerId &&
+      String(ownVote?.vote || '') === playerId
+    ) {
       await unlock('self-aware');
     }
   };
@@ -105,13 +110,18 @@ async function recordMostLikelyToResult({
     voterCounts[voterKey] = (Number(voterCounts[voterKey]) || 0) + 1;
   });
   stats.mostLikelyToVotesByVoter = voterCounts;
-  const sameVoterMaximum = Math.max(0, ...Object.values(voterCounts).map(Number));
-  if (sameVoterMaximum >= 5) await unlock('not-my-name-again', sameVoterMaximum);
+  const sameVoterMaximum = Math.max(
+    0,
+    ...Object.values(voterCounts).map(Number)
+  );
+  if (sameVoterMaximum >= 5)
+    await unlock('not-my-name-again', sameVoterMaximum);
 
   const currentNomineeStreak = Number(stats.serialNominee) || 0;
   const nextNomineeStreak = receivedCount > 0 ? currentNomineeStreak + 1 : 0;
   stats.serialNominee = nextNomineeStreak;
-  if (nextNomineeStreak >= 10) await unlock('serial-nominee', nextNomineeStreak);
+  if (nextNomineeStreak >= 10)
+    await unlock('serial-nominee', nextNomineeStreak);
 
   const sessionKey = normalizeString(partyId, 'party');
   if (stats.mostLikelyToSessionId !== sessionKey) {
@@ -138,10 +148,7 @@ async function recordMostLikelyToResult({
     await unlock('main-character', receivedCount);
     await unlock('unanimous-mvp', receivedCount);
   }
-  if (
-    String(ownVote?.vote || '') === playerId &&
-    receivedCount === 1
-  ) {
+  if (String(ownVote?.vote || '') === playerId && receivedCount === 1) {
     await unlock('well-this-is-awkward');
   }
 

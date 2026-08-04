@@ -57,6 +57,10 @@ test('account schema preserves domain schema contracts and indexes', () => {
   );
   assert.equal(admin.adminSchema.path('actionLogs').options.select, false);
   assert.equal(
+    admin.adminSchema.path('emailTemplateTestRecipient').defaultValue,
+    null
+  );
+  assert.equal(
     security.securitySchema.path('loginHistory').options.select,
     false
   );
@@ -102,6 +106,17 @@ test('account schema stores usernames and emails in lowercase', () => {
 
   assert.equal(account.username, 'lowercase.user');
   assert.equal(account.email, 'user@example.com');
+  assert.equal(account.validateSync(), undefined);
+});
+
+test('account schema stores the administrator email test recipient', () => {
+  const account = new Account({
+    username: 'email-admin',
+    passwordHash: 'password-hash',
+    admin: { emailTemplateTestRecipient: ' TESTS@Example.COM ' }
+  });
+
+  assert.equal(account.admin.emailTemplateTestRecipient, 'tests@example.com');
   assert.equal(account.validateSync(), undefined);
 });
 

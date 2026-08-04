@@ -50,7 +50,6 @@ function toPlainObject(document) {
   return document.toObject ? document.toObject() : document;
 }
 
-
 module.exports = {
   OLING_LAYERS,
   OLING_RARITIES,

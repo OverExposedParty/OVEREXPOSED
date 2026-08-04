@@ -3,6 +3,9 @@
   const DEFAULT_SLIDE_OUT_SOUND = 'notificationSlideOut';
   const popupTimeouts = new Set();
   const popupSounds = new WeakMap();
+  const popupAnalytics = new WeakMap();
+  const popupLastActions = new WeakMap();
+  const popupAnalyticsBound = new WeakSet();
   const exitingPopups = new WeakSet();
   const activeStatusPopups = new Map();
   let activeSiteUpdatePopup = null;
@@ -21,9 +24,11 @@
 
   function normalisePopupSound(sound, fallback) {
     if (
-      sound === false
-      || sound === null
-      || String(sound || '').trim().toLowerCase() === 'none'
+      sound === false ||
+      sound === null ||
+      String(sound || '')
+        .trim()
+        .toLowerCase() === 'none'
     ) {
       return null;
     }
@@ -34,11 +39,12 @@
   function getPopupSounds(options = {}) {
     const hasSlideInSound = Object.hasOwn(options, 'slideInSound');
     const hasSlideOutSound = Object.hasOwn(options, 'slideOutSound');
-    const requestedSlideInSound = options.sound === false
-      ? null
-      : hasSlideInSound
-        ? options.slideInSound
-        : options.soundKey;
+    const requestedSlideInSound =
+      options.sound === false
+        ? null
+        : hasSlideInSound
+          ? options.slideInSound
+          : options.soundKey;
 
     return {
       slideInSound: normalisePopupSound(
@@ -64,14 +70,108 @@
     return feed;
   }
 
-  function dismissPopup(row, timeoutId) {
+  function getPopupAnalytics(row, options = {}) {
+    const configured =
+      options.analytics && typeof options.analytics === 'object'
+        ? options.analytics
+        : {};
+    const popupClass = Array.from(row?.classList || []).find((className) =>
+      className.endsWith('popup-row')
+    );
+    const notificationType =
+      configured.notificationType ||
+      row?.dataset?.popupType ||
+      popupClass ||
+      '';
+    const notificationId = row?.dataset?.notificationId || '';
+    const notificationKey =
+      configured.key ||
+      (notificationId
+        ? `${notificationType || 'notification'}:${notificationId}`
+        : notificationType);
+    if (!notificationKey) return null;
+
+    return {
+      notificationKey,
+      notificationType: notificationType || 'popup',
+      category: configured.category || row?.dataset?.notificationCategory || '',
+      variant: configured.variant || row?.dataset?.notificationVariant || ''
+    };
+  }
+
+  function trackPopupEvent(row, eventName, properties = {}) {
+    const analytics = popupAnalytics.get(row);
+    if (!analytics || typeof window.OEAnalytics?.track !== 'function') return;
+    window.OEAnalytics.track(eventName, {
+      ...analytics,
+      ...properties
+    });
+  }
+
+  function getPopupAction(target) {
+    const actionTarget = target?.closest?.('button, a');
+    if (!actionTarget) return '';
+    if (actionTarget.dataset.analyticsAction) {
+      return actionTarget.dataset.analyticsAction;
+    }
+    if (
+      [...actionTarget.classList].some((className) =>
+        className.includes('dismiss')
+      )
+    ) {
+      return 'dismiss';
+    }
+    return String(actionTarget.textContent || 'action')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 80);
+  }
+
+  function bindPopupAnalytics(row) {
+    if (popupAnalyticsBound.has(row)) return;
+    popupAnalyticsBound.add(row);
+    row.addEventListener(
+      'click',
+      (event) => {
+        const action = getPopupAction(event.target);
+        if (!action) return;
+        popupLastActions.set(row, action);
+        trackPopupEvent(row, 'notification.action_clicked', { action });
+        const clearLastAction = () => popupLastActions.delete(row);
+        if (typeof window.queueMicrotask === 'function') {
+          window.queueMicrotask(clearLastAction);
+        } else {
+          Promise.resolve().then(clearLastAction);
+        }
+      },
+      true
+    );
+  }
+
+  function dismissPopup(row, timeoutOrOptions) {
+    const options =
+      timeoutOrOptions && typeof timeoutOrOptions === 'object'
+        ? timeoutOrOptions
+        : { timeoutId: timeoutOrOptions };
+    const timeoutId = options.timeoutId;
     if (timeoutId) popupTimeouts.delete(timeoutId);
     if (!row || exitingPopups.has(row)) return false;
     exitingPopups.add(row);
-    const sounds = popupSounds.get(row);
-    playPopupSound(
-      sounds ? sounds.slideOutSound : DEFAULT_SLIDE_OUT_SOUND
+    const lastAction = popupLastActions.get(row);
+    const reason =
+      options.reason ||
+      (lastAction === 'dismiss' ? 'dismiss_button' : 'programmatic');
+    trackPopupEvent(
+      row,
+      reason === 'dismiss_button'
+        ? 'notification.dismissed'
+        : 'notification.closed',
+      { reason }
     );
+    const sounds = popupSounds.get(row);
+    playPopupSound(sounds ? sounds.slideOutSound : DEFAULT_SLIDE_OUT_SOUND);
     row.classList.add('is-exiting');
     setTimeout(() => row.remove(), 260);
     return true;
@@ -84,6 +184,12 @@
 
     row.classList.add('oe-popup-row');
     popupSounds.set(row, sounds);
+    const analytics = getPopupAnalytics(row, options);
+    if (analytics) {
+      popupAnalytics.set(row, analytics);
+      bindPopupAnalytics(row);
+      trackPopupEvent(row, 'notification.impression');
+    }
     feed.prepend(row);
     playPopupSound(sounds.slideInSound);
     row.getBoundingClientRect();
@@ -94,7 +200,7 @@
 
     if (!options.persist && duration > 0) {
       const timeoutId = setTimeout(() => {
-        dismissPopup(row, timeoutId);
+        dismissPopup(row, { timeoutId, reason: 'auto_expired' });
       }, duration);
       popupTimeouts.add(timeoutId);
     }
@@ -235,7 +341,7 @@
         slideInSound:
           options.sound === false
             ? 'none'
-            : options.slideInSound ?? options.soundKey,
+            : (options.slideInSound ?? options.soundKey),
         slideOutSound: options.slideOutSound
       });
       activePopup = { row, timeoutId: null };
@@ -256,6 +362,22 @@
         : null;
 
     return activePopup.row;
+  }
+
+  function showEmailVerificationSuccessPopup() {
+    const account = achievements.getStoredAccountSafely();
+    return showStatusPopup({
+      key: 'email-verification-success',
+      label: 'ACCOUNT READY',
+      title: 'Email confirmed',
+      messages: 'You are signed in and ready to continue.',
+      tone: 'success',
+      avatar: {
+        userId: account?.id || account?._id || 'email-verified-account',
+        userCustomisationString: account?.oeIcon || '',
+        label: 'Your OE'
+      }
+    });
   }
 
   const achievements = window.createPopupFeedAchievements({ showPopup });
@@ -434,6 +556,7 @@
   window.dismissOePopup = dismissPopup;
   window.showOeStatusPopup = showStatusPopup;
   window.dismissOeStatusPopup = dismissStatusPopup;
+  window.showEmailVerificationSuccessPopup = showEmailVerificationSuccessPopup;
   window.showAchievementPopup = achievements.showAchievementPopup;
   window.showOpalRewardPopup = achievements.showOpalRewardPopup;
   window.handleLiveAccountNotifications =

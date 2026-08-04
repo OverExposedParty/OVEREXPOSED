@@ -566,9 +566,7 @@ test('host lobby membership sounds distinguish joins from voluntary leaves', () 
   window.syncGamemodeSettingsReadySound(createParty(['guest-1']), {
     initializeOnly: true
   });
-  window.syncGamemodeSettingsReadySound(
-    createParty(['guest-1', 'guest-2'])
-  );
+  window.syncGamemodeSettingsReadySound(createParty(['guest-1', 'guest-2']));
   window.syncGamemodeSettingsReadySound(createParty(['guest-1']));
   window.syncGamemodeSettingsReadySound(
     createParty(['guest-1', 'guest-3'], 'PARTY-2')
@@ -872,14 +870,12 @@ test('blocked online start attempt plays feedback without starting a countdown',
   assert.deepEqual(
     {
       userId: statusPopups[0].avatar.userId,
-      userCustomisationString:
-        statusPopups[0].avatar.userCustomisationString,
+      userCustomisationString: statusPopups[0].avatar.userCustomisationString,
       label: statusPopups[0].avatar.label
     },
     {
       userId: 'host',
-      userCustomisationString:
-        'host-colour:host-head:host-eyes:host-mouth',
+      userCustomisationString: 'host-colour:host-head:host-eyes:host-mouth',
       label: "Party Host's OE"
     }
   );

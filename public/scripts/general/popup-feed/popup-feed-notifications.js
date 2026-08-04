@@ -80,6 +80,8 @@
       row.classList.add('system-notification-popup-row');
       row.classList.toggle('has-image', Boolean(notification.image));
       row.dataset.popupType = 'system-notification';
+      row.dataset.notificationCategory = notification.category || 'system';
+      row.dataset.notificationVariant = notification.variant || 'default';
       if (notification.id) {
         row.dataset.notificationId = String(notification.id);
       } else {

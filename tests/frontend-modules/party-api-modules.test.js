@@ -125,10 +125,7 @@ test('all-users-ready check excludes the host by identity instead of array posit
 
   const sandbox = vm.createContext(context);
   vm.runInContext(
-    fs.readFileSync(
-      path.join(onlineDirectory, 'party-api/players.js'),
-      'utf8'
-    ),
+    fs.readFileSync(path.join(onlineDirectory, 'party-api/players.js'), 'utf8'),
     sandbox,
     { filename: 'party-api/players.js' }
   );
@@ -160,10 +157,7 @@ test('ready updates report whether the player patch succeeded', async () => {
 
   const sandbox = vm.createContext(context);
   vm.runInContext(
-    fs.readFileSync(
-      path.join(onlineDirectory, 'party-api/players.js'),
-      'utf8'
-    ),
+    fs.readFileSync(path.join(onlineDirectory, 'party-api/players.js'), 'utf8'),
     sandbox,
     { filename: 'party-api/players.js' }
   );

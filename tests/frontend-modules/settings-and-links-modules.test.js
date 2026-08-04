@@ -24,13 +24,17 @@ test('settings-and-links support modules load before their coordinator', () => {
 
   supportScripts.forEach((scriptPath) => {
     const index = registry.indexOf(`/scripts/general/${scriptPath}`);
-    assert.ok(index > previousIndex, `${scriptPath} should have ordered registry entry`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should have ordered registry entry`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    registry.indexOf('/scripts/general/settings-and-links/settings-and-links.js') >
-      previousIndex,
+    registry.indexOf(
+      '/scripts/general/settings-and-links/settings-and-links.js'
+    ) > previousIndex,
     'the settings coordinator should load after support modules'
   );
 });
@@ -67,7 +71,11 @@ test('settings-and-links support modules preserve their shared browser helpers',
     'initialiseOverexposureConsoleInteractions',
     'syncSettingsConsoleState'
   ].forEach((helper) => {
-    assert.equal(typeof context[helper], 'function', `${helper} should remain public`);
+    assert.equal(
+      typeof context[helper],
+      'function',
+      `${helper} should remain public`
+    );
   });
 });
 
@@ -103,11 +111,7 @@ test('applying the NSFW preference announces its authoritative state', () => {
 
   vm.runInContext(
     fs.readFileSync(
-      path.join(
-        generalDirectory,
-        'settings-and-links',
-        'sound-settings.js'
-      ),
+      path.join(generalDirectory, 'settings-and-links', 'sound-settings.js'),
       'utf8'
     ),
     context,

@@ -35,7 +35,10 @@ test('recordTruthOrDarePromptResult unlocks the truth streak independently', asy
   assert.equal(account.gameData.achievementStats.truthOrDareNoSkipStreak, 10);
   assert.equal(account.gameData.achievementStats.truthOrDareTruthStreak, 10);
   assert.equal(account.gameData.achievementStats.truthOrDareDareStreak, 0);
-  assert.deepEqual(unlocked.map((item) => item.key), ['honest-soul']);
+  assert.deepEqual(
+    unlocked.map((item) => item.key),
+    ['honest-soul']
+  );
 });
 
 test('recordTruthOrDarePromptResult tracks dare, no-skip, and NSFW milestones', async () => {
@@ -124,9 +127,15 @@ test('recordTruthOrDarePromptResult unlocks truth and dare lifetime milestones',
   });
 
   assert.equal(truthAccount.gameData.achievementStats.truthsCompleted, 10);
-  assert.deepEqual(truthUnlocked.map((item) => item.key), ['truth-teller']);
+  assert.deepEqual(
+    truthUnlocked.map((item) => item.key),
+    ['truth-teller']
+  );
   assert.equal(dareAccount.gameData.achievementStats.daresCompleted, 25);
-  assert.deepEqual(dareUnlocked.map((item) => item.key), ['daredevil']);
+  assert.deepEqual(
+    dareUnlocked.map((item) => item.key),
+    ['daredevil']
+  );
 });
 
 test('recordTruthOrDarePromptResult tracks skip milestones and resets streaks', async () => {

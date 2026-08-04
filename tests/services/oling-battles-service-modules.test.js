@@ -13,30 +13,33 @@ const events = require('../../server/services/oling-battles/events');
 const players = require('../../server/services/oling-battles/battle-players');
 
 test('Oling battle service facade preserves the public API', () => {
-  assert.deepEqual(Object.keys(olingBattles).sort(), [
-    'DEFAULT_MATCH_LENGTH_SECONDS',
-    'MATCH_CODE_PATTERN',
-    'addAiBattleOpponent',
-    'assertMatchCode',
-    'createBattleMatch',
-    'emitBattleUpdate',
-    'generateMatchCode',
-    'generateUniqueMatchCode',
-    'getBattleMatch',
-    'getBattleTimeMultiplier',
-    'getMatchTiming',
-    'joinBattleMatch',
-    'kickBattleOpponent',
-    'leaveBattleMatch',
-    'readyBattlePlayer',
-    'recordBattleEvent',
-    'resolveAiBattleHit',
-    'resolveBattleHit',
-    'selectBattlePlayerOling',
-    'serializeBattleMatch',
-    'snapshotBattleOling',
-    'startBattleMatch'
-  ].sort());
+  assert.deepEqual(
+    Object.keys(olingBattles).sort(),
+    [
+      'DEFAULT_MATCH_LENGTH_SECONDS',
+      'MATCH_CODE_PATTERN',
+      'addAiBattleOpponent',
+      'assertMatchCode',
+      'createBattleMatch',
+      'emitBattleUpdate',
+      'generateMatchCode',
+      'generateUniqueMatchCode',
+      'getBattleMatch',
+      'getBattleTimeMultiplier',
+      'getMatchTiming',
+      'joinBattleMatch',
+      'kickBattleOpponent',
+      'leaveBattleMatch',
+      'readyBattlePlayer',
+      'recordBattleEvent',
+      'resolveAiBattleHit',
+      'resolveBattleHit',
+      'selectBattlePlayerOling',
+      'serializeBattleMatch',
+      'snapshotBattleOling',
+      'startBattleMatch'
+    ].sort()
+  );
 });
 
 test('Oling battle service facade delegates to focused modules', () => {
@@ -51,15 +54,24 @@ test('Oling battle service facade delegates to focused modules', () => {
     olingBattles.generateUniqueMatchCode,
     matchCodes.generateUniqueMatchCode
   );
-  assert.equal(olingBattles.getBattleTimeMultiplier, matchView.getBattleTimeMultiplier);
+  assert.equal(
+    olingBattles.getBattleTimeMultiplier,
+    matchView.getBattleTimeMultiplier
+  );
   assert.equal(olingBattles.getMatchTiming, matchView.getMatchTiming);
-  assert.equal(olingBattles.serializeBattleMatch, matchView.serializeBattleMatch);
+  assert.equal(
+    olingBattles.serializeBattleMatch,
+    matchView.serializeBattleMatch
+  );
   assert.equal(olingBattles.createBattleMatch, lifecycle.createBattleMatch);
   assert.equal(olingBattles.getBattleMatch, lifecycle.getBattleMatch);
   assert.equal(olingBattles.joinBattleMatch, lifecycle.joinBattleMatch);
   assert.equal(olingBattles.readyBattlePlayer, lifecycle.readyBattlePlayer);
   assert.equal(olingBattles.startBattleMatch, lifecycle.startBattleMatch);
-  assert.equal(olingBattles.addAiBattleOpponent, aiOpponent.addAiBattleOpponent);
+  assert.equal(
+    olingBattles.addAiBattleOpponent,
+    aiOpponent.addAiBattleOpponent
+  );
   assert.equal(olingBattles.resolveAiBattleHit, battleHits.resolveAiBattleHit);
   assert.equal(olingBattles.resolveBattleHit, battleHits.resolveBattleHit);
   assert.equal(
@@ -67,7 +79,10 @@ test('Oling battle service facade delegates to focused modules', () => {
     participants.selectBattlePlayerOling
   );
   assert.equal(olingBattles.leaveBattleMatch, participants.leaveBattleMatch);
-  assert.equal(olingBattles.kickBattleOpponent, participants.kickBattleOpponent);
+  assert.equal(
+    olingBattles.kickBattleOpponent,
+    participants.kickBattleOpponent
+  );
   assert.equal(olingBattles.emitBattleUpdate, events.emitBattleUpdate);
   assert.equal(olingBattles.recordBattleEvent, events.recordBattleEvent);
   assert.equal(olingBattles.snapshotBattleOling, players.snapshotBattleOling);

@@ -71,25 +71,27 @@ test('shop landing feature modules share cross-feature helpers', () => {
       key: 'base-egg',
       collection: 'base',
       rarityOdds: { common: 1 },
-      sets: [{
-        key: 'starter',
-        name: 'Starter',
-        rarity: 'common',
-        traits: {
-          flight: 'starter-flight',
-          body: 'starter-body',
-          eyes: 'starter-eyes',
-          mouth: 'starter-mouth'
-        },
-        metadata: {
-          layers: {
-            flight: '/flight.svg',
-            body: '/body.svg',
-            eyes: '/eyes.svg',
-            mouth: '/mouth.svg'
+      sets: [
+        {
+          key: 'starter',
+          name: 'Starter',
+          rarity: 'common',
+          traits: {
+            flight: 'starter-flight',
+            body: 'starter-body',
+            eyes: 'starter-eyes',
+            mouth: 'starter-mouth'
+          },
+          metadata: {
+            layers: {
+              flight: '/flight.svg',
+              body: '/body.svg',
+              eyes: '/eyes.svg',
+              mouth: '/mouth.svg'
+            }
           }
         }
-      }]
+      ]
     }
   );
   assert.equal(preview.oling.eggKey, 'base-egg');
@@ -125,7 +127,9 @@ test('shop hatch preview support modules load before the compatibility facade', 
     path.join(__dirname, '../../public/pages/shop/landing-page.html'),
     'utf8'
   );
-  const facadeIndex = page.indexOf("'/scripts/shop/landing-page/hatch-preview.js'");
+  const facadeIndex = page.indexOf(
+    "'/scripts/shop/landing-page/hatch-preview.js'"
+  );
 
   assert.ok(facadeIndex > -1);
   [
@@ -133,10 +137,15 @@ test('shop hatch preview support modules load before the compatibility facade', 
     'hatch-preview/hatch-ui.js',
     'hatch-preview/preview-runtime.js'
   ].forEach((fileName) => {
-    const scriptIndex = page.indexOf(`'/scripts/shop/landing-page/${fileName}'`);
+    const scriptIndex = page.indexOf(
+      `'/scripts/shop/landing-page/${fileName}'`
+    );
 
     assert.ok(scriptIndex > -1, `${fileName} should be configured`);
-    assert.ok(scriptIndex < facadeIndex, `${fileName} should load before the facade`);
+    assert.ok(
+      scriptIndex < facadeIndex,
+      `${fileName} should load before the facade`
+    );
   });
 });
 
@@ -156,9 +165,14 @@ test('shop purchase support modules load before the compatibility facade', () =>
     'purchase/receipt.js',
     'purchase/dialog.js'
   ].forEach((fileName) => {
-    const scriptIndex = page.indexOf(`'/scripts/shop/landing-page/${fileName}'`);
+    const scriptIndex = page.indexOf(
+      `'/scripts/shop/landing-page/${fileName}'`
+    );
 
     assert.ok(scriptIndex > -1, `${fileName} should be configured`);
-    assert.ok(scriptIndex < facadeIndex, `${fileName} should load before the facade`);
+    assert.ok(
+      scriptIndex < facadeIndex,
+      `${fileName} should load before the facade`
+    );
   });
 });

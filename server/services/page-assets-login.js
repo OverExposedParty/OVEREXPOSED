@@ -6,10 +6,7 @@ const {
   DEPLOYMENT_VERSION,
   ONE_YEAR_IN_SECONDS
 } = require('../constants');
-const {
-  getCookieValue,
-  prepareHtmlResponse
-} = require('./page-assets');
+const { getCookieValue, prepareHtmlResponse } = require('./page-assets');
 
 const LOGIN_TEMPLATE_PATH = path.join(
   PUBLIC_DIRECTORY,

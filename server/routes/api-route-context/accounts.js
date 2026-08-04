@@ -319,11 +319,19 @@ function createAccountContext(context) {
         allowFriendRequests:
           account.profile?.privacySettings?.allowFriendRequests !== false
       },
+      notificationPreferences: {
+        marketingEmail:
+          account.profile?.notificationPreferences?.marketingEmail === true
+      },
       legal: {
         termsAcceptedVersion:
           account.legalConsent?.termsAcceptedVersion || null,
         privacyPolicyAcceptedVersion:
           account.legalConsent?.privacyPolicyAcceptedVersion || null,
+        marketingConsentStatus:
+          account.legalConsent?.marketingConsentStatus || 'declined',
+        marketingConsentTimestamp:
+          account.legalConsent?.marketingConsentTimestamp || null,
         latestDataExportRequest:
           account.legalConsent?.dataExportRequests?.at?.(-1) || null,
         latestAccountDeletionRequest:
@@ -400,11 +408,6 @@ function createAccountContext(context) {
     };
   }
 
-  function getEmailVerifiedRedirect(req, status) {
-    const siteUrl = getPublicSiteUrl(req);
-    return `${siteUrl}/sign-in?emailVerified=${encodeURIComponent(status)}`;
-  }
-
   async function getCurrentAccount(req) {
     const sessionToken = getCookieValue(req.headers.cookie, 'oe_session');
     if (!sessionToken) return null;
@@ -420,7 +423,7 @@ function createAccountContext(context) {
       },
       'profile.accountStatus': { $nin: ['suspended', 'banned', 'deleted'] }
     }).select(
-      '+security +security.sessions.tokenHash +legalConsent.dataExportRequests +legalConsent.accountDeletionRequests'
+      '+security +security.sessions.tokenHash +legalConsent.consentHistory +legalConsent.dataExportRequests +legalConsent.accountDeletionRequests'
     );
   }
 
@@ -487,7 +490,6 @@ function createAccountContext(context) {
     upgradeGuestPartyIdentityForAccount,
     validateAccountInput,
     serializeAccount,
-    getEmailVerifiedRedirect,
     getCurrentAccount,
     requireOePanelAccount,
     hasOePanelPermission,

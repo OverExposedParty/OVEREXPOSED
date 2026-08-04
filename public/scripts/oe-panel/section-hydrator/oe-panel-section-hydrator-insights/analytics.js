@@ -78,7 +78,9 @@
                 };
               }
               if (stat.label === 'Sessions') {
-                const value = ga4.available ? formatCount(current.sessions) : '-';
+                const value = ga4.available
+                  ? formatCount(current.sessions)
+                  : '-';
                 return {
                   ...stat,
                   value,
@@ -142,7 +144,8 @@
                   : '-';
                 const difference =
                   ga4.available && Number.isFinite(Number(previous.bounceRate))
-                    ? (Number(current.bounceRate) - Number(previous.bounceRate)) *
+                    ? (Number(current.bounceRate) -
+                        Number(previous.bounceRate)) *
                       100
                     : null;
                 return {
@@ -185,17 +188,41 @@
           }
 
           if (gridConfig.id === 'analytics-grid-4') {
+            const productAnalytics = analyticsData.productAnalytics || {};
             gridConfig.alerts = Array.isArray(analyticsData.alerts)
               ? analyticsData.alerts
               : [];
+            gridConfig.alertCounts = {
+              ...(gridConfig.alertCounts || {}),
+              analyticsStatusItems: gridConfig.alerts.length
+            };
+            if (Array.isArray(gridConfig.actions)) {
+              const rowsByAction = {
+                'authentication-performance': productAnalytics.auth,
+                'notification-performance': productAnalytics.notifications,
+                'pack-selection': productAnalytics.packs,
+                'rule-usage': productAnalytics.rules,
+                'question-engagement': productAnalytics.questions
+              };
+              gridConfig.actions.forEach((action) => {
+                if (!action.widget || !(action.value in rowsByAction)) return;
+                const rows = rowsByAction[action.value];
+                action.widget = {
+                  ...action.widget,
+                  rows: Array.isArray(rows) ? rows : []
+                };
+              });
+            }
             return;
           }
 
           if (!Array.isArray(gridConfig.calendarSeries)) return;
-          gridConfig.calendarSeries = gridConfig.calendarSeries.map((series) => ({
-            ...series,
-            counts: gaActivity[series.value] || activity[series.value] || {}
-          }));
+          gridConfig.calendarSeries = gridConfig.calendarSeries.map(
+            (series) => ({
+              ...series,
+              counts: gaActivity[series.value] || activity[series.value] || {}
+            })
+          );
           gridConfig.counts = gridConfig.calendarSeries[0]?.counts || {};
         });
 
@@ -208,5 +235,6 @@
     return { hydrateSection };
   }
 
-  window.createOePanelAnalyticsInsightsHydrator = createOePanelAnalyticsInsightsHydrator;
+  window.createOePanelAnalyticsInsightsHydrator =
+    createOePanelAnalyticsInsightsHydrator;
 })();

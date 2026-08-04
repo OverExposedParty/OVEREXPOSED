@@ -60,8 +60,9 @@ function createSoundContext(storedValues = {}, options = {}) {
     }
 
     emit(eventName) {
-      [...(this.listeners.get(eventName) || [])]
-        .forEach((listener) => listener());
+      [...(this.listeners.get(eventName) || [])].forEach((listener) =>
+        listener()
+      );
     }
 
     finish() {
@@ -247,8 +248,14 @@ test('sound engine repairs a persisted zero master volume', () => {
 
 test('page-load splash plays the matching exit sound', () => {
   assert.match(splashScreenSource, /function playSplashScreenExitSound/);
-  assert.match(splashScreenSource, /direction === 'up' \? 'splashScreenUp' : 'splashScreenDown'/);
-  assert.match(splashScreenSource, /playSplashScreenExitSound\(exitDirection\)/);
+  assert.match(
+    splashScreenSource,
+    /direction === 'up' \? 'splashScreenUp' : 'splashScreenDown'/
+  );
+  assert.match(
+    splashScreenSource,
+    /playSplashScreenExitSound\(exitDirection\)/
+  );
 });
 
 test('ordinary buttons are silent by default', async () => {
@@ -440,9 +447,12 @@ test('data-sound-intent opts any button-like control into semantic feedback', as
 });
 
 test('foreground priorities drop timer sounds and keep only the latest phase cue', async () => {
-  const { audioElements, window } = createSoundContext({}, {
-    deferTimeouts: true
-  });
+  const { audioElements, window } = createSoundContext(
+    {},
+    {
+      deferTimeouts: true
+    }
+  );
   await window.OEAudio.register({
     testVoice: {
       src: '/voice.wav',
@@ -484,28 +494,22 @@ test('foreground priorities drop timer sounds and keep only the latest phase cue
 
   assert.equal(await oldPhasePromise, null);
   assert.equal(window.OEAudio.getLaneState().queuedKey, 'testPhaseNew');
-  assert.equal(
-    getPlayCountForSource(audioElements, '/timer.wav'),
-    0
-  );
+  assert.equal(getPlayCountForSource(audioElements, '/timer.wav'), 0);
 
   voicePlayback.source.finish();
   const newPhasePlayback = await newPhasePromise;
   assert.ok(newPhasePlayback);
-  assert.equal(
-    getPlayCountForSource(audioElements, '/phase-old.wav'),
-    0
-  );
-  assert.equal(
-    getPlayCountForSource(audioElements, '/phase-new.wav'),
-    1
-  );
+  assert.equal(getPlayCountForSource(audioElements, '/phase-old.wav'), 0);
+  assert.equal(getPlayCountForSource(audioElements, '/phase-new.wav'), 1);
 });
 
 test('sound sequences reserve their lane until every item has ended', async () => {
-  const { audioElements, window } = createSoundContext({}, {
-    deferTimeouts: true
-  });
+  const { audioElements, window } = createSoundContext(
+    {},
+    {
+      deferTimeouts: true
+    }
+  );
   await window.OEAudio.register({
     testConfirmation: {
       src: '/confirmation.wav',
@@ -528,8 +532,8 @@ test('sound sequences reserve their lane until every item has ended', async () =
     { ignoreInteraction: true }
   );
   await new Promise((resolve) => setImmediate(resolve));
-  const confirmationAudio = audioElements.find((audio) =>
-    audio.src.endsWith('/confirmation.wav') && audio.playCount === 1
+  const confirmationAudio = audioElements.find(
+    (audio) => audio.src.endsWith('/confirmation.wav') && audio.playCount === 1
   );
   assert.ok(confirmationAudio);
 
@@ -539,8 +543,8 @@ test('sound sequences reserve their lane until every item has ended', async () =
   confirmationAudio.finish();
   await new Promise((resolve) => setImmediate(resolve));
 
-  const spokenAudio = audioElements.find((audio) =>
-    audio.src.endsWith('/spoken.wav') && audio.playCount === 1
+  const spokenAudio = audioElements.find(
+    (audio) => audio.src.endsWith('/spoken.wav') && audio.playCount === 1
   );
   assert.ok(spokenAudio);
   assert.equal(getPlayCountForSource(audioElements, '/results.wav'), 0);
@@ -553,9 +557,12 @@ test('sound sequences reserve their lane until every item has ended', async () =
 });
 
 test('critical sounds interrupt locked sequences and clear obsolete queued audio', async () => {
-  const { audioElements, window } = createSoundContext({}, {
-    deferTimeouts: true
-  });
+  const { audioElements, window } = createSoundContext(
+    {},
+    {
+      deferTimeouts: true
+    }
+  );
   await window.OEAudio.register({
     testSequenceStart: {
       src: '/sequence-start.wav',
@@ -601,9 +608,12 @@ test('critical sounds interrupt locked sequences and clear obsolete queued audio
 });
 
 test('background and foreground lanes can play independently', async () => {
-  const { audioElements, window } = createSoundContext({}, {
-    deferTimeouts: true
-  });
+  const { audioElements, window } = createSoundContext(
+    {},
+    {
+      deferTimeouts: true
+    }
+  );
   await window.OEAudio.register({
     testForeground: {
       src: '/foreground.wav',
@@ -630,8 +640,14 @@ test('background and foreground lanes can play independently', async () => {
   assert.ok(backgroundPlayback);
   assert.equal(getPlayCountForSource(audioElements, '/foreground.wav'), 1);
   assert.equal(getPlayCountForSource(audioElements, '/background.wav'), 1);
-  assert.equal(window.OEAudio.getLaneState('foreground').activeKey, 'testForeground');
-  assert.equal(window.OEAudio.getLaneState('background').activeKey, 'testBackground');
+  assert.equal(
+    window.OEAudio.getLaneState('foreground').activeKey,
+    'testForeground'
+  );
+  assert.equal(
+    window.OEAudio.getLaneState('background').activeKey,
+    'testBackground'
+  );
 });
 
 test('every direct playback skip has a machine-readable reason', async () => {
@@ -651,9 +667,12 @@ test('every direct playback skip has a machine-readable reason', async () => {
 });
 
 test('lane conflict skips identify the dropped request reason', async () => {
-  const { debugEntries, window } = createSoundContext({}, {
-    deferTimeouts: true
-  });
+  const { debugEntries, window } = createSoundContext(
+    {},
+    {
+      deferTimeouts: true
+    }
+  );
   await window.OEAudio.register({
     locked: {
       src: '/locked.wav',
@@ -693,8 +712,7 @@ test('audio settings and registration use structured categories', async () => {
   assert.ok(
     debugEntries.some(
       (entry) =>
-        entry.category === 'audio' &&
-        entry.data?.event === 'registered'
+        entry.category === 'audio' && entry.data?.event === 'registered'
     )
   );
   assert.ok(
@@ -720,8 +738,7 @@ test('playback failures report an error and a skip reason without throwing', asy
   assert.ok(
     debugEntries.some(
       (entry) =>
-        entry.category === 'audio.errors' &&
-        entry.data?.event === 'play_failed'
+        entry.category === 'audio.errors' && entry.data?.event === 'play_failed'
     )
   );
   assert.ok(

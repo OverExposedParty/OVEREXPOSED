@@ -233,4 +233,3 @@ test('recordNeverHaveIEverResult unlocks have-not total and resets have streak',
     ['innocent-until-proven-otherwise']
   );
 });
-

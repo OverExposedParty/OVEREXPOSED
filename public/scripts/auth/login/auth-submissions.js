@@ -2,13 +2,31 @@
   const AUTH_NAVIGATION_SOUND_TIMEOUT_MS = 1600;
 
   function createLoginAuthSubmissions({ session, ui }) {
+    function getAuthEntryPoint() {
+      return typeof session.getAuthEntryPoint === 'function'
+        ? session.getAuthEntryPoint()
+        : 'direct_auth_url';
+    }
+
+    function trackAuthCompletion(properties) {
+      window.OEAnalytics?.track('auth.completed', properties);
+      if (properties.entryPoint !== 'account_notification') return;
+      window.OEAnalytics?.track('notification.conversion', {
+        notificationKey: 'create_account_prompt',
+        notificationType: 'account-prompt',
+        flow: properties.flow,
+        provider: properties.provider
+      });
+    }
+
     function playAuthSound(soundKey, options) {
       if (!soundKey || typeof window.playSoundEffect !== 'function') {
         return Promise.resolve(null);
       }
       try {
-        return Promise.resolve(window.playSoundEffect(soundKey, options))
-          .catch(() => null);
+        return Promise.resolve(window.playSoundEffect(soundKey, options)).catch(
+          () => null
+        );
       } catch {
         return Promise.resolve(null);
       }
@@ -17,7 +35,11 @@
     async function waitForAuthSound(playbackPromise) {
       const playback = await playbackPromise;
       const audio = playback?.source;
-      if (!audio || audio.ended || typeof audio.addEventListener !== 'function') {
+      if (
+        !audio ||
+        audio.ended ||
+        typeof audio.addEventListener !== 'function'
+      ) {
         return;
       }
 
@@ -38,10 +60,7 @@
         events.forEach((eventName) => {
           audio.addEventListener(eventName, finish, { once: true });
         });
-        timeoutId = window.setTimeout(
-          finish,
-          AUTH_NAVIGATION_SOUND_TIMEOUT_MS
-        );
+        timeoutId = window.setTimeout(finish, AUTH_NAVIGATION_SOUND_TIMEOUT_MS);
       });
     }
 
@@ -58,6 +77,12 @@
       playAuthSound('uiSelect');
       ui.setSubmitting(form, true);
       ui.setAuthStatus('Signing in...');
+      const analyticsProperties = {
+        flow: 'signin',
+        provider: 'email',
+        entryPoint: getAuthEntryPoint()
+      };
+      window.OEAnalytics?.track('auth.attempted', analyticsProperties);
       try {
         const payload = await session.postJson('/api/accounts/login', {
           identifier: data.identifier.toLowerCase(),
@@ -65,6 +90,10 @@
           oeIcon: session.getLocalOeIcon()
         });
         session.storeAccount(payload.account);
+        trackAuthCompletion({
+          ...analyticsProperties,
+          outcome: 'success'
+        });
         ui.setAuthStatus('You are signed in.', 'success');
         const navigationSound = waitForAuthSound(
           playAuthSound('notificationSuccess')
@@ -82,8 +111,15 @@
           });
         }
       } catch (error) {
+        window.OEAnalytics?.track('auth.failed', {
+          ...analyticsProperties,
+          outcome: 'error',
+          reason: error.status === 429 ? 'rate_limited' : 'credentials'
+        });
         ui.setAuthStatus(error.message, 'error');
-        playAuthSound(error.status === 429 ? 'uiWarning' : 'notificationFailure');
+        playAuthSound(
+          error.status === 429 ? 'uiWarning' : 'notificationFailure'
+        );
       } finally {
         ui.setSubmitting(form, false);
       }
@@ -123,6 +159,12 @@
       playAuthSound('uiSelect');
       ui.setSubmitting(form, true);
       ui.setAuthStatus('Creating account...');
+      const analyticsProperties = {
+        flow: 'signup',
+        provider: 'email',
+        entryPoint: getAuthEntryPoint()
+      };
+      window.OEAnalytics?.track('auth.attempted', analyticsProperties);
       try {
         await session.postJson('/api/accounts', {
           username: data.username.toLowerCase(),
@@ -131,6 +173,8 @@
           password: data.password,
           termsAccepted: true,
           privacyPolicyAccepted: true,
+          marketingEmailOptIn:
+            document.getElementById('signup-marketing-email')?.checked === true,
           oeIcon: session.getLocalOeIcon(),
           signupReferrerPath: session.getReturnToPath()
         });
@@ -140,6 +184,10 @@
           oeIcon: session.getLocalOeIcon()
         });
         session.storeAccount(loginPayload.account);
+        trackAuthCompletion({
+          ...analyticsProperties,
+          outcome: 'success'
+        });
         ui.setAuthStatus('Account created. You are signed in.', 'success');
         const navigationSound = waitForAuthSound(
           playAuthSound('accountCreated')
@@ -157,8 +205,15 @@
           });
         }
       } catch (error) {
+        window.OEAnalytics?.track('auth.failed', {
+          ...analyticsProperties,
+          outcome: 'error',
+          reason: error.status === 429 ? 'rate_limited' : 'validation'
+        });
         ui.setAuthStatus(error.message, 'error');
-        playAuthSound(error.status === 429 ? 'uiWarning' : 'notificationFailure');
+        playAuthSound(
+          error.status === 429 ? 'uiWarning' : 'notificationFailure'
+        );
       } finally {
         ui.setSubmitting(form, false);
       }
@@ -193,7 +248,9 @@
         ui.updateSubmitButtonState(form);
       } catch (error) {
         ui.setAuthStatus(error.message, 'error');
-        playAuthSound(error.status === 429 ? 'uiWarning' : 'notificationFailure');
+        playAuthSound(
+          error.status === 429 ? 'uiWarning' : 'notificationFailure'
+        );
       } finally {
         ui.setSubmitting(form, false);
       }
@@ -216,10 +273,23 @@
           }
 
           const params = new URLSearchParams({ mode });
+          const entryPoint = getAuthEntryPoint();
+          params.set('authEntryPoint', entryPoint);
+          window.OEAnalytics?.track('auth.attempted', {
+            flow: isSignup ? 'signup' : 'signin',
+            provider,
+            entryPoint
+          });
           const returnToPath = session.getReturnToPath();
           if (returnToPath) params.set('returnTo', returnToPath);
           params.set('splashScreen', session.getReturnSplashScreen());
           if (isSignup) params.set('legalConsentAccepted', 'true');
+          if (
+            isSignup &&
+            document.getElementById('signup-marketing-email')?.checked === true
+          ) {
+            params.set('marketingEmailOptIn', 'true');
+          }
           window.location.href = `/api/auth/${provider}/start?${params.toString()}`;
         });
       });

@@ -1,4 +1,9 @@
-const { OLING_LAYERS, OLING_MAX_ENERGY, normalizeKey, toPlainObject } = require('../shared');
+const {
+  OLING_LAYERS,
+  OLING_MAX_ENERGY,
+  normalizeKey,
+  toPlainObject
+} = require('../shared');
 const {
   getEnergyRestoreThreshold,
   getOlingEnergy,
@@ -20,7 +25,8 @@ function serializeOlingTrait(trait) {
     flightType: plain.flightType || '',
     flightMotion: plain.flightMotion || '',
     flightSpeed:
-      Number.isFinite(Number(plain.flightSpeed)) && Number(plain.flightSpeed) > 0
+      Number.isFinite(Number(plain.flightSpeed)) &&
+      Number(plain.flightSpeed) > 0
         ? Number(plain.flightSpeed)
         : 1,
     rarity: plain.rarity,
@@ -127,7 +133,8 @@ function getMatchingOlingSet(oling, traitsByKey, egg) {
       (set) =>
         set.key === themes[0] &&
         OLING_LAYERS.every(
-          (layer) => normalizeKey(set.traits?.[layer]) === normalizeKey(build[layer])
+          (layer) =>
+            normalizeKey(set.traits?.[layer]) === normalizeKey(build[layer])
         )
     ) || null
   );
@@ -170,7 +177,11 @@ function serializePlayerOling(oling, definitions = {}) {
       headwear: serializeOlingTrait(traitsByKey.get(headwearKey)) || null
     },
     matchingSet: matchingSet
-      ? { key: matchingSet.key, name: matchingSet.name, rarity: matchingSet.rarity }
+      ? {
+          key: matchingSet.key,
+          name: matchingSet.name,
+          rarity: matchingSet.rarity
+        }
       : null,
     traits: Object.fromEntries(
       OLING_LAYERS.map((layer) => [

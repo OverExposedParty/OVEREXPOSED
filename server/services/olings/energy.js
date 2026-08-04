@@ -197,7 +197,6 @@ async function awardOlingXp({ PlayerOling, accountId, olingId, amount }) {
   return oling;
 }
 
-
 module.exports = {
   getOlingAdventureEnergyCost,
   getOlingBedRestDurationMs,

@@ -91,8 +91,7 @@ function createOeCustomisationUploadHelpers({
   }
 
   function validateOeCustomisationSvgDimensions(svgText) {
-    const svgOpenTag =
-      String(svgText || '').match(/<svg\b[^>]*>/i)?.[0] || '';
+    const svgOpenTag = String(svgText || '').match(/<svg\b[^>]*>/i)?.[0] || '';
     const viewBoxMatch = svgOpenTag.match(
       /\bviewBox\s*=\s*["']\s*([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s*["']/i
     );

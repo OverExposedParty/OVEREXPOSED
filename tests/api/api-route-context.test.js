@@ -12,8 +12,14 @@ test('API route context preserves its public helper contract', () => {
     runtime: {}
   });
 
-  assert.equal(Object.keys(context).length, 227);
+  assert.equal(Object.keys(context).length, 233);
+  assert.equal(Object.hasOwn(context, 'getEmailVerifiedRedirect'), false);
+  assert.equal(Object.hasOwn(context, 'AnalyticsEvent'), true);
+  assert.equal(Object.hasOwn(context, 'EmailAudience'), true);
+  assert.equal(Object.hasOwn(context, 'EmailAutomation'), true);
+  assert.equal(Object.hasOwn(context, 'EmailSuppression'), true);
   assert.equal(Object.hasOwn(context, 'EmailTemplate'), true);
+  assert.equal(Object.hasOwn(context, 'EmailDelivery'), true);
   assert.equal(Object.hasOwn(context, 'emailConnection'), true);
   [
     'createGamePackUpdatePayload',
@@ -23,7 +29,9 @@ test('API route context preserves its public helper contract', () => {
     'assertAuthThrottle',
     'establishAccountSession',
     'serializeAccount',
-    'serializeActiveRoom'
+    'serializeActiveRoom',
+    'recordEmailConversion',
+    'createMarketingUnsubscribeUrl'
   ].forEach((key) => assert.equal(typeof context[key], 'function', key));
 });
 

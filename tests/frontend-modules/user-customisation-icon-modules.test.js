@@ -42,7 +42,9 @@ test('user customisation icon modules load before their startup script', () => {
 
   assert.ok(startupIndex > -1);
   iconModules.forEach((filename) => {
-    const moduleIndex = template.indexOf(`'/scripts/general/online/${filename}'`);
+    const moduleIndex = template.indexOf(
+      `'/scripts/general/online/${filename}'`
+    );
     assert.ok(moduleIndex > -1, `${filename} should be configured`);
     assert.ok(moduleIndex < startupIndex, `${filename} should load first`);
   });
@@ -107,20 +109,18 @@ test('getUserIconString prefers the signed-in account OE icon', () => {
   };
   context.window = context;
 
-  ['user-customisation-icon/state.js', 'user-customisation-icon/data.js'].forEach(
-    (filename) => {
-      vm.runInNewContext(
-        fs.readFileSync(path.join(scriptsDirectory, filename), 'utf8'),
-        context,
-        { filename }
-      );
-    }
-  );
+  [
+    'user-customisation-icon/state.js',
+    'user-customisation-icon/data.js'
+  ].forEach((filename) => {
+    vm.runInNewContext(
+      fs.readFileSync(path.join(scriptsDirectory, filename), 'utf8'),
+      context,
+      { filename }
+    );
+  });
 
-  assert.equal(
-    context.getUserIconString(),
-    'base-blue:cap:wide-eyes:smile'
-  );
+  assert.equal(context.getUserIconString(), 'base-blue:cap:wide-eyes:smile');
 });
 
 test('UpdateUserIcons does not require the gamemode settings globals', async () => {

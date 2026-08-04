@@ -9,7 +9,10 @@ const utilsSource = fs.readFileSync(
   'utf8'
 );
 const overlaySource = fs.readFileSync(
-  path.join(__dirname, '../../public/scripts/general/overlay-and-toggle/overlay-and-toggle.js'),
+  path.join(
+    __dirname,
+    '../../public/scripts/general/overlay-and-toggle/overlay-and-toggle.js'
+  ),
   'utf8'
 );
 
@@ -56,7 +59,10 @@ test('a dismissible settings layer suspends and restores a permanent layer', () 
   assert.equal(gameOver.classList.contains('is-visible'), true);
   assert.equal(dom.window.overlayText.hidden, true);
 
-  dom.window.addElementIfNotExists(dom.window.settingsElementClassArray, account);
+  dom.window.addElementIfNotExists(
+    dom.window.settingsElementClassArray,
+    account
+  );
   assert.equal(gameOver.classList.contains('is-visible'), false);
   assert.equal(account.classList.contains('is-visible'), true);
   assert.equal(dom.window.overlayText.hidden, false);
@@ -65,10 +71,10 @@ test('a dismissible settings layer suspends and restores a permanent layer', () 
   assert.equal(account.classList.contains('is-visible'), false);
   assert.equal(gameOver.classList.contains('is-visible'), true);
   assert.equal(dom.window.overlayText.hidden, true);
-  assert.deepEqual(
-    Array.from(dom.window.playedContainerSounds),
-    ['containerOpen', 'containerClose']
-  );
+  assert.deepEqual(Array.from(dom.window.playedContainerSounds), [
+    'containerOpen',
+    'containerClose'
+  ]);
 });
 
 test('managed containers use default transition sounds only for real actions', () => {
@@ -86,10 +92,10 @@ test('managed containers use default transition sounds only for real actions', (
   dom.window.toggleOverlay(false);
   dom.window.toggleOverlay(false);
 
-  assert.deepEqual(
-    Array.from(dom.window.playedContainerSounds),
-    ['containerOpen', 'containerClose']
-  );
+  assert.deepEqual(Array.from(dom.window.playedContainerSounds), [
+    'containerOpen',
+    'containerClose'
+  ]);
 });
 
 test('managed containers support custom and silent transition sounds', () => {
@@ -107,16 +113,13 @@ test('managed containers support custom and silent transition sounds', () => {
 
   gameOver.dataset.containerOpenSound = 'none';
   gameOver.dataset.containerCloseSound = 'none';
-  dom.window.addElementIfNotExists(
-    dom.window.elementClassArray,
-    gameOver
-  );
+  dom.window.addElementIfNotExists(dom.window.elementClassArray, gameOver);
   dom.window.toggleOverlay(false);
 
-  assert.deepEqual(
-    Array.from(dom.window.playedContainerSounds),
-    ['accountOpen', 'accountClose']
-  );
+  assert.deepEqual(Array.from(dom.window.playedContainerSounds), [
+    'accountOpen',
+    'accountClose'
+  ]);
 });
 
 test('suspending and restoring an underlying container does not replay sounds', () => {
@@ -136,10 +139,10 @@ test('suspending and restoring an underlying container does not replay sounds', 
   dom.window.toggleOverlay(false);
 
   assert.equal(gameOver.classList.contains('is-visible'), true);
-  assert.deepEqual(
-    Array.from(dom.window.playedContainerSounds),
-    ['containerOpen', 'containerClose']
-  );
+  assert.deepEqual(Array.from(dom.window.playedContainerSounds), [
+    'containerOpen',
+    'containerClose'
+  ]);
 });
 
 test('loading the overlay script again reuses the single backdrop', () => {

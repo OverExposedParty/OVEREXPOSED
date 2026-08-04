@@ -96,6 +96,20 @@ function SetGameSettingsButtons() {
               gamemodeSettings = removeSetting(gamemodeSettings, key);
             }
           }
+
+          const isPack = Boolean(
+            button.closest('.packs-content-container')
+          );
+          window.OEAnalytics?.track(
+            isPack ? 'game.pack_changed' : 'game.rule_changed',
+            isPack
+              ? { packKey: key, enabled: isActive }
+              : { ruleKey: key, enabled: isActive, value: isActive },
+            {
+              gameMode: partyGameMode,
+              playMode: partyCode ? 'online' : 'offline'
+            }
+          );
         }
 
         UpdateSettings();
@@ -157,12 +171,25 @@ function SetGameSettingsButtons() {
       }
 
       function updateCount(newCount) {
+        const previousCount = count;
         count = newCount;
         container.setAttribute('data-count', count);
         container.dataset.count = String(count);
         countDisplay.textContent = count;
         localStorage.setItem(key, count);
         UpdateSettings();
+        window.OEAnalytics?.track(
+          'game.rule_changed',
+          {
+            ruleKey: key,
+            value: count,
+            previousValue: previousCount
+          },
+          {
+            gameMode: partyGameMode,
+            playMode: partyCode ? 'online' : 'offline'
+          }
+        );
       }
 
       if (alreadyBound) {

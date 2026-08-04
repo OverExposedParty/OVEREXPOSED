@@ -37,12 +37,17 @@ test('Truth or Dare setup loads instruction modules before the compatibility fac
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -63,13 +68,20 @@ test('Truth or Dare instruction modules preserve their public handler contract',
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(truthOrDareDirectory, 'truth-or-dare-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(truthOrDareDirectory, 'truth-or-dare-online-instructions.js'),
+      'utf8'
+    ),
     context,
     { filename: 'truth-or-dare-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -115,7 +127,10 @@ test('Truth or Dare retires written answers and redirects legacy instructions', 
     settings['truth-or-dare-settings'].map((rule) => rule['settings-name']),
     ['prompt-heist', 'rounds', 'drink-wheel', 'take-a-shot']
   );
-  assert.doesNotMatch(selectedUserTemplate, /answer-question-container|textarea/);
+  assert.doesNotMatch(
+    selectedUserTemplate,
+    /answer-question-container|textarea/
+  );
   assert.doesNotMatch(onlinePage, /answer-view/);
   assert.equal(
     context.getTruthOrDareInstructionFallback(),
@@ -311,10 +326,7 @@ test('Truth or Dare flow sounds follow deduplicated state transitions', async ()
   assert.deepEqual(flowSounds, [
     {
       kind: 'sequence',
-      eventNames: [
-        'actionConfirmed',
-        'truthSelected'
-      ],
+      eventNames: ['actionConfirmed', 'truthSelected'],
       options: {
         priority: 'voice',
         conflictPolicy: 'queue-latest',
@@ -339,8 +351,7 @@ test('Truth or Dare flow sounds follow deduplicated state transitions', async ()
     {
       kind: 'single',
       eventName: 'punishmentReveal',
-      eventId:
-        'ABC-123:truth-or-dare:punishment-reveal:1-0-0:player-2:2_sips'
+      eventId: 'ABC-123:truth-or-dare:punishment-reveal:1-0-0:player-2:2_sips'
     },
     {
       kind: 'single',
@@ -349,10 +360,7 @@ test('Truth or Dare flow sounds follow deduplicated state transitions', async ()
     },
     {
       kind: 'sequence',
-      eventNames: [
-        'roundStart',
-        'yourTurn'
-      ],
+      eventNames: ['roundStart', 'yourTurn'],
       options: {
         priority: 'phase',
         conflictPolicy: 'queue-latest',
@@ -361,10 +369,7 @@ test('Truth or Dare flow sounds follow deduplicated state transitions', async ()
     },
     {
       kind: 'sequence',
-      eventNames: [
-        'gameComplete',
-        'gameOver'
-      ],
+      eventNames: ['gameComplete', 'gameOver'],
       options: {
         priority: 'critical',
         conflictPolicy: 'interrupt',
@@ -449,10 +454,7 @@ test('Truth or Dare only adds the your-turn cue for the active player', async ()
     },
     {
       kind: 'sequence',
-      eventNames: [
-        'roundStart',
-        'yourTurn'
-      ]
+      eventNames: ['roundStart', 'yourTurn']
     }
   ]);
 });
@@ -483,10 +485,7 @@ test('Truth or Dare punishment text does not duplicate the action verb', () => {
     context.formatTruthOrDarePunishmentText('2_SIPS'),
     'Take 2 sips.'
   );
-  assert.equal(
-    context.formatTruthOrDarePunishmentText('DOWN_IT'),
-    'Down it!'
-  );
+  assert.equal(context.formatTruthOrDarePunishmentText('DOWN_IT'), 'Down it!');
 });
 
 test('Truth or Dare question type confirmation uses an atomic voice sequence', async () => {
@@ -516,10 +515,13 @@ test('Truth or Dare question type confirmation uses an atomic voice sequence', a
 
   await context.playTruthOrDareQuestionTypeConfirmation('truth');
   await context.playTruthOrDareQuestionTypeConfirmation('dare');
-  assert.deepEqual(playedSequences.map(({ eventNames }) => [...eventNames]), [
-    ['actionConfirmed', 'truthSelected'],
-    ['actionConfirmed', 'dareSelected']
-  ]);
+  assert.deepEqual(
+    playedSequences.map(({ eventNames }) => [...eventNames]),
+    [
+      ['actionConfirmed', 'truthSelected'],
+      ['actionConfirmed', 'dareSelected']
+    ]
+  );
   playedSequences.forEach(({ options }) => {
     assert.equal(options.priority, 'voice');
     assert.equal(options.conflictPolicy, 'queue-latest');
@@ -582,18 +584,9 @@ test('Truth or Dare contextual audio controls suppress generic selection sounds'
     'utf8'
   );
 
-  assert.match(
-    selectedUserTemplate,
-    /id="truth"[^>]*data-sound="none"/
-  );
-  assert.match(
-    selectedUserTemplate,
-    /id="dare"[^>]*data-sound="none"/
-  );
-  assert.match(
-    page,
-    /id="answer"[^>]*data-sound="none"/
-  );
+  assert.match(selectedUserTemplate, /id="truth"[^>]*data-sound="none"/);
+  assert.match(selectedUserTemplate, /id="dare"[^>]*data-sound="none"/);
+  assert.match(page, /id="answer"[^>]*data-sound="none"/);
 });
 
 test('Truth or Dare action lifecycle manages timer warnings', () => {
@@ -627,10 +620,22 @@ test('Truth or Dare action lifecycle manages timer warnings', () => {
     'utf8'
   );
 
-  assert.match(promptFlow, /syncTruthOrDareTimerWarning\([\s\S]*?'select-question-type'\s*\)/);
-  assert.match(promptFlow, /syncTruthOrDareTimerWarning\([\s\S]*?'answer-or-pass'\s*\)/);
-  assert.match(promptFlow, /syncTruthOrDareTimerWarning\([\s\S]*?'prompt-heist'\s*\)/);
-  assert.match(answerFlow, /syncTruthOrDareTimerWarning\([\s\S]*?'complete-prompt'\s*\)/);
+  assert.match(
+    promptFlow,
+    /syncTruthOrDareTimerWarning\([\s\S]*?'select-question-type'\s*\)/
+  );
+  assert.match(
+    promptFlow,
+    /syncTruthOrDareTimerWarning\([\s\S]*?'answer-or-pass'\s*\)/
+  );
+  assert.match(
+    promptFlow,
+    /syncTruthOrDareTimerWarning\([\s\S]*?'prompt-heist'\s*\)/
+  );
+  assert.match(
+    answerFlow,
+    /syncTruthOrDareTimerWarning\([\s\S]*?'complete-prompt'\s*\)/
+  );
   assert.match(
     punishmentFlow,
     /syncTruthOrDareTimerWarning\([\s\S]*?'choose-punishment'\s*\)/

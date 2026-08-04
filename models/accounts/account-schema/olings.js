@@ -196,4 +196,16 @@ const accountOlingsSchema = new Schema(
   { _id: false }
 );
 
-module.exports = { olingEggSchema, olingConsumableSchema, olingFurnitureSchema, olingPetSchema, olingHatchHistorySchema, olingInventorySchema, olingLabInventorySlotSchema, olingLabContainerSlotSchema, olingLabPlacedItemSchema, olingLabSchema, accountOlingsSchema };
+module.exports = {
+  olingEggSchema,
+  olingConsumableSchema,
+  olingFurnitureSchema,
+  olingPetSchema,
+  olingHatchHistorySchema,
+  olingInventorySchema,
+  olingLabInventorySlotSchema,
+  olingLabContainerSlotSchema,
+  olingLabPlacedItemSchema,
+  olingLabSchema,
+  accountOlingsSchema
+};

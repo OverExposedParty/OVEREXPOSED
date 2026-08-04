@@ -278,6 +278,29 @@ test('achievement normalization accepts legacy category values', () => {
   );
 });
 
+test('achievement normalization rewrites legacy icon directories', () => {
+  assert.equal(
+    normalization.normalizeAchievementForDb({
+      key: 'legacy-profile-achievement',
+      category: 'account',
+      image: '/images/achievements/icons/account/legacy-profile-achievement.svg'
+    }).image,
+    '/images/achievements/icons/account/profile/legacy-profile-achievement.svg'
+  );
+
+  assert.equal(
+    normalization.serializeAchievementForJson({
+      key: 'legacy-imposter-achievement',
+      category: 'gameplay',
+      subcategory: 'online',
+      gamemode: 'imposter',
+      image:
+        '/images/achievements/icons/imposter-online/legacy-imposter-achievement.svg'
+    }).image,
+    '/images/achievements/icons/gameplay/online/imposter/legacy-imposter-achievement.svg'
+  );
+});
+
 test('achievement import/export normalization preserves rewards arrays', () => {
   const achievement = {
     key: 'reward-stack',

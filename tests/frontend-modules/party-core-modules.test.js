@@ -23,7 +23,9 @@ const moduleNames = [
 test('party core support modules load before the compatibility script', () => {
   const settingsSource = fs.readFileSync(onlineSettingsPath, 'utf8');
   const moduleIndexes = moduleNames.map((filename) =>
-    settingsSource.indexOf(`'/scripts/party-games/online/party-core/${filename}'`)
+    settingsSource.indexOf(
+      `'/scripts/party-games/online/party-core/${filename}'`
+    )
   );
   const coreIndex = settingsSource.indexOf(
     "'/scripts/party-games/online/party-core.js'"
@@ -36,8 +38,9 @@ test('party core support modules load before the compatibility script', () => {
   assert.ok(moduleIndexes.every((index) => index < coreIndex));
   assert.ok(coreIndex < apiIndex);
   assert.ok(
-    moduleIndexes.every((index, moduleIndex) =>
-      moduleIndex === 0 || index > moduleIndexes[moduleIndex - 1]
+    moduleIndexes.every(
+      (index, moduleIndex) =>
+        moduleIndex === 0 || index > moduleIndexes[moduleIndex - 1]
     )
   );
 });
@@ -84,7 +87,10 @@ test('party core modules preserve the shared browser API', () => {
   const sandbox = vm.createContext(context);
   for (const filename of moduleNames) {
     vm.runInContext(
-      fs.readFileSync(path.join(onlineDirectory, 'party-core', filename), 'utf8'),
+      fs.readFileSync(
+        path.join(onlineDirectory, 'party-core', filename),
+        'utf8'
+      ),
       sandbox,
       { filename }
     );

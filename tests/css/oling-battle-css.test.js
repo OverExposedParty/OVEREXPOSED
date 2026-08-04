@@ -4,11 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const cssDirectory = path.join(__dirname, '../../public/css/olings');
-const battleEntryPath = path.join(
-  cssDirectory,
-  'battle',
-  'battle-olings.css'
-);
+const battleEntryPath = path.join(cssDirectory, 'battle', 'battle-olings.css');
 const modules = [
   'base.css',
   'arena.css',

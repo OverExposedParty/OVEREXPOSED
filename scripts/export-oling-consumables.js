@@ -2,10 +2,7 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 
-const {
-  OlingConsumable,
-  olingsConnection
-} = require('../server/models');
+const { OlingConsumable, olingsConnection } = require('../server/models');
 const { exportOlingConsumablesToJson } = require('../server/services/olings');
 
 function getDatabaseUri(baseUri, dbName) {

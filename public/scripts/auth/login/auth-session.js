@@ -12,6 +12,32 @@
   ]);
 
   function createLoginAuthSession({ defaultOeIcon, setAuthStatus }) {
+    const AUTH_ENTRY_POINTS = new Set([
+      'direct_auth_url',
+      'account_notification',
+      'account_container',
+      'protected_page',
+      'auth_page_tab'
+    ]);
+
+    function getAuthEntryPoint() {
+      const value = new URLSearchParams(window.location.search).get(
+        'authEntryPoint'
+      );
+      return AUTH_ENTRY_POINTS.has(value) ? value : 'direct_auth_url';
+    }
+
+    function trackAuthCompletion(properties) {
+      window.OEAnalytics?.track('auth.completed', properties);
+      if (properties.entryPoint !== 'account_notification') return;
+      window.OEAnalytics?.track('notification.conversion', {
+        notificationKey: 'create_account_prompt',
+        notificationType: 'account-prompt',
+        flow: properties.flow,
+        provider: properties.provider
+      });
+    }
+
     function getRememberedPartyResumePath(returnUrl) {
       const partyCodeMatch = returnUrl.pathname.match(PARTY_CODE_PATH_PATTERN);
       if (!partyCodeMatch) return '';
@@ -129,6 +155,12 @@
           provider ? `Signed in with ${provider}.` : 'You are signed in.',
           'success'
         );
+        trackAuthCompletion({
+          flow: searchParams.get('flow') || 'signin',
+          provider: provider || 'email',
+          entryPoint: getAuthEntryPoint(),
+          outcome: 'success'
+        });
         clearAuthResultFromUrl(searchParams);
         if (
           activePartyCode &&
@@ -150,6 +182,13 @@
         return;
       }
       if (authResult === 'error') {
+        window.OEAnalytics?.track('auth.failed', {
+          flow: searchParams.get('flow') || 'signin',
+          provider: searchParams.get('provider') || 'email',
+          entryPoint: getAuthEntryPoint(),
+          outcome: 'error',
+          reason: 'oauth_error'
+        });
         setAuthStatus(
           searchParams.get('message') || 'Social sign in failed.',
           'error'
@@ -279,6 +318,7 @@
 
     return {
       continueAsGuest,
+      getAuthEntryPoint,
       getFormData,
       getLocalOeIcon,
       getReturnSplashScreen,

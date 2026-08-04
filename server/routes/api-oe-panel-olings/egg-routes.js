@@ -1,7 +1,11 @@
 function registerOePanelOlingEggRoutes(context, helpers) {
   const { app } = context;
   const { OlingEgg } = context.models || {};
-  const { createOePanelEggPayload, serializeOePanelOlingEgg, upsertOePanelBuildSets } = helpers;
+  const {
+    createOePanelEggPayload,
+    serializeOePanelOlingEgg,
+    upsertOePanelBuildSets
+  } = helpers;
 
   with (context) {
     app.post('/api/oe-panel/olings/eggs', async (req, res) => {
@@ -161,7 +165,6 @@ function registerOePanelOlingEggRoutes(context, helpers) {
         });
       }
     });
-
   }
 }
 

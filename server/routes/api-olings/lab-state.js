@@ -1,7 +1,4 @@
-const {
-  clampInteger,
-  createDefaultOlingLab
-} = require('./lab-state/defaults');
+const { clampInteger, createDefaultOlingLab } = require('./lab-state/defaults');
 const {
   serializeOlingLabItem,
   getAllowedRoomRows,

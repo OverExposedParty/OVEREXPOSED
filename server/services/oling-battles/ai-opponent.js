@@ -1,5 +1,10 @@
 const { DEFAULT_AI_DIFFICULTY } = require('./constants');
-const { clampDifficulty, createAiBattlePlayer, getAiOpponent, getHumanMatchPlayer } = require('./battle-players');
+const {
+  clampDifficulty,
+  createAiBattlePlayer,
+  getAiOpponent,
+  getHumanMatchPlayer
+} = require('./battle-players');
 const { recordBattleEvent } = require('./events');
 const { getBattleMatch } = require('./match-lifecycle');
 

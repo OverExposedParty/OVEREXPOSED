@@ -497,6 +497,53 @@ a.oe-panel-data-table-cell-content:focus-visible {
   text-align: center;
 }
 
+.oe-panel-data-table-expanded-action:disabled {
+  color: #8d8d8d;
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.oe-panel-data-table-expanded-action-tooltip {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.oe-panel-data-table-expanded-action-tooltip
+  .oe-panel-data-table-expanded-action {
+  width: 100%;
+  height: 100%;
+}
+
+.oe-panel-data-table-expanded-action-tooltip::after {
+  position: absolute;
+  z-index: 20;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  width: max-content;
+  max-width: min(22rem, 80vw);
+  padding: 0.45rem 0.55rem;
+  border: 1px solid
+    var(--oe-panel-widget-primary-colour, var(--primarypagecolour));
+  border-radius: 0.25rem;
+  background: #171717;
+  color: #f4f4f4;
+  content: attr(data-tooltip);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 120ms ease;
+}
+
+.oe-panel-data-table-expanded-action-tooltip:hover::after,
+.oe-panel-data-table-expanded-action-tooltip:focus-visible::after {
+  opacity: 1;
+}
+
 .oe-panel-data-table-expanded-action:focus-visible {
   background-color: var(
     --oe-panel-widget-secondary-colour,
@@ -507,7 +554,7 @@ a.oe-panel-data-table-cell-content:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .oe-panel-data-table-expanded-action:hover {
+  .oe-panel-data-table-expanded-action:not(:disabled):hover {
     background-color: var(
       --oe-panel-widget-secondary-colour,
       var(--secondarypagecolour)

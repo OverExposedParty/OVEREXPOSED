@@ -9,7 +9,10 @@ const sync = require('../../server/services/olings/definitions/sync');
 
 test('Oling definitions facade delegates to focused modules', () => {
   assert.equal(definitions.getLayerPool, buildSets.getLayerPool);
-  assert.equal(definitions.serializePlayerOling, serializers.serializePlayerOling);
+  assert.equal(
+    definitions.serializePlayerOling,
+    serializers.serializePlayerOling
+  );
   assert.equal(definitions.listOlingConsumables, catalog.listOlingConsumables);
   assert.equal(
     definitions.importOlingDefinitionsFromJson,

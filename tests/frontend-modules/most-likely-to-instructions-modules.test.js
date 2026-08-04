@@ -34,12 +34,17 @@ test('Most Likely To setup loads instruction modules before the compatibility fa
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -60,13 +65,20 @@ test('Most Likely To instruction modules preserve their public handler contract'
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(mostLikelyToDirectory, 'most-likely-to-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(mostLikelyToDirectory, 'most-likely-to-online-instructions.js'),
+      'utf8'
+    ),
     context,
     { filename: 'most-likely-to-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -213,10 +225,7 @@ test('Most Likely To flow sounds follow deduplicated state transitions', async (
 
   context.currentPartyData.deck.currentCardIndex = 1;
   await context.syncMostLikelyToFlowSounds({}, 'DISPLAY_PRIVATE_CARD');
-  await context.syncMostLikelyToFlowSounds(
-    { phase: 'game-over' },
-    'GAME_OVER'
-  );
+  await context.syncMostLikelyToFlowSounds({ phase: 'game-over' }, 'GAME_OVER');
 
   assert.deepEqual(flowSounds, [
     {
@@ -229,8 +238,7 @@ test('Most Likely To flow sounds follow deduplicated state transitions', async (
     },
     {
       eventName: 'punishmentReveal',
-      eventId:
-        'ABC-123:most-likely-to:punishment-reveal:0:player-2:take_3_sips'
+      eventId: 'ABC-123:most-likely-to:punishment-reveal:0:player-2:take_3_sips'
     },
     {
       eventName: 'roundStart',
@@ -268,7 +276,10 @@ test('Most Likely To action lifecycle manages timer warnings', () => {
   );
 
   assert.match(voteFlow, /syncMostLikelyToTimerWarning\([\s\S]*?'vote'\s*\)/);
-  assert.match(voteFlow, /syncMostLikelyToTimerWarning\([\s\S]*?'tiebreaker'\s*\)/);
+  assert.match(
+    voteFlow,
+    /syncMostLikelyToTimerWarning\([\s\S]*?'tiebreaker'\s*\)/
+  );
   assert.match(
     punishmentFlow,
     /syncMostLikelyToTimerWarning\([\s\S]*?'choose-punishment'\s*\)/

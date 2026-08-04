@@ -1,3 +1,5 @@
+const { applyMarketingConsent } = require('../../services/marketing-consent');
+
 function registerAccountRegistrationRoutes(context) {
   const {
     app,
@@ -16,9 +18,12 @@ function registerAccountRegistrationRoutes(context) {
     Achievement,
     upgradeGuestPartyIdentityForAccount,
     sendVerificationEmail,
+    EmailAutomation,
     EmailTemplate,
+    EmailDelivery,
+    recordEmailConversion,
     serializeAccount,
-    getEmailVerifiedRedirect,
+    establishAccountSession,
     recordProfileCompletionAchievement,
     getCurrentAccount,
     requireVerifiedAccount,
@@ -62,7 +67,10 @@ function registerAccountRegistrationRoutes(context) {
           oeIcon: normalizeOeIcon(req.body?.oeIcon) || null,
           emailVerified: false,
           emailVerifiedAt: null,
-          accountStatus: 'pending_verification'
+          accountStatus: 'pending_verification',
+          notificationPreferences: {
+            marketingEmail: accountInput.marketingEmailOptIn
+          }
         },
         security: {
           emailVerification: {
@@ -72,7 +80,10 @@ function registerAccountRegistrationRoutes(context) {
             ipAddress: req.ip
           }
         },
-        legalConsent: createSignupLegalConsent(req),
+        legalConsent: createSignupLegalConsent(
+          req,
+          accountInput.marketingEmailOptIn
+        ),
         analytics: signupContext ? { signupContext } : undefined
       });
 
@@ -103,7 +114,9 @@ function registerAccountRegistrationRoutes(context) {
           req,
           to: account.email,
           verifyToken: emailVerificationToken,
-          EmailTemplate
+          EmailAutomation,
+          EmailTemplate,
+          EmailDelivery
         });
         verificationEmailSent = !emailResult?.skipped;
       } catch (emailError) {
@@ -150,26 +163,47 @@ function registerAccountRegistrationRoutes(context) {
   });
 
   app.get('/api/accounts/verify-email', async (req, res) => {
-    const token = typeof req.query.token === 'string' ? req.query.token : '';
+    const params = new URLSearchParams();
+    if (typeof req.query.token === 'string' && req.query.token) {
+      params.set('token', req.query.token);
+    }
+    if (
+      typeof req.query.emailTrackingId === 'string' &&
+      req.query.emailTrackingId
+    ) {
+      params.set('emailTrackingId', req.query.emailTrackingId);
+    }
+    const query = params.toString();
+    res.redirect(`/verify-email${query ? `?${query}` : ''}`);
+  });
+
+  app.post('/api/accounts/verify-email/complete', async (req, res) => {
+    const token =
+      typeof req.body?.token === 'string' ? req.body.token.trim() : '';
     const tokenHash = token ? hashEmailVerificationToken(token) : '';
 
     if (!tokenHash) {
-      return res.redirect(getEmailVerifiedRedirect(req, 'invalid'));
+      return res.apiError({
+        status: 400,
+        code: 'invalid_email_verification_token',
+        message: 'This email confirmation link is invalid or has expired'
+      });
     }
 
     try {
+      const now = new Date();
       const account = await Account.findOneAndUpdate(
         {
           'security.emailVerification.tokenHash': tokenHash,
-          'security.emailVerification.expiresAt': { $gt: new Date() },
+          'security.emailVerification.expiresAt': { $gt: now },
           'security.emailVerification.completedAt': null
         },
         {
           $set: {
             'profile.emailVerified': true,
-            'profile.emailVerifiedAt': new Date(),
+            'profile.emailVerifiedAt': now,
             'profile.accountStatus': 'active',
-            'security.emailVerification.completedAt': new Date()
+            'security.emailVerification.completedAt': now
           },
           $unset: {
             'security.emailVerification.tokenHash': '',
@@ -179,7 +213,37 @@ function registerAccountRegistrationRoutes(context) {
         { new: true, runValidators: false }
       );
 
-      if (account) {
+      if (!account) {
+        return res.apiError({
+          status: 400,
+          code: 'invalid_email_verification_token',
+          message: 'This email confirmation link is invalid or has expired'
+        });
+      }
+
+      let signedIn = true;
+      let activePartyConflict = null;
+      try {
+        const sessionResult =
+          (await establishAccountSession(req, res, account)) || {};
+        activePartyConflict = sessionResult.activePartyConflict || null;
+      } catch (sessionError) {
+        signedIn = false;
+        console.error(
+          `[REQ ${req.id}] Email verified but automatic sign in failed:`,
+          sessionError
+        );
+      }
+
+      await recordEmailConversion?.({
+        EmailDelivery,
+        trackingId:
+          typeof req.body?.emailTrackingId === 'string'
+            ? req.body.emailTrackingId
+            : ''
+      });
+
+      try {
         await recordProfileCompletionAchievement(account, 'email-verified');
         await unlockAchievementByKey({
           Achievement,
@@ -187,14 +251,28 @@ function registerAccountRegistrationRoutes(context) {
           key: 'verified',
           source: 'email-verified'
         });
+      } catch (achievementError) {
+        console.error(
+          `[REQ ${req.id}] Email verified but achievement processing failed:`,
+          achievementError
+        );
       }
 
-      res.redirect(
-        getEmailVerifiedRedirect(req, account ? 'success' : 'invalid')
-      );
+      res.apiSuccess({
+        message: signedIn
+          ? 'Email confirmed. You are signed in.'
+          : 'Email confirmed, but automatic sign in failed. Please sign in.',
+        signedIn,
+        account: serializeAccount(account),
+        ...(activePartyConflict ? { activePartyConflict } : {})
+      });
     } catch (err) {
       console.error(`[REQ ${req.id}] Failed to verify account email:`, err);
-      res.redirect(getEmailVerifiedRedirect(req, 'error'));
+      res.apiError({
+        status: 500,
+        code: 'email_verification_failed',
+        message: 'Email confirmation failed. Try again later.'
+      });
     }
   });
 
@@ -237,7 +315,9 @@ function registerAccountRegistrationRoutes(context) {
         req,
         to: account.email,
         verifyToken: emailVerificationToken,
-        EmailTemplate
+        EmailAutomation,
+        EmailTemplate,
+        EmailDelivery
       });
 
       res.apiSuccess({
@@ -289,7 +369,10 @@ function registerAccountRegistrationRoutes(context) {
       const emailResult = await sendEmailChangeEmail({
         req,
         to: account.email,
-        changeToken: emailChangeToken
+        changeToken: emailChangeToken,
+        EmailAutomation,
+        EmailTemplate,
+        EmailDelivery
       });
 
       res.apiSuccess({
@@ -365,6 +448,16 @@ function registerAccountRegistrationRoutes(context) {
 
       const previousEmail = account.email;
       const emailVerificationToken = createEmailVerificationToken();
+      if (
+        account.legalConsent?.marketingConsentStatus === 'accepted' ||
+        account.profile?.notificationPreferences?.marketingEmail === true
+      ) {
+        applyMarketingConsent(account, {
+          accepted: false,
+          req,
+          source: 'email_change'
+        });
+      }
       account.email = emailChangeInput.email;
       account.profile.emailVerified = false;
       account.profile.emailVerifiedAt = null;
@@ -390,11 +483,18 @@ function registerAccountRegistrationRoutes(context) {
       account.security.emailChangeRequest.tokenHash = null;
       await account.save();
 
+      await recordEmailConversion?.({
+        EmailDelivery,
+        trackingId: String(req.body?.emailTrackingId || '')
+      });
+
       await sendVerificationEmail({
         req,
         to: account.email,
         verifyToken: emailVerificationToken,
-        EmailTemplate
+        EmailAutomation,
+        EmailTemplate,
+        EmailDelivery
       }).catch((emailError) => {
         console.error(
           `[REQ ${req.id}] Failed to send new email verification:`,

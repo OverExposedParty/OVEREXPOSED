@@ -1,4 +1,9 @@
-const { OLING_LAYERS, OLING_RARITIES, normalizeKey, toPlainObject } = require('../shared');
+const {
+  OLING_LAYERS,
+  OLING_RARITIES,
+  normalizeKey,
+  toPlainObject
+} = require('../shared');
 
 function getSetDerivedOlingPools(egg) {
   const pools = Object.fromEntries(

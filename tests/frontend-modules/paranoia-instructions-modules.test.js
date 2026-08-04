@@ -38,12 +38,17 @@ test('Paranoia setup loads instruction modules before the compatibility facade',
 
   supportScripts.forEach((scriptPath) => {
     const index = setup.indexOf(scriptPath);
-    assert.ok(index > previousIndex, `${scriptPath} should load in dependency order`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should load in dependency order`
+    );
     previousIndex = index;
   });
 
   assert.ok(
-    setup.indexOf('`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`') > previousIndex,
+    setup.indexOf(
+      '`${instructionsBasePath}/${cardContainerGamemode}-online-instructions.js`'
+    ) > previousIndex,
     'the facade should load after every support module'
   );
 });
@@ -64,13 +69,20 @@ test('Paranoia instruction modules preserve their public handler contract', () =
   });
 
   vm.runInContext(
-    fs.readFileSync(path.join(paranoiaDirectory, 'paranoia-online-instructions.js'), 'utf8'),
+    fs.readFileSync(
+      path.join(paranoiaDirectory, 'paranoia-online-instructions.js'),
+      'utf8'
+    ),
     context,
     { filename: 'paranoia-online-instructions.js' }
   );
 
   publicHandlers.forEach((handler) => {
-    assert.equal(typeof context[handler], 'function', `${handler} should remain public`);
+    assert.equal(
+      typeof context[handler],
+      'function',
+      `${handler} should remain public`
+    );
   });
 });
 
@@ -182,7 +194,10 @@ test('Paranoia flow sounds follow deduplicated state transitions', async () => {
   );
 
   await context.syncParanoiaFlowSounds({}, 'DISPLAY_PRIVATE_CARD:READING_CARD');
-  await context.syncParanoiaFlowSounds({}, 'DISPLAY_PRIVATE_CARD:CHOOSE_PLAYER');
+  await context.syncParanoiaFlowSounds(
+    {},
+    'DISPLAY_PRIVATE_CARD:CHOOSE_PLAYER'
+  );
   assert.deepEqual(flowSounds, [], 'the initial state should be silent');
 
   await context.syncParanoiaFlowSounds(
@@ -229,8 +244,7 @@ test('Paranoia flow sounds follow deduplicated state transitions', async () => {
     },
     {
       eventName: 'punishmentReveal',
-      eventId:
-        'ABC-123:paranoia:punishment-reveal:0:player-2:take_2_sips'
+      eventId: 'ABC-123:paranoia:punishment-reveal:0:player-2:take_2_sips'
     },
     {
       eventName: 'playerPassed',
@@ -275,7 +289,10 @@ test('Paranoia action lifecycle manages timer warnings', () => {
     'utf8'
   );
 
-  assert.match(questionFlow, /syncParanoiaTimerWarning\([\s\S]*?'select-target'\s*\)/);
+  assert.match(
+    questionFlow,
+    /syncParanoiaTimerWarning\([\s\S]*?'select-target'\s*\)/
+  );
   assert.match(questionFlow, /syncParanoiaTimerWarning\([\s\S]*?'reveal'\s*\)/);
   assert.match(
     punishmentFlow,

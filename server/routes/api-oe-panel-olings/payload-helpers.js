@@ -349,7 +349,6 @@ function createOePanelOlingPayloadHelpers(context) {
       return { update };
     }
 
-
     return {
       OE_PANEL_OLING_LAYERS,
       OE_PANEL_OLING_RARITIES,

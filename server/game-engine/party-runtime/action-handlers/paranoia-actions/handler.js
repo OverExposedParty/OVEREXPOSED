@@ -1,9 +1,5 @@
-const {
-  createParanoiaTargetSelectionHandlers
-} = require('./target-selection');
-const {
-  createParanoiaPunishmentFlowHandlers
-} = require('./punishment-flow');
+const { createParanoiaTargetSelectionHandlers } = require('./target-selection');
+const { createParanoiaPunishmentFlowHandlers } = require('./punishment-flow');
 const { createParanoiaTimeoutHandlers } = require('./timeouts');
 
 function createParanoiaActionHandler() {

@@ -1,6 +1,4 @@
-const {
-  isPartyRoomActive
-} = require('../../../services/party-room-activity');
+const { isPartyRoomActive } = require('../../../services/party-room-activity');
 
 function createPartyUtilityRoutes(context) {
   const { app, assertPartyId, appendPartyError, createPartyErrorEntry } =

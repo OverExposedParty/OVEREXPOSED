@@ -145,6 +145,40 @@ test('OE panel achievement rows format rewards arrays', () => {
   assert.equal(Object.hasOwn(row, 'reward'), false);
 });
 
+test('OE panel achievement rows rewrite legacy icon directories', () => {
+  const { createAchievementCreatePayload, serializeAchievementForPanel } =
+    createHelpers();
+
+  const row = serializeAchievementForPanel({
+    key: 'legacy-social-achievement',
+    name: 'Legacy Social Achievement',
+    category: 'social',
+    subcategory: 'friends',
+    image: '/images/achievements/icons/friends-social/first-friend.svg'
+  });
+  assert.equal(
+    row.image,
+    '/images/achievements/icons/social/friends/first-friend.svg'
+  );
+
+  const { achievement, error } = createAchievementCreatePayload({
+    key: 'legacy-settings-achievement',
+    name: 'Legacy Settings Achievement',
+    category: 'account',
+    subcategory: 'settings',
+    image: '/images/achievements/icons/settings/tinkerer.svg',
+    status: 'draft',
+    active: 'no',
+    hidden: 'no',
+    rewardsJson: ''
+  });
+  assert.equal(error, undefined);
+  assert.equal(
+    achievement.image,
+    '/images/achievements/icons/account/settings/tinkerer.svg'
+  );
+});
+
 test('OE panel achievement payload normalizes legacy gamemode categories', () => {
   const { createAchievementCreatePayload } = createHelpers();
   const { achievement, error } = createAchievementCreatePayload({

@@ -23,7 +23,10 @@ test('Find The OE facade loads support modules in dependency order', () => {
   supportScripts.forEach((scriptPath) => {
     const index = facade.indexOf(`/scripts/other/applications/${scriptPath}`);
 
-    assert.ok(index > previousIndex, `${scriptPath} should follow its dependencies`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should follow its dependencies`
+    );
     previousIndex = index;
   });
 });
@@ -32,7 +35,10 @@ test('Find The OE support modules register their shared game factory', () => {
   const context = vm.createContext({ window: {} });
 
   supportScripts.forEach((scriptPath) => {
-    const source = fs.readFileSync(path.join(applicationsDirectory, scriptPath), 'utf8');
+    const source = fs.readFileSync(
+      path.join(applicationsDirectory, scriptPath),
+      'utf8'
+    );
     vm.runInContext(source, context, { filename: scriptPath });
   });
 
@@ -63,25 +69,36 @@ test('Find The OE reaches its start screen after its modules load', async () => 
   const { window } = dom;
   const slotItems = {
     colour: [{ id: 'colour-1', slot: 'colour', 'file-path': '/colour.svg' }],
-    'head-slot': [{ id: 'head-1', slot: 'head-slot', 'file-path': '/head.svg' }],
-    'eyes-slot': [{ id: 'eyes-1', slot: 'eyes-slot', 'file-path': '/eyes.svg' }],
-    'mouth-slot': [{ id: 'mouth-1', slot: 'mouth-slot', 'file-path': '/mouth.svg' }]
+    'head-slot': [
+      { id: 'head-1', slot: 'head-slot', 'file-path': '/head.svg' }
+    ],
+    'eyes-slot': [
+      { id: 'eyes-1', slot: 'eyes-slot', 'file-path': '/eyes.svg' }
+    ],
+    'mouth-slot': [
+      { id: 'mouth-1', slot: 'mouth-slot', 'file-path': '/mouth.svg' }
+    ]
   };
 
   window.fetch = async (url) => ({
     ok: true,
-    json: async () => String(url).endsWith('oe-image-packs')
-      ? [{ 'pack-path': '/pack.json' }]
-      : slotItems
+    json: async () =>
+      String(url).endsWith('oe-image-packs')
+        ? [{ 'pack-path': '/pack.json' }]
+        : slotItems
   });
 
   supportScripts.forEach((scriptPath) => {
-    window.eval(fs.readFileSync(path.join(applicationsDirectory, scriptPath), 'utf8'));
+    window.eval(
+      fs.readFileSync(path.join(applicationsDirectory, scriptPath), 'utf8')
+    );
   });
   window.eval(fs.readFileSync(facadePath, 'utf8'));
 
   const mount = window.document.getElementById('mount');
-  const instance = await window.Error404Applications['find-the-oe-game'].init({ mount });
+  const instance = await window.Error404Applications['find-the-oe-game'].init({
+    mount
+  });
 
   assert.equal(instance.id, 'find-the-oe-game');
   assert.equal(mount.dataset.applicationReady, 'true');

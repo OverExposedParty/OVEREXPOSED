@@ -5,6 +5,85 @@ let cardPackMap = []; // Maps cards to their respective packs
 let numberOfQuestions = 0;
 let numberOfTruthQuestions = 0;
 let numberOfDareQuestions = 0;
+let offlineQuestionAnalyticsState = null;
+
+function getQuestionAnalyticsNow() {
+  return typeof window.performance?.now === 'function'
+    ? window.performance.now()
+    : Date.now();
+}
+
+function finishOfflineQuestionAnalytics(outcome = 'next_question') {
+  const state = offlineQuestionAnalyticsState;
+  if (!state) return;
+
+  const now = getQuestionAnalyticsNow();
+  if (state.visibleStartedAt !== null) {
+    state.activeMs += now - state.visibleStartedAt;
+  }
+  offlineQuestionAnalyticsState = null;
+  window.OEAnalytics?.track(
+    outcome === 'next_question'
+      ? 'game.question_advanced'
+      : 'game.question_abandoned',
+    {
+      questionId: state.questionId,
+      packKey: state.packKey,
+      questionType: state.questionType,
+      displayedMs: now - state.startedAt,
+      activeMs: state.activeMs,
+      outcome
+    },
+    { gameMode: gamemode, playMode: 'offline' }
+  );
+}
+
+function beginOfflineQuestionAnalytics(question) {
+  if ((typeof partyCode === 'string' && partyCode) || !question?.questionId) {
+    return;
+  }
+  finishOfflineQuestionAnalytics('next_question');
+  const now = getQuestionAnalyticsNow();
+  offlineQuestionAnalyticsState = {
+    questionId: question.questionId,
+    packKey: question.packKey || 'unknown-pack',
+    questionType: question.questionType || 'question',
+    startedAt: now,
+    visibleStartedAt: document.hidden ? null : now,
+    activeMs: 0
+  };
+  window.OEAnalytics?.track(
+    'game.question_shown',
+    {
+      questionId: question.questionId,
+      packKey: question.packKey || 'unknown-pack',
+      questionType: question.questionType || 'question'
+    },
+    { gameMode: gamemode, playMode: 'offline' }
+  );
+}
+
+document.addEventListener('visibilitychange', () => {
+  const state = offlineQuestionAnalyticsState;
+  if (!state) return;
+  const now = getQuestionAnalyticsNow();
+  if (document.hidden && state.visibleStartedAt !== null) {
+    state.activeMs += now - state.visibleStartedAt;
+    state.visibleStartedAt = null;
+  } else if (!document.hidden && state.visibleStartedAt === null) {
+    state.visibleStartedAt = now;
+  }
+});
+
+window.addEventListener('pagehide', () => {
+  finishOfflineQuestionAnalytics('page_exit');
+  window.OEAnalytics?.flush({ beacon: true });
+});
+
+window.OEOfflineQuestionAnalytics = {
+  beginQuestion: beginOfflineQuestionAnalytics,
+  finishQuestion: finishOfflineQuestionAnalytics
+};
 
 function addPartyCodeToQuestionContentUrl(url) {
   const code = String(
@@ -93,7 +172,7 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
           .replace(formattedGamemode, "")
           .trim();
 
-        questions.forEach(question => {
+        questions.forEach((question, questionIndex) => {
           const alts = question["question-alternatives"];
 
           if (alts === undefined || alts === null) {
@@ -103,6 +182,9 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
           }
 
           question.__packName = displayPackName;
+          question.__packKey = packName;
+          question.__questionId =
+            question['question-id'] || `${packName}:${questionIndex + 1}`;
           allQuestions.push(question);
         });
       });
@@ -187,11 +269,16 @@ function getNextQuestion(index = null, questionType = null, seed = null) {
         cardType = selectedQuestion?.__packName || 'Unknown Pack';
     }
 
-    return {
+    const result = {
         question: selectedQuestion["question"],
         cardType: cardType,
+        packKey: selectedQuestion.__packKey || 'unknown-pack',
+        questionId: selectedQuestion.__questionId || null,
+        questionType: selectedQuestion["question-type"] || 'question',
         punishment: selectedQuestion["punishment"] || null,
         // ✅ Now always an array in your JSON
         questionAlternatives: selectedQuestion["question-alternatives"] || []
     };
+    beginOfflineQuestionAnalytics(result);
+    return result;
 }

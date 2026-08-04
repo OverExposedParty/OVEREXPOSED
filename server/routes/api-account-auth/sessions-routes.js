@@ -8,6 +8,10 @@ function registerAccountSessionsRoutes(context) {
     createPasswordResetToken,
     hashPasswordResetToken,
     sendPasswordResetEmail,
+    EmailAutomation,
+    EmailTemplate,
+    EmailDelivery,
+    recordEmailConversion,
     isProduction,
     normalizePasswordResetInput,
     validatePasswordResetInput,
@@ -79,7 +83,10 @@ function registerAccountSessionsRoutes(context) {
           const emailResult = await sendPasswordResetEmail({
             req,
             to: account.email,
-            resetToken
+            resetToken,
+            EmailAutomation,
+            EmailTemplate,
+            EmailDelivery
           });
           resetEmailDelivery = emailResult?.skipped ? 'skipped' : 'sent';
         } catch (emailError) {
@@ -171,6 +178,11 @@ function registerAccountSessionsRoutes(context) {
           message: 'Password reset link is invalid or expired'
         });
       }
+
+      await recordEmailConversion?.({
+        EmailDelivery,
+        trackingId: String(req.body?.emailTrackingId || '')
+      });
 
       res.clearCookie('oe_session', {
         httpOnly: true,

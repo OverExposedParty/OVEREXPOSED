@@ -520,6 +520,16 @@ accountExpandedContent?.addEventListener('click', (event) => {
     return;
   }
 
+  if (action.dataset.profileAction === 'enableMarketingEmails') {
+    patchAccountMarketingConsent(action, true);
+    return;
+  }
+
+  if (action.dataset.profileAction === 'disableMarketingEmails') {
+    patchAccountMarketingConsent(action, false);
+    return;
+  }
+
   if (action.dataset.profileAction === 'requestDataExport') {
     requestAccountDataExport(action);
     return;

@@ -80,6 +80,9 @@ function createOAuthAccountTools({
         emailVerified: Boolean(normalizedEmail),
         emailVerifiedAt: normalizedEmail ? new Date() : null,
         accountStatus: 'active',
+        notificationPreferences: {
+          marketingEmail: legalConsent.marketingConsentStatus === 'accepted'
+        },
         loginProviders: [
           { name: provider, providerUserId: profile.providerUserId }
         ]

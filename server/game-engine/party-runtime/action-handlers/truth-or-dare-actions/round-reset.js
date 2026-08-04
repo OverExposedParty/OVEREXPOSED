@@ -1,7 +1,4 @@
-const {
-  assertTruthOrDareAction,
-  getCurrentTurnPlayer
-} = require('./shared');
+const { assertTruthOrDareAction, getCurrentTurnPlayer } = require('./shared');
 
 function getRoundPlayers(context) {
   const { getPartyPlayerId, getPartyPlayerState, players, state } = context;
@@ -70,13 +67,14 @@ function createTruthOrDareRoundResetHandlers() {
           player.isReady = true;
           player.hasConfirmed = true;
         });
-
       } else {
         const actorPlayer = players.find(
           (player) => getPartyPlayerId(player) === actorId
         );
         if (!actorPlayer) {
-          const error = new Error('Player not found for round reset confirmation.');
+          const error = new Error(
+            'Player not found for round reset confirmation.'
+          );
           error.status = 404;
           throw error;
         }

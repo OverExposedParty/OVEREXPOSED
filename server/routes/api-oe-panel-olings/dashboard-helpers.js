@@ -324,7 +324,6 @@ function createOePanelOlingDashboardHelpers(context, payloadHelpers) {
       ).join(', ');
     }
 
-
     return {
       createOePanelRarityBalancer,
       getOePanelOlingOwnerLabels,

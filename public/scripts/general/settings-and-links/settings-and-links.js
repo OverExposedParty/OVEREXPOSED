@@ -1,5 +1,14 @@
-instagramLink.href = instagramUrl;
-tiktokLink.href = tiktokUrl;
+if (instagramLink) instagramLink.href = instagramUrl;
+if (tiktokLink) tiktokLink.href = tiktokUrl;
+
+document.querySelectorAll('[data-oe-social-link]').forEach((link) => {
+    const platform = link.dataset.oeSocialLink;
+    const socialLink = window.OE_SOCIAL_MEDIA_LINKS?.[platform];
+    if (socialLink?.url) {
+        link.href = socialLink.url;
+        if (!link.textContent.trim()) link.textContent = socialLink.label;
+    }
+});
 
 const settingsConsoleOption = document.getElementById('settings-console-option');
 const settingsConsoleCheckbox = document.getElementById('settings-console');

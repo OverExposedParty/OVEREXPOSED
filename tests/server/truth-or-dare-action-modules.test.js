@@ -64,9 +64,9 @@ test('Truth or Dare punishment selection records a timeline event for the active
   );
 
   assert.equal(state.phase, 'truth-or-dare-show-punishment');
-  assert.deepEqual(events.map((event) => event.type), [
-    'punishment-selected',
-    'punishment-in-progress'
-  ]);
+  assert.deepEqual(
+    events.map((event) => event.type),
+    ['punishment-selected', 'punishment-in-progress']
+  );
   assert.equal(events[1].player, player);
 });

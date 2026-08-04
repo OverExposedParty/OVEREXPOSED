@@ -22,6 +22,12 @@ function registerAccountOauthRoutes(context) {
     const legalConsentAccepted =
       req.query.legalConsentAccepted === 'true' ||
       req.query.legalConsentAccepted === true;
+    const marketingEmailOptIn =
+      req.query.marketingEmailOptIn === 'true' ||
+      req.query.marketingEmailOptIn === true;
+    const authEntryPoint = String(
+      req.query.authEntryPoint || 'direct_auth_url'
+    );
 
     if (!provider) {
       return res.redirect(
@@ -68,7 +74,9 @@ function registerAccountOauthRoutes(context) {
       mode,
       returnTo,
       splashScreen,
-      legalConsentAccepted
+      legalConsentAccepted,
+      marketingEmailOptIn,
+      authEntryPoint
     });
     const pkcePair = config.usePkce ? createPkcePair() : null;
     const authorizeUrl = new URL(config.authorizeUrl);
@@ -100,7 +108,9 @@ function registerAccountOauthRoutes(context) {
       'oe_oauth_context',
       serializeOAuthCookie({
         stateId,
-        codeVerifier: pkcePair?.verifier || null
+        codeVerifier: pkcePair?.verifier || null,
+        legalConsentAccepted,
+        marketingEmailOptIn
       }),
       {
         httpOnly: true,

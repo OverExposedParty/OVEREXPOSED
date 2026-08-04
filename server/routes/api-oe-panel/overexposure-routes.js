@@ -2,7 +2,7 @@ function registerOePanelOverexposureRoutes(context) {
   const { app } = context;
 
   with (context) {
-app.get('/api/oe-panel/overexposure', async (req, res) => {
+    app.get('/api/oe-panel/overexposure', async (req, res) => {
       try {
         const account = await requireOePanelAccount(req, res);
         if (!account) return;

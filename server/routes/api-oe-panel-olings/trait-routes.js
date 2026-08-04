@@ -1,7 +1,8 @@
 function registerOePanelOlingTraitRoutes(context, helpers) {
   const { app } = context;
   const { OlingTrait } = context.models || {};
-  const { createOePanelTraitUpdatePayload, serializeOePanelOlingTrait } = helpers;
+  const { createOePanelTraitUpdatePayload, serializeOePanelOlingTrait } =
+    helpers;
 
   with (context) {
     app.patch('/api/oe-panel/olings/traits/:key', async (req, res) => {
@@ -70,7 +71,6 @@ function registerOePanelOlingTraitRoutes(context, helpers) {
         });
       }
     });
-
   }
 }
 

@@ -306,6 +306,35 @@ window.cancelGamemodeStartCountdownIfIneligible =
 window.isGamemodeStartCountdownActive = () =>
   Boolean(activeGamemodeStartCountdown);
 
+function trackGamemodeStarted() {
+  const gameMode =
+    typeof partyGameMode === 'string'
+      ? partyGameMode
+      : typeof gamemode === 'string'
+        ? gamemode
+        : '';
+  window.OEAnalytics?.track(
+    'game.started',
+    {
+      selectedPacks: Array.isArray(gamemodeSelectedPacks)
+        ? [...gamemodeSelectedPacks]
+        : [],
+      availablePacks: Array.isArray(packButtons)
+        ? packButtons.map((button) => button.dataset.key).filter(Boolean)
+        : [],
+      selectedRules:
+        gamemodeSettings && typeof gamemodeSettings === 'object'
+          ? { ...gamemodeSettings }
+          : {}
+    },
+    {
+      gameMode,
+      playMode: partyCode ? 'online' : 'offline'
+    }
+  );
+  window.OEAnalytics?.flush({ keepalive: true });
+}
+
 function bindGamemodeSettingsActions() {
   if (copyPartyCodeButton) {
     copyPartyCodeButton.dataset.sound = 'none';
@@ -379,6 +408,7 @@ function bindGamemodeSettingsActions() {
         startGamemodeStartCountdown(startGameButton);
       } else {
         playInteractionSound('confirm');
+        trackGamemodeStarted();
         transitionSplashScreen(
           removeSettingsExtensionFromCurrentURL(),
           `/images/splash-screens/${startGameButton.id}.png`
@@ -409,6 +439,7 @@ function bindGamemodeSettingsActions() {
       });
     } else {
       playInteractionSound('confirm');
+      trackGamemodeStarted();
       transitionSplashScreen(
         removeSettingsExtensionFromCurrentURL(),
         `/images/splash-screens/${startGameButton.id}.png`
@@ -465,6 +496,7 @@ async function startOnlineGame({ bypassPlayerRestrictions = false } = {}) {
   try {
     loadingPage = true;
     await startOnlinePartyGame(partyCode, { bypassPlayerRestrictions });
+    trackGamemodeStarted();
     playInteractionSound('confirm');
     transitionSplashScreen(
       removeSettingsExtensionFromCurrentURL() + '/' + partyCode,

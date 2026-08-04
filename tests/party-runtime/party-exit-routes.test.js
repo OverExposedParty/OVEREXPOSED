@@ -255,10 +255,7 @@ test('confirmed kicks notify the removed player and the remaining lobby', async 
   );
   assert.equal(lobbyEvent.payload.username, 'Party Guest');
   assert.equal(lobbyEvent.payload.notification.perspective, 'lobby');
-  assert.equal(
-    lobbyEvent.payload.notification.actorUsername,
-    'Party Guest'
-  );
+  assert.equal(lobbyEvent.payload.notification.actorUsername, 'Party Guest');
   assert.equal(kick.queuedNotifications.length, 1);
   assert.equal(kick.departedRooms.length, 1);
 });
@@ -272,9 +269,7 @@ test('voluntary departures do not emit kick notifications', async () => {
   await leave.invoke();
 
   assert.equal(
-    leave.directSocketEvents.some(
-      ({ event }) => event === 'kicked-from-party'
-    ),
+    leave.directSocketEvents.some(({ event }) => event === 'kicked-from-party'),
     false
   );
   assert.equal(
@@ -301,9 +296,7 @@ test('kicking a disconnected player still notifies the remaining lobby', async (
     true
   );
   assert.equal(
-    kick.directSocketEvents.some(
-      ({ event }) => event === 'kicked-from-party'
-    ),
+    kick.directSocketEvents.some(({ event }) => event === 'kicked-from-party'),
     false
   );
 });

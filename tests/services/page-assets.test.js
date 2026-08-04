@@ -15,9 +15,7 @@ const {
 const {
   renderBattleOlingsPage
 } = require('../../server/services/page-assets-battle-olings');
-const {
-  renderLoginPage
-} = require('../../server/services/page-assets-login');
+const { renderLoginPage } = require('../../server/services/page-assets-login');
 
 test('getCookieValue returns the requested cookie value', () => {
   const cookieHeader =
@@ -109,10 +107,7 @@ test('injectCriticalSplashStyles adds first-paint splash CSS for splash pages', 
     output,
     /\.splash-screen-container,\n\.splash-screen-container-static/
   );
-  assert.match(
-    output,
-    /html,\nbody \{[\s\S]*?overflow: hidden;[\s\S]*?\}/
-  );
+  assert.match(output, /html,\nbody \{[\s\S]*?overflow: hidden;[\s\S]*?\}/);
   assert.match(
     output,
     /\.splash-screen-container img,\n\.splash-screen-container-static img \{[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?object-fit: cover;[\s\S]*?object-position: center;[\s\S]*?\}/
@@ -174,11 +169,11 @@ test('protected page login URL keeps the current page as returnTo', () => {
 
   assert.equal(
     loginUrl,
-    '/sign-in?returnTo=%2Folings%2Fbattle%2FABC-123%3Fside%3Dleft'
+    '/sign-in?returnTo=%2Folings%2Fbattle%2FABC-123%3Fside%3Dleft&authEntryPoint=protected_page'
   );
   assert.match(
     html,
-    /href="\/sign-in\?returnTo=%2Folings%2Fbattle%2FABC-123%3Fside%3Dleft"/
+    /href="\/sign-in\?returnTo=%2Folings%2Fbattle%2FABC-123%3Fside%3Dleft&amp;authEntryPoint=protected_page"/
   );
 });
 
@@ -186,7 +181,10 @@ test('renderBattleOlingsPage expands local page fragments', () => {
   const html = renderBattleOlingsPage();
 
   assert.doesNotMatch(html, /__BATTLE_OLINGS_/);
-  assert.match(html, /class="oling-battle-container oling-battle-shell is-lobby"/);
+  assert.match(
+    html,
+    /class="oling-battle-container oling-battle-shell is-lobby"/
+  );
   assert.match(html, /class="oling-battle-lobby-matchup"/);
   assert.match(html, /class="battle-momentum-bar"/);
   assert.match(html, /NO OLING FOUND/);

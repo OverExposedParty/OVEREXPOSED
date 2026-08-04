@@ -29,7 +29,8 @@ test('auth input normalizers canonicalize account identifiers to lowercase', () 
       password: '',
       confirmPassword: '',
       termsAccepted: false,
-      privacyPolicyAccepted: false
+      privacyPolicyAccepted: false,
+      marketingEmailOptIn: false
     }
   );
   assert.equal(
@@ -42,4 +43,23 @@ test('auth input normalizers canonicalize account identifiers to lowercase', () 
     }).identifier,
     'user@example.com'
   );
+});
+
+test('signup consent records an explicit marketing choice', () => {
+  const context = createContext();
+  const req = {
+    ip: '127.0.0.1',
+    get(name) {
+      return name === 'user-agent' ? 'consent-test' : null;
+    }
+  };
+
+  const accepted = context.createSignupLegalConsent(req, true);
+  const declined = context.createSignupLegalConsent(req, false);
+
+  assert.equal(accepted.marketingConsentStatus, 'accepted');
+  assert.equal(accepted.consentHistory.at(-1).type, 'marketing_email');
+  assert.equal(accepted.consentHistory.at(-1).source, 'signup');
+  assert.equal(declined.marketingConsentStatus, 'declined');
+  assert.equal(declined.consentHistory.at(-1).acceptedAt, null);
 });

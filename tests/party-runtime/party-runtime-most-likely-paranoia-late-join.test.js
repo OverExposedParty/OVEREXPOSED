@@ -1,8 +1,4 @@
-const {
-  test,
-  assert,
-  createApplier
-} = require("./scenarios/helpers");
+const { test, assert, createApplier } = require('./scenarios/helpers');
 
 test('pending Most Likely To players cannot vote during the current question', () => {
   const { applyPartyActionToSnapshot } = createApplier();

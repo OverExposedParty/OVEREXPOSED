@@ -112,8 +112,7 @@ async function recordParanoiaResult({
       : {};
 
   if (isSelector && targetPlayerId) {
-    const previousTargetAccountId =
-      stats.paranoiaLastPickedByAccountId || null;
+    const previousTargetAccountId = stats.paranoiaLastPickedByAccountId || null;
     if (previousTargetAccountId === accountByPlayerId.get(targetPlayerId)) {
       await unlock('revenge-pick');
     }
@@ -129,10 +128,7 @@ async function recordParanoiaResult({
         Achievement,
         account,
         statKey: 'vendetta',
-        amount: Math.max(
-          0,
-          mostPicksInSession - (Number(stats.vendetta) || 0)
-        ),
+        amount: Math.max(0, mostPicksInSession - (Number(stats.vendetta) || 0)),
         source: 'paranoia-repeat-target',
         save: false
       });
@@ -145,8 +141,7 @@ async function recordParanoiaResult({
     if (stats.paranoiaLastSelectorAccountId === selectorAccountId) {
       await unlock('not-you-again');
     }
-    stats.publicEnemyNumberOne =
-      (Number(stats.publicEnemyNumberOne) || 0) + 1;
+    stats.publicEnemyNumberOne = (Number(stats.publicEnemyNumberOne) || 0) + 1;
     if (Number(stats.publicEnemyNumberOne) >= 5) {
       await unlock('public-enemy-number-one', stats.publicEnemyNumberOne);
     }

@@ -82,11 +82,7 @@ test('recordParanoiaResult tracks selection streaks and revenge history', async 
 });
 
 test('recordParanoiaResult handles punishment denial and game-end awards', async () => {
-  const keys = [
-    'pinocchio-s-doppelganger',
-    'thick-skin',
-    'the-usual-suspect'
-  ];
+  const keys = ['pinocchio-s-doppelganger', 'thick-skin', 'the-usual-suspect'];
   const achievements = keys.map((key) => ({
     key,
     enabled: true,
@@ -138,4 +134,3 @@ test('recordParanoiaResult handles punishment denial and game-end awards', async
   );
   assert.equal(account.gameData.achievementStats.theUsualSuspect, 5);
 });
-

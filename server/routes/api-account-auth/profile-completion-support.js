@@ -1,9 +1,5 @@
 function createProfileCompletionSupport(context) {
-  const {
-    isDefaultOeIcon,
-    unlockAchievementByKey,
-    Achievement
-  } = context;
+  const { isDefaultOeIcon, unlockAchievementByKey, Achievement } = context;
 
   function escapeAccountRegex(value) {
     return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

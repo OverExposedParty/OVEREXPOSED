@@ -1,7 +1,4 @@
-const {
-  canAccessFeature,
-  canAccessOwnerPages
-} = require('./page-protection');
+const { canAccessFeature, canAccessOwnerPages } = require('./page-protection');
 
 const PUBLIC_GAME_CONTENT_ACCESS = Object.freeze({ type: 'public' });
 

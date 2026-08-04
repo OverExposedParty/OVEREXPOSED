@@ -189,7 +189,7 @@
         });
       }
 
-      const rowActions =
+      const rowActions = (
         gridConfig.editable === true
           ? [
               {
@@ -210,7 +210,13 @@
             : [
                 { label: 'Archive', action: 'archive' },
                 { label: 'Delete', action: 'delete' }
-              ];
+              ]
+      ).filter((actionConfig) => {
+        const condition = actionConfig.hiddenWhen;
+        return !(
+          condition?.key && rowConfig[condition.key] === condition.equals
+        );
+      });
 
       async function saveEditableRow(button) {
         const endpoint = getRowSaveEndpoint(rowConfig);
@@ -331,6 +337,9 @@
               new CustomEvent('oe-panel-shop-products-changed')
             );
           }
+          if (gridConfig.dataSource === 'emailTemplates') {
+            window.OE_PANEL_DATA?.clear?.('emailTemplates');
+          }
           window.dispatchEvent(
             new CustomEvent('oe-panel-admin-logs-data-changed')
           );
@@ -350,7 +359,12 @@
           return;
         }
 
-        if (!window.confirm('Are you sure you want to delete this row?')) {
+        if (
+          !window.confirm(
+            gridConfig.deleteConfirmMessage ||
+              'Are you sure you want to delete this row?'
+          )
+        ) {
           return;
         }
 
@@ -404,6 +418,24 @@
           if (gridConfig.dataSource === 'shopProducts') {
             window.dispatchEvent(
               new CustomEvent('oe-panel-shop-products-changed')
+            );
+          }
+          if (gridConfig.dataSource === 'emailTemplates') {
+            window.OE_PANEL_DATA?.clear?.('emailTemplates');
+          }
+          if (gridConfig.dataSource === 'emailAutomations') {
+            window.dispatchEvent(
+              new CustomEvent('oe-panel-email-automations-changed')
+            );
+          }
+          if (gridConfig.dataSource === 'emailAudiences') {
+            window.dispatchEvent(
+              new CustomEvent('oe-panel-email-audiences-changed')
+            );
+          }
+          if (gridConfig.dataSource === 'emailSuppressions') {
+            window.dispatchEvent(
+              new CustomEvent('oe-panel-email-suppressions-changed')
             );
           }
           window.dispatchEvent(
@@ -460,8 +492,14 @@
 
         rowActions.forEach((actionConfig) => {
           const button = document.createElement('button');
+          const disabledCondition = actionConfig.disabledWhen;
+          const isDisabled = Boolean(
+            disabledCondition?.key &&
+            rowConfig[disabledCondition.key] === disabledCondition.equals
+          );
           button.className = 'oe-panel-data-table-expanded-action';
           button.type = 'button';
+          button.disabled = isDisabled;
           button.textContent =
             actionConfig.label || actionConfig.action || 'Action';
           button.dataset.oePanelTableAction =
@@ -470,7 +508,26 @@
             event.stopPropagation();
             runRowAction(button.dataset.oePanelTableAction, button);
           });
-          actionContainer.appendChild(button);
+          const disabledTooltip = isDisabled
+            ? rowConfig[actionConfig.disabledTitleKey] ||
+              actionConfig.disabledTitle ||
+              ''
+            : '';
+          if (disabledTooltip) {
+            const tooltip = document.createElement('span');
+            tooltip.className = 'oe-panel-data-table-expanded-action-tooltip';
+            tooltip.dataset.tooltip = disabledTooltip;
+            tooltip.title = disabledTooltip;
+            tooltip.tabIndex = 0;
+            tooltip.setAttribute(
+              'aria-label',
+              `${button.textContent}: ${disabledTooltip}`
+            );
+            tooltip.appendChild(button);
+            actionContainer.appendChild(tooltip);
+          } else {
+            actionContainer.appendChild(button);
+          }
         });
 
         panel.appendChild(actionContainer);

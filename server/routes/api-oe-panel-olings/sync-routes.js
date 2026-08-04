@@ -1,7 +1,7 @@
 function registerOePanelOlingSyncRoutes(context, helpers) {
   const { app } = context;
   const { OlingConsumable } = context.models || {};
-  const {  } = helpers;
+  const {} = helpers;
 
   with (context) {
     app.post('/api/oe-panel/olings/consumables/export', async (req, res) => {
@@ -42,7 +42,6 @@ function registerOePanelOlingSyncRoutes(context, helpers) {
         });
       }
     });
-
   }
 }
 

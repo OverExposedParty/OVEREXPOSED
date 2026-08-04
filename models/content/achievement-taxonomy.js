@@ -98,6 +98,26 @@ const ACHIEVEMENT_ICON_DIRECTORIES = Object.freeze({
   'other|general': 'other/general'
 });
 
+const LEGACY_ACHIEVEMENT_ICON_DIRECTORIES = Object.freeze({
+  account: 'account/profile',
+  settings: 'account/settings',
+  customisation: 'customisation/appearance',
+  'friends-social': 'social/friends',
+  'general-online': 'gameplay/online',
+  'imposter-online': 'gameplay/online/imposter',
+  'mafia-online': 'gameplay/online/mafia',
+  'most-likely-to-online': 'gameplay/online/most-likely-to',
+  'never-have-i-ever-online': 'gameplay/online/never-have-i-ever',
+  'paranoia-online': 'gameplay/online/paranoia',
+  'truth-or-dare-online': 'gameplay/online/truth-or-dare',
+  'would-you-rather-online': 'gameplay/online/would-you-rather',
+  help: 'community/help',
+  overexposure: 'community/overexposure',
+  seasonal: 'events/seasonal',
+  shop: 'shop/collections',
+  other: 'other/general'
+});
+
 function normalizeTaxonomySegment(value, fallback = '') {
   return (
     String(value ?? fallback)
@@ -201,6 +221,7 @@ function getAchievementIconDirectory(achievement = {}) {
 
 module.exports = {
   ACHIEVEMENT_CATEGORY_CONFIG,
+  LEGACY_ACHIEVEMENT_ICON_DIRECTORIES,
   getAchievementIconDirectory,
   isAchievementAvailableToStandardAccounts,
   isAchievementTaxonomyValid,

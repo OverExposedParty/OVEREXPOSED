@@ -29,7 +29,10 @@ const {
   leaveBattleMatch,
   selectBattlePlayerOling
 } = require('./oling-battles/match-participants');
-const { emitBattleUpdate, recordBattleEvent } = require('./oling-battles/events');
+const {
+  emitBattleUpdate,
+  recordBattleEvent
+} = require('./oling-battles/events');
 const { snapshotBattleOling } = require('./oling-battles/battle-players');
 
 module.exports = {

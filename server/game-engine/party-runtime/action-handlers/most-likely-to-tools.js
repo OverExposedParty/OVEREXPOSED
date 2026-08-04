@@ -6,11 +6,7 @@ function assertMostLikelyToGamemode({ config, workingParty }) {
   }
 }
 
-function requireMostLikelyToPunishmentPhase({
-  state,
-  expectedPhase,
-  message
-}) {
+function requireMostLikelyToPunishmentPhase({ state, expectedPhase, message }) {
   const phaseData = state.phaseData || {};
   const targetId = phaseData.targetId ?? null;
 

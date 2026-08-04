@@ -57,7 +57,9 @@ async function recordTruthOrDarePromptResult({
   account.markModified?.('gameData.achievementStats');
 
   const unlocked = [];
-  for (const statKey of unlockStatKeys.filter((key) => changedStatKeys.has(key))) {
+  for (const statKey of unlockStatKeys.filter((key) =>
+    changedStatKeys.has(key)
+  )) {
     const newlyUnlocked = await unlockEligibleStatAchievements({
       Achievement,
       account,

@@ -162,6 +162,121 @@ test('OE panel widget registry renders through extracted modules', () => {
   }
 });
 
+test('OE panel form widget loads select options from a dependent field', async () => {
+  const dom = new JSDOM('<!doctype html><main id="widget"></main>', {
+    runScripts: 'dangerously',
+    url: 'https://overexposed.test/'
+  });
+  const { window } = dom;
+  const requests = [];
+
+  try {
+    window.fetch = async (url, options = {}) => {
+      requests.push({ url: String(url), options });
+      if (String(url).includes('automation-template-options')) {
+        return {
+          ok: true,
+          async json() {
+            return {
+              success: true,
+              data: {
+                options: [
+                  {
+                    label: 'Password Reset (Account Security)',
+                    value: 'password-reset'
+                  },
+                  {
+                    label: 'Password Reset Compact (Account Security)',
+                    value: 'password-reset-compact'
+                  }
+                ]
+              }
+            };
+          }
+        };
+      }
+      return {
+        ok: true,
+        async json() {
+          return { success: true, data: {} };
+        }
+      };
+    };
+    window.eval(
+      fs.readFileSync(
+        path.join(widgetsDirectory, 'widgets/oe-panel-widget-form.js'),
+        'utf8'
+      )
+    );
+    const { renderFormWidget } = window.createOePanelFormWidget({
+      createPanelBackHeader() {
+        return window.document.createElement('header');
+      }
+    });
+    const container = window.document.getElementById('widget');
+    renderFormWidget(container, {
+      submitEndpoint: '/api/oe-panel/emails/automations',
+      fields: [
+        {
+          name: 'trigger',
+          label: 'Trigger',
+          required: true,
+          options: [
+            { label: 'Choose a trigger', value: '' },
+            {
+              label: 'Password reset request',
+              value: 'password-reset-request'
+            }
+          ]
+        },
+        {
+          name: 'templateKey',
+          label: 'Email Template',
+          required: true,
+          options: [{ label: 'Choose a trigger first', value: '' }],
+          optionsEndpoint: '/api/oe-panel/emails/automation-template-options',
+          dependsOn: 'trigger',
+          value: 'password-reset'
+        }
+      ]
+    });
+
+    const trigger = container.querySelector('[name="trigger"]');
+    const template = container.querySelector('[name="templateKey"]');
+    assert.equal(template.disabled, true);
+
+    trigger.value = 'password-reset-request';
+    trigger.dispatchEvent(new window.Event('change', { bubbles: true }));
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    assert.equal(
+      requests[0].url,
+      '/api/oe-panel/emails/automation-template-options?trigger=password-reset-request'
+    );
+    assert.equal(template.disabled, false);
+    assert.equal(
+      template.options[1].textContent,
+      'Password Reset (Account Security)'
+    );
+    assert.equal(template.value, 'password-reset');
+    template.dispatchEvent(new window.Event('change', { bubbles: true }));
+    container
+      .querySelector('form')
+      .dispatchEvent(
+        new window.Event('submit', { bubbles: true, cancelable: true })
+      );
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    assert.equal(requests[1].url, '/api/oe-panel/emails/automations');
+    assert.deepEqual(JSON.parse(requests[1].options.body), {
+      trigger: 'password-reset-request',
+      templateKey: 'password-reset'
+    });
+  } finally {
+    dom.window.close();
+  }
+});
+
 test('OE panel time series widget renders legends and an honest empty state', () => {
   const dom = new JSDOM('<!doctype html><main id="widget"></main>', {
     runScripts: 'dangerously'

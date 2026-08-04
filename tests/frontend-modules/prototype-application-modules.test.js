@@ -23,7 +23,10 @@ test('prototype application facade loads every support module in dependency orde
   supportScripts.forEach((scriptPath) => {
     const index = facade.indexOf(`/scripts/other/applications/${scriptPath}`);
 
-    assert.ok(index > previousIndex, `${scriptPath} should follow its dependencies`);
+    assert.ok(
+      index > previousIndex,
+      `${scriptPath} should follow its dependencies`
+    );
     previousIndex = index;
   });
 });
@@ -57,7 +60,10 @@ test('prototype application facade retains the Error 404 registration contract',
     filename: 'prototype-application.js'
   });
 
-  assert.equal(typeof context.window.Error404PrototypeApplication.init, 'function');
+  assert.equal(
+    typeof context.window.Error404PrototypeApplication.init,
+    'function'
+  );
   assert.equal(
     context.window.Error404Applications['prototype-application'],
     context.window.Error404PrototypeApplication
@@ -72,7 +78,9 @@ test('prototype application initializes the package viewer after its modules loa
   const { window } = dom;
 
   supportScripts.forEach((scriptPath) => {
-    window.eval(fs.readFileSync(path.join(applicationsDirectory, scriptPath), 'utf8'));
+    window.eval(
+      fs.readFileSync(path.join(applicationsDirectory, scriptPath), 'utf8')
+    );
   });
   window.eval(fs.readFileSync(facadePath, 'utf8'));
 
@@ -102,7 +110,9 @@ test('prototype application initializes the package viewer after its modules loa
 
   const form = mount.querySelector('.prototype-app-newsletter');
   form.querySelector('input').value = 'test@example.com';
-  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  form.dispatchEvent(
+    new window.Event('submit', { bubbles: true, cancelable: true })
+  );
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   assert.deepEqual(
@@ -143,7 +153,9 @@ test('prototype application loads its support modules through the Error 404 load
 
   assert.deepEqual(
     loadedScripts,
-    supportScripts.map((scriptPath) => `/scripts/other/applications/${scriptPath}`)
+    supportScripts.map(
+      (scriptPath) => `/scripts/other/applications/${scriptPath}`
+    )
   );
   dom.window.close();
 });

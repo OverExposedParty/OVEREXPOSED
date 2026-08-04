@@ -25,6 +25,7 @@ test('registerAccountAuthRoutes preserves the account endpoint contract', () => 
   assert.deepEqual(registrations, [
     ['post', '/api/accounts'],
     ['get', '/api/accounts/verify-email'],
+    ['post', '/api/accounts/verify-email/complete'],
     ['post', '/api/accounts/verify-email/request'],
     ['post', '/api/accounts/email-change/request'],
     ['post', '/api/accounts/email-change/complete'],
@@ -57,6 +58,7 @@ test('registerAccountAuthRoutes preserves the account endpoint contract', () => 
     ['patch', '/api/accounts/me/notifications'],
     ['patch', '/api/accounts/me/customisation-preferences'],
     ['patch', '/api/accounts/me/privacy-settings'],
+    ['patch', '/api/accounts/me/marketing-consent'],
     ['post', '/api/accounts/me/data-export-requests'],
     ['post', '/api/accounts/me/deletion-requests'],
     ['get', '/api/oe-library'],

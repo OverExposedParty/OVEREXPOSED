@@ -7,6 +7,7 @@ const cssDirectory = path.join(__dirname, '../../public/css/olings');
 const labEntryPath = path.join(cssDirectory, 'lab', 'lab.css');
 const modules = [
   'core/base-and-room.css',
+  'core/rest-visuals.css',
   'core/base-actions.css',
   'menu-and-adventures/index.css',
   'furniture-and-storage/index.css',
@@ -49,9 +50,9 @@ const hatchAndOlingModules = [
 
 test('Oling lab stylesheet imports feature modules in cascade order', () => {
   const entry = fs.readFileSync(labEntryPath, 'utf8');
-  const imports = [
-    ...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)
-  ].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)].map(
+    (match) => match[1]
+  );
 
   assert.deepEqual(imports, modules);
   assert.equal(entry.trim().split('\n').length, modules.length);
@@ -75,14 +76,15 @@ test('Oling lab furniture stylesheet imports feature modules in cascade order', 
     path.join(cssDirectory, 'lab', 'furniture-and-storage', 'index.css'),
     'utf8'
   );
-  const imports = [
-    ...entry.matchAll(
-      /@import url\('\.\/([^']+)'\);/g
-    )
-  ].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)].map(
+    (match) => match[1]
+  );
 
   assert.deepEqual(imports, furnitureAndStorageModules);
-  assert.equal(entry.trim().split('\n').length, furnitureAndStorageModules.length);
+  assert.equal(
+    entry.trim().split('\n').length,
+    furnitureAndStorageModules.length
+  );
 
   furnitureAndStorageModules.forEach((fileName) => {
     const stylesheet = fs.readFileSync(
@@ -103,11 +105,9 @@ test('Oling lab menu stylesheet imports feature modules in cascade order', () =>
     path.join(cssDirectory, 'lab', 'menu-and-adventures', 'index.css'),
     'utf8'
   );
-  const imports = [
-    ...entry.matchAll(
-      /@import url\('\.\/([^']+)'\);/g
-    )
-  ].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import url\('\.\/([^']+)'\);/g)].map(
+    (match) => match[1]
+  );
 
   assert.deepEqual(imports, menuAndAdventureModules);
   assert.equal(entry.trim().split('\n').length, menuAndAdventureModules.length);

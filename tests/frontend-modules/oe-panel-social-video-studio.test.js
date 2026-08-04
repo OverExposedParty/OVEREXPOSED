@@ -55,7 +55,10 @@ const widgetSupportPaths = [
     '../../public/scripts/oe-panel/oe-panel-social-creation-widget/download-icon.js'
   )
 ];
-const pagePath = path.join(__dirname, '../../public/pages/oe-panel/oe-panel.html');
+const pagePath = path.join(
+  __dirname,
+  '../../public/pages/oe-panel/oe-panel.html'
+);
 
 test('social video studio registers its view factory', () => {
   const context = { window: {} };
@@ -198,10 +201,13 @@ test('social creation widget support modules register before the facade', () => 
 });
 
 test('social video editor composes its preview, controls, and export modules', () => {
-  const dom = new JSDOM('<div id="container"><section id="widget"></section><p id="status"></p></div>', {
-    runScripts: 'outside-only',
-    url: 'https://overexposed.test/'
-  });
+  const dom = new JSDOM(
+    '<div id="container"><section id="widget"></section><p id="status"></p></div>',
+    {
+      runScripts: 'outside-only',
+      url: 'https://overexposed.test/'
+    }
+  );
   const { window } = dom;
   window.requestAnimationFrame = (callback) => callback();
 

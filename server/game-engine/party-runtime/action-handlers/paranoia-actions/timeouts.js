@@ -1,25 +1,55 @@
 function createParanoiaTimeoutHandlers() {
   return {
     'paranoia-handle-reveal-timeout': (context) => {
-      const { SCORE_RULES, getPartyPlayerId, appendPartyAccountStatEvent, createAccountStatEvent, getTurnPlayer, applyParanoiaRoundReset, addScoreToPartyPlayerById, assertActorCanControlParty, actorId, payload, workingParty, config, state, players, allowBypass } = context;
+      const {
+        SCORE_RULES,
+        getPartyPlayerId,
+        appendPartyAccountStatEvent,
+        createAccountStatEvent,
+        getTurnPlayer,
+        applyParanoiaRoundReset,
+        addScoreToPartyPlayerById,
+        assertActorCanControlParty,
+        actorId,
+        payload,
+        workingParty,
+        config,
+        state,
+        players,
+        allowBypass
+      } = context;
       if ((config.gamemode || workingParty.gamemode) !== 'paranoia') {
         const error = new Error('This action is only valid for Paranoia.');
         error.status = 400;
         throw error;
       }
       assertActorCanControlParty(workingParty, actorId, allowBypass);
-      const instruction = state.userInstructions ?? config.userInstructions ?? '';
+      const instruction =
+        state.userInstructions ?? config.userInstructions ?? '';
       if (!String(instruction).includes('DISPLAY_DUAL_STACK_CARD')) {
         state.lastPinged = new Date();
         return;
       }
       const turnPlayer = getTurnPlayer(players, state, state.playerTurn ?? 0);
       const turnPlayerId = getPartyPlayerId(turnPlayer);
-      addScoreToPartyPlayerById(players, turnPlayerId, SCORE_RULES.paranoia.revealQuestionSelectorPenalty);
-      appendPartyAccountStatEvent(workingParty, createAccountStatEvent('paranoia', [{
-        player: players.find((player) => String(getPartyPlayerId(player)) === String(state.phaseData?.targetId)),
-        paths: { 'stats.revealsSurvived': 1 }
-      }]));
+      addScoreToPartyPlayerById(
+        players,
+        turnPlayerId,
+        SCORE_RULES.paranoia.revealQuestionSelectorPenalty
+      );
+      appendPartyAccountStatEvent(
+        workingParty,
+        createAccountStatEvent('paranoia', [
+          {
+            player: players.find(
+              (player) =>
+                String(getPartyPlayerId(player)) ===
+                String(state.phaseData?.targetId)
+            ),
+            paths: { 'stats.revealsSurvived': 1 }
+          }
+        ])
+      );
       applyParanoiaRoundReset({
         workingParty,
         incrementScore: SCORE_RULES.paranoia.revealQuestionTargetBonus,
@@ -28,7 +58,23 @@ function createParanoiaTimeoutHandlers() {
       });
     },
     'paranoia-handle-phase-timeout': (context) => {
-      const { SCORE_RULES, getPartyPlayerId, getTurnPlayer, getPartyPlayerState, applyParanoiaRoundReset, addScoreToPartyPlayer, addParanoiaRevealMissScores, assertActorCanControlParty, actorId, payload, workingParty, config, state, players, allowBypass } = context;
+      const {
+        SCORE_RULES,
+        getPartyPlayerId,
+        getTurnPlayer,
+        getPartyPlayerState,
+        applyParanoiaRoundReset,
+        addScoreToPartyPlayer,
+        addParanoiaRevealMissScores,
+        assertActorCanControlParty,
+        actorId,
+        payload,
+        workingParty,
+        config,
+        state,
+        players,
+        allowBypass
+      } = context;
       if ((config.gamemode || workingParty.gamemode) !== 'paranoia') {
         const error = new Error('This action is only valid for Paranoia.');
         error.status = 400;
@@ -38,9 +84,17 @@ function createParanoiaTimeoutHandlers() {
       if (state.phase === 'paranoia-choose-punishment') {
         const targetId = state.phaseData?.targetId ?? null;
         const selector = getTurnPlayer(players, state, state.playerTurn ?? 0);
-        const targetIndex = players.findIndex((player) => getPartyPlayerId(player) === targetId);
-        if (targetId && String(getPartyPlayerId(selector)) !== String(targetId)) {
-          addScoreToPartyPlayer(selector, SCORE_RULES.paranoia.keepQuestionSecretBonus);
+        const targetIndex = players.findIndex(
+          (player) => getPartyPlayerId(player) === targetId
+        );
+        if (
+          targetId &&
+          String(getPartyPlayerId(selector)) !== String(targetId)
+        ) {
+          addScoreToPartyPlayer(
+            selector,
+            SCORE_RULES.paranoia.keepQuestionSecretBonus
+          );
         }
         applyParanoiaRoundReset({
           workingParty,
@@ -55,8 +109,14 @@ function createParanoiaTimeoutHandlers() {
         const turnPlayer = getTurnPlayer(players, state, state.playerTurn ?? 0);
         const turnPlayerId = getPartyPlayerId(turnPlayer);
         const targetId = state.phaseData?.targetId ?? turnPlayerId ?? null;
-        if (turnPlayerId && targetId && String(turnPlayerId) === String(targetId)) {
-          const turnPlayerIndex = players.findIndex((player) => getPartyPlayerId(player) === turnPlayerId);
+        if (
+          turnPlayerId &&
+          targetId &&
+          String(turnPlayerId) === String(targetId)
+        ) {
+          const turnPlayerIndex = players.findIndex(
+            (player) => getPartyPlayerId(player) === turnPlayerId
+          );
           applyParanoiaRoundReset({
             workingParty,
             currentPlayerIndex: turnPlayerIndex === -1 ? null : turnPlayerIndex,
@@ -77,7 +137,11 @@ function createParanoiaTimeoutHandlers() {
       if (state.phase === 'paranoia-confirm-punishment') {
         const turnPlayer = getTurnPlayer(players, state, state.playerTurn ?? 0);
         const targetId = state.phaseData?.targetId ?? null;
-        addParanoiaRevealMissScores(players, getPartyPlayerId(turnPlayer), targetId);
+        addParanoiaRevealMissScores(
+          players,
+          getPartyPlayerId(turnPlayer),
+          targetId
+        );
         players.forEach((player) => {
           const playerState = getPartyPlayerState(player);
           if (playerState.isReady !== true) {

@@ -193,6 +193,9 @@ function renderAccountProfilePanel() {
   );
 
   const privacySettings = account.privacySettings || {};
+  const marketingEmailEnabled =
+    account.notificationPreferences?.marketingEmail === true &&
+    account.legal?.marketingConsentStatus === 'accepted';
   const latestDataExport = account.legal?.latestDataExportRequest;
   const latestDeletionRequest = account.legal?.latestAccountDeletionRequest;
   const privacy = createAccountProfileSection('Privacy');
@@ -212,6 +215,10 @@ function renderAccountProfilePanel() {
     createAccountProfileRow(
       'Friend requests',
       privacySettings.allowFriendRequests === false ? 'Blocked' : 'Allowed'
+    ),
+    createAccountProfileRow(
+      'Marketing emails',
+      marketingEmailEnabled ? 'Subscribed' : 'Unsubscribed'
     ),
     createAccountProfileRow(
       'Data export',
@@ -284,6 +291,19 @@ function renderAccountProfilePanel() {
           privacySettings.allowFriendRequests === false
             ? 'Allow people to send friend requests'
             : 'Stop people sending friend requests'
+      }
+    ),
+    createAccountProfileAction(
+      marketingEmailEnabled
+        ? 'Unsubscribe from marketing emails'
+        : 'Receive marketing emails',
+      marketingEmailEnabled
+        ? 'disableMarketingEmails'
+        : 'enableMarketingEmails',
+      {
+        hint: marketingEmailEnabled
+          ? 'Stop receiving features, game packs, events, offers, and rewards by email'
+          : 'Receive features, game packs, events, offers, and rewards by email'
       }
     )
   );

@@ -22,11 +22,13 @@ const {
 const { exportOlingConsumablesToJson } = require('../services/olings');
 const { serializeOeImagesForPackJson } = require('../services/oe-images');
 const {
+  createMarketingUnsubscribeUrl,
   getPublicSiteUrl,
   sendEmailChangeEmail,
   sendPasswordResetEmail,
   sendVerificationEmail
 } = require('../services/email');
+const { recordEmailConversion } = require('../services/email-tracking');
 const {
   grantShopItemsToAccount,
   serializeOpalTransactions,
@@ -201,10 +203,12 @@ function createApiRouteContext({ app, models, runtime, partyOwnerLeases }) {
     unlockAchievementByKey,
     exportOlingConsumablesToJson,
     serializeOeImagesForPackJson,
+    createMarketingUnsubscribeUrl,
     getPublicSiteUrl,
     sendEmailChangeEmail,
     sendPasswordResetEmail,
     sendVerificationEmail,
+    recordEmailConversion,
     grantShopItemsToAccount,
     serializeOpalTransactions,
     serializeOpalWallet,

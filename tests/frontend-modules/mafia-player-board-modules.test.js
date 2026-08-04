@@ -34,7 +34,10 @@ test('Mafia player board support modules register before the facade', () => {
     typeof context.window.createMafiaPlayerBoardActionMenu,
     'function'
   );
-  assert.equal(typeof context.window.createMafiaPlayerBoardRenderer, 'function');
+  assert.equal(
+    typeof context.window.createMafiaPlayerBoardRenderer,
+    'function'
+  );
   assert.equal(typeof context.window.bindMafiaPlayerBoardEvents, 'function');
 });
 

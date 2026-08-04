@@ -1,5 +1,10 @@
 const { recordPackOwnershipAchievements } = require('../achievements');
-const { findProductVariant, getEntitlementConfig, normalizeGrant, normalizeAdminGrant } = require('./catalog');
+const {
+  findProductVariant,
+  getEntitlementConfig,
+  normalizeGrant,
+  normalizeAdminGrant
+} = require('./catalog');
 const { grantOlingInventory } = require('./inventory');
 
 async function spendOpalsForProduct({

@@ -1,4 +1,8 @@
 const { createOeIconAccessTools } = require('./auth-security-oe-icon-access');
+const {
+  createMarketingConsentRecord,
+  isMarketingEmailOptIn
+} = require('../../services/marketing-consent');
 
 function createAuthSecurityContext(context) {
   const { crypto, canUseOeItem, Account, OeCustomisation } = context;
@@ -14,7 +18,8 @@ function createAuthSecurityContext(context) {
     login: { limit: 12, windowMs: 15 * 60 * 1000 },
     passwordReset: { limit: 5, windowMs: 60 * 60 * 1000 },
     emailVerification: { limit: 4, windowMs: 15 * 60 * 1000 },
-    emailChange: { limit: 4, windowMs: 15 * 60 * 1000 }
+    emailChange: { limit: 4, windowMs: 15 * 60 * 1000 },
+    analytics: { limit: 120, windowMs: 5 * 60 * 1000 }
   };
 
   const loginLockoutMaxAttempts = 5;
@@ -200,7 +205,8 @@ function createAuthSecurityContext(context) {
     password,
     terms,
     termsAccepted,
-    privacyPolicyAccepted
+    privacyPolicyAccepted,
+    marketingEmailOptIn
   } = {}) {
     const hasAcceptedTerms =
       terms === true || terms === 'on' || terms === 'true';
@@ -217,17 +223,21 @@ function createAuthSecurityContext(context) {
       confirmPassword:
         typeof confirmPassword === 'string' ? confirmPassword : '',
       termsAccepted: hasAcceptedTerms || hasExplicitTermsAcceptance,
-      privacyPolicyAccepted: hasAcceptedTerms || hasAcceptedPrivacy
+      privacyPolicyAccepted: hasAcceptedTerms || hasAcceptedPrivacy,
+      marketingEmailOptIn: isMarketingEmailOptIn(marketingEmailOptIn)
     };
   }
 
-  function createSignupLegalConsent(req) {
+  function createSignupLegalConsent(req, marketingEmailOptIn = false) {
     const acceptedAt = new Date();
     const userAgent = req.get('user-agent') || null;
+    const marketingAccepted = isMarketingEmailOptIn(marketingEmailOptIn);
 
     return {
       termsAcceptedVersion: legalTermsVersion,
       privacyPolicyAcceptedVersion: legalPrivacyPolicyVersion,
+      marketingConsentStatus: marketingAccepted ? 'accepted' : 'declined',
+      marketingConsentTimestamp: acceptedAt,
       consentHistory: [
         {
           type: 'terms',
@@ -244,7 +254,12 @@ function createAuthSecurityContext(context) {
           acceptedAt,
           ipAddress: req.ip,
           userAgent
-        }
+        },
+        createMarketingConsentRecord(req, {
+          status: marketingAccepted ? 'accepted' : 'declined',
+          source: 'signup',
+          recordedAt: acceptedAt
+        })
       ]
     };
   }

@@ -1,6 +1,4 @@
-const {
-  createOAuthProviderConfig
-} = require('./oauth/provider-config');
+const { createOAuthProviderConfig } = require('./oauth/provider-config');
 const { createOAuthStateTools } = require('./oauth/state');
 const { createOAuthTransport } = require('./oauth/transport');
 const { createOAuthAccountTools } = require('./oauth/accounts');

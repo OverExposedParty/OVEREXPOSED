@@ -179,12 +179,21 @@ test('all four battle scene depths shake only for locally initiated attacks', ()
   );
   const { window } = dom;
   const arena = window.document.querySelector('.oling-battle-arena');
-  const layers = [...window.document.querySelectorAll('.oling-battle-scene-layer')];
-  const playerMarker = window.document.querySelector('.player-oling-head-marker');
+  const layers = [
+    ...window.document.querySelectorAll('.oling-battle-scene-layer')
+  ];
+  const playerMarker = window.document.querySelector(
+    '.player-oling-head-marker'
+  );
   const momentumTrack = window.document.querySelector('.momentum-track');
 
   window.requestAnimationFrame = () => 1;
-  arena.getBoundingClientRect = () => ({ height: 500, left: 0, top: 0, width: 300 });
+  arena.getBoundingClientRect = () => ({
+    height: 500,
+    left: 0,
+    top: 0,
+    width: 300
+  });
   playerMarker.getBoundingClientRect = () => ({ left: 145, width: 10 });
   momentumTrack.getBoundingClientRect = () => ({ left: 50, width: 200 });
 
@@ -333,7 +342,9 @@ test('choose Oling mode enables save and fills the detail pane while waiting for
     'choose-mode player description stats must stretch through the lower half'
   );
   assert.ok(
-    battleLobbySource.includes('renderOlingArt(pickerPreview, opponentOling)') &&
+    battleLobbySource.includes(
+      'renderOlingArt(pickerPreview, opponentOling)'
+    ) &&
       battleLobbySource.includes('panel: playerDescriptionPanel') &&
       battleLobbySource.includes('stats: playerDescriptionStats'),
     'enemy Oling view must reuse the shared upper preview and lower details'

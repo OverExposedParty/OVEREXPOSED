@@ -1,7 +1,15 @@
 function registerOePanelOlingSimulationRoutes(context, helpers) {
   const { app } = context;
   const { OlingEgg } = context.models || {};
-  const { OE_PANEL_OLING_LAYERS, getOePanelRollableRarityOdds, getOePanelSetDerivedPools, normalizeOePanelOlingBoolean, normalizeOePanelOlingKey, pickOePanelRandom, pickOePanelWeightedRarity } = helpers;
+  const {
+    OE_PANEL_OLING_LAYERS,
+    getOePanelRollableRarityOdds,
+    getOePanelSetDerivedPools,
+    normalizeOePanelOlingBoolean,
+    normalizeOePanelOlingKey,
+    pickOePanelRandom,
+    pickOePanelWeightedRarity
+  } = helpers;
 
   with (context) {
     app.post('/api/oe-panel/olings/simulate', async (req, res) => {

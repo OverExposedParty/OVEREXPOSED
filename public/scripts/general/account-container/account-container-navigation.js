@@ -473,6 +473,41 @@ async function patchAccountPrivacySettings(button, settings) {
   }
 }
 
+async function patchAccountMarketingConsent(button, accepted) {
+  button.disabled = true;
+  const originalText = button.textContent;
+  button.textContent = 'Saving...';
+
+  try {
+    const response = await fetch('/api/accounts/me/marketing-consent', {
+      method: 'PATCH',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accepted })
+    });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || payload.success === false) {
+      throw new Error(
+        payload?.error?.message || 'Failed to save marketing preference'
+      );
+    }
+
+    if (payload.account) {
+      setAccountPreview(payload.account);
+      renderAccountProfilePanel();
+    }
+    setAccountFooterHint(payload.message || 'Marketing preference saved');
+    playAccountContainerSound('uiSuccess');
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = originalText;
+    setAccountFooterHint(error.message || 'Marketing preference failed');
+    playAccountContainerSound('notificationFailure');
+    console.warn(error);
+  }
+}
+
 async function requestAccountDataExport(button) {
   button.disabled = true;
   const originalText = button.textContent;
@@ -604,7 +639,9 @@ function getCurrentAccountSplashScreen() {
 function redirectToLoginFromAccount() {
   const loginPath = `/sign-in?returnTo=${encodeURIComponent(
     getCurrentAccountReturnPath()
-  )}&splashScreen=${encodeURIComponent(getCurrentAccountSplashScreen())}`;
+  )}&splashScreen=${encodeURIComponent(
+    getCurrentAccountSplashScreen()
+  )}&authEntryPoint=account_container`;
 
   if (typeof transitionSplashScreen === 'function') {
     transitionSplashScreen(loginPath, accountLoginSplashScreen);

@@ -267,7 +267,6 @@ function createChangeStreamService({
     restartAllChangeStreams('startup');
   }
 
-
   return {
     restartAllChangeStreams,
     startChangeStreams

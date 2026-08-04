@@ -1,8 +1,4 @@
-const {
-  test,
-  assert,
-  createApplier
-} = require("./scenarios/helpers");
+const { test, assert, createApplier } = require('./scenarios/helpers');
 
 test('truth or dare question selection can create its round stat event', () => {
   const { applyPartyActionToSnapshot } = createApplier();

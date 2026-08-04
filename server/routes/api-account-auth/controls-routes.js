@@ -1,6 +1,7 @@
 const {
   runWithFreshDocumentRetry
 } = require('../../services/mongoose-version-retry');
+const { applyMarketingConsent } = require('../../services/marketing-consent');
 
 function registerAccountControlsRoutes(context) {
   const {
@@ -14,7 +15,8 @@ function registerAccountControlsRoutes(context) {
     normalizeCustomisationPreferences,
     serializeAccount,
     normalizePrivacySettings,
-    recordProfileCompletionAchievement
+    recordProfileCompletionAchievement,
+    EmailSuppression
   } = context;
 
   app.get('/api/accounts/me/wallet', async (req, res) => {
@@ -203,6 +205,80 @@ function registerAccountControlsRoutes(context) {
         status: 500,
         code: 'privacy_settings_save_failed',
         message: 'Failed to save privacy settings'
+      });
+    }
+  });
+
+  app.patch('/api/accounts/me/marketing-consent', async (req, res) => {
+    const accepted = req.body?.accepted;
+    if (accepted !== true && accepted !== false) {
+      return res.apiError({
+        status: 400,
+        code: 'marketing_consent_invalid',
+        message: 'Choose whether to receive marketing emails'
+      });
+    }
+
+    const account = await getCurrentAccount(req);
+    if (!account) {
+      return res.apiError({
+        status: 401,
+        code: 'account_required',
+        message: 'Sign in to update marketing email preferences'
+      });
+    }
+
+    try {
+      const now = new Date();
+      if (accepted && EmailSuppression?.updateMany) {
+        await EmailSuppression.updateMany(
+          {
+            email: account.email,
+            reason: 'unsubscribed',
+            removedAt: null
+          },
+          { $set: { removedAt: now, removedBy: account._id } }
+        );
+      }
+
+      applyMarketingConsent(account, {
+        accepted,
+        req,
+        source: 'account_settings'
+      });
+      account.profile.lastProfileUpdatedAt = now;
+      await account.save();
+
+      if (!accepted && EmailSuppression?.findOne) {
+        const query = EmailSuppression.findOne({
+          email: account.email,
+          removedAt: null
+        });
+        const activeSuppression = query?.lean
+          ? await query.lean()
+          : await query;
+        if (!activeSuppression && EmailSuppression.create) {
+          await EmailSuppression.create({
+            email: account.email,
+            reason: 'unsubscribed',
+            source: 'user',
+            note: 'Marketing consent withdrawn in account settings'
+          });
+        }
+      }
+
+      res.apiSuccess({
+        message: accepted
+          ? 'Marketing emails enabled'
+          : 'Marketing emails disabled',
+        account: serializeAccount(account)
+      });
+    } catch (err) {
+      console.error(`[REQ ${req.id}] Failed to save marketing consent:`, err);
+      res.apiError({
+        status: 500,
+        code: 'marketing_consent_save_failed',
+        message: 'Failed to save marketing email preferences'
       });
     }
   });

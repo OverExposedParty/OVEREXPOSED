@@ -44,11 +44,11 @@ const battleDemoOlingsScript = fs.readFileSync(
     '..',
     '..',
     '..',
-      'public',
-      'scripts',
-      'olings',
-      'battle',
-      'battle-olings-demo-olings.js'
+    'public',
+    'scripts',
+    'olings',
+    'battle',
+    'battle-olings-demo-olings.js'
   ),
   'utf8'
 );
@@ -58,11 +58,11 @@ const battleLobbyScript = fs.readFileSync(
     '..',
     '..',
     '..',
-      'public',
-      'scripts',
-      'olings',
-      'battle',
-      'battle-olings-lobby.js'
+    'public',
+    'scripts',
+    'olings',
+    'battle',
+    'battle-olings-lobby.js'
   ),
   'utf8'
 );

@@ -26,15 +26,38 @@ function createTemplate(overrides = {}) {
 test('email templates use the dedicated email-templates collection', () => {
   assert.equal(EmailTemplate.collection.name, 'email-templates');
   assert.deepEqual(EmailTemplate.STATUSES, ['draft', 'published', 'archived']);
+  assert.deepEqual(EmailTemplate.CATEGORIES, [
+    'transactional',
+    'marketing',
+    'account-security',
+    'onboarding',
+    'party-social',
+    'rewards-progress',
+    'shop-orders',
+    'product-updates',
+    'events',
+    're-engagement'
+  ]);
+  assert.deepEqual(EmailTemplate.AUTOMATION_TRIGGERS, [
+    'email-verification',
+    'password-reset-request',
+    'email-address-change'
+  ]);
   assert.ok(EmailTemplate.SECTION_TYPES.includes('socialLinks'));
 });
 
 test('email template schema accepts ordered unique section instances', () => {
-  const template = createTemplate({ key: 'verify-email' });
+  const template = createTemplate({
+    key: 'verify-email',
+    automationTriggers: ['email-verification']
+  });
 
   assert.equal(template.validateSync(), undefined);
-  assert.equal(template.version, 1);
+  assert.equal(template.version, undefined);
+  assert.equal(template.publishedVersion, undefined);
   assert.equal(template.status, 'draft');
+  assert.equal(template.theme.secondaryColour, '#427bb9');
+  assert.deepEqual(template.automationTriggers, ['email-verification']);
 });
 
 test('email template schema rejects duplicate section IDs', () => {
@@ -56,7 +79,6 @@ test('email template keys have a unique partial index', () => {
   assert.equal(options.unique, true);
   assert.equal(options.name, 'email_template_key_unique');
   assert.deepEqual(options.partialFilterExpression, {
-    key: { $type: 'string' },
-    'system.archivedAt': null
+    key: { $type: 'string' }
   });
 });

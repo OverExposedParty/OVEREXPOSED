@@ -23,6 +23,14 @@ const adminSchema = new Schema(
     adminCreatedAt: { type: Date, default: null },
     grantedBy: { type: Schema.Types.ObjectId, ref: 'Account', default: null },
     lastAdminLoginAt: { type: Date, default: null },
+    emailTemplateTestRecipient: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      maxlength: 254,
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      default: null
+    },
     disabled: { type: Boolean, default: false },
     actionLogs: { type: [adminActionSchema], select: false, default: [] },
     contentChangesMade: {

@@ -75,7 +75,11 @@ function registerOePanelUserQueryRoutes(context) {
         securityFlagged,
         flaggedAccounts
       ] = await Promise.all([
-        Account.find({}).select('+security').sort({ createdAt: -1 }).limit(100).lean(),
+        Account.find({})
+          .select('+security')
+          .sort({ createdAt: -1 })
+          .limit(100)
+          .lean(),
         Account.find({
           $or: [
             { 'profile.accountStatus': { $in: ['suspended', 'banned'] } },
@@ -90,7 +94,9 @@ function registerOePanelUserQueryRoutes(context) {
         Account.aggregate([
           {
             $group: {
-              _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+              _id: {
+                $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+              },
               count: { $sum: 1 }
             }
           }
@@ -159,8 +165,9 @@ function registerOePanelUserQueryRoutes(context) {
         return enrichmentByAccountId.get(key);
       };
       userReports.forEach((report) => {
-        const reportedAccountId = report.reportedUser?.accountId
-          || (report.target?.type === 'account' ? report.target.id : null);
+        const reportedAccountId =
+          report.reportedUser?.accountId ||
+          (report.target?.type === 'account' ? report.target.id : null);
         if (!reportedAccountId) return;
 
         const enrichment = getEnrichment(reportedAccountId);
@@ -185,12 +192,14 @@ function registerOePanelUserQueryRoutes(context) {
         }
       });
       enrichmentByAccountId.forEach((enrichment) => {
-        enrichment.recentAdminActions = enrichment.adminActions.join('\n') || '-';
+        enrichment.recentAdminActions =
+          enrichment.adminActions.join('\n') || '-';
       });
-      const serializeUser = (user) => serializeOePanelUser(
-        user,
-        enrichmentByAccountId.get(String(user._id)) || {}
-      );
+      const serializeUser = (user) =>
+        serializeOePanelUser(
+          user,
+          enrichmentByAccountId.get(String(user._id)) || {}
+        );
 
       res.apiSuccess({
         data: {

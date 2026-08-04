@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const { EMAIL_TEMPLATE_CATEGORIES } = require('./email-template-constants');
+const { EMAIL_AUTOMATION_TRIGGERS } = require('./email-automation-constants');
 
 const { Schema } = mongoose;
 
 const EMAIL_TEMPLATE_STATUSES = ['draft', 'published', 'archived'];
-const EMAIL_TEMPLATE_CATEGORIES = ['transactional', 'marketing'];
 const EMAIL_SECTION_TYPES = [
   'logo',
   'heading',
@@ -11,6 +12,16 @@ const EMAIL_SECTION_TYPES = [
   'image',
   'content',
   'primaryAction',
+  'secondaryAction',
+  'buttonGroup',
+  'infoBox',
+  'codeToken',
+  'keyValueList',
+  'featureList',
+  'quote',
+  'productCard',
+  'eventBlock',
+  'legalNote',
   'divider',
   'spacer',
   'socialLinks',
@@ -40,6 +51,7 @@ const emailThemeSchema = new Schema(
     emailBackground: { type: String, default: '#171717' },
     contentBackground: { type: String, default: '#292929' },
     accentColour: { type: String, default: '#66ccff' },
+    secondaryColour: { type: String, default: '#427bb9' },
     contentWidth: { type: Number, min: 420, max: 760, default: 640 },
     borderRadius: { type: Number, min: 0, max: 32, default: 0 }
   },
@@ -48,7 +60,6 @@ const emailThemeSchema = new Schema(
 
 const publishedSnapshotSchema = new Schema(
   {
-    version: { type: Number, min: 1, required: true },
     subject: { type: String, maxlength: 240, required: true },
     html: { type: String, required: true },
     text: { type: String, required: true },
@@ -72,6 +83,10 @@ const emailTemplateSchema = new Schema(
       enum: EMAIL_TEMPLATE_CATEGORIES,
       default: 'transactional'
     },
+    automationTriggers: {
+      type: [{ type: String, enum: EMAIL_AUTOMATION_TRIGGERS }],
+      default: []
+    },
     status: {
       type: String,
       enum: EMAIL_TEMPLATE_STATUSES,
@@ -93,8 +108,6 @@ const emailTemplateSchema = new Schema(
       },
       default: []
     },
-    version: { type: Number, min: 1, default: 1 },
-    publishedVersion: { type: Number, min: 1, default: undefined },
     publishedSnapshot: {
       type: publishedSnapshotSchema,
       default: undefined
@@ -123,18 +136,17 @@ emailTemplateSchema.index(
   { key: 1 },
   {
     unique: true,
-    partialFilterExpression: {
-      key: { $type: 'string' },
-      'system.archivedAt': null
-    },
+    partialFilterExpression: { key: { $type: 'string' } },
     name: 'email_template_key_unique'
   }
 );
 emailTemplateSchema.index({ status: 1, 'system.updatedAt': -1 });
+emailTemplateSchema.index({ status: 1, automationTriggers: 1 });
 emailTemplateSchema.index({ 'system.archivedAt': 1, 'system.updatedAt': -1 });
 
 emailTemplateSchema.statics.STATUSES = EMAIL_TEMPLATE_STATUSES;
 emailTemplateSchema.statics.CATEGORIES = EMAIL_TEMPLATE_CATEGORIES;
+emailTemplateSchema.statics.AUTOMATION_TRIGGERS = EMAIL_AUTOMATION_TRIGGERS;
 emailTemplateSchema.statics.SECTION_TYPES = EMAIL_SECTION_TYPES;
 
 module.exports = mongoose.model(

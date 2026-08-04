@@ -1,7 +1,11 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const { OLING_DEFINITIONS_ROOT, OLING_LAYERS, normalizeKey } = require('../shared');
+const {
+  OLING_DEFINITIONS_ROOT,
+  OLING_LAYERS,
+  normalizeKey
+} = require('../shared');
 const { attachOlingBuildSetsToEggs } = require('./build-sets');
 
 async function getOlingDefinitions(
@@ -12,9 +16,7 @@ async function getOlingDefinitions(
     ...new Set(
       olings.flatMap((oling) =>
         [
-          ...OLING_LAYERS.map((layer) =>
-            normalizeKey(oling.build?.[layer])
-          ),
+          ...OLING_LAYERS.map((layer) => normalizeKey(oling.build?.[layer])),
           normalizeKey(oling.equipment?.headwear)
         ].filter(Boolean)
       )
@@ -26,7 +28,9 @@ async function getOlingDefinitions(
     )
   ];
   const eggKeys = [
-    ...new Set(olings.map((oling) => normalizeKey(oling.eggKey)).filter(Boolean))
+    ...new Set(
+      olings.map((oling) => normalizeKey(oling.eggKey)).filter(Boolean)
+    )
   ];
 
   const [traits, rawEggs, personalities] = await Promise.all([
@@ -107,7 +111,10 @@ async function listOlingConsumables({ OlingConsumable } = {}) {
   return filterPublishedOlingConsumables(consumables);
 }
 
-async function getOlingConsumableByKey(consumableKey, { OlingConsumable } = {}) {
+async function getOlingConsumableByKey(
+  consumableKey,
+  { OlingConsumable } = {}
+) {
   const normalizedKey = normalizeKey(consumableKey);
   if (!normalizedKey) return null;
 
@@ -133,7 +140,9 @@ async function getOlingConsumableByKey(consumableKey, { OlingConsumable } = {}) 
   }
 
   const consumables = await listOlingConsumables();
-  return consumables.find((consumable) => consumable.key === normalizedKey) || null;
+  return (
+    consumables.find((consumable) => consumable.key === normalizedKey) || null
+  );
 }
 
 async function readAllOlingConsumablesFromJson() {
@@ -170,11 +179,9 @@ async function listPublishedOlingEggs({ OlingEgg, OlingBuildSet }) {
       .lean();
 
     if (eggs.length) {
-      return attachOlingBuildSetsToEggs(
-        { OlingBuildSet },
-        eggs,
-        { publicOnly: true }
-      );
+      return attachOlingBuildSetsToEggs({ OlingBuildSet }, eggs, {
+        publicOnly: true
+      });
     }
   } catch (error) {
     console.warn('Falling back to JSON Oling eggs:', error.message || error);

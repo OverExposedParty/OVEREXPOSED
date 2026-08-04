@@ -114,9 +114,11 @@ test('recordMostLikelyToResult handles nomination counters and delayed tie outco
     key,
     enabled: true,
     status: 'published',
-    requirementType: ['serial-nominee', 'not-my-name-again', 'taste-maker'].includes(
-      key
-    )
+    requirementType: [
+      'serial-nominee',
+      'not-my-name-again',
+      'taste-maker'
+    ].includes(key)
       ? 'stat_threshold'
       : 'event',
     statKey:
@@ -183,4 +185,3 @@ test('recordMostLikelyToResult handles nomination counters and delayed tie outco
   assert.equal(account.gameData.achievementStats.serialNominee, 10);
   assert.equal(account.gameData.achievementStats.tasteMaker, 10);
 });
-

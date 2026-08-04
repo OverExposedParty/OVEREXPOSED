@@ -61,8 +61,9 @@ let frequentlyAskedQuestionsLink = document.getElementById(
   'frequently-asked-questions-link'
 );
 
-const instagramUrl = 'https://www.instagram.com/oe.app/';
-const tiktokUrl = 'https://www.tiktok.com/@overexposed.app';
+const oeSocialMediaLinks = window.OE_SOCIAL_MEDIA_LINKS || {};
+const instagramUrl = oeSocialMediaLinks.instagram?.url || '#';
+const tiktokUrl = oeSocialMediaLinks.tiktok?.url || '#';
 
 const instagramLink = document.getElementById('instagram-link');
 const tiktokLink = document.getElementById('tiktok-link');

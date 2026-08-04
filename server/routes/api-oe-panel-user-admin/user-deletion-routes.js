@@ -14,7 +14,9 @@ function registerOePanelUserDeletionRoutes(context) {
       if (!account) return;
       if (!requireOePanelPermission(account, res, 'users.delete')) return;
 
-      const currentAccount = await Account.findById(req.params.accountId).lean();
+      const currentAccount = await Account.findById(
+        req.params.accountId
+      ).lean();
       if (!currentAccount) {
         return res.apiError({
           status: 404,

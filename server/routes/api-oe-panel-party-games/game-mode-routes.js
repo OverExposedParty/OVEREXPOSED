@@ -2,7 +2,7 @@ function registerOePanelGameModeRoutes(context) {
   const { app } = context;
 
   with (context) {
-app.post('/api/oe-panel/game-modes/export', async (req, res) => {
+    app.post('/api/oe-panel/game-modes/export', async (req, res) => {
       try {
         const account = await requireOePanelAccount(req, res);
         if (!account) return;

@@ -1,4 +1,16 @@
 function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
+  const authEntryPoints = new Set([
+    'direct_auth_url',
+    'account_notification',
+    'account_container',
+    'protected_page',
+    'auth_page_tab'
+  ]);
+
+  function getAuthEntryPoint(value) {
+    return authEntryPoints.has(value) ? value : 'direct_auth_url';
+  }
+
   function getOAuthMode(mode) {
     if (mode === 'signup') return 'signup';
     if (mode === 'link') return 'link';
@@ -11,7 +23,10 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
     try {
       const returnUrl = new URL(returnTo, 'http://overexposed.local');
       if (returnUrl.origin !== 'http://overexposed.local') return '';
-      if (returnUrl.pathname === '/login' || returnUrl.pathname === '/sign-in') {
+      if (
+        returnUrl.pathname === '/login' ||
+        returnUrl.pathname === '/sign-in'
+      ) {
         return '';
       }
 
@@ -83,7 +98,9 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
     mode,
     returnTo,
     splashScreen,
-    legalConsentAccepted = false
+    legalConsentAccepted = false,
+    marketingEmailOptIn = false,
+    authEntryPoint = 'direct_auth_url'
   }) {
     const stateId = crypto.randomBytes(18).toString('base64url');
     const safeReturnTo = getSafeReturnToPath(returnTo);
@@ -97,7 +114,10 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
         signupReferrerPath: safeMode === 'signup' ? safeReturnTo : '',
         splashScreen: getSafeSplashScreenPath(splashScreen),
         legalConsentAccepted:
-          safeMode === 'signup' && legalConsentAccepted === true
+          safeMode === 'signup' && legalConsentAccepted === true,
+        marketingEmailOptIn:
+          safeMode === 'signup' && marketingEmailOptIn === true,
+        authEntryPoint: getAuthEntryPoint(authEntryPoint)
       }),
       'utf8'
     ).toString('base64url');
@@ -123,9 +143,19 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
     return { verifier, challenge };
   }
 
-  function serializeOAuthCookie({ stateId, codeVerifier = null }) {
+  function serializeOAuthCookie({
+    stateId,
+    codeVerifier = null,
+    legalConsentAccepted = false,
+    marketingEmailOptIn = false
+  }) {
     return Buffer.from(
-      JSON.stringify({ stateId, codeVerifier }),
+      JSON.stringify({
+        stateId,
+        codeVerifier,
+        legalConsentAccepted: legalConsentAccepted === true,
+        marketingEmailOptIn: marketingEmailOptIn === true
+      }),
       'utf8'
     ).toString('base64url');
   }
@@ -141,7 +171,12 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
       // Older cookies stored only the state id as plain text.
     }
 
-    return { stateId: cookieValue, codeVerifier: null };
+    return {
+      stateId: cookieValue,
+      codeVerifier: null,
+      legalConsentAccepted: false,
+      marketingEmailOptIn: false
+    };
   }
 
   return {

@@ -24,7 +24,17 @@ function getNextQuestion(type) {
 
     currentQuestionIndex++;
 
-    return { question: selectedQuestion['question'], cardType: cardType, punishment: punishment, questionAlternatives: questionAlternatives || [] };
+    const result = {
+        question: selectedQuestion['question'],
+        cardType: cardType,
+        packKey: selectedQuestion.__packKey || 'unknown-pack',
+        questionId: selectedQuestion.__questionId || null,
+        questionType: selectedQuestion['question-type'] || type,
+        punishment: punishment,
+        questionAlternatives: questionAlternatives || []
+    };
+    window.OEOfflineQuestionAnalytics?.beginQuestion(result);
+    return result;
 }
 function updateTruthOrDareText(type) {
     const svgPath = `/images/party-games/truth-or-dare/${type}-text.svg`;

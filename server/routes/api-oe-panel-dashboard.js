@@ -2,6 +2,7 @@ const {
   fetchGoogleAnalyticsData,
   getAnalyticsConfiguration
 } = require('../services/google-analytics');
+const { getProductAnalyticsSummary } = require('../services/product-analytics');
 
 function registerOePanelDashboardRoutes(context) {
   const { app } = context;
@@ -153,6 +154,11 @@ function registerOePanelDashboardRoutes(context) {
         const previous7Days = new Date(
           now.getTime() - 14 * 24 * 60 * 60 * 1000
         );
+        const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const productAnalyticsPromise = getProductAnalyticsSummary(
+          AnalyticsEvent,
+          { since: last30Days }
+        );
         const hasSignupAttribution = {
           $or: [
             { 'analytics.signupContext.source': { $type: 'string', $ne: '' } },
@@ -253,6 +259,7 @@ function registerOePanelDashboardRoutes(context) {
             ? `${Math.round((Number(row.accounts || 0) / attributedSignups) * 100)}%`
             : '0%'
         }));
+        const productAnalytics = await productAnalyticsPromise;
         const gaConfiguration = getAnalyticsConfiguration();
         let googleAnalytics = null;
 
@@ -325,6 +332,7 @@ function registerOePanelDashboardRoutes(context) {
             },
             popularPages: topPages,
             acquisitionSources,
+            productAnalytics,
             alerts: analyticsAlerts
           }
         });

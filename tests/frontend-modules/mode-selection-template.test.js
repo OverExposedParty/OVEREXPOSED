@@ -110,9 +110,7 @@ test('mode buttons use themed artwork and content inline SVG layers', async () =
   const container = await dom.window.initializeModeSelection();
   const options = container.querySelectorAll('.mode-selection-option');
   const buttons = container.querySelectorAll('.mode-selection-button');
-  const helpButtons = container.querySelectorAll(
-    '.mode-selection-help-button'
-  );
+  const helpButtons = container.querySelectorAll('.mode-selection-help-button');
   const separator = container.querySelector('.mode-selection-separator');
   const headerTitle = container.querySelector('.mode-selection-header-title');
 
@@ -167,10 +165,7 @@ test('mode buttons use themed artwork and content inline SVG layers', async () =
         true
       );
       assert.match(partyActiveStyles, /var\(--primarypagecolour\)/);
-      assert.doesNotMatch(
-        partyActiveStyles,
-        /#(?:66ccff|6cf)(?![0-9a-f])/i
-      );
+      assert.doesNotMatch(partyActiveStyles, /#(?:66ccff|6cf)(?![0-9a-f])/i);
       assert.ok(
         artboard.querySelector('.mode-selection-party-active-backdrop')
       );
@@ -178,9 +173,7 @@ test('mode buttons use themed artwork and content inline SVG layers', async () =
   });
 
   options.forEach((option) => {
-    const modeButton = option.querySelector(
-      ':scope > .mode-selection-button'
-    );
+    const modeButton = option.querySelector(':scope > .mode-selection-button');
     const helpButton = option.querySelector(
       ':scope > .mode-selection-help-anchor > .mode-selection-help-button'
     );
@@ -226,9 +219,7 @@ test('help buttons open one card help panel without selecting a mode', async () 
     new dom.window.MouseEvent('click', { bubbles: true })
   );
 
-  const onlinePanel = onlineOption.querySelector(
-    '.mode-selection-help-panel'
-  );
+  const onlinePanel = onlineOption.querySelector('.mode-selection-help-panel');
   assert.equal(onlineOption.classList.contains('is-help-open'), true);
   assert.equal(onlinePanel.hidden, false);
   assert.equal(onlinePanel.getAttribute('aria-hidden'), 'false');
@@ -258,9 +249,9 @@ test('help buttons open one card help panel without selecting a mode', async () 
   assert.equal(offlineOption.classList.contains('is-help-open'), true);
   assert.equal(offlinePanel.hidden, false);
 
-  offlinePanel.querySelector('.mode-selection-help-back').dispatchEvent(
-    new dom.window.MouseEvent('click', { bubbles: true })
-  );
+  offlinePanel
+    .querySelector('.mode-selection-help-back')
+    .dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));
 
   assert.equal(offlineOption.classList.contains('is-help-open'), false);
   assert.equal(offlinePanel.hidden, true);
@@ -312,9 +303,7 @@ test('mode selection ignores backdrop dismissal and closes from either button', 
 
     if (mode === 'online') {
       await new Promise((resolve) => dom.window.setTimeout(resolve, 0));
-      const progress = selectedButton.querySelector(
-        '.mode-selection-progress'
-      );
+      const progress = selectedButton.querySelector('.mode-selection-progress');
       assert.equal(progress.getAttribute('aria-valuenow'), '100');
       assert.equal(container.classList.contains('is-visible'), true);
 
@@ -441,9 +430,9 @@ test('active-party mode supports a future navigation handler', async () => {
   assert.equal(onlineButton.dataset.modeAction, 'active-party');
   assert.equal(onlineButton.dataset.activePartyCode, 'ABC-123');
   assert.equal(
-    onlineButton.closest('.mode-selection-option').classList.contains(
-      'has-active-party'
-    ),
+    onlineButton
+      .closest('.mode-selection-option')
+      .classList.contains('has-active-party'),
     true
   );
   const onlineOption = onlineButton.closest('.mode-selection-option');
@@ -554,15 +543,12 @@ test('active online card opens party management instead of creating a party', as
   const onlineOption = onlineButton.closest('.mode-selection-option');
   assert.equal(onlineButton.dataset.modeAction, 'create-party');
   assert.equal(
-    onlineButton.closest('.mode-selection-option').classList.contains(
-      'has-active-party'
-    ),
+    onlineButton
+      .closest('.mode-selection-option')
+      .classList.contains('has-active-party'),
     false
   );
-  assert.equal(
-    onlineOption.style.getPropertyValue('--primarypagecolour'),
-    ''
-  );
+  assert.equal(onlineOption.style.getPropertyValue('--primarypagecolour'), '');
   assert.equal(onlineButton.dataset.activePartyCode, undefined);
   assert.equal(
     onlineOption.querySelector('.mode-selection-help-title').textContent,

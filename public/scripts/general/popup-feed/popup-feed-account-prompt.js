@@ -69,14 +69,16 @@
     function getSignupPromptPath() {
       const params = new URLSearchParams({
         mode: 'signup',
-        returnTo: getCurrentReturnPath()
+        returnTo: getCurrentReturnPath(),
+        authEntryPoint: 'account_notification'
       });
       return `/sign-in?${params.toString()}`;
     }
 
     function getSignInPromptPath() {
       const params = new URLSearchParams({
-        returnTo: getCurrentReturnPath()
+        returnTo: getCurrentReturnPath(),
+        authEntryPoint: 'account_notification'
       });
       return `/sign-in?${params.toString()}`;
     }
@@ -262,6 +264,7 @@
       dismissButton.className =
         'account-prompt-popup-dismiss oe-popup-text-action oe-popup-dismiss-action';
       dismissButton.type = 'button';
+      dismissButton.dataset.analyticsAction = 'dismiss';
       dismissButton.setAttribute('aria-label', 'Dismiss create account prompt');
       dismissButton.textContent = 'Dismiss';
 
@@ -269,6 +272,7 @@
       createButton.className =
         'account-prompt-popup-create oe-popup-text-action oe-popup-view-action';
       createButton.type = 'button';
+      createButton.dataset.analyticsAction = 'create_account';
       createButton.textContent = 'Create';
 
       dismissButton.addEventListener('click', () => dismissAccountPrompt(row));
@@ -294,7 +298,15 @@
       }
 
       activeAccountPromptRow = createAccountPromptPopupRow();
-      return showPopup(activeAccountPromptRow, { persist: true, sound: false });
+      return showPopup(activeAccountPromptRow, {
+        persist: true,
+        sound: false,
+        analytics: {
+          key: 'create_account_prompt',
+          category: 'account_acquisition',
+          variant: 'benefits_v1'
+        }
+      });
     }
 
     function scheduleAccountPrompt() {
