@@ -233,6 +233,8 @@ function createPartyActionApplier(deps) {
         Math.max(0, Number(partySession.playSequence) || 0) + 1;
       partySession.playtimeStartedAt = playtimeNow;
       partySession.playtimeAccumulatedMilliseconds = 0;
+      partySession.startedAt = playtimeNow;
+      partySession.endedAt = null;
     } else {
       if (wasPlaying && !partySession.playtimeStartedAt) {
         // Active parties created before playtime tracking was deployed begin
@@ -277,6 +279,7 @@ function createPartyActionApplier(deps) {
       previousState.phase !== 'game-over' && state.phase === 'game-over';
 
     if (gameJustEnded) {
+      partySession.endedAt = playtimeNow;
       const phaseData =
         state.phaseData && typeof state.phaseData === 'object'
           ? state.phaseData

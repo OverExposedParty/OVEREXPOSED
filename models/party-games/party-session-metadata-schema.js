@@ -13,6 +13,8 @@ const partySessionMetadataSchema = new mongoose.Schema(
   {
     gameId: { type: String, default: createFallbackGameId },
     createdAt: { type: Date, default: Date.now },
+    startedAt: { type: Date, default: null },
+    endedAt: { type: Date, default: null },
     playSequence: { type: Number, min: 0, default: 0 },
     playtimeStartedAt: { type: Date, default: null },
     playtimeAccumulatedMilliseconds: { type: Number, min: 0, default: 0 },

@@ -116,6 +116,48 @@ test('archived room duration ends at recorded activity instead of cleanup time',
   assert.equal(room.timeLapsed, '10m');
 });
 
+test('room panel serializers include visual player and configuration snapshots', () => {
+  const context = createApiRouteContext({
+    app: {},
+    models: {},
+    runtime: {}
+  });
+  const archivedRoom = context.serializeArchivedRoom({
+    partyId: 'ROOM-ONE',
+    gameId: 'GAME-ONE',
+    gamemode: 'mafia',
+    archivedAt: new Date('2026-08-05T12:30:00.000Z'),
+    session: {},
+    config: {
+      selectedPacks: ['classic-mafia'],
+      gameRules: { discussionTimer: 60 },
+      roleCounts: { mafia: 1 }
+    },
+    state: {},
+    players: [
+      { username: 'Legacy Player', isHost: true },
+      {
+        username: 'Snapshot Player',
+        userIcon: '1000:1100:1200:1300',
+        accountId: 'account-one'
+      }
+    ]
+  });
+
+  assert.equal(archivedRoom.hostUser, 'Legacy Player');
+  assert.deepEqual(archivedRoom.roomVisual.selectedPacks, ['classic-mafia']);
+  assert.equal(archivedRoom.roomVisual.gameRules.discussionTimer, 60);
+  assert.equal(archivedRoom.roomVisual.roleCounts.mafia, 1);
+  assert.deepEqual(
+    archivedRoom.roomVisual.players.map((player) => player.userIcon),
+    ['0000:0100:0200:0300', '1000:1100:1200:1300']
+  );
+  assert.deepEqual(
+    archivedRoom.roomVisual.players.map((player) => player.accountType),
+    ['Guest', 'Account']
+  );
+});
+
 test('game pack payloads create and replace editable questions without losing metadata', () => {
   const context = createApiRouteContext({
     app: {},

@@ -93,7 +93,11 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
         rows: [],
         dataSource: 'partyRooms',
         deleteEndpoint:
-          '/api/oe-panel/party-rooms/{roomCode}?sourceCollection={sourceCollection}'
+          '/api/oe-panel/party-rooms/{roomCode}?sourceCollection={sourceCollection}',
+        rowActions: [
+          { label: 'View Room', action: 'view-room' },
+          { label: 'Delete', action: 'delete' }
+        ]
       },
       {
         value: 'packs',

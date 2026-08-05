@@ -19,6 +19,9 @@ test('return-to-lobby preserves the party config and resets gameplay state', () 
   });
 
   assert.deepEqual(updated.config.selectedPacks, ['pack-one']);
+  assert.match(updated.session.gameId, /^MLT-[A-F0-9]{16}$/);
+  assert.equal(updated.session.startedAt, null);
+  assert.equal(updated.session.endedAt, null);
   assert.deepEqual(updated.config.gameRules, { rounds: 20 });
   assert.equal(updated.config.userInstructions, '');
   assert.equal(updated.state.isPlaying, false);
@@ -31,6 +34,50 @@ test('return-to-lobby preserves the party config and resets gameplay state', () 
   assert.equal(updated.players[1].state.isReady, false);
   assert.equal(updated.players[0].state.score, 0);
   assert.equal(updated.players[1].state.score, 0);
+});
+
+test('return-to-lobby rotates the game id while preserving the party code', () => {
+  const { applyPartyActionToSnapshot } = createApplier();
+  const party = createGameOverParty();
+  party.session = {
+    gameId: 'MLT-OLDGAME1234',
+    createdAt: new Date('2026-08-05T12:00:00.000Z'),
+    startedAt: new Date('2026-08-05T12:01:00.000Z'),
+    endedAt: new Date('2026-08-05T12:10:00.000Z'),
+    playSequence: 1,
+    access: { originalHostComputerId: 'host-device' }
+  };
+
+  const updated = applyPartyActionToSnapshot({
+    party,
+    action: 'return-to-lobby',
+    actorId: 'host-device',
+    payload: {},
+    hasDeck: true
+  });
+
+  assert.equal(updated.partyId, 'ABC-123');
+  assert.notEqual(updated.session.gameId, party.session.gameId);
+  assert.equal(updated.session.playSequence, 1);
+  assert.equal(updated.session.access.originalHostComputerId, 'host-device');
+});
+
+test('return-to-lobby rejects a game that has not ended', () => {
+  const { applyPartyActionToSnapshot } = createApplier();
+  const party = createGameOverParty();
+  party.state.phase = 'lobby';
+
+  assert.throws(
+    () =>
+      applyPartyActionToSnapshot({
+        party,
+        action: 'return-to-lobby',
+        actorId: 'host-device',
+        payload: {},
+        hasDeck: true
+      }),
+    /must end/
+  );
 });
 
 test('return-to-lobby rejects non-host players', () => {

@@ -136,10 +136,16 @@ async function grantPartyGameRewardSummary({
   }
 
   const legacySourceId = `${party.partyId}:${accountId}`;
+  const legacyPlayerSourceId = `${party.partyId}:${summary.playerId}`;
+  const playSequence = Number(party.session?.playSequence);
+  const legacySourceIds =
+    !Number.isFinite(playSequence) || playSequence <= 1
+      ? [legacySourceId, legacyPlayerSourceId]
+      : [];
   const existingTransaction = account.gameData.opalTransactions.find(
     (transaction) =>
       transaction?.sourceType === 'game_reward' &&
-      [summary.claimKey, legacySourceId].includes(
+      [summary.claimKey, ...legacySourceIds].includes(
         String(transaction?.sourceId || '')
       )
   );
@@ -227,6 +233,7 @@ async function grantPartyGameRewardSummary({
       await PartyGameRewardClaim.create({
         claimKey: summary.claimKey,
         partyId: party.partyId,
+        gameId: summary.gameId || party.session?.gameId || null,
         playerId: summary.playerId,
         accountId,
         gamemode: party.config?.gamemode || party.gamemode || null,

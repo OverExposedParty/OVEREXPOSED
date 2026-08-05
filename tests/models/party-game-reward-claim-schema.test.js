@@ -25,7 +25,8 @@ test('party game reward claims preserve versioned reward audit fields', () => {
   assert.ok(
     indexes.some(
       ({ fields, unique }) =>
-        fields.partyId === 1 && fields.playerId === 1 && unique
+        fields.gameId === 1 && fields.playerId === 1 && unique
     )
   );
+  assert.ok(schema.path('gameId'));
 });

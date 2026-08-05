@@ -7,7 +7,8 @@ function createPartyRoomContext(context) {
     partyGameMostLikelyToSchema,
     partyGameImposterSchema,
     partyGameWouldYouRatherSchema,
-    partyGameMafiaSchema
+    partyGameMafiaSchema,
+    defaultOeIcon = '0000:0100:0200:0300'
   } = context;
 
   function formatRoundedDuration(startDate, endDate) {
@@ -95,6 +96,71 @@ function createPartyRoomContext(context) {
         ? null
         : Math.max(0, players.length - connectedPlayers),
       readyPlayers
+    };
+  }
+
+  function getRoomVisual(room) {
+    const players = Array.isArray(room.players) ? room.players : [];
+    const isArchivedSnapshot = Boolean(room.archivedAt);
+    const hostComputerIds = new Set(
+      [
+        room.state?.hostComputerId,
+        ...(Array.isArray(room.state?.hostComputerIdList)
+          ? room.state.hostComputerIdList
+          : [])
+      ]
+        .filter(Boolean)
+        .map(String)
+    );
+    const normalizeRecord = (value) => {
+      if (!value) return {};
+      if (value instanceof Map) return Object.fromEntries(value);
+      return typeof value === 'object' ? value : {};
+    };
+
+    return {
+      players: players.map((player, index) => {
+        const identity = player.identity || player;
+        const computerId = identity.computerId || player.computerId;
+        const participationStatus = player.state?.participationStatus || '';
+        const hasConnection = Boolean(
+          player.connection?.socketId || player.connection?.lastPing
+        );
+
+        return {
+          username:
+            identity.username || player.username || `Player ${index + 1}`,
+          userIcon:
+            identity.userIcon || player.userIcon || String(defaultOeIcon),
+          isHost: Boolean(
+            player.isHost ||
+            (computerId && hostComputerIds.has(String(computerId)))
+          ),
+          accountType:
+            identity.accountId || player.accountId ? 'Account' : 'Guest',
+          connectionStatus: isArchivedSnapshot
+            ? 'Archived snapshot'
+            : participationStatus
+              ? participationStatus
+                  .split('_')
+                  .map(
+                    (part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`
+                  )
+                  .join(' ')
+              : hasConnection
+                ? 'Connected'
+                : 'Disconnected',
+          isReady: Boolean(player.state?.isReady),
+          score: Number.isFinite(Number(player.state?.score))
+            ? Number(player.state.score)
+            : null
+        };
+      }),
+      selectedPacks: Array.isArray(room.config?.selectedPacks)
+        ? room.config.selectedPacks
+        : [],
+      roleCounts: normalizeRecord(room.config?.roleCounts),
+      gameRules: normalizeRecord(room.config?.gameRules)
     };
   }
 
@@ -281,6 +347,7 @@ function createPartyRoomContext(context) {
     const phase = room.state?.phase ?? null;
     const instruction = getRoomInstruction(room);
     const playerSummary = getRoomPlayerSummary(room);
+    const roomVisual = getRoomVisual(room);
 
     return {
       roomCode: room.partyId || '-',
@@ -294,7 +361,11 @@ function createPartyRoomContext(context) {
       serverRegion: room.session?.serverRegion || '-',
       roomStatus: room.state?.isPlaying ? 'In Game' : 'Lobby',
       hostUser:
-        room.host?.username || room.hostUsername || room.createdBy || '-',
+        room.host?.username ||
+        room.hostUsername ||
+        room.createdBy ||
+        roomVisual.players.find((player) => player.isHost)?.username ||
+        '-',
       createdAt: createdAt ? new Date(createdAt).toLocaleString() : '-',
       lastUpdated: lastUpdated ? new Date(lastUpdated).toLocaleString() : '-',
       reportCount: Array.isArray(room.reports)
@@ -325,6 +396,7 @@ function createPartyRoomContext(context) {
       outcome: formatRoomDetailValue(getRoomOutcome(room)),
       stateSummary: formatRoomDetailValue(room.state),
       configSummary: formatRoomDetailValue(room.config),
+      roomVisual,
       errors,
       details: {
         'Game ID': room.session?.gameId || '-',
@@ -347,6 +419,7 @@ function createPartyRoomContext(context) {
     const phase = room.state?.phase ?? null;
     const instruction = getRoomInstruction(room);
     const playerSummary = getRoomPlayerSummary(room);
+    const roomVisual = getRoomVisual(room);
 
     return {
       roomCode: room.partyId || '-',
@@ -358,7 +431,11 @@ function createPartyRoomContext(context) {
       serverRegion: room.session?.serverRegion || '-',
       roomStatus: 'Archived',
       hostUser:
-        room.host?.username || room.hostUsername || room.createdBy || '-',
+        room.host?.username ||
+        room.hostUsername ||
+        room.createdBy ||
+        roomVisual.players.find((player) => player.isHost)?.username ||
+        '-',
       createdAt: createdAt ? new Date(createdAt).toLocaleString() : '-',
       lastUpdated: lastUpdated ? new Date(lastUpdated).toLocaleString() : '-',
       reportCount: Array.isArray(room.reports)
@@ -390,6 +467,7 @@ function createPartyRoomContext(context) {
       outcome: formatRoomDetailValue(getRoomOutcome(room)),
       stateSummary: formatRoomDetailValue(room.state),
       configSummary: formatRoomDetailValue(room.config),
+      roomVisual,
       errors,
       details: {
         'Game ID': room.gameId || '-',

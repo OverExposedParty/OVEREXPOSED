@@ -33,7 +33,8 @@ function createPartyActionRoute(context) {
     GameRole,
     GamePack,
     GameRule,
-    assertPartyConfigContentAccess
+    assertPartyConfigContentAccess,
+    archiveRoomSnapshot
   } = context;
   const { applyPartyAccountStatEvents } = createPartyActionStatEventTools({
     Account,
@@ -102,6 +103,25 @@ function createPartyActionRoute(context) {
         assertPrincipalOwnsPlayer(existingParty, actorId, principal);
 
         if (
+          action === 'return-to-lobby' &&
+          existingParty.state?.phase === 'game-over' &&
+          typeof archiveRoomSnapshot === 'function'
+        ) {
+          const archived = await archiveRoomSnapshot({
+            roomDocument: existingParty,
+            endedAt: existingParty.session?.endedAt
+          });
+          if (!archived) {
+            const error = new Error(
+              `Failed to archive ${logLabel.toLowerCase()} before starting the next game`
+            );
+            error.status = 500;
+            error.code = 'party_archive_failed';
+            throw error;
+          }
+        }
+
+        if (
           ['start-game', 'mafia-start-game'].includes(action) &&
           typeof assertPartyConfigContentAccess === 'function'
         ) {
@@ -159,7 +179,12 @@ function createPartyActionRoute(context) {
         }
 
         const updateFilter = { partyId };
-        if (action !== 'end-game' && action !== 'return-to-lobby') {
+        if (action === 'return-to-lobby') {
+          updateFilter['state.phase'] = 'game-over';
+          if (existingParty.session?.gameId) {
+            updateFilter['session.gameId'] = existingParty.session.gameId;
+          }
+        } else {
           updateFilter['state.phase'] = { $ne: 'game-over' };
         }
 
@@ -195,6 +220,7 @@ function createPartyActionRoute(context) {
               partyId,
               action,
               eventId: payload.eventId,
+              gameId: updatedPartySnapshot.session?.gameId,
               playSequence: updatedPartySnapshot.session?.playSequence,
               phase: existingParty.state?.phase,
               playerTurn: existingParty.state?.playerTurn
@@ -207,7 +233,7 @@ function createPartyActionRoute(context) {
           });
         }
 
-        if (gameJustEnded) {
+        if (gameJustEnded || action === 'end-game') {
           const rewardSummaries = await grantPartyGameRewards({
             Account,
             PartyGameRewardClaim: partyGameRewardClaimSchema,
@@ -226,13 +252,32 @@ function createPartyActionRoute(context) {
           updatedParty = await updatedParty.save();
         }
 
+        if (
+          (gameJustEnded || action === 'end-game') &&
+          updatedParty.state?.phase === 'game-over' &&
+          typeof archiveRoomSnapshot === 'function'
+        ) {
+          const archived = await archiveRoomSnapshot({
+            roomDocument: updatedParty,
+            endedAt: updatedParty.session?.endedAt
+          });
+          if (!archived) {
+            const error = new Error(
+              `Failed to archive completed ${logLabel.toLowerCase()}`
+            );
+            error.status = 500;
+            error.code = 'party_archive_failed';
+            throw error;
+          }
+        }
+
         await waitingRoomModel.findOneAndUpdate(
           { partyId },
           {
             session: updatedParty.session,
             config: updatedParty.config,
             state: updatedParty.state,
-            players: updatedPartySnapshot.players
+            players: updatedParty.players
           },
           {
             new: true,

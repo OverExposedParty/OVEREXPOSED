@@ -1,3 +1,5 @@
+const { createPartyGameId } = require('../../game-session');
+
 function handleCoreLifecycleAction(action, context) {
   const {
     getPartyPlayerId,
@@ -154,6 +156,25 @@ function handleCoreLifecycleAction(action, context) {
       assertActorCanControlParty(workingParty, actorId, false);
 
       const gamemode = config.gamemode || workingParty.gamemode;
+      if (state.phase !== 'game-over') {
+        const error = new Error(
+          'The current game must end before the party can return to the lobby.'
+        );
+        error.status = 409;
+        error.code = 'party_game_not_over';
+        throw error;
+      }
+
+      const previousSession = workingParty.session || {};
+      workingParty.session = {
+        ...previousSession,
+        gameId: createPartyGameId(gamemode),
+        createdAt: new Date(),
+        startedAt: null,
+        endedAt: null,
+        playtimeStartedAt: null,
+        playtimeAccumulatedMilliseconds: 0
+      };
       config.userInstructions = '';
       state.userInstructions = '';
       state.isPlaying = false;
@@ -168,6 +189,8 @@ function handleCoreLifecycleAction(action, context) {
       state.speakingPlayerTurn = 0;
       state.round = 0;
       state.roundPlayerTurn = 0;
+      state.roundTimeline = [];
+      state.achievementData = null;
       state.vote = null;
       state.lastPinged = new Date();
 

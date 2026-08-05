@@ -14,6 +14,7 @@ const panelModules = [
   'email-audience-editor.css',
   'pie-chart.css',
   'data-tables.css',
+  'room-visualizer.css',
   'palette-values.css',
   'alerts-and-actions.css',
   'social-video.css',
@@ -57,6 +58,7 @@ test('OE Panel stylesheet imports feature modules in cascade order', () => {
     'shell.css',
     'shell-stats.css',
     'palette-values.css',
+    'room-visualizer.css',
     'email-widgets.css',
     'email-template-editor.css'
   ].forEach((fileName) => {

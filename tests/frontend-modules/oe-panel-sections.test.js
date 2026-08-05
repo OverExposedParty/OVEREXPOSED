@@ -90,6 +90,7 @@ test('OE panel section modules build a complete registry in any load order', () 
     (action) => action.value === 'room-activity'
   );
   const table = partyGames.find((grid) => grid.id === 'party-games-grid-1');
+  const rooms = table.tableSeries.find((series) => series.value === 'rooms');
   const roles = table.tableSeries.find((series) => series.value === 'roles');
   const exportRoles = quickActions.actions.find(
     (action) => action.value === 'export-roles'
@@ -104,6 +105,13 @@ test('OE panel section modules build a complete registry in any load order', () 
   assert.equal(quickActions.visibleActions, 8);
   assert.equal(roomActivity.view, 'embedded-widget');
   assert.equal(roomActivity.widget.type, 'calendar');
+  assert.deepEqual(
+    Array.from(rooms.rowActions, ({ label, action }) => ({ label, action })),
+    [
+      { label: 'View Room', action: 'view-room' },
+      { label: 'Delete', action: 'delete' }
+    ]
+  );
   assert.equal(roles.dataSource, 'partyRoles');
   assert.equal(roles.saveEndpoint, '/api/oe-panel/game-roles/{key}');
   assert.ok(

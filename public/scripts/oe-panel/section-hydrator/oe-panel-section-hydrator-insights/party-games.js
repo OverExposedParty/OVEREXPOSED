@@ -4,7 +4,7 @@
       if (sectionName === 'Party Games') {
         const partyRoomsData = await panelData.fetchPartyRoomsData();
         const dashboardActivity = await panelData.fetchDashboardActivityData();
-        const rooms = Array.isArray(partyRoomsData.rooms)
+        const roomRows = Array.isArray(partyRoomsData.rooms)
           ? partyRoomsData.rooms
           : [];
         const partyPacks = Array.isArray(partyRoomsData.packs)
@@ -13,6 +13,69 @@
         const partyRules = Array.isArray(partyRoomsData.rules)
           ? partyRoomsData.rules
           : [];
+        const packsByKey = new Map();
+        partyPacks.forEach((pack) => {
+          [pack.slug, pack.packKey, pack.key, pack.title].forEach((key) => {
+            const normalizedKey = String(key || '')
+              .trim()
+              .toLowerCase();
+            if (normalizedKey && normalizedKey !== '-') {
+              packsByKey.set(normalizedKey, pack);
+            }
+          });
+        });
+        const rulesByKey = new Map();
+        partyRules.forEach((rule) => {
+          [rule.key, rule.ruleKey, rule.rule].forEach((key) => {
+            const normalizedKey = String(key || '')
+              .trim()
+              .toLowerCase();
+            if (normalizedKey && normalizedKey !== '-') {
+              rulesByKey.set(normalizedKey, rule);
+            }
+          });
+        });
+        const rooms = roomRows.map((room) => {
+          const selectedPacks = Array.isArray(room.roomVisual?.selectedPacks)
+            ? room.roomVisual.selectedPacks
+            : [];
+          const gameRules = room.roomVisual?.gameRules || {};
+          return {
+            ...room,
+            roomVisual: {
+              ...(room.roomVisual || {}),
+              selectedPackDetails: selectedPacks.map((packKey) => {
+                const pack = packsByKey.get(
+                  String(packKey || '')
+                    .trim()
+                    .toLowerCase()
+                );
+                return {
+                  key: packKey,
+                  title: pack?.title || packKey,
+                  difficulty: pack?.difficulty || '',
+                  restriction: pack?.restriction || '',
+                  colour: pack?.details?.colour || '',
+                  secondaryColour: pack?.details?.secondaryColour || ''
+                };
+              }),
+              gameRuleDetails: Object.keys(gameRules).map((ruleKey) => {
+                const normalizedRuleKey = String(ruleKey).toLowerCase();
+                const compositeKey = `${String(room.gamemode || '').toLowerCase()}:${normalizedRuleKey}`;
+                const rule =
+                  rulesByKey.get(compositeKey) ||
+                  rulesByKey.get(normalizedRuleKey);
+                return {
+                  key: ruleKey,
+                  title: rule?.rule || ruleKey,
+                  buttonType: rule?.buttonType || '',
+                  colour: rule?.colour || '',
+                  secondaryColour: rule?.secondaryColour || ''
+                };
+              })
+            }
+          };
+        });
         const partyRoles = Array.isArray(partyRoomsData.roles)
           ? partyRoomsData.roles
           : [];

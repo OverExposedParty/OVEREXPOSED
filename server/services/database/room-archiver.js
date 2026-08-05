@@ -4,6 +4,8 @@ const {
   isPartyRoomExpired
 } = require('../party-room-activity');
 
+const DEFAULT_OE_ICON = '0000:0100:0200:0300';
+
 function createRoomArchiver({ models, partyOwnerLeases = {} }) {
   const {
     partyGameTruthOrDareSchema,
@@ -107,6 +109,15 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
     const gameId = room.session?.gameId ?? null;
     const partyId = room.partyId;
     const userInstructions = getRoomInstructions(room);
+    const completionStatus =
+      room.state?.phase === 'game-over'
+        ? 'completed'
+        : room.session?.startedAt ||
+            (room.state?.phase &&
+              room.state.phase !== 'lobby' &&
+              Number(room.session?.playSequence) > 0)
+          ? 'abandoned'
+          : 'lobby-closed';
 
     return {
       partyId,
@@ -114,8 +125,10 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
       gamemode,
       sourceCollection,
       archivedAt,
+      completionStatus,
       session: {
         createdAt: room.session?.createdAt ?? null,
+        startedAt: room.session?.startedAt ?? null,
         endedAt,
         serverRegion: room.session?.serverRegion ?? null
       },
@@ -137,6 +150,8 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
         computerId: player.identity?.computerId ?? null,
         accountId: player.identity?.accountId ?? null,
         username: player.identity?.username ?? '',
+        userIcon:
+          player.identity?.userIcon ?? player.userIcon ?? DEFAULT_OE_ICON,
         isHost:
           Boolean(hostComputerId) &&
           String(player.identity?.computerId) === String(hostComputerId)
@@ -177,7 +192,11 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
       .map((player) => player.accountId)
       .filter(Boolean);
 
-    if (archivedRecord?._id && accountIds.length > 0) {
+    if (
+      archivedRecord?._id &&
+      archivedRoom.completionStatus === 'completed' &&
+      accountIds.length > 0
+    ) {
       await Account.updateMany(
         { _id: { $in: accountIds } },
         { $addToSet: { 'gameData.matchHistory': archivedRecord._id } }

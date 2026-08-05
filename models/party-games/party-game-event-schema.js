@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const partyGameEventSchema = new mongoose.Schema(
   {
     partyId: { type: String, required: true, index: true },
+    gameId: { type: String, default: null, index: true },
     eventKey: { type: String, required: true },
     gamemode: { type: String, required: true },
     action: { type: String, required: true },

@@ -13,6 +13,8 @@ const ACCOUNT_TWO = '64f000000000000000000002';
 function createParty({
   now = new Date('2026-07-08T12:00:00.000Z'),
   startedAt = new Date('2026-07-08T11:54:00.000Z'),
+  gameId = null,
+  playSequence = null,
   progress = {
     [ACCOUNT_ONE]: { actionsAvailable: 8, actionsTaken: 6 },
     [ACCOUNT_TWO]: { actionsAvailable: 8, actionsTaken: 1 }
@@ -21,6 +23,8 @@ function createParty({
   return {
     partyId: 'ABC123',
     session: {
+      ...(gameId ? { gameId } : {}),
+      ...(playSequence == null ? {} : { playSequence }),
       createdAt: startedAt,
       playtimeStartedAt: null,
       playtimeAccumulatedMilliseconds: Math.max(
@@ -563,6 +567,47 @@ test('party game rewards do not grant Opals or XP twice', async () => {
   assert.equal(account.gameData.xp, 30);
   assert.equal(account.gameData.opalTransactions.length, 1);
   assert.equal(account.saveCalls, 0);
+});
+
+test('the same players can earn rewards in consecutive games under one party code', async () => {
+  const now = new Date('2026-07-08T12:00:00.000Z');
+  const account = createAccount();
+  const Account = {
+    findById: async (accountId) =>
+      String(accountId) === ACCOUNT_ONE ? account : null
+  };
+  const { claims, PartyGameRewardClaim } = createRewardClaimModel();
+
+  await grantPartyGameRewards({
+    Account,
+    PartyGameRewardClaim,
+    party: createParty({
+      now,
+      gameId: 'MLT-GAMEONE0001',
+      playSequence: 1
+    }),
+    now
+  });
+  await grantPartyGameRewards({
+    Account,
+    PartyGameRewardClaim,
+    party: createParty({
+      now: new Date(now.getTime() + 10 * 60 * 1000),
+      startedAt: new Date(now.getTime() + 4 * 60 * 1000),
+      gameId: 'MLT-GAMETWO0002',
+      playSequence: 2
+    }),
+    now: new Date(now.getTime() + 10 * 60 * 1000)
+  });
+
+  assert.ok(claims.has('MLT-GAMEONE0001:player-one'));
+  assert.ok(claims.has('MLT-GAMETWO0002:player-one'));
+  assert.deepEqual(
+    account.gameData.opalTransactions.map(
+      (transaction) => transaction.sourceId
+    ),
+    ['MLT-GAMEONE0001:player-one', 'MLT-GAMETWO0002:player-one']
+  );
 });
 
 test('party game XP can level an account during the shared reward save', async () => {

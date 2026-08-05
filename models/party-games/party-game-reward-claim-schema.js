@@ -4,6 +4,7 @@ const partyGameRewardClaimSchema = new mongoose.Schema(
   {
     claimKey: { type: String, required: true, unique: true },
     partyId: { type: String, required: true, index: true },
+    gameId: { type: String, default: null, index: true },
     playerId: { type: String, required: true },
     accountId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,7 +31,13 @@ const partyGameRewardClaimSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-partyGameRewardClaimSchema.index({ partyId: 1, playerId: 1 }, { unique: true });
+partyGameRewardClaimSchema.index(
+  { gameId: 1, playerId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { gameId: { $type: 'string' } }
+  }
+);
 
 module.exports = mongoose.model(
   'PartyGameRewardClaim',

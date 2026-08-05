@@ -326,8 +326,11 @@ function createPartyGameRewardSummary({
   maxScore
 }) {
   const { playerId, accountId } = getPartyPlayerRewardIdentity(player);
+  const gameId = party?.session?.gameId || null;
   const claimKey =
-    party?.partyId && playerId ? `${party.partyId}:${playerId}` : null;
+    (gameId || party?.partyId) && playerId
+      ? `${gameId || party.partyId}:${playerId}`
+      : null;
   const actionsAvailable = Math.max(
     0,
     Math.floor(Number(progress?.actionsAvailable) || 0)
@@ -383,6 +386,7 @@ function createPartyGameRewardSummary({
   return {
     playerId,
     accountId,
+    gameId,
     claimKey,
     eligible,
     failedRequirements,

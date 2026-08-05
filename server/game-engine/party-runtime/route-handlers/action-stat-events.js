@@ -401,6 +401,7 @@ function createPartyActionStatEventTools(context) {
       try {
         await partyGameEventSchema.create({
           partyId: eventContext.partyId,
+          gameId: eventContext.gameId || null,
           eventKey,
           gamemode: event.gameMode,
           action: eventContext.action

@@ -10,6 +10,7 @@ const archivedPlayerSchema = new mongoose.Schema(
       default: null
     },
     username: { type: String, default: '' },
+    userIcon: { type: String, default: '0000:0100:0200:0300' },
     isHost: { type: Boolean, default: false }
   },
   { _id: false }
@@ -22,8 +23,15 @@ const archivedRoomSchema = new mongoose.Schema(
     gamemode: { type: String, default: null, index: true },
     sourceCollection: { type: String, required: true },
     archivedAt: { type: Date, default: Date.now },
+    completionStatus: {
+      type: String,
+      enum: ['completed', 'abandoned', 'lobby-closed'],
+      default: 'abandoned',
+      index: true
+    },
     session: {
       createdAt: { type: Date, default: null },
+      startedAt: { type: Date, default: null },
       endedAt: { type: Date, default: null },
       serverRegion: { type: String, default: null }
     },

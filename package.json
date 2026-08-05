@@ -9,6 +9,7 @@
   "scripts": {
     "test": "node --test",
     "accounts:migrate-email-index": "node scripts/migrate-account-email-index.js",
+    "party-games:migrate-reward-claim-index": "node scripts/migrate-party-game-reward-claim-index.js",
     "emails:seed-templates": "node scripts/seed-email-templates.js",
     "emails:seed-templates": "node scripts/seed-email-templates.js",
     "game-packs:import": "node scripts/import-game-packs.js",

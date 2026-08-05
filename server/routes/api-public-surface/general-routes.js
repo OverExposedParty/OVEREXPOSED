@@ -73,7 +73,8 @@ function registerPublicGeneralRoutes(context) {
               partyId: match.partyId,
               gamemode: match.gamemode,
               archivedAt: match.archivedAt,
-              startedAt: match.session?.createdAt || null,
+              startedAt:
+                match.session?.startedAt || match.session?.createdAt || null,
               selectedPacks: match.config?.selectedPacks || [],
               playerCount: Array.isArray(match.players)
                 ? match.players.length
