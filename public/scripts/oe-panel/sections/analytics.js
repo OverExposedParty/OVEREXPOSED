@@ -192,7 +192,15 @@ window.OE_PANEL_SECTIONS['Analytics'] = [
           title: 'Rule Usage - Last 30 Days',
           columns: [
             { key: 'gameMode', label: 'Gamemode' },
-            { key: 'rule', label: 'Rule' },
+            {
+              key: 'rule',
+              label: 'Rule',
+              palette: {
+                type: 'rule',
+                fallbackType: 'gamemode',
+                fallbackField: 'gameMode'
+              }
+            },
             { key: 'value', label: 'Value' },
             { key: 'starts', label: 'Starts' },
             { key: 'usageRate', label: 'Usage Rate' }

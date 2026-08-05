@@ -42,7 +42,14 @@ const {
   assertPartyConfigContentAccess
 } = require('../services/party-content-access');
 
-function createPartyRuntime({ app, io, models, logger, partyOwnerLeases }) {
+function createPartyRuntime({
+  app,
+  io,
+  models,
+  logger,
+  partyOwnerLeases,
+  roomArchiver
+}) {
   const context = {
     app,
     io,
@@ -60,6 +67,7 @@ function createPartyRuntime({ app, io, models, logger, partyOwnerLeases }) {
     crypto,
     getCurrentAccount,
     assertPartyConfigContentAccess,
+    archiveRoomSnapshot: roomArchiver?.archiveRoomSnapshot,
     ...partyOwnerLeases
   };
 

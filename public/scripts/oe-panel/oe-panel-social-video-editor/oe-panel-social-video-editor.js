@@ -332,6 +332,10 @@
         gamemodeSelect.appendChild(option);
       });
       gamemodeSelect.value = editState.gamemode;
+      window.OE_PANEL_PALETTES?.decorateSelect(
+        gamemodeSelect,
+        'gamemode'
+      );
       gamemodeSelect.addEventListener('change', () => {
         editState.gamemode = gamemodeSelect.value;
         markEditDirty();

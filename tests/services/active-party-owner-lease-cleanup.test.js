@@ -32,6 +32,7 @@ function createEmptyRoomModel() {
 
 test('room expiry releases the captured owner lease after active rooms are deleted', async () => {
   const lifecycle = [];
+  let archivedSnapshot = null;
   const expiredRoom = {
     partyId: 'ABC-123',
     session: { gameId: 'game-one', createdAt: new Date(0) },
@@ -83,7 +84,8 @@ test('room expiry releases the captured owner lease after active rooms are delet
         }
       },
       archivedRoomSchema: {
-        async updateOne() {
+        async updateOne(_filter, update) {
+          archivedSnapshot = update.$setOnInsert;
           lifecycle.push('archive');
         },
         findOne() {
@@ -124,4 +126,9 @@ test('room expiry releases the captured owner lease after active rooms are delet
     'delete:chat',
     'lease:release'
   ]);
+  assert.equal(archivedSnapshot.session.endedAt.getTime(), 0);
+  assert.ok(
+    archivedSnapshot.archivedAt.getTime() >
+      archivedSnapshot.session.endedAt.getTime()
+  );
 });

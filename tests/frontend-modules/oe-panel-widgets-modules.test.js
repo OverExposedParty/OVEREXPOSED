@@ -456,6 +456,163 @@ test('OE panel actions renderer composes its extracted modules', () => {
   }
 });
 
+test('party game pack edit action opens the full form and saves question changes', async () => {
+  const dom = new JSDOM('<!doctype html><main id="widget"></main>', {
+    runScripts: 'dangerously',
+    url: 'https://overexposed.test/'
+  });
+  const { window } = dom;
+  const requests = [];
+
+  try {
+    window.alert = (message) => assert.fail(message);
+    window.fetch = async (url, options = {}) => {
+      requests.push({ url: String(url), options });
+      if (
+        String(url) ===
+          '/api/oe-panel/game-packs/truth-or-dare%3Aice-breaker' &&
+        !options.method
+      ) {
+        return {
+          ok: true,
+          async json() {
+            return {
+              success: true,
+              data: {
+                pack: {
+                  key: 'truth-or-dare:ice-breaker',
+                  gameType: 'truth-or-dare',
+                  slug: 'ice-breaker',
+                  title: 'Ice Breaker',
+                  description: 'Easy questions.',
+                  status: 'published',
+                  active: 'yes',
+                  availabilityMode: 'always',
+                  availabilityTimeZone: 'UTC',
+                  availableFrom: '',
+                  availableUntil: '',
+                  difficulty: 'chill, funny',
+                  restriction: 'sfw',
+                  colour: '#66CCFF',
+                  secondaryColour: '#427BB9',
+                  questions: [
+                    { question: 'First question', type: 'truth' },
+                    {
+                      question: 'Second question',
+                      type: null,
+                      alternatives: ['Alternative wording'],
+                      punishment: null
+                    }
+                  ]
+                }
+              }
+            };
+          }
+        };
+      }
+
+      return {
+        ok: true,
+        async json() {
+          return String(url).includes('gamemode-settings-alerts')
+            ? { success: true, data: { alerts: [] } }
+            : { success: true, data: { row: {} } };
+        }
+      };
+    };
+
+    widgetModules.forEach(([filename]) => {
+      window.eval(
+        fs.readFileSync(path.join(widgetsDirectory, filename), 'utf8')
+      );
+    });
+    window.eval(
+      fs.readFileSync(
+        path.join(widgetsDirectory, 'widgets/oe-panel-widgets.js'),
+        'utf8'
+      )
+    );
+    actionModules.forEach(([filename]) => {
+      window.eval(
+        fs.readFileSync(path.join(widgetsDirectory, filename), 'utf8')
+      );
+    });
+    window.eval(
+      fs.readFileSync(
+        path.join(widgetsDirectory, 'actions/oe-panel-actions-widget.js'),
+        'utf8'
+      )
+    );
+
+    const container = window.document.getElementById('widget');
+    window.OE_PANEL_WIDGETS.render(container, {
+      id: 'party-games-grid-4',
+      type: 'actions',
+      title: 'Quick Actions',
+      actions: [{ label: 'Manage Packs', value: 'manage-packs' }]
+    });
+    window.dispatchEvent(
+      new window.CustomEvent('oe-panel-table-row-action', {
+        detail: {
+          action: 'edit-game-pack',
+          gridId: 'party-games-grid-1',
+          row: { key: 'truth-or-dare:ice-breaker' }
+        }
+      })
+    );
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    assert.match(container.textContent, /Edit Ice Breaker/);
+    assert.equal(
+      container.querySelectorAll('.oe-panel-game-pack-question-row').length,
+      2
+    );
+    container.querySelector('.oe-panel-game-pack-question-clear').click();
+    container.querySelector('.oe-panel-game-pack-add-question').click();
+    const questionInputs = container.querySelectorAll(
+      'input[name="questions"]'
+    );
+    questionInputs[1].value = 'A newly added question';
+    questionInputs[1].dispatchEvent(
+      new window.Event('input', { bubbles: true })
+    );
+    container
+      .querySelector('form')
+      .dispatchEvent(
+        new window.Event('submit', { bubbles: true, cancelable: true })
+      );
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    const patchRequest = requests.find(
+      (request) => request.options.method === 'PATCH'
+    );
+    assert.equal(
+      patchRequest.url,
+      '/api/oe-panel/game-packs/truth-or-dare%3Aice-breaker'
+    );
+    const saved = JSON.parse(patchRequest.options.body);
+    assert.deepEqual(saved.questions, [
+      {
+        type: null,
+        alternatives: ['Alternative wording'],
+        punishment: null,
+        question: 'Second question'
+      },
+      {
+        type: null,
+        alternatives: [],
+        punishment: null,
+        question: 'A newly added question'
+      }
+    ]);
+    assert.equal(saved.description, 'Easy questions.');
+    assert.equal(saved.difficulty, 'chill, funny');
+  } finally {
+    dom.window.close();
+  }
+});
+
 test('OE panel pie chart renders API elements and filters the rooms table', async () => {
   const dom = new JSDOM('<!doctype html><main id="widget"></main>', {
     runScripts: 'dangerously',

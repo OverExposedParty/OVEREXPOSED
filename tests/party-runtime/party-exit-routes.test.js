@@ -565,6 +565,11 @@ test('host disband endpoint deletes party state before broadcasting', async () =
     getPlayerConnectionSocketId: (player) =>
       player?.connection?.socketId || null,
     createLivePartyNotification: ({ type, partyId }) => ({ type, partyId }),
+    archiveRoomSnapshot: async ({ roomDocument }) => {
+      assert.equal(roomDocument, session);
+      lifecycle.push('archive');
+      return true;
+    },
     getActivePartyOwnerLeaseReleaseToken: async () => {
       lifecycle.push('lease:capture');
       return { leaseId: 'lease-one', leaseToken: 'release-token' };
@@ -614,17 +619,100 @@ test('host disband endpoint deletes party state before broadcasting', async () =
     }
   );
 
-  assert.deepEqual(lifecycle.slice(0, 5), [
+  assert.deepEqual(lifecycle.slice(0, 6), [
     'lease:capture',
+    'archive',
     'delete:waiting',
     'delete:main',
     'lease:release',
     'delete:chat'
   ]);
-  assert.ok(lifecycle.indexOf('emit:party-deleted') > 4);
+  assert.ok(lifecycle.indexOf('emit:party-deleted') > 5);
   assert.equal(lifecycle.includes('record:error'), false);
   assert.equal(responsePayload.partyCode, 'ABC-123');
   assert.match(responsePayload.message, /disbanded successfully/);
+});
+
+test('failed archival preserves live party state', async () => {
+  let disbandHandler;
+  let mainDeleted = false;
+  let waitingDeleted = false;
+  const session = {
+    partyId: 'ABC-123',
+    config: { gamemode: 'never-have-i-ever' },
+    state: { hostComputerId: 'host-device' },
+    players: [
+      {
+        identity: {
+          computerId: 'host-device',
+          accountId: 'host-account'
+        }
+      }
+    ]
+  };
+  const routes = createPartyExitRoutes({
+    app: {
+      post(_route, handler) {
+        disbandHandler = handler;
+      }
+    },
+    io: {
+      to: () => ({ emit() {} }),
+      sockets: { adapter: { rooms: new Map() }, sockets: new Map() }
+    },
+    partyGameChatLogSchema: { async deleteMany() {} },
+    assertPartyId() {},
+    parseBeaconBody: (body) => body,
+    cloneSerializable: (value) => structuredClone(value),
+    getPartyPlayerId: (player) => player?.identity?.computerId || null,
+    getPartyPlayerAccountId: () => null,
+    formatPartyModeName: () => 'Never Have I Ever',
+    getPartyNotificationModeName: () => 'Never Have I Ever',
+    getPartyNotificationActor: () => ({}),
+    queuePartyAccountNotification: async () => {},
+    getPartyRequestPrincipal: async () => ({ type: 'account' }),
+    assertPrincipalOwnsPlayer() {},
+    withoutGuestHashes: (party) => structuredClone(party),
+    withPartyJoinLock: async (_partyId, callback) => callback(),
+    forgetSocketPartyMembership() {},
+    getPlayerConnectionSocketId: () => null,
+    createLivePartyNotification: () => ({}),
+    archiveRoomSnapshot: async () => false,
+    recordPartyRouteError: async () => {}
+  });
+  routes.createDisbandPartyHandler({
+    route: '/delete',
+    mainModel: {
+      findOne: () => ({ select: async () => session }),
+      async deleteOne() {
+        mainDeleted = true;
+      }
+    },
+    waitingRoomModel: {
+      async deleteOne() {
+        waitingDeleted = true;
+      }
+    },
+    logLabel: 'Party Game Never Have I Ever'
+  });
+
+  let responsePayload;
+  await disbandHandler(
+    { body: { partyCode: 'ABC-123' }, query: {}, id: 'archive-failure' },
+    {
+      apiSuccess(payload) {
+        responsePayload = payload;
+      },
+      apiError(payload) {
+        responsePayload = payload;
+        return payload;
+      }
+    }
+  );
+
+  assert.equal(responsePayload.code, 'party_archive_failed');
+  assert.equal(mainDeleted, false);
+  assert.equal(waitingDeleted, false);
 });
 
 test('failed waiting-room cleanup preserves the main party for retry', async () => {

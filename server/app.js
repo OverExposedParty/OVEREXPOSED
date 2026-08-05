@@ -11,6 +11,7 @@ const {
   registerOlingBattleSockets
 } = require('./sockets/register-oling-battle-sockets');
 const { createDatabaseServices } = require('./services/database');
+const { createRoomArchiver } = require('./services/database/room-archiver');
 const {
   createActivePartyOwnerLeaseService
 } = require('./services/active-party-owner-leases');
@@ -25,13 +26,15 @@ function createAppServer() {
   configureMiddleware(app);
 
   const partyOwnerLeases = createActivePartyOwnerLeaseService({ models });
+  const roomArchiver = createRoomArchiver({ models, partyOwnerLeases });
 
   const runtime = createPartyRuntime({
     app,
     io,
     models,
     logger,
-    partyOwnerLeases
+    partyOwnerLeases,
+    roomArchiver
   });
 
   registerApiRoutes({
@@ -99,7 +102,8 @@ function createAppServer() {
     io,
     debugLog: logger.debugLog,
     models,
-    partyOwnerLeases
+    partyOwnerLeases,
+    roomArchiver
   });
 
   return {

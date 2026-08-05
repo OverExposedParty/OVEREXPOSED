@@ -89,7 +89,15 @@
     term.textContent = label;
   
     const description = document.createElement('dd');
-    description.textContent = value || '-';
+    const paletteValue = window.OE_PANEL_PALETTES?.createValue({
+      value,
+      fieldConfig: { key: label.replace(/\s+/g, '') }
+    });
+    if (paletteValue) {
+      description.appendChild(paletteValue);
+    } else {
+      description.textContent = value || '-';
+    }
   
     group.append(term, description);
     return group;

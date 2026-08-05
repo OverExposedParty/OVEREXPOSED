@@ -1,6 +1,7 @@
 (function () {
   const { createWidgetElement, getVisibleItems, runSyncWarningAction } =
     window.OE_PANEL_WIDGET_HELPERS || {};
+  const palettes = window.OE_PANEL_PALETTES;
   const renderTableSeriesWidget =
     window.createOePanelTableSeriesRenderer(renderTableWidget);
 
@@ -15,6 +16,15 @@
 
     const columns = Array.isArray(gridConfig.columns) ? gridConfig.columns : [];
     const rows = Array.isArray(gridConfig.rows) ? gridConfig.rows : [];
+    const paletteRecordConfig = {
+      partyPacks: { type: 'pack', keyField: 'title' },
+      partyRules: { type: 'rule', keyField: 'rule' },
+      partyRoles: { type: 'role', keyField: 'role' },
+      oeCustomisationPacks: { type: 'oe-pack', keyField: 'pack' }
+    }[gridConfig.dataSource];
+    if (paletteRecordConfig) {
+      palettes?.indexRows(paletteRecordConfig.type, rows, paletteRecordConfig);
+    }
 
     if (!columns.length || !rows.length) {
       container.appendChild(
@@ -190,7 +200,18 @@
             ? document.createElement('a')
             : document.createElement('span');
           cellContent.className = 'oe-panel-data-table-cell-content';
-          cellContent.textContent = rowConfig[column.key] || '';
+          const value = rowConfig[column.key] ?? '';
+          const paletteValue = palettes?.createValue({
+            value,
+            row: rowConfig,
+            fieldConfig: column,
+            dataSource: gridConfig.dataSource
+          });
+          if (paletteValue) {
+            cellContent.appendChild(paletteValue);
+          } else {
+            cellContent.textContent = value;
+          }
           if (linkUrl) {
             cellContent.href = linkUrl;
             cellContent.addEventListener('click', (event) => {

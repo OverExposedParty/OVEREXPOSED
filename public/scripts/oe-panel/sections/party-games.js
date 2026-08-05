@@ -52,8 +52,26 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
             section: 'Configuration',
             expandable: true
           },
-          { key: 'roleCounts', label: 'Role Counts', expandable: true },
-          { key: 'gameRules', label: 'Game Rules', expandable: true },
+          {
+            key: 'roleCounts',
+            label: 'Role Counts',
+            expandable: true,
+            palette: {
+              type: 'role',
+              map: true,
+              fallbackType: 'gamemode'
+            }
+          },
+          {
+            key: 'gameRules',
+            label: 'Game Rules',
+            expandable: true,
+            palette: {
+              type: 'rule',
+              map: true,
+              fallbackType: 'gamemode'
+            }
+          },
           { key: 'instruction', label: 'Instructions', expandable: true },
           {
             key: 'configSummary',
@@ -136,10 +154,11 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
         ],
         rows: [],
         dataSource: 'partyPacks',
-        editable: true,
-        saveEndpoint: '/api/oe-panel/game-packs/{key}',
         deleteEndpoint: '/api/oe-panel/game-packs/{key}',
-        rowActions: [{ label: 'Delete', action: 'delete' }]
+        rowActions: [
+          { label: 'Edit', action: 'edit-game-pack' },
+          { label: 'Delete', action: 'delete' }
+        ]
       },
       {
         value: 'rules',

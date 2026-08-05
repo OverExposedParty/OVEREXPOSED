@@ -73,6 +73,9 @@ window.OE_PANEL_SECTIONS["oLings"] = [
       targetSeries: 'sets',
       targetQueryField: 'setKey',
       targetQueryValue: 'setKey',
+      dataSource: 'olingBuildSets',
+      paletteField: 'rarity',
+      paletteType: 'rarity',
       items: []
     },
     {

@@ -38,6 +38,14 @@
       if (fieldConfig.value !== undefined && fieldConfig.value !== null) {
         input.value = fieldConfig.value;
       }
+      if (fieldConfig.palette && input.tagName === 'SELECT') {
+        window.OE_PANEL_PALETTES?.decorateSelect(
+          input,
+          typeof fieldConfig.palette === 'string'
+            ? fieldConfig.palette
+            : fieldConfig.palette.type
+        );
+      }
 
       return input;
     }

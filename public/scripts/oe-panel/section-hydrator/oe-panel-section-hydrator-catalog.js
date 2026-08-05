@@ -16,6 +16,9 @@
         const galleryItems = Array.isArray(customisationData.galleryItems)
           ? customisationData.galleryItems
           : images;
+        window.OE_PANEL_PALETTES?.indexRows('oe-pack', packs, {
+          keyField: 'pack'
+        });
         const statTableColumns = [
           { key: 'label', label: 'Metric' },
           { key: 'value', label: 'Value' }

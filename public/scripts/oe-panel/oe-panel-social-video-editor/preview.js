@@ -64,16 +64,6 @@
         mafia: 'Mafia',
         overexposure: 'Overexposure'
       };
-      const gamemodeColours = {
-        'truth-or-dare': '#66CCFF',
-        paranoia: '#9D8AFF',
-        'never-have-i-ever': '#FF9266',
-        'most-likely-to': '#FFEE66',
-        'would-you-rather': '#7CFFB2',
-        imposter: '#3DA7A1',
-        mafia: '#9B56D3',
-        overexposure: 'var(--oe-panel-widget-primary-colour)'
-      };
       const getWatermarkPath = (gamemode) =>
         `/images/content/watermarks/${gamemode}.png`;
       const sanitizeExportFileName = (fileName) =>
@@ -91,8 +81,12 @@
         editTextLabel.style.fontFamily =
           '"OverExposed", "OverExposed-Regular", sans-serif';
         editText.style.fontSize = `${editState.fontSize}px`;
+        const gamemodePalette = window.OE_PANEL_PALETTES?.get(
+          'gamemode',
+          editState.gamemode
+        );
         editText.style.color =
-          gamemodeColours[editState.gamemode] ||
+          gamemodePalette?.primary ||
           'var(--oe-panel-widget-primary-colour)';
         editText.style.left = `${editState.textX}%`;
         editText.style.top = `${editState.textY}%`;

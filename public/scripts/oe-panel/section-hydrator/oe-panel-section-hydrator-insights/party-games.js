@@ -40,6 +40,15 @@
           partyRoles,
           partyGamemodes
         };
+        window.OE_PANEL_PALETTES?.indexRows('pack', partyPacks, {
+          keyField: 'title'
+        });
+        window.OE_PANEL_PALETTES?.indexRows('rule', partyRules, {
+          keyField: 'rule'
+        });
+        window.OE_PANEL_PALETTES?.indexRows('role', partyRoles, {
+          keyField: 'role'
+        });
 
         nextConfig.forEach((gridConfig) => {
           if (Array.isArray(gridConfig.actions)) {

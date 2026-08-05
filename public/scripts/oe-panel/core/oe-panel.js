@@ -29,6 +29,9 @@
     contentGrid.setAttribute('aria-label', `${sectionName} panel containers`);
     contentGrid.replaceChildren();
 
+    await (window.OE_PANEL_PALETTES?.ready || Promise.resolve());
+    if (renderToken !== activeRenderToken) return;
+
     const hydratedGridConfig = await hydrateSectionConfig(
       sectionName,
       sectionGridConfig

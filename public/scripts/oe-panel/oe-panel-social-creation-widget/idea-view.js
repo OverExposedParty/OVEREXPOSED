@@ -178,6 +178,10 @@
         ],
         true
       );
+      window.OE_PANEL_PALETTES?.decorateSelect(
+        gamemodeField.select,
+        'gamemode'
+      );
 
       const updateGamemodeField = () => {
         const isGamemodeMeme = typeField.select.value === 'gamemode-meme';

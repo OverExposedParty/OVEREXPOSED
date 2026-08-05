@@ -33,6 +33,46 @@ function createPartyContentContext(context) {
     return null;
   }
 
+  function normalizeGamePackQuestions(value) {
+    if (!Array.isArray(value)) {
+      return { error: 'Pack questions must be an array.' };
+    }
+
+    const questions = [];
+    for (let index = 0; index < value.length; index += 1) {
+      const input =
+        typeof value[index] === 'string'
+          ? { question: value[index] }
+          : value[index] || {};
+      const question = String(input.question || '').trim();
+      if (!question) {
+        return { error: `Pack question ${index + 1} cannot be blank.` };
+      }
+
+      const rawType = String(input.type || '')
+        .trim()
+        .toLowerCase();
+      if (rawType && !['truth', 'dare'].includes(rawType)) {
+        return {
+          error: `Pack question ${index + 1} type must be truth, dare, or blank.`
+        };
+      }
+
+      questions.push({
+        question,
+        type: rawType || null,
+        alternatives: Array.isArray(input.alternatives)
+          ? input.alternatives
+              .map((alternative) => String(alternative || '').trim())
+              .filter(Boolean)
+          : [],
+        punishment: input.punishment ? String(input.punishment).trim() : null
+      });
+    }
+
+    return { questions };
+  }
+
   function createGamePackUpdatePayload(body, currentPack = {}) {
     const update = {};
 
@@ -79,6 +119,12 @@ function createPartyContentContext(context) {
       update.restriction = String(body.restriction || '').trim() || null;
     }
 
+    if (Object.prototype.hasOwnProperty.call(body, 'questions')) {
+      const normalizedQuestions = normalizeGamePackQuestions(body.questions);
+      if (normalizedQuestions.error) return normalizedQuestions;
+      update.questions = normalizedQuestions.questions;
+    }
+
     if (Object.prototype.hasOwnProperty.call(body, 'colour')) {
       const { colour, error } = normalizePackHexColour(
         body.colour,
@@ -117,10 +163,14 @@ function createPartyContentContext(context) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
     const title = String(body.title || '').trim();
+    const description = String(body.description || '').trim();
 
     if (!gameType) return { error: 'Gamemode is required.' };
     if (!slug) return { error: 'Pack slug is required.' };
     if (!title) return { error: 'Pack title is required.' };
+    if (description.length > 500) {
+      return { error: 'Pack description must be 500 characters or fewer.' };
+    }
 
     const status = String(body.status || 'published')
       .trim()
@@ -147,27 +197,10 @@ function createPartyContentContext(context) {
     );
     if (secondaryColour.error) return { error: secondaryColour.error };
 
-    const questions = Array.isArray(body.questions)
-      ? body.questions
-          .map((question) =>
-            typeof question === 'string' ? { question } : question
-          )
-          .map((question) => ({
-            question: String(question?.question || '').trim(),
-            type: ['truth', 'dare'].includes(question?.type)
-              ? question.type
-              : null,
-            alternatives: Array.isArray(question?.alternatives)
-              ? question.alternatives
-                  .map((alternative) => String(alternative || '').trim())
-                  .filter(Boolean)
-              : [],
-            punishment: question?.punishment
-              ? String(question.punishment).trim()
-              : null
-          }))
-          .filter((question) => question.question)
-      : [];
+    const normalizedQuestions = normalizeGamePackQuestions(
+      body.questions === undefined ? [] : body.questions
+    );
+    if (normalizedQuestions.error) return normalizedQuestions;
     const parsedAvailability = parseAvailabilityInput(body, {
       mode: 'always'
     });
@@ -179,6 +212,7 @@ function createPartyContentContext(context) {
         slug,
         key: `${gameType}-${slug}`,
         title,
+        description,
         enabled,
         status,
         availability:
@@ -190,7 +224,7 @@ function createPartyContentContext(context) {
           colour: primaryColour.colour,
           secondaryColour: secondaryColour.colour
         },
-        questions
+        questions: normalizedQuestions.questions
       }
     };
   }

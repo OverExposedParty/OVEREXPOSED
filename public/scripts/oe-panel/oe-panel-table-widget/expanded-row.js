@@ -1,5 +1,6 @@
 (function () {
   function createOePanelTableExpandedRow(context) {
+    const palettes = window.OE_PANEL_PALETTES;
     const {
       gridConfig,
       container,
@@ -84,6 +85,14 @@
         term.textContent = label;
 
         const description = document.createElement('dd');
+        const paletteValue = !isEditing
+          ? palettes?.createValue({
+              value,
+              row: rowConfig,
+              fieldConfig,
+              dataSource: gridConfig.dataSource
+            })
+          : null;
         if (isEditing && isEditableField(fieldConfig)) {
           if (fieldConfig.inputType === 'select') {
             const select = document.createElement('select');
@@ -99,6 +108,13 @@
               select.appendChild(option);
             });
             select.value = value === '-' ? '' : String(value).toLowerCase();
+            const selectPalette = palettes?.inferConfig(
+              fieldConfig,
+              gridConfig.dataSource
+            );
+            if (selectPalette?.type) {
+              palettes.decorateSelect(select, selectPalette.type);
+            }
             description.appendChild(select);
           } else {
             const input = document.createElement('input');
@@ -110,8 +126,21 @@
               input.dataset.oePanelInputType = fieldConfig.inputType;
             }
             input.setAttribute('aria-label', `Edit ${label}`);
-            description.appendChild(input);
+            const paletteConfig = palettes?.inferConfig(
+              fieldConfig,
+              gridConfig.dataSource
+            );
+            if (paletteConfig?.type && paletteConfig.type !== 'colour') {
+              palettes.decorateSelect(input, paletteConfig.type);
+            }
+            description.appendChild(
+              paletteConfig?.type === 'colour'
+                ? palettes.createColourInput(input)
+                : input
+            );
           }
+        } else if (paletteValue) {
+          description.appendChild(paletteValue);
         } else if (fieldConfig.expandable) {
           const fullText = String(value || '-');
           const collapsedText = getCollapsedText(

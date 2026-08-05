@@ -343,7 +343,7 @@ function createPartyRoomContext(context) {
     const playerCount = getRoomPlayerCount(room);
     const errors = serializeRoomErrors(room);
     const createdAt = room.session?.createdAt || room.archivedAt;
-    const lastUpdated = room.archivedAt;
+    const lastUpdated = room.session?.endedAt || room.archivedAt;
     const phase = room.state?.phase ?? null;
     const instruction = getRoomInstruction(room);
     const playerSummary = getRoomPlayerSummary(room);

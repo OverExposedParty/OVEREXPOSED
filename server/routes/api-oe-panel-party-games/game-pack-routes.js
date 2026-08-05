@@ -70,6 +70,80 @@ function registerOePanelGamePackRoutes(context) {
       }
     });
 
+    app.get('/api/oe-panel/game-packs/:packKey', async (req, res) => {
+      try {
+        const account = await requireOePanelAccount(req, res);
+        if (!account) return;
+
+        const parsedKey = parseCompositePartyContentKey(req.params.packKey);
+        if (!parsedKey) {
+          return res.apiError({
+            status: 400,
+            code: 'oe_panel_game_pack_key_required',
+            message: 'Pack key is required'
+          });
+        }
+
+        const pack = await GamePack.findOne({
+          gameType: parsedKey.gameType,
+          slug: parsedKey.itemKey
+        }).lean();
+        if (!pack) {
+          return res.apiError({
+            status: 404,
+            code: 'oe_panel_game_pack_not_found',
+            message: 'Game pack not found'
+          });
+        }
+
+        const panelPack = serializePartyPackForPanel(pack);
+        const editableColour = (value) =>
+          /^#[0-9a-f]{6}$/i.test(String(value || '').trim()) ? value : '';
+        res.apiSuccess({
+          data: {
+            pack: {
+              key: panelPack.key,
+              gameType: pack.gameType,
+              slug: pack.slug,
+              title: pack.title,
+              description: pack.description || '',
+              status: pack.status,
+              active: pack.enabled ? 'yes' : 'no',
+              availabilityMode: panelPack.availabilityMode,
+              availabilityTimeZone: panelPack.availabilityTimeZone,
+              availableFrom:
+                panelPack.availableFrom === '-' ? '' : panelPack.availableFrom,
+              availableUntil:
+                panelPack.availableUntil === '-'
+                  ? ''
+                  : panelPack.availableUntil,
+              difficulty: pack.difficulty || '',
+              restriction: pack.restriction || '',
+              colour: editableColour(pack.assets?.colour),
+              secondaryColour: editableColour(pack.assets?.secondaryColour),
+              questions: Array.isArray(pack.questions)
+                ? pack.questions.map((question) => ({
+                    question: question.question,
+                    type: question.type || null,
+                    alternatives: Array.isArray(question.alternatives)
+                      ? question.alternatives
+                      : [],
+                    punishment: question.punishment || null
+                  }))
+                : []
+            }
+          }
+        });
+      } catch (err) {
+        console.error(`[REQ ${req.id}] Failed to fetch game pack:`, err);
+        res.apiError({
+          status: 500,
+          code: 'oe_panel_game_pack_fetch_failed',
+          message: 'Failed to fetch game pack'
+        });
+      }
+    });
+
     app.patch('/api/oe-panel/game-packs/:packKey', async (req, res) => {
       try {
         const account = await requireOePanelAccount(req, res);

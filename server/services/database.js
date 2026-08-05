@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const { createRoomArchiver } = require('./database/room-archiver');
 const { createChangeStreamService } = require('./database/change-streams');
 
-function createDatabaseServices({ io, debugLog, models, partyOwnerLeases }) {
+function createDatabaseServices({
+  io,
+  debugLog,
+  models,
+  partyOwnerLeases,
+  roomArchiver
+}) {
   const {
     OverexposurePost,
     SocialContentItem,
@@ -380,7 +386,8 @@ function createDatabaseServices({ io, debugLog, models, partyOwnerLeases }) {
     );
   }
 
-  const roomArchiver = createRoomArchiver({ models, partyOwnerLeases });
+  const activeRoomArchiver =
+    roomArchiver || createRoomArchiver({ models, partyOwnerLeases });
   const changeStreams = createChangeStreamService({
     io,
     debugLog,
@@ -404,7 +411,7 @@ function createDatabaseServices({ io, debugLog, models, partyOwnerLeases }) {
   return {
     connectDatabases,
     ensureDatabaseIndexes,
-    startRoomArchiver: roomArchiver.startRoomArchiver,
+    startRoomArchiver: activeRoomArchiver.startRoomArchiver,
     startChangeStreams: changeStreams.startChangeStreams
   };
 }

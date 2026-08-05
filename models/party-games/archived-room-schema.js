@@ -24,6 +24,7 @@ const archivedRoomSchema = new mongoose.Schema(
     archivedAt: { type: Date, default: Date.now },
     session: {
       createdAt: { type: Date, default: null },
+      endedAt: { type: Date, default: null },
       serverRegion: { type: String, default: null }
     },
     config: {

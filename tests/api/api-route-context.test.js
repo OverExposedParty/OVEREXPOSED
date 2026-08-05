@@ -94,6 +94,79 @@ test('party content panel serializers retain descriptions as metadata', () => {
   assert.equal(role.defaultCount, '1');
 });
 
+test('archived room duration ends at recorded activity instead of cleanup time', () => {
+  const context = createApiRouteContext({
+    app: {},
+    models: {},
+    runtime: {}
+  });
+  const room = context.serializeArchivedRoom({
+    partyId: 'ABC-123',
+    gameId: 'GAME-ONE',
+    gamemode: 'never-have-i-ever',
+    archivedAt: new Date('2026-08-05T12:30:00.000Z'),
+    session: {
+      createdAt: new Date('2026-08-05T12:00:00.000Z'),
+      endedAt: new Date('2026-08-05T12:10:00.000Z')
+    },
+    state: {},
+    players: []
+  });
+
+  assert.equal(room.timeLapsed, '10m');
+});
+
+test('game pack payloads create and replace editable questions without losing metadata', () => {
+  const context = createApiRouteContext({
+    app: {},
+    models: {},
+    runtime: {}
+  });
+
+  const created = context.createGamePackCreatePayload({
+    gameType: 'truth-or-dare',
+    slug: 'new-pack',
+    title: 'New Pack',
+    description: 'A short pack description.',
+    questions: [
+      {
+        question: 'Tell us a secret.',
+        type: 'truth',
+        alternatives: ['Pass'],
+        punishment: 'Take a sip'
+      }
+    ]
+  });
+  assert.equal(created.error, undefined);
+  assert.equal(created.pack.description, 'A short pack description.');
+  assert.deepEqual(created.pack.questions, [
+    {
+      question: 'Tell us a secret.',
+      type: 'truth',
+      alternatives: ['Pass'],
+      punishment: 'Take a sip'
+    }
+  ]);
+
+  const updated = context.createGamePackUpdatePayload({
+    questions: [{ question: 'Complete the dare.', type: 'dare' }]
+  });
+  assert.deepEqual(updated.update.questions, [
+    {
+      question: 'Complete the dare.',
+      type: 'dare',
+      alternatives: [],
+      punishment: null
+    }
+  ]);
+  assert.match(
+    context.createGamePackUpdatePayload({
+      questions: [{ question: '   ' }]
+    }).error,
+    /cannot be blank/
+  );
+});
+
 test('OAuth session establishment receives account helpers after composition', async () => {
   const updates = [];
   const Account = {

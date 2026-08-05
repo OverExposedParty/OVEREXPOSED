@@ -175,6 +175,9 @@ window.OE_PANEL_SECTIONS['Achievements'] = [
     targetSeries: 'library',
     targetQueryField: 'key',
     targetQueryValue: 'key',
+    dataSource: 'achievementLibrary',
+    paletteField: 'rarity',
+    paletteType: 'rarity',
     items: []
   },
   {
@@ -260,6 +263,7 @@ window.OE_PANEL_SECTIONS['Achievements'] = [
                     {
                       label: 'Gamemode',
                       name: 'gamemode',
+                      palette: 'gamemode',
                       options: [
                         { label: 'Global', value: '' },
                         { label: 'Truth Or Dare', value: 'truth-or-dare' },
@@ -349,6 +353,7 @@ window.OE_PANEL_SECTIONS['Achievements'] = [
                     {
                       label: 'Rarity',
                       name: 'rarity',
+                      palette: 'rarity',
                       value: 'common',
                       options: [
                         { label: 'Common', value: 'common' },

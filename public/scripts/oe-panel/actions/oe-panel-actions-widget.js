@@ -109,7 +109,28 @@
     const { runEndpointAction, runDownloadAction } = operations;
     const { showEmbeddedWidget } = embeddedWidgets;
     const { showAdminLogFilterForm, showAdminLogArchiveForm } = adminForms;
-    const { showCreatePackForm, showCreateOePackForm } = packForms;
+    const { showCreatePackForm, showEditPackForm, showCreateOePackForm } =
+      packForms;
+
+    if (window.__oePanelGamePackEditListener) {
+      window.removeEventListener(
+        'oe-panel-table-row-action',
+        window.__oePanelGamePackEditListener
+      );
+    }
+    window.__oePanelGamePackEditListener = (event) => {
+      if (
+        event.detail?.action !== 'edit-game-pack' ||
+        event.detail?.gridId !== 'party-games-grid-1'
+      ) {
+        return;
+      }
+      showEditPackForm(event.detail.row);
+    };
+    window.addEventListener(
+      'oe-panel-table-row-action',
+      window.__oePanelGamePackEditListener
+    );
 
     displayActions.forEach((actionConfig, index) => {
       const button = document.createElement('button');

@@ -43,6 +43,7 @@ function createPartyExitRoutes(context) {
     repairPartyHost,
     disconnectPartyPlayer,
     beginTruthOrDareDisconnectGrace,
+    archiveRoomSnapshot,
     getActivePartyOwnerLeaseReleaseToken,
     releaseActivePartyOwnerLeaseIfInactive
   } = context;
@@ -81,6 +82,18 @@ function createPartyExitRoutes(context) {
           `Failed to capture the owner lease for party ${partyId}:`,
           error
         );
+      }
+    }
+
+    if (typeof archiveRoomSnapshot === 'function') {
+      const archived = await archiveRoomSnapshot({ roomDocument: session });
+      if (!archived) {
+        const error = new Error(
+          `Failed to archive ${logLabel.toLowerCase()} before disbanding`
+        );
+        error.status = 500;
+        error.code = 'party_archive_failed';
+        throw error;
       }
     }
 

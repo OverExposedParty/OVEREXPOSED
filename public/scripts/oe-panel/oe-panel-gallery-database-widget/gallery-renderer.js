@@ -2,6 +2,7 @@
   function createOePanelGalleryWidgetRenderer({
     normaliseGalleryImagePath
   } = {}) {
+    const palettes = window.OE_PANEL_PALETTES;
     function normalise(value) {
       return String(value || '')
         .trim()
@@ -104,6 +105,17 @@
         const card = document.createElement('button');
         card.className = 'oe-panel-oe-gallery-card';
         card.type = 'button';
+        const paletteField = gridConfig.paletteField || '';
+        const palette = paletteField
+          ? palettes?.resolve(
+              { type: gridConfig.paletteType || paletteField },
+              item[paletteField],
+              item,
+              { key: paletteField },
+              gridConfig.dataSource
+            )
+          : null;
+        palettes?.decorate(card, palette);
 
         const preview = document.createElement('div');
         preview.className = 'oe-panel-oe-gallery-preview';
@@ -150,18 +162,42 @@
 
         const meta = document.createElement('span');
         meta.className = 'oe-panel-oe-gallery-meta';
-        meta.textContent = (
+        const metaFields = (
           Array.isArray(fieldMap.meta) ? fieldMap.meta : []
-        )
-          .map((field) => item[field])
-          .filter(Boolean)
-          .join(' / ');
+        ).filter((field) => item[field]);
+        metaFields.forEach((field, index) => {
+          if (index) meta.appendChild(document.createTextNode(' / '));
+          const paletteValue = palettes?.createValue({
+            value: item[field],
+            row: item,
+            fieldConfig: { key: field },
+            dataSource: gridConfig.dataSource
+          });
+          if (paletteValue) {
+            meta.appendChild(paletteValue);
+          } else {
+            meta.appendChild(document.createTextNode(item[field]));
+          }
+        });
 
         const status = document.createElement('span');
         status.className = 'oe-panel-oe-gallery-status';
         status.textContent = item[fieldMap.status] || '-';
 
-        body.append(name, meta, status);
+        const paletteMeta = paletteField
+          ? palettes?.createValue({
+              value: item[paletteField],
+              row: item,
+              fieldConfig: {
+                key: paletteField,
+                palette: gridConfig.paletteType || paletteField
+              },
+              dataSource: gridConfig.dataSource
+            })
+          : null;
+        body.append(name, meta);
+        if (paletteMeta) body.appendChild(paletteMeta);
+        body.appendChild(status);
         card.append(preview, body);
         if (gridConfig.targetGridId) {
           card.addEventListener('click', () => {

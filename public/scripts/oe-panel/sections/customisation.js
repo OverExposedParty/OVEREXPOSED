@@ -160,6 +160,9 @@ window.OE_PANEL_SECTIONS["OE Customisation"] = [
       targetSeries: 'images',
       targetQueryField: 'OE-ID',
       targetQueryValue: 'oeId',
+      dataSource: 'oeCustomisationImages',
+      paletteField: 'pack',
+      paletteType: 'oe-pack',
       items: []
     },
     {

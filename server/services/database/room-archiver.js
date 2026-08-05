@@ -1,5 +1,6 @@
 const {
   getPartyRoomActiveSince,
+  getPartyRoomLastActivity,
   isPartyRoomExpired
 } = require('../party-room-activity');
 
@@ -94,7 +95,11 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
     );
   }
 
-  function createArchivedRoom(roomDocument, sourceCollection) {
+  function createArchivedRoom(
+    roomDocument,
+    sourceCollection,
+    { archivedAt = new Date(), endedAt = archivedAt } = {}
+  ) {
     const room = toPlainObject(roomDocument);
     const players = Array.isArray(room.players) ? room.players : [];
     const hostComputerId = room.state?.hostComputerId ?? null;
@@ -108,9 +113,10 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
       gameId,
       gamemode,
       sourceCollection,
-      archivedAt: new Date(),
+      archivedAt,
       session: {
         createdAt: room.session?.createdAt ?? null,
+        endedAt,
         serverRegion: room.session?.serverRegion ?? null
       },
       config: {
@@ -139,31 +145,23 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
     };
   }
 
-  async function archiveRoomDocument({
+  async function archiveRoomSnapshot({
     roomDocument,
     sourceCollection,
-    deleteFromModel,
-    deleteRelatedDocuments = false
+    endedAt
   }) {
     const room = toPlainObject(roomDocument);
     const gameId = room.session?.gameId ?? null;
     if (!room.partyId || !gameId) return false;
-    let leaseReleaseToken = null;
 
-    if (typeof getActivePartyOwnerLeaseReleaseToken === 'function') {
-      try {
-        leaseReleaseToken = await getActivePartyOwnerLeaseReleaseToken(
-          room.partyId
-        );
-      } catch (error) {
-        console.warn(
-          `Failed to capture the owner lease for expired party ${room.partyId}:`,
-          error.message || error
-        );
-      }
-    }
-
-    const archivedRoom = createArchivedRoom(room, sourceCollection);
+    const resolvedSourceCollection =
+      sourceCollection ||
+      getPartyGameCollectionNameForGamemode(room.config?.gamemode);
+    const archivedAt = new Date();
+    const archivedRoom = createArchivedRoom(room, resolvedSourceCollection, {
+      archivedAt,
+      endedAt: endedAt ?? archivedAt
+    });
 
     await archivedRoomSchema.updateOne(
       { gameId },
@@ -185,6 +183,40 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
         { $addToSet: { 'gameData.matchHistory': archivedRecord._id } }
       );
     }
+
+    return true;
+  }
+
+  async function archiveRoomDocument({
+    roomDocument,
+    sourceCollection,
+    deleteFromModel,
+    deleteRelatedDocuments = false,
+    endedAt
+  }) {
+    const room = toPlainObject(roomDocument);
+    const gameId = room.session?.gameId ?? null;
+    if (!room.partyId || !gameId) return false;
+    let leaseReleaseToken = null;
+
+    if (typeof getActivePartyOwnerLeaseReleaseToken === 'function') {
+      try {
+        leaseReleaseToken = await getActivePartyOwnerLeaseReleaseToken(
+          room.partyId
+        );
+      } catch (error) {
+        console.warn(
+          `Failed to capture the owner lease for expired party ${room.partyId}:`,
+          error.message || error
+        );
+      }
+    }
+
+    await archiveRoomSnapshot({
+      roomDocument: room,
+      sourceCollection,
+      endedAt
+    });
 
     await deleteFromModel.deleteOne({ partyId: room.partyId });
 
@@ -251,11 +283,14 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
 
         for (const room of expiredRooms) {
           if (!isPartyRoomExpired(room, archiveStartedAt)) continue;
+          const lastActivity = getPartyRoomLastActivity(room);
           await archiveRoomDocument({
             roomDocument: room,
             sourceCollection: source.collectionName,
             deleteFromModel: source.model,
-            deleteRelatedDocuments: true
+            deleteRelatedDocuments: true,
+            endedAt:
+              lastActivity == null ? archiveStartedAt : new Date(lastActivity)
           });
         }
       }
@@ -267,6 +302,7 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
 
       for (const room of waitingRoomOnlyRecords) {
         if (!isPartyRoomExpired(room, archiveStartedAt)) continue;
+        const lastActivity = getPartyRoomLastActivity(room);
         const matchingGames = await Promise.all(
           getPartyGameArchiveSources().map((source) =>
             source.model.exists({ partyId: room.partyId })
@@ -281,7 +317,9 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
             room.config?.gamemode
           ),
           deleteFromModel: waitingRoomSchema,
-          deleteRelatedDocuments: false
+          deleteRelatedDocuments: false,
+          endedAt:
+            lastActivity == null ? archiveStartedAt : new Date(lastActivity)
         });
       }
     } catch (error) {
@@ -306,7 +344,8 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
 
   return {
     startRoomArchiver,
-    archiveExpiredRooms
+    archiveExpiredRooms,
+    archiveRoomSnapshot
   };
 }
 

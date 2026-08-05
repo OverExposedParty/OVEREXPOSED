@@ -9,29 +9,41 @@
       showActionSubmenu,
       fetchGamemodeSettingsAlerts,
       createPackFormField,
-      slugifyPackTitle,
-      packDifficultyOptions
+      slugifyPackTitle
     } = options;
 
-    function showCreatePackForm(parentAction) {
+    function showPackForm({ parentAction = null, pack = null } = {}) {
+      const isEditing = Boolean(pack?.key);
       const detailHeader = document.createElement('div');
       detailHeader.className = 'oe-panel-social-action-header';
 
       const backButton = document.createElement('button');
       backButton.className = 'oe-panel-alert-detail-back';
       backButton.type = 'button';
-      backButton.setAttribute('aria-label', 'Back to manage packs');
-      backButton.addEventListener('click', () =>
-        showActionSubmenu(parentAction)
+      backButton.setAttribute(
+        'aria-label',
+        isEditing ? 'Back to party game actions' : 'Back to manage packs'
       );
+      backButton.addEventListener('click', () => {
+        if (parentAction) {
+          showActionSubmenu(parentAction);
+          return;
+        }
+        showActionList();
+      });
 
       const detailTitle = document.createElement('h3');
       detailTitle.className =
         'oe-panel-social-creation-title oe-panel-social-action-title';
-      detailTitle.textContent = getBackHeaderTitle('Back to manage packs');
+      detailTitle.textContent = getBackHeaderTitle(
+        isEditing ? 'Back to party game actions' : 'Back to manage packs'
+      );
 
       detailHeader.append(backButton, detailTitle);
-      appendCenteredBackHeaderTitle(detailHeader, 'Create New Pack');
+      appendCenteredBackHeaderTitle(
+        detailHeader,
+        isEditing ? `Edit ${pack.title}` : 'Create New Pack'
+      );
 
       const form = document.createElement('form');
       form.className =
@@ -39,6 +51,7 @@
 
       const gamemodeField = createPackFormField('Gamemode', 'gameType', {
         required: true,
+        value: pack?.gameType || '',
         options: [
           { label: 'Truth Or Dare', value: 'truth-or-dare' },
           { label: 'Paranoia', value: 'paranoia' },
@@ -49,13 +62,35 @@
           { label: 'Mafia', value: 'mafia' }
         ]
       });
+      window.OE_PANEL_PALETTES?.decorateSelect(
+        gamemodeField.input,
+        'gamemode'
+      );
       const titleField = createPackFormField('Title', 'title', {
-        required: true
+        required: true,
+        value: pack?.title || ''
       });
       const slugField = createPackFormField('Slug', 'slug', {
-        required: true
+        required: true,
+        value: pack?.slug || ''
       });
+      const descriptionField = createPackFormField(
+        'Description',
+        'description',
+        {
+          value: pack?.description || '',
+          multiline: true,
+          rows: 3,
+          maxLength: 500,
+          placeholder: 'Describe the questions and tone of this pack.'
+        }
+      );
+      if (isEditing) {
+        gamemodeField.input.disabled = true;
+        slugField.input.disabled = true;
+      }
       const statusField = createPackFormField('Status', 'status', {
+        value: pack?.status || 'published',
         options: [
           { label: 'Published', value: 'published' },
           { label: 'Draft', value: 'draft' },
@@ -63,7 +98,7 @@
         ]
       });
       const activeField = createPackFormField('Active', 'active', {
-        value: 'no',
+        value: pack?.active || 'no',
         options: [
           { label: 'No', value: 'no' },
           { label: 'Yes', value: 'yes' }
@@ -73,6 +108,7 @@
         'Availability Mode',
         'availabilityMode',
         {
+          value: pack?.availabilityMode || 'always',
           options: [
             { label: 'Always', value: 'always' },
             { label: 'Fixed Dates', value: 'fixed' },
@@ -84,24 +120,31 @@
         'Timezone',
         'availabilityTimeZone',
         {
-          value: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+          value:
+            pack?.availabilityTimeZone ||
+            Intl.DateTimeFormat().resolvedOptions().timeZone ||
+            'UTC'
         }
       );
       const availableFromField = createPackFormField(
         'Available From',
-        'availableFrom'
+        'availableFrom',
+        { value: pack?.availableFrom || '' }
       );
       const availableUntilField = createPackFormField(
         'Available Until',
-        'availableUntil'
+        'availableUntil',
+        { value: pack?.availableUntil || '' }
       );
       const difficultyField = createPackFormField('Difficulty', 'difficulty', {
-        options: packDifficultyOptions
+        value: pack?.difficulty || '',
+        placeholder: 'chill, funny, creative'
       });
       const restrictionField = createPackFormField(
         'Restriction',
         'restriction',
         {
+          value: pack?.restriction || '',
           options: [
             { label: 'SFW', value: 'sfw' },
             { label: 'NSFW', value: 'nsfw' },
@@ -113,17 +156,17 @@
         pattern: '^#[0-9A-Fa-f]{6}$',
         placeholder: '#E685AD',
         inputMode: 'text',
-        title: 'Enter a 6-digit hex code, for example #E685AD.'
+        title: 'Enter a 6-digit hex code, for example #E685AD.',
+        paletteInput: true
       };
-      const colourField = createPackFormField(
-        'Colour',
-        'colour',
-        hexColourFieldOptions
-      );
+      const colourField = createPackFormField('Colour', 'colour', {
+        ...hexColourFieldOptions,
+        value: pack?.colour || ''
+      });
       const secondaryColourField = createPackFormField(
         'Secondary Colour',
         'secondaryColour',
-        hexColourFieldOptions
+        { ...hexColourFieldOptions, value: pack?.secondaryColour || '' }
       );
 
       const questionField = document.createElement('div');
@@ -149,9 +192,18 @@
           });
       };
 
-      const addQuestionInput = () => {
+      const addQuestionInput = (question = {}, { focus = true } = {}) => {
         const questionRow = document.createElement('div');
         questionRow.className = 'oe-panel-game-pack-question-row';
+        questionRow.__oePanelQuestionMetadata = {
+          type: ['truth', 'dare'].includes(question.type)
+            ? question.type
+            : null,
+          alternatives: Array.isArray(question.alternatives)
+            ? question.alternatives.map(String)
+            : [],
+          punishment: question.punishment ? String(question.punishment) : null
+        };
 
         const questionNumber = document.createElement('span');
         questionNumber.className = 'oe-panel-game-pack-question-number';
@@ -162,32 +214,34 @@
         questionInput.name = 'questions';
         questionInput.type = 'text';
         questionInput.required = true;
+        questionInput.value = String(question.question || '');
         questionInput.setAttribute('aria-label', 'Pack question');
 
         const clearQuestionButton = document.createElement('button');
         clearQuestionButton.className = 'oe-panel-game-pack-question-clear';
         clearQuestionButton.type = 'button';
-        clearQuestionButton.setAttribute('aria-label', 'Clear question');
+        clearQuestionButton.setAttribute('aria-label', 'Remove question');
         clearQuestionButton.textContent = 'X';
         clearQuestionButton.addEventListener('click', () => {
-          if (questionInput.value.trim()) {
-            questionInput.value = '';
-            questionInput.focus();
-            return;
-          }
-
           questionRow.remove();
           refreshQuestionNumbers();
+          updateSaveButtonState();
         });
 
         questionRow.append(questionNumber, questionInput, clearQuestionButton);
         questionList.appendChild(questionRow);
-        questionInput.focus();
+        if (focus) questionInput.focus();
       };
 
-      addQuestionButton.addEventListener('click', addQuestionInput);
+      addQuestionButton.addEventListener('click', () => addQuestionInput());
       questionField.append(questionLabel, questionList, addQuestionButton);
-      addQuestionInput();
+      if (Array.isArray(pack?.questions) && pack.questions.length) {
+        pack.questions.forEach((question) =>
+          addQuestionInput(question, { focus: false })
+        );
+      } else if (!isEditing) {
+        addQuestionInput({}, { focus: false });
+      }
 
       const firstRow = document.createElement('div');
       firstRow.className = 'oe-panel-game-pack-form-row is-three-column';
@@ -217,10 +271,22 @@
             const previousMode = input.dataset.availabilityMode;
             if (reset && previousMode && previousMode !== mode)
               input.value = '';
+            const currentValue = input.value;
             input.disabled = mode === 'always';
             input.type = mode === 'fixed' ? 'datetime-local' : 'text';
             input.step = mode === 'fixed' ? '1' : '';
             input.placeholder = mode === 'annual' ? 'XXXX-MM-DDTHH:mm:ss' : '';
+            if (mode === 'fixed' && currentValue) {
+              const date = new Date(currentValue);
+              if (Number.isFinite(date.getTime())) {
+                const pad = (value) => String(value).padStart(2, '0');
+                input.value = `${date.getFullYear()}-${pad(
+                  date.getMonth() + 1
+                )}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(
+                  date.getMinutes()
+                )}:${pad(date.getSeconds())}`;
+              }
+            }
             input.dataset.availabilityMode = mode;
           }
         );
@@ -240,6 +306,7 @@
         firstRow,
         titleField.field,
         slugField.field,
+        descriptionField.field,
         difficultyField.field,
         restrictionField.field,
         availabilityModeField.field,
@@ -249,14 +316,16 @@
         saveButton
       );
 
-      let slugTouched = false;
-      slugField.input.addEventListener('input', () => {
-        slugTouched = true;
-      });
-      titleField.input.addEventListener('input', () => {
-        if (slugTouched) return;
-        slugField.input.value = slugifyPackTitle(titleField.input.value);
-      });
+      if (!isEditing) {
+        let slugTouched = false;
+        slugField.input.addEventListener('input', () => {
+          slugTouched = true;
+        });
+        titleField.input.addEventListener('input', () => {
+          if (slugTouched) return;
+          slugField.input.value = slugifyPackTitle(titleField.input.value);
+        });
+      }
 
       const updateSaveButtonState = () => {
         const questionInputs = Array.from(
@@ -308,10 +377,11 @@
 
         try {
           const questions = Array.from(
-            form.querySelectorAll('input[name="questions"]')
-          )
-            .map((input) => input.value.trim())
-            .filter(Boolean);
+            questionList.querySelectorAll('.oe-panel-game-pack-question-row')
+          ).map((row) => ({
+            ...(row.__oePanelQuestionMetadata || {}),
+            question: row.querySelector('input[name="questions"]').value.trim()
+          }));
           const availabilityMode = formData.get('availabilityMode');
           const serializeBoundary = (value) => {
             if (!value) return null;
@@ -320,13 +390,19 @@
               : value;
           };
 
-          const response = await fetch('/api/oe-panel/game-packs', {
-            method: 'POST',
+          const endpoint = isEditing
+            ? `/api/oe-panel/game-packs/${encodeURIComponent(pack.key)}`
+            : '/api/oe-panel/game-packs';
+          const response = await fetch(endpoint, {
+            method: isEditing ? 'PATCH' : 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              gameType: formData.get('gameType'),
+              ...(!isEditing && {
+                gameType: gamemodeField.input.value,
+                slug: slugField.input.value
+              }),
               title: formData.get('title'),
-              slug: formData.get('slug'),
+              description: formData.get('description'),
               status: formData.get('status'),
               active: formData.get('active'),
               difficulty: formData.get('difficulty'),
@@ -347,7 +423,8 @@
 
           if (!response.ok || payload.success === false) {
             throw new Error(
-              payload?.error?.message || 'Pack could not be created.'
+              payload?.error?.message ||
+                `Pack could not be ${isEditing ? 'updated' : 'created'}.`
             );
           }
 
@@ -358,7 +435,10 @@
           );
           showActionList();
         } catch (error) {
-          window.alert(error.message || 'Pack could not be created.');
+          window.alert(
+            error.message ||
+              `Pack could not be ${isEditing ? 'updated' : 'created'}.`
+          );
           saveButton.textContent = originalText;
           updateSaveButtonState();
         }
@@ -370,6 +450,46 @@
       container.dispatchEvent(
         new CustomEvent('oe-panel-request-expand', { bubbles: true })
       );
+    }
+
+    function showCreatePackForm(parentAction) {
+      showPackForm({ parentAction });
+    }
+
+    async function showEditPackForm(row) {
+      const packKey = String(row?.key || '').trim();
+      if (!packKey) {
+        window.alert('This pack could not be opened for editing.');
+        return;
+      }
+
+      const loading = document.createElement('div');
+      loading.className = 'oe-panel-action-list';
+      loading.textContent = 'Loading pack...';
+      widget.className =
+        'oe-panel-widget oe-panel-widget-actions oe-panel-social-action-view';
+      widget.replaceChildren(loading);
+      container.dispatchEvent(
+        new CustomEvent('oe-panel-request-expand', { bubbles: true })
+      );
+      container.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+
+      try {
+        const response = await fetch(
+          `/api/oe-panel/game-packs/${encodeURIComponent(packKey)}`
+        );
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || payload.success === false || !payload.data?.pack) {
+          throw new Error(
+            payload?.error?.message || 'Pack could not be loaded.'
+          );
+        }
+
+        showPackForm({ pack: payload.data.pack });
+      } catch (error) {
+        window.alert(error.message || 'Pack could not be loaded.');
+        showActionList();
+      }
     }
 
     function createOeFormField(labelText, name, options = {}) {
@@ -431,12 +551,18 @@
         ]
       });
       const colourField = createOeFormField('Colour', 'colour', {
-        placeholder: '#66CCFF'
+        placeholder: '#66CCFF',
+        pattern: '^#[0-9A-Fa-f]{6}$',
+        paletteInput: true
       });
       const secondaryColourField = createOeFormField(
         'Secondary Colour',
         'secondaryColour',
-        { placeholder: '#427BB9' }
+        {
+          placeholder: '#427BB9',
+          pattern: '^#[0-9A-Fa-f]{6}$',
+          paletteInput: true
+        }
       );
       const saveButton = document.createElement('button');
       saveButton.className = 'oe-panel-social-edit-save';
@@ -523,7 +649,7 @@
       );
     }
 
-    return { showCreatePackForm, showCreateOePackForm };
+    return { showCreatePackForm, showEditPackForm, showCreateOePackForm };
   }
 
   window.createOePanelActionPackForms = createOePanelActionPackForms;

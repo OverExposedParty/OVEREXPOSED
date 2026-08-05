@@ -20,6 +20,7 @@ test('OE panel party game routes preserve their endpoint contract and order', ()
     ['get', '/api/oe-panel/party-rooms'],
     ['delete', '/api/oe-panel/party-rooms/:partyCode'],
     ['post', '/api/oe-panel/game-packs'],
+    ['get', '/api/oe-panel/game-packs/:packKey'],
     ['patch', '/api/oe-panel/game-packs/:packKey'],
     ['delete', '/api/oe-panel/game-packs/:packKey'],
     ['post', '/api/oe-panel/game-packs/export'],
