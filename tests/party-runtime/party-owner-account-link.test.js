@@ -184,10 +184,7 @@ test('guest account claims complete the auth lease and restore active state', as
 
   assert.equal(patches.length, 2);
   patches.forEach(({ patch }) => {
-    assert.equal(
-      patch['players.$.state.participationStatus'],
-      'active'
-    );
+    assert.equal(patch['players.$.state.participationStatus'], 'active');
     assert.equal(patch['players.$.state.reconnectDeadline'], null);
   });
   assert.deepEqual(cancelledTransitions, [

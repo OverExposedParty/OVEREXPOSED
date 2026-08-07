@@ -210,6 +210,21 @@ test('switch picker reuses homepage artwork and has no cancel action', async () 
   assert.ok(document.querySelector('[data-party-switch-confirm]'));
 });
 
+test('switch picker shows each game player-count range', async () => {
+  const { document, window } = createHarness();
+  await window.openOnlinePartyGameSwitcher();
+
+  const truthOrDareDetail = document.querySelector(
+    '.party-game-switch-option[data-gamemode="truth-or-dare"] .party-game-switch-option-detail'
+  );
+  const paranoiaDetail = document.querySelector(
+    '.party-game-switch-option[data-gamemode="paranoia"] .party-game-switch-option-detail'
+  );
+
+  assert.equal(truthOrDareDetail.textContent, '2-20 players');
+  assert.equal(paranoiaDetail.textContent, '3-15 players');
+});
+
 test('switch picker omits games unavailable to the current account', async () => {
   const { document, window } = createHarness({
     unavailableGamemodes: ['imposter', 'mafia']

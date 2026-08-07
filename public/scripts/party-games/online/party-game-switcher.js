@@ -3,6 +3,7 @@
     {
       gamemode: 'truth-or-dare',
       label: 'Truth or Dare',
+      minPlayers: 2,
       maxPlayers: 20,
       primary: '#66CCFF',
       secondary: '#427BB9'
@@ -10,6 +11,7 @@
     {
       gamemode: 'paranoia',
       label: 'Paranoia',
+      minPlayers: 3,
       maxPlayers: 15,
       primary: '#9D8AFF',
       secondary: '#7F71B2'
@@ -17,6 +19,7 @@
     {
       gamemode: 'never-have-i-ever',
       label: 'Never Have I Ever',
+      minPlayers: 2,
       maxPlayers: 20,
       primary: '#FF9266',
       secondary: '#B96542'
@@ -24,6 +27,7 @@
     {
       gamemode: 'most-likely-to',
       label: 'Most Likely To',
+      minPlayers: 2,
       maxPlayers: 20,
       primary: '#FFEE66',
       secondary: '#B9AA42'
@@ -31,6 +35,7 @@
     {
       gamemode: 'imposter',
       label: 'Imposter',
+      minPlayers: 3,
       maxPlayers: 16,
       primary: '#3DA7A1',
       secondary: '#2A6E6A'
@@ -38,6 +43,7 @@
     {
       gamemode: 'would-you-rather',
       label: 'Would You Rather',
+      minPlayers: 2,
       maxPlayers: 20,
       primary: '#7CFFB2',
       secondary: '#55B97F'
@@ -45,6 +51,7 @@
     {
       gamemode: 'mafia',
       label: 'Mafia',
+      minPlayers: 5,
       maxPlayers: 20,
       primary: '#9B56D3',
       secondary: '#6D3C95'
@@ -382,7 +389,7 @@
           ? `Maximum ${option.maxPlayers} players`
           : mode === 'offline'
             ? 'Play on this device'
-            : `Up to ${option.maxPlayers} players`;
+            : `${option.minPlayers}-${option.maxPlayers} players`;
 
       label.append(input, picture, detail);
       optionsContainer.appendChild(label);

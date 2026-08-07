@@ -509,9 +509,8 @@ function createPartyAuthTransitionRoutes(context) {
           );
         }
 
-        const completedState = await completeTransitionReconnectState(
-          transition
-        );
+        const completedState =
+          await completeTransitionReconnectState(transition);
         if (!completedState) {
           clearTransition(transition);
           return sendTransitionError(

@@ -127,8 +127,7 @@ async function recordMostLikelyToResult({
 
   const partyKey = normalizeString(partyId, 'party');
   const gameKey =
-    normalizeString(gameId) ||
-    `play-${Math.max(0, Number(playSequence) || 0)}`;
+    normalizeString(gameId) || `play-${Math.max(0, Number(playSequence) || 0)}`;
   const sessionKey = `${partyKey}:${gameKey}`;
   if (stats.mostLikelyToSessionId !== sessionKey) {
     stats.mostLikelyToSessionId = sessionKey;

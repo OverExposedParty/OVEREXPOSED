@@ -189,19 +189,13 @@ test('auth transition heartbeat renews the lobby lease and completion cancels it
 
   const completed = await harness.post('complete', started.payload);
   assert.equal(completed.payload.completed, true);
-  assert.equal(
-    harness.session.players[1].state.participationStatus,
-    'active'
-  );
+  assert.equal(harness.session.players[1].state.participationStatus, 'active');
   assert.equal(harness.session.players[1].state.reconnectDeadline, null);
   assert.equal(
     harness.waitingRoom.players[1].state.participationStatus,
     'active'
   );
-  assert.equal(
-    harness.waitingRoom.players[1].state.reconnectDeadline,
-    null
-  );
+  assert.equal(harness.waitingRoom.players[1].state.reconnectDeadline, null);
   await new Promise((resolve) => setTimeout(resolve, 60));
   assert.equal(harness.session.players.length, 2);
 });

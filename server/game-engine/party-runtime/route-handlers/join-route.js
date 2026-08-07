@@ -1,6 +1,9 @@
 function restoreNonRoundRejoinState(
   incomingPlayer,
-  { existingPlayerWasDisconnected = false, supportsActiveRoundJoin = false } = {}
+  {
+    existingPlayerWasDisconnected = false,
+    supportsActiveRoundJoin = false
+  } = {}
 ) {
   if (
     !incomingPlayer ||
