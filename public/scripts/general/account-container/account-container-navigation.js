@@ -643,12 +643,21 @@ function redirectToLoginFromAccount() {
     getCurrentAccountSplashScreen()
   )}&authEntryPoint=account_container`;
 
-  if (typeof transitionSplashScreen === 'function') {
-    transitionSplashScreen(loginPath, accountLoginSplashScreen);
+  const navigate = (path) => {
+    if (typeof transitionSplashScreen === 'function') {
+      transitionSplashScreen(path, accountLoginSplashScreen);
+      return;
+    }
+
+    window.location.href = path;
+  };
+
+  if (typeof window.beginOnlinePartyAuthNavigation === 'function') {
+    void window.beginOnlinePartyAuthNavigation(loginPath, { navigate });
     return;
   }
 
-  window.location.href = loginPath;
+  navigate(loginPath);
 }
 
 function setAccountExpandedPanel(actionTitle = '', action = '') {

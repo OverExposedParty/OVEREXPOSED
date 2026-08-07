@@ -1,5 +1,8 @@
 async function DisplayPrivateCard(instruction) {
-  await ensureQuestionsLoadedForCurrentConfig(getPartyConfig(currentPartyData));
+  const questionsLoaded = await ensureQuestionsLoadedForCurrentConfig(
+    getPartyConfig(currentPartyData)
+  );
+  if (!questionsLoaded) return;
 
   const state = getPartyState(currentPartyData);
   const deck  = currentPartyData.deck ?? currentPartyData;

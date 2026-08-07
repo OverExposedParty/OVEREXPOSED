@@ -15,34 +15,20 @@ body {
 }
 
 .protected-page {
-  display: none;
-}
-
-.protected-splash {
   position: fixed;
   inset: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 9999;
+  z-index: 9997;
   display: grid;
   min-height: 100dvh;
   place-items: center;
   padding: clamp(1rem, 5vw, 4rem);
+  box-sizing: border-box;
   background: #202020;
   isolation: isolate;
-  transition: none;
-  transform: none;
+  overflow: hidden;
 }
 
-.protected-splash.center,
-.protected-splash.down,
-.protected-splash.up {
-  top: 0;
-}
-
-.protected-splash > img {
+.protected-page-background {
   position: absolute;
   inset: 0;
   z-index: -2;
@@ -56,7 +42,7 @@ body {
   filter: brightness(0.64);
 }
 
-.protected-splash::after {
+.protected-page::after {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -145,6 +131,10 @@ body {
   outline: none;
 }
 
+.protected-page-action[hidden] {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .protected-page-action:hover {
     border-color: var(--secondarypagecolour);
@@ -154,30 +144,18 @@ body {
   }
 }
 
-.protected-splash .protected-page-message > .protected-page-eyebrow,
-.protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
-  position: static;
-  bottom: auto;
-  width: auto;
-  margin-left: 0;
-  padding: 0;
-  text-align: center;
-}
-
-.protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
-  width: min(34rem, 100%);
-  margin: 1.25rem auto 0;
-}
-
 .protected-access-page .oe-bodyguard {
   left: 0;
   bottom: -3rem;
   width: min(36rem, 82vw);
   height: calc(min(36rem, 82vw) * 4 / 3);
-  animation: protected-bodyguard-peek 0.7s ease-out 0.45s forwards;
   transform: translateX(-115%) rotate(15deg);
   transform-origin: bottom left;
   z-index: 2;
+}
+
+.protected-access-page .oe-bodyguard.is-revealing {
+  animation: protected-bodyguard-peek 0.7s ease-out forwards;
 }
 
 @keyframes protected-bodyguard-peek {
@@ -188,6 +166,16 @@ body {
   to {
     transform: translateX(calc(clamp(-10rem, -14vw, -4rem) - 5vw))
       rotate(15deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .protected-access-page .splash-screen-container {
+    transition-duration: 0.01ms;
+  }
+
+  .protected-access-page .oe-bodyguard.is-revealing {
+    animation-duration: 0.01ms;
   }
 }
 

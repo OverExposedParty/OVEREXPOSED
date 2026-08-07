@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const gameModeReleaseMetadataSchema = require('./game-mode-release-metadata-schema');
 
 const partyGameErrorSchema = new mongoose.Schema(
   {
@@ -21,6 +22,11 @@ const partyGameErrorSchema = new mongoose.Schema(
     phase: { type: String, default: null },
     instruction: { type: String, default: '' },
     gamemode: { type: String, default: null },
+    gameModeRelease: {
+      type: gameModeReleaseMetadataSchema,
+      default: null
+    },
+    runtimeBuild: { type: String, default: '' },
     details: { type: mongoose.Schema.Types.Mixed, default: null }
   },
   { _id: false }

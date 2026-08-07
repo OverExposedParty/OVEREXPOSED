@@ -7,6 +7,42 @@ const {
   pruneUnavailablePartyContent
 } = require('../../../services/game-content-availability');
 
+async function createPartyReplaySnapshot({
+  party,
+  actorId,
+  gameId,
+  gameModeRelease,
+  shuffleSeed,
+  applyPartyActionToSnapshot,
+  hasDeck,
+  socketId,
+  prepareLobbySnapshot
+}) {
+  const lobbySnapshot = applyPartyActionToSnapshot({
+    party,
+    action: 'return-to-lobby',
+    actorId,
+    payload: {
+      nextGameId: gameId,
+      nextGameModeRelease: gameModeRelease,
+      socketId
+    },
+    hasDeck
+  });
+
+  lobbySnapshot.config = lobbySnapshot.config || {};
+  lobbySnapshot.config.shuffleSeed = shuffleSeed;
+  await prepareLobbySnapshot?.(lobbySnapshot);
+
+  return applyPartyActionToSnapshot({
+    party: lobbySnapshot,
+    action: 'start-game',
+    actorId,
+    payload: { socketId },
+    hasDeck
+  });
+}
+
 function createPartyActionRoute(context) {
   const {
     app,
@@ -34,7 +70,13 @@ function createPartyActionRoute(context) {
     GamePack,
     GameRule,
     assertPartyConfigContentAccess,
-    archiveRoomSnapshot
+    archiveRoomSnapshot,
+    reservePartyGameSession,
+    activatePartyGameSession,
+    completePartyGameSession,
+    releasePartyGameSession,
+    io,
+    crypto
   } = context;
   const { applyPartyAccountStatEvents } = createPartyActionStatEventTools({
     Account,
@@ -59,6 +101,8 @@ function createPartyActionRoute(context) {
     hasDeck
   }) {
     app.post(`${route}/action`, async (req, res) => {
+      let gameSessionReservation = null;
+      let partyTransitionCommitted = false;
       try {
         const body = {
           ...req.body,
@@ -72,6 +116,9 @@ function createPartyActionRoute(context) {
           payload: requestedPayload = {}
         } = body;
         let payload = requestedPayload;
+        const startsNextGame = ['return-to-lobby', 'replay-game'].includes(
+          action
+        );
         const principal = await getPartyRequestPrincipal(req, res);
 
         const existingParty = await mainModel
@@ -103,7 +150,20 @@ function createPartyActionRoute(context) {
         assertPrincipalOwnsPlayer(existingParty, actorId, principal);
 
         if (
-          action === 'return-to-lobby' &&
+          action === 'replay-game' &&
+          String(requestedPayload.expectedGameId) !==
+            String(existingParty.session?.gameId || '')
+        ) {
+          const error = new Error(
+            'This game has already changed. Reload the latest party state.'
+          );
+          error.status = 409;
+          error.code = 'party_replay_stale_session';
+          throw error;
+        }
+
+        if (
+          startsNextGame &&
           existingParty.state?.phase === 'game-over' &&
           typeof archiveRoomSnapshot === 'function'
         ) {
@@ -150,13 +210,62 @@ function createPartyActionRoute(context) {
           };
         }
 
-        const updatedPartySnapshot = applyPartyActionToSnapshot({
-          party: existingParty,
-          action,
-          actorId,
-          payload,
-          hasDeck
-        });
+        if (startsNextGame) {
+          gameSessionReservation = await reservePartyGameSession({
+            partyId,
+            gamemode: existingParty.config?.gamemode || existingParty.gamemode
+          });
+          payload = {
+            ...payload,
+            nextGameId: gameSessionReservation.gameId
+          };
+        }
+
+        let updatedPartySnapshot;
+        if (action === 'replay-game') {
+          updatedPartySnapshot = await createPartyReplaySnapshot({
+            party: existingParty,
+            actorId,
+            gameId: gameSessionReservation.gameId,
+            gameModeRelease: gameSessionReservation.gameModeRelease,
+            shuffleSeed:
+              typeof crypto.randomInt === 'function'
+                ? crypto.randomInt(0, 256)
+                : crypto.randomBytes(1)[0],
+            applyPartyActionToSnapshot,
+            hasDeck,
+            socketId: payload.socketId,
+            prepareLobbySnapshot: async (lobbySnapshot) => {
+              await pruneUnavailablePartyContent({
+                config: lobbySnapshot.config,
+                GamePack,
+                GameRule,
+                GameRole
+              });
+              if (typeof assertPartyConfigContentAccess === 'function') {
+                await assertPartyConfigContentAccess({
+                  config: lobbySnapshot.config,
+                  partyId,
+                  existingParty: lobbySnapshot,
+                  principal,
+                  Account,
+                  WaitingRoom: waitingRoomModel,
+                  GameRule,
+                  GamePack,
+                  GameRole
+                });
+              }
+            }
+          });
+        } else {
+          updatedPartySnapshot = applyPartyActionToSnapshot({
+            party: existingParty,
+            action,
+            actorId,
+            payload,
+            hasDeck
+          });
+        }
 
         if (action === 'return-to-lobby') {
           await pruneUnavailablePartyContent({
@@ -179,13 +288,15 @@ function createPartyActionRoute(context) {
         }
 
         const updateFilter = { partyId };
-        if (action === 'return-to-lobby') {
+        if (startsNextGame) {
           updateFilter['state.phase'] = 'game-over';
           if (existingParty.session?.gameId) {
             updateFilter['session.gameId'] = existingParty.session.gameId;
           }
         } else {
-          updateFilter['state.phase'] = { $ne: 'game-over' };
+          updateFilter['state.phase'] = {
+            $nin: ['game-over', 'switching-game']
+          };
         }
 
         let updatedParty = await mainModel.findOneAndUpdate(
@@ -194,6 +305,7 @@ function createPartyActionRoute(context) {
           { new: true }
         );
         const actionApplied = Boolean(updatedParty);
+        partyTransitionCommitted = startsNextGame && actionApplied;
         const gameJustEnded =
           actionApplied &&
           existingParty.state?.phase !== 'game-over' &&
@@ -204,6 +316,36 @@ function createPartyActionRoute(context) {
         // than allowing this stale action to revive the gameplay cycle.
         if (!updatedParty) {
           updatedParty = await mainModel.findOne({ partyId });
+        }
+
+        if (gameSessionReservation) {
+          if (actionApplied) {
+            try {
+              await activatePartyGameSession(gameSessionReservation);
+            } catch (error) {
+              console.error(
+                `[REQ ${req.id}] Failed to activate game session ${gameSessionReservation.gameId}:`,
+                error
+              );
+            }
+          } else {
+            await releasePartyGameSession(gameSessionReservation);
+            gameSessionReservation = null;
+          }
+        }
+
+        if (action === 'replay-game' && actionApplied) {
+          try {
+            await completePartyGameSession({
+              gameId: existingParty.session?.gameId,
+              partyId
+            });
+          } catch (error) {
+            console.error(
+              `[REQ ${req.id}] Failed to complete replayed game session ${existingParty.session?.gameId}:`,
+              error
+            );
+          }
         }
 
         if (!updatedParty) {
@@ -269,6 +411,17 @@ function createPartyActionRoute(context) {
             error.code = 'party_archive_failed';
             throw error;
           }
+          try {
+            await completePartyGameSession({
+              gameId: updatedParty.session?.gameId,
+              partyId
+            });
+          } catch (error) {
+            console.error(
+              `[REQ ${req.id}] Failed to complete game session ${updatedParty.session?.gameId}:`,
+              error
+            );
+          }
         }
 
         await waitingRoomModel.findOneAndUpdate(
@@ -285,11 +438,38 @@ function createPartyActionRoute(context) {
           }
         );
 
+        let transition;
+        if (action === 'replay-game' && actionApplied) {
+          transition = {
+            partyId,
+            gamemode:
+              updatedParty.config?.gamemode || updatedParty.gamemode || null,
+            gameId: updatedParty.session?.gameId || null,
+            hostComputerId: updatedParty.state?.hostComputerId || null
+          };
+          io?.to?.(partyId)?.emit('party-game-replayed', transition);
+        }
+
         res.apiSuccess({
           message: `${logLabel} action applied successfully`,
-          updated: updatedParty
+          updated: updatedParty,
+          ...(transition ? { transition } : {})
         });
       } catch (err) {
+        if (
+          gameSessionReservation &&
+          !partyTransitionCommitted &&
+          typeof releasePartyGameSession === 'function'
+        ) {
+          try {
+            await releasePartyGameSession(gameSessionReservation);
+          } catch (releaseError) {
+            console.error(
+              `[REQ ${req.id}] Failed to release unused game session ${gameSessionReservation.gameId}:`,
+              releaseError
+            );
+          }
+        }
         const status = Number.isInteger(err.status) ? err.status : 500;
         console.error(
           `[REQ ${req.id}] ❌ Error applying ${logLabel.toLowerCase()} action:`,
@@ -327,5 +507,6 @@ function createPartyActionRoute(context) {
 }
 
 module.exports = {
+  createPartyReplaySnapshot,
   createPartyActionRoute
 };

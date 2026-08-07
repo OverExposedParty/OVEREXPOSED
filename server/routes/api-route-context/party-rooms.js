@@ -174,27 +174,59 @@ function createPartyRoomContext(context) {
     );
   }
 
+  function serializeGameModeRelease(release) {
+    if (!release) return null;
+
+    return {
+      version: release.version || null,
+      releaseId: release.releaseId || null,
+      runtimeBuild: release.runtimeBuild || null,
+      contentHash: release.contentHash || null,
+      capturedAt: release.capturedAt || null
+    };
+  }
+
+  function getRoomRelease(room) {
+    return serializeGameModeRelease(room.session?.gameModeRelease);
+  }
+
   function serializeRoomErrors(room) {
     const errors = Array.isArray(room.errors) ? room.errors : [];
 
-    return errors.map((error) => ({
-      occurredAt: error.occurredAt || null,
-      source: error.source || 'server',
-      message: error.message || 'Unknown room error',
-      name: error.name || 'Error',
-      code: error.code || '',
-      status: Number.isInteger(error.status) ? error.status : null,
-      action: error.action || '',
-      actorId: error.actorId || '',
-      computerId: error.computerId || '',
-      username: error.username || '',
-      playerTurn: Number.isInteger(error.playerTurn) ? error.playerTurn : null,
-      turnPlayerId: error.turnPlayerId || '',
-      phase: error.phase || '',
-      instruction: error.instruction || '',
-      gamemode: error.gamemode || room.config?.gamemode || room.gamemode || '',
-      details: error.details || null
-    }));
+    return errors.map((error) => {
+      const gameModeRelease = serializeGameModeRelease(error.gameModeRelease);
+      const runtimeBuild = error.runtimeBuild || '';
+
+      return {
+        occurredAt: error.occurredAt || null,
+        source: error.source || 'server',
+        message: error.message || 'Unknown room error',
+        name: error.name || 'Error',
+        code: error.code || '',
+        status: Number.isInteger(error.status) ? error.status : null,
+        action: error.action || '',
+        actorId: error.actorId || '',
+        computerId: error.computerId || '',
+        username: error.username || '',
+        playerTurn: Number.isInteger(error.playerTurn)
+          ? error.playerTurn
+          : null,
+        turnPlayerId: error.turnPlayerId || '',
+        phase: error.phase || '',
+        instruction: error.instruction || '',
+        gamemode:
+          error.gamemode || room.config?.gamemode || room.gamemode || '',
+        gameModeRelease,
+        gameModeVersion: gameModeRelease?.version || 'Legacy',
+        runtimeBuild: runtimeBuild || '-',
+        buildChanged: Boolean(
+          runtimeBuild &&
+          gameModeRelease?.runtimeBuild &&
+          runtimeBuild !== gameModeRelease.runtimeBuild
+        ),
+        details: error.details || null
+      };
+    });
   }
 
   function getRoomErrorSummary(errors) {
@@ -296,7 +328,13 @@ function createPartyRoomContext(context) {
         `Action: ${error.action || '-'}`,
         `Actor: ${error.username || error.computerId || error.actorId || '-'}`,
         `Code: ${error.code || '-'}`,
-        `HTTP status: ${error.status ?? '-'}`
+        `HTTP status: ${error.status ?? '-'}`,
+        `Game version: ${error.gameModeVersion || 'Legacy'}`,
+        `Session build: ${error.gameModeRelease?.runtimeBuild || '-'}`,
+        `Error build: ${error.runtimeBuild || '-'}`,
+        `Build changed: ${error.buildChanged ? 'Yes' : 'No'}`,
+        `Release ID: ${error.gameModeRelease?.releaseId || '-'}`,
+        `Content hash: ${error.gameModeRelease?.contentHash || '-'}`
       ].join('\n'),
       issue: {
         message: error.message || 'Unknown room error',
@@ -318,7 +356,13 @@ function createPartyRoomContext(context) {
         username: error.username || '-',
         computerId: error.computerId || '-',
         code: error.code || '-',
-        status: error.status ?? '-'
+        status: error.status ?? '-',
+        gameModeVersion: error.gameModeVersion || 'Legacy',
+        sessionBuild: error.gameModeRelease?.runtimeBuild || '-',
+        runtimeBuild: error.runtimeBuild || '-',
+        buildChanged: error.buildChanged ? 'Yes' : 'No',
+        releaseId: error.gameModeRelease?.releaseId || '-',
+        contentHash: error.gameModeRelease?.contentHash || '-'
       },
       room: {
         roomCode: room.roomCode || '-',
@@ -332,7 +376,10 @@ function createPartyRoomContext(context) {
         archivedAt: room.archivedAt
           ? new Date(room.archivedAt).toLocaleString()
           : '-',
-        sourceCollection: room.sourceCollection || '-'
+        sourceCollection: room.sourceCollection || '-',
+        gameModeVersion: room.gameModeVersion || 'Legacy',
+        releaseId: room.releaseId || '-',
+        runtimeBuild: room.runtimeBuild || '-'
       }
     };
   }
@@ -348,6 +395,7 @@ function createPartyRoomContext(context) {
     const instruction = getRoomInstruction(room);
     const playerSummary = getRoomPlayerSummary(room);
     const roomVisual = getRoomVisual(room);
+    const release = getRoomRelease(room);
 
     return {
       roomCode: room.partyId || '-',
@@ -359,6 +407,12 @@ function createPartyRoomContext(context) {
         : String(playerCount),
       timeLapsed: formatRoundedDuration(createdAt, lastUpdated),
       serverRegion: room.session?.serverRegion || '-',
+      gameModeVersion: release?.version || 'Legacy',
+      gameModeVersionLabel: release?.version ? `v${release.version}` : 'Legacy',
+      releaseId: release?.releaseId || '-',
+      runtimeBuild: release?.runtimeBuild || '-',
+      contentHash: release?.contentHash || '-',
+      releaseCapturedAt: formatRoomDetailValue(release?.capturedAt),
       roomStatus: room.state?.isPlaying ? 'In Game' : 'Lobby',
       hostUser:
         room.host?.username ||
@@ -406,6 +460,10 @@ function createPartyRoomContext(context) {
         Phase: formatRoomDetailValue(phase),
         Instructions: instruction || '-',
         'Phase Data': formatRoomDetailValue(room.state?.phaseData),
+        'Game Version': release?.version || 'Legacy',
+        'Release ID': release?.releaseId || '-',
+        'Runtime Build': release?.runtimeBuild || '-',
+        'Content Hash': release?.contentHash || '-',
         'Source Collection': sourceCollection
       }
     };
@@ -420,6 +478,7 @@ function createPartyRoomContext(context) {
     const instruction = getRoomInstruction(room);
     const playerSummary = getRoomPlayerSummary(room);
     const roomVisual = getRoomVisual(room);
+    const release = getRoomRelease(room);
 
     return {
       roomCode: room.partyId || '-',
@@ -429,6 +488,12 @@ function createPartyRoomContext(context) {
       playerCount: String(playerCount),
       timeLapsed: formatRoundedDuration(createdAt, lastUpdated),
       serverRegion: room.session?.serverRegion || '-',
+      gameModeVersion: release?.version || 'Legacy',
+      gameModeVersionLabel: release?.version ? `v${release.version}` : 'Legacy',
+      releaseId: release?.releaseId || '-',
+      runtimeBuild: release?.runtimeBuild || '-',
+      contentHash: release?.contentHash || '-',
+      releaseCapturedAt: formatRoomDetailValue(release?.capturedAt),
       roomStatus: 'Archived',
       hostUser:
         room.host?.username ||
@@ -477,6 +542,10 @@ function createPartyRoomContext(context) {
         Phase: formatRoomDetailValue(phase),
         Instructions: instruction || '-',
         'Phase Data': formatRoomDetailValue(room.state?.phaseData),
+        'Game Version': release?.version || 'Legacy',
+        'Release ID': release?.releaseId || '-',
+        'Runtime Build': release?.runtimeBuild || '-',
+        'Content Hash': release?.contentHash || '-',
         'Source Collection': room.sourceCollection || '-'
       }
     };
@@ -499,6 +568,7 @@ function createPartyRoomContext(context) {
     getRoomPlayerCount,
     getRoomPlayerSummary,
     getRoomOutcome,
+    serializeGameModeRelease,
     serializeRoomErrors,
     getRoomErrorSummary,
     getRoomInstruction,

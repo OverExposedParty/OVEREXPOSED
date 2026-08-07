@@ -68,6 +68,15 @@ test('notification polling reloads the account after a version conflict', async 
     },
     countUnreadNotifications() {
       return 0;
+    },
+    countUnreadNotificationsByMenu() {
+      return {
+        notifications: 0,
+        friends: 0,
+        achievements: 0,
+        profile: 0,
+        statistics: 0
+      };
     }
   });
   const handler = handlers.get('get:/api/accounts/notifications');
@@ -80,7 +89,14 @@ test('notification polling reloads the account after a version conflict', async 
   assert.deepEqual(res.success, {
     notifications: [],
     inboxNotifications: [],
-    unreadCount: 0
+    unreadCount: 0,
+    unreadMenuCounts: {
+      notifications: 0,
+      friends: 0,
+      achievements: 0,
+      profile: 0,
+      statistics: 0
+    }
   });
 });
 

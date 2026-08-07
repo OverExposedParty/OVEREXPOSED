@@ -19,7 +19,7 @@
     <meta name="twitter:image" content="__META_TWITTER_IMAGE__">
     <link rel="canonical" href="__META_CANONICAL_URL__">
 
-    <link rel="preload" href="/images/splash-screens/overexposed.png" as="image">
+    <link rel="preload" href="__WAITING_ROOM_SPLASH_SCREEN__" as="image">
 
     <link rel="stylesheet" href="/css/general/header/header.css">
     <link rel="stylesheet" href="/css/general/waiting-room/waiting-room.css">
@@ -40,10 +40,10 @@
 
 <body>
     <div class="splash-screen-container-static" id="splash-screen-container-static">
-        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+        <img src="__WAITING_ROOM_SPLASH_SCREEN__" alt="Splash Screen" loading="eager">
     </div>
     <div class="splash-screen-container waiting-room" id="splash-screen-container">
-        <img src="/images/splash-screens/overexposed.png" alt="Splash Screen" loading="eager">
+        <img src="__WAITING_ROOM_SPLASH_SCREEN__" alt="Splash Screen" loading="eager">
         <p></p>
     </div>
 
@@ -123,8 +123,8 @@
     </div>
 </body>
 <script>
-    document.documentElement.style.setProperty('--primarypagecolour', '#999999');
-    document.documentElement.style.setProperty('--secondarypagecolour', '#666666');
+    document.documentElement.style.setProperty('--primarypagecolour', '__WAITING_ROOM_PRIMARY_COLOUR__');
+    document.documentElement.style.setProperty('--secondarypagecolour', '__WAITING_ROOM_SECONDARY_COLOUR__');
 
     window.pageScripts = {
         "https://cdn.socket.io/4.8.1/socket.io.min.js": { zIndex: 0 },

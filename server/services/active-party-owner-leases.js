@@ -174,7 +174,8 @@ function createActivePartyOwnerLeaseService({
       attached: false,
       conflict: true,
       partyId: details.partyCode,
-      ...(details.gamemode ? { gamemode: details.gamemode } : {})
+      ...(details.gamemode ? { gamemode: details.gamemode } : {}),
+      ...(details.apiRoute ? { apiRoute: details.apiRoute } : {})
     };
   }
 

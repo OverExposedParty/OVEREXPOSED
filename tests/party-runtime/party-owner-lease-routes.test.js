@@ -132,6 +132,8 @@ function createUpsertHarness({
   let handler = null;
   const activations = [];
   const releases = [];
+  const sessionActivations = [];
+  const sessionReleases = [];
   const errors = [];
   const model = {
     findOne() {
@@ -179,15 +181,30 @@ function createUpsertHarness({
     acquireActivePartyOwnerLease: acquire,
     activateActivePartyOwnerLease: async (input) => activations.push(input),
     releaseActivePartyOwnerLeaseIfInactive: async (input) =>
-      releases.push(input)
+      releases.push(input),
+    reservePartyGameSession: async ({ partyId, gamemode }) => ({
+      gameId: `TOD-${'A'.repeat(32)}`,
+      partyId,
+      gamemode
+    }),
+    activatePartyGameSession: async (input) => sessionActivations.push(input),
+    releasePartyGameSession: async (input) => sessionReleases.push(input)
   });
   routes.createUpsertPartyHandler({
     route: '/party',
     model,
     logLabel: 'Party',
-    fields: ['session', 'config', 'state', 'players']
+    fields: ['session', 'config', 'state', 'players'],
+    allocateGameId: true
   });
-  return { handler, activations, releases, errors };
+  return {
+    handler,
+    activations,
+    releases,
+    errors,
+    sessionActivations,
+    sessionReleases
+  };
 }
 
 function createResponseCapture() {
@@ -281,6 +298,8 @@ test('successful direct creation activates the exact acquired lease', async () =
   );
 
   assert.ok(result.success);
+  assert.match(result.success.updated.session.gameId, /^TOD-[A-F0-9]{32}$/);
+  assert.notEqual(result.success.updated.session.gameId, 'game-one');
   assert.deepEqual(harness.activations, [
     {
       partyId: 'ABC-123',
@@ -289,6 +308,8 @@ test('successful direct creation activates the exact acquired lease', async () =
     }
   ]);
   assert.equal(harness.releases.length, 0);
+  assert.equal(harness.sessionActivations.length, 1);
+  assert.equal(harness.sessionReleases.length, 0);
 });
 
 test('party content access is enforced before a party configuration write', async () => {
@@ -347,6 +368,8 @@ test('failed direct creation releases a newly acquired unused lease', async () =
       releaseToken: acquisition.releaseToken
     }
   ]);
+  assert.equal(harness.sessionActivations.length, 0);
+  assert.equal(harness.sessionReleases.length, 1);
   assert.equal(harness.activations.length, 0);
 });
 
@@ -414,4 +437,32 @@ test('an existing-party update cannot recreate a concurrently deleted room', asy
   assert.equal(result.error.status, 409);
   assert.equal(result.error.code, 'party_update_conflict');
   assert.equal(harness.activations.length, 0);
+});
+
+test('an existing party update cannot replace its server-assigned game id', async () => {
+  let writtenSession = null;
+  const existingParty = {
+    partyId: 'ABC-123',
+    session: { gameId: 'TOD-SERVERASSIGNEDGAMEID' },
+    config: { gamemode: 'truth-or-dare' },
+    state: { hostComputerId: 'host-device' },
+    players: createPartyBody().players
+  };
+  const harness = createUpsertHarness({
+    existingParty,
+    acquire: async () => assert.fail('existing updates must not reacquire'),
+    update: async (_filter, updateData) => {
+      writtenSession = updateData.session;
+      return updateData;
+    }
+  });
+  const { result, response } = createResponseCapture();
+
+  await harness.handler(
+    { body: createPartyBody(), query: {}, id: 'request-six' },
+    response
+  );
+
+  assert.ok(result.success);
+  assert.equal(writtenSession.gameId, existingParty.session.gameId);
 });

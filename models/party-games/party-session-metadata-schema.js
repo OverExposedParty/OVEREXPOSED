@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const gameModeReleaseMetadataSchema = require('./game-mode-release-metadata-schema');
 
 function createFallbackGameId() {
-  return `GAME-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
+  return `GAME-${crypto.randomBytes(16).toString('hex').toUpperCase()}`;
 }
 
 function getFallbackServerRegion() {
@@ -19,6 +20,10 @@ const partySessionMetadataSchema = new mongoose.Schema(
     playtimeStartedAt: { type: Date, default: null },
     playtimeAccumulatedMilliseconds: { type: Number, min: 0, default: 0 },
     serverRegion: { type: String, default: getFallbackServerRegion },
+    gameModeRelease: {
+      type: gameModeReleaseMetadataSchema,
+      default: null
+    },
     access: {
       originalHostAccountId: {
         type: mongoose.Schema.Types.ObjectId,

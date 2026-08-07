@@ -3,11 +3,34 @@
   const boundContainers = new WeakSet();
   let activePartySession = null;
   let activePartyActionHandler = null;
+  let resumeOfflineMode = false;
 
   try {
     window.localStorage?.removeItem('online');
   } catch {
     // Storage can be unavailable in restricted browser contexts.
+  }
+
+  try {
+    const currentUrl = new URL(window.location.href);
+    const requestedPlayMode = currentUrl.searchParams.get('playMode');
+    if (requestedPlayMode === 'offline') {
+      currentUrl.searchParams.delete('playMode');
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`
+      );
+      resumeOfflineMode =
+        typeof partyGameMode === 'string' &&
+        (typeof partyGamesInformation === 'undefined' ||
+          partyGamesInformation?.[partyGameMode]?.forceOnline !== true);
+      if (resumeOfflineMode) {
+        window.syncOfflinePartyGameSwitcherButton?.(partyGameMode);
+      }
+    }
+  } catch {
+    // Ignore malformed or unavailable navigation state and show mode selection.
   }
 
   function wait(milliseconds) {
@@ -249,6 +272,9 @@
     }
 
     if (mode === 'offline') {
+      if (typeof partyGameMode === 'string') {
+        window.syncOfflinePartyGameSwitcherButton?.(partyGameMode);
+      }
       await wait(selectionCloseDelay);
       window.ModeSelectionView.close(container);
       return;
@@ -319,6 +345,9 @@
     bind,
     completeOnlineSelection,
     getOnlineAction,
+    shouldSkipInitialSelection() {
+      return resumeOfflineMode;
+    },
     setActivePartyActionHandler(handler) {
       activePartyActionHandler =
         typeof handler === 'function' ? handler : null;

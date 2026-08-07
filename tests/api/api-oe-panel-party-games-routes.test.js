@@ -24,6 +24,7 @@ test('OE panel party game routes preserve their endpoint contract and order', ()
     ['patch', '/api/oe-panel/game-packs/:packKey'],
     ['delete', '/api/oe-panel/game-packs/:packKey'],
     ['post', '/api/oe-panel/game-packs/export'],
+    ['patch', '/api/oe-panel/game-modes/:gameType/version'],
     ['post', '/api/oe-panel/game-modes/export'],
     ['patch', '/api/oe-panel/game-rules/:ruleKey'],
     ['delete', '/api/oe-panel/game-rules/:ruleKey'],

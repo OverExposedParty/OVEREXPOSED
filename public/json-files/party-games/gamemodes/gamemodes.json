@@ -1,6 +1,7 @@
 [
   {
     "gamemodeID": "truth-or-dare",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Truth or Dare",
     "gamemodeCardImageFront": "/images/card-titles/front/truth-or-dare.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/truth-or-dare.svg",
@@ -13,6 +14,7 @@
   },
   {
     "gamemodeID": "paranoia",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Paranoia",
     "gamemodeCardImageFront": "/images/card-titles/front/paranoia.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/paranoia.svg",
@@ -25,6 +27,7 @@
   },
   {
     "gamemodeID": "never-have-i-ever",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Never Have I Ever",
     "gamemodeCardImageFront": "/images/card-titles/front/never-have-i-ever.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/never-have-i-ever.svg",
@@ -37,6 +40,7 @@
   },
   {
     "gamemodeID": "most-likely-to",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Most Likely To",
     "gamemodeCardImageFront": "/images/card-titles/front/most-likely-to.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/most-likely-to.svg",
@@ -49,6 +53,7 @@
   },
   {
     "gamemodeID": "imposter",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Imposter",
     "gamemodeCardImageFront": "/images/card-titles/front/imposter.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/imposter.svg",
@@ -61,6 +66,7 @@
   },
   {
     "gamemodeID": "would-you-rather",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Would You Rather",
     "gamemodeCardImageFront": "/images/card-titles/front/would-you-rather.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/would-you-rather.svg",
@@ -73,6 +79,7 @@
   },
   {
     "gamemodeID": "mafia",
+    "gamemodeVersion": "1.0.0",
     "gamemodeName": "Mafia",
     "gamemodeCardImageFront": "/images/card-titles/front/mafia.svg",
     "gamemodeCardImageBack": "/images/card-titles/back/mafia.svg",

@@ -133,7 +133,8 @@
 
       const title = document.createElement('span');
       title.className = 'system-notification-popup-title';
-      title.textContent = notification.title || 'Something needs your attention';
+      title.textContent =
+        notification.title || 'Something needs your attention';
 
       const message = document.createElement('span');
       message.className = 'system-notification-popup-message';
@@ -254,9 +255,12 @@
             : [];
         const unreadCount =
           payload?.data?.unreadCount ?? payload?.unreadCount ?? 0;
+        const unreadMenuCounts =
+          payload?.data?.unreadMenuCounts ?? payload?.unreadMenuCounts ?? null;
         window.OEAccountNotificationState?.setAccountNotifications({
           notifications: inboxNotifications,
-          unreadCount
+          unreadCount,
+          unreadMenuCounts
         });
         const friend = all.filter(
           (notification) => notification?.category === 'social'

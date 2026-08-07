@@ -34,8 +34,10 @@ function registerPartyGameRoutes({ app, models, runtime }) {
     createContinuePlayerAsGuestHandler,
     createPatchPlayerHandler,
     createDisconnectUserHandler,
+    createAuthTransitionHandlers,
     createPartyErrorHandler,
-    createPartyGetHandler
+    createPartyGetHandler,
+    createSwitchGameHandler
   } = runtime;
 
   const BETA_GAME_FEATURES = {
@@ -55,7 +57,12 @@ function registerPartyGameRoutes({ app, models, runtime }) {
   }
 
   function getRequestGamemode(req) {
-    return String(req?.body?.config?.gamemode || req?.body?.gamemode || '')
+    return String(
+      req?.body?.targetGamemode ||
+        req?.body?.config?.gamemode ||
+        req?.body?.gamemode ||
+        ''
+    )
       .trim()
       .toLowerCase();
   }
@@ -198,6 +205,7 @@ function registerPartyGameRoutes({ app, models, runtime }) {
   }
 
   app.use('/api/waiting-room', requireBetaWaitingRoomFeature);
+  app.use('/api/party-lobbies', requireBetaWaitingRoomFeature);
   app.use(
     '/api/party-game-imposter',
     requirePartyFeature('imposter', [
@@ -238,6 +246,7 @@ function registerPartyGameRoutes({ app, models, runtime }) {
     waitingRoomModel: null,
     logLabel: 'Waiting room'
   });
+  createSwitchGameHandler({ route: '/api/party-lobbies/switch-game' });
 
   const partyGameRoutes = [
     {
@@ -289,7 +298,8 @@ function registerPartyGameRoutes({ app, models, runtime }) {
         route: `/api/${route}`,
         model: partyGameModel,
         logLabel: partyGameLogLabel,
-        fields: partyGameFields
+        fields: partyGameFields,
+        allocateGameId: true
       });
 
       createDeleteHandler({
@@ -351,6 +361,13 @@ function registerPartyGameRoutes({ app, models, runtime }) {
 
       createDisconnectUserHandler({
         route: `/api/${route}/disconnect-user`,
+        mainModel: partyGameModel,
+        waitingRoomModel: waitingRoomSchema,
+        logLabel: partyGameLogLabel
+      });
+
+      createAuthTransitionHandlers({
+        route: `/api/${route}/auth-transition`,
         mainModel: partyGameModel,
         waitingRoomModel: waitingRoomSchema,
         logLabel: partyGameLogLabel

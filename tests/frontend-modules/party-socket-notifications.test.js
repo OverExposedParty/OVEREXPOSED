@@ -180,6 +180,28 @@ test('voluntary leave events trigger the host lobby sound for another player', (
   assert.equal(popups.length, 1);
 });
 
+test('signing-in events show the other player with their OE notification data', () => {
+  const { handlers, popups } = createPartySocketSandbox();
+  const notification = {
+    id: 'live:party_player_signing_in:PARTY-1:guest-player',
+    type: 'party_player_signing_in',
+    partyId: 'PARTY-1',
+    actorUsername: 'OE4534534',
+    actorOeIcon: '0001:0102:0203:0304'
+  };
+
+  handlers.get('user-authenticating')({
+    socketId: 'guest-socket',
+    computerId: 'guest-player',
+    notification
+  });
+
+  assert.deepEqual(popups[0], {
+    ...notification,
+    suppressIfRecent: true
+  });
+});
+
 test('gameplay pages ignore waiting-room projection updates after game over', async () => {
   const { handlers, sandbox } = createPartySocketSandbox();
   let statisticsUpdateCount = 0;

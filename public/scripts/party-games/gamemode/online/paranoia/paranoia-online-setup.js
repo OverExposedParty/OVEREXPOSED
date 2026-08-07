@@ -153,8 +153,8 @@ async function initialisePage() {
       { cacheBustKey: instructionsCacheBustKey }
     );
 
-    selectPunishmentTitle.textContent = "You've been selected";
-    selectPunishmentText.textContent = "Select a punishment to find out the question";
+    selectPunishmentTitle.textContent = "SELECT A PUNISHMENT";
+    selectPunishmentText.textContent = "Pick a forfeit to reveal the secret question.";
 
     const instructions = getUserInstructions(party);
     if (!gameRules["time-limit"]) {
@@ -215,7 +215,8 @@ async function SetPageSettings() {
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -227,7 +228,11 @@ async function SetPageSettings() {
   const config = getPartyConfig(currentPartyData);
   const deck = getPartyDeck(currentPartyData);
 
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  const questionsLoaded = await loadJSONFiles(
+    config.selectedPacks,
+    config.shuffleSeed
+  );
+  if (!questionsLoaded) return;
 
   const initialIndex = deck.currentCardIndex ?? currentPartyData.currentCardIndex ?? 0;
   selectedQuestionObj = getNextQuestion(initialIndex);

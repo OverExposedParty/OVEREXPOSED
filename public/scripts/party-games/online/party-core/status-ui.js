@@ -226,6 +226,28 @@ function ShowGameAlreadyStartedState() {
   document.title = `${titlePrefix} | GAME ALREADY STARTED`;
 }
 
+function ShowGameConfigurationErrorState() {
+  window.PartyChatReady?.then((partyChat) => {
+    partyChat?.setAvailable?.(false);
+  });
+  document.body.classList.add('party-missing-state');
+
+  const statusContainer = ensureOnlineStatusContainer({
+    id: 'game-configuration-error',
+    title: 'Game setup incomplete',
+    description:
+      'No question packs were available. The host needs to return to settings and start the game again.'
+  });
+
+  setActiveContainers();
+  showContainer(statusContainer);
+  const titlePrefix =
+    typeof formattedGamemode === 'string' && formattedGamemode.trim()
+      ? formattedGamemode.toUpperCase()
+      : 'PARTY GAME';
+  document.title = `${titlePrefix} | SETUP INCOMPLETE`;
+}
+
 function dispatchOnlinePageColours(primary, secondary) {
   if (!primary || !secondary) return;
 

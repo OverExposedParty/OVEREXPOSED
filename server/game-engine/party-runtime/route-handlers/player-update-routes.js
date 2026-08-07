@@ -21,7 +21,9 @@ function createPartyPlayerUpdateRoutes(context) {
     isDisconnectedPartyPlayer,
     announcePartyPlayerReconnected,
     repairPartyHostForParty,
-    attachAccountToPartyOwnerLease
+    attachAccountToPartyOwnerLease,
+    cancelAuthTransitionForPlayer,
+    hasAuthTransitionForPlayer
   } = context;
 
   function createPatchPlayerHandler({
@@ -269,13 +271,55 @@ function createPartyPlayerUpdateRoutes(context) {
                   partyCode: leaseLinkResult.partyId || null,
                   lobbyPath: leaseLinkResult.partyId
                     ? `/${leaseLinkResult.partyId}`
-                    : '/'
+                    : '/',
+                  ...(leaseLinkResult.gamemode
+                    ? { gamemode: leaseLinkResult.gamemode }
+                    : {}),
+                  ...(leaseLinkResult.apiRoute
+                    ? { apiRoute: leaseLinkResult.apiRoute }
+                    : {})
                 }
               };
             }
           }
 
+          const completesAuthTransition =
+            typeof hasAuthTransitionForPlayer === 'function' &&
+            hasAuthTransitionForPlayer(partyId, computerId);
+          const authTransitionPatch = completesAuthTransition
+            ? {
+                'players.$.state.participationStatus': 'active',
+                'players.$.state.reconnectDeadline': null,
+                'state.lastPinged': now
+              }
+            : null;
+
           if (alreadyLinked) {
+            if (authTransitionPatch) {
+              const [updatedMain, updatedWaitingRoom] = await Promise.all([
+                patchPlayerInPartyDocument(
+                  mainModel,
+                  partyId,
+                  computerId,
+                  authTransitionPatch
+                ),
+                patchPlayerInPartyDocument(
+                  waitingRoomModel,
+                  partyId,
+                  computerId,
+                  authTransitionPatch
+                )
+              ]);
+              if (updatedMain) {
+                cancelAuthTransitionForPlayer?.(partyId, computerId);
+              }
+              return {
+                updatedMain,
+                waitingRoom: updatedWaitingRoom,
+                linked: false,
+                alreadyLinked: true
+              };
+            }
             return {
               updatedMain: withoutGuestHashes(existingParty),
               waitingRoom: null,
@@ -291,7 +335,8 @@ function createPartyPlayerUpdateRoutes(context) {
             'players.$.identity.accountLinkedAt': now,
             'players.$.identity.accountLinkSource': 'guest_claim',
             'players.$.identity.guestIdHash': null,
-            'state.lastPinged': now
+            'state.lastPinged': now,
+            ...(authTransitionPatch || {})
           };
 
           const [updatedMain, updatedWaitingRoom] = await Promise.all([
@@ -308,6 +353,10 @@ function createPartyPlayerUpdateRoutes(context) {
               linkPatch
             )
           ]);
+
+          if (completesAuthTransition && updatedMain) {
+            cancelAuthTransitionForPlayer?.(partyId, computerId);
+          }
 
           return {
             updatedMain,

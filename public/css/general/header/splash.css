@@ -68,7 +68,3 @@
   color: var(--splash-screen-status-colour, var(--primarypagecolour));
   z-index: 10000;
 }
-
-.splash-screen-container.waiting-room p {
-  color: #66ccff;
-}

@@ -527,6 +527,11 @@
 
   async function createModeSelection() {
     if (typeof partyCode !== 'undefined' && partyCode) return null;
+    if (
+      window.PartyPlayModeController?.shouldSkipInitialSelection?.() === true
+    ) {
+      return null;
+    }
 
     const existingContainer = document.getElementById('mode-selection-container');
     if (existingContainer) return existingContainer;

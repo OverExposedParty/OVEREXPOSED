@@ -70,6 +70,38 @@ test('online instructions facade owns shared rule state', () => {
   assert.match(facade, /const resultTimerDuration = 5000;/);
 });
 
+test('shared question resets are submitted only by the authoritative host', async () => {
+  let actionCalls = 0;
+  let isHost = false;
+  const context = vm.createContext({
+    currentPartyData: {},
+    isAuthoritativePartyHost: () => isHost,
+    performOnlinePartyAction: async () => {
+      actionCalls += 1;
+      return { partyId: 'ABC-123' };
+    },
+    window: {}
+  });
+  const actionsPath = path.join(
+    scriptsDirectory,
+    'party-games-online-instructions/actions.js'
+  );
+
+  vm.runInContext(fs.readFileSync(actionsPath, 'utf8'), context, {
+    filename: actionsPath
+  });
+
+  assert.equal(await context.ResetQuestion({}), null);
+  assert.equal(actionCalls, 0);
+
+  isHost = true;
+  const updatedParty = await context.ResetQuestion({});
+
+  assert.equal(actionCalls, 1);
+  assert.equal(updatedParty.partyId, 'ABC-123');
+  assert.equal(context.currentPartyData.partyId, 'ABC-123');
+});
+
 test('waiting players hear only new confirmations from other players', async () => {
   const playedSounds = [];
   const icons = [

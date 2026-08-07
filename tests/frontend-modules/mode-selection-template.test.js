@@ -62,10 +62,12 @@ svgSources.set(
 
 function createModeSelectionDom({
   onlineResult = true,
-  toggleOnlineMode = null
+  toggleOnlineMode = null,
+  url = 'https://overexposed.app/truth-or-dare/settings'
 } = {}) {
   const dom = new JSDOM('<!doctype html><body></body>', {
-    runScripts: 'outside-only'
+    runScripts: 'outside-only',
+    url
   });
 
   dom.window.eval(`
@@ -82,6 +84,10 @@ function createModeSelectionDom({
     var helpContainer = null;
     var accountIconButton = null;
     var accountContainer = null;
+    var partyGameMode = 'truth-or-dare';
+    var partyGamesInformation = {
+      'truth-or-dare': { forceOnline: false }
+    };
     function playSoundEffect() {}
   `);
 
@@ -96,6 +102,10 @@ function createModeSelectionDom({
       return toggleOnlineMode(enabled, options);
     }
     return onlineResult;
+  };
+  dom.window.offlineSwitcherModes = [];
+  dom.window.syncOfflinePartyGameSwitcherButton = (gamemode) => {
+    dom.window.offlineSwitcherModes.push(gamemode);
   };
 
   dom.window.eval(utilsSource);
@@ -328,6 +338,38 @@ test('mode selection ignores backdrop dismissal and closes from either button', 
       false
     );
   }
+});
+
+test('choosing offline enables the offline game switcher', async () => {
+  const dom = createModeSelectionDom();
+  const container = await dom.window.initializeModeSelection();
+
+  container
+    .querySelector('.mode-selection-button--offline')
+    .dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));
+  await new Promise((resolve) => dom.window.setTimeout(resolve, 240));
+
+  assert.deepEqual(Array.from(dom.window.offlineSwitcherModes), [
+    'truth-or-dare'
+  ]);
+});
+
+test('offline switch navigation skips mode selection and consumes its URL handoff', async () => {
+  const dom = createModeSelectionDom({
+    url: 'https://overexposed.app/truth-or-dare/settings?playMode=offline'
+  });
+
+  const container = await dom.window.initializeModeSelection();
+
+  assert.equal(container, null);
+  assert.equal(
+    dom.window.document.querySelector('.mode-selection-container'),
+    null
+  );
+  assert.equal(dom.window.location.search, '');
+  assert.deepEqual(Array.from(dom.window.offlineSwitcherModes), [
+    'truth-or-dare'
+  ]);
 });
 
 test('failed online creation leaves the mode selection open and reusable', async () => {

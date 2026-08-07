@@ -15,6 +15,8 @@ let resetGamemodeInstruction = "DISPLAY_PRIVATE_CARD";
 async function SetPageSettings() {
   if (!(await registerRoundLateJoinIfRequested())) return;
 
+  selectPunishmentText.textContent = "You've been caught. Pick your forfeit.";
+
   buttonChoosePlayer.addEventListener('click', async () => {
     await setUserBool(deviceId, null, true);
   });
@@ -125,7 +127,8 @@ async function SetPageSettings() {
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -137,7 +140,11 @@ async function SetPageSettings() {
   const config = currentPartyData.config || {};
   const deck = currentPartyData.deck || {};
 
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  const questionsLoaded = await loadJSONFiles(
+    config.selectedPacks,
+    config.shuffleSeed
+  );
+  if (!questionsLoaded) return;
 
   const currentCardIndex = deck.currentCardIndex ?? 0;
   selectedQuestionObj = getNextQuestion(currentCardIndex);

@@ -278,6 +278,8 @@ async function FetchInstructions() {
     SetPartyGameStatisticsGameOver();
   }
   else if (instructions.includes("RESET_QUESTION")) {
+    if (!isAuthoritativePartyHost()) return;
+
     if (instructions.includes("TIMER_EXPIRED:2")) {
       await ResetTruthOrDareQuestion({ force: true, nextPlayer: true, incrementScore: 0, byPassHost: false });
     }

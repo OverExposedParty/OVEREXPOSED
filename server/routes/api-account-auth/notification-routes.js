@@ -25,6 +25,7 @@ function registerAccountNotificationRoutes(context) {
     getAccountNotifications,
     getCurrentAccount,
     countUnreadNotifications,
+    countUnreadNotificationsByMenu,
     populateFriendRelationships,
     importLegacyNotifications,
     persistNotificationsDeliveredAtomically,
@@ -44,7 +45,14 @@ function registerAccountNotificationRoutes(context) {
             return {
               notifications: [],
               inboxNotifications: [],
-              unreadCount: 0
+              unreadCount: 0,
+              unreadMenuCounts: {
+                notifications: 0,
+                friends: 0,
+                achievements: 0,
+                profile: 0,
+                statistics: 0
+              }
             };
           }
 
@@ -105,7 +113,8 @@ function registerAccountNotificationRoutes(context) {
             inboxNotifications: serializeInboxNotifications(account, {
               limit: 50
             }),
-            unreadCount: countUnreadNotifications(account)
+            unreadCount: countUnreadNotifications(account),
+            unreadMenuCounts: countUnreadNotificationsByMenu(account)
           };
         }
       });
@@ -154,9 +163,11 @@ function registerAccountNotificationRoutes(context) {
               notificationIds
             });
       const refreshedAccount = await getCurrentAccount(req);
+      const currentAccount = refreshedAccount || account;
       res.apiSuccess({
         updated,
-        unreadCount: countUnreadNotifications(refreshedAccount || account)
+        unreadCount: countUnreadNotifications(currentAccount),
+        unreadMenuCounts: countUnreadNotificationsByMenu(currentAccount)
       });
     } catch (err) {
       console.error(`[REQ ${req.id}] Failed to update notifications:`, err);

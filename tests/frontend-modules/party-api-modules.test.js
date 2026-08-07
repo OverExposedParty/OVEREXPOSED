@@ -77,12 +77,65 @@ test('party API facade preserves the shared browser helpers', () => {
     'UpdateUserPartyData',
     'addUserToParty',
     'performOnlinePartyAction',
+    'ReplayOnlinePartyGame',
     'DeleteParty',
     'linkCurrentPartyPlayerToAccount',
     'continueCurrentPartyPlayerAsGuest'
   ].forEach((functionName) => {
     assert.equal(typeof sandbox[functionName], 'function', functionName);
   });
+});
+
+test('replay action sends the finished game id and adopts the new session', async () => {
+  const requests = [];
+  const updatedParty = {
+    partyId: 'ABC-123',
+    session: { gameId: `MLT-${'B'.repeat(32)}` },
+    config: { gamemode: 'most-likely-to' },
+    state: { isPlaying: true }
+  };
+  const context = {
+    console: { error() {}, log() {}, warn() {} },
+    currentPartyData: {
+      partyId: 'ABC-123',
+      session: { gameId: `MLT-${'A'.repeat(32)}` }
+    },
+    deviceId: 'host-device',
+    fetch: async (url, options) => {
+      requests.push({ url, options });
+      return {
+        ok: true,
+        async json() {
+          return { updated: updatedParty };
+        }
+      };
+    },
+    isPlaying: false,
+    partyCode: 'ABC-123',
+    sessionPartyType: 'party-game-most-likely-to',
+    socket: { id: 'socket-one' },
+    window: null,
+    PartyApiPartyData: {
+      requireOnlinePartyId(value) {
+        return value;
+      }
+    }
+  };
+  context.window = context;
+  const sandbox = vm.createContext(context);
+  vm.runInContext(
+    fs.readFileSync(path.join(onlineDirectory, 'party-api/actions.js'), 'utf8'),
+    sandbox,
+    { filename: 'party-api/actions.js' }
+  );
+
+  const result = await sandbox.PartyApiActions.ReplayOnlinePartyGame();
+  const requestBody = JSON.parse(requests[0].options.body);
+
+  assert.equal(requestBody.action, 'replay-game');
+  assert.equal(requestBody.payload.expectedGameId, `MLT-${'A'.repeat(32)}`);
+  assert.equal(result.session.gameId, `MLT-${'B'.repeat(32)}`);
+  assert.equal(sandbox.currentPartyData.session.gameId, result.session.gameId);
 });
 
 test('all-users-ready check excludes the host by identity instead of array position', async () => {
@@ -180,6 +233,53 @@ test('ready updates report whether the player patch succeeded', async () => {
     }),
     false
   );
+});
+
+test('existing-player socket refresh explicitly completes an auth transition', async () => {
+  const lifecycle = [];
+  const context = {
+    console: { error() {}, log() {}, warn() {} },
+    currentPartyData: null,
+    fetch: async () => ({
+      ok: true,
+      status: 200,
+      json: async () => {
+        lifecycle.push('player-patched');
+        return { updated: { partyId: 'ABC-123' } };
+      }
+    }),
+    PartyApiActions: { performOnlinePartyAction() {} },
+    PartyApiPartyData: {
+      getExistingPartyData() {},
+      requireOnlinePartyId(value) {
+        return value;
+      }
+    },
+    PartyAuthTransition: {
+      async completeCurrentPartyAuthTransition() {
+        lifecycle.push('transition-completed');
+        return true;
+      }
+    },
+    sessionPartyType: 'party-game-truth-or-dare',
+    window: null
+  };
+  context.window = context;
+
+  const sandbox = vm.createContext(context);
+  vm.runInContext(
+    fs.readFileSync(path.join(onlineDirectory, 'party-api/players.js'), 'utf8'),
+    sandbox,
+    { filename: 'party-api/players.js' }
+  );
+
+  await sandbox.PartyApiPlayers.UpdateUserPartyData({
+    partyId: 'ABC-123',
+    computerId: 'guest-device',
+    newUserSocketId: 'returning-socket'
+  });
+
+  assert.deepEqual(lifecycle, ['player-patched', 'transition-completed']);
 });
 
 test('account logout continues the active lobby player with the guest profile', async () => {
@@ -469,6 +569,153 @@ test('account linking shows an active-party conflict even in silent mode', async
   assert.equal(shownConflicts.length, 4);
 });
 
+test('account linking reconciles an already signed-in player when binding', async () => {
+  const requests = [];
+  const context = {
+    console: { error() {}, log() {}, warn() {} },
+    currentPartyData: null,
+    deviceId: 'guest-device',
+    fetch: async (url, options) => {
+      requests.push({ url, options });
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true, linked: true })
+      };
+    },
+    localStorage: {
+      getItem(key) {
+        return key === 'oe-account'
+          ? JSON.stringify({ id: 'account-one' })
+          : null;
+      }
+    },
+    partyCode: 'ABC-123',
+    sessionPartyType: 'party-game-truth-or-dare',
+    window: null
+  };
+  context.window = context;
+  context.addEventListener = () => {};
+  const sandbox = vm.createContext(context);
+  ['party-api/party-data.js', 'party-api/account-link.js'].forEach(
+    (scriptPath) => {
+      vm.runInContext(
+        fs.readFileSync(path.join(onlineDirectory, scriptPath), 'utf8'),
+        sandbox,
+        { filename: scriptPath }
+      );
+    }
+  );
+
+  sandbox.PartyApiAccountLink.bindPartyAccountLinkListener();
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(requests.length, 1);
+  assert.equal(
+    requests[0].url,
+    '/api/party-game-truth-or-dare/link-player-account?partyCode=ABC-123'
+  );
+  assert.deepEqual(JSON.parse(requests[0].options.body), {
+    partyId: 'ABC-123',
+    computerId: 'guest-device'
+  });
+});
+
+test('account-link replacement ends the old party and retries the current link', async () => {
+  const requests = [];
+  const endedParties = [];
+  let conflictOptions = null;
+  const context = {
+    console: { error() {}, log() {}, warn() {} },
+    currentPartyData: {
+      players: [{ identity: { computerId: 'guest-device' } }]
+    },
+    deviceId: 'guest-device',
+    fetch: async (url) => {
+      requests.push(url);
+      if (requests.length === 1) {
+        return {
+          ok: false,
+          status: 409,
+          json: async () => ({
+            success: false,
+            error: {
+              code: 'party_owner_active_party_exists',
+              details: {
+                partyCode: 'OLD-123',
+                gamemode: 'truth-or-dare',
+                apiRoute: 'party-game-truth-or-dare'
+              }
+            }
+          })
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          success: true,
+          linked: true,
+          updated: { players: [{ identity: { accountId: 'account-one' } }] }
+        })
+      };
+    },
+    localStorage: {
+      getItem: () => JSON.stringify({ id: 'account-one' })
+    },
+    partyCode: 'NEW-456',
+    sessionPartyType: 'party-game-truth-or-dare',
+    window: null
+  };
+  context.window = context;
+  context.addEventListener = () => {};
+  context.ActivePartyConflictDialog = {
+    async endOwnedParty(party) {
+      endedParties.push(party);
+    },
+    openFromError(_value, options) {
+      conflictOptions = options;
+      return true;
+    }
+  };
+  const sandbox = vm.createContext(context);
+  ['party-api/party-data.js', 'party-api/account-link.js'].forEach(
+    (scriptPath) => {
+      vm.runInContext(
+        fs.readFileSync(path.join(onlineDirectory, scriptPath), 'utf8'),
+        sandbox,
+        { filename: scriptPath }
+      );
+    }
+  );
+
+  const firstResult =
+    await sandbox.PartyApiAccountLink.linkCurrentPartyPlayerToAccount();
+  assert.equal(firstResult, null);
+  assert.equal(typeof conflictOptions.onContinue, 'function');
+
+  const linked = await conflictOptions.onContinue({
+    partyCode: 'OLD-123',
+    gamemode: 'Truth Or Dare',
+    apiRoute: 'party-game-truth-or-dare'
+  });
+
+  assert.deepEqual(endedParties, [
+    {
+      partyCode: 'OLD-123',
+      gamemode: 'Truth Or Dare',
+      apiRoute: 'party-game-truth-or-dare'
+    }
+  ]);
+  assert.equal(requests.length, 2);
+  assert.match(requests[1], /NEW-456/);
+  assert.equal(linked.linked, true);
+  assert.equal(
+    context.currentPartyData.players[0].identity.accountId,
+    'account-one'
+  );
+});
+
 test('party-code reservation preserves active-party conflict metadata', async () => {
   const requests = [];
   const conflictDetails = {
@@ -567,4 +814,39 @@ test('dual-endpoint posts preserve structured API error metadata', async () => {
   );
 
   assert.deepEqual(requests, ['/api/party-game-truth-or-dare']);
+});
+
+test('dual-endpoint posts mirror the server-assigned session to the waiting room', async () => {
+  const requests = [];
+  const serverSession = {
+    gameId: 'TOD-0123456789ABCDEFFEDCBA9876543210',
+    createdAt: '2026-08-06T12:00:00.000Z'
+  };
+  const context = vm.createContext({
+    console: { error() {}, warn() {} },
+    fetch: async (url, options) => {
+      requests.push({ url, body: JSON.parse(options.body) });
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ updated: { session: serverSession } })
+      };
+    }
+  });
+  vm.runInContext(fs.readFileSync(partySyncPath, 'utf8'), context, {
+    filename: 'party-core/sync.js'
+  });
+
+  await context.postToBothEndpoints(
+    {
+      partyId: 'NEW-456',
+      session: { createdAt: 'client-time' }
+    },
+    '/api/party-game-truth-or-dare',
+    '/api/waiting-room'
+  );
+
+  assert.equal(requests.length, 2);
+  assert.deepEqual(requests[0].body.session, { createdAt: 'client-time' });
+  assert.deepEqual(requests[1].body.session, serverSession);
 });

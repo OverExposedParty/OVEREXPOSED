@@ -9,10 +9,37 @@
 
   function getBodyguardMount() {
     return (
-      document.querySelector(
-        '.protected-access-page #splash-screen-container.protected-splash'
-      ) || document.body
+      document.querySelector('.protected-access-page .protected-page') ||
+      document.body
     );
+  }
+
+  function revealBodyguardAfterSplash(bodyguard) {
+    const splashScreen = document.getElementById('splash-screen-container');
+    let fallbackTimer;
+
+    const revealBodyguard = () => {
+      if (fallbackTimer) window.clearTimeout(fallbackTimer);
+      bodyguard.classList.add('is-revealing');
+    };
+
+    if (!splashScreen || splashScreen.classList.contains('down')) {
+      revealBodyguard();
+      return;
+    }
+
+    const handleSplashExit = (event) => {
+      if (event.target !== splashScreen || event.propertyName !== 'transform') {
+        return;
+      }
+      splashScreen.removeEventListener('transitionend', handleSplashExit);
+      splashScreen.removeEventListener('transitioncancel', handleSplashExit);
+      revealBodyguard();
+    };
+
+    splashScreen.addEventListener('transitionend', handleSplashExit);
+    splashScreen.addEventListener('transitioncancel', handleSplashExit);
+    fallbackTimer = window.setTimeout(revealBodyguard, 1500);
   }
 
   function createBodyguardShell() {
@@ -73,10 +100,13 @@
 
     const { bodyguard, face } = createBodyguardShell();
     renderBodyguardOneFace(face);
+    revealBodyguardAfterSplash(bodyguard);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBodyguard, { once: true });
+    document.addEventListener('DOMContentLoaded', initBodyguard, {
+      once: true
+    });
   } else {
     initBodyguard();
   }

@@ -65,6 +65,7 @@
       );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Failed to join party');
+      await window.PartyAuthTransition?.completeCurrentPartyAuthTransition?.();
       return data;
     } catch (err) {
       console.error('Append failed:', err);
@@ -138,6 +139,9 @@
         throw error;
       }
       if (data.updated) currentPartyData = data.updated;
+      if (newUserSocketId) {
+        await window.PartyAuthTransition?.completeCurrentPartyAuthTransition?.();
+      }
       return data;
     } catch (err) {
       console.error('Update by computerId failed:', err);

@@ -718,6 +718,7 @@ test('online start countdown plays each cue, cancels on click, and starts once',
   for (let tick = 0; tick < 5; tick += 1) {
     await runNextTimer();
   }
+  await new Promise((resolve) => setImmediate(resolve));
 
   assert.deepEqual(playedSounds.slice(-5), [
     'gamemodeSettingsCountdownFive',
@@ -729,6 +730,128 @@ test('online start countdown plays each cue, cancels on click, and starts once',
   assert.equal(window.isGamemodeStartCountdownActive(), false);
   assert.equal(window.startGameButton.textContent, 'Start Game');
   assert.equal(onlineStarts, 1);
+});
+
+test('countdown saves settings, waits at zero, and cancellation prevents starting', async () => {
+  const window = createTestDOM();
+  const timers = new Map();
+  let nextTimerId = 1;
+  let settingsSaves = 0;
+  let onlineStarts = 0;
+  let finishSettingsSave;
+
+  window.setTimeout = (callback) => {
+    const timerId = nextTimerId++;
+    timers.set(timerId, callback);
+    return timerId;
+  };
+  window.clearTimeout = (timerId) => timers.delete(timerId);
+  window.partyCode = 'PARTY-1';
+  window.allUsersReady = true;
+  window.UpdateSettings = () => {
+    settingsSaves += 1;
+    return new Promise((resolve) => {
+      finishSettingsSave = resolve;
+    });
+  };
+  window.startOnlinePartyGame = async () => {
+    onlineStarts += 1;
+  };
+
+  const packs = window.document.createElement('div');
+  packs.className = 'packs-content-container';
+  const packControl = window.document.createElement('button');
+  packs.appendChild(packControl);
+  window.placeholderGamemodeSettings.appendChild(packs);
+
+  const runNextTimer = async () => {
+    const nextTimer = timers.entries().next().value;
+    assert.ok(nextTimer, 'expected a pending countdown timer');
+    const [timerId, callback] = nextTimer;
+    timers.delete(timerId);
+    callback();
+    await Promise.resolve();
+    await Promise.resolve();
+  };
+
+  loadHelperScript('gamemode-settings-start.js', window);
+  window.bindGamemodeSettingsActions();
+
+  window.startGameButton.click();
+  await Promise.resolve();
+  assert.equal(settingsSaves, 1);
+  assert.equal(packControl.disabled, true);
+
+  for (let tick = 0; tick < 5; tick += 1) {
+    await runNextTimer();
+  }
+
+  assert.equal(window.startGameButton.textContent, 'SAVING SETTINGS…');
+  assert.equal(window.isGamemodeStartCountdownActive(), true);
+  assert.equal(onlineStarts, 0);
+
+  window.startGameButton.click();
+  finishSettingsSave();
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(window.isGamemodeStartCountdownActive(), false);
+  assert.equal(window.startGameButton.textContent, 'Start Game');
+  assert.equal(packControl.disabled, false);
+  assert.equal(onlineStarts, 0);
+});
+
+test('online settings saves are serialized with their own UI snapshots', async () => {
+  const window = createTestDOM();
+  const savedPackSelections = [];
+  let finishFirstSave;
+  let notifyFirstSaveStarted;
+  const firstSaveStarted = new Promise((resolve) => {
+    notifyFirstSaveStarted = resolve;
+  });
+
+  const packControl = window.document.createElement('button');
+  packControl.className = 'active';
+  packControl.dataset.key = 'pack-one';
+  window.packButtons = [packControl];
+  window.settingsButtons = [];
+  window.roleButtons = [];
+  window.partyCode = 'PARTY-1';
+  window.partyGameMode = 'truth-or-dare';
+  window.updateStartGameButton = () => {};
+  window.getExistingPartyData = async () => [
+    {
+      config: {
+        gamemode: 'truth-or-dare',
+        selectedPacks: [],
+        shuffleSeed: 42
+      },
+      session: { createdAt: '2026-08-06T12:00:00.000Z' },
+      players: []
+    }
+  ];
+  window.updateOnlineParty = async ({ config }) => {
+    savedPackSelections.push([...config.selectedPacks]);
+    if (savedPackSelections.length === 1) {
+      notifyFirstSaveStarted();
+      await new Promise((resolve) => {
+        finishFirstSave = resolve;
+      });
+    }
+  };
+
+  loadHelperScript('gamemode-settings-sync.js', window);
+
+  const firstSave = window.UpdateSettings({ throwOnError: true });
+  packControl.dataset.key = 'pack-two';
+  const secondSave = window.UpdateSettings({ throwOnError: true });
+
+  await firstSaveStarted;
+  assert.deepEqual(savedPackSelections, [['pack-one']]);
+
+  finishFirstSave();
+  await Promise.all([firstSave, secondSave]);
+
+  assert.deepEqual(savedPackSelections, [['pack-one'], ['pack-two']]);
 });
 
 test('NSFW countdown uses its warning button and outside click cancels it', () => {

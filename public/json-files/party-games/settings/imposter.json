@@ -31,7 +31,7 @@
       "button-initial-value": 3,
       "button-increment-value": 1,
       "button-minimum-value": 3,
-      "button-maximum-value": 8
+      "button-maximum-value": 16
     },
     {
       "settings-name": "rounds",

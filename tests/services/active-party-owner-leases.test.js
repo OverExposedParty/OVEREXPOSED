@@ -456,7 +456,8 @@ test('account attachment reports the existing account lease on a unique conflict
     attached: false,
     conflict: true,
     partyId: 'AAA-111',
-    gamemode: 'truth-or-dare'
+    gamemode: 'truth-or-dare',
+    apiRoute: 'party-game-truth-or-dare'
   });
   const guestLease = model
     .snapshot()
@@ -499,7 +500,8 @@ test('account attachment re-reads a lease after losing its compare-and-swap', as
     attached: false,
     conflict: true,
     partyId: 'AAA-111',
-    gamemode: 'truth-or-dare'
+    gamemode: 'truth-or-dare',
+    apiRoute: 'party-game-truth-or-dare'
   });
   assert.equal(model.snapshot()[0].accountId, ACCOUNT_TWO);
 });

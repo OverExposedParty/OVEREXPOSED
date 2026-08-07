@@ -180,7 +180,8 @@ async function SetPageSettings() {
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -190,10 +191,11 @@ async function SetPageSettings() {
   currentPartyData = initialPartyData;
 
   // NEW SCHEMA: selectedPacks + shuffleSeed in config
-  await loadJSONFiles(
+  const questionsLoaded = await loadJSONFiles(
     currentPartyData.config.selectedPacks,
     currentPartyData.config.shuffleSeed
   );
+  if (!questionsLoaded) return;
   debugLog("Loaded JSON files");
   await initialisePage();
 }

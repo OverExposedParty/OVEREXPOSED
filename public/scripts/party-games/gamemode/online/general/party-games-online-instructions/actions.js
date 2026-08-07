@@ -182,6 +182,8 @@ async function ResetQuestion({
   playerIndex = null,
   nextPlayer = false
 }) {
+  if (!isAuthoritativePartyHost()) return null;
+
   const updatedParty = await performOnlinePartyAction({
     action: 'reset-question',
     payload: {
@@ -203,6 +205,8 @@ async function ResetQuestion({
       icons[i]?.classList.remove('no');
     }
   }
+
+  return updatedParty;
 }
 
 async function PartyRestart() {

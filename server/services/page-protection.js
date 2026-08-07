@@ -137,6 +137,14 @@ function hasPasswordAccess(req, protection) {
   );
 }
 
+function getRequiredFeatureAccess(feature) {
+  const accessLevel = getFeatureAccessLevel(feature);
+  if (accessLevel === CONTENT_ACCESS_LEVELS.BETA) return 'beta';
+  if (accessLevel === CONTENT_ACCESS_LEVELS.OWNER) return 'owner';
+  if (accessLevel === CONTENT_ACCESS_LEVELS.STANDARD) return 'account';
+  return 'restricted';
+}
+
 function getPartyCurrentHostAccountId(party) {
   const hostComputerId = party?.state?.hostComputerId;
   if (!hostComputerId || !Array.isArray(party?.players)) return null;
@@ -266,7 +274,11 @@ async function canAccessProtectedPage(
           continue;
         }
 
-        return { allowed: false, reason: 'account_required' };
+        return {
+          allowed: false,
+          reason: 'account_required',
+          requiredAccess: 'owner'
+        };
       }
 
       for (const rule of featureRules) {
@@ -280,11 +292,26 @@ async function canAccessProtectedPage(
           continue;
         }
 
-        return { allowed: false, reason: 'account_required' };
+        return {
+          allowed: false,
+          reason: 'account_required',
+          requiredAccess: getRequiredFeatureAccess(rule.feature)
+        };
       }
 
-      if (explicitAccountRules.length || accountRules.length) {
-        return { allowed: false, reason: 'account_required' };
+      if (explicitAccountRules.length) {
+        return {
+          allowed: false,
+          reason: 'account_required',
+          requiredAccess: 'account'
+        };
+      }
+      if (accountRules.length) {
+        return {
+          allowed: false,
+          reason: 'account_required',
+          requiredAccess: 'admin'
+        };
       }
     }
     if (accountRules.length && !canAccessAdminPages(account)) {
@@ -319,6 +346,7 @@ async function canAccessProtectedPage(
           getFeatureAccessLevel(rule.feature) === CONTENT_ACCESS_LEVELS.OWNER
             ? 'owner_required'
             : 'feature_required',
+        requiredAccess: getRequiredFeatureAccess(rule.feature),
         feature: rule.feature || null
       };
     }

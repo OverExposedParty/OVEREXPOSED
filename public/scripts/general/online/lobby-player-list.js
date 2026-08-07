@@ -74,6 +74,8 @@
     ).toLowerCase();
     const hasDisconnectedSocket = socketId === 'DISCONNECTED';
     const hasLiveSocket = Boolean(socketId) && !hasDisconnectedSocket;
+    const isReconnecting =
+      player.isReconnecting === true || participationStatus === 'reconnecting';
 
     return {
       userId:
@@ -100,8 +102,10 @@
       ),
       isDisconnected:
         player.isDisconnected === true ||
+        isReconnecting ||
         hasDisconnectedSocket ||
-        (!hasLiveSocket && participationStatus === 'disconnected')
+        (!hasLiveSocket && participationStatus === 'disconnected'),
+      isReconnecting
     };
   }
 
@@ -124,9 +128,17 @@
     return icon;
   }
 
-  function setTileStatus(tile, { isReady = false, isDisconnected = false } = {}) {
+  function setTileStatus(
+    tile,
+    {
+      isReady = false,
+      isDisconnected = false,
+      isReconnecting = false
+    } = {}
+  ) {
     tile.dataset.ready = String(Boolean(isReady));
     tile.dataset.disconnected = String(Boolean(isDisconnected));
+    tile.dataset.signingIn = String(Boolean(isReconnecting));
     const checkmark = tile.querySelector('.checkmark');
     if (checkmark) {
       checkmark.replaceChildren();
@@ -136,7 +148,13 @@
     checkmark?.classList.toggle('disconnected', Boolean(isDisconnected));
     checkmark?.setAttribute(
       'aria-label',
-      isDisconnected ? 'Disconnected' : isReady ? 'Ready' : 'Not ready'
+      isReconnecting
+        ? 'Signing in'
+        : isDisconnected
+          ? 'Disconnected'
+          : isReady
+            ? 'Ready'
+            : 'Not ready'
     );
   }
 

@@ -127,13 +127,34 @@ test('room panel serializers include visual player and configuration snapshots',
     gameId: 'GAME-ONE',
     gamemode: 'mafia',
     archivedAt: new Date('2026-08-05T12:30:00.000Z'),
-    session: {},
+    session: {
+      gameModeRelease: {
+        version: '2.1.0',
+        releaseId: 'mafia@2.1.0+release',
+        runtimeBuild: 'build-created',
+        contentHash: 'content-hash',
+        capturedAt: new Date('2026-08-05T11:55:00.000Z')
+      }
+    },
     config: {
       selectedPacks: ['classic-mafia'],
       gameRules: { discussionTimer: 60 },
       roleCounts: { mafia: 1 }
     },
     state: {},
+    errors: [
+      {
+        message: 'Vote failed',
+        runtimeBuild: 'build-error',
+        gameModeRelease: {
+          version: '2.1.0',
+          releaseId: 'mafia@2.1.0+release',
+          runtimeBuild: 'build-created',
+          contentHash: 'content-hash',
+          capturedAt: new Date('2026-08-05T11:55:00.000Z')
+        }
+      }
+    ],
     players: [
       { username: 'Legacy Player', isHost: true },
       {
@@ -148,6 +169,10 @@ test('room panel serializers include visual player and configuration snapshots',
   assert.deepEqual(archivedRoom.roomVisual.selectedPacks, ['classic-mafia']);
   assert.equal(archivedRoom.roomVisual.gameRules.discussionTimer, 60);
   assert.equal(archivedRoom.roomVisual.roleCounts.mafia, 1);
+  assert.equal(archivedRoom.gameModeVersion, '2.1.0');
+  assert.equal(archivedRoom.releaseId, 'mafia@2.1.0+release');
+  assert.equal(archivedRoom.errors[0].buildChanged, true);
+  assert.equal(archivedRoom.errors[0].runtimeBuild, 'build-error');
   assert.deepEqual(
     archivedRoom.roomVisual.players.map((player) => player.userIcon),
     ['0000:0100:0200:0300', '1000:1100:1200:1300']

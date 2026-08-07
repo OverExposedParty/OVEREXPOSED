@@ -38,7 +38,7 @@ const partyGamesInformation = {
   "most-likely-to": {
     partyType: "party-game-most-likely-to",
     playerCountRestrictions: {
-      minPlayers: 3,
+      minPlayers: 2,
       maxPlayers: 20
     },
     gamemodeColours: {

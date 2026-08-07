@@ -72,6 +72,172 @@ test('account container feature scripts share the ordered browser context', () =
   dom.window.close();
 });
 
+test('account action menu renders live destination notification badges', () => {
+  const dom = new JSDOM(
+    '<!doctype html><body><section class="account-button-container"></section></body>',
+    {
+      runScripts: 'outside-only',
+      url: 'https://overexposed.app/'
+    }
+  );
+  const context = dom.getInternalVMContext();
+  context.window.OEAccountNotificationState = {
+    getSnapshot() {
+      return {
+        menuCounts: {
+          notifications: 12,
+          friends: 2,
+          achievements: 1,
+          profile: 0,
+          statistics: 0
+        }
+      };
+    }
+  };
+  const source = fs.readFileSync(
+    path.join(
+      __dirname,
+      '../../public/scripts/general/account-container/account-container-core.js'
+    ),
+    'utf8'
+  );
+  new vm.Script(source).runInContext(context);
+  vm.runInContext('renderAccountActionMenu()', context);
+
+  const notificationsButton = dom.window.document.getElementById(
+    'account-notifications-button'
+  );
+  const friendsButton = dom.window.document.getElementById(
+    'account-friends-button'
+  );
+  const profileBadge = dom.window.document.querySelector(
+    '#account-profile-button .account-action-notification-badge'
+  );
+  assert.equal(
+    notificationsButton.querySelector('.account-action-notification-badge')
+      .textContent,
+    '9+'
+  );
+  assert.equal(
+    notificationsButton.getAttribute('aria-label'),
+    'NOTIFICATIONS, 12 unread notifications'
+  );
+  assert.equal(
+    friendsButton.querySelector('.account-action-notification-badge')
+      .textContent,
+    '2'
+  );
+  assert.equal(profileBadge.hidden, true);
+
+  vm.runInContext(
+    `updateAccountActionNotificationBadges({
+      menuCounts: {
+        notifications: 1,
+        friends: 0,
+        achievements: 0,
+        profile: 0,
+        statistics: 0
+      }
+    })`,
+    context
+  );
+  assert.equal(
+    friendsButton.querySelector('.account-action-notification-badge').hidden,
+    true
+  );
+  assert.equal(friendsButton.getAttribute('aria-label'), 'FRIENDS');
+  dom.window.close();
+});
+
+test('opening an account destination marks only its routed notifications read', async () => {
+  const dom = new JSDOM(
+    '<!doctype html><body><div id="account-expanded-content"></div></body>',
+    {
+      runScripts: 'outside-only',
+      url: 'https://overexposed.app/'
+    }
+  );
+  const context = dom.getInternalVMContext();
+  const requests = [];
+  context.setAccountFooterHint = () => {};
+  context.fetch = async (url, options = {}) => {
+    requests.push({ url, options });
+    return {
+      ok: true,
+      async json() {
+        return {
+          data: {
+            unreadCount: 2,
+            unreadMenuCounts: {
+              notifications: 2,
+              friends: 1,
+              achievements: 1,
+              profile: 0,
+              statistics: 0
+            }
+          }
+        };
+      }
+    };
+  };
+  const stateSource = fs.readFileSync(
+    path.join(
+      __dirname,
+      '../../public/scripts/general/notifications/account-notification-state.js'
+    ),
+    'utf8'
+  );
+  const notificationsSource = fs.readFileSync(
+    path.join(
+      __dirname,
+      '../../public/scripts/general/account-container/account-container-notifications.js'
+    ),
+    'utf8'
+  );
+  new vm.Script(stateSource).runInContext(context);
+  new vm.Script(notificationsSource).runInContext(context);
+  dom.window.OEAccountNotificationState.setAccountNotifications({
+    notifications: [
+      { id: 'friend-one', type: 'friend_request', readAt: null },
+      { id: 'friend-accepted', type: 'friend_accepted', readAt: null },
+      {
+        id: 'achievement-one',
+        type: 'achievement_unlocked',
+        readAt: null
+      }
+    ],
+    unreadCount: 3,
+    unreadMenuCounts: {
+      notifications: 3,
+      friends: 2,
+      achievements: 1,
+      profile: 0,
+      statistics: 0
+    }
+  });
+
+  await vm.runInContext(
+    `markAccountNotificationDestinationRead('friends', {
+      types: ['friend_request']
+    })`,
+    context
+  );
+
+  assert.equal(requests.length, 1);
+  assert.deepEqual(JSON.parse(requests[0].options.body), {
+    action: 'read',
+    notificationIds: ['friend-one']
+  });
+  const snapshot = dom.window.OEAccountNotificationState.getSnapshot();
+  assert.ok(snapshot.inboxNotifications[0].readAt);
+  assert.equal(snapshot.inboxNotifications[1].readAt, null);
+  assert.equal(snapshot.inboxNotifications[2].readAt, null);
+  assert.equal(snapshot.menuCounts.friends, 1);
+  assert.equal(snapshot.menuCounts.achievements, 1);
+  assert.equal(snapshot.totalUnread, 2);
+  dom.window.close();
+});
+
 test('closing the account container resets its view to the main menu', async () => {
   const dom = new JSDOM(
     `<!doctype html>

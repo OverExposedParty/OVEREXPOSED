@@ -5,6 +5,7 @@ function createUserIcon({
   userIcon: userIconString = USER_ICON_DEFAULT_STRING,
   checked = false,
   disconnected = false,
+  signingIn = false,
   canKick = false
 }) {
   const userIcon = document.createElement('div');
@@ -41,7 +42,7 @@ function createUserIcon({
 
   const checkmark = document.createElement('span');
   checkmark.className = 'checkmark';
-  setCheckmarkStatus(checkmark, { checked, disconnected });
+  setCheckmarkStatus(checkmark, { checked, disconnected, signingIn });
 
   const nameSpan = document.createElement('span');
   nameSpan.className = 'username';
@@ -109,6 +110,7 @@ function editUserIcon({
   newUsername,
   userReady,
   userDisconnected = false,
+  userSigningIn = false,
   userIcon
 }) {
   const userIconContainer = document.querySelector(
@@ -129,7 +131,8 @@ function editUserIcon({
     const checkbox = userIconContainer.querySelector('.checkmark');
     setCheckmarkStatus(checkbox, {
       checked: Boolean(userReady),
-      disconnected: Boolean(userDisconnected)
+      disconnected: Boolean(userDisconnected),
+      signingIn: Boolean(userSigningIn)
     });
     const imageStackContainer = userIconContainer.querySelector('.image-stack');
     imageStackContainer.querySelectorAll('img').forEach((img) => {
@@ -222,7 +225,9 @@ async function UpdateUserIcons(partyData) {
     ).toLowerCase();
     const hasDisconnectedSocket = socketId === 'DISCONNECTED';
     const hasLiveSocket = Boolean(socketId) && !hasDisconnectedSocket;
+    const isSigningIn = participationStatus === 'reconnecting';
     const isDisconnected =
+      isSigningIn ||
       hasDisconnectedSocket ||
       (!hasLiveSocket && participationStatus === 'disconnected');
 
@@ -245,6 +250,7 @@ async function UpdateUserIcons(partyData) {
         userIcon: userIconString,
         checked: isSelf && isReady,
         disconnected: isDisconnected,
+        signingIn: isSigningIn,
         canKick: canKickPlayers
       });
     }
@@ -281,6 +287,7 @@ async function UpdateUserIcons(partyData) {
       newUsername: username,
       userReady: isReady,
       userDisconnected: isDisconnected,
+      userSigningIn: isSigningIn,
       userIcon: userIconString
     });
   }

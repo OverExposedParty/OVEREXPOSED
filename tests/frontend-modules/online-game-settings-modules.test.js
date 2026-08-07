@@ -291,7 +291,6 @@ function createToggleLifecycleSandbox({
     allUsersReady: undefined,
     clearActivePartyLobbyLock() {},
     clearPlayerCountRestrictionError() {},
-    createOnlineGameSessionId: () => 'game-session',
     currentOnlineShuffleSeed: null,
     currentPartyData: null,
     debugLog() {},
@@ -338,8 +337,9 @@ function createToggleLifecycleSandbox({
     toggleUserCustomisationIcon() {},
     updateOnlineParty: async (party) => {
       events.push('create:start');
-      await updateOnlineParty(party);
+      const result = await updateOnlineParty(party);
       events.push('create:complete');
+      return result;
     },
     updateStartGameButton() {},
     window: null
@@ -480,6 +480,31 @@ test('online lobby lifecycle sounds follow confirmed creation and deletion', asy
   assert.deepEqual(deleted.playedSounds, [
     'gamemodeSettingsOnlineLobbyDeleted'
   ]);
+});
+
+test('online party creation adopts the server-assigned game id', async () => {
+  let creationPayload = null;
+  const serverGameId = 'TOD-0123456789ABCDEFFEDCBA9876543210';
+  const created = createToggleLifecycleSandbox({
+    updateOnlineParty: async (payload) => {
+      creationPayload = payload;
+      return {
+        primary: {
+          updated: {
+            ...payload,
+            session: {
+              ...payload.session,
+              gameId: serverGameId
+            }
+          }
+        }
+      };
+    }
+  });
+
+  assert.equal(await created.sandbox.ToggleOnlineMode(true), true);
+  assert.equal(creationPayload.session.gameId, undefined);
+  assert.equal(created.sandbox.currentPartyData.session.gameId, serverGameId);
 });
 
 test('online lobby failures use the UI error sound while no-op toggles stay silent', async () => {

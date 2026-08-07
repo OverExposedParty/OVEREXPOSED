@@ -1118,6 +1118,58 @@ test('party popups render every distinct rapid connection occurrence', () => {
   }
 });
 
+test('signing-in party popups render the player OE and status', () => {
+  const dom = new JSDOM('<!doctype html><body></body>', {
+    runScripts: 'dangerously',
+    url: 'https://overexposed.app/'
+  });
+  const { window } = dom;
+  const shownRows = [];
+  const renderedIcons = [];
+  window.createUserIconPartyGames = (options) => renderedIcons.push(options);
+
+  try {
+    window.eval(
+      fs.readFileSync(
+        path.join(
+          scriptsDirectory,
+          'popup-feed/popup-feed-social-notifications.js'
+        ),
+        'utf8'
+      )
+    );
+    const social = window.createPopupFeedSocialNotifications({
+      dismissPopup() {},
+      getStoredAccountSafely: () => null,
+      isSignedInAccount: () => false,
+      showPopup(row) {
+        shownRows.push(row);
+        return row;
+      }
+    });
+
+    social.showPartyNotificationPopup({
+      id: 'signing-in-occurrence',
+      type: 'party_player_signing_in',
+      partyId: 'PARTY-ONE',
+      actorUsername: 'OE4534534',
+      actorOeIcon: '0001:0102:0203:0304'
+    });
+
+    assert.equal(
+      shownRows[0].querySelector('.friend-request-popup-message').textContent,
+      'IS SIGNING IN…'
+    );
+    assert.equal(renderedIcons[0].username, 'OE4534534');
+    assert.equal(
+      renderedIcons[0].userCustomisationString,
+      '0001:0102:0203:0304'
+    );
+  } finally {
+    dom.window.close();
+  }
+});
+
 test('party connection sounds use a sliding cooldown per player and party', () => {
   const dom = new JSDOM('<!doctype html><body></body>', {
     runScripts: 'dangerously',

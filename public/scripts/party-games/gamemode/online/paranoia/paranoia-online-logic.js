@@ -127,21 +127,21 @@ async function FetchInstructions() {
     );
 
     if (instructions.includes("PLAYER_TURN_PASSED:2")) {
-      ResetParanoiaQuestion({
+      await ResetParanoiaQuestion({
         nextPlayer: true,
         incrementScore: -2,
         currentPlayerIndex
       });
     }
     else if (instructions.includes("PLAYER_TURN_PASSED:1")) {
-      ResetParanoiaQuestion({
+      await ResetParanoiaQuestion({
         nextPlayer: true,
         incrementScore: -1,
         currentPlayerIndex
       });
     }
     else {
-      ResetParanoiaQuestion({ nextPlayer: true });
+      await ResetParanoiaQuestion({ nextPlayer: true });
     }
   }
 }

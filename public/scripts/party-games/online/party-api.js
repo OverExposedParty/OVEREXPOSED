@@ -20,6 +20,7 @@
       actions.syncOnlinePartyInstructionsAfterAction,
     performOnlinePartyAction: actions.performOnlinePartyAction,
     EndOnlineGame: actions.EndOnlineGame,
+    ReplayOnlinePartyGame: actions.ReplayOnlinePartyGame,
     ReturnOnlinePartyToLobby: actions.ReturnOnlinePartyToLobby,
     updateOnlineParty: players.updateOnlineParty,
     addUserToParty: players.addUserToParty,

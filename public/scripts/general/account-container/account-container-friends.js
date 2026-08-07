@@ -141,6 +141,17 @@ async function renderAccountFriendsPanel(activeTab = 'friends') {
     createAccountFriendsTabs(activeTab),
     list
   );
+  if (accountExpandedAction === 'friends') {
+    const visibleNotificationTypes = {
+      friends: ['friend_accepted'],
+      requests: ['friend_request']
+    }[activeTab];
+    if (visibleNotificationTypes) {
+      await markAccountNotificationDestinationRead('friends', {
+        types: visibleNotificationTypes
+      });
+    }
+  }
 }
 
 async function inviteAccountFriend(button) {

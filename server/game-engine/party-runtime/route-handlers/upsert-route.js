@@ -18,6 +18,9 @@ function createPartyUpsertRoute(context) {
     acquireActivePartyOwnerLease,
     activateActivePartyOwnerLease,
     releaseActivePartyOwnerLeaseIfInactive,
+    reservePartyGameSession,
+    activatePartyGameSession,
+    releasePartyGameSession,
     assertPartyConfigContentAccess,
     Account,
     GameRule,
@@ -26,9 +29,16 @@ function createPartyUpsertRoute(context) {
     waitingRoomSchema
   } = context;
 
-  function createUpsertPartyHandler({ route, model, logLabel, fields }) {
+  function createUpsertPartyHandler({
+    route,
+    model,
+    logLabel,
+    fields,
+    allocateGameId = false
+  }) {
     app.post(route, async (req, res) => {
       let leaseAcquisition = null;
+      let gameSessionReservation = null;
       let partyWriteCompleted = false;
       try {
         const bodyPartyId =
@@ -59,6 +69,8 @@ function createPartyUpsertRoute(context) {
           )
           .lean();
         const isReservedShell = isReservedPartyShell(existingParty);
+        const shouldAllocateGameId =
+          allocateGameId && (!existingParty || isReservedShell);
 
         // Build the update object dynamically from allowed fields
         const updateData = {};
@@ -76,6 +88,17 @@ function createPartyUpsertRoute(context) {
             serverRegion:
               updateData.session?.serverRegion || (await getServerRegion())
           };
+
+          if (allocateGameId) {
+            if (shouldAllocateGameId) {
+              delete updateData.session.gameId;
+              delete updateData.session.gameModeRelease;
+            } else if (existingParty?.session?.gameId) {
+              updateData.session.gameId = existingParty.session.gameId;
+              updateData.session.gameModeRelease =
+                existingParty.session.gameModeRelease ?? null;
+            }
+          }
         }
 
         if (existingParty && !isReservedShell) {
@@ -222,6 +245,16 @@ function createPartyUpsertRoute(context) {
           assertOnlinePlayerRestrictions({ gamemode, players });
         }
 
+        if (shouldAllocateGameId) {
+          gameSessionReservation = await reservePartyGameSession({
+            partyId,
+            gamemode: updateData.config?.gamemode
+          });
+          updateData.session.gameId = gameSessionReservation.gameId;
+          updateData.session.gameModeRelease =
+            gameSessionReservation.gameModeRelease;
+        }
+
         const updated = await model.findOneAndUpdate(
           { partyId: existingParty?.partyId || partyId },
           updateData,
@@ -240,6 +273,17 @@ function createPartyUpsertRoute(context) {
         }
         partyWriteCompleted = true;
 
+        if (gameSessionReservation) {
+          try {
+            await activatePartyGameSession(gameSessionReservation);
+          } catch (error) {
+            console.error(
+              `[REQ ${req.id}] Failed to activate game session ${gameSessionReservation.gameId}:`,
+              error
+            );
+          }
+        }
+
         if (leaseAcquisition) {
           await activateActivePartyOwnerLease({
             partyId,
@@ -254,6 +298,20 @@ function createPartyUpsertRoute(context) {
           updated
         });
       } catch (err) {
+        if (
+          gameSessionReservation &&
+          !partyWriteCompleted &&
+          typeof releasePartyGameSession === 'function'
+        ) {
+          try {
+            await releasePartyGameSession(gameSessionReservation);
+          } catch (releaseError) {
+            console.error(
+              `[REQ ${req.id}] Failed to release unused game session ${gameSessionReservation.gameId}:`,
+              releaseError
+            );
+          }
+        }
         if (
           leaseAcquisition?.acquired &&
           !partyWriteCompleted &&

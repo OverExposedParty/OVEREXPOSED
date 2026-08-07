@@ -132,6 +132,11 @@
     color: inherit;
 }
 
+.account-action-notification-badge {
+    flex: 0 0 auto;
+    margin-left: 0.75dvh;
+}
+
 .account-action-container.disabled {
     color: #6f6f6f;
     opacity: 0.75;

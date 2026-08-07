@@ -434,7 +434,9 @@ body.party-missing-state .main-container > :not(.online-status-container) {
     pointer-events: none !important;
 }
 
+.game-over-statistics #statistics-replay-game,
 .game-over-statistics #statistics-game-settings,
+.game-over-statistics #statistics-change-game,
 .game-over-statistics #statistics-main-menu {
     font-size: clamp(9px, 1.1vh, 11px);
     white-space: nowrap;

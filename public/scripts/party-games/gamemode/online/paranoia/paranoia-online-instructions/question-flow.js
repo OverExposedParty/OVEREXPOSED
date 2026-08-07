@@ -56,7 +56,7 @@ async function NextQuestion() {
       icons.forEach(icon => icon.classList.add('yes'));
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      ResetParanoiaQuestion({
+      await ResetParanoiaQuestion({
         nextPlayer: true,
         incrementScore: 1
       });
@@ -198,7 +198,6 @@ async function DisplayDualStackCard() {
       : players;
   const state = getPartyState(currentPartyData);
   const deck = getPartyDeck(currentPartyData);
-  const authoritativeHostId = state?.hostComputerId ?? hostDeviceId;
   const meIndex = players.findIndex(player => getPlayerId(player) === deviceId);
   const playerTurn = state.playerTurn ?? currentPartyData.playerTurn ?? 0;
   const currentPlayer = getParanoiaTurnPlayer(players, state, playerTurn);
@@ -240,12 +239,10 @@ async function DisplayDualStackCard() {
       icons.forEach(icon => icon.classList.add('yes'));
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      if (deviceId === authoritativeHostId) {
-        await ResetParanoiaQuestion({
-          nextPlayer: true,
-          incrementScore: 1
-        });
-      }
+      await ResetParanoiaQuestion({
+        nextPlayer: true,
+        incrementScore: 1
+      });
     }
 
     return;

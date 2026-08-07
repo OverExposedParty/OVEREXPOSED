@@ -1,14 +1,12 @@
 function postToBothEndpoints(payload, endpoint1, endpoint2) {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  };
-
-  const postEndpoint = async (endpoint) => {
-    const res = await fetch(endpoint, options);
+  const postEndpoint = async (endpoint, requestPayload) => {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestPayload)
+    });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
       const serverError =
@@ -32,11 +30,17 @@ function postToBothEndpoints(payload, endpoint1, endpoint2) {
     return data;
   };
 
-  return postEndpoint(endpoint1)
-    .then(async (primary) => ({
-      primary,
-      secondary: await postEndpoint(endpoint2)
-    }))
+  return postEndpoint(endpoint1, payload)
+    .then(async (primary) => {
+      const authoritativeSession = primary?.updated?.session;
+      const secondaryPayload = authoritativeSession
+        ? { ...payload, session: authoritativeSession }
+        : payload;
+      return {
+        primary,
+        secondary: await postEndpoint(endpoint2, secondaryPayload)
+      };
+    })
     .catch((err) => {
       console.error('❌ One or both POSTs failed:', err);
       throw err;
@@ -51,6 +55,7 @@ async function waitForOnlinePartySnapshot({
   partyType = sessionPartyType,
   requirePlayer = false,
   requirePlaying = false,
+  requireSelectedPacks = false,
   retries = 20,
   delayMs = 250
 } = {}) {
@@ -79,8 +84,12 @@ async function waitForOnlinePartySnapshot({
         ? state.isPlaying === true || state.phase === 'game-over'
         : true;
       const playerReady = requirePlayer ? hasPlayer : true;
+      const selectedPacksReady = requireSelectedPacks
+        ? Array.isArray(latestParty.config?.selectedPacks) &&
+          latestParty.config.selectedPacks.length > 0
+        : true;
 
-      if (playerReady && playingReady) {
+      if (playerReady && playingReady && selectedPacksReady) {
         return latestParty;
       }
     }

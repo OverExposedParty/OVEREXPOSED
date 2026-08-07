@@ -82,7 +82,10 @@ function createDisconnectedStatusIcon() {
   return icon;
 }
 
-function setCheckmarkStatus(checkmark, { checked = false, disconnected = false }) {
+function setCheckmarkStatus(
+  checkmark,
+  { checked = false, disconnected = false, signingIn = false }
+) {
   if (!checkmark) return;
 
   checkmark.replaceChildren();
@@ -91,6 +94,12 @@ function setCheckmarkStatus(checkmark, { checked = false, disconnected = false }
   checkmark.classList.toggle('disconnected', Boolean(disconnected));
   checkmark.setAttribute(
     'aria-label',
-    disconnected ? 'Disconnected' : checked ? 'Ready' : 'Not ready'
+    signingIn
+      ? 'Signing in'
+      : disconnected
+        ? 'Disconnected'
+        : checked
+          ? 'Ready'
+          : 'Not ready'
   );
 }

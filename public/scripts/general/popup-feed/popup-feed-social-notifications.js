@@ -15,6 +15,7 @@
     const displayedPartyNotificationIds = new Set();
     const recentPartyNotificationKeys = new Map();
     const partyConnectionNotificationTypes = new Set([
+      'party_player_signing_in',
       'party_player_disconnected',
       'party_player_reconnected'
     ]);
@@ -255,6 +256,7 @@
       const { type } = notification;
       if (type === 'party_player_joined') return 'JOINED YOUR PARTY';
       if (type === 'party_player_left') return 'LEFT THE PARTY';
+      if (type === 'party_player_signing_in') return 'IS SIGNING IN…';
       if (type === 'party_player_disconnected') return 'DISCONNECTED';
       if (type === 'party_disbanded') return 'DISBANDED THE PARTY';
       if (type === 'party_player_reconnected') return 'RECONNECTED';

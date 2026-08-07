@@ -130,7 +130,8 @@ function createRoomArchiver({ models, partyOwnerLeases = {} }) {
         createdAt: room.session?.createdAt ?? null,
         startedAt: room.session?.startedAt ?? null,
         endedAt,
-        serverRegion: room.session?.serverRegion ?? null
+        serverRegion: room.session?.serverRegion ?? null,
+        gameModeRelease: room.session?.gameModeRelease ?? null
       },
       config: {
         selectedPacks: Array.isArray(room.config?.selectedPacks)

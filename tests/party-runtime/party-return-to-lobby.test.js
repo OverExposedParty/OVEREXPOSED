@@ -5,6 +5,9 @@ const {
   createGameOverParty,
   isReservedPartyShell
 } = require('./scenarios/helpers');
+const {
+  createPartyReplaySnapshot
+} = require('../../server/game-engine/party-runtime/route-handlers/action-route');
 
 test('return-to-lobby preserves the party config and resets gameplay state', () => {
   const { applyPartyActionToSnapshot } = createApplier();
@@ -19,7 +22,7 @@ test('return-to-lobby preserves the party config and resets gameplay state', () 
   });
 
   assert.deepEqual(updated.config.selectedPacks, ['pack-one']);
-  assert.match(updated.session.gameId, /^MLT-[A-F0-9]{16}$/);
+  assert.match(updated.session.gameId, /^MLT-[A-F0-9]{32}$/);
   assert.equal(updated.session.startedAt, null);
   assert.equal(updated.session.endedAt, null);
   assert.deepEqual(updated.config.gameRules, { rounds: 20 });
@@ -60,6 +63,68 @@ test('return-to-lobby rotates the game id while preserving the party code', () =
   assert.notEqual(updated.session.gameId, party.session.gameId);
   assert.equal(updated.session.playSequence, 1);
   assert.equal(updated.session.access.originalHostComputerId, 'host-device');
+});
+
+test('return-to-lobby uses the game id reserved by the server route', () => {
+  const { applyPartyActionToSnapshot } = createApplier();
+  const reservedGameId = `MLT-${'C'.repeat(32)}`;
+
+  const updated = applyPartyActionToSnapshot({
+    party: createGameOverParty(),
+    action: 'return-to-lobby',
+    actorId: 'host-device',
+    payload: { nextGameId: reservedGameId },
+    hasDeck: true
+  });
+
+  assert.equal(updated.session.gameId, reservedGameId);
+});
+
+test('replay starts a clean game immediately with the same party settings', async () => {
+  const { applyPartyActionToSnapshot } = createApplier({
+    assertOnlinePlayerRestrictions() {}
+  });
+  const party = createGameOverParty();
+  party.session = {
+    gameId: `MLT-${'A'.repeat(32)}`,
+    playSequence: 4,
+    createdAt: new Date('2026-08-05T12:00:00.000Z'),
+    startedAt: new Date('2026-08-05T12:01:00.000Z'),
+    endedAt: new Date('2026-08-05T12:10:00.000Z')
+  };
+  party.config.shuffleSeed = 7;
+  const nextGameId = `MLT-${'B'.repeat(32)}`;
+
+  const replayed = await createPartyReplaySnapshot({
+    party,
+    actorId: 'host-device',
+    gameId: nextGameId,
+    shuffleSeed: 42,
+    applyPartyActionToSnapshot,
+    hasDeck: true
+  });
+
+  assert.equal(replayed.partyId, party.partyId);
+  assert.equal(replayed.session.gameId, nextGameId);
+  assert.equal(replayed.session.playSequence, 5);
+  assert.ok(replayed.session.startedAt instanceof Date);
+  assert.equal(replayed.session.endedAt, null);
+  assert.equal(replayed.config.gamemode, party.config.gamemode);
+  assert.deepEqual(replayed.config.selectedPacks, party.config.selectedPacks);
+  assert.deepEqual(replayed.config.gameRules, party.config.gameRules);
+  assert.equal(replayed.config.shuffleSeed, 42);
+  assert.equal(replayed.state.isPlaying, true);
+  assert.equal(replayed.state.phase, 'lobby');
+  assert.equal(replayed.state.completedRounds, 0);
+  assert.equal(replayed.deck.currentCardIndex, 0);
+  assert.deepEqual(
+    replayed.players.map((player) => player.identity.computerId),
+    party.players.map((player) => player.identity.computerId)
+  );
+  assert.deepEqual(
+    replayed.players.map((player) => player.state.score),
+    [0, 0]
+  );
 });
 
 test('return-to-lobby rejects a game that has not ended', () => {
@@ -352,6 +417,30 @@ test('starting within 60 seconds emits the organiser event for the host', () => 
       ]
     }
   ]);
+});
+
+test('question games cannot start without a selected pack', () => {
+  const { applyPartyActionToSnapshot } = createApplier();
+  const party = createGameOverParty();
+  party.state.phase = 'lobby';
+  party.config.selectedPacks = [];
+
+  assert.throws(
+    () =>
+      applyPartyActionToSnapshot({
+        party,
+        action: 'start-game',
+        actorId: 'host-device',
+        payload: { bypassPlayerRestrictions: true },
+        hasDeck: true
+      }),
+    (error) => {
+      assert.equal(error.status, 409);
+      assert.equal(error.code, 'party_selected_packs_required');
+      assert.match(error.message, /at least one question pack/i);
+      return true;
+    }
+  );
 });
 
 test('playtime pauses and resumes with the server isPlaying state', () => {

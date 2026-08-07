@@ -33,6 +33,7 @@ function createDatabaseServices({
     partyGameChatLogSchema,
     partyGameEventSchema,
     partyGameRewardClaimSchema,
+    partyGameSessionSchema,
     activePartyOwnerLeaseSchema,
     archivedRoomSchema,
     GamePack,
@@ -312,13 +313,14 @@ function createDatabaseServices({
   }
 
   async function ensureDatabaseIndexes() {
-    if (!activePartyOwnerLeaseSchema) {
-      throw new Error('Active party owner lease model is unavailable.');
+    if (!activePartyOwnerLeaseSchema || !partyGameSessionSchema) {
+      throw new Error('Critical party lifecycle index models are unavailable.');
     }
 
     // Party creation relies on these unique indexes across every server
     // instance, so failing to create them must fail startup.
     await activePartyOwnerLeaseSchema.createIndexes();
+    await partyGameSessionSchema.createIndexes();
 
     const modelsToIndex = [
       waitingRoomSchema,

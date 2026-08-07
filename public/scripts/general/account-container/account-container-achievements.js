@@ -805,4 +805,7 @@ async function renderAccountAchievementsPanel() {
       pendingAccountAchievementKey = '';
     }
   }
+  if (accountExpandedAction === 'achievements') {
+    await markAccountNotificationDestinationRead('achievements');
+  }
 }

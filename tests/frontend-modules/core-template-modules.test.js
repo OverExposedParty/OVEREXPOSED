@@ -172,6 +172,21 @@ test('bootstrap debug reporting prefers the service and keeps a native fallback'
   assert.match(bootstrap, /window\.reportOEDebug = reportOEDebug/);
 });
 
+test('bootstrap derives deployment versions from the versioned core script', () => {
+  const bootstrap = fs.readFileSync(
+    path.join(templateDirectory, 'core-template', 'bootstrap.js'),
+    'utf8'
+  );
+  const manualVersions = bootstrap.match(
+    /const MANUAL_SCRIPT_VERSIONS = Object\.freeze\(\{[\s\S]*?\n\}\);/
+  )?.[0];
+
+  assert.ok(manualVersions);
+  assert.match(manualVersions, /WEBSITE_CACHE_VERSION: ''/);
+  assert.match(manualVersions, /WEBSITE_VERSION: ''/);
+  assert.match(manualVersions, /GAME_SETTINGS_VERSION: ''/);
+});
+
 test('structured debug service loads before loader modules and sound', () => {
   const coreTemplate = fs.readFileSync(
     path.join(templateDirectory, 'core-template', 'core-template.js'),

@@ -261,6 +261,7 @@ function sendVersionedHtmlFile(req, res, filePath, statusCode = 200) {
 
 module.exports = {
   getCookieValue,
+  getSplashScreenImageUrl,
   getVersionedPublicAssetUrl,
   versionLocalAssetReferences,
   stripMetaContentSecurityPolicy,

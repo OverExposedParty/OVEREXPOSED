@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   countUnreadNotifications,
+  countUnreadNotificationsByMenu,
   createAccountNotificationState,
   inferNotificationDelivery,
   markAccountNotificationsDelivered,
@@ -39,6 +40,13 @@ test('notification delivery separates persistent inbox items from activity toast
   assert.equal(inferNotificationDelivery('party_player_joined'), 'toast');
   assert.equal(inferNotificationDelivery('account_security_notice'), 'both');
   assert.equal(countUnreadNotifications(account), 2);
+  assert.deepEqual(countUnreadNotificationsByMenu(account), {
+    notifications: 2,
+    friends: 1,
+    achievements: 0,
+    profile: 0,
+    statistics: 0
+  });
   assert.deepEqual(
     serializeInboxNotifications(account)
       .map((notification) => notification.id)
@@ -65,6 +73,44 @@ test('notification delivery separates persistent inbox items from activity toast
   );
   assert.equal(friendOnline.readAt, deliveredAt);
   assert.equal(countUnreadNotifications(account), 2);
+});
+
+test('unread notification menu counts route only actionable inbox destinations', () => {
+  const account = {
+    gameData: { notifications: [] },
+    markModified() {}
+  };
+  queueAccountNotification(account, { type: 'friend_request' });
+  queueAccountNotification(account, { type: 'friend_accepted' });
+  queueAccountNotification(account, { type: 'session_invite' });
+  queueAccountNotification(account, { type: 'achievement_unlocked' });
+  const readAchievement = queueAccountNotification(account, {
+    type: 'achievement_unlocked'
+  });
+  readAchievement.readAt = new Date();
+  queueAccountNotification(account, { type: 'account_security_notice' });
+  queueAccountNotification(account, { type: 'friend_online' });
+
+  assert.deepEqual(countUnreadNotificationsByMenu(account), {
+    notifications: 5,
+    friends: 2,
+    achievements: 1,
+    profile: 0,
+    statistics: 0
+  });
+  assert.deepEqual(
+    serializeInboxNotifications(account)
+      .filter((notification) => !notification.readAt)
+      .map((notification) => [notification.type, notification.menuDestination])
+      .sort(([left], [right]) => left.localeCompare(right)),
+    [
+      ['achievement_unlocked', 'achievements'],
+      ['account_security_notice', null],
+      ['friend_accepted', 'friends'],
+      ['friend_request', 'friends'],
+      ['session_invite', null]
+    ].sort(([left], [right]) => left.localeCompare(right))
+  );
 });
 
 test('historic account records are not treated as pending notifications', () => {

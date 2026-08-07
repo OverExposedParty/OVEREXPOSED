@@ -84,6 +84,46 @@ test('Imposter instruction modules preserve their public handler contract', () =
   });
 });
 
+test('Imposter round resets are submitted only by the authoritative host', async () => {
+  let actionCalls = 0;
+  let clearCalls = 0;
+  let isHost = false;
+  const context = vm.createContext({
+    ClearIcons() {
+      clearCalls += 1;
+    },
+    currentPartyData: {},
+    getTimeLimit: () => 120,
+    isAuthoritativePartyHost: () => isHost,
+    performOnlinePartyAction: async () => {
+      actionCalls += 1;
+      return { partyId: 'ABC-123' };
+    },
+    resetGamemodeInstruction: 'DISPLAY_START_TIMER',
+    stopImposterTimerWarning() {},
+    window: {}
+  });
+  const roundActionsPath = path.join(
+    imposterDirectory,
+    'imposter-online-instructions/round-actions.js'
+  );
+
+  vm.runInContext(fs.readFileSync(roundActionsPath, 'utf8'), context, {
+    filename: roundActionsPath
+  });
+
+  assert.equal(await context.ResetImposterQuestion(), null);
+  assert.equal(actionCalls, 0);
+  assert.equal(clearCalls, 0);
+
+  isHost = true;
+  const updatedParty = await context.ResetImposterQuestion();
+
+  assert.equal(actionCalls, 1);
+  assert.equal(clearCalls, 1);
+  assert.equal(updatedParty.partyId, 'ABC-123');
+});
+
 test('Imposter timer warning follows local action ownership', () => {
   const timerCalls = [];
   const context = vm.createContext({

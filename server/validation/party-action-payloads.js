@@ -259,6 +259,9 @@ function validateSharedPayloadFields(payload = {}) {
   assertOptionalString(payload.completionReason, 'payload.completionReason', {
     maxLength: 120
   });
+  assertOptionalString(payload.expectedGameId, 'payload.expectedGameId', {
+    maxLength: 120
+  });
   assertOptionalStringArray(payload.tiedIds, 'payload.tiedIds');
   assertOptionalPlainObject(payload.configPatch, 'payload.configPatch');
   assertOptionalPlainObject(payload.statePatch, 'payload.statePatch');
@@ -275,6 +278,12 @@ const ACTION_VALIDATORS = {
   },
   'end-game': validateSharedPayloadFields,
   'return-to-lobby': validateSharedPayloadFields,
+  'replay-game': (payload) => {
+    validateSharedPayloadFields(payload);
+    assertRequiredString(payload.expectedGameId, 'payload.expectedGameId', {
+      maxLength: 120
+    });
+  },
   'set-user-confirmation': (payload) => {
     validateSharedPayloadFields(payload);
     assertRequiredString(payload.selectedDeviceId, 'payload.selectedDeviceId', {

@@ -10,6 +10,38 @@ const GAMEMODE_START_COUNTDOWN_SOUNDS = Object.freeze({
 let activeGamemodeStartCountdown = null;
 let gamemodeStartCountdownGeneration = 0;
 
+function setGamemodeCountdownSettingsLocked(locked) {
+  const controls = placeholderGamemodeSettings?.querySelectorAll(
+    '.packs-content-container button, .rules-settings-container button'
+  );
+
+  controls?.forEach((control) => {
+    if (locked) {
+      if (control.dataset.countdownSettingsLocked === 'true') return;
+      control.dataset.countdownSettingsLocked = 'true';
+      control.dataset.countdownPreviouslyDisabled = String(control.disabled);
+      control.disabled = true;
+      return;
+    }
+
+    if (control.dataset.countdownSettingsLocked !== 'true') return;
+    control.disabled = control.dataset.countdownPreviouslyDisabled === 'true';
+    delete control.dataset.countdownSettingsLocked;
+    delete control.dataset.countdownPreviouslyDisabled;
+  });
+}
+
+function saveGamemodeSettingsForCountdown() {
+  if (typeof UpdateSettings !== 'function') {
+    return Promise.resolve({ ok: true, error: null });
+  }
+
+  return Promise.resolve()
+    .then(() => UpdateSettings({ throwOnError: true }))
+    .then(() => ({ ok: true, error: null }))
+    .catch((error) => ({ ok: false, error }));
+}
+
 if (typeof window.OEAudio?.register === 'function') {
   window.OEAudio.register({
     gamemodeSettingsCountdownFive: {
@@ -184,6 +216,7 @@ function cancelGamemodeStartCountdown() {
   activeGamemodeStartCountdown = null;
   stopGamemodeStartCountdownAudio();
   restoreGamemodeStartCountdownButton(countdown);
+  setGamemodeCountdownSettingsLocked(false);
   playGamemodeSettingsStartBlockedSound();
   return true;
 }
@@ -220,6 +253,32 @@ async function completeGamemodeStartCountdown(countdown, generation) {
   ) {
     return;
   }
+  if (!canContinueGamemodeStartCountdown()) {
+    cancelGamemodeStartCountdown();
+    return;
+  }
+
+  countdown.button.textContent = 'SAVING SETTINGS…';
+  countdown.button.setAttribute(
+    'aria-label',
+    'Saving game settings before starting'
+  );
+  const saveResult = await countdown.settingsSavePromise;
+
+  // The host may cancel while the final settings request is completing.
+  if (
+    activeGamemodeStartCountdown !== countdown ||
+    generation !== gamemodeStartCountdownGeneration
+  ) {
+    return;
+  }
+
+  if (!saveResult.ok) {
+    cancelGamemodeStartCountdown();
+    showGamemodeStartFailureNotification(saveResult.error);
+    return;
+  }
+
   if (!canContinueGamemodeStartCountdown()) {
     cancelGamemodeStartCountdown();
     return;
@@ -275,11 +334,14 @@ function startGamemodeStartCountdown(button, { fromWarning = false } = {}) {
     fromWarning,
     remaining: GAMEMODE_START_COUNTDOWN_SECONDS,
     timerId: null,
+    settingsSavePromise: null,
     originalText: button.textContent,
     originalAriaLabel: button.getAttribute('aria-label'),
     originalAriaLive: button.getAttribute('aria-live')
   };
   activeGamemodeStartCountdown = countdown;
+  setGamemodeCountdownSettingsLocked(true);
+  countdown.settingsSavePromise = saveGamemodeSettingsForCountdown();
   button.classList.add('countdown-active');
   button.setAttribute('aria-live', 'assertive');
   renderGamemodeStartCountdownTick(countdown);
@@ -486,6 +548,7 @@ async function startOnlineGame({ bypassPlayerRestrictions = false } = {}) {
   if (partyCode && !bypassPlayerRestrictions) {
     const playerCountIsValid = await refreshOnlinePlayerCountRestrictions();
     if (!playerCountIsValid) {
+      setGamemodeCountdownSettingsLocked(false);
       closeStartWarningIfOpen();
       updateStartGameButton(allUsersReady);
       showGamemodeStartBlockedNotification();
@@ -504,6 +567,7 @@ async function startOnlineGame({ bypassPlayerRestrictions = false } = {}) {
     );
   } catch (error) {
     loadingPage = false;
+    setGamemodeCountdownSettingsLocked(false);
     console.error('Failed to start online game:', error);
     playInteractionSound('error');
     await refreshOnlinePlayerCountRestrictions();

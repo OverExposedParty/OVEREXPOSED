@@ -322,7 +322,7 @@ test('account-link copy is safe and unsafe return paths fall back to the party c
     assert.equal(
       dialog.querySelector('.active-party-conflict-dialog-action.is-secondary')
         .textContent,
-      'Continue here'
+      'Continue Here'
     );
     assert.equal(dialog.querySelector('script'), null);
     assert.equal(
@@ -348,6 +348,83 @@ test('account-link copy is safe and unsafe return paths fall back to the party c
       null
     );
     assert.equal(tooltip.textContent, 'COPIED');
+  } finally {
+    dom.window.close();
+  }
+});
+
+test('account-link replacement confirms before ending the old party', async () => {
+  const { dom, window } = createDialogDom();
+  const replacements = [];
+  const dismissals = [];
+
+  try {
+    const dialog = window.ActivePartyConflictDialog.open({
+      partyCode: 'OLD-123',
+      gamemode: 'truth-or-dare',
+      apiRoute: 'party-game-truth-or-dare',
+      source: 'account-link',
+      onContinue: async (context) => replacements.push(context),
+      onDismiss: (reason) => dismissals.push(reason)
+    });
+    const continueButton = dialog.querySelector(
+      '.active-party-conflict-dialog-action.is-secondary'
+    );
+
+    continueButton.click();
+    assert.equal(dialog.open, true);
+    assert.deepEqual(replacements, []);
+    assert.equal(continueButton.textContent, 'Confirm End & Continue');
+    assert.match(
+      dialog.querySelector('.active-party-conflict-dialog-description')
+        .textContent,
+      /removes it for everyone/
+    );
+
+    continueButton.click();
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
+    assert.equal(replacements.length, 1);
+    assert.equal(replacements[0].partyCode, 'OLD-123');
+    assert.equal(replacements[0].gamemode, 'Truth Or Dare');
+    assert.equal(replacements[0].apiRoute, 'party-game-truth-or-dare');
+    assert.equal(dialog.open, false);
+    assert.deepEqual(dismissals, ['continue']);
+  } finally {
+    dom.window.close();
+  }
+});
+
+test('ending an owned party uses the validated gamemode route', async () => {
+  const { dom, window } = createDialogDom();
+  const requests = [];
+  const disbanded = [];
+
+  try {
+    window.fetch = async (url, options) => {
+      requests.push({ url, options });
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true })
+      };
+    };
+    window.addEventListener('oe-active-party-lobby-disbanded', (event) => {
+      disbanded.push(event.detail.partyCode);
+    });
+
+    await window.ActivePartyConflictDialog.endOwnedParty({
+      partyCode: 'old-123',
+      gamemode: 'truth-or-dare'
+    });
+
+    assert.equal(requests.length, 1);
+    assert.equal(requests[0].url, '/api/party-game-truth-or-dare/delete');
+    assert.equal(requests[0].options.method, 'POST');
+    assert.deepEqual(JSON.parse(requests[0].options.body), {
+      partyCode: 'OLD-123'
+    });
+    assert.deepEqual(disbanded, ['OLD-123']);
   } finally {
     dom.window.close();
   }

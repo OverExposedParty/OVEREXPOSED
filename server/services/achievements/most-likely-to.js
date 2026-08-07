@@ -7,6 +7,8 @@ async function recordMostLikelyToResult({
   account,
   result,
   partyId,
+  gameId,
+  playSequence,
   save = true
 } = {}) {
   if (!Achievement || !account || !result) return [];
@@ -123,10 +125,17 @@ async function recordMostLikelyToResult({
   if (nextNomineeStreak >= 10)
     await unlock('serial-nominee', nextNomineeStreak);
 
-  const sessionKey = normalizeString(partyId, 'party');
+  const partyKey = normalizeString(partyId, 'party');
+  const gameKey =
+    normalizeString(gameId) ||
+    `play-${Math.max(0, Number(playSequence) || 0)}`;
+  const sessionKey = `${partyKey}:${gameKey}`;
   if (stats.mostLikelyToSessionId !== sessionKey) {
     stats.mostLikelyToSessionId = sessionKey;
     stats.mostLikelyToVotedPlayerIds = [];
+    stats.mostLikelyToWinnerAfterZeroPreviousEligible = false;
+    stats.mostLikelyToPreviousVotesReceived = 0;
+    stats.mostLikelyToHadPreviousRound = false;
   }
   const votedPlayerIds = new Set(
     Array.isArray(stats.mostLikelyToVotedPlayerIds)

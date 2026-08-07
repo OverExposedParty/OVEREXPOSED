@@ -16,6 +16,7 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
           { key: 'roomCode', label: 'Room Code' },
           { key: 'gameId', label: 'Game ID' },
           { key: 'gamemode', label: 'Gamemode' },
+          { key: 'gameModeVersionLabel', label: 'Version' },
           { key: 'playerCount', label: 'Player Count' },
           { key: 'timeLapsed', label: 'Time Lapsed' },
           { key: 'serverRegion', label: 'Server Region' },
@@ -78,6 +79,15 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
             label: 'Full Configuration',
             expandable: true
           },
+          {
+            key: 'gameModeVersionLabel',
+            label: 'Game Version',
+            section: 'Release'
+          },
+          { key: 'releaseId', label: 'Release ID', expandable: true },
+          { key: 'runtimeBuild', label: 'Runtime Build', expandable: true },
+          { key: 'contentHash', label: 'Content Hash', expandable: true },
+          { key: 'releaseCapturedAt', label: 'Release Captured At' },
           {
             key: 'stateSummary',
             label: 'Current State',
@@ -316,13 +326,45 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
         label: 'Gamemodes',
         columns: [
           { key: 'gamemode', label: 'Gamemode' },
+          { key: 'configuredVersion', label: 'Version' },
           { key: 'rooms', label: 'Rooms (30d)' },
-          { key: 'share', label: 'Share' },
           { key: 'activeRooms', label: 'Active' },
+          { key: 'activeVersions', label: 'Active Versions' },
+          { key: 'releaseHealth', label: 'Release Health' },
           { key: 'errorRate', label: 'Error Rate' }
         ],
         expandedFields: [
           { key: 'gamemodeKey', label: 'Gamemode Key' },
+          {
+            key: 'configuredVersion',
+            label: 'Configured Version',
+            section: 'Current Release'
+          },
+          { key: 'currentReleaseId', label: 'Release ID', expandable: true },
+          {
+            key: 'currentRuntimeBuild',
+            label: 'Runtime Build',
+            expandable: true
+          },
+          {
+            key: 'currentContentHash',
+            label: 'Content Hash',
+            expandable: true
+          },
+          { key: 'latestReleaseNote', label: 'Latest Release Note' },
+          {
+            key: 'activeVersions',
+            label: 'Active Versions',
+            section: 'Adoption'
+          },
+          { key: 'observedVersions', label: 'Archived Versions (30d)' },
+          { key: 'outdatedActiveRooms', label: 'Outdated Active Rooms' },
+          { key: 'releaseHealth', label: 'Release Health' },
+          {
+            key: 'versionErrorRates',
+            label: 'Error Rate by Version',
+            section: 'Performance'
+          },
           { key: 'rooms', label: 'Archived Rooms (30d)' },
           { key: 'share', label: 'Room Share' },
           { key: 'activeRooms', label: 'Active Rooms' },
@@ -332,7 +374,24 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
           { key: 'latestArchived', label: 'Latest Archived Room' }
         ],
         rows: [],
-        dataSource: 'partyGamemodes'
+        dataSource: 'partyGamemodes',
+        rowActions: [
+          {
+            label: 'Bump Patch',
+            action: 'bump-version-patch',
+            hiddenWhen: { key: 'canReleaseVersion', equals: false }
+          },
+          {
+            label: 'Bump Minor',
+            action: 'bump-version-minor',
+            hiddenWhen: { key: 'canReleaseVersion', equals: false }
+          },
+          {
+            label: 'Bump Major',
+            action: 'bump-version-major',
+            hiddenWhen: { key: 'canReleaseVersion', equals: false }
+          }
+        ]
       }
     ]
   },

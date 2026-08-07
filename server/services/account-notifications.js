@@ -29,6 +29,18 @@ const TOAST_ONLY_NOTIFICATION_TYPES = new Set([
   'friend_online',
   ...PARTY_NOTIFICATION_TYPES
 ]);
+const NOTIFICATION_MENU_DESTINATIONS = Object.freeze({
+  friend_request: 'friends',
+  friend_accepted: 'friends',
+  achievement_unlocked: 'achievements'
+});
+const ACCOUNT_NOTIFICATION_MENU_KEYS = Object.freeze([
+  'notifications',
+  'friends',
+  'achievements',
+  'profile',
+  'statistics'
+]);
 const MAX_ACCOUNT_NOTIFICATIONS = 200;
 
 function inferNotificationCategory(type) {
@@ -40,6 +52,10 @@ function inferNotificationCategory(type) {
 
 function inferNotificationDelivery(type) {
   return TOAST_ONLY_NOTIFICATION_TYPES.has(type) ? 'toast' : 'both';
+}
+
+function inferNotificationMenuDestination(type) {
+  return NOTIFICATION_MENU_DESTINATIONS[type] || null;
 }
 
 function getNotificationDelivery(notification) {
@@ -147,6 +163,7 @@ function serializeAccountNotification(notification) {
     type: notification.type,
     category:
       notification.category || inferNotificationCategory(notification.type),
+    menuDestination: inferNotificationMenuDestination(notification.type),
     delivery: getNotificationDelivery(notification),
     actorAccountId: notification.actorAccountId
       ? String(notification.actorAccountId?._id || notification.actorAccountId)
@@ -257,13 +274,36 @@ function serializeInboxNotifications(account, { limit = 50 } = {}) {
 }
 
 function countUnreadNotifications(account) {
-  return getAccountNotifications(account).filter(
-    (notification) =>
-      !notification.readAt &&
-      !notification.dismissedAt &&
-      !isAchievementOpalNotification(notification) &&
-      getNotificationDelivery(notification) !== 'toast'
-  ).length;
+  return getAccountNotifications(account).filter(isUnreadInboxNotification)
+    .length;
+}
+
+function isUnreadInboxNotification(notification) {
+  return Boolean(
+    notification &&
+    !notification.readAt &&
+    !notification.dismissedAt &&
+    !isAchievementOpalNotification(notification) &&
+    getNotificationDelivery(notification) !== 'toast'
+  );
+}
+
+function countUnreadNotificationsByMenu(account) {
+  const counts = Object.fromEntries(
+    ACCOUNT_NOTIFICATION_MENU_KEYS.map((key) => [key, 0])
+  );
+
+  getAccountNotifications(account).forEach((notification) => {
+    if (!isUnreadInboxNotification(notification)) return;
+
+    counts.notifications += 1;
+    const destination = inferNotificationMenuDestination(notification.type);
+    if (destination && Object.hasOwn(counts, destination)) {
+      counts[destination] += 1;
+    }
+  });
+
+  return counts;
 }
 
 function markNotificationsDelivered(
@@ -718,7 +758,9 @@ module.exports = {
   PARTY_NOTIFICATION_TYPES,
   PROGRESSION_NOTIFICATION_TYPES,
   TOAST_ONLY_NOTIFICATION_TYPES,
+  ACCOUNT_NOTIFICATION_MENU_KEYS,
   countUnreadNotifications,
+  countUnreadNotificationsByMenu,
   createAccountNotificationState,
   getAccountNotificationIds,
   getAccountNotifications,
@@ -726,6 +768,7 @@ module.exports = {
   importLegacyProgressionNotifications,
   inferNotificationCategory,
   inferNotificationDelivery,
+  inferNotificationMenuDestination,
   markAccountNotificationsDelivered,
   markNotificationsDelivered,
   markNotificationsRead,

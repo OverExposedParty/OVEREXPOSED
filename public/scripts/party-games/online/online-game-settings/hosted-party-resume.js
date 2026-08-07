@@ -87,6 +87,18 @@ function restoreHostedPartySettingControls(party) {
   });
 }
 
+function hostedPartyNeedsInitialSettings(party) {
+  const config = party?.config || {};
+  const gameRules = config.gameRules || {};
+  const roleCounts = config.roleCounts || {};
+  return (
+    (!Array.isArray(config.selectedPacks) ||
+      config.selectedPacks.length === 0) &&
+    Object.keys(gameRules).length === 0 &&
+    Object.keys(roleCounts).length === 0
+  );
+}
+
 async function resumeHostedOnlinePartyFromUrl() {
   if (!partyCode) return false;
 
@@ -140,7 +152,10 @@ async function resumeHostedOnlinePartyFromUrl() {
   onlineSettingsTab.classList.add('active');
   showContainer(onlineSettingsContainer);
 
-  restoreHostedPartySettingControls(party);
+  const needsInitialSettings = hostedPartyNeedsInitialSettings(party);
+  if (!needsInitialSettings) {
+    restoreHostedPartySettingControls(party);
+  }
   await window.SetGamemodeButtons();
 
   await UpdateUserPartyData({
@@ -155,7 +170,14 @@ async function resumeHostedOnlinePartyFromUrl() {
   await joinParty(partyCode);
   window.onlinePartySettingsResumePending = false;
 
+  if (needsInitialSettings && typeof UpdateSettings === 'function') {
+    await UpdateSettings();
+    const initializedData = await getExistingPartyData(partyCode);
+    currentPartyData = initializedData?.[0] || currentPartyData;
+  }
+
   const latestParty = currentPartyData || party;
+  window.syncOnlinePartyGameSwitcherButtons?.(latestParty);
   if (typeof UpdateUserIcons === 'function') {
     await UpdateUserIcons(latestParty);
   }

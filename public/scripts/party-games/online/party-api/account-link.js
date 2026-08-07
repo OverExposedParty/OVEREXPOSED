@@ -61,7 +61,8 @@
     computerId = deviceId,
     partyType = sessionPartyType,
     accountId = getStoredAccountId(),
-    silent = true
+    silent = true,
+    showConflict = true
   } = {}) {
     if (!partyId || !computerId || !partyType) return null;
     if (onlinePartyAccountLinkInFlight) return onlinePartyAccountLinkInFlight;
@@ -88,15 +89,41 @@
           const conflictKey = conflictPartyCode
             ? `${identityKey}:${conflictPartyCode}`
             : '';
-          if (conflictKey && conflictKey === lastShownAccountLinkConflictKey) {
+          if (
+            showConflict &&
+            conflictKey &&
+            conflictKey === lastShownAccountLinkConflictKey
+          ) {
             return null;
           }
 
+          const conflictDialog = window.ActivePartyConflictDialog;
           const conflictShown =
-            typeof window.ActivePartyConflictDialog?.openFromError ===
-              'function' &&
-            window.ActivePartyConflictDialog.openFromError(data, {
-              source: 'account-link'
+            showConflict &&
+            typeof conflictDialog?.openFromError === 'function' &&
+            conflictDialog.openFromError(data, {
+              source: 'account-link',
+              onContinue:
+                typeof conflictDialog.endOwnedParty === 'function'
+                  ? async (oldParty) => {
+                      await conflictDialog.endOwnedParty(oldParty);
+                      lastShownAccountLinkConflictKey = '';
+                      const linked = await linkCurrentPartyPlayerToAccount({
+                        partyId: normalisedPartyId,
+                        computerId,
+                        partyType,
+                        accountId,
+                        silent: false,
+                        showConflict: false
+                      });
+                      if (!linked) {
+                        throw new Error(
+                          'The account could not be attached to the current party.'
+                        );
+                      }
+                      return linked;
+                    }
+                  : null
             });
           if (conflictShown) {
             lastShownAccountLinkConflictKey = conflictKey;
@@ -144,6 +171,7 @@
         if (data.claimedReward?.earnedTotal > 0) {
           window.refreshAccountPreview?.();
         }
+        void window.PartyAuthTransition?.completeCurrentPartyAuthTransition?.();
 
         return data;
       } finally {
@@ -253,6 +281,26 @@
         );
       });
     });
+
+    const storedAccountId = getStoredAccountId();
+    if (
+      storedAccountId &&
+      typeof partyCode !== 'undefined' &&
+      typeof sessionPartyType !== 'undefined' &&
+      typeof deviceId !== 'undefined' &&
+      partyCode &&
+      sessionPartyType &&
+      deviceId
+    ) {
+      linkCurrentPartyPlayerToAccount({ accountId: storedAccountId }).catch(
+        (error) => {
+          console.warn(
+            'Failed to reconcile the signed-in party player:',
+            error
+          );
+        }
+      );
+    }
   }
 
   window.PartyApiAccountLink = {

@@ -4,6 +4,67 @@ const { createPartyGameSyncAlerts } = require('./sync-alerts');
 const {
   registerGamemodeDistributionRoute
 } = require('./gamemode-distribution');
+const {
+  createReleaseMetadataFromContent,
+  getRuntimeBuild
+} = require('../../services/game-mode-releases');
+
+function normalizeReleaseVersion(value) {
+  const version = String(value || '').trim();
+  return version && version !== '-' ? version : 'Legacy';
+}
+
+function formatReleaseVersion(value) {
+  const version = normalizeReleaseVersion(value);
+  return version === 'Legacy' ? version : `v${version}`;
+}
+
+function countRoomVersions(rooms, gamemode) {
+  return rooms.reduce((counts, room) => {
+    if (String(room.gamemode) !== String(gamemode)) return counts;
+    const version = normalizeReleaseVersion(room.gameModeVersion);
+    counts.set(version, Number(counts.get(version) || 0) + 1);
+    return counts;
+  }, new Map());
+}
+
+function formatVersionCounts(counts) {
+  if (!counts?.size) return '-';
+  return [...counts.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([version, count]) => `${formatReleaseVersion(version)}: ${count}`)
+    .join(', ');
+}
+
+function createArchivedVersionBreakdown(rows, gamemode) {
+  return rows
+    .filter((row) => String(row._id?.gamemode) === String(gamemode))
+    .map((row) => ({
+      version: normalizeReleaseVersion(row._id?.version),
+      rooms: Number(row.rooms || 0),
+      roomsWithErrors: Number(row.roomsWithErrors || 0)
+    }));
+}
+
+function formatVersionErrorRates(breakdown) {
+  if (!breakdown.length) return '-';
+  return breakdown
+    .sort((left, right) => left.version.localeCompare(right.version))
+    .map(({ version, rooms, roomsWithErrors }) => {
+      const errorRate = rooms ? Math.round((roomsWithErrors / rooms) * 100) : 0;
+      return `${formatReleaseVersion(version)}: ${errorRate}%`;
+    })
+    .join(', ');
+}
+
+function contentAppliesToGamemode(content, gamemode) {
+  if (content.gameType === gamemode) return true;
+  return (
+    content.scope === 'global' &&
+    Array.isArray(content.appliesTo) &&
+    content.appliesTo.includes(gamemode)
+  );
+}
 
 function registerOePanelPartyRoomRoutes(context) {
   const { app, partyOwnerLeases = {} } = context;
@@ -92,6 +153,30 @@ function registerOePanelPartyRoomRoutes(context) {
           },
           { $sort: { rooms: -1, _id: 1 } }
         ]);
+        const archivedReleaseAggregationRows =
+          await archivedRoomSchema.aggregate([
+            { $match: { archivedAt: { $gte: last30Days } } },
+            {
+              $group: {
+                _id: {
+                  gamemode: { $ifNull: ['$gamemode', 'unknown'] },
+                  version: {
+                    $ifNull: ['$session.gameModeRelease.version', 'Legacy']
+                  }
+                },
+                rooms: { $sum: 1 },
+                roomsWithErrors: {
+                  $sum: {
+                    $cond: [
+                      { $gt: [{ $size: { $ifNull: ['$errors', []] } }, 0] },
+                      1,
+                      0
+                    ]
+                  }
+                }
+              }
+            }
+          ]);
         const archivedRoomsLast30Days = gamemodeAggregationRows.reduce(
           (total, row) => total + Number(row.rooms || 0),
           0
@@ -143,19 +228,122 @@ function registerOePanelPartyRoomRoutes(context) {
           (total, row) => total + Number(row.outcomeRecorded || 0),
           0
         );
-        const partyPacks = (
-          await GamePack.find({}).sort({ gameType: 1, slug: 1 }).lean()
-        ).map(serializePartyPackForPanel);
-        const partyRules = (
-          await GameRule.find({}).sort({ gameType: 1, key: 1 }).lean()
-        )
+        const [
+          gameModeDocuments,
+          gamePackDocuments,
+          gameRuleDocuments,
+          gameRoleDocuments
+        ] = await Promise.all([
+          GameMode.find({}).sort({ sortOrder: 1, gameType: 1 }).lean(),
+          GamePack.find({}).sort({ gameType: 1, slug: 1 }).lean(),
+          GameRule.find({}).sort({ gameType: 1, key: 1 }).lean(),
+          GameRole.find({}).sort({ gameType: 1, sortOrder: 1, key: 1 }).lean()
+        ]);
+        const partyPacks = gamePackDocuments.map(serializePartyPackForPanel);
+        const partyRules = gameRuleDocuments
           .filter((rule) => !isRetiredRule(rule))
           .map(serializePartyRuleForPanel);
-        const partyRoles = (
-          await GameRole.find({})
-            .sort({ gameType: 1, sortOrder: 1, key: 1 })
-            .lean()
-        ).map(serializePartyRoleForPanel);
+        const partyRoles = gameRoleDocuments.map(serializePartyRoleForPanel);
+        const gamemodeRowsByKey = new Map(
+          gamemodes.map((row) => [String(row.gamemodeKey), row])
+        );
+        gameModeDocuments.forEach((gameMode) => {
+          const gamemode = String(gameMode.gameType);
+          if (!gamemodeRowsByKey.has(gamemode)) {
+            const row = {
+              gamemode: gameMode.name || formatPartyGameLabel(gamemode),
+              gamemodeKey: gamemode,
+              rooms: '0',
+              share: '0%',
+              activeRooms: String(activeRoomsByGamemode[gamemode] || 0),
+              averagePlayers: '-',
+              errorRate: '-',
+              outcomeCoverage: '-',
+              latestArchived: '-'
+            };
+            gamemodes.push(row);
+            gamemodeRowsByKey.set(gamemode, row);
+          }
+
+          const row = gamemodeRowsByKey.get(gamemode);
+          const configuredVersion = normalizeReleaseVersion(gameMode.version);
+          const activeVersions = countRoomVersions(activeRooms, gamemode);
+          const archivedVersions = createArchivedVersionBreakdown(
+            archivedReleaseAggregationRows,
+            gamemode
+          );
+          const currentRelease = createReleaseMetadataFromContent({
+            gamemode,
+            gameMode,
+            runtimeBuild: getRuntimeBuild(),
+            rules: gameRuleDocuments.filter(
+              (rule) =>
+                rule.enabled &&
+                rule.status === 'published' &&
+                contentAppliesToGamemode(rule, gamemode)
+            ),
+            packs: gamePackDocuments.filter(
+              (pack) =>
+                pack.gameType === gamemode &&
+                pack.enabled &&
+                pack.status === 'published'
+            ),
+            roles: gameRoleDocuments.filter(
+              (role) =>
+                role.gameType === gamemode &&
+                role.enabled &&
+                role.status === 'published'
+            )
+          });
+          const matchingActiveRooms = activeRooms.filter(
+            (activeRoom) => String(activeRoom.gamemode) === gamemode
+          );
+          const outdatedActiveRooms = matchingActiveRooms.filter(
+            (activeRoom) =>
+              activeRoom.releaseId === '-' ||
+              activeRoom.releaseId !== currentRelease.releaseId
+          ).length;
+
+          Object.assign(row, {
+            configuredVersion: formatReleaseVersion(configuredVersion),
+            configuredVersionRaw: configuredVersion,
+            activeVersions: formatVersionCounts(activeVersions),
+            observedVersions: archivedVersions.length
+              ? archivedVersions
+                  .map(
+                    ({ version, rooms }) =>
+                      `${formatReleaseVersion(version)}: ${rooms}`
+                  )
+                  .join(', ')
+              : '-',
+            versionErrorRates: formatVersionErrorRates(archivedVersions),
+            outdatedActiveRooms: String(outdatedActiveRooms),
+            releaseHealth:
+              outdatedActiveRooms > 0
+                ? `${outdatedActiveRooms} outdated`
+                : activeVersions.size
+                  ? 'Current'
+                  : 'No active rooms',
+            currentReleaseId: currentRelease.releaseId,
+            currentRuntimeBuild: currentRelease.runtimeBuild,
+            currentContentHash: currentRelease.contentHash,
+            latestReleaseNote:
+              gameMode.releaseHistory?.at?.(-1)?.releaseNote || '-'
+          });
+        });
+        const configuredGamemodeKeys = new Set(
+          gameModeDocuments.map((gameMode) => String(gameMode.gameType))
+        );
+        const canReleaseGameModes = hasOePanelPermission(
+          account,
+          'party_games.release'
+        );
+        gamemodes.forEach((row) => {
+          row.canReleaseVersion = Boolean(
+            canReleaseGameModes &&
+            configuredGamemodeKeys.has(String(row.gamemodeKey))
+          );
+        });
         const gamemodeSettingsAlerts = (
           await GamemodeSettingsAlert.find(getGamemodeSettingsAlertQuery('all'))
             .sort({ 'system.createdAt': -1 })
@@ -348,4 +536,11 @@ function registerOePanelPartyRoomRoutes(context) {
   }
 }
 
-module.exports = { registerOePanelPartyRoomRoutes };
+module.exports = {
+  countRoomVersions,
+  createArchivedVersionBreakdown,
+  formatReleaseVersion,
+  formatVersionCounts,
+  formatVersionErrorRates,
+  registerOePanelPartyRoomRoutes
+};

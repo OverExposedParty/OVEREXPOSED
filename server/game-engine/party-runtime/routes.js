@@ -56,7 +56,13 @@ const {
   createPartyPlayerUpdateRoutes
 } = require('./route-handlers/player-update-routes');
 const { createPartyExitRoutes } = require('./route-handlers/exit-routes');
+const {
+  createPartyAuthTransitionRoutes
+} = require('./route-handlers/auth-transition-routes');
 const { createPartyUtilityRoutes } = require('./route-handlers/utility-routes');
+const {
+  createPartySwitchGameRoute
+} = require('./route-handlers/switch-game-route');
 
 function createPartyRouteHandlers(deps) {
   const context = {
@@ -85,10 +91,12 @@ function createPartyRouteHandlers(deps) {
   Object.assign(context, createPartyActionRoute(context));
   Object.assign(context, createPartyUpsertRoute(context));
   Object.assign(context, createPartySocketTools(context));
+  Object.assign(context, createPartyAuthTransitionRoutes(context));
   Object.assign(context, createPartyJoinRoute(context));
   Object.assign(context, createPartyPlayerUpdateRoutes(context));
   Object.assign(context, createPartyExitRoutes(context));
   Object.assign(context, createPartyUtilityRoutes(context));
+  Object.assign(context, createPartySwitchGameRoute(context));
 
   return {
     createUpsertPartyHandler: context.createUpsertPartyHandler,
@@ -101,8 +109,10 @@ function createPartyRouteHandlers(deps) {
       context.createContinuePlayerAsGuestHandler,
     createPatchPlayerHandler: context.createPatchPlayerHandler,
     createDisconnectUserHandler: context.createDisconnectUserHandler,
+    createAuthTransitionHandlers: context.createAuthTransitionHandlers,
     createPartyErrorHandler: context.createPartyErrorHandler,
     createPartyGetHandler: context.createPartyGetHandler,
+    createSwitchGameHandler: context.createSwitchGameHandler,
     disconnectSocketPartyMemberships: context.disconnectSocketPartyMemberships,
     DISCONNECT_GRACE_PERIOD_MS: context.DISCONNECT_GRACE_PERIOD_MS
   };

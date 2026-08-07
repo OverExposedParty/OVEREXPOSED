@@ -24,6 +24,49 @@
     return element;
   }
 
+  function formatDateTime(value) {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+  }
+
+  function abbreviateIdentifier(value) {
+    const text = String(value || '-');
+    return text.length > 24 ? `${text.slice(0, 12)}…${text.slice(-8)}` : text;
+  }
+
+  function createMetaValue(value, { copyable = false } = {}) {
+    const normalizedValue = String(value || '-');
+    if (!copyable || normalizedValue === '-') {
+      return createElement(
+        'strong',
+        'oe-panel-room-meta-value',
+        normalizedValue
+      );
+    }
+
+    const button = createElement(
+      'button',
+      'oe-panel-room-meta-value oe-panel-room-meta-copy',
+      abbreviateIdentifier(normalizedValue)
+    );
+    button.type = 'button';
+    button.title = normalizedValue;
+    button.setAttribute('aria-label', `Copy ${normalizedValue}`);
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard?.writeText?.(normalizedValue);
+        button.textContent = 'Copied';
+        window.setTimeout(() => {
+          button.textContent = abbreviateIdentifier(normalizedValue);
+        }, 1200);
+      } catch (error) {
+        window.alert('This value could not be copied automatically.');
+      }
+    });
+    return button;
+  }
+
   function createOeStack(userIcon) {
     const resolvedIcon =
       typeof userIcon === 'string' && userIcon.split(':').length === 4
@@ -329,6 +372,7 @@
     const list = createElement('div', 'oe-panel-room-error-list');
     errors.forEach((error) => {
       const card = createElement('article', 'oe-panel-room-error');
+      if (error.buildChanged) card.classList.add('is-build-changed');
       card.append(
         createElement(
           'strong',
@@ -338,11 +382,31 @@
         createElement(
           'span',
           'oe-panel-room-error-meta',
-          [error.source, error.code, error.phase, error.occurredAt]
+          [
+            error.source,
+            error.code,
+            error.phase,
+            error.gameModeVersion && error.gameModeVersion !== 'Legacy'
+              ? `v${error.gameModeVersion}`
+              : error.gameModeVersion,
+            error.runtimeBuild && error.runtimeBuild !== '-'
+              ? `build ${abbreviateIdentifier(error.runtimeBuild)}`
+              : '',
+            error.occurredAt
+          ]
             .filter(Boolean)
             .join(' · ') || 'No additional details'
         )
       );
+      if (error.buildChanged) {
+        card.appendChild(
+          createElement(
+            'span',
+            'oe-panel-room-error-build-warning',
+            'Build changed during game'
+          )
+        );
+      }
       list.appendChild(card);
     });
     section.appendChild(list);
@@ -379,19 +443,30 @@
 
     const meta = createElement('div', 'oe-panel-room-meta-grid');
     [
-      ['Game ID', row.gameId],
-      ['Players', row.playerCount],
-      ['Host', row.hostUser],
-      ['Duration', row.timeLapsed],
-      ['Created', row.createdAt],
-      ['Last Updated', row.lastUpdated],
-      ['Server Region', row.serverRegion],
-      ['Source', row.sourceCollection]
-    ].forEach(([label, value]) => {
+      { label: 'Game ID', value: row.gameId, copyable: true },
+      {
+        label: 'Version',
+        value: row.gameModeVersionLabel || row.gameModeVersion || 'Legacy'
+      },
+      { label: 'Players', value: row.playerCount },
+      { label: 'Host', value: row.hostUser },
+      { label: 'Duration', value: row.timeLapsed },
+      { label: 'Created', value: row.createdAt },
+      { label: 'Last Updated', value: row.lastUpdated },
+      { label: 'Server Region', value: row.serverRegion },
+      { label: 'Release ID', value: row.releaseId, copyable: true },
+      { label: 'Runtime Build', value: row.runtimeBuild, copyable: true },
+      { label: 'Content Hash', value: row.contentHash, copyable: true },
+      {
+        label: 'Release Captured',
+        value: formatDateTime(row.releaseCapturedAt)
+      },
+      { label: 'Source', value: row.sourceCollection }
+    ].forEach(({ label, value, copyable }) => {
       const item = createElement('div', 'oe-panel-room-meta-item');
       item.append(
         createElement('span', 'oe-panel-room-meta-label', label),
-        createElement('strong', 'oe-panel-room-meta-value', value || '-')
+        createMetaValue(value, { copyable })
       );
       meta.appendChild(item);
     });

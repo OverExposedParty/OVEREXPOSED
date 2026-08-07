@@ -24,6 +24,7 @@ test('party runtime preserves its public handler contract', () => {
   });
 
   assert.deepEqual(Object.keys(runtime).sort(), [
+    'createAuthTransitionHandlers',
     'createContinuePlayerAsGuestHandler',
     'createDeleteHandler',
     'createDeleteQueryHandler',
@@ -35,6 +36,7 @@ test('party runtime preserves its public handler contract', () => {
     'createPartyGetHandler',
     'createPatchPlayerHandler',
     'createRemoveUserHandler',
+    'createSwitchGameHandler',
     'createUpsertPartyHandler',
     'disconnectSocketPartyMemberships',
     'io',

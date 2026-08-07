@@ -63,6 +63,51 @@
     return GAMEMODE_COLOURS[getGamemodeKey(value)] || DEFAULT_GAMEMODE_COLOURS;
   }
 
+  function getPartyApiRoute(apiRoute, gamemode) {
+    const explicitRoute = String(apiRoute || '').trim();
+    const allowedRoutes = new Set(
+      Object.keys(GAMEMODE_COLOURS).map((key) => `party-game-${key}`)
+    );
+    if (allowedRoutes.has(explicitRoute)) return explicitRoute;
+
+    const derivedRoute = `party-game-${getGamemodeKey(gamemode)}`;
+    return allowedRoutes.has(derivedRoute) ? derivedRoute : '';
+  }
+
+  async function endOwnedParty({ partyCode, apiRoute, gamemode } = {}) {
+    const normalisedPartyCode = normalisePartyCode(partyCode);
+    const normalisedApiRoute = getPartyApiRoute(apiRoute, gamemode);
+    if (!normalisedPartyCode || !normalisedApiRoute) {
+      throw new Error('The old party could not be identified.');
+    }
+
+    const response = await fetch(`/api/${normalisedApiRoute}/delete`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ partyCode: normalisedPartyCode })
+    });
+    const payload = await response.json().catch(() => ({}));
+    const alreadyEnded =
+      response.status === 404 && payload?.error?.code === 'party_not_found';
+    if ((!response.ok || payload?.success === false) && !alreadyEnded) {
+      const error = new Error(
+        payload?.error?.message || 'The old party could not be ended.'
+      );
+      error.code = payload?.error?.code || 'party_disband_failed';
+      error.status = response.status;
+      throw error;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent('oe-active-party-lobby-disbanded', {
+        detail: { partyCode: normalisedPartyCode }
+      })
+    );
+    return true;
+  }
+
   function getReturnPath(partyCode, gamemode, conflictType) {
     if (!partyCode) return '';
     const gamemodeKey = getGamemodeKey(gamemode);
@@ -250,7 +295,9 @@
     onLeave,
     onEnd,
     onLeaveAndCreate,
-    onEndAndCreate
+    onEndAndCreate,
+    onContinue,
+    apiRoute
   }) {
     const isAccountLink = source === 'account-link';
     const isPartyManagement = source === 'party-management';
@@ -286,9 +333,13 @@
       'p',
       'active-party-conflict-dialog-description',
       isAccountLink
-        ? partyCode
-          ? `This account already owns party ${partyCode}. Your current guest party was left unchanged.`
-          : 'This account already owns another active party. Your current guest party was left unchanged.'
+        ? typeof onContinue === 'function'
+          ? partyCode
+            ? `This account already owns party ${partyCode}. Return to it, or end it and use your current party instead.`
+            : 'This account already owns another active party. Return to it, or end it and use your current party instead.'
+          : partyCode
+            ? `This account already owns party ${partyCode}. Your current guest party was left unchanged.`
+            : 'This account already owns another active party. Your current guest party was left unchanged.'
         : isParticipant
           ? "You're already in an active party. Return to it or leave it before creating another one."
           : 'You already have an active party. Return to it or end it before creating another one.'
@@ -421,7 +472,7 @@
       : isParticipant
         ? onLeaveAndCreate
         : isAccountLink
-          ? null
+          ? onContinue
           : onEndAndCreate;
     const replacementLabel = isPartyManagement
       ? isParticipant
@@ -437,30 +488,40 @@
       ? isParticipant
         ? 'leave-party'
         : 'end-party'
-      : isParticipant
-        ? 'leave-and-create'
-        : 'end-and-create';
+      : isAccountLink
+        ? 'continue'
+        : isParticipant
+          ? 'leave-and-create'
+          : 'end-and-create';
     const secondaryButton = createElement(
       'button',
       'active-party-conflict-dialog-action is-secondary',
-      isAccountLink ? 'Continue here' : replacementLabel
+      isAccountLink
+        ? typeof replacementAction === 'function'
+          ? 'End & Continue Here'
+          : 'Continue Here'
+        : replacementLabel
     );
     secondaryButton.type = 'button';
-    if (!isAccountLink) {
+    if (!isAccountLink || typeof replacementAction === 'function') {
       secondaryButton.disabled = typeof replacementAction !== 'function';
       secondaryButton.addEventListener('click', async () => {
         if (secondaryButton.disabled) return;
         if (
-          isPartyManagement &&
+          (isPartyManagement || isAccountLink) &&
           secondaryButton.dataset.confirming !== 'true'
         ) {
           secondaryButton.dataset.confirming = 'true';
-          secondaryButton.textContent = isParticipant
-            ? 'Confirm leave'
-            : 'Confirm end party';
-          description.textContent = isParticipant
-            ? 'Leaving removes you from this party. Press again to confirm.'
-            : 'Ending this party removes it for everyone. Press again to confirm.';
+          secondaryButton.textContent = isAccountLink
+            ? 'Confirm End & Continue'
+            : isParticipant
+              ? 'Confirm leave'
+              : 'Confirm end party';
+          description.textContent = isAccountLink
+            ? `Ending party ${partyCode} removes it for everyone. Press again to confirm and attach your account to the current party.`
+            : isParticipant
+              ? 'Leaving removes you from this party. Press again to confirm.'
+              : 'Ending this party removes it for everyone. Press again to confirm.';
           return;
         }
 
@@ -468,7 +529,7 @@
         secondaryButton.setAttribute('aria-busy', 'true');
         secondaryButton.textContent = replacementProgressLabel;
         try {
-          await replacementAction({ partyCode });
+          await replacementAction({ partyCode, gamemode, apiRoute });
           close(replacementCloseReason);
         } catch (error) {
           console.error(
@@ -477,12 +538,14 @@
               : 'Failed to replace the active party:',
             error
           );
-          if (isPartyManagement) {
+          if (isPartyManagement || isAccountLink) {
             description.textContent =
               error?.message ||
-              (isParticipant
-                ? 'The party could not be left. Try again.'
-                : 'The party could not be ended. Try again.');
+              (isAccountLink
+                ? 'The old party could not be replaced. Try again.'
+                : isParticipant
+                  ? 'The party could not be left. Try again.'
+                  : 'The party could not be ended. Try again.');
           } else if (error?.previousPartyExited) {
             description.textContent = isParticipant
               ? 'You left the previous party, but the new party could not be created. Try again.'
@@ -494,7 +557,9 @@
           secondaryButton.textContent =
             !isPartyManagement && error?.previousPartyExited
               ? 'Create New Party'
-              : replacementLabel;
+              : isAccountLink
+                ? 'End & Continue Here'
+                : replacementLabel;
         }
       });
     } else {
@@ -518,7 +583,9 @@
     onLeave = null,
     onEnd = null,
     onLeaveAndCreate = null,
-    onEndAndCreate = null
+    onEndAndCreate = null,
+    onContinue = null,
+    apiRoute: rawApiRoute = ''
   } = {}) {
     const host = ensureDialogHost();
     const partyCode = normalisePartyCode(rawPartyCode);
@@ -536,6 +603,7 @@
       normaliseReturnPath(rawReturnPath) ||
       getReturnPath(partyCode, rawGamemode, normalisedConflictType);
     const statusText = String(rawStatusText || '').trim().slice(0, 80);
+    const apiRoute = getPartyApiRoute(rawApiRoute, rawGamemode);
 
     if (!host.open && activeDialogState) {
       queueActiveClose(host.returnValue || 'programmatic');
@@ -576,7 +644,9 @@
         onLeave,
         onEnd,
         onLeaveAndCreate,
-        onEndAndCreate
+        onEndAndCreate,
+        onContinue,
+        apiRoute
       })
     );
 
@@ -621,6 +691,7 @@
     ERROR_CODE,
     PARTICIPANT_ERROR_CODE,
     close,
+    endOwnedParty,
     isConflict,
     open,
     openFromError

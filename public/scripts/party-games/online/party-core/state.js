@@ -6,6 +6,7 @@ let loadingPage = false;
 let isPlaying = false;
 let lastKnownPing = 0;
 let onlineUsername = 'N/A';
+var currentPartyData = null;
 window.onlineGameUiReady = false;
 window.pendingOnlineInstructionSync = false;
 window.onlineInstructionSyncInFlight = false;
@@ -13,6 +14,19 @@ window.lastOnlineInstructionSnapshotSignature = null;
 
 const { protocol, hostname } = window.location;
 let socket;
+
+function isAuthoritativePartyHost(partyData = currentPartyData) {
+  const state = partyData?.state ?? partyData ?? {};
+  const authoritativeHostId = state.hostComputerId ?? hostDeviceId;
+  const currentDeviceId =
+    typeof deviceId === 'undefined' ? null : deviceId;
+
+  return Boolean(
+    authoritativeHostId &&
+    currentDeviceId &&
+    String(authoritativeHostId) === String(currentDeviceId)
+  );
+}
 
 let partyCode =
   window.location.pathname.match(

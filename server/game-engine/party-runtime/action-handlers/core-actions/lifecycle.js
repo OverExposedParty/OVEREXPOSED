@@ -1,5 +1,14 @@
 const { createPartyGameId } = require('../../game-session');
 
+const PACK_REQUIRED_GAMEMODES = new Set([
+  'truth-or-dare',
+  'never-have-i-ever',
+  'would-you-rather',
+  'most-likely-to',
+  'paranoia',
+  'imposter'
+]);
+
 function handleCoreLifecycleAction(action, context) {
   const {
     getPartyPlayerId,
@@ -31,6 +40,18 @@ function handleCoreLifecycleAction(action, context) {
       assertActorCanControlParty(workingParty, actorId, false);
 
       const gamemode = config.gamemode || workingParty.gamemode;
+
+      const selectedPacks = Array.isArray(config.selectedPacks)
+        ? config.selectedPacks.filter((pack) => String(pack || '').trim())
+        : [];
+      if (PACK_REQUIRED_GAMEMODES.has(gamemode) && selectedPacks.length === 0) {
+        const error = new Error(
+          'Select at least one question pack before starting the game.'
+        );
+        error.status = 409;
+        error.code = 'party_selected_packs_required';
+        throw error;
+      }
 
       if (payload.bypassPlayerRestrictions !== true) {
         assertOnlinePlayerRestrictions({ gamemode, players });
@@ -168,7 +189,8 @@ function handleCoreLifecycleAction(action, context) {
       const previousSession = workingParty.session || {};
       workingParty.session = {
         ...previousSession,
-        gameId: createPartyGameId(gamemode),
+        gameId: payload.nextGameId || createPartyGameId(gamemode),
+        gameModeRelease: payload.nextGameModeRelease || null,
         createdAt: new Date(),
         startedAt: null,
         endedAt: null,

@@ -13,6 +13,7 @@ const GAMEMODES_FILE = path.join(GAMEMODES_ROOT, 'gamemodes.json');
 function serializeGameModeForJson(gamemode) {
   return {
     gamemodeID: gamemode.gameType,
+    gamemodeVersion: gamemode.version || '1.0.0',
     gamemodeName: gamemode.name,
     gamemodeCardImageFront: gamemode.cardImages?.front || '',
     gamemodeCardImageBack: gamemode.cardImages?.back || '',
@@ -52,6 +53,7 @@ async function importGameModesFromJson(GameMode) {
       {
         $set: {
           gameType,
+          version: gamemode.gamemodeVersion || '1.0.0',
           name: gamemode.gamemodeName || gameType,
           description: gamemode.gamemodeDescription || '',
           cardImages: {
@@ -113,6 +115,7 @@ async function getPublishedGameModes(GameMode) {
     .filter((gamemode) => gamemode['gamemode-active'] !== false)
     .map((gamemode, index) => ({
       gameType: gamemode.gamemodeID,
+      version: gamemode.gamemodeVersion || '1.0.0',
       name: gamemode.gamemodeName,
       description: gamemode.gamemodeDescription || '',
       cardImages: {

@@ -77,7 +77,7 @@ async function passTruthOrDarePrompt() {
 async function SetPageSettings() {
   if (!(await registerTruthOrDareLateJoinIfRequested())) return;
 
-  selectPunishmentText.textContent = "YOU CHOSE TO PASS. PICK A FORFEIT.";
+  selectPunishmentText.textContent = "You chose to pass. Pick your forfeit.";
 
   selectPunishmentConfirmPunishmentButton.addEventListener('click', async () => {
     const selectedPunishmentId = selectPunishmentContainer.getAttribute('select-id');
@@ -203,7 +203,8 @@ async function SetPageSettings() {
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -214,7 +215,11 @@ async function SetPageSettings() {
 
   // Use config for selectedPacks & shuffleSeed (fallback to flat for legacy)
   const config = getPartyConfig(currentPartyData);
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  const questionsLoaded = await loadJSONFiles(
+    config.selectedPacks,
+    config.shuffleSeed
+  );
+  if (!questionsLoaded) return;
   debugLog("initialisePage");
   await initialisePage();
 }

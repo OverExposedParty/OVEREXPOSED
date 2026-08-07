@@ -101,6 +101,100 @@ test('guest account claims retain the browser party owner binding', async () => 
   });
 });
 
+test('guest account claims complete the auth lease and restore active state', async () => {
+  const handlers = new Map();
+  const patches = [];
+  const cancelledTransitions = [];
+  const existingParty = {
+    players: [
+      {
+        identity: {
+          computerId: 'guest-device',
+          accountId: null,
+          guestIdHash: 'guest-owner-hash'
+        },
+        state: {
+          participationStatus: 'reconnecting',
+          reconnectDeadline: new Date(Date.now() + 300_000)
+        }
+      }
+    ],
+    state: { phase: 'lobby' }
+  };
+  const mainModel = {
+    findOne() {
+      return { select: async () => existingParty };
+    }
+  };
+  const waitingRoomModel = {};
+  const routes = createPartyPlayerUpdateRoutes({
+    app: {
+      post(route, handler) {
+        handlers.set(route, handler);
+      }
+    },
+    Account: {},
+    partyGameRewardClaimSchema: {},
+    assertPatchPlayerBody() {},
+    recordPartyRouteError: async () => {},
+    getPartyPlayerId: (player) => player?.identity?.computerId,
+    grantPendingPartyGameReward: async () => null,
+    getPartyRequestPrincipal: async () => ({
+      type: 'account',
+      accountId: 'account-one',
+      partyOwnerIdHash: 'party-owner-hash'
+    }),
+    playerMatchesGuestPrincipal: (player, principal) =>
+      player.identity?.guestIdHash === principal.guestIdHash,
+    getPartyGuestPrincipalFromRequest: () => ({
+      type: 'guest',
+      guestIdHash: 'guest-owner-hash'
+    }),
+    withoutGuestHashes: (party) => party,
+    patchPlayerInPartyDocument: async (model, partyId, computerId, patch) => {
+      patches.push({ model, partyId, computerId, patch });
+      return { ...existingParty, state: { phase: 'lobby' } };
+    },
+    withPartyJoinLock: async (_partyId, callback) => callback(),
+    hasAuthTransitionForPlayer: () => true,
+    cancelAuthTransitionForPlayer: (partyId, computerId) => {
+      cancelledTransitions.push({ partyId, computerId });
+      return true;
+    }
+  });
+  routes.createLinkPlayerAccountHandler({
+    route: '/link-player-account',
+    mainModel,
+    waitingRoomModel,
+    logLabel: 'Test party'
+  });
+
+  await handlers.get('/link-player-account')(
+    {
+      body: { partyId: 'ABC-123', computerId: 'guest-device' },
+      query: {}
+    },
+    {
+      apiSuccess() {},
+      apiError(payload) {
+        assert.fail(`Unexpected API error: ${JSON.stringify(payload)}`);
+      }
+    }
+  );
+
+  assert.equal(patches.length, 2);
+  patches.forEach(({ patch }) => {
+    assert.equal(
+      patch['players.$.state.participationStatus'],
+      'active'
+    );
+    assert.equal(patch['players.$.state.reconnectDeadline'], null);
+  });
+  assert.deepEqual(cancelledTransitions, [
+    { partyId: 'ABC-123', computerId: 'guest-device' }
+  ]);
+});
+
 test('guest account claims stop before mutation when the owner lease conflicts', async () => {
   const handlers = new Map();
   const errors = [];
@@ -147,7 +241,9 @@ test('guest account claims stop before mutation when the owner lease conflicts',
     attachAccountToPartyOwnerLease: async () => ({
       attached: false,
       conflict: true,
-      partyId: 'OLD-123'
+      partyId: 'OLD-123',
+      gamemode: 'truth-or-dare',
+      apiRoute: 'party-game-truth-or-dare'
     })
   });
   routes.createLinkPlayerAccountHandler({
@@ -181,7 +277,9 @@ test('guest account claims stop before mutation when the owner lease conflicts',
   assert.equal(errors[0].code, 'party_owner_active_party_exists');
   assert.deepEqual(errors[0].details, {
     partyCode: 'OLD-123',
-    lobbyPath: '/OLD-123'
+    lobbyPath: '/OLD-123',
+    gamemode: 'truth-or-dare',
+    apiRoute: 'party-game-truth-or-dare'
   });
 });
 

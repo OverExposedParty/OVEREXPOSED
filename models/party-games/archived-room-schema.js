@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const partyGameErrorSchema = require('./party-game-error-schema');
+const gameModeReleaseMetadataSchema = require('./game-mode-release-metadata-schema');
 
 const archivedPlayerSchema = new mongoose.Schema(
   {
@@ -33,7 +34,11 @@ const archivedRoomSchema = new mongoose.Schema(
       createdAt: { type: Date, default: null },
       startedAt: { type: Date, default: null },
       endedAt: { type: Date, default: null },
-      serverRegion: { type: String, default: null }
+      serverRegion: { type: String, default: null },
+      gameModeRelease: {
+        type: gameModeReleaseMetadataSchema,
+        default: null
+      }
     },
     config: {
       selectedPacks: { type: [String], default: [] },

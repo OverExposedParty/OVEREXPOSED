@@ -94,9 +94,9 @@ window.debugWarn = (...args) => {
 // Update these values manually when you want to force browsers to fetch new script files.
 // Leave a value empty to fall back to the version already on the core-template.js URL.
 const MANUAL_SCRIPT_VERSIONS = Object.freeze({
-  WEBSITE_CACHE_VERSION: '2026-08-04-01',
-  WEBSITE_VERSION: '2026-08-04-01',
-  GAME_SETTINGS_VERSION: '2026-08-04-01'
+  WEBSITE_CACHE_VERSION: '',
+  WEBSITE_VERSION: '',
+  GAME_SETTINGS_VERSION: ''
 });
 
 function resolveScriptVersion(manualVersion) {

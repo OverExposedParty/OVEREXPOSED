@@ -140,7 +140,55 @@ test('canAccessProtectedPage blocks shop pages for regular accounts', async () =
 
   assert.equal(access.allowed, false);
   assert.equal(access.reason, 'feature_required');
+  assert.equal(access.requiredAccess, 'beta');
   assert.equal(access.feature, 'shop');
+});
+
+test('canAccessProtectedPage describes the access needed when signed out', async () => {
+  const request = { headers: { cookie: '' }, path: '/protected' };
+  const Account = createAccountModel(null);
+
+  const accountAccess = await canAccessProtectedPage(
+    request,
+    { type: 'account' },
+    { Account }
+  );
+  const betaAccess = await canAccessProtectedPage(
+    request,
+    { type: 'feature', feature: 'shop' },
+    { Account }
+  );
+  const ownerAccess = await canAccessProtectedPage(
+    request,
+    { type: 'owner' },
+    { Account }
+  );
+  const adminAccess = await canAccessProtectedPage(
+    request,
+    { type: 'admin' },
+    { Account }
+  );
+
+  assert.deepEqual(accountAccess, {
+    allowed: false,
+    reason: 'account_required',
+    requiredAccess: 'account'
+  });
+  assert.deepEqual(betaAccess, {
+    allowed: false,
+    reason: 'account_required',
+    requiredAccess: 'beta'
+  });
+  assert.deepEqual(ownerAccess, {
+    allowed: false,
+    reason: 'account_required',
+    requiredAccess: 'owner'
+  });
+  assert.deepEqual(adminAccess, {
+    allowed: false,
+    reason: 'account_required',
+    requiredAccess: 'admin'
+  });
 });
 
 test('canAccessProtectedPage still blocks beta feature pages for ordinary accounts', async () => {

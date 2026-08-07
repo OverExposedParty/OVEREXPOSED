@@ -1,3 +1,21 @@
+function restoreNonRoundRejoinState(
+  incomingPlayer,
+  { existingPlayerWasDisconnected = false, supportsActiveRoundJoin = false } = {}
+) {
+  if (
+    !incomingPlayer ||
+    !existingPlayerWasDisconnected ||
+    supportsActiveRoundJoin
+  ) {
+    return false;
+  }
+
+  incomingPlayer.state ||= {};
+  incomingPlayer.state.participationStatus = 'active';
+  incomingPlayer.state.reconnectDeadline = null;
+  return true;
+}
+
 function createPartyJoinRoute(context) {
   const {
     app,
@@ -21,6 +39,7 @@ function createPartyJoinRoute(context) {
     upsertPlayerInPartyDocument,
     withPartyJoinLock,
     cancelDisconnectGrace,
+    cancelAuthTransitionForPlayer,
     rememberSocketPartyMembership,
     getPlayerConnectionSocketId,
     hasLivePartySocketId,
@@ -74,6 +93,7 @@ function createPartyJoinRoute(context) {
           }
 
           cancelDisconnectGrace(partyId, incomingPlayerId);
+          cancelAuthTransitionForPlayer?.(partyId, incomingPlayerId);
           const activeGamemode = existingParty?.config?.gamemode;
           const supportsActiveRoundJoin =
             existingParty?.state?.isPlaying === true &&
@@ -85,6 +105,10 @@ function createPartyJoinRoute(context) {
               'paranoia',
               'imposter'
             ].includes(activeGamemode);
+          restoreNonRoundRejoinState(incomingPlayer, {
+            existingPlayerWasDisconnected,
+            supportsActiveRoundJoin
+          });
           if (supportsActiveRoundJoin) {
             if (!existingPlayer) {
               assertOnlinePlayerRestrictions({
@@ -377,5 +401,6 @@ function createPartyJoinRoute(context) {
 }
 
 module.exports = {
-  createPartyJoinRoute
+  createPartyJoinRoute,
+  restoreNonRoundRejoinState
 };

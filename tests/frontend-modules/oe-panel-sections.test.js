@@ -92,6 +92,9 @@ test('OE panel section modules build a complete registry in any load order', () 
   const table = partyGames.find((grid) => grid.id === 'party-games-grid-1');
   const rooms = table.tableSeries.find((series) => series.value === 'rooms');
   const roles = table.tableSeries.find((series) => series.value === 'roles');
+  const gamemodes = table.tableSeries.find(
+    (series) => series.value === 'gamemodes'
+  );
   const exportRoles = quickActions.actions.find(
     (action) => action.value === 'export-roles'
   );
@@ -120,6 +123,20 @@ test('OE panel section modules build a complete registry in any load order', () 
     )
   );
   assert.equal(exportRoles.endpoint, '/api/oe-panel/game-roles/export');
+  assert.ok(
+    rooms.columns.some((column) => column.key === 'gameModeVersionLabel')
+  );
+  assert.deepEqual(
+    Array.from(gamemodes.rowActions, ({ label, action }) => ({
+      label,
+      action
+    })),
+    [
+      { label: 'Bump Patch', action: 'bump-version-patch' },
+      { label: 'Bump Minor', action: 'bump-version-minor' },
+      { label: 'Bump Major', action: 'bump-version-major' }
+    ]
+  );
 
   const analytics = context.window.OE_PANEL_SECTIONS.Analytics;
   const analyticsActions = analytics.find(

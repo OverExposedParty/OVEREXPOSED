@@ -362,9 +362,62 @@ function createAccountActionContainer({ id, action, label, primary = false }) {
   const labelElement = document.createElement('span');
   labelElement.className = 'account-action-label';
   labelElement.textContent = label;
-  container.appendChild(labelElement);
+
+  const badge = document.createElement('span');
+  badge.className =
+    'notification-count-badge account-action-notification-badge';
+  badge.hidden = true;
+  badge.setAttribute('aria-hidden', 'true');
+
+  container.dataset.accountLabel = label;
+  container.append(labelElement, badge);
 
   return container;
+}
+
+function formatAccountActionNotificationCount(count) {
+  return count > 9 ? '9+' : String(count);
+}
+
+function updateAccountActionNotificationBadges(snapshot) {
+  const state =
+    snapshot || window.OEAccountNotificationState?.getSnapshot?.() || {};
+  const menuCounts = state.menuCounts || {};
+
+  accountButtonContainer
+    ?.querySelectorAll('.account-action-container[data-account-action]')
+    .forEach((actionButton) => {
+      const action = actionButton.dataset.accountAction;
+      const count = Math.max(0, Math.trunc(Number(menuCounts[action]) || 0));
+      const badge = actionButton.querySelector(
+        '.account-action-notification-badge'
+      );
+      if (!badge) return;
+
+      const previousCount = Math.max(
+        0,
+        Math.trunc(Number(badge.dataset.notificationCount) || 0)
+      );
+      badge.textContent = count
+        ? formatAccountActionNotificationCount(count)
+        : '';
+      badge.hidden = count === 0;
+      badge.dataset.notificationCount = String(count);
+
+      const label = actionButton.dataset.accountLabel || action;
+      actionButton.setAttribute(
+        'aria-label',
+        count
+          ? `${label}, ${count} unread notification${count === 1 ? '' : 's'}`
+          : label
+      );
+
+      if (count > previousCount) {
+        badge.classList.remove('is-increasing');
+        badge.getBoundingClientRect();
+        badge.classList.add('is-increasing');
+      }
+    });
 }
 
 function renderAccountActionMenu() {
@@ -398,6 +451,7 @@ function renderAccountActionMenu() {
       label: 'STATISTICS'
     })
   );
+  updateAccountActionNotificationBadges();
 }
 
 function setAccountActionButtonsDisabled(isDisabled) {

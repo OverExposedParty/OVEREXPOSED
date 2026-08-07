@@ -1,6 +1,6 @@
 let partyGameStatisticsButton;
 
-let partyGameStatisticsContainer, partyGameStatisticsTitle, scoreboardContainer, partyGameStatisticsEndGameButton, partyGameStatisticsGameSettingsButton, partyGameStatisticsWaitingForHost, partyGameStatisticsMainMenuButton;
+let partyGameStatisticsContainer, partyGameStatisticsTitle, scoreboardContainer, partyGameStatisticsEndGameButton, partyGameStatisticsReplayButton, partyGameStatisticsGameSettingsButton, partyGameStatisticsWaitingForHost, partyGameStatisticsMainMenuButton;
 let partyGameStatisticsTabs, partyGameStatisticsResultsTab, partyGameStatisticsOpalsTab, partyGameStatisticsXpTab, partyGameStatisticsResultsPanel, partyGameStatisticsOpalsPanel, partyGameStatisticsXpPanel;
 let partyGameRewardEmpty, partyGameRewardEmptyReason, partyGameRewardCompleted, partyGameRewardParticipation, partyGameRewardObjective, partyGameCapReductionRow, partyGameCapReductionLabel, partyGameCapReductionAmount, partyGameRewardTotal;
 let partyGameXpEmpty, partyGameXpEmptyReason, partyGameXpLevelRow, partyGameXpCurrentLevel, partyGameXpLevelUp, partyGameXpLevelBefore, partyGameXpLevelAfter, partyGameXpProgress, partyGameXpProgressText, partyGameXpProgressTrack, partyGameXpProgressFill, partyGameXpTotalRow, partyGameXpTotal;
@@ -76,6 +76,7 @@ function loadPartyGameStatisticsTemplate() {
         partyGameStatisticsTitle = partyGameStatisticsContainer.querySelector('h1');
         scoreboardContainer = partyGameStatisticsContainer.querySelector('#scoreboard-container');
         partyGameStatisticsEndGameButton = partyGameStatisticsContainer.querySelector('#end-game');
+        partyGameStatisticsReplayButton = partyGameStatisticsContainer.querySelector('#statistics-replay-game');
         partyGameStatisticsGameSettingsButton = partyGameStatisticsContainer.querySelector('#statistics-game-settings');
         partyGameStatisticsWaitingForHost = partyGameStatisticsContainer.querySelector('#statistics-waiting-for-host');
         partyGameStatisticsMainMenuButton = partyGameStatisticsContainer.querySelector('#statistics-main-menu');
@@ -132,6 +133,29 @@ function loadPartyGameStatisticsTemplate() {
             setPartyGameStatisticsView('xp');
         });
 
+        partyGameStatisticsReplayButton?.addEventListener('click', async () => {
+            if (partyGameStatisticsReplayButton.disabled) return;
+
+            partyGameStatisticsReplayButton.disabled = true;
+            const expectedGameId = currentPartyData?.session?.gameId;
+            try {
+                const updatedParty = await ReplayOnlinePartyGame({ expectedGameId });
+                if (updatedParty) {
+                    handleOnlinePartyGameReplayed({
+                        partyId: updatedParty.partyId,
+                        gamemode: updatedParty.config?.gamemode,
+                        gameId: updatedParty.session?.gameId,
+                        hostComputerId: updatedParty.state?.hostComputerId
+                    });
+                } else {
+                    partyGameStatisticsReplayButton.disabled = false;
+                }
+            } catch (error) {
+                partyGameStatisticsReplayButton.disabled = false;
+                console.error('Failed to replay the party game:', error);
+            }
+        });
+
         partyGameStatisticsGameSettingsButton?.addEventListener('click', async () => {
             if (partyGameStatisticsGameSettingsButton.disabled) return;
 
@@ -184,6 +208,7 @@ function loadPartyGameStatisticsTemplate() {
 
         renderPartyGameRewards(null);
         renderPartyGameXp(null);
+        window.syncOnlinePartyGameSwitcherButtons?.();
     }).then(() => {
         document.addEventListener('pointerdown', dismissPartyGameScoreImpactFeed);
         setPartyGameStatisticsMode(getPartyGameStatisticsMode());
@@ -243,9 +268,13 @@ function updatePartyGameStatisticsEndGameButtonState(partyData) {
     if (partyGameStatisticsGameSettingsButton) {
         partyGameStatisticsGameSettingsButton.hidden = !isGameOver || !isCurrentHost;
     }
+    if (partyGameStatisticsReplayButton) {
+        partyGameStatisticsReplayButton.hidden = !isGameOver || !isCurrentHost;
+    }
     if (partyGameStatisticsWaitingForHost) {
         partyGameStatisticsWaitingForHost.hidden = !isGameOver || Boolean(isCurrentHost);
     }
+    window.syncOnlinePartyGameSwitcherButtons?.(resolvedPartyData);
 }
 
 function SetPartyGameStatistics() {
@@ -350,6 +379,11 @@ function setPartyGameStatisticsMode(mode = 'live', options = {}) {
         partyGameStatisticsGameSettingsButton.disabled = false;
     }
 
+    if (partyGameStatisticsReplayButton) {
+        partyGameStatisticsReplayButton.hidden = !isGameOver || !isCurrentHost;
+        partyGameStatisticsReplayButton.disabled = false;
+    }
+
     if (partyGameStatisticsWaitingForHost) {
         partyGameStatisticsWaitingForHost.hidden = !isGameOver || Boolean(isCurrentHost);
     }
@@ -361,6 +395,7 @@ function setPartyGameStatisticsMode(mode = 'live', options = {}) {
     setPartyGameStatisticsView('results');
 
     partyGameStatisticsContainer?.classList.toggle('game-over-statistics', isGameOver);
+    window.syncOnlinePartyGameSwitcherButtons?.();
 }
 
 function setPartyGameStatisticsView(view = 'results') {

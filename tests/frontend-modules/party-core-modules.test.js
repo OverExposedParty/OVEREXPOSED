@@ -100,7 +100,10 @@ test('party core modules preserve the shared browser API', () => {
   });
 
   for (const functionName of [
+    'isAuthoritativePartyHost',
     'getOnlinePartyLobbyDestination',
+    'getOnlinePartyGameDestination',
+    'handleOnlinePartyGameReplayed',
     'redirectOnlinePartyToLobby',
     'reportOnlineGameError',
     'waitForOnlineCore',
@@ -113,4 +116,63 @@ test('party core modules preserve the shared browser API', () => {
   ]) {
     assert.equal(typeof sandbox[functionName], 'function');
   }
+
+  assert.equal(sandbox.isAuthoritativePartyHost(), false);
+  vm.runInContext(
+    'currentPartyData = { state: { hostComputerId: deviceId } };',
+    sandbox
+  );
+  assert.equal(sandbox.isAuthoritativePartyHost(), true);
+  vm.runInContext(
+    "currentPartyData = { state: { hostComputerId: 'another-device' } };",
+    sandbox
+  );
+  assert.equal(sandbox.isAuthoritativePartyHost(), false);
+});
+
+test('replay routing sends every client directly to the new game once', () => {
+  const transitions = [];
+  const context = {
+    URLSearchParams,
+    debugLog() {},
+    deviceId: 'guest-device',
+    formatPackName: (value) => String(value).trim().toLowerCase(),
+    getCurrentGamemodeSlug: () => 'most-likely-to',
+    loadingPage: false,
+    partyCode: 'ABC-123',
+    partyGameMode: 'most-likely-to',
+    transitionSplashScreen(destination, splash) {
+      transitions.push({ destination, splash });
+    },
+    window: null
+  };
+  context.window = context;
+  context.location = {
+    pathname: '/most-likely-to/ABC-123',
+    search: ''
+  };
+  const sandbox = vm.createContext(context);
+  vm.runInContext(
+    fs.readFileSync(
+      path.join(onlineDirectory, 'party-core/routing.js'),
+      'utf8'
+    ),
+    sandbox,
+    { filename: 'party-core/routing.js' }
+  );
+  const replay = {
+    partyId: 'ABC-123',
+    gamemode: 'most-likely-to',
+    gameId: `MLT-${'B'.repeat(32)}`
+  };
+
+  assert.equal(sandbox.handleOnlinePartyGameReplayed(replay), true);
+  assert.equal(sandbox.handleOnlinePartyGameReplayed(replay), false);
+  assert.deepEqual(transitions, [
+    {
+      destination: '/most-likely-to/ABC-123',
+      splash: '/images/splash-screens/most-likely-to.png'
+    }
+  ]);
+  assert.equal(sandbox.loadingPage, true);
 });

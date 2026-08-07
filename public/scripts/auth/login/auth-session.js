@@ -10,6 +10,7 @@
     'would-you-rather',
     'mafia'
   ]);
+  const PARTY_CODE_PATTERN = /^[A-Z0-9]{3}-[A-Z0-9]{3}$/;
 
   function createLoginAuthSession({ defaultOeIcon, setAuthStatus }) {
     const AUTH_ENTRY_POINTS = new Set([
@@ -288,6 +289,82 @@
       );
     }
 
+    function getCurrentPartyLinkTarget() {
+      const returnPath = getReturnToPath();
+      if (!returnPath) return null;
+
+      try {
+        const returnUrl = new URL(returnPath, window.location.origin);
+        const pathParts = returnUrl.pathname.split('/').filter(Boolean);
+        let gamemode = '';
+        let partyCode = '';
+
+        if (pathParts.length === 2 && pathParts[1] === 'settings') {
+          gamemode = pathParts[0];
+          partyCode = String(returnUrl.searchParams.get('partyCode') || '')
+            .trim()
+            .toUpperCase();
+        } else if (pathParts.length === 2) {
+          gamemode = pathParts[0];
+          partyCode = String(pathParts[1] || '')
+            .trim()
+            .toUpperCase();
+        }
+
+        const computerId = String(
+          window.localStorage?.getItem('device-id') || ''
+        ).trim();
+        if (
+          !PARTY_GAMEMODES.has(gamemode) ||
+          !PARTY_CODE_PATTERN.test(partyCode) ||
+          !computerId
+        ) {
+          return null;
+        }
+
+        return {
+          apiRoute: `party-game-${gamemode}`,
+          computerId,
+          partyCode
+        };
+      } catch {
+        return null;
+      }
+    }
+
+    async function replaceActivePartyAndAttachAccount(
+      conflictDialog,
+      oldParty,
+      target
+    ) {
+      await conflictDialog.endOwnedParty(oldParty);
+
+      const response = await fetch(
+        `/api/${target.apiRoute}/link-player-account?partyCode=${encodeURIComponent(target.partyCode)}`,
+        {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            partyId: target.partyCode,
+            computerId: target.computerId
+          })
+        }
+      );
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload?.success === false) {
+        const error = new Error(
+          payload?.error?.message ||
+            'The account could not be attached to the current party.'
+        );
+        error.code = payload?.error?.code || 'party_account_link_failed';
+        error.status = response.status;
+        error.previousPartyExited = true;
+        throw error;
+      }
+      return payload;
+    }
+
     function showActivePartyConflict(
       conflict,
       {
@@ -298,9 +375,20 @@
     ) {
       const conflictDialog = window.ActivePartyConflictDialog;
       if (typeof conflictDialog?.openFromError !== 'function') return false;
+      const currentPartyTarget = getCurrentPartyLinkTarget();
 
       return conflictDialog.openFromError(conflict, {
         source: 'account-link',
+        onContinue:
+          currentPartyTarget &&
+          typeof conflictDialog.endOwnedParty === 'function'
+            ? (party) =>
+                replaceActivePartyAndAttachAccount(
+                  conflictDialog,
+                  party,
+                  currentPartyTarget
+                )
+            : null,
         onDismiss:
           typeof onDismiss === 'function'
             ? onDismiss

@@ -592,6 +592,10 @@ accountFooterGridButtons.forEach((grid) => {
   });
 });
 
+window.addEventListener('oe-notification-count-changed', (event) => {
+  updateAccountActionNotificationBadges(event.detail);
+});
+
 renderAccountActionMenu();
 setAccountFooterAuthState(false);
 setAccountPreview(getStoredAccount());

@@ -207,6 +207,8 @@ async function initialisePage() {
 async function SetPageSettings() {
   if (!(await registerRoundLateJoinIfRequested())) return;
 
+  selectPunishmentText.textContent = "You got the most votes. Pick your forfeit.";
+
   // Current user is ready to pick someone
   buttonChoosePlayer.addEventListener('click', async () => {
     await setUserBool(deviceId, null, true);
@@ -313,7 +315,8 @@ async function SetPageSettings() {
   // Load current party (new schema only)
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -325,7 +328,11 @@ async function SetPageSettings() {
   const config = getPartyConfig(currentPartyData);
   const deck = currentPartyData.deck;
 
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  const questionsLoaded = await loadJSONFiles(
+    config.selectedPacks,
+    config.shuffleSeed
+  );
+  if (!questionsLoaded) return;
 
   const cardIndex = deck.currentCardIndex ?? 0;
   selectedQuestionObj = getNextQuestion(cardIndex);

@@ -34,7 +34,16 @@ test('room archiver snapshots each player OE and defaults missing legacy icons',
     sourceCollection: 'party-game-mafia',
     roomDocument: {
       partyId: 'ROOM-ONE',
-      session: { gameId: 'GAME-ONE' },
+      session: {
+        gameId: 'GAME-ONE',
+        gameModeRelease: {
+          version: '1.2.0',
+          releaseId: 'mafia@1.2.0+release',
+          runtimeBuild: 'build-123',
+          contentHash: 'content-123',
+          capturedAt: new Date('2026-08-06T12:00:00.000Z')
+        }
+      },
       config: { gamemode: 'mafia' },
       state: { hostComputerId: 'host-device' },
       players: [
@@ -62,6 +71,7 @@ test('room archiver snapshots each player OE and defaults missing legacy icons',
   );
   assert.equal(archivedSnapshot.players[0].isHost, true);
   assert.equal(archivedSnapshot.completionStatus, 'lobby-closed');
+  assert.equal(archivedSnapshot.session.gameModeRelease.version, '1.2.0');
 });
 
 test('only completed archived games are added to account match history', async () => {

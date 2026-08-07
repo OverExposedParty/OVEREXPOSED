@@ -22,6 +22,7 @@ const defaultPartyGameMafiaSchema = require('../models/party-games/party-game-ma
 const defaultPartyGameChatLogSchema = require('../models/party-games/party-game-chat-log-schema');
 const defaultPartyGameEventSchema = require('../models/party-games/party-game-event-schema');
 const defaultPartyGameRewardClaimSchema = require('../models/party-games/party-game-reward-claim-schema');
+const defaultPartyGameSessionSchema = require('../models/party-games/party-game-session-schema');
 const defaultActivePartyOwnerLeaseSchema = require('../models/party-games/active-party-owner-lease-schema');
 const defaultArchivedRoomSchema = require('../models/party-games/archived-room-schema');
 const defaultWaitingRoomSchema = require('../models/party-games/waiting-room-schema');
@@ -103,6 +104,10 @@ const partyGameEventSchema = bindModelToConnection(
 );
 const partyGameRewardClaimSchema = bindModelToConnection(
   defaultPartyGameRewardClaimSchema,
+  partyGamesConnection
+);
+const partyGameSessionSchema = bindModelToConnection(
+  defaultPartyGameSessionSchema,
   partyGamesConnection
 );
 const activePartyOwnerLeaseSchema = bindModelToConnection(
@@ -293,6 +298,7 @@ module.exports = {
   partyGameChatLogSchema,
   partyGameEventSchema,
   partyGameRewardClaimSchema,
+  partyGameSessionSchema,
   activePartyOwnerLeaseSchema,
   archivedRoomSchema,
   waitingRoomSchema,

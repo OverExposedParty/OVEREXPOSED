@@ -21,6 +21,7 @@
     const onlineSettingsReady = (async () => {
         await LoadScript('/scripts/general/online/session-status-prompts.js');
         await LoadScript('/scripts/general/online/active-party-conflict-dialog.js');
+        await LoadScript('/scripts/general/online/party-auth-transition.js');
         await LoadScript('/scripts/party-games/online/party-core/state.js');
         await LoadScript('/scripts/party-games/online/party-core/routing.js');
         await LoadScript('/scripts/party-games/online/party-core/error-reporting.js');
@@ -35,6 +36,7 @@
         await LoadScript('/scripts/party-games/online/party-api/players.js');
         await LoadScript('/scripts/party-games/online/party-api/account-link.js');
         await LoadScript('/scripts/party-games/online/party-api.js');
+        await LoadScript('/scripts/party-games/online/party-game-switcher.js');
         await LoadScript('/scripts/party-games/online/party-socket.js');
         await LoadScript('/scripts/party-games/online/party-chat-and-exit.js');
 

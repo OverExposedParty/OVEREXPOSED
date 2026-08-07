@@ -346,10 +346,19 @@ function createAccountNotificationCard(notification = {}, visualData = {}) {
   return card;
 }
 
-async function markAccountNotificationCardsRead(notifications) {
-  const unreadIds = notifications
-    .filter((notification) => !notification.readAt && notification.id)
-    .map((notification) => String(notification.id));
+function getAccountNotificationMenuDestination(notification = {}) {
+  if (notification.menuDestination) return notification.menuDestination;
+  if (
+    notification.type === 'friend_request' ||
+    notification.type === 'friend_accepted'
+  ) {
+    return 'friends';
+  }
+  if (notification.type === 'achievement_unlocked') return 'achievements';
+  return null;
+}
+
+async function markAccountNotificationsRead(notifications, unreadIds) {
   if (!unreadIds.length) return;
 
   try {
@@ -370,22 +379,58 @@ async function markAccountNotificationCardsRead(notifications) {
     }
 
     const readAt = new Date().toISOString();
-    notifications.forEach((notification) => {
+    const latestNotifications =
+      window.OEAccountNotificationState?.getSnapshot?.()?.inboxNotifications ||
+      notifications;
+    latestNotifications.forEach((notification) => {
       if (unreadIds.includes(String(notification.id))) {
         notification.readAt = readAt;
       }
     });
-    accountExpandedContent
-      ?.querySelectorAll('.account-notification-card.is-unread')
-      .forEach((card) => card.classList.remove('is-unread'));
+    if (typeof accountExpandedContent !== 'undefined') {
+      accountExpandedContent
+        ?.querySelectorAll('.account-notification-card.is-unread')
+        .forEach((card) => card.classList.remove('is-unread'));
+    }
     window.OEAccountNotificationState?.setAccountNotifications({
-      notifications,
-      unreadCount: payload?.data?.unreadCount ?? payload?.unreadCount ?? 0
+      notifications: latestNotifications,
+      unreadCount: payload?.data?.unreadCount ?? payload?.unreadCount ?? 0,
+      unreadMenuCounts:
+        payload?.data?.unreadMenuCounts ?? payload?.unreadMenuCounts ?? null
     });
+    return true;
   } catch (error) {
     setAccountFooterHint('Notifications could not be marked as read');
     console.warn(error);
+    return false;
   }
+}
+
+async function markAccountNotificationCardsRead(notifications) {
+  const unreadIds = notifications
+    .filter((notification) => !notification.readAt && notification.id)
+    .map((notification) => String(notification.id));
+  return markAccountNotificationsRead(notifications, unreadIds);
+}
+
+async function markAccountNotificationDestinationRead(
+  destination,
+  { types = null } = {}
+) {
+  const notifications =
+    window.OEAccountNotificationState?.getSnapshot?.()?.inboxNotifications ||
+    [];
+  const typeSet = Array.isArray(types) ? new Set(types) : null;
+  const unreadIds = notifications
+    .filter(
+      (notification) =>
+        !notification.readAt &&
+        notification.id &&
+        getAccountNotificationMenuDestination(notification) === destination &&
+        (!typeSet || typeSet.has(notification.type))
+    )
+    .map((notification) => String(notification.id));
+  return markAccountNotificationsRead(notifications, unreadIds);
 }
 
 async function renderAccountNotificationsPanel() {
@@ -415,9 +460,12 @@ async function renderAccountNotificationsPanel() {
         ? payload.inboxNotifications
         : [];
     const unreadCount = payload?.data?.unreadCount ?? payload?.unreadCount ?? 0;
+    const unreadMenuCounts =
+      payload?.data?.unreadMenuCounts ?? payload?.unreadMenuCounts ?? null;
     window.OEAccountNotificationState?.setAccountNotifications({
       notifications,
-      unreadCount
+      unreadCount,
+      unreadMenuCounts
     });
 
     if (!notifications.length) {

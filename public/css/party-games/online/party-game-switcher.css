@@ -1,0 +1,254 @@
+.party-game-switch-dialog {
+  --party-switch-primary: var(--primarypagecolour);
+  --party-switch-secondary: var(--secondarypagecolour);
+  --party-switch-action-height: 48px;
+  --party-switch-action-gap: 24px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 850;
+  display: var(--container-display, none);
+  width: min(80vw, 760px);
+  height: auto;
+  max-height: 80dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  color: var(--primarytextcolour, #fff);
+  background: var(--backgroundcolour, #171717);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 55%);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  scrollbar-color: var(--party-switch-primary) transparent;
+  scrollbar-width: thin;
+  --container-visible-display: block;
+}
+
+.party-game-switch-dialog::-webkit-scrollbar,
+.party-game-switch-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.party-game-switch-dialog::-webkit-scrollbar-thumb,
+.party-game-switch-options::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--party-switch-primary);
+}
+
+.party-game-switch-side-button .side-button-icon-container {
+  background: #252525;
+}
+
+.party-game-switch-side-button .side-button-icon-container img {
+  width: 78%;
+  height: 78%;
+}
+
+.party-game-switch-form {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: auto;
+  max-height: 80dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.party-game-switch-heading {
+  padding: clamp(18px, 3vw, 28px);
+  color: var(--backgroundcolour, #171717);
+  background: var(--party-switch-primary);
+  text-align: center;
+  transition: background-color 180ms ease;
+}
+
+.party-game-switch-heading h2,
+.party-game-switch-heading p {
+  margin: 0;
+  color: var(--backgroundcolour, #171717);
+}
+
+.party-game-switch-heading p {
+  margin-top: 7px;
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+}
+
+.party-game-switch-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(
+    var(--party-switch-option-rows, 4),
+    minmax(clamp(130px, 20vw, 220px), auto)
+  );
+  gap: 12px;
+  min-height: 0;
+  padding: clamp(18px, 3vw, 28px);
+  overflow-y: auto;
+}
+
+.party-game-switch-option.homepage-tile {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: clamp(14px, 2vw, 20px);
+  background: rgb(255 255 255 / 10%);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.party-game-switch-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.party-game-switch-option .homepage-tile-picture,
+.party-game-switch-option .homepage-tile-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.party-game-switch-option .homepage-tile-image {
+  object-fit: contain;
+  pointer-events: none;
+  transition: transform 180ms ease;
+}
+
+.party-game-switch-option.is-selected,
+.party-game-switch-option:has(input:focus-visible) {
+  border-color: var(--tile-colour, var(--party-switch-primary));
+  outline: none;
+  box-shadow: none;
+}
+
+.party-game-switch-option-detail {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  z-index: 1;
+  max-width: calc(100% - 20px);
+  padding: 5px 9px 4px;
+  border-radius: 999px;
+  color: var(--backgroundcolour, #171717);
+  background: var(--tile-colour, var(--party-switch-primary));
+  font-size: clamp(0.62rem, 1.5vw, 0.76rem);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.party-game-switch-option.is-unavailable {
+  cursor: not-allowed;
+  filter: grayscale(0.7);
+  opacity: 0.42;
+}
+
+.party-game-switch-status {
+  margin: 0;
+  padding: 0 clamp(18px, 3vw, 28px) 14px;
+  color: var(--party-switch-primary);
+  text-align: center;
+}
+
+.party-game-switch-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--party-switch-action-gap);
+  padding: 0 clamp(18px, 3vw, 28px) clamp(20px, 3vw, 28px);
+}
+
+.party-game-switch-actions [data-party-switch-confirm] {
+  min-width: min(300px, 100%);
+  min-height: var(--party-switch-action-height);
+  padding: 11px 30px 9px;
+  border: 3px solid var(--party-switch-primary);
+  border-radius: 999px;
+  color: var(--backgroundcolour, #171717);
+  background: var(--party-switch-primary);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 100ms ease;
+}
+
+.party-game-switch-actions [data-party-switch-confirm]:disabled {
+  border-color: var(--backgroundcolour, #171717);
+  color: #a0a0a0;
+  background: #4a4a4a;
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .party-game-switch-option:not(.is-unavailable):hover {
+    border-color: var(--tile-secondary-colour, var(--party-switch-secondary));
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgb(0 0 0 / 28%);
+  }
+
+  .party-game-switch-option:not(.is-unavailable):hover .homepage-tile-image {
+    transform: scale(1.08);
+  }
+
+  .party-game-switch-actions [data-party-switch-confirm]:not(:disabled):hover {
+    border-color: var(--party-switch-secondary);
+    background: var(--party-switch-secondary);
+  }
+}
+
+.party-game-switch-actions [data-party-switch-confirm]:not(:disabled):active {
+  border-color: var(--party-switch-secondary);
+  background: var(--party-switch-secondary);
+  transform: scale(0.97);
+}
+
+.party-game-switch-actions [data-party-switch-confirm]:focus-visible {
+  outline: 3px solid var(--party-switch-secondary);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .party-game-switch-dialog {
+    border-radius: 18px;
+  }
+
+  .party-game-switch-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(
+      var(--party-switch-option-rows, 4),
+      minmax(120px, auto)
+    );
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .party-game-switch-option.homepage-tile {
+    border-width: 2px;
+    border-radius: 14px;
+  }
+
+  .party-game-switch-actions {
+    padding: 0 14px 16px;
+  }
+
+  .party-game-switch-actions [data-party-switch-confirm] {
+    width: 100%;
+  }
+}

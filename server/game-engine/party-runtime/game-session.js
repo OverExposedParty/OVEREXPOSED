@@ -25,7 +25,7 @@ function getPartyGameIdPrefix(gamemode) {
 }
 
 function createPartyGameId(gamemode, randomBytes = crypto.randomBytes) {
-  const suffix = randomBytes(8).toString('hex').toUpperCase();
+  const suffix = randomBytes(16).toString('hex').toUpperCase();
   return `${getPartyGameIdPrefix(gamemode)}-${suffix}`;
 }
 

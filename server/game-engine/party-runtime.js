@@ -37,10 +37,20 @@ const {
   createPartyOwnerReservationTools
 } = require('./party-runtime/party-owner-reservations');
 const crypto = require('crypto');
-const { getCurrentAccount } = require('../services/page-protection');
+const {
+  canAccessFeature,
+  canAccessOwnerPages,
+  getCurrentAccount
+} = require('../services/page-protection');
 const {
   assertPartyConfigContentAccess
 } = require('../services/party-content-access');
+const {
+  createPartyGameSessionService
+} = require('../services/party-game-sessions');
+const {
+  createGameModeReleaseService
+} = require('../services/game-mode-releases');
 
 function createPartyRuntime({
   app,
@@ -50,6 +60,16 @@ function createPartyRuntime({
   partyOwnerLeases,
   roomArchiver
 }) {
+  const gameModeReleases = createGameModeReleaseService({
+    GameMode: models.GameMode,
+    GameRule: models.GameRule,
+    GamePack: models.GamePack,
+    GameRole: models.GameRole
+  });
+  const partyGameSessions = createPartyGameSessionService({
+    PartyGameSession: models.partyGameSessionSchema,
+    ...gameModeReleases
+  });
   const context = {
     app,
     io,
@@ -65,9 +85,12 @@ function createPartyRuntime({
     ...partyDocuments,
     ...partyRuntimeConstants,
     crypto,
+    canAccessFeature,
+    canAccessOwnerPages,
     getCurrentAccount,
     assertPartyConfigContentAccess,
     archiveRoomSnapshot: roomArchiver?.archiveRoomSnapshot,
+    ...partyGameSessions,
     ...partyOwnerLeases
   };
 
@@ -96,8 +119,10 @@ function createPartyRuntime({
     createContinuePlayerAsGuestHandler,
     createPatchPlayerHandler,
     createDisconnectUserHandler,
+    createAuthTransitionHandlers,
     createPartyErrorHandler,
     createPartyGetHandler,
+    createSwitchGameHandler,
     disconnectSocketPartyMemberships
   } = createPartyRouteHandlers(context);
 
@@ -113,8 +138,10 @@ function createPartyRuntime({
     createContinuePlayerAsGuestHandler,
     createPatchPlayerHandler,
     createDisconnectUserHandler,
+    createAuthTransitionHandlers,
     createPartyErrorHandler,
     createPartyGetHandler,
+    createSwitchGameHandler,
     disconnectSocketPartyMemberships,
     reservePartyCodeForRequest: context.reservePartyCodeForRequest,
     io

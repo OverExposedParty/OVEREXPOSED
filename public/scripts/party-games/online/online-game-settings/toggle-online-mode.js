@@ -221,7 +221,6 @@ async function updateGamemodeSettingsOnlineMode(
     );
 
     const session = {
-      gameId: createOnlineGameSessionId(partyGameMode),
       createdAt: new Date()
     };
 
@@ -249,13 +248,14 @@ async function updateGamemodeSettingsOnlineMode(
       deck,
       players
     };
+    window.syncOnlinePartyGameSwitcherButtons?.(currentPartyData);
     if (typeof window.syncGamemodeSettingsReadySound === 'function') {
       window.syncGamemodeSettingsReadySound(currentPartyData, {
         initializeOnly: true
       });
     }
 
-    await updateOnlineParty({
+    const creationResult = await updateOnlineParty({
       partyId: partyCode,
       session,
       config,
@@ -263,6 +263,9 @@ async function updateGamemodeSettingsOnlineMode(
       deck,
       players
     });
+    if (creationResult?.primary?.updated) {
+      currentPartyData = creationResult.primary.updated;
+    }
     reportOnlineLobbyCreationProgress(onProgress, 70, 'Lobby created');
 
     await joinParty(partyCode);
@@ -347,6 +350,7 @@ async function updateGamemodeSettingsOnlineMode(
 
     suppressActiveLobbyLockForDeletedParty(deletedPartyCode);
     window.currentOnlineShuffleSeed = null;
+    window.syncOnlinePartyGameSwitcherButtons?.(null);
     removeOnlineSettingsPartyCodeFromUrl();
     inputPartyCode.value = '';
     if (typeof clearPlayerCountRestrictionError === 'function') {
@@ -383,6 +387,7 @@ async function updateGamemodeSettingsOnlineMode(
     }
     updateStartGameButton();
     toggleUserCustomisationIcon(false);
+    window.syncOfflinePartyGameSwitcherButton?.(partyGameMode);
     return true;
   }
 }

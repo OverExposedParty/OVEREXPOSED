@@ -209,15 +209,37 @@ async function loadJSONFiles(fetchPacks = null, seedShuffle = null) {
       numberOfDareQuestions = allQuestions.filter(q => q["question-type"] === "dare").length;
     } else {
       console.error("No questions available to shuffle.");
-      window.location.href = addSettingsExtensionToCurrentURL();
+      const isOnlineParty =
+        typeof partyCode !== 'undefined' && Boolean(String(partyCode).trim());
+
+      if (
+        isOnlineParty &&
+        typeof ShowGameConfigurationErrorState === 'function'
+      ) {
+        ShowGameConfigurationErrorState();
+      } else if (typeof addSettingsExtensionToCurrentURL === 'function') {
+        window.location.href = addSettingsExtensionToCurrentURL();
+      } else {
+        const settingsPath =
+          typeof gamemode === 'string' && gamemode
+            ? `/${gamemode}/settings`
+            : '/';
+        window.location.href = settingsPath;
+      }
+
+      numberOfQuestions = 0;
+      SetScriptLoaded("/scripts/party-games/general/load-questions.js");
+      return false;
     }
 
     numberOfQuestions = allQuestions.length;
     debugLog(`Loaded ${numberOfQuestions} questions`);
     SetScriptLoaded("/scripts/party-games/general/load-questions.js");
+    return true;
 
   } catch (error) {
     console.error("Failed to load JSON files:", error);
+    return false;
   }
 }
 

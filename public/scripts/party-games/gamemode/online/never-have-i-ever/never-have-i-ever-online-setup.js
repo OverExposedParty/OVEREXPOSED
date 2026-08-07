@@ -20,12 +20,17 @@ async function ensureQuestionsLoadedForCurrentConfig(config = {}) {
   const nextSignature = getQuestionConfigSignature(config);
 
   if (loadedQuestionConfigSignature === nextSignature) {
-    return;
+    return true;
   }
 
-  await loadJSONFiles(config.selectedPacks, config.shuffleSeed);
+  const questionsLoaded = await loadJSONFiles(
+    config.selectedPacks,
+    config.shuffleSeed
+  );
+  if (!questionsLoaded) return false;
   loadedQuestionConfigSignature = nextSignature;
   debugLog("Loaded JSON files for synced config");
+  return true;
 }
 
 async function initialisePage() {
@@ -114,7 +119,10 @@ async function initialisePage() {
         currentPartyData = partyWithInstruction;
       }
 
-      await ensureQuestionsLoadedForCurrentConfig(getPartyConfig(currentPartyData));
+      const questionsLoaded = await ensureQuestionsLoadedForCurrentConfig(
+        getPartyConfig(currentPartyData)
+      );
+      if (!questionsLoaded) return;
 
       await runOnlineFetchInstructions({ reason: 'setup' });
     }
@@ -166,7 +174,8 @@ async function SetPageSettings() {
 
   const initialPartyData = await waitForOnlinePartySnapshot({
     requirePlayer: true,
-    requirePlaying: true
+    requirePlaying: true,
+    requireSelectedPacks: true
   });
   if (!initialPartyData) {
     console.warn('No party data found.');
@@ -177,6 +186,6 @@ async function SetPageSettings() {
 
   // 🔁 Use nested config (with legacy fallback)
   const config = getPartyConfig(currentPartyData);
-  await ensureQuestionsLoadedForCurrentConfig(config);
+  if (!(await ensureQuestionsLoadedForCurrentConfig(config))) return;
   await initialisePage();
 }

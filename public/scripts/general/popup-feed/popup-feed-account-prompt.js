@@ -131,11 +131,18 @@
 
     function navigateFromAccountBenefits(path) {
       rememberAccountPromptDismissed();
-      if (typeof window.navigateFromPopupFeed === 'function') {
-        window.navigateFromPopupFeed(path);
+      const navigate = (destination) => {
+        if (typeof window.navigateFromPopupFeed === 'function') {
+          window.navigateFromPopupFeed(destination);
+          return;
+        }
+        window.location.href = destination;
+      };
+      if (typeof window.beginOnlinePartyAuthNavigation === 'function') {
+        void window.beginOnlinePartyAuthNavigation(path, { navigate });
         return;
       }
-      window.location.href = path;
+      navigate(path);
     }
 
     function openAccountBenefitsDialog() {

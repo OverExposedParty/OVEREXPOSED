@@ -38,6 +38,24 @@ const onlinePages = [
   'mafia/mafia-online-page.html'
 ];
 
+test('game-over actions clearly separate replay from changing settings', () => {
+  const template = fs.readFileSync(templatePath, 'utf8');
+
+  assert.match(
+    template,
+    /id="statistics-replay-game"[^>]*>PLAY AGAIN<\/button>/
+  );
+  assert.match(
+    template,
+    /id="statistics-game-settings"[^>]*>CHANGE SETTINGS<\/button>/
+  );
+  assert.match(
+    template,
+    /id="statistics-change-game"[^>]*>CHANGE GAME<\/button>/
+  );
+  assert.match(template, /id="statistics-main-menu"[^>]*>MAIN MENU<\/button>/);
+});
+
 function createScoreImpactChange({ id, delta, score = 10, accountId = null }) {
   return {
     id,

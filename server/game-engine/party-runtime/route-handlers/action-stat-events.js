@@ -336,6 +336,8 @@ function createPartyActionStatEventTools(context) {
             account,
             result: event.achievementData,
             partyId: event.partyId,
+            gameId: event.gameId,
+            playSequence: event.playSequence,
             save: false
           });
         }
@@ -413,7 +415,9 @@ function createPartyActionStatEventTools(context) {
       deliveries.push(
         ...(await applyPartyAccountStatEvent({
           ...event,
-          partyId: eventContext.partyId
+          partyId: eventContext.partyId,
+          gameId: eventContext.gameId,
+          playSequence: eventContext.playSequence
         }))
       );
     }

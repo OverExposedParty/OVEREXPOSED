@@ -1,4 +1,6 @@
 async function ResetImposterQuestion({ nextPlayer = true } = {}) {
+  if (!isAuthoritativePartyHost()) return null;
+
   ClearIcons();
 
   const updatedParty = await performOnlinePartyAction({
@@ -15,6 +17,8 @@ async function ResetImposterQuestion({ nextPlayer = true } = {}) {
     currentPartyData = updatedParty;
     stopImposterTimerWarning();
   }
+
+  return updatedParty;
 }
 
 async function PartySkip({ nextPlayer = true } = {}) {

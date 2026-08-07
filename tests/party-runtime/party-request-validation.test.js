@@ -36,6 +36,28 @@ test('assertPartyActionBody accepts the host return-to-lobby action', () => {
   });
 });
 
+test('assertPartyActionBody accepts replay only with the finished game id', () => {
+  assert.doesNotThrow(() => {
+    assertPartyActionBody({
+      partyId: 'ABC-123',
+      action: 'replay-game',
+      actorId: 'host-device',
+      payload: { expectedGameId: `MLT-${'A'.repeat(32)}` }
+    });
+  });
+
+  assert.throws(
+    () =>
+      assertPartyActionBody({
+        partyId: 'ABC-123',
+        action: 'replay-game',
+        actorId: 'host-device',
+        payload: {}
+      }),
+    /expectedGameId is required/
+  );
+});
+
 test('assertPartyActionBody rejects malformed party ids', () => {
   assert.throws(
     () =>

@@ -129,8 +129,25 @@
     return updatedParty;
   }
 
+  async function ReplayOnlinePartyGame({
+    partyType = sessionPartyType,
+    partyId = partyCode,
+    expectedGameId = currentPartyData?.session?.gameId
+  } = {}) {
+    const updatedParty = await performOnlinePartyAction({
+      partyType,
+      partyId,
+      action: 'replay-game',
+      payload: { expectedGameId },
+      syncInstructions: false
+    });
+    if (updatedParty) currentPartyData = updatedParty;
+    return updatedParty;
+  }
+
   window.PartyApiActions = {
     EndOnlineGame,
+    ReplayOnlinePartyGame,
     ReturnOnlinePartyToLobby,
     normaliseOnlinePartyActionPayload,
     performOnlinePartyAction,

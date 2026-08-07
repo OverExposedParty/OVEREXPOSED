@@ -238,6 +238,13 @@ socket.on('user-disconnected', ({ socketId, computerId, notification }) => {
   window.setTimeout(() => window.checkPartyNotifications?.(), 250);
 });
 
+socket.on('user-authenticating', ({ socketId, computerId, notification }) => {
+  debugLog(`🔐 User signing in: ${socketId}`);
+  if (!isCurrentPartyDevice({ computerId, socketId })) {
+    queueLivePartyNotification(notification);
+  }
+});
+
 socket.on('user-reconnected', ({ socketId, computerId, notification }) => {
   debugLog(`🔁 User reconnected: ${socketId}`);
   if (!isCurrentPartyDevice({ computerId, socketId })) {
@@ -343,6 +350,7 @@ socket.on(
         hostDeviceId = state.hostComputerId;
       }
       currentPartyData = party;
+      window.syncOnlinePartyGameSwitcherButtons?.(party);
 
       if (
         state?.isPlaying === false &&
@@ -514,6 +522,18 @@ socket.on(
     }
   }
 );
+
+socket.on('party-game-switched', (transition) => {
+  if (typeof window.handleOnlinePartyGameSwitched === 'function') {
+    window.handleOnlinePartyGameSwitched(transition);
+  }
+});
+
+socket.on('party-game-replayed', (transition) => {
+  if (typeof window.handleOnlinePartyGameReplayed === 'function') {
+    window.handleOnlinePartyGameReplayed(transition);
+  }
+});
 
 // Chat updates
 socket.on('chat-updated', async ({ type, chatLog, documentKey }) => {

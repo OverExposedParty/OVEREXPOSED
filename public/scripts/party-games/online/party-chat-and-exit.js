@@ -37,10 +37,7 @@ function isCurrentPartyPlayerReady() {
 }
 
 function isCurrentPartyHost() {
-  const hostComputerId =
-    currentPartyData?.state?.hostComputerId || hostDeviceId || null;
-
-  return Boolean(hostComputerId && String(hostComputerId) === String(deviceId));
+  return isAuthoritativePartyHost();
 }
 
 function setLocalReadyButtonState(isReady) {
@@ -141,6 +138,7 @@ async function unreadyLobbyUserOnHidden() {
 
 function handleOnlinePartyPageHide() {
   if (isOnlineGamemodeSettingsPage()) return;
+  if (window.onlinePartyAuthTransitionInProgress === true) return;
   if (removeLobbyUserOnExit()) return;
   disconnectUserOnExit();
 }

@@ -67,7 +67,9 @@ const waitingRoomConfigSchema = new mongoose.Schema(
       type: Map,
       of: Number,
       default: () => ({})
-    }
+    },
+    userInstructions: { type: String, default: '' },
+    shuffleSeed: { type: Number, default: null }
   },
   { _id: false }
 );
@@ -75,6 +77,7 @@ const waitingRoomConfigSchema = new mongoose.Schema(
 const waitingRoomStateSchema = new mongoose.Schema(
   {
     isPlaying: { type: Boolean, required: true },
+    phase: { type: String, default: 'lobby' },
     lastPinged: { type: Date, default: Date.now },
     hostComputerId: { type: String, default: null },
     hostComputerIdList: { type: [String], default: [] }

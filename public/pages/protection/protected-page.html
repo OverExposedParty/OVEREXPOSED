@@ -12,7 +12,7 @@
 
     <link
       rel="preload"
-      href="/images/protection/splash-screen/garage-door.jpg"
+      href="__PROTECTION_SPLASH_SCREEN__"
       as="image"
     />
     <link
@@ -56,17 +56,9 @@
       }
 
       .protected-page {
-        display: none;
-      }
-
-      .protected-splash {
         position: fixed;
         inset: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 9999;
+        z-index: 9997;
         display: grid;
         min-height: 100dvh;
         place-items: center;
@@ -74,18 +66,10 @@
         box-sizing: border-box;
         background: #202020;
         isolation: isolate;
-        transition: none;
-        transform: none;
         overflow: hidden;
       }
 
-      .protected-splash.center,
-      .protected-splash.down,
-      .protected-splash.up {
-        top: 0;
-      }
-
-      .protected-splash > img {
+      .protected-page-background {
         position: absolute;
         inset: 0;
         z-index: -2;
@@ -99,7 +83,7 @@
         filter: brightness(0.64);
       }
 
-      .protected-splash::after {
+      .protected-page::after {
         position: absolute;
         inset: 0;
         z-index: -1;
@@ -176,19 +160,8 @@
         text-transform: uppercase;
       }
 
-      .protected-splash .protected-page-message > .protected-page-eyebrow,
-      .protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
-        position: static;
-        bottom: auto;
-        width: auto;
-        margin-left: 0;
-        padding: 0;
-        text-align: center;
-      }
-
-      .protected-splash .protected-page-message > p:not(.protected-page-eyebrow) {
-        width: min(34rem, 100%);
-        margin: 1.25rem auto 0;
+      .protected-page-action[hidden] {
+        display: none;
       }
 
       .protected-access-page .oe-bodyguard {
@@ -209,22 +182,31 @@
 
   <body class="protected-access-page">
     <div
-      class="splash-screen-container-static protected-splash"
+      class="splash-screen-container-static"
       id="splash-screen-container-static"
     >
       <img
-        src="/images/protection/splash-screen/garage-door.jpg"
+        src="__PROTECTION_SPLASH_SCREEN__"
         alt="Splash Screen"
         loading="eager"
       />
     </div>
     <div
-      class="splash-screen-container protected-splash"
+      class="splash-screen-container"
       id="splash-screen-container"
     >
       <img
-        src="/images/protection/splash-screen/garage-door.jpg"
+        src="__PROTECTION_SPLASH_SCREEN__"
         alt="Splash Screen"
+        loading="eager"
+      />
+    </div>
+
+    <main class="protected-page" data-reason="__PROTECTION_REASON__">
+      <img
+        class="protected-page-background"
+        src="/images/protection/splash-screen/garage-door.jpg"
+        alt=""
         loading="eager"
       />
       <section class="protected-page-message" aria-labelledby="protected-title">
@@ -232,7 +214,10 @@
         <h1 id="protected-title">__PROTECTION_TITLE__</h1>
         <p>__PROTECTION_MESSAGE__</p>
         <div class="protected-page-actions">
-          <a class="protected-page-action" href="__PROTECTION_LOGIN_URL__">Login</a>
+          <a
+            class="protected-page-action"
+            href="__PROTECTION_LOGIN_URL__" __PROTECTION_SIGN_IN_HIDDEN__
+            >Sign In</a>
           <a class="protected-page-action" href="/">Main Menu</a>
         </div>
       </section>
@@ -278,13 +263,13 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <div id="header-placeholder"></div>
-    <main class="protected-page" data-reason="__PROTECTION_REASON__"></main>
   </body>
   <script>
-    window.allowTransition = false;
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'down';
 
     document.documentElement.style.setProperty('--primarypagecolour', '#FFF0E8');
     document.documentElement.style.setProperty('--secondarypagecolour', '#E3C5B5');
@@ -293,6 +278,10 @@
       '/scripts/protection/bodyguard/bodyguard.js': {
         cacheBustKey: 'OTHER',
         zIndex: 0
+      },
+      '/scripts/protection/protected-page-actions.js': {
+        cacheBustKey: 'OTHER',
+        zIndex: 1
       }
     };
   </script>

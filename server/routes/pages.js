@@ -16,10 +16,34 @@ const {
   sendVersionedHtmlFile
 } = require('../services/page-assets');
 const {
+  getSplashScreenImageUrl
+} = require('../services/page-assets/asset-response');
+const {
   sendBattleOlingsPage
 } = require('../services/page-assets-battle-olings');
 const { sendLoginPage } = require('../services/page-assets-login');
 const { canAccessProtectedPage } = require('../services/page-protection');
+
+const HOMEPAGE_PATH = path.join(
+  PUBLIC_DIRECTORY,
+  'pages',
+  'homepages',
+  'homepage.html'
+);
+const HOMEPAGE_SPLASH_SCREEN =
+  getSplashScreenImageUrl(fs.readFileSync(HOMEPAGE_PATH, 'utf8')) ||
+  '/images/splash-screens/overexposed.png';
+
+function getProtectedPageSplashScreen(filePath) {
+  try {
+    return (
+      getSplashScreenImageUrl(fs.readFileSync(filePath, 'utf8')) ||
+      HOMEPAGE_SPLASH_SCREEN
+    );
+  } catch {
+    return HOMEPAGE_SPLASH_SCREEN;
+  }
+}
 
 function registerPageRoutes({
   app,
@@ -29,6 +53,11 @@ function registerPageRoutes({
   waitingRoomModel
 }) {
   const sendPage = (route, relativePath, protection = null) => {
+    const filePath = path.join(PUBLIC_DIRECTORY, relativePath);
+    const protectedPageOptions = protection
+      ? { splashScreen: getProtectedPageSplashScreen(filePath) }
+      : {};
+
     app.get(route, async (req, res) => {
       let access;
 
@@ -44,16 +73,21 @@ function registerPageRoutes({
           `[REQ ${req.id || 'unknown'}] Page protection check failed:`,
           error
         );
-        sendProtectedPage(req, res, { reason: 'protected' }, 403);
+        sendProtectedPage(
+          req,
+          res,
+          { reason: 'protected' },
+          403,
+          protectedPageOptions
+        );
         return;
       }
 
       if (!access.allowed) {
-        sendProtectedPage(req, res, access, 403);
+        sendProtectedPage(req, res, access, 403, protectedPageOptions);
         return;
       }
 
-      const filePath = path.join(PUBLIC_DIRECTORY, relativePath);
       debugLog(`Attempting to serve file from: ${filePath}`);
 
       if (!fs.existsSync(filePath)) {
@@ -246,6 +280,8 @@ function registerPageRoutes({
     featureProtected('olings.lab')
   );
   const sendBattleOlingsPageRoute = (route) => {
+    const protectedPageOptions = { splashScreen: HOMEPAGE_SPLASH_SCREEN };
+
     app.get(route, async (req, res) => {
       let access;
 
@@ -261,12 +297,18 @@ function registerPageRoutes({
           `[REQ ${req.id || 'unknown'}] Page protection check failed:`,
           error
         );
-        sendProtectedPage(req, res, { reason: 'protected' }, 403);
+        sendProtectedPage(
+          req,
+          res,
+          { reason: 'protected' },
+          403,
+          protectedPageOptions
+        );
         return;
       }
 
       if (!access.allowed) {
-        sendProtectedPage(req, res, access, 403);
+        sendProtectedPage(req, res, access, 403, protectedPageOptions);
         return;
       }
 
@@ -385,5 +427,6 @@ function registerPageRoutes({
 }
 
 module.exports = {
+  getProtectedPageSplashScreen,
   registerPageRoutes
 };

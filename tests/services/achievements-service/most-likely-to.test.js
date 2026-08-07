@@ -136,6 +136,7 @@ test('recordMostLikelyToResult handles nomination counters and delayed tie outco
   const account = createAccount({
     achievements: [],
     achievementStats: {
+      mostLikelyToSessionId: 'PARTY2:play-0',
       mostLikelyToHadPreviousRound: true,
       mostLikelyToPreviousVotesReceived: 0,
       serialNominee: 9,
@@ -184,4 +185,70 @@ test('recordMostLikelyToResult handles nomination counters and delayed tie outco
   );
   assert.equal(account.gameData.achievementStats.serialNominee, 10);
   assert.equal(account.gameData.achievementStats.tasteMaker, 10);
+});
+
+test('recordMostLikelyToResult does not carry unexpected winner eligibility into a new session', async () => {
+  const Achievement = createThresholdAchievementModel([
+    {
+      key: 'unexpected-winner',
+      enabled: true,
+      status: 'published',
+      requirementType: 'event',
+      rewards: []
+    }
+  ]);
+  const account = createAccount({
+    achievements: [],
+    achievementStats: {
+      mostLikelyToSessionId: 'SAME-PARTY:old-game',
+      mostLikelyToHadPreviousRound: true,
+      mostLikelyToPreviousVotesReceived: 0,
+      mostLikelyToWinnerAfterZeroPreviousEligible: true
+    }
+  });
+  account._id = 'account-one';
+  const playerAccounts = [
+    { playerId: 'player-one', accountId: 'account-one' },
+    { playerId: 'player-two', accountId: 'account-two' }
+  ];
+
+  const recordRound = ({ votes, winnerPlayerId }) =>
+    recordMostLikelyToResult({
+      Achievement,
+      account,
+      partyId: 'SAME-PARTY',
+      gameId: 'new-game',
+      result: {
+        type: 'most-likely-to-round',
+        playerAccounts,
+        votes,
+        winnerPlayerId,
+        isTie: false
+      }
+    });
+
+  await recordRound({
+    votes: [{ playerId: 'player-two', vote: 'player-one' }],
+    winnerPlayerId: 'player-one'
+  });
+
+  assert.equal(
+    account.gameData.achievements.some(
+      ({ key }) => key === 'unexpected-winner'
+    ),
+    false
+  );
+
+  await recordRound({ votes: [], winnerPlayerId: null });
+  await recordRound({
+    votes: [{ playerId: 'player-two', vote: 'player-one' }],
+    winnerPlayerId: 'player-one'
+  });
+
+  assert.equal(
+    account.gameData.achievements.filter(
+      ({ key }) => key === 'unexpected-winner'
+    ).length,
+    1
+  );
 });

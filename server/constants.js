@@ -3,7 +3,7 @@ const path = require('path');
 const ROOT_DIRECTORY = path.resolve(__dirname, '..');
 const PUBLIC_DIRECTORY = path.join(ROOT_DIRECTORY, 'public');
 const WEBSITE_CACHE_VERSION =
-  process.env.WEBSITE_CACHE_VERSION || '2026-08-04-01';
+  process.env.WEBSITE_CACHE_VERSION || '2026-08-07-01';
 const DEPLOYMENT_VERSION = WEBSITE_CACHE_VERSION;
 const ONE_YEAR_IN_SECONDS = 31536000;
 const PARTY_CODE_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -13,7 +13,7 @@ const ONLINE_GAMEMODE_MIN_PLAYERS = {
   'truth-or-dare': 2,
   paranoia: 3,
   'never-have-i-ever': 2,
-  'most-likely-to': 3,
+  'most-likely-to': 2,
   imposter: 3,
   'would-you-rather': 2,
   mafia: 5

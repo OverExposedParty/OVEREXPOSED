@@ -61,6 +61,11 @@ test('room visualizer replaces the rooms grid and restores it on back', () => {
       roomStatus: 'Archived',
       playerCount: '2',
       hostUser: 'Alex',
+      gameModeVersion: '2.1.0',
+      releaseId: 'truth-or-dare@2.1.0+release-id',
+      runtimeBuild: 'build-created',
+      contentHash: 'content-hash-value',
+      releaseCapturedAt: '2026-08-06T12:00:00.000Z',
       roomVisual: {
         players: [
           {
@@ -107,7 +112,17 @@ test('room visualizer replaces the rooms grid and restores it on back', () => {
         ],
         roleCounts: {}
       },
-      errors: []
+      errors: [
+        {
+          message: 'Action failed',
+          source: 'server',
+          code: 'action_failed',
+          phase: 'voting',
+          gameModeVersion: '2.1.0',
+          runtimeBuild: 'build-error',
+          buildChanged: true
+        }
+      ]
     });
 
     assert.equal(tableView.isConnected, false);
@@ -175,7 +190,19 @@ test('room visualizer replaces the rooms grid and restores it on back', () => {
         .classList.contains('is-active'),
       true
     );
-    assert.match(container.textContent, /No errors were recorded/);
+    assert.match(container.textContent, /Build changed during game/);
+    assert.equal(
+      container
+        .querySelector('.oe-panel-room-error')
+        .classList.contains('is-build-changed'),
+      true
+    );
+    assert.match(container.textContent, /Version2\.1\.0/);
+    assert.equal(
+      container.querySelector('[title="truth-or-dare@2.1.0+release-id"]')
+        .textContent,
+      'truth-or-dar…lease-id'
+    );
     assert.doesNotMatch(container.textContent, /Role Counts/);
     assert.equal(
       container

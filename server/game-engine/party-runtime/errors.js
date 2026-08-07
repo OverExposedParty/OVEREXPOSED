@@ -1,3 +1,5 @@
+const { getRuntimeBuild } = require('../../services/game-mode-releases');
+
 function createPartyErrorTools(deps) {
   const {
     PARTY_ERROR_LOG_LIMIT,
@@ -5,7 +7,8 @@ function createPartyErrorTools(deps) {
     debugWarn,
     getPartyPlayerId,
     shouldUsePlayerTurnOrder,
-    getTurnPlayer
+    getTurnPlayer,
+    getPartyRuntimeBuild = getRuntimeBuild
   } = deps;
 
   function truncateErrorText(value, maxLength = 2000) {
@@ -63,6 +66,10 @@ function createPartyErrorTools(deps) {
     const actorPlayer =
       players.find((player) => getPartyPlayerId(player) === actorId) ?? null;
     const actorIdentity = actorPlayer?.identity ?? {};
+    const savedGameModeRelease = party?.session?.gameModeRelease;
+    const gameModeRelease = savedGameModeRelease?.toObject
+      ? savedGameModeRelease.toObject()
+      : savedGameModeRelease || null;
 
     return {
       occurredAt: new Date(),
@@ -106,6 +113,8 @@ function createPartyErrorTools(deps) {
       phase: state?.phase ?? null,
       instruction: config?.userInstructions ?? state?.userInstructions ?? '',
       gamemode: config?.gamemode ?? party?.gamemode ?? null,
+      gameModeRelease,
+      runtimeBuild: getPartyRuntimeBuild(),
       details: details.details ?? null
     };
   }

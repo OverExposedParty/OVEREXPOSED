@@ -61,7 +61,12 @@ function removeSetting(settingsObj, key) {
   return newSettings;
 }
 
-async function UpdateSettings({ syncOnlineParty = true } = {}) {
+let gamemodeSettingsSaveQueue = Promise.resolve();
+
+async function UpdateSettings({
+  syncOnlineParty = true,
+  throwOnError = false
+} = {}) {
   const canSyncOnlineParty =
     syncOnlineParty &&
     window.onlinePartySettingsResumePending !== true &&
@@ -160,6 +165,15 @@ async function UpdateSettings({ syncOnlineParty = true } = {}) {
     gamemodeRoleCounts[key] = Number(count);
   });
 
+  // Capture this UI state before the first await. Multiple controls can queue
+  // saves in quick succession, and each request must persist the state that
+  // caused it rather than whichever globals happen to exist later.
+  const settingsSnapshot = {
+    gameRules: { ...gamemodeSettings },
+    selectedPacks: [...gamemodeSelectedPacks],
+    roleCounts: { ...gamemodeRoleCounts }
+  };
+
   packButtons.forEach((button) => {
     SetButtonStyle(button, false);
   });
@@ -168,7 +182,7 @@ async function UpdateSettings({ syncOnlineParty = true } = {}) {
   });
 
   if (syncPartyCode && canSyncOnlineParty) {
-    try {
+    const saveSettingsSnapshot = async () => {
       const existingData = await getExistingPartyData(syncPartyCode);
 
       if (
@@ -182,7 +196,9 @@ async function UpdateSettings({ syncOnlineParty = true } = {}) {
 
       if (!currentPartyData) {
         if (typeof resetOnlineSettingsAfterMissingParty === 'function') {
-          await resetOnlineSettingsAfterMissingParty('missing-during-settings-save');
+          await resetOnlineSettingsAfterMissingParty(
+            'missing-during-settings-save'
+          );
         }
         return;
       }
@@ -193,9 +209,9 @@ async function UpdateSettings({ syncOnlineParty = true } = {}) {
       const mergedConfig = {
         gamemode:
           oldConfig.gamemode || currentPartyData.gamemode || partyGameMode,
-        gameRules: gamemodeSettings,
-        selectedPacks: gamemodeSelectedPacks,
-        roleCounts: gamemodeRoleCounts,
+        gameRules: settingsSnapshot.gameRules,
+        selectedPacks: settingsSnapshot.selectedPacks,
+        roleCounts: settingsSnapshot.roleCounts,
         userInstructions:
           oldConfig.userInstructions ?? currentPartyData.userInstructions ?? '',
         shuffleSeed:
@@ -220,8 +236,21 @@ async function UpdateSettings({ syncOnlineParty = true } = {}) {
         config: mergedConfig,
         players: currentPartyData.players
       });
+    };
+
+    const queuedSave = gamemodeSettingsSaveQueue.then(
+      saveSettingsSnapshot,
+      saveSettingsSnapshot
+    );
+    // Keep the queue usable after a failed background save. The caller still
+    // receives queuedSave below and can opt into handling the original error.
+    gamemodeSettingsSaveQueue = queuedSave.catch(() => undefined);
+
+    try {
+      await queuedSave;
     } catch (err) {
       console.error('❌ Failed to update settings party config:', err);
+      if (throwOnError) throw err;
     }
   }
 

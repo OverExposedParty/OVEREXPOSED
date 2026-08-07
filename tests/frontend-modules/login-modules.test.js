@@ -145,21 +145,35 @@ test('login resumes a remembered lobby through game settings', () => {
   dom.window.close();
 });
 
-test('OAuth success pauses its redirect while an active-party conflict is shown', () => {
+test('OAuth success replaces the old party before redirecting to the current party', async () => {
   const sessionPath = path.join(
     root,
     'public/scripts/auth/login/auth-session.js'
   );
   const dom = new JSDOM('', {
     runScripts: 'outside-only',
-    url: 'https://overexposed.test/sign-in?auth=success&provider=google&activePartyCode=OLD-123&activePartyGamemode=truth-or-dare&returnTo=%2Foe-panel'
+    url: 'https://overexposed.test/sign-in?auth=success&provider=google&activePartyCode=OLD-123&activePartyGamemode=truth-or-dare&returnTo=%2Ftruth-or-dare%2Fsettings%3FpartyCode%3DNEW-456'
   });
   const navigations = [];
+  const linkRequests = [];
   let openedConflict = null;
+  const endedParties = [];
+  dom.window.localStorage.setItem('device-id', 'new-party-device');
+  dom.window.fetch = async (url, options) => {
+    linkRequests.push({ url, options });
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true, linked: true })
+    };
+  };
   dom.window.transitionSplashScreen = (destination) => {
     navigations.push(destination);
   };
   dom.window.ActivePartyConflictDialog = {
+    endOwnedParty(party) {
+      endedParties.push(party);
+    },
     openFromError(conflict, options) {
       openedConflict = { conflict, options };
       return true;
@@ -178,14 +192,30 @@ test('OAuth success pauses its redirect while an active-party conflict is shown'
   assert.equal(openedConflict.conflict.partyCode, 'OLD-123');
   assert.equal(openedConflict.conflict.gamemode, 'truth-or-dare');
   assert.equal(openedConflict.options.source, 'account-link');
+  assert.equal(typeof openedConflict.options.onContinue, 'function');
   assert.deepEqual(navigations, []);
   const remainingParams = new URL(dom.window.location.href).searchParams;
   assert.equal(remainingParams.get('activePartyCode'), null);
   assert.equal(remainingParams.get('activePartyGamemode'), null);
-  assert.equal(remainingParams.get('returnTo'), '/oe-panel');
+  assert.equal(
+    remainingParams.get('returnTo'),
+    '/truth-or-dare/settings?partyCode=NEW-456'
+  );
+
+  await openedConflict.options.onContinue({ partyCode: 'OLD-123' });
+  assert.deepEqual(endedParties, [{ partyCode: 'OLD-123' }]);
+  assert.equal(linkRequests.length, 1);
+  assert.equal(
+    linkRequests[0].url,
+    '/api/party-game-truth-or-dare/link-player-account?partyCode=NEW-456'
+  );
+  assert.deepEqual(JSON.parse(linkRequests[0].options.body), {
+    partyId: 'NEW-456',
+    computerId: 'new-party-device'
+  });
 
   openedConflict.options.onDismiss();
-  assert.deepEqual(navigations, ['/oe-panel']);
+  assert.deepEqual(navigations, ['/truth-or-dare/settings?partyCode=NEW-456']);
   dom.window.close();
 });
 
