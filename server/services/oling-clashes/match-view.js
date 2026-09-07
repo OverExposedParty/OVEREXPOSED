@@ -140,7 +140,8 @@ function serializeClashMatch(match, viewerAccountId = null, options = {}) {
   if (!match) return null;
   const includeEvents = options.includeEvents !== false;
   const canUseDerivedState = Number(match.derivedStateVersion || 0) >= 1;
-  const plain = !includeEvents && canUseDerivedState ? match : toPlainObject(match);
+  const plain =
+    !includeEvents && canUseDerivedState ? match : toPlainObject(match);
   const viewerId = viewerAccountId ? String(viewerAccountId) : null;
   const hasDerivedState = Number(plain.derivedStateVersion || 0) >= 1;
   const sourceEvents =

@@ -833,7 +833,10 @@ test('session invites and Olings notifications navigate through the splash helpe
     incubator.click();
 
     assert.deepEqual(transitions, [
-      ['/truth-or-dare/ABC-123', '/images/splash-screens/party-games/truth-or-dare/game.png'],
+      [
+        '/truth-or-dare/ABC-123',
+        '/images/splash-screens/party-games/truth-or-dare/game.png'
+      ],
       ['/olings/lab', '/images/splash-screens/core/overexposed.png']
     ]);
   } finally {

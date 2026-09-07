@@ -256,14 +256,11 @@ function damageEveryNthActivation(context) {
 
   const cadence =
     context.cadence ||
-    advanceAbilityCadence(
-      source,
-      {
-        key: context.activation.abilityKey,
-        revision: context.activation.abilityRevision,
-        cadence: legacyCadence
-      }
-    );
+    advanceAbilityCadence(source, {
+      key: context.activation.abilityKey,
+      revision: context.activation.abilityRevision,
+      cadence: legacyCadence
+    });
   const activationThreshold = cadence.every;
   const beforeActivationCount = cadence.beforeActivationCount;
   const triggered = cadence.triggered;
@@ -1627,14 +1624,11 @@ function healEveryNthActivation(context) {
 
   const cadence =
     context.cadence ||
-    advanceAbilityCadence(
-      target,
-      {
-        key: context.activation.abilityKey,
-        revision: context.activation.abilityRevision,
-        cadence: legacyCadence
-      }
-    );
+    advanceAbilityCadence(target, {
+      key: context.activation.abilityKey,
+      revision: context.activation.abilityRevision,
+      cadence: legacyCadence
+    });
   const activationThreshold = cadence.every;
   const beforeActivationCount = cadence.beforeActivationCount;
   const reachedThreshold = cadence.triggered;

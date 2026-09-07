@@ -31,9 +31,7 @@ function getProtectedPageCopy(access = {}) {
   }
 
   if (access.reason === 'oling_lab_friends_only') {
-    const owner = access.targetUsername
-      ? `${access.targetUsername}'s`
-      : 'This';
+    const owner = access.targetUsername ? `${access.targetUsername}'s` : 'This';
     return {
       title: 'Friends-Only Oling Lab',
       message: `${owner} Oling Lab is only available to friends.`,

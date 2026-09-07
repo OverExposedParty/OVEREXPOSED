@@ -94,7 +94,9 @@ test('Clash health preserves image nodes when its values have not changed', () =
   renderer.renderHealth(container, { ...health });
 
   assert.ok(
-    [...container.children].every((unit, index) => unit === originalUnits[index])
+    [...container.children].every(
+      (unit, index) => unit === originalUnits[index]
+    )
   );
 });
 

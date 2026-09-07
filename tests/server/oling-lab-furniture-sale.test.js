@@ -9,9 +9,7 @@ const {
   removePlacedFurniture,
   decrementFurnitureInventory
 } = require('../../server/routes/api-olings/lab-furniture-sale-routes');
-const {
-  OlingLabItems
-} = require('../../server/routes/api-olings/lab-catalog');
+const { OlingLabItems } = require('../../server/routes/api-olings/lab-catalog');
 
 function createLab() {
   return {
@@ -129,5 +127,8 @@ test('selling one furniture unit decrements and removes empty stacks', () => {
   const withoutRack = decrementFurnitureInventory(next, 'pod_rack', now);
 
   assert.equal(next.find((item) => item.key === 'oling_bed').quantity, 1);
-  assert.equal(withoutRack.some((item) => item.key === 'pod_rack'), false);
+  assert.equal(
+    withoutRack.some((item) => item.key === 'pod_rack'),
+    false
+  );
 });

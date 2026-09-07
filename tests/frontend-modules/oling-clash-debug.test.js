@@ -42,7 +42,11 @@ function createDebugOptions(overrides = {}) {
     round: 1,
     selections: { localAction: null },
     teams: {
-      local: [createOling('Mossy'), createOling('Pebble'), createOling('Ember')],
+      local: [
+        createOling('Mossy'),
+        createOling('Pebble'),
+        createOling('Ember')
+      ],
       opponent: [createOling('Fang'), createOling('Scrap'), createOling('Moss')]
     },
     winner: null

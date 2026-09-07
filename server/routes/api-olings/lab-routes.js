@@ -2,9 +2,7 @@ const {
   registerOlingLabPublicCatalogRoutes
 } = require('./lab-public-catalog-routes');
 const { registerOlingLabReadRoutes } = require('./lab-read-routes');
-const {
-  registerOlingLabPrivacyRoutes
-} = require('./lab-privacy-routes');
+const { registerOlingLabPrivacyRoutes } = require('./lab-privacy-routes');
 const {
   registerOlingNotificationRoutes
 } = require('./oling-notification-routes');

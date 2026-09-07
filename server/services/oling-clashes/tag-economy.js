@@ -44,10 +44,7 @@ function normalizeTagState(player, source = {}) {
     charges >= rules.maximumCharges
       ? 0
       : Number.isInteger(rawProgress)
-        ? Math.min(
-            rules.decisiveClashesPerCharge - 1,
-            Math.max(0, rawProgress)
-          )
+        ? Math.min(rules.decisiveClashesPerCharge - 1, Math.max(0, rawProgress))
         : 0;
 
   if (player) {

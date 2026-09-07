@@ -24,7 +24,11 @@ test('Oling Lab privacy updates both canonical and mirrored state', async () => 
   const accountUpdates = [];
   const stateUpdates = [];
   registerOlingLabPrivacyRoutes({
-    app: { patch(path, routeHandler) { handler = routeHandler; } },
+    app: {
+      patch(path, routeHandler) {
+        handler = routeHandler;
+      }
+    },
     getCurrentAccount: async () => ({ _id: 'owner-id' }),
     Account: {
       updateOne(...args) {
@@ -68,14 +72,22 @@ test('visited Oling Lab payloads omit the owner inventory and account record', a
     }
   };
   registerOlingLabVisitorRoutes({
-    app: { get(path, routeHandler) { handler = routeHandler; } },
+    app: {
+      get(path, routeHandler) {
+        handler = routeHandler;
+      }
+    },
     getCurrentAccount: async () => null,
     Account: { findOne: async () => targetAccount },
     PlayerOling: {
       find() {
         return {
-          sort() { return this; },
-          lean() { return Promise.resolve([]); }
+          sort() {
+            return this;
+          },
+          lean() {
+            return Promise.resolve([]);
+          }
         };
       }
     },

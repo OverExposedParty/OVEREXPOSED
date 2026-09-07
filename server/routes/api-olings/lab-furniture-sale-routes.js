@@ -100,7 +100,8 @@ function getFurnitureSaleBlock({ target, account, olingState }) {
     return {
       status: 409,
       code: 'oling_lab_gateway_active',
-      message: 'Wait for the active adventure to finish before selling the Explorer Gateway.'
+      message:
+        'Wait for the active adventure to finish before selling the Explorer Gateway.'
     };
   }
   return null;
@@ -266,11 +267,7 @@ function registerOlingLabFurnitureSaleRoutes(context) {
     const lab = olingState?.lab?.placedItems
       ? olingState.lab
       : account.olings?.lab;
-    const target = findPlacedFurniture(
-      lab,
-      req.body?.placedId,
-      OlingLabItems
-    );
+    const target = findPlacedFurniture(lab, req.body?.placedId, OlingLabItems);
     const block = getFurnitureSaleBlock({ target, account, olingState });
     if (block) {
       res.apiError(block);
@@ -289,7 +286,8 @@ function registerOlingLabFurnitureSaleRoutes(context) {
         res.apiError({
           status: 409,
           code: 'oling_pod_storage_not_empty',
-          message: 'Move or release every Oling in this Pod Rack before selling it.'
+          message:
+            'Move or release every Oling in this Pod Rack before selling it.'
         });
         return null;
       }
@@ -381,9 +379,7 @@ function registerOlingLabFurnitureSaleRoutes(context) {
       const stillOwned = nextFurniture.some(
         (item) => item?.key === quote.itemKey && Number(item.quantity) > 0
       );
-      const unlocks = Array.isArray(
-        account.gameData?.inGamePurchasesAndUnlocks
-      )
+      const unlocks = Array.isArray(account.gameData?.inGamePurchasesAndUnlocks)
         ? account.gameData.inGamePurchasesAndUnlocks
         : [];
       account.set('olings.lab', nextLab);

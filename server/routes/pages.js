@@ -323,50 +323,41 @@ function registerPageRoutes({
     path.join('pages', 'olings', 'lab.html'),
     featureProtected('olings.lab')
   );
-  app.get(
-    '/olings/lab/:username([a-zA-Z0-9_.-]{3,30})',
-    async (req, res) => {
-      try {
-        const [targetAccount, viewerAccount] = await Promise.all([
-          findOlingLabAccountByUsername(accountModel, req.params.username),
-          getCurrentAccount(req, accountModel)
-        ]);
-        if (!targetAccount) {
-          sendVersionedHtmlFile(
-            req,
-            res,
-            path.join(PUBLIC_DIRECTORY, 'pages', '404.html'),
-            404
-          );
-          return;
-        }
-
-        const access = getOlingLabAccess(targetAccount, viewerAccount);
-        if (!access.allowed) {
-          sendProtectedPage(req, res, access, 403, {
-            splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
-          });
-          return;
-        }
-
-        sendVersionedHtmlFile(req, res, OLING_LAB_PAGE_PATH);
-      } catch (error) {
-        console.error(
-          `[REQ ${req.id || 'unknown'}] Oling Lab visitor access check failed:`,
-          error
-        );
-        sendProtectedPage(
+  app.get('/olings/lab/:username([a-zA-Z0-9_.-]{3,30})', async (req, res) => {
+    try {
+      const [targetAccount, viewerAccount] = await Promise.all([
+        findOlingLabAccountByUsername(accountModel, req.params.username),
+        getCurrentAccount(req, accountModel)
+      ]);
+      if (!targetAccount) {
+        sendVersionedHtmlFile(
           req,
           res,
-          { reason: 'protected' },
-          403,
-          {
-            splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
-          }
+          path.join(PUBLIC_DIRECTORY, 'pages', '404.html'),
+          404
         );
+        return;
       }
+
+      const access = getOlingLabAccess(targetAccount, viewerAccount);
+      if (!access.allowed) {
+        sendProtectedPage(req, res, access, 403, {
+          splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
+        });
+        return;
+      }
+
+      sendVersionedHtmlFile(req, res, OLING_LAB_PAGE_PATH);
+    } catch (error) {
+      console.error(
+        `[REQ ${req.id || 'unknown'}] Oling Lab visitor access check failed:`,
+        error
+      );
+      sendProtectedPage(req, res, { reason: 'protected' }, 403, {
+        splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
+      });
     }
-  );
+  });
   sendPage(
     '/olings/clash',
     path.join('pages', 'olings', 'clash.html'),

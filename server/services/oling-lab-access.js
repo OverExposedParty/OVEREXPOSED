@@ -8,9 +8,7 @@ function normalizeOlingLabVisibility(value) {
   const visibility = String(value || '')
     .trim()
     .toLowerCase();
-  return OLING_LAB_VISIBILITIES.includes(visibility)
-    ? visibility
-    : 'private';
+  return OLING_LAB_VISIBILITIES.includes(visibility) ? visibility : 'private';
 }
 
 function escapeRegExp(value) {

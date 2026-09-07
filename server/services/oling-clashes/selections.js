@@ -430,7 +430,8 @@ async function updateClashSelectionDraft({
         runValidators: true
       }
     );
-    if (typeof atomicUpdate?.exec === 'function') atomicUpdate = atomicUpdate.exec();
+    if (typeof atomicUpdate?.exec === 'function')
+      atomicUpdate = atomicUpdate.exec();
     const updatedMatch = await atomicUpdate;
     if (updatedMatch) return { match: updatedMatch };
     return {

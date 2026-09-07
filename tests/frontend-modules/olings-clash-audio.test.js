@@ -540,9 +540,7 @@ test('Clash audio waits for damage and resource cues before statuses', () => {
       }
     ]
   };
-  const damagePackets = [
-    { damageType: 'normal', layers: [{ key: 'hearts' }] }
-  ];
+  const damagePackets = [{ damageType: 'normal', layers: [{ key: 'hearts' }] }];
 
   audio.playStatuses(result, damagePackets);
 

@@ -124,8 +124,7 @@ function consumePartSuppression(match, player, active, part, ability) {
   if (statusIndex < 0) return null;
 
   const status = active.statuses[statusIndex];
-  const remainsActive =
-    status.data?.consumption === 'different-action-win';
+  const remainsActive = status.data?.consumption === 'different-action-win';
   if (!remainsActive) active.statuses.splice(statusIndex, 1);
   const definition = getStatusDefinition(match, status);
   return {
@@ -241,7 +240,8 @@ function getTriggeredActivation(match, player, outcome, survived) {
     ? null
     : consumeActivationReplacement(match, player, active, layer, ability);
   const activationPrevented =
-    Boolean(triggeredStatus) || Boolean(activationReplacement?.preventsActivation);
+    Boolean(triggeredStatus) ||
+    Boolean(activationReplacement?.preventsActivation);
   return {
     activation: {
       playerSlot: player.slot,
@@ -256,9 +256,7 @@ function getTriggeredActivation(match, player, outcome, survived) {
     triggeredStatuses: [
       ...clearedStatuses,
       ...(triggeredStatus ? [triggeredStatus] : []),
-      ...(activationReplacement
-        ? [activationReplacement.triggeredStatus]
-        : [])
+      ...(activationReplacement ? [activationReplacement.triggeredStatus] : [])
     ]
   };
 }
@@ -317,13 +315,7 @@ function resolveCoreClashRound(match, options = {}) {
     ? []
     : captureDecisiveStatusTriggers(match);
   const applyDamage = (target, units, type, source) =>
-    applyRoutedDamage(
-      target,
-      units,
-      type,
-      source,
-      match.ruleset.snapshot
-    );
+    applyRoutedDamage(target, units, type, source, match.ruleset.snapshot);
 
   for (const player of match.players) {
     if (!isDraw && player.slot === winnerSlot) continue;
@@ -343,15 +335,14 @@ function resolveCoreClashRound(match, options = {}) {
     });
   }
 
-  const activationResults = match.players
-    .map((player) =>
-      getTriggeredActivation(
-        match,
-        player,
-        isDraw ? 'draw' : player.slot === winnerSlot ? 'win' : 'loss',
-        !getActiveOling(player).defeated
-      )
-    );
+  const activationResults = match.players.map((player) =>
+    getTriggeredActivation(
+      match,
+      player,
+      isDraw ? 'draw' : player.slot === winnerSlot ? 'win' : 'loss',
+      !getActiveOling(player).defeated
+    )
+  );
   const activationAttempts = activationResults
     .map((result) => result.activation)
     .filter(Boolean);
@@ -380,15 +371,8 @@ function resolveCoreClashRound(match, options = {}) {
     : resolvePrimedActionWinStatuses(match, winnerSlot);
   const resolvedDecisiveStatuses = isDraw
     ? []
-    : resolveDecisiveStatusTriggers(
-        match,
-        decisiveStatusTriggers,
-        applyDamage
-      );
-  triggeredStatuses.push(
-    ...primedActionStatuses,
-    ...resolvedDecisiveStatuses
-  );
+    : resolveDecisiveStatusTriggers(match, decisiveStatusTriggers, applyDamage);
+  triggeredStatuses.push(...primedActionStatuses, ...resolvedDecisiveStatuses);
   triggeredStatuses.push(...expireRoundStatuses(match));
   const tagStatesBefore = new Map(
     match.players.map((player) => {
@@ -405,8 +389,7 @@ function resolveCoreClashRound(match, options = {}) {
     match.players.map((player) => {
       const before = tagStatesBefore.get(player.slot);
       const update = advanceTagRecharge(player, match, {
-        eligible:
-          !isDraw && before?.charges < before?.maximumCharges
+        eligible: !isDraw && before?.charges < before?.maximumCharges
       });
       return [player.slot, update];
     })

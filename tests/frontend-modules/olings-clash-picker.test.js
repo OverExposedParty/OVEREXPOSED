@@ -198,10 +198,7 @@ test('Clash picker keeps effect choices in one adaptive icon row', () => {
   let choices = [...row.querySelectorAll('[data-clash-picker-choice]')];
   assert.equal(row.classList.contains('is-effect-row'), true);
   assert.equal(row.classList.contains('is-icon-only'), false);
-  assert.equal(
-    row.style.getPropertyValue('--clash-picker-choice-count'),
-    '3'
-  );
+  assert.equal(row.style.getPropertyValue('--clash-picker-choice-count'), '3');
   assert.equal(
     choices.every(
       (choice) =>
@@ -218,10 +215,7 @@ test('Clash picker keeps effect choices in one adaptive icon row', () => {
   });
   choices = [...row.querySelectorAll('[data-clash-picker-choice]')];
   assert.equal(row.classList.contains('is-icon-only'), true);
-  assert.equal(
-    row.style.getPropertyValue('--clash-picker-choice-count'),
-    '4'
-  );
+  assert.equal(row.style.getPropertyValue('--clash-picker-choice-count'), '4');
   assert.equal(
     choices.every(
       (choice) =>
