@@ -1,0 +1,42 @@
+.oling-lab-contained-item {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.oling-lab-contained-item > img {
+  position: relative;
+  z-index: 2;
+}
+
+.oling-lab-egg-marker {
+  position: absolute;
+  left: calc((var(--egg-x) / 512) * 100%);
+  top: calc((var(--egg-y) / 512) * 100%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 18%;
+  min-width: 2.4rem;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: transparent;
+}
+
+.oling-lab-egg-marker img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.oling-lab-page.is-customising-furniture .oling-lab-item::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: rgb(178 38 38 / 9%);
+  outline: 2px solid rgb(178 38 38 / 35%);
+  outline-offset: -2px;
+}

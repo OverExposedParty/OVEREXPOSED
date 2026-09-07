@@ -68,9 +68,7 @@ function reportBootstrapLegacyDebug(level, args) {
   const message =
     typeof firstValue === 'string' ? firstValue : 'Legacy debug output.';
   const data =
-    typeof firstValue === 'string'
-      ? values
-      : [firstValue, ...values];
+    typeof firstValue === 'string' ? values : [firstValue, ...values];
   reportOEDebug(
     level,
     'legacy',
@@ -120,9 +118,10 @@ const SCRIPT_VERSIONS = {
 
   PARTY_GAMES_SETTINGS: GAME_SETTINGS_VERSION,
 
-  OLING_LAB: '2026-08-04-01',
+  OLING_LAB: '2026-09-06-03',
   OLING_FLIGHT_MOTION: '2026-08-04-01',
   OLING_BATTLE: '2026-08-04-01',
+  OLING_CLASH: '2026-08-25-28',
 
   PARTY_GAMES_OFFLINE_GENERAL: WEBSITE_VERSION,
   PARTY_GAMES_OFFLINE_IMPOSTER: WEBSITE_VERSION,
@@ -139,6 +138,7 @@ const SCRIPT_VERSIONS = {
 
   OVEREXPOSURE: WEBSITE_VERSION,
   AUTH: WEBSITE_VERSION,
+  TUTORIAL: WEBSITE_VERSION,
   OTHER: WEBSITE_VERSION,
   ERROR_404: WEBSITE_VERSION
 };

@@ -3,8 +3,7 @@ function getCurrentPlayerCountRestrictions() {
 }
 
 const GAMEMODE_SETTINGS_ALL_READY_SOUND = 'gamemodeSettingsReadyToStart';
-const GAMEMODE_SETTINGS_PLAYER_JOINED_SOUND =
-  'gamemodeSettingsPlayerJoined';
+const GAMEMODE_SETTINGS_PLAYER_JOINED_SOUND = 'gamemodeSettingsPlayerJoined';
 const GAMEMODE_SETTINGS_PLAYER_LEFT_SOUND = 'gamemodeSettingsPlayerLeft';
 let gamemodeSettingsReadySoundPartyCode = '';
 let previousNonHostReadyStates = null;
@@ -43,9 +42,7 @@ if (typeof window.OEAudio?.register === 'function') {
 }
 
 function getGamemodeSettingsPlayerId(player) {
-  return String(
-    player?.identity?.computerId || player?.computerId || ''
-  );
+  return String(player?.identity?.computerId || player?.computerId || '');
 }
 
 function getGamemodeSettingsNonHostReadyStates(party) {
@@ -59,8 +56,7 @@ function getGamemodeSettingsNonHostReadyStates(party) {
   return new Map(
     players
       .filter(
-        (player) =>
-          getGamemodeSettingsPlayerId(player) !== hostComputerId
+        (player) => getGamemodeSettingsPlayerId(player) !== hostComputerId
       )
       .map((player) => [
         getGamemodeSettingsPlayerId(player),
@@ -71,6 +67,10 @@ function getGamemodeSettingsNonHostReadyStates(party) {
 }
 
 function isCurrentDeviceGamemodeSettingsHost(party) {
+  if (typeof window.isCurrentOnlinePartyHost === 'function') {
+    return window.isCurrentOnlinePartyHost(party);
+  }
+
   const players = Array.isArray(party?.players) ? party.players : [];
   const hostComputerId = String(
     party?.state?.hostComputerId ||
@@ -261,6 +261,16 @@ function getStartGameBlockers(allReady) {
   if (partyCode) {
     const currentParty =
       typeof currentPartyData === 'undefined' ? null : currentPartyData;
+    const authoritativeParty = latestOnlineStartParty || currentParty;
+    if (
+      authoritativeParty?.state?.hostComputerId &&
+      !isCurrentDeviceGamemodeSettingsHost(authoritativeParty)
+    ) {
+      blockers.push({
+        id: 'host-only',
+        message: 'Only the host can start the game'
+      });
+    }
     const hasLatestPlayers = Array.isArray(latestOnlineStartParty?.players);
     const hasCurrentPlayers = Array.isArray(currentParty?.players);
     const players = hasLatestPlayers
@@ -356,10 +366,7 @@ function updateStartGameButton(allReady) {
     return;
   }
 
-  if (
-    !partyCode &&
-    typeof window.cancelGamemodeStartCountdown === 'function'
-  ) {
+  if (!partyCode && typeof window.cancelGamemodeStartCountdown === 'function') {
     window.cancelGamemodeStartCountdown();
   }
   const anyActive = Array.from(packButtons).some((button) =>

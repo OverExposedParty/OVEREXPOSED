@@ -1,0 +1,163 @@
+.oling-lab-panel-back,
+.oling-lab-explorer-adventure-back {
+  box-sizing: border-box;
+  width: 3rem;
+  min-width: 3rem;
+  height: 3rem;
+  min-height: 3rem;
+  display: grid;
+  grid-template-rows: 1fr;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--oling-lab-element-radius, 0.5rem);
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.oling-lab-furniture-sell {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 3rem;
+  min-width: 3rem;
+  height: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--oling-lab-element-radius, 0.5rem);
+  background: var(--warningcolour, #ff3333);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color 160ms ease;
+}
+
+.oling-lab-furniture-sell[hidden] {
+  display: none;
+}
+
+.oling-lab-furniture-sell:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.oling-lab-furniture-sell:focus-visible {
+  outline: 3px solid var(--warningcoloursecondary, #b22626);
+  outline-offset: 2px;
+}
+
+.oling-lab-wall-decoration-panel-header:has(.oling-lab-furniture-sell) {
+  padding-right: 4.5rem;
+}
+
+.oling-lab-furniture-detail-panel {
+  --wall-decoration-panel-primary: #b8e1ff;
+  --wall-decoration-panel-secondary: #84bee8;
+}
+
+.oling-lab-furniture-detail-panel .oling-lab-wall-decoration-panel-header {
+  padding-left: 4.5rem;
+}
+
+.oling-lab-furniture-detail-panel-content {
+  min-height: 0;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.oling-lab-wall-decoration-panel .oling-lab-panel-back {
+  background: var(--wall-decoration-panel-primary);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-panel-back::before {
+  background-color: var(--backgroundcolour);
+}
+
+.oling-lab-panel-back:not(.is-close)::before {
+  display: none;
+  content: none;
+}
+
+.oling-lab-panel-back.is-close {
+  width: 3rem;
+}
+
+.oling-lab-panel-back.is-close::before {
+  display: none;
+  content: none;
+}
+
+.oling-lab-explorer-adventure-back > span {
+  color: inherit;
+  font-size: inherit;
+}
+
+.oling-lab-panel-back:focus-visible,
+.oling-lab-explorer-adventure-back:focus-visible {
+  outline: 3px solid var(--oling-lab-menu-secondary-colour);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-panel-back:hover,
+  .oling-lab-explorer-adventure-back:hover,
+  .oling-lab-wall-decoration-panel .oling-lab-panel-back:hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+  }
+
+  .oling-lab-wall-decoration-panel .oling-lab-panel-back:hover {
+    background: var(--wall-decoration-panel-secondary);
+  }
+
+  .oling-lab-panel-back:hover::before {
+    background-color: var(--backgroundcolour);
+  }
+
+  .oling-lab-furniture-sell:hover {
+    background: var(--warningcoloursecondary, #b22626);
+  }
+}
+
+.oling-furniture-sale-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: min(88%, 22rem);
+}
+
+.oling-furniture-sale-actions .is-cancel {
+  background: var(--disabledcolour, #777);
+}
+
+.oling-furniture-sale-actions .is-warning {
+  background: var(--warningcolour, #ff3333);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-furniture-sale-actions .is-cancel:hover {
+    background: color-mix(in srgb, var(--disabledcolour, #777) 72%, #fff);
+  }
+
+  .oling-furniture-sale-actions .is-warning:hover {
+    background: var(--warningcoloursecondary, #b22626);
+  }
+}

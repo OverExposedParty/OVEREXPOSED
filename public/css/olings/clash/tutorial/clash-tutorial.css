@@ -1,0 +1,143 @@
+.oe-tutorial-root[data-oe-tutorial-id='olings-clash'] {
+  --oe-tutorial-primary-colour: var(--primarypagecolour);
+  --oe-tutorial-page-primary-colour: var(--primarypagecolour);
+  --oe-tutorial-page-secondary-colour: var(--secondarypagecolour);
+  --oe-tutorial-background-colour: var(--clash-game-surface, #171919);
+}
+
+@font-face {
+  font-family: 'OverExposed';
+  src: url('/fonts/overexposed/OverExposed-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+[data-clash-tutorial] [data-clash-roster='local'] {
+  scroll-margin: 1rem;
+}
+
+[data-clash-tutorial].is-tutorial-paused:not(.is-tutorial-action-input)
+  [data-clash-actions] {
+  pointer-events: none;
+}
+
+[data-clash-tutorial].is-tutorial-action-input [data-clash-passive] {
+  pointer-events: none;
+}
+
+[data-clash-tutorial].is-tutorial-action-input [data-clash-passive],
+[data-clash-tutorial].is-tutorial-action-input [data-clash-fighter='local'] {
+  filter: blur(7px) brightness(0.65);
+  opacity: 0.35 !important;
+}
+
+[data-clash-tutorial].is-tutorial-result-lesson [data-clash-fighter='local'] {
+  filter: blur(7px) brightness(0.65);
+  opacity: 0.35 !important;
+}
+
+[data-clash-tutorial].is-tutorial-ability-reveal-lesson
+  [data-clash-ability-reveal],
+[data-clash-tutorial].is-tutorial-ability-reveal-lesson
+  [data-clash-ability-reveal]
+  * {
+  animation-play-state: paused !important;
+}
+
+.olings-clash-tutorial-action-diagram {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: visible;
+  color: var(--oe-tutorial-page-primary-colour);
+  pointer-events: none;
+}
+
+.olings-clash-tutorial-action-canvas,
+.olings-clash-tutorial-action-beats,
+.olings-clash-tutorial-action-type {
+  position: fixed;
+  pointer-events: none;
+}
+
+.olings-clash-tutorial-action-canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.olings-clash-tutorial-action-curve,
+.olings-clash-tutorial-action-head {
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 7;
+  vector-effect: non-scaling-stroke;
+}
+
+.olings-clash-tutorial-action-curve {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: olings-clash-tutorial-draw-curve 420ms ease-out forwards;
+}
+
+.olings-clash-tutorial-action-head {
+  opacity: 0;
+  animation: olings-clash-tutorial-show-arrow-head 140ms ease-out 360ms forwards;
+}
+
+.olings-clash-tutorial-action-anchor {
+  fill: currentcolor;
+  opacity: 0;
+}
+
+.olings-clash-tutorial-action-diagram[data-debug-anchors='true']
+  .olings-clash-tutorial-action-anchor {
+  opacity: 1;
+}
+
+.olings-clash-tutorial-action-beats {
+  color: var(--oe-tutorial-page-primary-colour);
+  font-family: 'OverExposed', 'OverExposed-Regular', sans-serif;
+  font-size: clamp(0.75rem, 1.125vw, 1rem);
+  line-height: 1;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+}
+
+.olings-clash-tutorial-action-type {
+  color: var(--oe-tutorial-page-primary-colour);
+  font-family: 'OverExposed', 'OverExposed-Regular', sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes olings-clash-tutorial-draw-curve {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes olings-clash-tutorial-show-arrow-head {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .olings-clash-tutorial-action-curve {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .olings-clash-tutorial-action-head {
+    opacity: 1;
+    animation: none;
+  }
+}

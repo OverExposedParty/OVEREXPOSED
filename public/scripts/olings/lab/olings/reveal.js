@@ -26,7 +26,6 @@
     const receiptInfluenceSlots = [
       { key: 'hatch', label: 'Hatch Speed' },
       { key: 'rarity', label: 'Rarity' },
-      { key: 'personality', label: 'Personality' },
       { key: 'matching-set', label: 'Matching Set' }
     ];
 
@@ -85,11 +84,6 @@
       details.append(
         createDetailRow('Set', oling?.matchingSet?.name || receipt?.matchingSet || 'Mixed'),
         createDetailRow(
-          'Personality',
-          oling?.personality?.name ||
-            formatTitle(oling?.personalityKey || 'Unknown')
-        ),
-        createDetailRow(
           'Egg',
           formatTitle(receipt?.eggKey || oling?.eggKey || 'Egg')
         )
@@ -117,7 +111,6 @@
           )
         : recordedInfluences?.[slotKey];
       if (influence) return influence;
-      if (slotKey === 'personality') return receipt?.rolls?.personality?.influence || null;
       return null;
     }
 
@@ -135,11 +128,7 @@
       if (slotKey === 'hatch') return `+${percentage}% speed`;
       if (slotKey === 'rarity') return `+${percentage}% rarity`;
       if (slotKey === 'matching-set') return `+${percentage}% match`;
-      const personalityKey =
-        influence?.personalityKey || effect.personalityKey || consumable?.metadata?.personalityKey;
-      return personalityKey
-        ? `+${percentage}% ${formatTitle(personalityKey)}`
-        : `+${percentage}% personality`;
+      return '';
     }
 
     function createReceiptInfluenceCard(slot, receipt) {

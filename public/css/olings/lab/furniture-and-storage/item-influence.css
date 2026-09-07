@@ -1,26 +1,38 @@
 .oling-lab-item-slot-row {
-  --oling-lab-item-influence-card-size: clamp(6.75rem, 23vw, 9rem);
-  position: absolute;
-  inset: 0;
+  position: relative;
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  align-items: center;
-  justify-items: center;
-  padding: 0.65rem;
-  transition: opacity 240ms ease;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: stretch;
+  justify-items: stretch;
+  padding: clamp(0.75rem, 3vw, 1.25rem);
+  background:
+    linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)),
+    url('/images/olings/lab/gui/egg-background.jpg') center / cover no-repeat,
+    rgb(22 31 36 / 82%);
+}
+
+.oling-lab-item-slot-row[data-influence-slot-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  padding: 0;
 }
 
 .oling-lab-item-influence-slot {
   position: relative;
   box-sizing: border-box;
   min-width: 0;
-  justify-self: center;
-  width: min(100%, var(--oling-lab-item-influence-card-size));
-  min-height: var(--oling-lab-item-influence-card-size);
-  aspect-ratio: 1 / 1;
+  justify-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  aspect-ratio: auto;
   display: grid;
   gap: 0.4rem;
   place-items: center;
@@ -39,82 +51,29 @@
   opacity: 0.68;
 }
 
-.oling-lab-item-influence-slot.is-expanded {
+.oling-lab-item-influence-slot.is-item-drop-target::after {
   position: absolute;
+  z-index: 20;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: auto;
-  grid-template-rows: minmax(0, 1fr) auto;
-  padding: 1rem 1rem 4.25rem;
-  cursor: default;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  content: attr(data-oling-item-drop-message);
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
-.oling-lab-item-influence-slot.is-expanded strong {
-  bottom: 3.35rem;
-}
-
-.oling-lab-item-influence-slot.is-expanded .oling-lab-item-influence-marker {
-  top: calc(50% - 1.4rem);
-}
-
-.oling-lab-item-influence-slot.is-expanded img {
-  position: absolute;
-  top: calc(50% - 1.4rem);
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.oling-lab-item-influence-back {
-  position: absolute;
-  top: 0.8rem;
-  left: 0.8rem;
-  z-index: 4;
-  width: 2.15rem;
-  aspect-ratio: 1;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  transition: transform 0.18s ease;
-}
-
-.oling-lab-item-influence-back::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(0.8rem, 2vw, 1rem);
-  aspect-ratio: 1;
-  background-color: var(--oling-lab-menu-secondary-colour);
-  clip-path: polygon(22% 50%, 76% 8%, 76% 92%);
-  transform: translate(-50%, -50%);
-  transition: background-color 0.2s;
-}
-
-.oling-lab-item-influence-back:focus-visible::before,
-.oling-lab-item-influence-back:active::before {
-  background-color: var(--oling-lab-menu-secondary-colour);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .oling-lab-item-influence-back:hover::before {
-    background-color: var(--oling-lab-menu-secondary-colour);
-  }
-}
-
-.oling-lab-item-influence-back:focus-visible {
-  outline: none;
-}
-
-.oling-lab-item-influence-back:focus-visible {
-  transform: scale(1.08);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .oling-lab-item-influence-back:hover {
-    transform: scale(1.08);
-  }
+.oling-lab-item-slot-row:not([data-influence-slot-count='1'])
+  .oling-lab-item-influence-slot.is-active {
+  outline: 3px solid var(--oling-lab-menu-secondary-colour);
+  outline-offset: -3px;
 }
 
 .oling-lab-panel-back {
@@ -144,6 +103,16 @@
   transition: background-color 0.2s;
 }
 
+.oling-lab-panel-back.is-close {
+  width: 3rem;
+}
+
+.oling-lab-panel-back.is-close::before {
+  display: none;
+  content: none;
+  clip-path: none;
+}
+
 .oling-lab-panel-back:focus-visible::before,
 .oling-lab-panel-back:active::before {
   background-color: var(--oling-lab-menu-secondary-colour);
@@ -157,16 +126,6 @@
 
 .oling-lab-panel-back:focus-visible {
   outline: none;
-}
-
-.oling-lab-panel-back:focus-visible {
-  transform: scale(1.08);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .oling-lab-panel-back:hover {
-    transform: scale(1.08);
-  }
 }
 
 .oling-lab-panel-back + h3 {
@@ -229,7 +188,8 @@
 
 .oling-lab-egg-insertion-stage.is-viewing-details .oling-lab-stats-toggle,
 .oling-lab-egg-insertion-stage.is-viewing-egg-info .oling-lab-stats-toggle,
-.oling-lab-egg-insertion-stage.is-viewing-incubator-info .oling-lab-stats-toggle {
+.oling-lab-egg-insertion-stage.is-viewing-incubator-info
+  .oling-lab-stats-toggle {
   opacity: 0;
   pointer-events: none;
 }
@@ -241,7 +201,6 @@
   width: auto;
   height: min(30%, 3.25rem);
   transform: translate(-50%, -50%);
-  font-size: clamp(1.75rem, 8vw, 3rem);
 }
 
 .oling-lab-item-influence-slot img {
@@ -265,7 +224,60 @@
   text-transform: uppercase;
 }
 
-.oling-lab-items-stage.is-selecting-item-influence .oling-lab-item-slot-row {
-  opacity: 0;
-  pointer-events: none;
+.oling-lab-item-slot-row[data-influence-slot-count='1']
+  .oling-lab-item-influence-slot {
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  place-items: center;
+  padding: 1rem;
+  background: transparent;
+  text-align: center;
+}
+
+.oling-lab-item-slot-row[data-influence-slot-count='1']
+  .oling-lab-item-influence-marker {
+  position: relative;
+  top: auto;
+  left: auto;
+  align-self: center;
+  justify-self: center;
+  width: auto;
+  height: 30%;
+  transform: none;
+}
+
+.oling-lab-item-slot-row[data-influence-slot-count='1']
+  .oling-lab-item-influence-slot
+  img {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-item-slot-row[data-influence-slot-count='1']
+  .oling-lab-item-influence-slot
+  strong {
+  position: static;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.oling-lab-items-stage {
+  height: 100%;
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  overflow: hidden;
+  background: transparent;
+}
+
+.oling-lab-items-stage.is-locked {
+  grid-template-rows: auto;
+  align-content: start;
+}
+
+.oling-lab-items-stage > .oling-lab-menu-empty {
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }

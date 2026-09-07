@@ -19,12 +19,9 @@ const olingHatchReceiptSchema = new Schema(
       body: { type: layerRollSchema, required: true },
       eyes: { type: layerRollSchema, required: true },
       mouth: { type: layerRollSchema, required: true },
-      flight: { type: layerRollSchema, required: true },
-      personality: {
-        personalityKey: { type: String, trim: true, required: true },
-        influence: { type: Schema.Types.Mixed, default: null }
-      }
+      flight: { type: layerRollSchema, required: true }
     },
+    influences: { type: [Schema.Types.Mixed], default: () => [] },
     eggOddsSnapshot: { type: Schema.Types.Mixed, default: () => ({}) },
     inventoryChange: {
       eggKey: { type: String, trim: true, default: '' },

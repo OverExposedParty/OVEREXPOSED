@@ -8,23 +8,34 @@ const {
 } = require('../shared');
 const { attachOlingBuildSetsToEggs } = require('./build-sets');
 
+const ACTIVE_OLING_CONSUMABLE_KEYS = Object.freeze([
+  'oling-cookie',
+  'o-juice',
+  'oling-blanket',
+  'opal-dust',
+  'lucky-clover'
+]);
+const activeOlingConsumableKeys = new Set(ACTIVE_OLING_CONSUMABLE_KEYS);
+
 async function getOlingDefinitions(
-  { OlingTrait, OlingEgg, OlingBuildSet, OlingPersonality },
+  { OlingTrait, OlingEgg, OlingBuildSet, OlingClashAbility },
   olings = []
 ) {
-  const traitKeys = [
+  const clashTraitKeys = [
     ...new Set(
       olings.flatMap((oling) =>
-        [
-          ...OLING_LAYERS.map((layer) => normalizeKey(oling.build?.[layer])),
-          normalizeKey(oling.equipment?.headwear)
-        ].filter(Boolean)
+        OLING_LAYERS.map((layer) => normalizeKey(oling.build?.[layer])).filter(
+          Boolean
+        )
       )
     )
   ];
-  const personalityKeys = [
+  const traitKeys = [
     ...new Set(
-      olings.map((oling) => normalizeKey(oling.personalityKey)).filter(Boolean)
+      [
+        ...clashTraitKeys,
+        ...olings.map((oling) => normalizeKey(oling.equipment?.headwear))
+      ].filter(Boolean)
     )
   ];
   const eggKeys = [
@@ -33,15 +44,20 @@ async function getOlingDefinitions(
     )
   ];
 
-  const [traits, rawEggs, personalities] = await Promise.all([
+  const [traits, rawEggs, clashAbilities] = await Promise.all([
     traitKeys.length
       ? OlingTrait.find({ key: { $in: traitKeys } }).lean()
       : Promise.resolve([]),
     eggKeys.length
       ? OlingEgg.find({ key: { $in: eggKeys } }).lean()
       : Promise.resolve([]),
-    personalityKeys.length
-      ? OlingPersonality.find({ key: { $in: personalityKeys } }).lean()
+    clashTraitKeys.length && OlingClashAbility
+      ? OlingClashAbility.find({
+          traitKey: { $in: clashTraitKeys },
+          isCurrent: true,
+          enabled: true,
+          status: 'published'
+        }).lean()
       : Promise.resolve([])
   ]);
   const eggs = await attachOlingBuildSetsToEggs({ OlingBuildSet }, rawEggs, {
@@ -50,10 +66,10 @@ async function getOlingDefinitions(
 
   return {
     traitsByKey: new Map(traits.map((trait) => [trait.key, trait])),
-    eggsByKey: new Map(eggs.map((egg) => [egg.key, egg])),
-    personalitiesByKey: new Map(
-      personalities.map((personality) => [personality.key, personality])
-    )
+    clashAbilitiesByTraitKey: new Map(
+      clashAbilities.map((ability) => [ability.traitKey, ability])
+    ),
+    eggsByKey: new Map(eggs.map((egg) => [egg.key, egg]))
   };
 }
 
@@ -65,11 +81,26 @@ async function readJsonList(fileName, key) {
 }
 
 function normalizeOlingConsumable(consumable = {}) {
-  return {
+  const normalized = {
     ...consumable,
     key: normalizeKey(consumable.key),
     enabled: consumable.enabled !== false,
     status: consumable.status || 'published'
+  };
+
+  if (normalized.key !== 'o-juice') return normalized;
+
+  return {
+    ...normalized,
+    name: 'O-Juice',
+    category: 'care',
+    subcategory: 'energy',
+    target: 'oling',
+    effect: { type: 'energy', restoreToEnergy: 75 },
+    assets: {
+      icon: '/images/olings/lab/consumables/energy/o-juice.svg',
+      image: '/images/olings/lab/consumables/energy/o-juice.svg'
+    }
   };
 }
 
@@ -79,6 +110,7 @@ function filterPublishedOlingConsumables(consumables = []) {
     .filter(
       (consumable) =>
         consumable.key &&
+        activeOlingConsumableKeys.has(consumable.key) &&
         consumable.enabled !== false &&
         consumable.status === 'published'
     );
@@ -87,18 +119,33 @@ function filterPublishedOlingConsumables(consumables = []) {
 async function listOlingConsumables({ OlingConsumable } = {}) {
   if (OlingConsumable) {
     try {
-      const consumables = await OlingConsumable.find({
-        enabled: true,
-        status: 'published'
+      const storedConsumables = await OlingConsumable.find({
+        key: { $in: ACTIVE_OLING_CONSUMABLE_KEYS }
       })
         .sort({ category: 1, subcategory: 1, key: 1 })
         .lean();
-
-      if (consumables.length) return consumables.map(normalizeOlingConsumable);
-      if (typeof OlingConsumable.countDocuments === 'function') {
-        const totalConsumables = await OlingConsumable.countDocuments({});
-        if (totalConsumables > 0) return [];
-      }
+      const storedKeys = new Set(
+        storedConsumables.map((item) => normalizeKey(item.key))
+      );
+      const jsonConsumables = await readJsonList(
+        'consumables.json',
+        'consumables'
+      );
+      return filterPublishedOlingConsumables([
+        ...storedConsumables,
+        ...jsonConsumables.filter(
+          (item) => !storedKeys.has(normalizeKey(item.key))
+        )
+      ]).sort((left, right) =>
+        [left.category, left.subcategory, left.key]
+          .map((value) => String(value || ''))
+          .join(':')
+          .localeCompare(
+            [right.category, right.subcategory, right.key]
+              .map((value) => String(value || ''))
+              .join(':')
+          )
+      );
     } catch (error) {
       console.warn(
         'Falling back to JSON Oling consumables:',
@@ -116,7 +163,7 @@ async function getOlingConsumableByKey(
   { OlingConsumable } = {}
 ) {
   const normalizedKey = normalizeKey(consumableKey);
-  if (!normalizedKey) return null;
+  if (!activeOlingConsumableKeys.has(normalizedKey)) return null;
 
   if (OlingConsumable) {
     try {
@@ -128,7 +175,9 @@ async function getOlingConsumableByKey(
 
       if (consumable) return normalizeOlingConsumable(consumable);
       if (typeof OlingConsumable.countDocuments === 'function') {
-        const totalConsumables = await OlingConsumable.countDocuments({});
+        const totalConsumables = await OlingConsumable.countDocuments({
+          key: normalizedKey
+        });
         if (totalConsumables > 0) return null;
       }
     } catch (error) {
@@ -149,27 +198,7 @@ async function readAllOlingConsumablesFromJson() {
   const consumables = await readJsonList('consumables.json', 'consumables');
   return consumables
     .map((consumable) => ({ ...consumable, key: normalizeKey(consumable.key) }))
-    .filter((consumable) => consumable.key);
-}
-
-async function listOlingPersonalities() {
-  const personalities = await readJsonList(
-    'personalities.json',
-    'personalities'
-  );
-  return personalities
-    .map((personality) => ({
-      ...personality,
-      key: normalizeKey(personality.key),
-      enabled: personality.enabled !== false,
-      status: personality.status || 'published'
-    }))
-    .filter(
-      (personality) =>
-        personality.key &&
-        personality.enabled !== false &&
-        personality.status === 'published'
-    );
+    .filter((consumable) => activeOlingConsumableKeys.has(consumable.key));
 }
 
 async function listPublishedOlingEggs({ OlingEgg, OlingBuildSet }) {
@@ -204,34 +233,13 @@ async function listPublishedOlingTraits({ OlingTrait }) {
   return readJsonList('traits.json', 'traits');
 }
 
-async function listPublishedOlingPersonalities({ OlingPersonality }) {
-  try {
-    const personalities = await OlingPersonality.find({
-      enabled: true,
-      status: 'published'
-    })
-      .sort({ key: 1 })
-      .lean();
-
-    if (personalities.length) return personalities;
-  } catch (error) {
-    console.warn(
-      'Falling back to JSON Oling personalities:',
-      error.message || error
-    );
-  }
-
-  return listOlingPersonalities();
-}
-
 module.exports = {
+  ACTIVE_OLING_CONSUMABLE_KEYS,
   filterPublishedOlingConsumables,
   getOlingConsumableByKey,
   getOlingDefinitions,
   listOlingConsumables,
-  listOlingPersonalities,
   listPublishedOlingEggs,
-  listPublishedOlingPersonalities,
   listPublishedOlingTraits,
   normalizeOlingConsumable,
   readAllOlingConsumablesFromJson,

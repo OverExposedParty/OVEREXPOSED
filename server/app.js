@@ -10,11 +10,17 @@ const { registerPartySockets } = require('./sockets/register-party-sockets');
 const {
   registerOlingBattleSockets
 } = require('./sockets/register-oling-battle-sockets');
+const {
+  registerOlingClashSockets
+} = require('./sockets/register-oling-clash-sockets');
 const { createDatabaseServices } = require('./services/database');
 const { createRoomArchiver } = require('./services/database/room-archiver');
 const {
   createActivePartyOwnerLeaseService
 } = require('./services/active-party-owner-leases');
+const {
+  createOlingClashDeadlineCoordinator
+} = require('./services/oling-clashes/deadline-coordinator');
 const models = require('./models');
 const logger = require('./logger');
 
@@ -36,6 +42,11 @@ function createAppServer() {
     partyOwnerLeases,
     roomArchiver
   });
+  const olingClashDeadlines = createOlingClashDeadlineCoordinator({
+    models,
+    runtime
+  });
+  runtime.olingClashDeadlineCoordinator = olingClashDeadlines;
 
   registerApiRoutes({
     app,
@@ -63,6 +74,11 @@ function createAppServer() {
     debugLog: logger.debugLog
   });
 
+  registerOlingClashSockets({
+    io,
+    debugLog: logger.debugLog
+  });
+
   registerPageRoutes({
     app,
     accountModel: models.Account,
@@ -72,6 +88,7 @@ function createAppServer() {
       models.partyGameImposterSchema,
       models.partyGameWouldYouRatherSchema
     ],
+    olingClashMatchModel: models.OlingClashMatch,
     waitingRoomModel: models.waitingRoomSchema
   });
 
@@ -110,7 +127,8 @@ function createAppServer() {
     app,
     server,
     io,
-    database
+    database,
+    olingClashDeadlines
   };
 }
 

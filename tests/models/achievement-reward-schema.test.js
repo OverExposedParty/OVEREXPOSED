@@ -101,7 +101,9 @@ test('canonical item rewards survive account schema casting', () => {
       name: 'Schema Item Reward',
       rewards: [
         { type: 'badge', key: 'schema-badge' },
-        { type: 'oling_furniture', key: 'schema-chair', quantity: 2 }
+        { type: 'oling_furniture', key: 'schema-chair', quantity: 2 },
+        { type: 'oling_wallpaper', key: 'schema-wallpaper' },
+        { type: 'oling_wallpaper_variant', key: 'brick:blue' }
       ]
     }
   });
@@ -125,6 +127,18 @@ test('canonical item rewards survive account schema casting', () => {
       {
         type: 'oling_furniture',
         key: 'schema-chair',
+        rewardGranted: true,
+        rewardStatus: 'granted'
+      },
+      {
+        type: 'oling_wallpaper',
+        key: 'schema-wallpaper',
+        rewardGranted: true,
+        rewardStatus: 'granted'
+      },
+      {
+        type: 'oling_wallpaper_variant',
+        key: 'brick:blue',
         rewardGranted: true,
         rewardStatus: 'granted'
       }

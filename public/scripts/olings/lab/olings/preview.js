@@ -76,7 +76,10 @@
       meter.setAttribute('aria-valuenow', String(displayedEnergy));
       meter.title = `Energy: ${displayedEnergy}/${displayedMaxEnergy}`;
 
-      const icon = createImage('/images/olings/gui/icons/general/energy.svg', 'Energy');
+      const icon = createImage(
+        '/images/olings/lab/gui/icons/general/energy.svg',
+        'Energy'
+      );
       icon.className = 'oling-lab-oling-energy-icon';
       const track = document.createElement('div');
       track.className = 'oling-lab-oling-energy-track';

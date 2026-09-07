@@ -3,6 +3,32 @@
     window.PartyApiPartyData;
   const { performOnlinePartyAction } = window.PartyApiActions;
 
+  function getCurrentOnlinePartySnapshot() {
+    return typeof currentPartyData === 'undefined' ? null : currentPartyData;
+  }
+
+  function getCurrentOnlinePartyActorId(preferredComputerId = null) {
+    return (
+      window.resolveOnlinePartyActorId?.(
+        getCurrentOnlinePartySnapshot(),
+        preferredComputerId
+      ) ??
+      preferredComputerId ??
+      (typeof deviceId === 'string' ? deviceId : null)
+    );
+  }
+
+  function rejectNonHostPartyMutation(action) {
+    const party = getCurrentOnlinePartySnapshot();
+    if (!party?.state?.hostComputerId) return null;
+    try {
+      window.requireCurrentOnlinePartyHost?.(party, action);
+      return null;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   function updateOnlineParty({
     partyType = sessionPartyType,
     partyId,
@@ -14,6 +40,8 @@
     bypassPlayerRestrictions = false
   }) {
     const normalisedPartyId = requireOnlinePartyId(partyId);
+    const hostRejection = rejectNonHostPartyMutation('change party settings');
+    if (hostRejection) return hostRejection;
     const isDeckGame = !partyType?.startsWith('party-game-mafia');
     const payload = {
       partyId: normalisedPartyId,
@@ -103,10 +131,12 @@
     newScore,
     newUserSocketId,
     playerPatch,
-    partyType = sessionPartyType
+    partyType = sessionPartyType,
+    identityRetryAttempted = false
   }) {
     try {
       const normalisedPartyId = requireOnlinePartyId(partyId);
+      const resolvedComputerId = getCurrentOnlinePartyActorId(computerId);
       const res = await fetch(
         `/api/${partyType}/patch-player?partyCode=${encodeURIComponent(normalisedPartyId)}`,
         {
@@ -114,7 +144,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             partyId: normalisedPartyId,
-            computerId,
+            computerId: resolvedComputerId,
             newUsername,
             newUserIcon,
             newUserReady,
@@ -131,14 +161,51 @@
         const error = new Error(
           serverError?.message ||
             data?.message ||
-            `Failed to patch player "${computerId}"`
+            `Failed to patch player "${resolvedComputerId}"`
         );
         error.code = serverError?.code || 'party_patch_player_failed';
         error.status = res.status;
         error.details = serverError?.details;
+        if (error.status === 403 && !identityRetryAttempted) {
+          const existing = await getExistingPartyData(
+            normalisedPartyId,
+            partyType
+          ).catch(() => null);
+          const latestParty = Array.isArray(existing) ? existing[0] : null;
+          if (latestParty) {
+            currentPartyData = latestParty;
+            const refreshedComputerId =
+              window.syncOnlinePartyIdentity?.(latestParty) ||
+              window.resolveOnlinePartyActorId?.(
+                latestParty,
+                resolvedComputerId
+              );
+            if (
+              refreshedComputerId &&
+              String(refreshedComputerId) !== String(resolvedComputerId)
+            ) {
+              return UpdateUserPartyData({
+                partyId: normalisedPartyId,
+                computerId: refreshedComputerId,
+                newUsername,
+                newUserIcon,
+                newUserReady,
+                newUserConfirmation,
+                newScore,
+                newUserSocketId,
+                playerPatch,
+                partyType,
+                identityRetryAttempted: true
+              });
+            }
+          }
+        }
         throw error;
       }
-      if (data.updated) currentPartyData = data.updated;
+      if (data.updated) {
+        currentPartyData = data.updated;
+        window.syncOnlinePartyIdentity?.(data.updated);
+      }
       if (newUserSocketId) {
         await window.PartyAuthTransition?.completeCurrentPartyAuthTransition?.();
       }
@@ -155,20 +222,38 @@
     partyType = sessionPartyType
   ) {
     const normalisedPartyId = requireOnlinePartyId(partyId);
+    const actorComputerId = getCurrentOnlinePartyActorId();
+    if (String(actorComputerId) !== String(computerIdToRemove)) {
+      const hostRejection = rejectNonHostPartyMutation('remove another player');
+      if (hostRejection) return hostRejection;
+    }
     const res = await fetch(`/api/${partyType}/remove-user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         partyId: normalisedPartyId,
         computerIdToRemove,
-        actorComputerId: typeof deviceId === 'string' ? deviceId : null,
+        actorComputerId,
         actorSocketId: typeof socket?.id === 'string' ? socket.id : null
       })
     });
 
     if (!res.ok) {
-      console.error('Failed to remove user:', await res.json());
-      return;
+      const payload = await res.json().catch(() => ({}));
+      const serverError =
+        payload?.error && typeof payload.error === 'object'
+          ? payload.error
+          : {};
+      const error = new Error(
+        (typeof payload?.error === 'string' && payload.error) ||
+          serverError.message ||
+          payload?.message ||
+          'Failed to remove user'
+      );
+      error.status = res.status;
+      error.code = serverError.code || 'party_remove_user_failed';
+      error.details = serverError.details;
+      throw error;
     }
 
     const partyRes = await fetch(
@@ -208,6 +293,8 @@
 
   async function DeleteParty(partyIdToDelete = partyCode) {
     const normalisedPartyId = requireOnlinePartyId(partyIdToDelete);
+    const hostRejection = rejectNonHostPartyMutation('disband the party');
+    if (hostRejection) return hostRejection;
     const previousTeardownState = window.onlinePartyTeardownInProgress === true;
     window.onlinePartyTeardownInProgress = true;
 
@@ -231,6 +318,8 @@
       hostedParty = false;
       waitingForHost = false;
       currentPartyData = null;
+      window.onlinePartyMembershipEstablished = false;
+      window.onlinePartyJoinedCode = null;
       if (
         String(partyCode || '').toUpperCase() ===
         String(normalisedPartyId).toUpperCase()
@@ -258,14 +347,16 @@
   ) {
     try {
       const normalisedPartyId = requireOnlinePartyId(partyId);
+      const party = getCurrentOnlinePartySnapshot();
+      const actorId = party?.state?.hostComputerId
+        ? window.requireCurrentOnlinePartyHost?.(party, 'start the game') ||
+          getCurrentOnlinePartyActorId()
+        : getCurrentOnlinePartyActorId(
+            hostedParty && hostDeviceId ? hostDeviceId : null
+          );
       await performOnlinePartyAction({
         partyId: normalisedPartyId,
-        actorId:
-          hostedParty && hostDeviceId
-            ? hostDeviceId
-            : typeof deviceId === 'string'
-              ? deviceId
-              : null,
+        actorId,
         action: 'start-game',
         payload: { bypassPlayerRestrictions },
         syncInstructions: false
@@ -319,9 +410,8 @@
     const nonHostPlayers = hostComputerId
       ? players.filter(
           (player) =>
-            String(
-              player.identity?.computerId || player.computerId || ''
-            ) !== String(hostComputerId)
+            String(player.identity?.computerId || player.computerId || '') !==
+            String(hostComputerId)
         )
       : players.slice(1);
 

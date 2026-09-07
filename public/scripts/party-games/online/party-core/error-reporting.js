@@ -1,4 +1,34 @@
 let onlineErrorReportInFlight = false;
+const expectedOnlinePartyErrorCodes = new Set([
+  'account_required',
+  'guest_session_required',
+  'party_host_required',
+  'party_network_unavailable',
+  'party_not_found',
+  'party_or_player_not_found',
+  'party_owner_active_party_exists',
+  'party_player_account_locked',
+  'party_player_forbidden',
+  'party_player_not_found',
+  'party_replay_stale_session',
+  'party_socket_join_timeout',
+  'party_switch_conflict',
+  'party_switch_game_active',
+  'party_switch_same_gamemode',
+  'party_switch_stale_session',
+  'party_update_conflict'
+]);
+
+function shouldReportOnlineGameError(error) {
+  const status = Number.isInteger(error?.status) ? error.status : null;
+  if (status !== null && status >= 500) return true;
+  if (status === 401 || status === 403) return false;
+
+  return !(
+    error?.name === 'AbortError' ||
+    expectedOnlinePartyErrorCodes.has(error?.code)
+  );
+}
 
 function getOnlineErrorSnapshotContext(extra = {}) {
   const partyData =
@@ -33,7 +63,28 @@ function serializeOnlineError(error) {
     return {
       name: error.name,
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
+      code: error.code,
+      status: Number.isInteger(error.status) ? error.status : null
+    };
+  }
+
+  if (error && typeof error === 'object') {
+    return {
+      name: typeof error.name === 'string' ? error.name : 'Error',
+      message:
+        typeof error.message === 'string'
+          ? error.message
+          : (() => {
+              try {
+                return JSON.stringify(error);
+              } catch {
+                return 'Unknown client error';
+              }
+            })(),
+      stack: typeof error.stack === 'string' ? error.stack : '',
+      code: typeof error.code === 'string' ? error.code : '',
+      status: Number.isInteger(error.status) ? error.status : null
     };
   }
 
@@ -54,6 +105,7 @@ function serializeOnlineError(error) {
 
 function reportOnlineGameError(error, context = {}) {
   if (
+    !shouldReportOnlineGameError(error) ||
     onlineErrorReportInFlight ||
     !partyCode ||
     typeof sessionPartyType !== 'string'
@@ -100,6 +152,7 @@ function reportOnlineGameError(error, context = {}) {
 }
 
 window.reportOnlineGameError = reportOnlineGameError;
+window.shouldReportOnlineGameError = shouldReportOnlineGameError;
 
 window.addEventListener('error', (event) => {
   reportOnlineGameError(event.error || event.message, {

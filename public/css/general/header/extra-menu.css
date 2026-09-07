@@ -47,11 +47,37 @@
     font-size 0.3s;
 }
 
+.extra-menu-context-action {
+  border-top: 2px solid color-mix(in srgb, var(--warningcolour) 55%, transparent);
+  color: var(--warningcolour);
+}
+
+.extra-menu-context-action.is-clash-forfeit {
+  border-top: 0;
+  background-color: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+.extra-menu-context-action.is-clash-forfeit:focus-visible {
+  background-color: var(--warningcoloursecondary);
+  color: var(--backgroundcolour);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .extra-menu-button:hover {
     background-color: var(--primarypagecolour);
     color: var(--backgroundcolour);
     font-size: 28px;
+  }
+
+  .extra-menu-context-action:hover {
+    background-color: var(--warningcolour);
+    color: var(--backgroundcolour);
+  }
+
+  .extra-menu-context-action.is-clash-forfeit:hover {
+    background-color: var(--warningcoloursecondary);
+    color: var(--backgroundcolour);
   }
 }
 

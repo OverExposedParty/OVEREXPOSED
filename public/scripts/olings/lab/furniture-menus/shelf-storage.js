@@ -1,205 +1,555 @@
 (function () {
   function createOlingLabShelfStorage(dependencies, shelfInventory) {
     const {
-      furnitureGridSize: FURNITURE_GRID_SIZE,
+      state,
+      elements = {},
       createImage,
-      setPanelInteractivity,
-      openStagePanel,
-      closeStagePanel,
-      getFurniturePlacement
+      closeMenu,
+      closeGatewayPanel = () => {},
+      getOlingViews = () => null,
+      getQuickSellPrices = () => Promise.resolve([]),
+      openQuickSellDialog
     } = dependencies;
-    const { createShelfDetailsPanel, getShelfInventoryItems } = shelfInventory;
+    const { getShelfInventoryItems } = shelfInventory;
+    const inventoryPageSize = 8;
+    let selectedStackKey = null;
+    let selectedUnitIndexes = new Set();
+    let inventoryPageIndex = 0;
+    let priceRequestId = 0;
+    let quickSellUnitPrices = new Map();
+    let selectedPayout = null;
 
-function createShelfStorageTab(placed, item) {
-      const section = document.createElement('section');
-      section.className = 'oling-lab-menu-section oling-lab-shelf-section';
-      const stage = document.createElement('section');
-      stage.className = 'oling-lab-egg-insertion-stage oling-lab-shelf-stage';
-      const viewport = document.createElement('div');
-      viewport.className = 'oling-lab-shelf-viewport';
-      const shelf = document.createElement('div');
-      shelf.className = 'oling-lab-shelf-grid';
-      const placement = getFurniturePlacement(item);
-      const shelfArtboard = document.createElement('div');
-      shelfArtboard.className = 'oling-lab-shelf-artboard';
-      const shelfArt = createImage(item.image, item.name);
-      shelfArt.className = 'oling-lab-shelf-art';
-      shelfArtboard.appendChild(shelfArt);
-      shelf.appendChild(shelfArtboard);
-      const view = {
-        scale: 1,
-        x: 0,
-        y: 0,
-        dragging: false,
-        dragged: false,
-        pointerId: null
-      };
-      const applyShelfView = () => {
-        const maxX = (viewport.clientWidth * (view.scale - 1)) / 2;
-        const maxY = (viewport.clientHeight * (view.scale - 1)) / 2;
-        view.x = Math.max(-maxX, Math.min(maxX, view.x));
-        view.y = Math.max(-maxY, Math.min(maxY, view.y));
-        shelf.style.width = `${view.scale * 100}%`;
-        shelf.style.height = `${view.scale * 100}%`;
-        shelf.style.transform = `translate(-50%, -50%) translate3d(${view.x}px, ${view.y}px, 0)`;
-        const canvasSize = Math.min(shelf.clientWidth, shelf.clientHeight);
-        const canvasLeft = (shelf.clientWidth - canvasSize) / 2;
-        const canvasTop = (shelf.clientHeight - canvasSize) / 2;
-        const scale = canvasSize / FURNITURE_GRID_SIZE;
-        shelfArtboard.style.left = `${canvasLeft + placement.x * scale}px`;
-        shelfArtboard.style.top = `${canvasTop + placement.y * scale}px`;
-        shelfArtboard.style.width = `${placement.width * scale}px`;
-        shelfArtboard.style.height = `${placement.height * scale}px`;
-      };
-      const setShelfScale = (scale) => {
-        view.scale = Math.max(1, Math.min(3, Number(scale) || 1));
-        if (view.scale === 1) {
-          view.x = 0;
-          view.y = 0;
+    const playSound = (key) => {
+      if (!key || typeof window.playSoundEffect !== 'function') return;
+      Promise.resolve(window.playSoundEffect(key)).catch(() => {});
+    };
+    const panelTransitions = window.OlingLabPanelTransitions;
+
+    function getActiveShelf() {
+      const placed = (state.lab?.placedItems || []).find(
+        (candidate) =>
+          String(candidate?.placedId || '') ===
+          String(state.activeSupplyStoragePlacedId || '')
+      );
+      const definition = state.catalog?.get?.(placed?.itemId);
+      const storageSlots = (definition?.inventorySlots || []).filter(
+        (slot) => slot?.slotType === 'storage'
+      );
+      if (!placed || !definition || !storageSlots.length) return null;
+      return { placed, definition, storageSlots };
+    }
+
+    function getShelfStacks(activeShelf) {
+      const maxStack = Math.max(
+        1,
+        Number(activeShelf?.storageSlots?.[0]?.maxStack) || 8
+      );
+      const capacity = activeShelf?.storageSlots?.length || 16;
+      const stacks = [];
+      getShelfInventoryItems().forEach((item) => {
+        let remaining = Math.max(0, Number(item.quantity) || 0);
+        let stackIndex = 0;
+        while (remaining > 0 && stacks.length < capacity) {
+          const quantity = Math.min(maxStack, remaining);
+          stacks.push({
+            ...item,
+            quantity,
+            maxStack,
+            stackIndex,
+            stackKey: `${item.type}:${item.key}:${stackIndex}`
+          });
+          remaining -= quantity;
+          stackIndex += 1;
         }
-        applyShelfView();
-      };
-      let panel = null;
-      const closePanel = () => {
-        if (!panel) return;
-        closeStagePanel(stage, panel, 'is-viewing-shelf-slot', () => {
-          panel = null;
+      });
+      return { capacity, maxStack, stacks };
+    }
+
+    const getPriceKey = (item) => `${item?.type || ''}:${item?.key || ''}`;
+
+    function setQuickSellState(stack) {
+      if (!elements.supplyStorageQuickSell) return;
+      const quantity = stack ? selectedUnitIndexes.size : 0;
+      const unitPayout = Number(quickSellUnitPrices.get(getPriceKey(stack)));
+      const hasPrice = Number.isFinite(unitPayout) && unitPayout > 0;
+      const payout = hasPrice ? unitPayout * quantity : 0;
+      selectedPayout = hasPrice && quantity > 0 ? payout : null;
+      const label = Object.assign(document.createElement('span'), {
+        className: 'oling-lab-supply-storage-quick-sell-label',
+        textContent: 'Quick Sell'
+      });
+      const currency = document.createElement('span');
+      currency.className = 'oling-lab-supply-storage-quick-sell-value';
+      const icon = Object.assign(document.createElement('img'), {
+        src: '/images/icons/currency/opal.svg',
+        alt: ''
+      });
+      icon.setAttribute('aria-hidden', 'true');
+      currency.append(
+        icon,
+        Object.assign(document.createElement('strong'), {
+          textContent: String(payout)
+        })
+      );
+      elements.supplyStorageQuickSell.replaceChildren(label, currency);
+      elements.supplyStorageQuickSell.disabled =
+        !stack || quantity < 1 || !hasPrice;
+      elements.supplyStorageQuickSell.setAttribute(
+        'aria-label',
+        stack && quantity > 0
+          ? hasPrice
+            ? `Quick sell ${quantity} ${stack.name} for ${payout} Opals`
+            : `Quick sell price is unavailable for ${stack.name}`
+          : 'Select items from a stack to quick sell'
+      );
+    }
+
+    function loadQuickSellPrices(stacks) {
+      const requestId = (priceRequestId += 1);
+      const uniqueItems = [
+        ...new Map(stacks.map((stack) => [getPriceKey(stack), stack])).values()
+      ];
+      quickSellUnitPrices = new Map();
+      setQuickSellState(null);
+      getQuickSellPrices(uniqueItems)
+        .then((prices) => {
+          if (requestId !== priceRequestId) return;
+          quickSellUnitPrices = new Map(
+            prices
+              .filter((price) => Number(price?.unitPayout) > 0)
+              .map((price) => [
+                `${price.itemType}:${price.itemKey}`,
+                Number(price.unitPayout)
+              ])
+          );
+          const activeShelf = getActiveShelf();
+          const selected = activeShelf
+            ? getShelfStacks(activeShelf).stacks.find(
+                (stack) => stack.stackKey === selectedStackKey
+              )
+            : null;
+          setQuickSellState(selected || null);
+        })
+        .catch(() => {
+          if (requestId !== priceRequestId) return;
+          quickSellUnitPrices = new Map();
+          setQuickSellState(null);
         });
-      };
-      const storedItems = getShelfInventoryItems();
-      (item.inventorySlots || []).forEach((slotDefinition, index) => {
-        const storedItem = storedItems[index] || null;
+    }
+
+    function createInventoryDescription(stack) {
+      const description = document.createElement('div');
+      description.className = 'oling-lab-supply-storage-description';
+      description.classList.toggle('is-guidance', !stack);
+      description.setAttribute('aria-live', 'polite');
+      description.append(
+        Object.assign(document.createElement('strong'), {
+          textContent: stack?.name || 'Item Description'
+        }),
+        Object.assign(document.createElement('p'), {
+          textContent: stack
+            ? stack.description || 'No description is available for this item.'
+            : 'Select an inventory item to view its description.'
+        })
+      );
+      return description;
+    }
+
+    function createInventorySection(stacks, capacity, selectedStack) {
+      const section = document.createElement('section');
+      section.className = 'oling-lab-supply-storage-inventory';
+      const heading = document.createElement('div');
+      heading.className = 'oling-lab-supply-storage-heading';
+      const count = Object.assign(document.createElement('span'), {
+        textContent: `${stacks.length}/${capacity}`
+      });
+      count.setAttribute(
+        'aria-label',
+        `${stacks.length} of ${capacity} stack slots used`
+      );
+      heading.append(
+        Object.assign(document.createElement('h3'), {
+          textContent: 'Inventory'
+        }),
+        count
+      );
+      const pageCount = Math.max(
+        1,
+        Math.ceil(stacks.length / inventoryPageSize)
+      );
+      inventoryPageIndex = Math.min(
+        Math.max(0, inventoryPageIndex),
+        pageCount - 1
+      );
+      const visibleStacks = stacks.slice(
+        inventoryPageIndex * inventoryPageSize,
+        (inventoryPageIndex + 1) * inventoryPageSize
+      );
+      const browser = document.createElement('div');
+      browser.className = 'oling-lab-supply-storage-browser';
+      const grid = document.createElement('div');
+      grid.className = 'oling-lab-supply-storage-grid';
+      if (!stacks.length) {
+        grid.appendChild(
+          Object.assign(document.createElement('p'), {
+            className: 'oling-lab-supply-storage-empty',
+            textContent: 'No eggs or consumables are available.'
+          })
+        );
+      }
+      visibleStacks.forEach((stack) => {
         const button = document.createElement('button');
-        button.className = 'oling-lab-shelf-slot';
+        button.className = 'oling-lab-supply-storage-item';
         button.type = 'button';
-        const slotX = Number(slotDefinition?.x || 256);
-        const slotY = Number(slotDefinition?.y || 256);
-        const slotWidth = Number(slotDefinition?.width || 48);
-        const slotHeight = Number(slotDefinition?.height || 48);
-        button.style.setProperty(
-          '--shelf-slot-x',
-          `${((slotX - placement.x) / placement.width) * 100}%`
-        );
-        button.style.setProperty(
-          '--shelf-slot-y',
-          `${((slotY - placement.y) / placement.height) * 100}%`
-        );
-        button.style.setProperty(
-          '--shelf-slot-width',
-          `${(slotWidth / placement.width) * 100}%`
-        );
-        button.style.setProperty(
-          '--shelf-slot-height',
-          `${(slotHeight / placement.height) * 100}%`
+        button.dataset.soundIntent = 'select';
+        button.classList.toggle(
+          'is-selected',
+          stack.stackKey === selectedStackKey
         );
         button.setAttribute(
           'aria-label',
-          storedItem
-            ? `${storedItem.name}, ${storedItem.quantity} in storage`
-            : 'Empty shelf slot'
+          `${stack.name}, ${stack.quantity} in this stack`
         );
-        if (storedItem?.image)
-          button.appendChild(createImage(storedItem.image, ''));
+        button.setAttribute(
+          'aria-pressed',
+          String(stack.stackKey === selectedStackKey)
+        );
+        if (stack.image) button.appendChild(createImage(stack.image, ''));
         button.addEventListener('click', () => {
-          if (panel) closePanel();
-          if (!storedItem) return;
-          panel = createShelfDetailsPanel(storedItem, closePanel);
-          setPanelInteractivity(panel, true);
-          stage.appendChild(panel);
-          openStagePanel(stage, panel, 'is-viewing-shelf-slot');
+          if (selectedStackKey !== stack.stackKey) {
+            selectedUnitIndexes = new Set();
+          }
+          selectedStackKey = stack.stackKey;
+          renderShelfStoragePanel();
         });
-        shelfArtboard.appendChild(button);
+        grid.appendChild(button);
       });
-      viewport.appendChild(shelf);
-      viewport.addEventListener(
-        'wheel',
-        (event) => {
-          event.preventDefault();
-          setShelfScale(view.scale + (event.deltaY < 0 ? 0.25 : -0.25));
-        },
-        { passive: false }
+      browser.appendChild(grid);
+      if (pageCount > 1) {
+        const pagination = document.createElement('nav');
+        pagination.className = 'oling-lab-supply-storage-pagination';
+        pagination.setAttribute('aria-label', 'Supply Shelf inventory pages');
+        const previous = Object.assign(document.createElement('button'), {
+          type: 'button',
+          textContent: '‹',
+          disabled: inventoryPageIndex === 0
+        });
+        previous.dataset.soundIntent = 'previous';
+        previous.setAttribute('aria-label', 'Previous inventory page');
+        previous.addEventListener('click', () => {
+          inventoryPageIndex -= 1;
+          renderShelfStoragePanel();
+        });
+        const pageStatus = Object.assign(document.createElement('strong'), {
+          textContent: `${inventoryPageIndex + 1} / ${pageCount}`
+        });
+        pageStatus.setAttribute('aria-live', 'polite');
+        const next = Object.assign(document.createElement('button'), {
+          type: 'button',
+          textContent: '›',
+          disabled: inventoryPageIndex >= pageCount - 1
+        });
+        next.dataset.soundIntent = 'next';
+        next.setAttribute('aria-label', 'Next inventory page');
+        next.addEventListener('click', () => {
+          inventoryPageIndex += 1;
+          renderShelfStoragePanel();
+        });
+        pagination.append(previous, pageStatus, next);
+        browser.appendChild(pagination);
+      }
+      section.append(
+        heading,
+        browser,
+        createInventoryDescription(selectedStack)
       );
-      viewport.addEventListener('pointerdown', (event) => {
-        view.dragging = true;
-        view.dragged = false;
-        view.pointerId = event.pointerId;
-        view.startX = event.clientX;
-        view.startY = event.clientY;
-        view.lastX = event.clientX;
-        view.lastY = event.clientY;
-      });
-      viewport.addEventListener('pointermove', (event) => {
-        if (!view.dragging || event.pointerId !== view.pointerId) return;
-        if (!view.dragged) {
-          view.dragged =
-            Math.hypot(
-              event.clientX - view.startX,
-              event.clientY - view.startY
-            ) >= 4;
-        }
-        if (!view.dragged) return;
-        if (!viewport.hasPointerCapture?.(event.pointerId)) {
-          viewport.setPointerCapture?.(event.pointerId);
-          viewport.classList.add('is-panning');
-        }
-        view.x += event.clientX - view.lastX;
-        view.y += event.clientY - view.lastY;
-        view.lastX = event.clientX;
-        view.lastY = event.clientY;
-        applyShelfView();
-      });
-      const stopShelfPan = (event) => {
-        if (!view.dragging || event.pointerId !== view.pointerId) return;
-        view.dragging = false;
-        view.pointerId = null;
-        viewport.classList.remove('is-panning');
-      };
-      viewport.addEventListener('pointerup', stopShelfPan);
-      viewport.addEventListener('pointercancel', stopShelfPan);
-      viewport.addEventListener(
-        'click',
-        (event) => {
-          if (!view.dragged) return;
-          view.dragged = false;
-          event.preventDefault();
-          event.stopImmediatePropagation();
-        },
-        true
-      );
-
-      const controls = document.createElement('div');
-      controls.className = 'oling-lab-shelf-zoom-controls';
-      [
-        {
-          label: '−',
-          title: 'Zoom out',
-          action: () => setShelfScale(view.scale - 0.25)
-        },
-        {
-          label: 'Reset',
-          title: 'Reset shelf view',
-          action: () => setShelfScale(1)
-        },
-        {
-          label: '+',
-          title: 'Zoom in',
-          action: () => setShelfScale(view.scale + 0.25)
-        }
-      ].forEach((control) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = control.label;
-        button.setAttribute('aria-label', control.title);
-        button.addEventListener('click', control.action);
-        controls.appendChild(button);
-      });
-      stage.append(viewport, controls);
-      window.requestAnimationFrame(applyShelfView);
-      section.appendChild(stage);
-      return [section];
+      return section;
     }
 
-    return { createShelfStorageTab };
+    function createStackDetails(stack, maxStack) {
+      const section = document.createElement('section');
+      section.className = 'oling-lab-supply-storage-details';
+      const heading = document.createElement('div');
+      heading.className = 'oling-lab-supply-storage-heading';
+      heading.appendChild(
+        Object.assign(document.createElement('h3'), {
+          textContent: 'Selected Stack'
+        })
+      );
+      section.appendChild(heading);
+      if (!stack) {
+        section.appendChild(
+          Object.assign(document.createElement('p'), {
+            className: 'oling-lab-supply-storage-empty',
+            textContent: 'Select an item to view its stack.'
+          })
+        );
+        return section;
+      }
+      const count = Object.assign(document.createElement('span'), {
+        className: 'oling-lab-supply-storage-count',
+        textContent: `${stack.quantity}/${maxStack}`
+      });
+      count.setAttribute(
+        'aria-label',
+        `${stack.quantity} of ${maxStack} items in this stack`
+      );
+      heading.appendChild(count);
+      const summary = document.createElement('div');
+      summary.className = 'oling-lab-supply-storage-summary';
+      if (stack.image) summary.appendChild(createImage(stack.image, ''));
+      const copy = document.createElement('div');
+      copy.append(
+        Object.assign(document.createElement('strong'), {
+          textContent: stack.name
+        }),
+        Object.assign(document.createElement('span'), {
+          textContent: 'Items in this stack'
+        })
+      );
+      summary.append(copy);
+      const units = document.createElement('div');
+      units.className = 'oling-lab-supply-storage-units';
+      Array.from({ length: stack.quantity }, (_, index) => {
+        const button = document.createElement('button');
+        const selected = selectedUnitIndexes.has(index);
+        button.className = 'oling-lab-supply-storage-unit';
+        button.classList.toggle('is-selected', selected);
+        button.type = 'button';
+        button.dataset.soundIntent = 'select';
+        button.setAttribute(
+          'aria-label',
+          `${selected ? 'Unselect' : 'Select'} ${stack.name} ${index + 1}`
+        );
+        button.setAttribute('aria-pressed', String(selected));
+        if (stack.image) button.appendChild(createImage(stack.image, ''));
+        button.addEventListener('click', () => {
+          if (selectedUnitIndexes.has(index)) selectedUnitIndexes.delete(index);
+          else selectedUnitIndexes.add(index);
+          renderShelfStoragePanel();
+        });
+        units.appendChild(button);
+      });
+      const selector = document.createElement('div');
+      selector.className = 'oling-lab-supply-storage-selector';
+      const decrement = Object.assign(document.createElement('button'), {
+        type: 'button',
+        textContent: '‹',
+        disabled: selectedUnitIndexes.size < 1
+      });
+      decrement.dataset.soundIntent = 'decrease';
+      decrement.setAttribute('aria-label', 'Select one fewer item');
+      const selectedCount = Object.assign(document.createElement('strong'), {
+        textContent: String(selectedUnitIndexes.size)
+      });
+      selectedCount.setAttribute(
+        'aria-label',
+        `${selectedUnitIndexes.size} selected`
+      );
+      const increment = Object.assign(document.createElement('button'), {
+        type: 'button',
+        textContent: '›',
+        disabled: selectedUnitIndexes.size >= stack.quantity
+      });
+      increment.dataset.soundIntent = 'increase';
+      increment.setAttribute('aria-label', 'Select one more item');
+      decrement.addEventListener('click', () => {
+        const selected = [...selectedUnitIndexes].sort((a, b) => b - a)[0];
+        if (selected !== undefined) selectedUnitIndexes.delete(selected);
+        renderShelfStoragePanel();
+      });
+      increment.addEventListener('click', () => {
+        const next = Array.from(
+          { length: stack.quantity },
+          (_, index) => index
+        ).find((index) => !selectedUnitIndexes.has(index));
+        if (next !== undefined) selectedUnitIndexes.add(next);
+        renderShelfStoragePanel();
+      });
+      selector.append(decrement, selectedCount, increment);
+      section.append(summary, units, selector);
+      return section;
+    }
+
+    function renderShelfStoragePanel() {
+      if (!elements.supplyStoragePanelContent) return;
+      const activeShelf = getActiveShelf();
+      if (!activeShelf) {
+        closeShelfStoragePanel();
+        return;
+      }
+      const { capacity, maxStack, stacks } = getShelfStacks(activeShelf);
+      if (
+        selectedStackKey &&
+        !stacks.some((stack) => stack.stackKey === selectedStackKey)
+      ) {
+        selectedStackKey = null;
+        selectedUnitIndexes = new Set();
+      }
+      const selected =
+        stacks.find((stack) => stack.stackKey === selectedStackKey) || null;
+      selectedUnitIndexes = new Set(
+        [...selectedUnitIndexes].filter(
+          (index) => selected && index >= 0 && index < selected.quantity
+        )
+      );
+      if (elements.supplyStoragePanelTitle) {
+        elements.supplyStoragePanelTitle.textContent =
+          activeShelf.definition.name || 'Supply Shelf';
+      }
+      elements.supplyStoragePanelContent.replaceChildren(
+        createInventorySection(stacks, capacity, selected),
+        createStackDetails(selected, maxStack)
+      );
+      setQuickSellState(selected);
+    }
+
+    function openShelfStoragePanel(placedId) {
+      const placed = (state.lab?.placedItems || []).find(
+        (candidate) => String(candidate?.placedId || '') === String(placedId)
+      );
+      const definition = state.catalog?.get?.(placed?.itemId);
+      if (
+        !placed ||
+        !(definition?.inventorySlots || []).some(
+          (slot) => slot?.slotType === 'storage'
+        ) ||
+        !elements.supplyStoragePanel
+      ) {
+        return;
+      }
+      const wasExpanded =
+        state.supplyStoragePanelOpen && !state.supplyStoragePanelCollapsed;
+      getOlingViews()?.closeStoragePanel?.({ sound: false });
+      closeGatewayPanel({ sound: false });
+      closeMenu?.();
+      state.activeSupplyStoragePlacedId = placed.placedId;
+      state.supplyStoragePanelOpen = true;
+      state.supplyStoragePanelCollapsed = false;
+      selectedStackKey = null;
+      selectedUnitIndexes = new Set();
+      inventoryPageIndex = 0;
+      elements.supplyStoragePanelToggle?.setAttribute('aria-expanded', 'true');
+      if (elements.supplyStoragePanelToggle) {
+        elements.supplyStoragePanelToggle.textContent = 'Hide';
+      }
+      renderShelfStoragePanel();
+      loadQuickSellPrices(getShelfStacks(getActiveShelf()).stacks);
+      const show = () => {
+        if (!state.supplyStoragePanelOpen) return;
+        if (!wasExpanded) playSound('sidePanelOpen');
+      };
+      if (panelTransitions) {
+        void panelTransitions.open(elements.supplyStoragePanel, {
+          afterOpen: show
+        });
+      } else if (typeof window.requestAnimationFrame === 'function') {
+        elements.supplyStoragePanel.hidden = false;
+        window.requestAnimationFrame(() => {
+          elements.supplyStoragePanel.classList.add('is-open');
+          show();
+        });
+      } else {
+        elements.supplyStoragePanel.hidden = false;
+        elements.supplyStoragePanel.classList.add('is-open');
+        show();
+      }
+    }
+
+    function closeShelfStoragePanel(options = {}) {
+      if (!elements.supplyStoragePanel) return;
+      const pendingClose = panelTransitions?.getPendingClose?.(
+        elements.supplyStoragePanel
+      );
+      if (!state.supplyStoragePanelOpen) {
+        return pendingClose || Promise.resolve(false);
+      }
+      const wasVisible = Boolean(
+        state.supplyStoragePanelOpen && !elements.supplyStoragePanel.hidden
+      );
+      state.supplyStoragePanelOpen = false;
+      state.supplyStoragePanelCollapsed = false;
+      state.activeSupplyStoragePlacedId = null;
+      selectedStackKey = null;
+      selectedUnitIndexes = new Set();
+      inventoryPageIndex = 0;
+      priceRequestId += 1;
+      quickSellUnitPrices = new Map();
+      selectedPayout = null;
+      elements.supplyStoragePanelToggle?.setAttribute('aria-expanded', 'false');
+      const playCloseSound = () => {
+        if (wasVisible && options.sound !== false) playSound('sidePanelClose');
+      };
+      const cleanup = () => {
+        elements.supplyStoragePanel.classList.remove(
+          'is-open',
+          'is-collapsed'
+        );
+        setQuickSellState(null);
+      };
+      if (panelTransitions) {
+        return panelTransitions.close(elements.supplyStoragePanel, {
+          beforeExit: playCloseSound,
+          afterClose: cleanup
+        });
+      }
+      playCloseSound();
+      elements.supplyStoragePanel.hidden = true;
+      cleanup();
+      return Promise.resolve(true);
+    }
+
+    function toggleShelfStoragePanel() {
+      if (!state.supplyStoragePanelOpen || !elements.supplyStoragePanel) return;
+      state.supplyStoragePanelCollapsed = !state.supplyStoragePanelCollapsed;
+      elements.supplyStoragePanel.classList.toggle(
+        'is-collapsed',
+        state.supplyStoragePanelCollapsed
+      );
+      elements.supplyStoragePanelToggle?.setAttribute(
+        'aria-expanded',
+        String(!state.supplyStoragePanelCollapsed)
+      );
+      if (elements.supplyStoragePanelToggle) {
+        elements.supplyStoragePanelToggle.textContent =
+          state.supplyStoragePanelCollapsed ? 'Show' : 'Hide';
+      }
+      playSound(
+        state.supplyStoragePanelCollapsed ? 'sidePanelClose' : 'sidePanelOpen'
+      );
+    }
+
+    elements.supplyStoragePanelToggle?.addEventListener(
+      'click',
+      toggleShelfStoragePanel
+    );
+    elements.supplyStoragePanelBack?.addEventListener('click', () => {
+      closeShelfStoragePanel();
+      elements.actionPanel
+        ?.querySelector('.oling-lab-action-panel-button.is-interact')
+        ?.focus();
+    });
+    elements.supplyStorageQuickSell?.addEventListener('click', () => {
+      const activeShelf = getActiveShelf();
+      if (!activeShelf) return;
+      const selected = getShelfStacks(activeShelf).stacks.find(
+        (stack) => stack.stackKey === selectedStackKey
+      );
+      const quantity = selectedUnitIndexes.size;
+      if (!selected || quantity < 1 || selectedPayout === null) return;
+      openQuickSellDialog(selected, quantity, {
+        onComplete: () => {
+          selectedUnitIndexes = new Set();
+          renderShelfStoragePanel();
+        }
+      });
+    });
+
+    return {
+      closeShelfStoragePanel,
+      openShelfStoragePanel,
+      renderShelfStoragePanel
+    };
   }
 
   window.createOlingLabShelfStorage = createOlingLabShelfStorage;

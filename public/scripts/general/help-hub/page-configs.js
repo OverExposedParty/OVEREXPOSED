@@ -476,6 +476,33 @@
           { label: 'Rewards' }
         ]
       },
+      olingClash: {
+        title: 'Olings Clash',
+        topics: [
+          {
+            label: 'Clash Abilities',
+            size: 'primary',
+            section: {
+              title: 'Clash Abilities',
+              body: 'Browse every current Clash ability. Filter by action type, then select an ability to see how it activates, what it targets, and which role it supports.',
+              type: 'oling-clash-abilities',
+              guides: []
+            }
+          },
+          {
+            label: 'Clash Symbols',
+            section: {
+              title: 'Clash Symbols',
+              type: 'oling-clash-symbols',
+              guides: []
+            }
+          },
+          { label: 'Building A Team' },
+          { label: 'Clash Rules' },
+          { label: 'Online Matches' },
+          { label: 'Battle Flow' }
+        ]
+      },
       shop: {
         title: 'Shop',
         topics: [

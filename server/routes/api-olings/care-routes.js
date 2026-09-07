@@ -1,3 +1,8 @@
+const {
+  createStoredOlingError,
+  isOlingActive
+} = require('../../services/olings/residency');
+
 function registerOlingCareRoutes(context) {
   const {
     app,
@@ -15,9 +20,15 @@ function registerOlingCareRoutes(context) {
     OLING_ACTIVITY_ENERGY_COSTS,
     spendOlingEnergy,
     OlingLabItems,
-    getOlingBedRestDurationMs,
+    getOlingRestDurationMs,
     getOlingEnergy,
-    hatchOling
+    hatchOling,
+    assignLegacyStoredOlingsToPodStorage = async () => ({
+      assigned: 0,
+      unassigned: 0
+    }),
+    listOlingPodDefinitions,
+    serializeOlingPodDefinition
   } = context;
 
   app.get('/api/olings/mine', async (req, res) => {
@@ -31,6 +42,13 @@ function registerOlingCareRoutes(context) {
         });
       }
 
+      const olingState = await getOrCreateOlingState(OlingState, account);
+      await assignLegacyStoredOlingsToPodStorage({
+        models,
+        accountId: account._id,
+        account,
+        olingState
+      });
       const olings = await PlayerOling.find({ ownerId: account._id })
         .sort({ favorite: -1, hatchedAt: -1 })
         .lean();
@@ -39,11 +57,19 @@ function registerOlingCareRoutes(context) {
         .limit(50)
         .lean();
       const definitions = await getOlingDefinitions(models, olings);
-      const olingState = await getOrCreateOlingState(OlingState, account);
-
       res.apiSuccess({
         account: serializeAccount(account, { olingState }),
         activeAdventure: account.olings?.adventures?.active || null,
+        inventory: {
+          pods: Array.isArray(account.olings?.pods)
+            ? account.olings.pods
+            : Array.isArray(olingState?.inventory?.pods)
+              ? olingState.inventory.pods
+              : []
+        },
+        podDefinitions: listOlingPodDefinitions().map(
+          serializeOlingPodDefinition
+        ),
         olings: olings.map((oling) => serializePlayerOling(oling, definitions)),
         receipts: receipts.map(serializeHatchReceipt)
       });
@@ -174,6 +200,14 @@ function registerOlingCareRoutes(context) {
           code: 'player_oling_not_found',
           message: 'That Oling could not be found.'
         });
+      if (!isOlingActive(oling)) {
+        const error = createStoredOlingError('changing its rest state');
+        return res.apiError({
+          status: error.status,
+          code: error.code,
+          message: error.message
+        });
+      }
       if (
         req.body.isSleeping &&
         String(account.olings?.adventures?.active?.olingId || '') ===
@@ -237,7 +271,7 @@ function registerOlingCareRoutes(context) {
         oling.set('care.sleepBedSlotId', String(sleepSlot.slotId));
         oling.set(
           'care.sleepDurationMs',
-          getOlingBedRestDurationMs(bedDefinition.rarity, oling.personalityKey)
+          getOlingRestDurationMs(bedDefinition.rarity)
         );
         oling.set('care.sleepUpdatedAt', now);
       } else if (!req.body.isSleeping && wasSleeping) {

@@ -14,6 +14,7 @@
   display: grid;
   gap: 0.65rem;
   align-content: start;
+  border-radius: var(--oling-lab-element-radius);
   background: var(--oling-lab-menu-secondary-colour);
   color: var(--backgroundcolour);
 }
@@ -61,6 +62,7 @@
   gap: 0.18rem;
   align-content: center;
   padding: 0.28rem 0.42rem;
+  border-radius: calc(var(--oling-lab-element-radius) * 0.65);
   background: var(--oling-lab-menu-secondary-colour);
 }
 
@@ -126,7 +128,8 @@
 .oling-lab-incubate-panel.is-status
   .oling-lab-menu-inline-actions
   .oling-lab-menu-action.is-remove-action,
-.oling-lab-item-influence-inventory-actions .oling-lab-menu-action.is-remove-action {
+.oling-lab-item-influence-inventory-actions
+  .oling-lab-menu-action.is-remove-action {
   background: var(--warningcolour);
   color: var(--backgroundcolour);
 }
@@ -147,8 +150,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .oling-lab-incubate-panel.is-status
-  .oling-lab-menu-inline-actions
-  .oling-lab-menu-action.is-hatch-action:hover {
+    .oling-lab-menu-inline-actions
+    .oling-lab-menu-action.is-hatch-action:hover {
     background: var(--successcoloursecondary);
     color: var(--backgroundcolour);
   }

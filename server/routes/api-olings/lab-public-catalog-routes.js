@@ -8,9 +8,6 @@ function registerOlingLabPublicCatalogRoutes(context) {
     OlingTrait,
     listPublishedOlingTraits,
     serializeOlingTrait,
-    OlingPersonality,
-    listPublishedOlingPersonalities,
-    serializeOlingPersonality,
     OlingConsumable,
     listOlingConsumables,
     serializeOlingConsumable
@@ -46,28 +43,6 @@ function registerOlingLabPublicCatalogRoutes(context) {
         status: 500,
         code: 'oling_traits_fetch_failed',
         message: 'Failed to fetch Oling traits'
-      });
-    }
-  });
-
-  app.get('/api/olings/personalities', async (req, res) => {
-    try {
-      const personalityDefinitions = await listPublishedOlingPersonalities({
-        OlingPersonality
-      });
-
-      res.apiSuccess({
-        personalities: personalityDefinitions.map(serializeOlingPersonality)
-      });
-    } catch (err) {
-      console.error(
-        `[REQ ${req.id}] Failed to fetch Oling personalities:`,
-        err
-      );
-      res.apiError({
-        status: 500,
-        code: 'oling_personalities_fetch_failed',
-        message: 'Failed to fetch Oling personalities'
       });
     }
   });

@@ -237,6 +237,65 @@ test('sound engine preloads the account authentication cues', () => {
   });
 });
 
+test('sound engine preloads reusable drag-and-drop and economy cues', () => {
+  const { audioElements } = createSoundContext();
+
+  [
+    '/sounds/ui/drag-and-drop/pickup.wav',
+    '/sounds/ui/drag-and-drop/move.wav',
+    '/sounds/ui/drag-and-drop/place.wav',
+    '/sounds/ui/drag-and-drop/store.wav',
+    '/sounds/economy/purchase.wav',
+    '/sounds/economy/reward.wav',
+    '/sounds/economy/sell.wav'
+  ].forEach((source) => {
+    assert.ok(
+      audioElements.some((audio) => audio.src.endsWith(source)),
+      source
+    );
+  });
+});
+
+test('drag pickup plays independently with up to two active instances', async () => {
+  const { audioElements, window } = createSoundContext(
+    {},
+    { deferTimeouts: true }
+  );
+  await window.OEAudio.register({
+    blockingVoice: {
+      src: '/blocking-voice.wav',
+      priority: 'voice',
+      interruptible: false
+    }
+  });
+
+  const blockingPlayback = await window.OEAudio.play('blockingVoice', {
+    ignoreInteraction: true
+  });
+  const firstPickup = await window.OEAudio.play('uiDragPickup', {
+    cooldown: 0,
+    ignoreInteraction: true
+  });
+  const secondPickup = await window.OEAudio.play('uiDragPickup', {
+    cooldown: 0,
+    ignoreInteraction: true
+  });
+  const thirdPickup = await window.OEAudio.play('uiDragPickup', {
+    cooldown: 0,
+    ignoreInteraction: true
+  });
+
+  assert.ok(blockingPlayback);
+  assert.ok(firstPickup);
+  assert.ok(secondPickup);
+  assert.equal(thirdPickup, null);
+  assert.equal(window.OEAudio.getLaneState().activeKey, 'blockingVoice');
+  assert.equal(
+    getPlayCountForSource(audioElements, '/sounds/ui/drag-and-drop/pickup.wav'),
+    2
+  );
+});
+
 test('sound engine repairs a persisted zero master volume', () => {
   const { values, window } = createSoundContext({
     'settings-sound-volume': '0'
@@ -256,6 +315,30 @@ test('page-load splash plays the matching exit sound', () => {
     splashScreenSource,
     /playSplashScreenExitSound\(exitDirection\)/
   );
+});
+
+test('Oling Lab side panels use dedicated animation-length splash cues', () => {
+  assert.match(
+    soundSource,
+    /sidePanelOpen:\s*{[^}]*side-panels\/side-panel-open\.wav/s
+  );
+  assert.match(
+    soundSource,
+    /sidePanelClose:\s*{[^}]*side-panels\/side-panel-close\.wav/s
+  );
+  const soundsRoot = path.join(__dirname, '../../public/sounds');
+  const getWavDuration = (fileName) => {
+    const audio = fs.readFileSync(fileName);
+    const dataOffset = audio.indexOf(Buffer.from('data'));
+    return audio.readUInt32LE(dataOffset + 4) / audio.readUInt32LE(28);
+  };
+  [
+    'olings/lab/side-panels/side-panel-open.wav',
+    'olings/lab/side-panels/side-panel-close.wav'
+  ].forEach((relativePath) => {
+    const duration = getWavDuration(path.join(soundsRoot, relativePath));
+    assert.ok(duration > 0.18 && duration <= 0.21, `${duration}s`);
+  });
 });
 
 test('ordinary buttons are silent by default', async () => {

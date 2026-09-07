@@ -118,7 +118,7 @@ function loadPartyGameStatisticsTemplate() {
                 RemoveUserFromParty(deviceId, { exitIntent: 'main-menu' });
             }
             loadingPage = true;
-            transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+            transitionSplashScreen('/', '/images/splash-screens/core/overexposed.png');
         });
 
         partyGameStatisticsResultsTab?.addEventListener('click', () => {

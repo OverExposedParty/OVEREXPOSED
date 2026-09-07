@@ -3,9 +3,10 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: 0;
   background:
     linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)),
-    url('/images/olings/gui/egg-background.jpg') center / cover no-repeat,
+    url('/images/olings/lab/gui/egg-background.jpg') center / cover no-repeat,
     rgb(22 31 36 / 82%);
 }
 
@@ -16,7 +17,7 @@
   width: 100%;
   height: 100%;
   border: 0;
-  border-radius: 0;
+  border-radius: inherit;
   outline: 0;
   display: grid;
   grid-template-rows: 1fr auto;
@@ -58,6 +59,7 @@
   bottom: 1rem;
   max-width: calc(100% - 2rem);
   padding: 0.4rem 0.55rem;
+  border-radius: calc(var(--oling-lab-element-radius) * 0.65);
   background: rgb(22 31 36 / 72%);
   color: var(--oling-lab-menu-secondary-colour);
   font-size: 0.72rem;
@@ -75,13 +77,53 @@
   height: 30%;
   aspect-ratio: 1 / 1;
   min-height: 0;
+  border-radius: calc(var(--oling-lab-element-radius) * 0.65);
   background: rgb(255 248 234 / 18%);
   font-weight: 900;
   line-height: 1;
 }
 
-.oling-lab-egg-insertion-plus {
-  font-size: clamp(1.75rem, 8vw, 3.5rem);
+.oling-lab-square-marker:is(
+  .oling-lab-egg-insertion-plus,
+  .oling-lab-item-influence-marker,
+  .oling-lab-furniture-slot-plus
+) {
+  font-size: 0;
+}
+
+.oling-lab-square-marker:is(
+  .oling-lab-egg-insertion-plus,
+  .oling-lab-furniture-slot-plus
+) {
+  position: relative;
+}
+
+.oling-lab-square-marker:is(
+    .oling-lab-egg-insertion-plus,
+    .oling-lab-item-influence-marker,
+    .oling-lab-furniture-slot-plus
+  )::before,
+.oling-lab-square-marker:is(
+    .oling-lab-egg-insertion-plus,
+    .oling-lab-item-influence-marker,
+    .oling-lab-furniture-slot-plus
+  )::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26%;
+  height: 8%;
+  transform: translate(-50%, -50%);
+  background: currentColor;
+}
+
+.oling-lab-square-marker:is(
+    .oling-lab-egg-insertion-plus,
+    .oling-lab-item-influence-marker,
+    .oling-lab-furniture-slot-plus
+  )::after {
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 
 .oling-lab-egg-insertion-placeholder {
@@ -109,6 +151,13 @@
   padding-right: 0.15rem;
 }
 
+.oling-lab-egg-picker-grid:has(> .oling-lab-menu-empty) {
+  grid-template-rows: minmax(0, 1fr);
+  align-content: stretch;
+  overflow: hidden;
+  padding-right: 0;
+}
+
 .oling-lab-egg-picker-grid .oling-lab-menu-action {
   min-height: 5.4rem;
   grid-template-columns: 4.2rem minmax(0, 1fr);
@@ -129,6 +178,12 @@
 }
 
 .oling-lab-egg-picker-grid .oling-lab-menu-empty {
-  min-height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  align-self: stretch;
+  margin: 0;
+  border-radius: 0;
   padding: 0.75rem;
 }

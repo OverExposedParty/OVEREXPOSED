@@ -39,6 +39,9 @@ function createPartyUtilityRoutes(context) {
               message: clientError.message,
               name: clientError.name,
               code: clientError.code,
+              status: Number.isInteger(clientError.status)
+                ? clientError.status
+                : null,
               stack: clientError.stack,
               action: req.body?.action,
               actorId: req.body?.actorId,

@@ -111,12 +111,10 @@ test('OE panel Oling dashboard handler serializes eggs with assigned build sets'
     _id: 'oling-1',
     ownerId: 'owner-1',
     eggKey: 'base-egg',
-    personalityKey: 'friendly',
     build: buildSet.traits,
     buildRarities: Object.fromEntries(
       Object.keys(buildSet.traits).map((layer) => [layer, 'common'])
     ),
-    battleStats: { wins: 2 },
     hatchedAt: '2026-07-17T12:00:00.000Z'
   };
   const emptyFindModel = createFindModel();
@@ -139,7 +137,6 @@ test('OE panel Oling dashboard handler serializes eggs with assigned build sets'
         enabled: true,
         setKeys: [buildSet.key],
         rarityOdds: { common: 100 },
-        personalityPool: [],
         assets: {},
         metadata: {}
       }
@@ -153,7 +150,6 @@ test('OE panel Oling dashboard handler serializes eggs with assigned build sets'
         return 1;
       }
     },
-    OlingPersonality: emptyFindModel,
     OlingTrait: createFindModel(traits),
     PlayerOling: {
       ...createFindModel([playerOling]),
@@ -193,5 +189,6 @@ test('OE panel Oling dashboard handler serializes eggs with assigned build sets'
   assert.equal(successPayload.data.hatchReceipts[0].owner, 'Oling Owner');
   assert.match(successPayload.data.hatchReceipts[0].summary, /sunny-flight/);
   assert.equal(successPayload.data.playerOlings[0].matchingSet, 'sunny');
+  assert.equal('battleStatsJson' in successPayload.data.playerOlings[0], false);
   assert.equal(successPayload.data.rarityBalancer[0].rarity, 'common');
 });

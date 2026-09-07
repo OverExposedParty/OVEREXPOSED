@@ -203,20 +203,48 @@
                 };
               }
               if (stat.label === 'Room Error Rate') {
+                const recentRoomCount = Number(
+                  stats.archivedRoomsLast24Hours ?? 0
+                );
+                const currentBuildRate =
+                  stats.currentBuildRoomErrorRate === null ||
+                  stats.currentBuildRoomErrorRate === undefined
+                    ? '-'
+                    : `${stats.currentBuildRoomErrorRate}%`;
                 return {
                   ...stat,
-                  value: `${stats.roomErrorRate ?? 0}%`,
-                  detail: 'archived rooms, 30d',
+                  value: `${stats.roomErrorRateLast24Hours ?? 0}%`,
+                  detail: `${recentRoomCount} archived ${recentRoomCount === 1 ? 'room' : 'rooms'}, last 24h`,
                   expanded: {
                     type: 'table',
-                    title: 'Room Data Quality',
+                    title: 'Room Error Monitoring',
                     columns: [
                       { key: 'label', label: 'Metric' },
                       { key: 'value', label: 'Value' }
                     ],
                     rows: [
                       {
-                        label: 'Rooms with errors',
+                        label: 'Rooms with errors, last 24h',
+                        value: `${stats.roomErrorRateLast24Hours ?? 0}%`
+                      },
+                      {
+                        label: 'Archived rooms, last 24h',
+                        value: String(stats.archivedRoomsLast24Hours ?? 0)
+                      },
+                      {
+                        label: 'Rooms with errors, current build',
+                        value: currentBuildRate
+                      },
+                      {
+                        label: 'Archived rooms, current build',
+                        value: String(stats.currentBuildArchivedRooms ?? 0)
+                      },
+                      {
+                        label: 'Current runtime build',
+                        value: stats.currentRuntimeBuild || '-'
+                      },
+                      {
+                        label: 'Rooms with errors, 30d',
                         value: `${stats.roomErrorRate ?? 0}%`
                       },
                       {

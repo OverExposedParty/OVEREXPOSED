@@ -79,12 +79,12 @@ async function main() {
         },
         media: {
           mainImage: {
-            url: '/images/olings/consumables/hatching/speed/oling-blanket.svg',
+            url: '/images/olings/lab/consumables/hatching/speed/oling-blanket.svg',
             alt: 'Oling Blanket'
           },
           gallery: [
             {
-              url: '/images/olings/consumables/hatching/speed/oling-blanket.svg',
+              url: '/images/olings/lab/consumables/hatching/speed/oling-blanket.svg',
               alt: 'Oling Blanket',
               type: 'image'
             }
@@ -103,12 +103,12 @@ async function main() {
     ],
     media: {
       mainImage: {
-        url: '/images/olings/consumables/hatching/speed/oling-blanket.svg',
+        url: '/images/olings/lab/consumables/hatching/speed/oling-blanket.svg',
         alt: 'Oling Blanket'
       },
       gallery: [
         {
-          url: '/images/olings/consumables/hatching/speed/oling-blanket.svg',
+          url: '/images/olings/lab/consumables/hatching/speed/oling-blanket.svg',
           alt: 'Oling Blanket',
           type: 'image'
         }

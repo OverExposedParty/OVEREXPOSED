@@ -3,7 +3,6 @@
     const {
       state,
       elements,
-      itemInfluenceSlots,
       labEndpoint,
       setStatus,
       startIncubatorCountdown,
@@ -27,7 +26,6 @@
       createDetailRow,
       createCompactDetailPair,
       formatTitle,
-      formatOdds,
       formatInfluenceEffect,
       formatDuration,
       getHatchProgress,
@@ -149,25 +147,30 @@
         setIncubatorInfo(context, true);
         openStagePanel(stage, panel, 'is-viewing-incubator-info');
       });
-      stage.appendChild(incubatorHero);
+      const preview = document.createElement('div');
+      preview.className = 'oling-lab-incubator-preview-frame';
+      preview.appendChild(incubatorHero);
+      stage.appendChild(preview);
       panel.appendChild(
         createPanelBackButton('Back from incubator details', closeInfo)
       );
-      panel.appendChild(
-        Object.assign(document.createElement('h3'), {
-          textContent: 'Incubator'
-        })
-      );
-      panel.appendChild(
+      const descriptionCard = document.createElement('section');
+      descriptionCard.className =
+        'oling-lab-incubator-copy oling-lab-incubator-description-card';
+      descriptionCard.append(
+        Object.assign(document.createElement('strong'), {
+          className: 'oling-lab-incubator-description-name',
+          textContent: context.incubator.name || 'Incubator'
+        }),
         Object.assign(document.createElement('p'), {
-          className: 'oling-lab-incubator-copy',
           textContent:
             context.incubator.description || 'A worn but reliable incubator.'
         })
       );
+      panel.appendChild(descriptionCard);
 
       const details = document.createElement('div');
-      details.className = 'oling-lab-detail-list';
+      details.className = 'oling-lab-detail-list oling-lab-incubator-info-grid';
       details.append(
         createDetailRow(
           'Rarity',
@@ -198,6 +201,12 @@
         isViewingInfo,
         shouldAnimatePanel
       );
+      if (elements.incubatorPanel && state.incubatorPanelOpen) {
+        stage.classList.add('is-drawer-detail', 'is-viewing-incubator-info');
+        panel.classList.add('is-open');
+        panel.inert = false;
+        panel.setAttribute('aria-hidden', 'false');
+      }
       return stage;
     }
 
@@ -242,28 +251,50 @@
       }
       panel.appendChild(
         Object.assign(document.createElement('h3'), {
-          textContent: 'Egg'
-        })
-      );
-      panel.appendChild(
-        Object.assign(document.createElement('p'), {
-          className: 'oling-lab-incubator-copy',
-          textContent:
-            egg.description ||
-            `A ${formatTitle(egg.collection || 'base')} egg with a few possible Olings waiting inside.`
+          textContent: 'Possible Oling Builds'
         })
       );
 
       const sets = document.createElement('div');
-      sets.className = 'oling-lab-set-preview-grid';
+      sets.className =
+        'oling-lab-set-preview-grid oling-lab-complete-set-preview-grid';
+      sets.setAttribute(
+        'aria-label',
+        `${egg.name || 'Egg'} possible Oling builds`
+      );
+      const layerOrder =
+        Array.isArray(state.layers) && state.layers.length
+          ? state.layers
+          : ['flight', 'body', 'eyes', 'mouth'];
       (egg.sets || []).forEach((set) => {
         const card = document.createElement('article');
-        card.className = 'oling-lab-set-preview';
+        card.className = 'oling-lab-set-preview oling-lab-complete-set-preview';
         applyRarityTheme(card, set.rarity);
-        const image =
-          set.metadata?.layers?.body ||
-          Object.values(set.metadata?.layers || {})[0];
-        if (image) card.appendChild(createImage(image, set.name));
+
+        const art = document.createElement('div');
+        art.className = 'oling-lab-set-build-art';
+        art.setAttribute('role', 'img');
+        art.setAttribute(
+          'aria-label',
+          `${set.name || formatTitle(set.key)} complete Oling build`
+        );
+        layerOrder.forEach((layer) => {
+          const source = set.metadata?.layers?.[layer];
+          if (!source) return;
+          const image = createImage(source, '');
+          image.className = `oling-lab-oling-layer is-${layer}`;
+          image.setAttribute('aria-hidden', 'true');
+          art.appendChild(image);
+        });
+        if (!art.children.length) {
+          const placeholder = document.createElement('span');
+          placeholder.className = 'oling-lab-menu-placeholder';
+          placeholder.textContent = String(set.name || set.key || 'O')
+            .charAt(0)
+            .toUpperCase();
+          art.appendChild(placeholder);
+        }
+
         const meta = document.createElement('div');
         meta.className = 'oling-lab-set-preview-meta';
         meta.append(
@@ -274,26 +305,13 @@
             textContent: formatTitle(set.rarity)
           })
         );
-        card.appendChild(meta);
+        card.append(art, meta);
         sets.appendChild(card);
       });
       panel.appendChild(
         sets.children.length
           ? sets
-          : createEmptyMessage('No Oling previews yet.')
-      );
-
-      const odds = document.createElement('div');
-      odds.className = 'oling-lab-detail-list';
-      Object.entries(egg.rarityOdds || {}).forEach(([rarity, chance]) => {
-        odds.appendChild(
-          createDetailRow(formatTitle(rarity), formatOdds(chance), { rarity })
-        );
-      });
-      panel.appendChild(
-        odds.children.length
-          ? odds
-          : createEmptyMessage('No hatch odds available.')
+          : createEmptyMessage('No complete Oling builds are available yet.')
       );
       return panel;
     }
@@ -338,7 +356,10 @@
         setIncubatorEggInfo(context, true);
         openStagePanel(stage, panel, 'is-viewing-egg-info');
       });
-      stage.append(eggHero, panel);
+      const preview = document.createElement('div');
+      preview.className = 'oling-lab-incubator-preview-frame';
+      preview.appendChild(eggHero);
+      stage.append(preview, panel);
       applyInitialStagePanel(
         stage,
         panel,
@@ -346,9 +367,14 @@
         isViewingInfo,
         shouldAnimatePanel
       );
+      if (elements.incubatorPanel && state.incubatorPanelOpen) {
+        stage.classList.add('is-drawer-detail', 'is-viewing-egg-info');
+        panel.classList.add('is-open');
+        panel.inert = false;
+        panel.setAttribute('aria-hidden', 'false');
+      }
       return stage;
     }
-
 
     return {
       createEggInfoStage,

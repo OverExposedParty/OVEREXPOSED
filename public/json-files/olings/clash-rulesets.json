@@ -1,0 +1,85 @@
+{
+  "rulesets": [
+    {
+      "key": "standard",
+      "revision": 2,
+      "engineVersion": 3,
+      "name": "Standard Clash",
+      "description": "The standard competitive Oling Clash rules.",
+      "actions": {
+        "attackBeats": "skill",
+        "skillBeats": "guard",
+        "guardBeats": "attack"
+      },
+      "health": {
+        "unitsPerHeart": 2,
+        "startingHeartUnits": 6,
+        "layerOrder": ["shields", "overgrowth", "hearts"],
+        "shieldStacks": true,
+        "shieldCapacityUnits": 2,
+        "overgrowthStacks": true,
+        "healingCannotExceedMaximumHearts": true,
+        "overgrowthCanExceedMaximumHearts": true
+      },
+      "damage": {
+        "decisiveUnits": 2,
+        "drawUnits": 1,
+        "defaultTypes": {
+          "clash": "normal",
+          "draw": "normal",
+          "bonus": "normal"
+        },
+        "routing": {
+          "normal": ["shields", "overgrowth", "hearts"],
+          "piercing": ["overgrowth", "hearts"],
+          "true": ["hearts"]
+        }
+      },
+      "lastStand": {
+        "enabled": true,
+        "minimumHeartUnits": 1,
+        "preventedDamageSources": ["draw"]
+      },
+      "transfer": {
+        "minimumDonorHeartUnits": 1,
+        "requireFullRecipientCapacity": true
+      },
+      "redirect": {
+        "maximumRedirectsPerEffect": 1,
+        "currentTargetHasPriority": true,
+        "otherStealsResolveAfterTargetDeclines": true,
+        "stealAndReflectShareLimit": true
+      },
+      "activation": {
+        "suppressionPreventsEntireActivation": true,
+        "defencesApplyToEachEffect": true
+      },
+      "tagging": {
+        "maximumCharges": 2,
+        "decisiveClashesPerCharge": 3,
+        "queuedTargetBecomesReplacement": true,
+        "defeatReplacementTriggersTagEffects": false,
+        "preserveProtection": true,
+        "preserveStatuses": true,
+        "roundDurationsContinueWhileBenched": true,
+        "activationConditionsWaitWhileBenched": true,
+        "clashConditionsWaitWhileBenched": true
+      },
+      "resolution": {
+        "clash": [
+          "base-damage",
+          "last-stand",
+          "defeat-check",
+          "part-activation",
+          "triggered-statuses",
+          "defeat-check",
+          "tag"
+        ],
+        "effect": ["redirect", "block", "ward", "resolve"],
+        "multipleEffects": "written-order"
+      },
+      "isCurrent": true,
+      "status": "published"
+    }
+  ]
+}

@@ -5,12 +5,12 @@
   max-height: none;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 7cqw minmax(0, 1fr) 7cqw;
+  grid-template-columns: 14cqw minmax(0, 1fr) 14cqw;
   grid-template-rows: minmax(0, 1fr);
   align-items: center;
   justify-items: center;
   gap: 1cqw;
-  color: var(--primary-colour);
+  color: var(--primarypagecolour, var(--primaryPageColour, #6ea8ff));
 }
 
 .oling-battle-lobby-oling-picker[hidden] {
@@ -29,8 +29,10 @@
   padding: 1.2cqw 2.6cqw 2.2cqw;
 }
 
-.oling-battle-lobby-matchup.is-choosing-oling .oling-battle-lobby-party.is-players,
-.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-party.is-players {
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-players,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-players {
   width: 100%;
   height: 100%;
 }
@@ -39,8 +41,10 @@
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
 }
 
-.oling-battle-lobby-matchup.is-choosing-oling .oling-battle-lobby-party.is-enemies,
-.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-party.is-enemies {
+.oling-battle-lobby-matchup.is-choosing-oling
+  .oling-battle-lobby-party.is-enemies,
+.oling-battle-lobby-matchup.is-viewing-enemy
+  .oling-battle-lobby-party.is-enemies {
   display: none;
 }
 
@@ -77,8 +81,7 @@
   display: none;
 }
 
-.oling-battle-lobby-matchup.is-viewing-enemy
-  .oling-battle-lobby-oling-arrow {
+.oling-battle-lobby-matchup.is-viewing-enemy .oling-battle-lobby-oling-arrow {
   display: none;
 }
 
@@ -101,13 +104,14 @@
 }
 
 .oling-battle-lobby-oling-arrow {
-  width: 7cqw;
-  height: 9cqw;
+  width: 14cqw;
+  height: 18cqw;
   padding: 0;
   display: grid;
   place-items: center;
   border: 0;
   background: transparent;
+  color: var(--primarypagecolour, var(--primaryPageColour, #6ea8ff));
   cursor: pointer;
 }
 
@@ -119,8 +123,8 @@
   content: '';
   width: 0;
   height: 0;
-  border-top: 1.6cqw solid transparent;
-  border-bottom: 1.6cqw solid transparent;
+  border-top: 3.2cqw solid transparent;
+  border-bottom: 3.2cqw solid transparent;
 }
 
 .oling-battle-lobby-oling-arrow.is-previous {
@@ -129,7 +133,7 @@
 }
 
 .oling-battle-lobby-oling-arrow.is-previous::before {
-  border-right: 2.2cqw solid var(--primary-colour);
+  border-right: 4.4cqw solid currentColor;
 }
 
 .oling-battle-lobby-oling-arrow.is-next {
@@ -138,7 +142,7 @@
 }
 
 .oling-battle-lobby-oling-arrow.is-next::before {
-  border-left: 2.2cqw solid var(--primary-colour);
+  border-left: 4.4cqw solid currentColor;
 }
 
 .oling-battle-lobby-oling-description {
@@ -279,4 +283,3 @@
   line-height: 1;
   white-space: normal;
 }
-

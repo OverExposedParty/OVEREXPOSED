@@ -47,6 +47,7 @@ async function createBattleMatch({
   await recordBattleEvent(models, match, 'created', account._id, {
     olingId: String(olingId)
   });
+  await match.save();
   return match;
 }
 
@@ -108,10 +109,10 @@ async function joinBattleMatch({ models, account, matchCode, olingId }) {
   match.status = 'waiting';
   match.state.phase = 'waiting';
   match.state.countdownStartedAt = null;
-  await match.save();
   await recordBattleEvent(models, match, 'joined', account._id, {
     olingId: String(olingId)
   });
+  await match.save();
   return match;
 }
 
@@ -146,13 +147,13 @@ async function readyBattlePlayer({ models, account, matchCode, ready = true }) {
     match.state.countdownStartedAt = null;
     match.state.startedAt = null;
   }
-  await match.save();
   await recordBattleEvent(
     models,
     match,
     player.ready ? 'ready' : 'unready',
     account._id
   );
+  await match.save();
   return match;
 }
 
@@ -202,8 +203,8 @@ async function startBattleMatch({ models, account, matchCode }) {
     match.state.phase = 'active';
     match.state.startedAt = now;
     match.state.marker.updatedAt = now;
-    await match.save();
     await recordBattleEvent(models, match, 'started', account._id);
+    await match.save();
   }
   return match;
 }

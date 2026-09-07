@@ -5,9 +5,15 @@ const mongoose = require('mongoose');
 const {
   OlingEgg,
   OlingBuildSet,
+  OlingClashAbility,
+  OlingClashStatus,
+  OlingClashArchive,
+  OlingClashMatch,
+  OlingClashRuleset,
+  OlingBattleArchive,
+  OlingBattleMatch,
   OlingConsumable,
   OlingHatchReceipt,
-  OlingPersonality,
   OlingTrait,
   olingsConnection
 } = require('../server/models');
@@ -46,8 +52,14 @@ async function main() {
     OlingTrait.createIndexes(),
     OlingEgg.createIndexes(),
     OlingBuildSet.createIndexes(),
+    OlingBattleMatch.createIndexes(),
+    OlingBattleArchive.createIndexes(),
+    OlingClashAbility.createIndexes(),
+    OlingClashStatus.createIndexes(),
+    OlingClashRuleset.createIndexes(),
+    OlingClashMatch.createIndexes(),
+    OlingClashArchive.createIndexes(),
     OlingConsumable.createIndexes(),
-    OlingPersonality.createIndexes(),
     OlingHatchReceipt.createIndexes()
   ]);
 
@@ -56,15 +68,19 @@ async function main() {
     OlingEgg,
     OlingBuildSet,
     OlingConsumable,
-    OlingPersonality
+    OlingClashAbility,
+    OlingClashRuleset,
+    OlingClashStatus
   });
 
   console.log(
     `Imported ${imported.traits.length} Oling traits, ` +
       `${imported.buildSets.length} build sets, ` +
       `${imported.eggs.length} eggs, and ` +
-      `${imported.personalities.length} personalities, and ` +
-      `${imported.consumables.length} consumables.`
+      `${imported.consumables.length} consumables, ` +
+      `${imported.clashAbilities.length} Clash abilities, ` +
+      `${imported.clashRulesets.length} Clash rulesets, and ` +
+      `${imported.clashStatuses.length} Clash statuses.`
   );
 }
 

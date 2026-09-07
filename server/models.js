@@ -40,13 +40,17 @@ const defaultOeCustomisationSchema = require('../models/customisation/oe-customi
 const defaultOlingTraitSchema = require('../models/olings/oling-trait-schema');
 const defaultOlingEggSchema = require('../models/olings/oling-egg-schema');
 const defaultOlingBuildSetSchema = require('../models/olings/oling-build-set-schema');
-const defaultOlingPersonalitySchema = require('../models/olings/oling-personality-schema');
 const defaultOlingConsumableSchema = require('../models/olings/oling-consumable-schema');
 const defaultPlayerOlingSchema = require('../models/olings/player-oling-schema');
 const defaultOlingHatchReceiptSchema = require('../models/olings/oling-hatch-receipt-schema');
 const defaultOlingStateSchema = require('../models/olings/oling-state-schema');
 const defaultOlingBattleMatchSchema = require('../models/olings/oling-battle-match-schema');
-const defaultOlingBattleEventSchema = require('../models/olings/oling-battle-event-schema');
+const defaultOlingBattleArchiveSchema = require('../models/olings/oling-battle-archive-schema');
+const defaultOlingClashAbilitySchema = require('../models/olings/oling-clash-ability-schema');
+const defaultOlingClashStatusSchema = require('../models/olings/oling-clash-status-schema');
+const defaultOlingClashRulesetSchema = require('../models/olings/oling-clash-ruleset-schema');
+const defaultOlingClashMatchSchema = require('../models/olings/oling-clash-match-schema');
+const defaultOlingClashArchiveSchema = require('../models/olings/oling-clash-archive-schema');
 const AnalyticsEvent = require('../models/analytics/analytics-event-schema');
 
 const accountsConnection = mongoose.createConnection();
@@ -172,10 +176,6 @@ const OlingBuildSet = bindModelToConnection(
   defaultOlingBuildSetSchema,
   olingsConnection
 );
-const OlingPersonality = bindModelToConnection(
-  defaultOlingPersonalitySchema,
-  olingsConnection
-);
 const OlingConsumable = bindModelToConnection(
   defaultOlingConsumableSchema,
   olingsConnection
@@ -196,8 +196,28 @@ const OlingBattleMatch = bindModelToConnection(
   defaultOlingBattleMatchSchema,
   olingsConnection
 );
-const OlingBattleEvent = bindModelToConnection(
-  defaultOlingBattleEventSchema,
+const OlingBattleArchive = bindModelToConnection(
+  defaultOlingBattleArchiveSchema,
+  olingsConnection
+);
+const OlingClashAbility = bindModelToConnection(
+  defaultOlingClashAbilitySchema,
+  olingsConnection
+);
+const OlingClashStatus = bindModelToConnection(
+  defaultOlingClashStatusSchema,
+  olingsConnection
+);
+const OlingClashRuleset = bindModelToConnection(
+  defaultOlingClashRulesetSchema,
+  olingsConnection
+);
+const OlingClashMatch = bindModelToConnection(
+  defaultOlingClashMatchSchema,
+  olingsConnection
+);
+const OlingClashArchive = bindModelToConnection(
+  defaultOlingClashArchiveSchema,
   olingsConnection
 );
 const Product = bindModelToConnection(defaultProductSchema, shopConnection);
@@ -278,13 +298,17 @@ module.exports = {
   OlingTrait,
   OlingEgg,
   OlingBuildSet,
-  OlingPersonality,
   OlingConsumable,
   PlayerOling,
   OlingHatchReceipt,
   OlingState,
   OlingBattleMatch,
-  OlingBattleEvent,
+  OlingBattleArchive,
+  OlingClashAbility,
+  OlingClashStatus,
+  OlingClashRuleset,
+  OlingClashMatch,
+  OlingClashArchive,
   GamemodeSettingsAlert,
   OeCustomisation,
   Product,

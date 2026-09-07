@@ -60,7 +60,7 @@
   margin: 0 -18px 10px;
   overflow: hidden;
   background: var(--secondarybackgroundcolour, #202020)
-    url('/images/olings/gui/general-background.jpg') center / cover no-repeat;
+    url('/images/olings/lab/gui/general-background.jpg') center / cover no-repeat;
 }
 
 .active-party-conflict-dialog-mascot {

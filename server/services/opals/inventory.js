@@ -41,6 +41,11 @@ function getLegacyOlingInventory(account) {
     eggs: list(inventory.eggs, legacyInventory.eggs),
     consumables: list(inventory.consumables, legacyInventory.consumables),
     furniture: list(inventory.furniture, legacyInventory.furniture),
+    pods: list(inventory.pods, legacyInventory.pods),
+    wallDecorations: list(
+      inventory.wallDecorations,
+      legacyInventory.wallDecorations
+    ),
     pets: list(inventory.olings || inventory.pets, legacyInventory.pets),
     hatchHistory: list(inventory.hatchHistory, legacyInventory.hatchHistory)
   };
@@ -68,11 +73,19 @@ async function grantOlingInventory({
   eggGrants,
   consumableGrants,
   furnitureGrants,
+  podGrants,
   now
 }) {
+  eggGrants ||= [];
+  consumableGrants ||= [];
+  furnitureGrants ||= [];
+  podGrants ||= [];
   if (
     !account ||
-    (!eggGrants.length && !consumableGrants.length && !furnitureGrants.length)
+    (!eggGrants.length &&
+      !consumableGrants.length &&
+      !furnitureGrants.length &&
+      !podGrants.length)
   ) {
     return null;
   }
@@ -92,6 +105,11 @@ async function grantOlingInventory({
     eggs: list(inventory.eggs, storedInventory.eggs),
     consumables: list(inventory.consumables, storedInventory.consumables),
     furniture: list(inventory.furniture, storedInventory.furniture),
+    pods: list(inventory.pods, storedInventory.pods),
+    wallDecorations: list(
+      inventory.wallDecorations,
+      storedInventory.wallDecorations
+    ),
     pets: list(inventory.pets, storedInventory.pets),
     hatchHistory: list(inventory.hatchHistory, storedInventory.hatchHistory)
   };
@@ -108,6 +126,8 @@ async function grantOlingInventory({
       furnitureGrants,
       now
     ),
+    pods: mergeQuantityInventoryItems(baseInventory.pods, podGrants, now),
+    wallDecorations: baseInventory.wallDecorations,
     olings: baseInventory.pets,
     hatchHistory: baseInventory.hatchHistory,
     lab:
@@ -134,19 +154,37 @@ async function grantOlingInventory({
 
   await clearLegacyOlingInventory(savedAccount);
 
+  const synchronizedState = {
+    ownerId: accountId,
+    inventory: {
+      eggs: savedAccount.olings?.eggs || [],
+      consumables: savedAccount.olings?.consumables || [],
+      furniture: savedAccount.olings?.furniture || [],
+      pods: savedAccount.olings?.pods || [],
+      wallDecorations: savedAccount.olings?.wallDecorations || [],
+      pets: savedAccount.olings?.olings || [],
+      hatchHistory: savedAccount.olings?.hatchHistory || []
+    },
+    lab: savedAccount.olings?.lab || null
+  };
+  let savedOlingState = null;
+  if (OlingState?.findOneAndUpdate) {
+    savedOlingState = await OlingState.findOneAndUpdate(
+      { ownerId: accountId },
+      {
+        $set: {
+          inventory: synchronizedState.inventory,
+          ...(synchronizedState.lab ? { lab: synchronizedState.lab } : {})
+        },
+        $setOnInsert: { ownerId: accountId }
+      },
+      { new: true, upsert: true, runValidators: false }
+    );
+  }
+
   return {
     account: savedAccount,
-    olingState: {
-      ownerId: accountId,
-      inventory: {
-        eggs: savedAccount.olings?.eggs || [],
-        consumables: savedAccount.olings?.consumables || [],
-        furniture: savedAccount.olings?.furniture || [],
-        pets: savedAccount.olings?.olings || [],
-        hatchHistory: savedAccount.olings?.hatchHistory || []
-      },
-      lab: savedAccount.olings?.lab || null
-    }
+    olingState: savedOlingState || synchronizedState
   };
 }
 

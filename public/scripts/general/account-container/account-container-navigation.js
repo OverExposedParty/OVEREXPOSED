@@ -632,7 +632,7 @@ function getCurrentAccountSplashScreen() {
     getAccountSplashScreenFromCss() ||
     getAccountSplashScreenFromPreload() ||
     getAccountSplashScreenFromPageImage() ||
-    '/images/splash-screens/overexposed.png'
+    '/images/splash-screens/core/overexposed.png'
   );
 }
 

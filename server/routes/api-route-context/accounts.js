@@ -267,6 +267,10 @@ function createAccountContext(context) {
       furniture: Array.isArray(accountOlings.furniture)
         ? accountOlings.furniture
         : [],
+      pods: Array.isArray(accountOlings.pods) ? accountOlings.pods : [],
+      wallDecorations: Array.isArray(accountOlings.wallDecorations)
+        ? accountOlings.wallDecorations
+        : [],
       pets: Array.isArray(accountOlings.olings) ? accountOlings.olings : [],
       hatchHistory: Array.isArray(accountOlings.hatchHistory)
         ? accountOlings.hatchHistory
@@ -391,6 +395,10 @@ function createAccountContext(context) {
             : [],
           furniture: Array.isArray(olingInventory.furniture)
             ? olingInventory.furniture
+            : [],
+          pods: Array.isArray(olingInventory.pods) ? olingInventory.pods : [],
+          wallDecorations: Array.isArray(olingInventory.wallDecorations)
+            ? olingInventory.wallDecorations
             : [],
           pets: Array.isArray(olingInventory.pets) ? olingInventory.pets : [],
           hatchHistory: Array.isArray(olingInventory.hatchHistory)

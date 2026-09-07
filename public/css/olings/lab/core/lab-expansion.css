@@ -1,0 +1,96 @@
+.oling-lab-expansion-purchase {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: max(0.55rem, calc(var(--oling-lab-cell) * 0.025));
+  width: 100%;
+  height: 200%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.oling-lab-expansion-purchase .oling-lab-plus.is-expansion {
+  position: static;
+  inset: auto;
+  width: 44%;
+  height: auto;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  border-style: solid;
+  background: rgb(184 225 255 / 72%);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-expansion-purchase:focus-visible .oling-lab-plus {
+  outline: 4px solid #b22626;
+  outline-offset: -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-expansion-purchase:hover .oling-lab-plus {
+    outline: 4px solid #b22626;
+    outline-offset: -4px;
+  }
+}
+
+.oling-lab-expansion-purchase:focus-visible {
+  outline: 0;
+}
+
+.oling-lab-expansion-price {
+  position: static;
+  transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  color: var(--backgroundcolour);
+  font-size: clamp(1.02rem, 2.55vw, 1.35rem);
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.is-customising-furniture
+  .oling-lab-cell.is-purchasable[data-oling-lab-row='0']::after {
+  border-bottom: 0;
+}
+
+.is-customising-furniture
+  .oling-lab-cell.is-purchasable[data-oling-lab-row='1']::after {
+  border-top: 0;
+}
+
+.oling-lab-expansion-price img {
+  width: 1.725rem;
+  height: 1.725rem;
+  object-fit: contain;
+}
+
+.oling-lab-purchase-preview {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.65rem;
+  border: 4px dashed currentColor;
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-purchase-preview-plus {
+  font-size: clamp(4rem, 18vw, 7rem);
+  font-weight: 900;
+  line-height: 0.75;
+}
+.oling-lab-purchase-preview-label {
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}

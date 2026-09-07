@@ -76,12 +76,12 @@ async function main() {
         },
         media: {
           mainImage: {
-            url: '/images/olings/consumables/mood/happiness/oling-cookie.svg',
+            url: '/images/olings/lab/consumables/mood/happiness/oling-cookie.svg',
             alt: 'Oling Cookie'
           },
           gallery: [
             {
-              url: '/images/olings/consumables/mood/happiness/oling-cookie.svg',
+              url: '/images/olings/lab/consumables/mood/happiness/oling-cookie.svg',
               alt: 'Oling Cookie',
               type: 'image'
             }
@@ -100,12 +100,12 @@ async function main() {
     ],
     media: {
       mainImage: {
-        url: '/images/olings/consumables/mood/happiness/oling-cookie.svg',
+        url: '/images/olings/lab/consumables/mood/happiness/oling-cookie.svg',
         alt: 'Oling Cookie'
       },
       gallery: [
         {
-          url: '/images/olings/consumables/mood/happiness/oling-cookie.svg',
+          url: '/images/olings/lab/consumables/mood/happiness/oling-cookie.svg',
           alt: 'Oling Cookie',
           type: 'image'
         }

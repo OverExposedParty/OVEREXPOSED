@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const {
+  OLING_BATTLE_GAME_ID_PATTERN,
+  createOlingBattleGameId
+} = require('./oling-battle-game-id');
 
 const { Schema } = mongoose;
 
@@ -21,13 +25,12 @@ const END_REASONS = [
   'admin',
   'unknown'
 ];
+const MAX_EMBEDDED_EVENTS = 500;
 
 const olingSnapshotSchema = new Schema(
   {
     id: { type: String, trim: true, default: '' },
     name: { type: String, trim: true, default: null },
-    level: { type: Number, min: 1, default: 1 },
-    personalityKey: { type: String, trim: true, lowercase: true, default: '' },
     build: { type: Schema.Types.Mixed, default: () => ({}) },
     equipment: { type: Schema.Types.Mixed, default: () => ({}) },
     traits: { type: Schema.Types.Mixed, default: () => ({}) }
@@ -75,21 +78,17 @@ const markerSchema = new Schema(
   { _id: false }
 );
 
-const hitHistorySchema = new Schema(
+const battleEventSchema = new Schema(
   {
-    accountId: {
+    sequence: { type: Number, min: 1, required: true },
+    type: { type: String, required: true, trim: true, lowercase: true },
+    actorAccountId: {
       type: Schema.Types.ObjectId,
       ref: 'Account',
-      required: true
+      default: null
     },
-    zone: {
-      type: String,
-      enum: ['critical', 'strike', 'disruption'],
-      required: true
-    },
-    result: { type: String, trim: true, required: true },
-    multiplier: { type: Number, min: 1, default: 1 },
-    sequence: { type: Number, min: 1, required: true },
+    actorSlot: { type: String, enum: PLAYER_SLOTS, default: null },
+    payload: { type: Schema.Types.Mixed, default: () => ({}) },
     createdAt: { type: Date, default: Date.now }
   },
   { _id: false }
@@ -110,7 +109,6 @@ const stateSchema = new Schema(
     phase: { type: String, enum: MATCH_PHASES, default: 'waiting' },
     timeMultiplier: { type: Number, min: 1, default: 1 },
     marker: { type: markerSchema, default: () => ({}) },
-    hitHistory: { type: [hitHistorySchema], default: [] },
     winnerAccountId: {
       type: Schema.Types.ObjectId,
       ref: 'Account',
@@ -123,11 +121,28 @@ const stateSchema = new Schema(
 
 const olingBattleMatchSchema = new Schema(
   {
+    gameId: {
+      type: String,
+      required: true,
+      default: () => createOlingBattleGameId(),
+      match: OLING_BATTLE_GAME_ID_PATTERN
+    },
     matchCode: { type: String, required: true, unique: true, index: true },
     status: { type: String, enum: MATCH_STATUSES, default: 'waiting' },
     config: { type: configSchema, default: () => ({}) },
     players: { type: [playerSchema], default: [] },
-    state: { type: stateSchema, default: () => ({}) }
+    state: { type: stateSchema, default: () => ({}) },
+    events: {
+      type: [battleEventSchema],
+      validate: {
+        validator: (events) =>
+          Array.isArray(events) &&
+          events.length <= MAX_EMBEDDED_EVENTS &&
+          new Set(events.map((event) => event.sequence)).size === events.length,
+        message: `Oling Battle matches require unique event sequences and cannot exceed ${MAX_EMBEDDED_EVENTS} events.`
+      },
+      default: []
+    }
   },
   {
     timestamps: true,
@@ -137,6 +152,13 @@ const olingBattleMatchSchema = new Schema(
 
 olingBattleMatchSchema.index({ status: 1, updatedAt: -1 });
 olingBattleMatchSchema.index({ 'players.accountId': 1, status: 1 });
+olingBattleMatchSchema.index(
+  { gameId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { gameId: { $type: 'string' } }
+  }
+);
 
 module.exports = mongoose.model(
   'OlingBattleMatch',
@@ -145,3 +167,10 @@ module.exports = mongoose.model(
 );
 module.exports.MATCH_STATUSES = MATCH_STATUSES;
 module.exports.PLAYER_SLOTS = PLAYER_SLOTS;
+module.exports.END_REASONS = END_REASONS;
+module.exports.MAX_EMBEDDED_EVENTS = MAX_EMBEDDED_EVENTS;
+module.exports.battleEventSchema = battleEventSchema;
+module.exports.configSchema = configSchema;
+module.exports.olingSnapshotSchema = olingSnapshotSchema;
+module.exports.playerSchema = playerSchema;
+module.exports.stateSchema = stateSchema;

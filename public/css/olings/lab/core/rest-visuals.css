@@ -69,9 +69,6 @@
   font-weight: 400;
   line-height: 1;
   pointer-events: none;
-  text-shadow:
-    0 1px 0 rgb(255 255 255 / 68%),
-    0 0 0.35rem rgb(255 255 255 / 44%);
   offset-position: 0 0;
   offset-path: var(--oling-rest-z-path, path('M 0 0 C 6 -11 17 -28 32 -46'));
   offset-distance: 0%;

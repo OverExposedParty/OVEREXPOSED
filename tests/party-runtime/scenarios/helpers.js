@@ -74,6 +74,7 @@ function createApplier(overrides = {}) {
       if (String(party.state.hostComputerId) !== String(actorId)) {
         const error = new Error('Only the host can perform this action.');
         error.status = 403;
+        error.code = 'party_host_required';
         throw error;
       }
     },

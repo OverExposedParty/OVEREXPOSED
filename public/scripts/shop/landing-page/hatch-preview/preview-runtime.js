@@ -29,7 +29,7 @@
       return shopHatchViews;
     }
 
-    function createPreviewHatchData(product, eggDefinition, personalities = []) {
+    function createPreviewHatchData(product, eggDefinition) {
       const eggGrant = getProductEggGrant(product);
       const eggKey = eggDefinition?.key || eggGrant?.key || 'preview-egg';
       const rollableOdds = getRollableEggOdds(product, eggDefinition);
@@ -68,23 +68,12 @@
           ? sets[0]
           : null;
       })();
-      const personality = pickRandom(
-        personalities.filter(
-          (item) => item?.enabled !== false && (item?.status || 'published') === 'published'
-        )
-      ) || { key: 'curious', name: 'Curious' };
-      rolls.personality = { personalityKey: personality.key };
       const oling = {
         id: 'shop-preview-hatch-oling',
         name: 'Preview Hatch',
         eggKey,
         rarity: matchingSet?.rarity || 'mixed',
         collection: eggDefinition?.collection || 'base',
-        personalityKey: personality.key,
-        personality: {
-          key: personality.key,
-          name: personality.name || formatShopHatchTitle(personality.key)
-        },
         matchingSet: {
           key: matchingSet?.key || 'mixed',
           name: matchingSet?.name || 'Mixed'
@@ -118,16 +107,14 @@
       }
 
       try {
-        const [eggs, personalities] = await Promise.all([
+        const [eggs] = await Promise.all([
           loadOlingEggs(),
-          loadOlingPersonalities(),
           loadRarityPalette()
         ]);
         const eggDefinition = findOlingEggDefinition(product, eggs);
         const { oling, receipt } = createPreviewHatchData(
           product,
-          eggDefinition,
-          personalities
+          eggDefinition
         );
         openShopHatchMenu(
           'Preview Hatch',

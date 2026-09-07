@@ -6,40 +6,51 @@ const definitions = require('../../server/services/olings/definitions');
 const energy = require('../../server/services/olings/energy');
 const accountState = require('../../server/services/olings/account-state');
 const interactions = require('../../server/services/olings/interactions');
+const storage = require('../../server/services/olings/storage');
+const storageDiagnostics = require('../../server/services/olings/storage-diagnostics');
 const rarityPalette = require('../../public/json-files/olings/rarities.json');
 
 const expectedExports = [
   'ENERGY_RESTORE_THRESHOLDS',
+  'OLING_LAB_ACTIVE_LIMIT',
   'OLING_LAYERS',
   'OLING_MAX_ENERGY',
+  'OLING_POD_RELEASE_OUTCOMES',
   'OLING_RARITIES',
+  'OLING_RESIDENCY_STATES',
   'OLING_REST_DURATION_MS',
+  'assignLegacyStoredOlingsToPodStorage',
   'attachOlingBuildSetsToEggs',
-  'awardOlingXp',
   'exportOlingConsumablesToJson',
-  'getOlingAdventureEnergyCost',
-  'getOlingBedRestDurationMs',
+  'findAvailableLabSlot',
   'getOlingDefinitions',
   'getOlingEnergy',
   'getOlingEnergyStatus',
+  'getOlingPodDefinition',
+  'getOlingRoster',
   'getOlingRestDurationMs',
   'getOlingRestRemainingMs',
   'getOrCreateOlingState',
+  'getPodStorageContainers',
   'hatchOling',
   'importOlingDefinitionsFromJson',
   'listOlingConsumables',
-  'listOlingPersonalities',
+  'listOlingPodDefinitions',
   'listPublishedOlingEggs',
-  'listPublishedOlingPersonalities',
   'listPublishedOlingTraits',
+  'releaseOlingFromPod',
+  'recordOlingStorageDiagnostic',
   'serializeHatchReceipt',
   'serializeOlingConsumable',
   'serializeOlingConsumableForJson',
   'serializeOlingEgg',
-  'serializeOlingPersonality',
+  'serializeOlingPodDefinition',
+  'serializeOlingResidency',
   'serializeOlingTrait',
   'serializePlayerOling',
   'spendOlingEnergy',
+  'storeOlingInPod',
+  'transferStoredOling',
   'useOlingConsumable'
 ];
 
@@ -59,4 +70,9 @@ test('Oling service facade delegates to focused modules', () => {
     accountState.getOrCreateOlingState
   );
   assert.equal(olings.hatchOling, interactions.hatchOling);
+  assert.equal(olings.transferStoredOling, storage.transferStoredOling);
+  assert.equal(
+    olings.recordOlingStorageDiagnostic,
+    storageDiagnostics.recordOlingStorageDiagnostic
+  );
 });

@@ -1,0 +1,23 @@
+.oling-lab-viewing-label {
+  box-sizing: border-box;
+  min-height: 2.75rem;
+  margin: 0;
+  border-radius: 0.5rem;
+  background: rgb(22 31 36 / 92%);
+  color: #f7efe3;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.oling-lab-viewing-label[hidden],
+.oling-lab-edit-toggle[hidden] {
+  display: none;
+}
+
+.oling-lab-viewing-label {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}

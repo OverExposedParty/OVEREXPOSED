@@ -1,11 +1,18 @@
 const { clampInteger, createDefaultOlingLab } = require('./lab-state/defaults');
 const {
   serializeOlingLabItem,
+  serializeOlingLabWallDecoration,
   getAllowedRoomRows,
   canUseRoomRow
 } = require('./lab-state/catalog');
 const {
+  getOwnedWallDecorationQuantities,
+  normalizePlacedWallDecorations
+} = require('./lab-state/wall-decorations');
+const {
   getOwnedLabFurniture,
+  getOwnedLabWallpapers,
+  getOwnedLabWallpaperVariants,
   ensureAccountOlingDocument,
   ensureContainerSlots,
   ensureItemInventorySlots,
@@ -18,6 +25,7 @@ const {
 const { serializeOlingLab } = require('./lab-state/serialization');
 const {
   getLabCellKey,
+  getLabColumnCellKeys,
   getUnlockedLabCellKeys,
   getLabExpansionDetails,
   getItemCells
@@ -32,9 +40,13 @@ module.exports = {
   clampInteger,
   createDefaultOlingLab,
   serializeOlingLabItem,
+  serializeOlingLabWallDecoration,
   getAllowedRoomRows,
   canUseRoomRow,
   getOwnedLabFurniture,
+  getOwnedLabWallpapers,
+  getOwnedLabWallpaperVariants,
+  getOwnedWallDecorationQuantities,
   ensureAccountOlingDocument,
   ensureContainerSlots,
   ensureItemInventorySlots,
@@ -46,9 +58,11 @@ module.exports = {
   validateItemInventorySlots,
   serializeOlingLab,
   getLabCellKey,
+  getLabColumnCellKeys,
   getUnlockedLabCellKeys,
   getLabExpansionDetails,
   getItemCells,
   validateContainerSlotItems,
-  normalizeLabPayload
+  normalizeLabPayload,
+  normalizePlacedWallDecorations
 };

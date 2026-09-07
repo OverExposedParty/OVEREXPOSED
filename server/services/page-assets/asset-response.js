@@ -7,6 +7,15 @@ const {
   DEPLOYMENT_VERSION,
   ONE_YEAR_IN_SECONDS
 } = require('../../constants');
+const { isProduction } = require('../../logger');
+
+const htmlFileCache = new Map();
+
+function isCacheableClashPage(filePath) {
+  return /[\\/]pages[\\/]olings[\\/]clash(?:-settings)?\.html$/i.test(
+    String(filePath || '')
+  );
+}
 
 function getCookieValue(cookieHeader, key) {
   if (
@@ -241,6 +250,20 @@ function appendDeploymentCacheHeaders(req, res) {
 }
 
 function sendVersionedHtmlFile(req, res, filePath, statusCode = 200) {
+  const cacheHtml = isProduction && isCacheableClashPage(filePath);
+  if (cacheHtml && htmlFileCache.has(filePath)) {
+    appendDeploymentCacheHeaders(req, res);
+    res
+      .status(statusCode)
+      .type('html')
+      .send(
+        prepareHtmlResponse(htmlFileCache.get(filePath), {
+          cspNonce: res.locals?.cspNonce
+        })
+      );
+    return;
+  }
+
   fs.readFile(filePath, 'utf8', (error, html) => {
     if (error) {
       console.error(`Error reading HTML file "${filePath}":`, error);
@@ -249,6 +272,8 @@ function sendVersionedHtmlFile(req, res, filePath, statusCode = 200) {
       }
       return;
     }
+
+    if (cacheHtml) htmlFileCache.set(filePath, html);
 
     appendDeploymentCacheHeaders(req, res);
 
@@ -262,6 +287,7 @@ function sendVersionedHtmlFile(req, res, filePath, statusCode = 200) {
 module.exports = {
   getCookieValue,
   getSplashScreenImageUrl,
+  isCacheableClashPage,
   getVersionedPublicAssetUrl,
   versionLocalAssetReferences,
   stripMetaContentSecurityPolicy,

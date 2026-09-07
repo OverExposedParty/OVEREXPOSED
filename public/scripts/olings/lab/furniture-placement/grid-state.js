@@ -32,12 +32,10 @@
         : col < Number(state.lab?.columns || 0);
     }
 
-    function getLabExpansionCell(row, col) {
-      const cell =
-        state.expansion?.cells?.find(
-          (cell) => cell.row === row && cell.col === col
-        ) || null;
-      return cell?.eligible && !cell.unlocked ? cell : null;
+    function getLabExpansionColumn(col) {
+      const column =
+        state.expansion?.columns?.find((column) => column.col === col) || null;
+      return column?.eligible && !column.unlocked ? column : null;
     }
 
     function getAnchorRow(item, row) {
@@ -82,30 +80,101 @@
       return true;
     }
 
-    function canMoveRoomItem(placed, item, row, col) {
+    function getMovePlacement(placed, item, row, col) {
       if (!placed || !item || item.layer !== 'room' || placed.locked)
-        return false;
+        return null;
       const width = Number(item.width || placed.width || 1);
       const height = Number(item.height || placed.height || 1);
       const anchorRow = getAnchorRow(item, row);
-      if (col < 0 || col + width > state.lab.columns) return false;
-      if (anchorRow < 0 || anchorRow + height > rows) return false;
-      if (!canUseRoomRow(item, anchorRow)) return false;
+      const anchorCol = Number(col);
+      if (anchorCol < 0 || anchorCol + width > state.lab.columns) return null;
+      if (anchorRow < 0 || anchorRow + height > rows) return null;
+      if (!canUseRoomRow(item, anchorRow)) return null;
 
-      const occupied = getOccupiedMap();
+      const cells = [];
       for (
         let cellRow = anchorRow;
         cellRow < anchorRow + height;
         cellRow += 1
       ) {
-        for (let cellCol = col; cellCol < col + width; cellCol += 1) {
-          if (!isLabCellUnlocked(cellRow, cellCol)) return false;
-          const occupant = occupied.get(`${cellRow}:${cellCol}`);
-          if (occupant && occupant.placedId !== placed.placedId) return false;
+        for (
+          let cellCol = anchorCol;
+          cellCol < anchorCol + width;
+          cellCol += 1
+        ) {
+          if (!isLabCellUnlocked(cellRow, cellCol)) return null;
+          cells.push(`${cellRow}:${cellCol}`);
         }
       }
 
+      return { row: anchorRow, col: anchorCol, width, height, cells };
+    }
+
+    function canMoveRoomItem(placed, item, row, col) {
+      const placement = getMovePlacement(placed, item, row, col);
+      if (!placement) return false;
+
+      const occupied = getOccupiedMap();
+      for (const cell of placement.cells) {
+        const occupant = occupied.get(cell);
+        if (occupant && occupant.placedId !== placed.placedId) return false;
+      }
+
       return true;
+    }
+
+    function getRoomItemSwap(firstPlaced, secondPlaced) {
+      if (
+        !firstPlaced ||
+        !secondPlaced ||
+        firstPlaced.placedId === secondPlaced.placedId ||
+        firstPlaced.locked ||
+        secondPlaced.locked
+      )
+        return null;
+
+      const firstItem = getItem(firstPlaced.itemId);
+      const secondItem = getItem(secondPlaced.itemId);
+      const firstPlacement = getMovePlacement(
+        firstPlaced,
+        firstItem,
+        secondPlaced.row,
+        secondPlaced.col
+      );
+      const secondPlacement = getMovePlacement(
+        secondPlaced,
+        secondItem,
+        firstPlaced.row,
+        firstPlaced.col
+      );
+      if (!firstPlacement || !secondPlacement) return null;
+
+      const ignoredPlacedIds = new Set([
+        firstPlaced.placedId,
+        secondPlaced.placedId
+      ]);
+      const occupied = getOccupiedMap();
+      for (const cell of [...firstPlacement.cells, ...secondPlacement.cells]) {
+        const occupant = occupied.get(cell);
+        if (occupant && !ignoredPlacedIds.has(occupant.placedId)) return null;
+      }
+
+      const firstCells = new Set(firstPlacement.cells);
+      if (secondPlacement.cells.some((cell) => firstCells.has(cell)))
+        return null;
+
+      return {
+        first: {
+          placedId: firstPlaced.placedId,
+          row: firstPlacement.row,
+          col: firstPlacement.col
+        },
+        second: {
+          placedId: secondPlaced.placedId,
+          row: secondPlacement.row,
+          col: secondPlacement.col
+        }
+      };
     }
 
     function getRoomPlacementBlockReason(item, row, col) {
@@ -175,16 +244,16 @@
       createPlacedId,
       getOccupiedMap,
       isLabCellUnlocked,
-      getLabExpansionCell,
+      getLabExpansionColumn,
       getAnchorRow,
       canPlaceRoomItem,
       canMoveRoomItem,
+      getRoomItemSwap,
       getRoomPlacementBlockReason,
       getRoomItemsForSlot,
       getContainerItemsForSlot
     };
   }
 
-  window.createOlingLabFurnitureGridState =
-    createOlingLabFurnitureGridState;
+  window.createOlingLabFurnitureGridState = createOlingLabFurnitureGridState;
 })();

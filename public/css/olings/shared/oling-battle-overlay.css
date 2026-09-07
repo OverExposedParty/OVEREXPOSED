@@ -2,7 +2,7 @@
   width: min(420px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
   padding: 18px;
-  border: 3px solid #ffb5c8;
+  border: 3px solid #6ea8ff;
   border-radius: 8px;
   background: var(--backgroundcolour);
   color: var(--fontcolour);
@@ -19,7 +19,7 @@
 
 .oling-battle-overlay h2 {
   margin: 0;
-  color: #ffb5c8;
+  color: #6ea8ff;
   font-size: 1.35rem;
   letter-spacing: 0;
 }
@@ -27,10 +27,10 @@
 .oling-battle-overlay-close {
   min-width: 0;
   padding: 6px 10px;
-  border: 2px solid #ffb5c8;
+  border: 2px solid #6ea8ff;
   border-radius: 6px;
   background: transparent;
-  color: #ffb5c8;
+  color: #6ea8ff;
   font-weight: 800;
   cursor: pointer;
 }
@@ -62,20 +62,20 @@
 .oling-battle-overlay-secondary {
   min-height: 38px;
   padding: 8px 12px;
-  border: 2px solid #ffb5c8;
+  border: 2px solid #6ea8ff;
   border-radius: 6px;
   font-weight: 900;
   cursor: pointer;
 }
 
 .oling-battle-overlay-primary {
-  background: #ffb5c8;
+  background: #6ea8ff;
   color: var(--backgroundcolour);
 }
 
 .oling-battle-overlay-secondary {
   background: transparent;
-  color: #ffb5c8;
+  color: #6ea8ff;
 }
 
 @media (max-width: 520px) {

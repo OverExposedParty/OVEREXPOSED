@@ -1,0 +1,789 @@
+.oling-lab-incubator-panel {
+  --wall-decoration-panel-primary: #ffd6a5;
+  --wall-decoration-panel-secondary: #e8b77e;
+  --oling-lab-menu-primary-colour: var(--wall-decoration-panel-primary);
+  --oling-lab-menu-secondary-colour: var(--wall-decoration-panel-secondary);
+  --oling-lab-element-radius: 0.5rem;
+  --oling-lab-incubator-tab-height: 2.15rem;
+  top: calc(
+    var(--headerheight, 4rem) + 4.5rem + var(--oling-lab-incubator-tab-height)
+  );
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(32rem, calc(100vw - 5rem));
+}
+
+.oling-lab-incubator-panel-tabs {
+  position: absolute;
+  top: calc(-1 * var(--oling-lab-incubator-tab-height));
+  left: var(--oling-lab-menu-radius, 0.65rem);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  width: calc(100% - var(--oling-lab-menu-radius, 0.65rem));
+  height: var(--oling-lab-incubator-tab-height);
+  min-width: 0;
+  overflow: visible;
+}
+
+.oling-lab-incubator-panel-tabs[hidden] {
+  display: none;
+}
+
+.oling-lab-incubator-panel-tabs .oling-lab-tab-list {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-incubator-panel-header {
+  padding-left: 4.5rem;
+}
+
+.oling-lab-incubator-panel-header h2 {
+  overflow-wrap: anywhere;
+}
+
+.oling-lab-incubator-panel .oling-lab-incubator-panel-back {
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--wall-decoration-panel-primary);
+}
+
+.oling-lab-incubator-panel-back::before {
+  border-right: 1.15rem solid currentColor;
+}
+
+.oling-lab-incubator-panel-content {
+  min-width: 0;
+  min-height: 0;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.oling-lab-incubator-panel-content > .oling-lab-tab-menu,
+.oling-lab-incubator-panel-content .oling-lab-tab-panel,
+.oling-lab-incubator-panel-content .oling-lab-menu-section {
+  min-height: 0;
+  height: 100%;
+}
+
+.oling-lab-incubator-panel-content .oling-lab-tab-panel {
+  overflow: hidden;
+  padding: 0;
+}
+
+.oling-lab-incubator-panel-content .oling-lab-menu-section {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.oling-lab-incubator-panel-content .oling-lab-incubator-overview {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.65rem;
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-incubator-overview.is-choosing-egg {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-incubator-overview:not(.is-choosing-egg) {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.oling-lab-incubator-panel-content .oling-lab-incubator-preview-frame {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background:
+    linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)),
+    url('/images/olings/lab/gui/egg-background.jpg') center / cover no-repeat,
+    rgb(22 31 36 / 82%);
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-incubator-preview-frame
+  > :is(
+    .oling-lab-egg-insertion-stage,
+    .oling-lab-item-slot-row,
+    .oling-lab-incubator-used,
+    .oling-lab-egg-used
+  ) {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-incubator-preview-frame
+  > :is(.oling-lab-egg-insertion-stage, .oling-lab-item-slot-row) {
+  background: transparent;
+}
+
+.oling-lab-incubator-overview:not(.is-choosing-egg)
+  .oling-lab-incubator-influence-summary {
+  align-self: stretch;
+  height: 100%;
+}
+
+.oling-lab-incubator-egg-inventory-host {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.oling-lab-incubator-egg-inventory {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 0.55rem;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.65rem;
+  background: var(--backgroundcolour);
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-menu-section-header h3 {
+  margin: 0;
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.76rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-egg-picker-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  align-content: start;
+  gap: 0.5rem;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.oling-lab-incubator-egg-inventory-browser {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  min-height: 0;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  place-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--oling-lab-element-radius);
+  padding: 0;
+  background: rgb(255 255 255 / 10%);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  text-align: center;
+  cursor: grab;
+  touch-action: none;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.oling-lab-incubator-egg-empty-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  visibility: hidden;
+}
+
+.oling-lab-incubator-egg-empty-message {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  border: 2px dashed currentColor;
+  border-radius: var(--oling-lab-element-radius);
+  padding: 1rem;
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.oling-lab-incubator-egg-pagination {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) 2rem;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.oling-lab-incubator-egg-pagination button {
+  box-sizing: border-box;
+  width: 2rem;
+  height: 1.75rem;
+  border: 0;
+  padding: 0;
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.oling-lab-incubator-egg-pagination button:disabled {
+  background: #6e7478;
+  color: #d7dadd;
+  cursor: default;
+}
+
+.oling-lab-incubator-egg-pagination strong {
+  font-size: 0.7rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.oling-lab-incubator-egg-description {
+  box-sizing: border-box;
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.65rem 0.75rem;
+  background: rgb(255 255 255 / 8%);
+  color: var(--oling-lab-menu-primary-colour);
+}
+
+.oling-lab-incubator-egg-description.is-guidance {
+  align-content: center;
+  justify-items: center;
+  overflow: hidden;
+  padding: 0.45rem 0.75rem;
+  text-align: center;
+}
+
+.oling-lab-incubator-egg-description strong,
+.oling-lab-incubator-egg-description span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-egg-description span {
+  color: var(--oling-lab-menu-secondary-colour);
+}
+
+.oling-lab-incubator-egg-description p {
+  width: 100%;
+  min-width: 0;
+  max-width: 28rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card:active {
+  cursor: grabbing;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card:focus-visible {
+  outline: 3px solid var(--oling-lab-menu-secondary-colour);
+  outline-offset: -3px;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card > img,
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-placeholder {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-placeholder {
+  position: static;
+  background: rgb(255 255 255 / 12%);
+  color: inherit;
+  transform: none;
+}
+
+.oling-lab-incubator-egg-inventory
+  .oling-lab-incubator-egg-card
+  :is(.oling-lab-incubator-egg-quantity, .oling-lab-incubator-egg-name) {
+  position: absolute;
+  z-index: 2;
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-egg-quantity {
+  top: 0.4rem;
+  left: 0.45rem;
+  font-size: 0.8rem !important;
+}
+
+.oling-lab-incubator-egg-name {
+  right: 0.3rem;
+  bottom: 0.35rem;
+  left: 0.3rem;
+  overflow: hidden;
+  font-size: clamp(0.5rem, 1.6vw, 0.68rem) !important;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oling-lab-incubator-egg-inventory .oling-lab-incubator-egg-card.is-selected {
+  outline: 0;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-incubator-egg-inventory
+    .oling-lab-incubator-egg-card:not(:disabled):hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+    transform: translateY(-2px);
+  }
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-egg-insertion-stage.is-egg-drop-target::after {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  border-radius: inherit;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  content: attr(data-oling-egg-drop-message);
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  pointer-events: none;
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-hatch-timer-badge:is(.is-staged, .is-ready-to-start) {
+  top: 1rem;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  transform: translateX(-50%);
+}
+
+.oling-lab-egg-drag-ghost {
+  position: fixed;
+  z-index: 2000;
+  width: 6.5rem;
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 160ms ease;
+  user-select: none;
+  will-change: left, top, transform;
+}
+
+.oling-lab-egg-drag-ghost.is-over-incubator {
+  transform: translate(-50%, -50%) scale(0.55);
+}
+
+.oling-lab-egg-drag-ghost > img,
+.oling-lab-egg-drag-ghost > .oling-lab-incubator-egg-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.oling-lab-incubator-influence-summary {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.oling-lab-incubator-influence-summary .oling-lab-menu-section-header h3 {
+  margin: 0;
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 0.76rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-influence-grid {
+  display: grid;
+  grid-auto-columns: minmax(12rem, 1fr);
+  grid-auto-flow: column;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 0.65rem;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0 0 0.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.oling-lab-incubator-influence-card {
+  position: relative;
+  display: grid;
+  grid-template:
+    'status' auto
+    'visual' minmax(0, 1fr)
+    'name' auto /
+    minmax(0, 1fr);
+  place-items: stretch;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--oling-lab-element-radius);
+  padding: 0.75rem;
+  background: rgb(255 255 255 / 10%);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.oling-lab-incubator-influence-card > img,
+.oling-lab-incubator-influence-card > .oling-lab-item-influence-marker,
+.oling-lab-incubator-influence-empty-state {
+  grid-area: visual;
+  align-self: center;
+  justify-self: center;
+}
+
+.oling-lab-incubator-influence-card > img {
+  width: min(54%, 8rem);
+  height: min(76%, 8rem);
+  min-height: 0;
+  object-fit: contain;
+}
+
+.oling-lab-incubator-influence-card > .oling-lab-item-influence-marker {
+  position: relative;
+  top: auto;
+  left: auto;
+  display: grid;
+  place-items: center;
+  width: min(22%, 4rem);
+  height: auto;
+  aspect-ratio: 1;
+  padding: 0;
+  background: rgb(255 248 234 / 18%);
+  color: inherit;
+  transform: none;
+}
+
+.oling-lab-incubator-influence-card > strong,
+.oling-lab-incubator-influence-status {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-influence-card > strong {
+  position: static;
+  grid-area: name;
+  align-self: center;
+  justify-self: center;
+  font-size: 1.35rem;
+  line-height: 1.05;
+  text-align: center;
+  transform: none;
+}
+
+.oling-lab-incubator-influence-status {
+  position: static;
+  grid-area: status;
+  align-self: center;
+  justify-self: end;
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.72;
+  text-align: right;
+}
+
+.oling-lab-incubator-influence-empty-state {
+  max-width: 18rem;
+  color: var(--oling-lab-menu-secondary-colour);
+  font-size: clamp(0.78rem, 2.2vw, 0.95rem);
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-incubator-influence-grid[data-influence-slot-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: row;
+}
+
+.oling-lab-incubator-influence-card.has-item {
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubator-influence-card.is-locked {
+  cursor: default;
+}
+
+.oling-lab-incubator-influence-card:disabled {
+  opacity: 1;
+}
+
+.oling-lab-incubator-influence-card:focus-visible {
+  outline: 3px solid var(--oling-lab-menu-secondary-colour);
+  outline-offset: -3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-incubator-influence-card:not(:disabled):hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+    transform: translateY(-2px);
+  }
+}
+
+.oling-lab-incubator-panel-content .oling-lab-egg-insertion-stage {
+  min-height: 0;
+}
+
+.oling-lab-incubator-panel-content
+  .oling-lab-egg-insertion-stage.is-drawer-detail {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  height: 100%;
+  aspect-ratio: auto;
+  overflow: hidden;
+  background: transparent;
+}
+
+.oling-lab-incubator-panel-content
+  .is-drawer-detail
+  :is(.oling-lab-incubator-used, .oling-lab-egg-used) {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  overflow: hidden;
+  background: transparent;
+}
+
+.oling-lab-incubator-panel-content
+  .is-drawer-detail
+  :is(.oling-lab-incubator-used, .oling-lab-egg-used)
+  .oling-lab-stats-toggle {
+  display: none;
+}
+
+.oling-lab-incubator-panel-content
+  .is-drawer-detail
+  > :is(.oling-lab-incubator-info-panel, .oling-lab-egg-info-panel) {
+  position: static;
+  inset: auto;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  transform: none;
+}
+
+.oling-lab-incubator-panel-content .oling-lab-side-panel {
+  width: 100%;
+  min-width: 100%;
+  box-shadow: none;
+}
+
+.oling-lab-incubator-panel-content
+  :is(.oling-lab-panel-back, .oling-lab-item-influence-back) {
+  display: none;
+}
+
+.oling-lab-incubator-panel-footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.oling-lab-incubator-panel-footer > :only-child {
+  grid-column: 1 / -1;
+}
+
+.oling-lab-incubator-panel-footer > :first-child:has(+ :empty) {
+  grid-column: 1 / -1;
+}
+
+.oling-lab-incubator-panel-action:empty {
+  display: none;
+}
+
+.oling-lab-incubator-panel-action,
+.oling-lab-incubator-panel-action > .oling-lab-menu-action {
+  min-width: 0;
+  height: 100%;
+}
+
+.oling-lab-incubator-panel-footer .oling-lab-menu-action {
+  width: 100%;
+  min-height: 2.75rem;
+  grid-template-rows: 1fr;
+  place-items: center;
+  justify-content: center;
+  border-radius: var(--oling-lab-element-radius);
+  padding: 0.55rem;
+}
+
+.oling-lab-incubator-panel-footer .oling-lab-menu-action span {
+  font-size: 0.82rem;
+}
+
+.oling-lab-incubator-panel-close {
+  border: 0;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubator-panel-footer .oling-lab-menu-action.is-remove-action {
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-incubator-panel-footer .oling-lab-menu-action.is-remove-action span {
+  color: inherit;
+}
+
+.oling-lab-menu-action.is-influence-action:disabled {
+  background: #6e7478 !important;
+  color: #d7dadd !important;
+  opacity: 1;
+}
+
+.oling-lab-menu-action.is-egg-action:disabled {
+  background: #6e7478 !important;
+  color: #d7dadd !important;
+  opacity: 1;
+}
+
+.oling-lab-menu-action.is-egg-action:disabled > span {
+  color: #d7dadd !important;
+}
+
+.oling-lab-menu-action.is-influence-action:disabled > span {
+  color: #d7dadd !important;
+}
+
+.oling-lab-incubator-panel-close:focus-visible {
+  outline: 3px solid var(--oling-lab-menu-secondary-colour);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-incubator-panel-close:hover {
+    background: var(--oling-lab-menu-secondary-colour);
+  }
+
+  .oling-lab-incubator-panel .oling-lab-incubator-panel-back:hover {
+    color: var(--wall-decoration-panel-secondary);
+  }
+}
+
+@media (max-width: 760px) {
+  .oling-lab-incubator-panel {
+    top: calc(
+      var(--headerheight, 4rem) + 4.5rem + var(--oling-lab-incubator-tab-height)
+    );
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(32rem, calc(100vw - 3.5rem));
+    height: auto;
+    border-radius: 0.8rem 0 0;
+    transform: translateX(calc(100% + 1.25rem));
+  }
+
+  .oling-lab-incubator-panel.is-open {
+    transform: translateX(0);
+  }
+
+  .oling-lab-incubator-panel.is-collapsed {
+    transform: translateX(100%);
+  }
+
+  .oling-lab-incubator-panel .oling-lab-wall-decoration-panel-toggle {
+    top: 1rem;
+    left: -3rem;
+    width: 3rem;
+    height: 5.25rem;
+    border-right: 0;
+    border-bottom: 3px solid var(--wall-decoration-panel-primary);
+    border-radius: 0.7rem 0 0 0.7rem;
+    writing-mode: vertical-rl;
+    transform: none;
+  }
+}

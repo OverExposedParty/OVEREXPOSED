@@ -62,7 +62,7 @@ function createOAuthStateTools({ crypto, getRequestBaseUrl }) {
   }
 
   function getSafeSplashScreenPath(splashScreen) {
-    const fallbackPath = '/images/splash-screens/overexposed.png';
+    const fallbackPath = '/images/splash-screens/core/overexposed.png';
     if (typeof splashScreen !== 'string' || !splashScreen.trim()) {
       return fallbackPath;
     }

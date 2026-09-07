@@ -1,100 +1,100 @@
 (function () {
   function createOlingLabDataFlow(dependencies) {
-    const {
-      state,
-      setStatus,
-      LAB_ENDPOINT,
-      parsePayload,
-      syncAccountPayload,
-      renderLab,
-      loadFurnitureGridPlacements,
-      RARITY_PALETTE_ENDPOINT,
-      MY_OLINGS_ENDPOINT,
-      getRoaming
-    } = dependencies;
+    const { state, setStatus, renderLab, getRoaming } = dependencies;
+    const api = window.createOlingLabApi(dependencies);
+    const hydrator = window.createOlingLabStateHydrator(dependencies);
+    let saveTail = Promise.resolve();
+    let latestSaveSequence = 0;
+
+    function cloneLabForSave(lab) {
+      return JSON.parse(JSON.stringify(lab));
+    }
 
     function saveLab(options = {}) {
+      if (state.visitorMode) return Promise.resolve();
+      if (state.tutorialMode) {
+        setStatus('Tutorial preview · changes are not saved');
+        renderLab();
+        return Promise.resolve();
+      }
+      const sequence = ++latestSaveSequence;
+      const labSnapshot = cloneLabForSave(state.lab);
       state.saving = true;
       setStatus('Saving...');
+      const performSave = () =>
+        api
+          .saveLab(labSnapshot)
+          .then((payload) => {
+            const isLatestSave = sequence === latestSaveSequence;
+            hydrator.hydrateSavedLab(payload, {
+              ...options,
+              preserveLocalLab:
+                Boolean(options.preserveLocalLab) || !isLatestSave
+            });
+            if (isLatestSave) {
+              setStatus('Saved');
+              renderLab();
+            }
+          })
+          .catch((error) => {
+            console.error('Failed to save Olings Lab:', error);
+            if (sequence === latestSaveSequence) {
+              setStatus(error.message || 'Could not save lab');
+            }
+          })
+          .finally(() => {
+            if (sequence === latestSaveSequence) state.saving = false;
+          });
+      const queuedSave = saveTail.then(performSave, performSave);
+      saveTail = queuedSave.catch(() => {});
+      return queuedSave;
+    }
 
-      fetch(LAB_ENDPOINT, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ lab: state.lab })
-      })
-        .then(parsePayload)
+    function loadPlayerOlings() {
+      return api
+        .loadPlayerOlings()
         .then((payload) => {
-          if (!options.preserveLocalLab) {
-            state.lab = payload.lab;
-          }
-          state.expansion = payload.expansion || state.expansion;
-          if (payload.eggs) {
-            state.eggs = new Map(payload.eggs.map((egg) => [egg.key, egg]));
-          }
-          if (payload.consumables) {
-            state.consumables = new Map(
-              payload.consumables.map((item) => [item.key, item])
-            );
-          }
-          state.ownedEggs = Array.isArray(payload.inventory?.eggs)
-            ? payload.inventory.eggs.filter(
-                (egg) => Number(egg.quantity || 0) > 0
-              )
-            : state.ownedEggs;
-          state.ownedConsumables = Array.isArray(payload.inventory?.consumables)
-            ? payload.inventory.consumables.filter(
-                (item) => Number(item.quantity || 0) > 0
-              )
-            : state.ownedConsumables;
-          syncAccountPayload(payload);
-          setStatus('Saved');
+          hydrator.hydratePlayerOlings(payload);
+          getRoaming().ensureRoamStates();
           renderLab();
+          getRoaming().start();
         })
-        .catch((error) => {
-          console.error('Failed to save Olings Lab:', error);
-          setStatus(error.message || 'Could not save lab');
-        })
-        .finally(() => {
-          state.saving = false;
-        });
+        .catch((error) =>
+          console.error('Failed to load player Olings:', error)
+        );
     }
 
     function loadLab() {
-      fetch(LAB_ENDPOINT, { headers: { Accept: 'application/json' } })
-        .then(parsePayload)
+      return api
+        .loadLab()
         .then(async (payload) => {
-          const catalog = await loadFurnitureGridPlacements(
-            payload.catalog || []
+          if (state.visitorMode && payload.viewer?.isOwner) {
+            window.location.replace(payload.canonicalUrl || '/olings/lab');
+            return;
+          }
+          await hydrator.hydrateLoadedLab(payload);
+          setStatus(
+            state.visitorMode && payload.owner?.username
+              ? `Viewing ${payload.owner.username}'s lab`
+              : 'Ready'
           );
-          state.catalog = new Map(catalog.map((item) => [item.id, item]));
-          state.eggs = new Map(
-            (payload.eggs || []).map((egg) => [egg.key, egg])
-          );
-          state.consumables = new Map(
-            (payload.consumables || []).map((item) => [item.key, item])
-          );
-          state.owned = new Set(
-            (payload.inventory?.furniture || []).map((item) => item.key)
-          );
-          state.ownedEggs = Array.isArray(payload.inventory?.eggs)
-            ? payload.inventory.eggs.filter(
-                (egg) => Number(egg.quantity || 0) > 0
-              )
-            : [];
-          state.ownedConsumables = Array.isArray(payload.inventory?.consumables)
-            ? payload.inventory.consumables.filter(
-                (item) => Number(item.quantity || 0) > 0
-              )
-            : [];
-          state.lab = payload.lab;
-          state.expansion = payload.expansion || null;
-          syncAccountPayload(payload);
-          setStatus('Ready');
           renderLab();
-          loadPlayerOlings();
+          if (state.tutorialMode || state.visitorMode) {
+            state.olings = Array.isArray(payload.olings) ? payload.olings : [];
+            getRoaming().ensureRoamStates();
+            renderLab();
+            getRoaming().start();
+          } else {
+            loadPlayerOlings();
+          }
+          window.dispatchEvent(
+            new CustomEvent('oling-lab:ready', {
+              detail: {
+                tutorialMode: state.tutorialMode,
+                visitorMode: state.visitorMode
+              }
+            })
+          );
         })
         .catch((error) => {
           console.error('Failed to load Olings Lab:', error);
@@ -111,50 +111,56 @@
     }
 
     function loadRarityPalette() {
-      return fetch(RARITY_PALETTE_ENDPOINT, {
-        headers: { Accept: 'application/json' }
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error('Rarity palette request failed');
-          return response.json();
-        })
+      return api
+        .loadRarityPalette()
         .then((rarities) => {
           state.rarityPalette =
             rarities && typeof rarities === 'object' ? rarities : {};
         })
-        .catch((error) => {
-          console.error('Failed to load rarity palette:', error);
-        });
+        .catch((error) =>
+          console.error('Failed to load rarity palette:', error)
+        );
     }
 
-    function loadPlayerOlings() {
-      fetch(MY_OLINGS_ENDPOINT, { headers: { Accept: 'application/json' } })
-        .then(parsePayload)
-        .then((payload) => {
-          state.olings = Array.isArray(payload.olings) ? payload.olings : [];
-          state.activeAdventure =
-            payload.activeAdventure ||
-            payload.account?.olings?.adventures?.active ||
-            null;
-          getRoaming().ensureRoamStates();
-          if (payload.account) {
-            localStorage.setItem('oe-account', JSON.stringify(payload.account));
-          }
-          renderLab();
-          getRoaming().start();
-        })
-        .catch((error) => {
-          console.error('Failed to load player Olings:', error);
-        });
+    async function runStorageMutation(request) {
+      try {
+        const payload = await request();
+        hydrator.hydrateOlingStorageMutation(payload);
+        getRoaming().ensureRoamStates();
+        renderLab();
+        setStatus(payload.message || 'Oling storage updated.');
+        return payload;
+      } catch (error) {
+        setStatus(error.message || 'Could not update Oling storage.');
+        throw error;
+      }
+    }
+
+    function storeOling(olingId, podKey, containerPlacedId) {
+      return runStorageMutation(() =>
+        api.storeOling(olingId, podKey, containerPlacedId)
+      );
+    }
+
+    function transferStoredOling(olingId, containerPlacedId) {
+      return runStorageMutation(() =>
+        api.transferStoredOling(olingId, containerPlacedId)
+      );
+    }
+
+    function releaseOling(olingId) {
+      return runStorageMutation(() => api.releaseOling(olingId));
     }
 
     return {
       saveLab,
       loadLab,
       loadRarityPalette,
-      loadPlayerOlings
+      loadPlayerOlings,
+      storeOling,
+      transferStoredOling,
+      releaseOling
     };
   }
-
   window.createOlingLabDataFlow = createOlingLabDataFlow;
 })();

@@ -9,8 +9,7 @@
   );
   left: calc(
     (var(--target-col) + var(--target-width)) * var(--oling-lab-cell) -
-      var(--action-panel-width) -
-      0.5rem
+      var(--action-panel-width) - 0.5rem
   );
   top: calc(var(--target-row) * var(--oling-lab-cell) + 0.5rem);
   z-index: 18;
@@ -37,87 +36,6 @@
   content: '';
   background: var(--backgroundcolour);
   box-shadow: 0 0.45rem 1.25rem rgb(0 0 0 / 16%);
-}
-
-.oling-lab-expansion-purchase {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  display: block;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.oling-lab-expansion-purchase .oling-lab-plus.is-expansion {
-  inset: 28%;
-  width: auto;
-  height: auto;
-  border-style: solid;
-  background: rgb(184 225 255 / 72%);
-  color: var(--backgroundcolour);
-}
-
-.oling-lab-expansion-purchase:focus-visible .oling-lab-plus {
-  outline: 4px solid #b22626;
-  outline-offset: -4px;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .oling-lab-expansion-purchase:hover .oling-lab-plus {
-    outline: 4px solid #b22626;
-    outline-offset: -4px;
-  }
-}
-
-.oling-lab-expansion-purchase:focus-visible {
-  outline: 0;
-}
-
-.oling-lab-expansion-price {
-  position: absolute;
-  top: calc(72% + 0.55rem);
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  color: var(--backgroundcolour);
-  font-size: clamp(1.02rem, 2.55vw, 1.35rem);
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.oling-lab-expansion-price img {
-  width: 1.725rem;
-  height: 1.725rem;
-  object-fit: contain;
-}
-
-.oling-lab-purchase-preview {
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 0.65rem;
-  border: 4px dashed currentColor;
-  color: var(--backgroundcolour);
-}
-
-.oling-lab-purchase-preview-plus {
-  font-size: clamp(4rem, 18vw, 7rem);
-  font-weight: 900;
-  line-height: 0.75;
-}
-
-.oling-lab-purchase-preview-label {
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-align: center;
-  text-transform: uppercase;
 }
 
 .oling-lab-action-panel-button {
@@ -165,7 +83,8 @@
 
 .oling-lab-action-panel-button.is-sell,
 .oling-lab-action-panel-button.is-cancel,
-.oling-lab-action-panel.is-confirming-sell .oling-lab-action-panel-button.is-confirm {
+.oling-lab-action-panel.is-confirming-sell
+  .oling-lab-action-panel-button.is-confirm {
   background: var(--warningcolour);
   color: var(--backgroundcolour);
 }

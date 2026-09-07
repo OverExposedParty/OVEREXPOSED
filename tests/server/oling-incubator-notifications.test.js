@@ -48,7 +48,7 @@ test('an incubator egg becomes a notification after its hatch timer', () => {
   assert.equal(notifications.length, 1);
   assert.equal(notifications[0].type, 'incubator_ready');
   assert.equal(notifications[0].eggName, 'Base Egg');
-  assert.equal(notifications[0].image, '/images/olings/eggs/base/egg.svg');
+  assert.equal(notifications[0].image, '/images/olings/lab/eggs/base/egg.svg');
   assert.equal(notifications[0].readyAt, '2026-07-05T08:30:00.000Z');
 });
 
@@ -70,4 +70,23 @@ test('an incubator notification waits until ready and is not repeated after deli
     ).length,
     0
   );
+});
+
+test('an Oling Blanket advances the authoritative hatch-ready time', () => {
+  const notifications = __test.getIncubatorReadyNotifications(
+    createLab({
+      influenceSlots: [{ slotKey: 'influence-1', itemKey: 'oling-blanket' }]
+    }),
+    [{ key: 'base-egg', metadata: { hatchMinutes: 120 } }],
+    new Date('2026-07-05T09:36:00.000Z'),
+    [
+      {
+        key: 'oling-blanket',
+        effect: { type: 'hatch_speed', amount: 25 }
+      }
+    ]
+  );
+
+  assert.equal(notifications.length, 1);
+  assert.equal(notifications[0].readyAt, '2026-07-05T09:36:00.000Z');
 });

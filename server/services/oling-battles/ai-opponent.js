@@ -71,10 +71,10 @@ async function addAiBattleOpponent({
   match.state.phase = 'waiting';
   match.state.countdownStartedAt = null;
   match.state.startedAt = null;
-  await match.save();
   await recordBattleEvent(models, match, 'ai-joined', account._id, {
     difficulty: clampDifficulty(difficulty)
   });
+  await match.save();
   return match;
 }
 

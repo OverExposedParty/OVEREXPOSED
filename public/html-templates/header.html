@@ -26,6 +26,15 @@
         <button class="extra-menu-button" id="oes-customisation-link">OE LIBRARY</button>
         <button class="extra-menu-button" id="terms-and-privacy-link">TERMS & PRIVACY</button>
         <button class="extra-menu-button" id="frequently-asked-questions-link">FAQS</button>
+        <button
+            class="extra-menu-button extra-menu-context-action"
+            id="clash-menu-action"
+            type="button"
+            data-clash-menu-action
+            hidden
+        >
+            FORFEIT CLASH
+        </button>
     </div>
     <div class="social-media-container">
         <div class="social-media-image-container">
@@ -131,10 +140,18 @@
     </footer>
 </div>
 
-<div class="landscape-message">
-    Please rotate your phone to continue
+<div
+    class="rotate-device-message"
+    data-rotate-device-message
+    role="status"
+    aria-live="polite"
+    aria-hidden="true"
+    hidden
+>
+    <strong class="rotate-device-message__title" data-rotate-device-title>ROTATE TO PORTRAIT</strong>
+    <span class="rotate-device-message__copy" data-rotate-device-copy>Rotate your device to continue.</span>
 
-    <svg class="rotate-icon" viewBox="0 0 1421 1331.51" xmlns="http://www.w3.org/2000/svg">
+    <svg class="rotate-icon" viewBox="0 0 1421 1331.51" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <g>
             <rect class="cls-2" x="371.5" y="-24.45" width="678" height="1378" rx="114.24" ry="114.24"
                 transform="translate(45.95 1375.05) rotate(-90)" />

@@ -21,6 +21,10 @@ const accountAccessPath = path.join(
   __dirname,
   '../../public/scripts/general/settings-and-links/account-access.js'
 );
+const abilityDetailsPath = path.join(
+  __dirname,
+  '../../public/scripts/olings/clash/ability-details.js'
+);
 const modules = [
   ['page-configs.js', 'createHelpHubPageConfigs'],
   ['mode-configs.js', 'createHelpHubModeConfigs'],
@@ -184,4 +188,170 @@ test('Game Settings Help shows Mafia Roles only for Mafia settings', () => {
 
   regularDom.window.close();
   mafiaDom.window.close();
+});
+
+test('Olings Clash Help exposes the shared ability library', async () => {
+  const dom = createRenderedHelpHub(
+    'https://overexposed.app/olings/clash/ABC-123'
+  );
+  const { document, window } = dom.window;
+  window.fetch = async () => ({
+    ok: true,
+    async json() {
+      return {
+        abilities: [
+          {
+            description: 'Heal a teammate.',
+            effects: [
+              {
+                mechanic: 'heal',
+                target: { location: 'bench', side: 'ally' }
+              }
+            ],
+            enabled: true,
+            imagePath: '/abilities/mend.svg',
+            isCurrent: true,
+            key: 'moss-mend',
+            layer: 'mouth',
+            name: 'Mend',
+            roleTags: ['support'],
+            traitKey: 'moss-mouth',
+            trigger: 'attack_win'
+          }
+        ]
+      };
+    }
+  });
+  window.eval(fs.readFileSync(abilityDetailsPath, 'utf8'));
+  const grid = document.querySelector('#help-hub-grid');
+  const title = document.querySelector('#help-hub-title');
+
+  assert.equal(title.textContent, 'Olings Clash');
+  const symbols = grid.querySelector('[data-help-topic="Clash Symbols"]');
+  assert.ok(symbols);
+  symbols.click();
+  assert.equal(title.textContent, 'Clash Symbols');
+  assert.equal(
+    document
+      .querySelector('#help-hub')
+      .classList.contains('clash-symbols-open'),
+    true
+  );
+  const symbolLibrary = grid.querySelector('[data-help-hub-clash-symbols]');
+  assert.ok(symbolLibrary);
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'categories');
+  assert.equal(
+    symbolLibrary.querySelectorAll('[data-clash-symbol-category]').length,
+    4
+  );
+  const categoryButtons = [
+    ...symbolLibrary.querySelectorAll('[data-clash-symbol-category]')
+  ];
+  assert.deepEqual(
+    categoryButtons.map((button) => button.textContent),
+    [
+      'Health & Defence',
+      'Actions & States',
+      'Positive Effects',
+      'Negative Effects'
+    ]
+  );
+  assert.equal(
+    categoryButtons.every(
+      (button) =>
+        button.classList.contains('help-hub-section-button') &&
+        button.childElementCount === 0
+    ),
+    true
+  );
+  const glossary = window.OlingClashAbilityDetails.getSymbolGlossary();
+  assert.deepEqual(Array.from(glossary, ({ key }) => key).sort(), [
+    'blocked',
+    'blood-heart',
+    'bloodbound',
+    'burn',
+    'burn-primed',
+    'fortified',
+    'heart',
+    'junk',
+    'locked',
+    'marked',
+    'overgrowth-heart',
+    'passive',
+    'reinforced',
+    'shield',
+    'steal-primed',
+    'suppressed',
+    'tag',
+    'warded'
+  ]);
+  const symbolAssets = new Set(
+    glossary.flatMap((definition) => [
+      ...(definition.path ? [definition.path] : []),
+      ...Object.values(definition.paths || {})
+    ])
+  );
+  assert.equal(symbolAssets.size, 21);
+
+  symbolLibrary.querySelector('[data-clash-symbol-category="health"]').click();
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'category');
+  assert.equal(symbolLibrary.querySelector('[data-clash-symbol-back]'), null);
+  const heartDefinition = symbolLibrary.querySelector(
+    '[data-clash-icon-glossary-key="heart"]'
+  );
+  assert.ok(heartDefinition);
+  assert.equal(heartDefinition.querySelectorAll('img').length, 2);
+  heartDefinition.click();
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'detail');
+  const heartDetail = symbolLibrary.querySelector(
+    '[data-clash-symbol-detail="heart"]'
+  );
+  assert.ok(heartDetail);
+  assert.equal(heartDetail.querySelectorAll('img').length, 2);
+  assert.match(heartDetail.textContent, /normal health/i);
+  assert.equal(
+    heartDetail.querySelector(
+      '.oling-clash-symbol-library__detail-visual > strong'
+    ).textContent,
+    'Heart'
+  );
+  assert.equal(heartDetail.querySelector('[data-clash-symbol-back]'), null);
+  window.dispatchEvent(
+    new window.CustomEvent('oe-account-state-changed', {
+      detail: { account: null }
+    })
+  );
+  assert.equal(title.textContent, 'Clash Symbols');
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'detail');
+  assert.equal(
+    grid.querySelector('[data-clash-symbol-detail="heart"]'),
+    heartDetail
+  );
+  document.querySelector('#help-hub-back-button').click();
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'category');
+  document.querySelector('#help-hub-back-button').click();
+  assert.equal(symbolLibrary.dataset.clashSymbolView, 'categories');
+  document.querySelector('#help-hub-back-button').click();
+
+  const abilities = grid.querySelector('[data-help-topic="Clash Abilities"]');
+  assert.ok(abilities);
+  abilities.click();
+  assert.equal(title.textContent, 'Clash Abilities');
+  assert.ok(grid.querySelector('[data-help-hub-clash-abilities]'));
+  await new Promise((resolve) => setImmediate(resolve));
+  const abilityCard = grid.querySelector(
+    '[data-clash-ability-library-key="moss-mend"]'
+  );
+  assert.ok(abilityCard);
+  abilityCard.click();
+  assert.equal(
+    document.querySelector('[data-clash-ability-details] h2').textContent,
+    'Mend'
+  );
+  assert.match(
+    document.querySelectorAll('.oling-clash-ability-dialog__art')[1].src,
+    /\/images\/olings\/builds\/mouth\/base\/moss-mouth\.svg$/
+  );
+
+  dom.window.close();
 });

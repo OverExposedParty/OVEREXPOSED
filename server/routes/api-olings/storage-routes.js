@@ -9,8 +9,296 @@ function registerOlingStorageRoutes(context) {
     OlingState,
     ensureAccountOlingDocument,
     QUICK_SELL_RATE,
-    serializeAccount
+    serializeAccount,
+    getOlingDefinitions,
+    serializePlayerOling,
+    storeOlingInPod,
+    transferStoredOling,
+    releaseOlingFromPod,
+    recordOlingStorageDiagnostic,
+    models
   } = context;
+
+  const recordStorageAttempt = ({
+    operation,
+    outcome,
+    req,
+    account,
+    result,
+    error
+  }) =>
+    recordOlingStorageDiagnostic?.({
+      operation,
+      outcome,
+      accountId: account?._id,
+      olingId: req.params?.olingId,
+      podKey: result?.pod?.key || req.body?.podKey,
+      releaseOutcome: result?.pod?.releaseOutcome,
+      rosterActiveCount: result?.roster?.activeCount,
+      error,
+      requestId: req.id
+    });
+
+  const serializeRoster = (roster) => ({
+    limit: Number(roster?.limit || 0),
+    activeCount: Number(roster?.activeCount || 0),
+    availableSlots: Number(roster?.availableSlots || 0),
+    nextAvailableSlot: roster?.nextAvailableSlot ?? null
+  });
+
+  async function serializeStorageResult(result) {
+    const definitions = await getOlingDefinitions(models, [result.oling]);
+    return {
+      account: serializeAccount(result.account),
+      oling: serializePlayerOling(result.oling, definitions),
+      pod: result.pod,
+      roster: serializeRoster(result.roster),
+      inventory: {
+        pods: Array.isArray(result.account?.olings?.pods)
+          ? result.account.olings.pods
+          : []
+      }
+    };
+  }
+
+  app.post('/api/olings/storage/:olingId/store', async (req, res) => {
+    let account = null;
+    try {
+      account = await getCurrentAccount(req);
+      if (!account) {
+        const error = {
+          status: 401,
+          code: 'account_required',
+          message: 'Sign in to store an Oling.'
+        };
+        recordStorageAttempt({
+          operation: 'store',
+          outcome: 'rejected',
+          req,
+          account,
+          error
+        });
+        return res.apiError(error);
+      }
+
+      const result = await storeOlingInPod({
+        models,
+        accountId: account._id,
+        olingId: req.params.olingId,
+        podKey: req.body?.podKey,
+        containerPlacedId: req.body?.containerPlacedId
+      });
+      if (result.error) {
+        recordStorageAttempt({
+          operation: 'store',
+          outcome: 'rejected',
+          req,
+          account,
+          result,
+          error: result.error
+        });
+        return res.apiError(result.error);
+      }
+
+      recordStorageAttempt({
+        operation: 'store',
+        outcome: 'succeeded',
+        req,
+        account,
+        result
+      });
+
+      res.apiSuccess({
+        message: `${result.oling?.name || 'Your Oling'} was stored in an Oling Pod.`,
+        ...(await serializeStorageResult(result))
+      });
+    } catch (err) {
+      recordStorageAttempt({
+        operation: 'store',
+        outcome: 'failed',
+        req,
+        account,
+        error: { status: 500, code: 'oling_storage_store_failed' }
+      });
+      console.error(`[REQ ${req.id}] Failed to store Oling:`, err);
+      res.apiError({
+        status: 500,
+        code: 'oling_storage_store_failed',
+        message: 'Could not store that Oling.'
+      });
+    }
+  });
+
+  app.post('/api/olings/storage/:olingId/transfer', async (req, res) => {
+    let account = null;
+    try {
+      account = await getCurrentAccount(req);
+      if (!account) {
+        return res.apiError({
+          status: 401,
+          code: 'account_required',
+          message: 'Sign in to move a stored Oling.'
+        });
+      }
+      const result = await transferStoredOling({
+        models,
+        accountId: account._id,
+        olingId: req.params.olingId,
+        containerPlacedId: req.body?.containerPlacedId
+      });
+      if (result.error) return res.apiError(result.error);
+      res.apiSuccess({
+        message: `${result.oling?.name || 'Your Oling'} was moved to another Pod Rack.`,
+        ...(await serializeStorageResult(result))
+      });
+    } catch (err) {
+      console.error(`[REQ ${req.id}] Failed to move stored Oling:`, err);
+      res.apiError({
+        status: 500,
+        code: 'oling_storage_transfer_failed',
+        message: 'Could not move that stored Oling.'
+      });
+    }
+  });
+
+  app.post('/api/olings/storage/:olingId/release', async (req, res) => {
+    let account = null;
+    try {
+      account = await getCurrentAccount(req);
+      if (!account) {
+        const error = {
+          status: 401,
+          code: 'account_required',
+          message: 'Sign in to release an Oling.'
+        };
+        recordStorageAttempt({
+          operation: 'release',
+          outcome: 'rejected',
+          req,
+          account,
+          error
+        });
+        return res.apiError(error);
+      }
+
+      const result = await releaseOlingFromPod({
+        models,
+        accountId: account._id,
+        olingId: req.params.olingId
+      });
+      if (result.error) {
+        recordStorageAttempt({
+          operation: 'release',
+          outcome: 'rejected',
+          req,
+          account,
+          result,
+          error: result.error
+        });
+        return res.apiError(result.error);
+      }
+
+      recordStorageAttempt({
+        operation: 'release',
+        outcome: 'succeeded',
+        req,
+        account,
+        result
+      });
+
+      const podMessage = result.pod?.destroyed
+        ? ' The one-use pod broke during release.'
+        : ' The pod was returned to storage.';
+      res.apiSuccess({
+        message: `${result.oling?.name || 'Your Oling'} was released.${podMessage}`,
+        ...(await serializeStorageResult(result))
+      });
+    } catch (err) {
+      recordStorageAttempt({
+        operation: 'release',
+        outcome: 'failed',
+        req,
+        account,
+        error: { status: 500, code: 'oling_storage_release_failed' }
+      });
+      console.error(`[REQ ${req.id}] Failed to release stored Oling:`, err);
+      res.apiError({
+        status: 500,
+        code: 'oling_storage_release_failed',
+        message: 'Could not release that Oling.'
+      });
+    }
+  });
+
+  app.post('/api/olings/storage/quick-sell/prices', async (req, res) => {
+    try {
+      const account = await getCurrentAccount(req);
+      if (!account) {
+        return res.apiError({
+          status: 401,
+          code: 'account_required',
+          message: 'Sign in to view quick sell prices.'
+        });
+      }
+      const requestedItems = Array.isArray(req.body?.items)
+        ? req.body.items
+        : [];
+      const uniqueItems = [];
+      const seen = new Set();
+      requestedItems.slice(0, 32).forEach((item) => {
+        const itemType = String(item?.itemType || '')
+          .trim()
+          .toLowerCase();
+        const itemKey = String(item?.itemKey || '').trim();
+        const identity = `${itemType}:${itemKey}`;
+        if (
+          !['egg', 'consumable'].includes(itemType) ||
+          !itemKey ||
+          seen.has(identity)
+        ) {
+          return;
+        }
+        seen.add(identity);
+        uniqueItems.push({ itemType, itemKey });
+      });
+      const prices = (
+        await Promise.all(
+          uniqueItems.map(async ({ itemType, itemKey }) => {
+            const inventoryKey = itemType === 'egg' ? 'eggs' : 'consumables';
+            const owned = account.olings?.[inventoryKey]?.find(
+              (item) => item?.key === itemKey
+            );
+            const reserved = getReservedLabItemQuantity(
+              account.olings?.lab,
+              itemType,
+              itemKey
+            );
+            if (Number(owned?.quantity || 0) - reserved < 1) return null;
+            const quote = await getQuickSellQuote(itemType, itemKey, 1);
+            if (!quote || quote.unitPayout < 1) return null;
+            return {
+              itemType,
+              itemKey,
+              productName: quote.productName,
+              shopValue: quote.shopValue,
+              unitPayout: quote.unitPayout
+            };
+          })
+        )
+      ).filter(Boolean);
+      res.apiSuccess({ prices });
+    } catch (err) {
+      console.error(
+        `[REQ ${req.id}] Failed to load Oling quick sell prices:`,
+        err
+      );
+      res.apiError({
+        status: 500,
+        code: 'oling_quick_sell_prices_failed',
+        message: 'Could not load quick sell prices.'
+      });
+    }
+  });
 
   app.post('/api/olings/storage/quick-sell/quote', async (req, res) => {
     try {
@@ -35,10 +323,11 @@ function registerOlingStorageRoutes(context) {
       const owned = inventoryKey
         ? account.olings?.[inventoryKey]?.find((item) => item?.key === itemKey)
         : null;
-      const reserved =
-        itemType === 'egg'
-          ? getReservedLabItemQuantity(account.olings?.lab, itemType, itemKey)
-          : 0;
+      const reserved = getReservedLabItemQuantity(
+        account.olings?.lab,
+        itemType,
+        itemKey
+      );
       if (
         !inventoryKey ||
         !itemKey ||
@@ -99,14 +388,11 @@ function registerOlingStorageRoutes(context) {
         ? account.olings[inventoryKey]
         : [];
       const ownedItem = inventory.find((item) => item?.key === itemKey);
-      const reserved =
-        itemType === 'egg'
-          ? getReservedLabItemQuantity(
-              olingState?.lab || account.olings?.lab,
-              itemType,
-              itemKey
-            )
-          : 0;
+      const reserved = getReservedLabItemQuantity(
+        olingState?.lab || account.olings?.lab,
+        itemType,
+        itemKey
+      );
       if (Number(ownedItem?.quantity || 0) - reserved < quantity) {
         return res.apiError({
           status: 403,

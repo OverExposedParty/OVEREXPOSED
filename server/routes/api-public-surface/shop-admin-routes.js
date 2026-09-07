@@ -9,11 +9,19 @@ function normalizeShopGrantType(value) {
   const aliases = {
     consumable: 'oling_consumable',
     oling_consumable: 'oling_consumable',
+    pod: 'oling_pod',
+    oling_pod: 'oling_pod',
     egg: 'oling_egg',
     oling_egg: 'oling_egg',
     headwear: 'oling_headwear',
     hat: 'oling_headwear',
     oling_headwear: 'oling_headwear',
+    furniture: 'oling_furniture',
+    oling_furniture: 'oling_furniture',
+    wallpaper: 'oling_wallpaper',
+    oling_wallpaper: 'oling_wallpaper',
+    wallpaper_variant: 'oling_wallpaper_variant',
+    oling_wallpaper_variant: 'oling_wallpaper_variant',
     oe: 'oe',
     layer: 'oe',
     pack: 'pack',
@@ -63,7 +71,11 @@ function registerPublicShopAdminRoutes(context) {
           'badge',
           'oling_egg',
           'oling_consumable',
-          'oling_headwear'
+          'oling_pod',
+          'oling_headwear',
+          'oling_furniture',
+          'oling_wallpaper',
+          'oling_wallpaper_variant'
         ]);
 
         if (!accountLookup) {
@@ -79,7 +91,7 @@ function registerPublicShopAdminRoutes(context) {
             status: 400,
             code: 'shop_admin_grant_type_invalid',
             message:
-              'Item type must be oe, pack, cosmetic, badge, egg, consumable, or headwear.'
+              'Item type must be oe, pack, cosmetic, badge, egg, consumable, pod, headwear, furniture, wallpaper, or wallpaper_variant.'
           });
         }
 

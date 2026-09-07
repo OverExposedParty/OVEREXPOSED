@@ -24,7 +24,9 @@
   border-radius: 0.35rem;
 }
 
-.oling-lab-side-panel .oling-lab-detail-row.is-rarity-detail :where(span, strong) {
+.oling-lab-side-panel
+  .oling-lab-detail-row.is-rarity-detail
+  :where(span, strong) {
   color: var(--oling-rarity-secondary-colour);
 }
 

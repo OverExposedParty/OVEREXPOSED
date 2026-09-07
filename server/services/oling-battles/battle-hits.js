@@ -1,35 +1,16 @@
-const {
-  DEFAULT_MARKER_DIRECTION,
-  DEFAULT_MARKER_POSITION,
-  HIT_DAMAGE,
-  MAX_HIT_HISTORY
-} = require('./constants');
+const { HIT_DAMAGE } = require('./constants');
+const { archiveAndResetBattle } = require('./archives');
 const { getAiOpponent, getHumanMatchPlayer } = require('./battle-players');
 const { recordBattleEvent } = require('./events');
 const { getBattleMatch } = require('./match-lifecycle');
 
-function resetBattleMatch(match) {
-  match.players.forEach((player) => {
-    player.currentHealth = player.maxHealth;
-    player.lastActionAt = null;
-    player.ready = false;
-    player.stunUntil = null;
-  });
-  match.status = 'waiting';
-  match.state.phase = 'waiting';
-  match.state.countdownStartedAt = null;
-  match.state.startedAt = null;
-  match.state.endedAt = null;
-  match.state.endReason = null;
-  match.state.winnerAccountId = null;
-  match.state.timeMultiplier = 1;
-  match.state.hitHistory = [];
-  match.state.marker = {
-    direction: DEFAULT_MARKER_DIRECTION,
-    isFullDisruption: false,
-    position: DEFAULT_MARKER_POSITION,
-    updatedAt: new Date()
-  };
+function isBattleSaveConflict(error) {
+  return (
+    error?.name === 'VersionError' ||
+    error?.code === 'VERSION_CONFLICT' ||
+    (Number(error?.status) === 409 &&
+      error?.code === 'document_version_conflict')
+  );
 }
 
 async function resolveBattleHitOnce({ models, account, matchCode, zone }) {
@@ -90,22 +71,6 @@ async function resolveBattleHitOnce({ models, account, matchCode, zone }) {
   );
   attacker.lastActionAt = new Date();
 
-  const sequence = Number(match.state.hitHistory?.at?.(-1)?.sequence || 0) + 1;
-  match.state.hitHistory.push({
-    accountId: account._id,
-    createdAt: new Date(),
-    multiplier: Number(match.state.timeMultiplier) || 1,
-    result,
-    sequence,
-    zone: normalizedZone
-  });
-  if (match.state.hitHistory.length > MAX_HIT_HISTORY) {
-    match.state.hitHistory.splice(
-      0,
-      match.state.hitHistory.length - MAX_HIT_HISTORY
-    );
-  }
-
   const ended = resolvedTarget.currentHealth <= 0;
   const battleResult = {
     damage,
@@ -118,15 +83,28 @@ async function resolveBattleHitOnce({ models, account, matchCode, zone }) {
     zone: normalizedZone
   };
 
-  if (ended) resetBattleMatch(match);
-  await match.save();
-  await recordBattleEvent(
-    models,
-    match,
-    ended ? 'completed' : 'hit',
-    account._id,
-    battleResult
-  );
+  if (ended) {
+    match.status = 'completed';
+    match.state.phase = 'complete';
+    match.state.endedAt = new Date();
+    match.state.endReason = 'knockout';
+    match.state.winnerAccountId = account._id;
+    await recordBattleEvent(
+      models,
+      match,
+      'completed',
+      account._id,
+      battleResult
+    );
+    await archiveAndResetBattle({
+      models,
+      match,
+      completionStatus: 'completed'
+    });
+  } else {
+    await recordBattleEvent(models, match, 'hit', account._id, battleResult);
+    await match.save();
+  }
   return { battleResult, match };
 }
 

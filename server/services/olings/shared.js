@@ -1,4 +1,9 @@
 const path = require('path');
+const {
+  OLING_LAB_ACTIVE_LIMIT,
+  OLING_POD_RELEASE_OUTCOMES,
+  OLING_RESIDENCY_STATES
+} = require('../../../models/olings/oling-storage-contract');
 
 const OLING_LAYERS = ['flight', 'body', 'eyes', 'mouth'];
 const OLING_RARITIES = [
@@ -9,7 +14,6 @@ const OLING_RARITIES = [
   'legendary',
   'mythic'
 ];
-const OLING_XP_PER_LEVEL = 100;
 const OLING_MAX_ENERGY = 100;
 const OLING_REST_DURATION_MS = Object.freeze({
   common: 10 * 60 * 60 * 1000,
@@ -37,6 +41,18 @@ const OLING_CONSUMABLES_FILE = path.join(
   OLING_DEFINITIONS_ROOT,
   'consumables.json'
 );
+const OLING_CLASH_ABILITIES_FILE = path.join(
+  OLING_DEFINITIONS_ROOT,
+  'clash-abilities.json'
+);
+const OLING_CLASH_RULESETS_FILE = path.join(
+  OLING_DEFINITIONS_ROOT,
+  'clash-rulesets.json'
+);
+const OLING_CLASH_STATUSES_FILE = path.join(
+  OLING_DEFINITIONS_ROOT,
+  'clash-statuses.json'
+);
 const STARTER_OLING_EGG_KEY = 'base-egg';
 
 function normalizeKey(value) {
@@ -51,14 +67,19 @@ function toPlainObject(document) {
 }
 
 module.exports = {
+  OLING_LAB_ACTIVE_LIMIT,
   OLING_LAYERS,
+  OLING_POD_RELEASE_OUTCOMES,
   OLING_RARITIES,
-  OLING_XP_PER_LEVEL,
+  OLING_RESIDENCY_STATES,
   OLING_MAX_ENERGY,
   OLING_REST_DURATION_MS,
   ENERGY_RESTORE_THRESHOLDS,
   OLING_DEFINITIONS_ROOT,
   OLING_CONSUMABLES_FILE,
+  OLING_CLASH_ABILITIES_FILE,
+  OLING_CLASH_RULESETS_FILE,
+  OLING_CLASH_STATUSES_FILE,
   STARTER_OLING_EGG_KEY,
   normalizeKey,
   toPlainObject

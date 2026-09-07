@@ -107,7 +107,7 @@
       );
       return splashScreen?.startsWith('/images/splash-screens/')
         ? splashScreen
-        : '/images/splash-screens/overexposed.png';
+        : '/images/splash-screens/core/overexposed.png';
     }
 
     function navigateAfterAuth(path, options = {}) {

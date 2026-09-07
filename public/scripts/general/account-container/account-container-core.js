@@ -68,7 +68,7 @@ const accountFooterLoginIconSvg =
   '<svg class="account-footer-login-icon" viewBox="0 0 296 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M16 0h176v80h-32V32H48v192h112v-48h32v80H16V0Zm280 112v32H144v32l-64-48 64-48v32h152Z" /></svg>';
 const accountFooterLogoutIconSvg =
   '<svg class="account-footer-logout-icon" viewBox="0 0 296 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M16 0h176v80h-24V24H40v208h128v-56h24v80H16V0Zm112 104h112V80l56 48-56 48v-24H128v-48Z" /></svg>';
-const accountLoginSplashScreen = '/images/splash-screens/overexposed.png';
+const accountLoginSplashScreen = '/images/splash-screens/core/overexposed.png';
 const accountDefaultOeIcon = '0000:0100:0200:0300';
 const accountSocialProviders = ['google', 'discord'];
 const accountFriendTabs = [

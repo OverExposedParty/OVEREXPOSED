@@ -14,6 +14,11 @@ function getLegacyOlingInventory(account) {
     eggs: list(inventory.eggs, legacyInventory.eggs),
     consumables: list(inventory.consumables, legacyInventory.consumables),
     furniture: list(inventory.furniture, legacyInventory.furniture),
+    pods: list(inventory.pods, legacyInventory.pods),
+    wallDecorations: list(
+      inventory.wallDecorations,
+      legacyInventory.wallDecorations
+    ),
     pets: list(inventory.olings || inventory.pets, legacyInventory.pets),
     hatchHistory: list(inventory.hatchHistory, legacyInventory.hatchHistory)
   };
@@ -38,6 +43,8 @@ function createStarterOlingInventory(acquiredAt = new Date()) {
     ],
     consumables: [],
     furniture: [],
+    pods: [],
+    wallDecorations: [],
     pets: [],
     hatchHistory: []
   };
@@ -45,7 +52,9 @@ function createStarterOlingInventory(acquiredAt = new Date()) {
 
 function createStarterOlingLab(placedAt = new Date()) {
   return {
+    visibility: 'private',
     roomLevel: 1,
+    appearance: { wallpaperKey: 'brick' },
     columns: 3,
     rows: 2,
     unlockedCells: ['0:0', '0:1', '0:2', '1:0', '1:1', '1:2'],
@@ -114,7 +123,15 @@ function hasLegacyOlingData(account) {
   const lab = account?.gameData?.olingLab;
 
   return (
-    ['eggs', 'consumables', 'furniture', 'pets', 'hatchHistory'].some(
+    [
+      'eggs',
+      'consumables',
+      'furniture',
+      'pods',
+      'wallDecorations',
+      'pets',
+      'hatchHistory'
+    ].some(
       (key) => Array.isArray(inventory[key]) && inventory[key].length > 0
     ) ||
     (lab && Array.isArray(lab.placedItems) && lab.placedItems.length > 0)
@@ -148,9 +165,15 @@ function getAccountOlingState(account) {
 }
 
 function hasOlingInventoryData(inventory) {
-  return ['eggs', 'consumables', 'furniture', 'pets', 'hatchHistory'].some(
-    (key) => Array.isArray(inventory?.[key]) && inventory[key].length > 0
-  );
+  return [
+    'eggs',
+    'consumables',
+    'furniture',
+    'pods',
+    'wallDecorations',
+    'pets',
+    'hatchHistory'
+  ].some((key) => Array.isArray(inventory?.[key]) && inventory[key].length > 0);
 }
 
 function hasOlingLabData(lab) {
@@ -179,6 +202,11 @@ async function getOrCreateOlingState(_OlingState, account) {
     eggs: list(inventory.eggs, storedInventory.eggs),
     consumables: list(inventory.consumables, storedInventory.consumables),
     furniture: list(inventory.furniture, storedInventory.furniture),
+    pods: list(inventory.pods, storedInventory.pods),
+    wallDecorations: list(
+      inventory.wallDecorations,
+      storedInventory.wallDecorations
+    ),
     pets: list(inventory.pets, storedInventory.pets),
     hatchHistory: list(inventory.hatchHistory, storedInventory.hatchHistory)
   };
@@ -207,11 +235,21 @@ async function getOrCreateOlingState(_OlingState, account) {
     Array.isArray(account.olings.eggs) &&
     Array.isArray(account.olings.consumables) &&
     Array.isArray(account.olings.furniture) &&
+    Array.isArray(account.olings.pods) &&
+    Array.isArray(account.olings.wallDecorations) &&
     Array.isArray(account.olings.olings) &&
     Array.isArray(account.olings.hatchHistory) &&
     account.olings.lab;
   const hasAccountOlingData =
-    ['eggs', 'consumables', 'furniture', 'olings', 'hatchHistory'].some(
+    [
+      'eggs',
+      'consumables',
+      'furniture',
+      'pods',
+      'wallDecorations',
+      'olings',
+      'hatchHistory'
+    ].some(
       (key) =>
         Array.isArray(account.olings?.[key]) && account.olings[key].length
     ) ||
@@ -228,6 +266,8 @@ async function getOrCreateOlingState(_OlingState, account) {
       eggs: mergedInventory.eggs,
       consumables: mergedInventory.consumables,
       furniture: mergedInventory.furniture,
+      pods: mergedInventory.pods,
+      wallDecorations: mergedInventory.wallDecorations,
       olings: mergedInventory.pets,
       hatchHistory: mergedInventory.hatchHistory,
       adventures: account.olings?.adventures || { active: null, history: [] },
@@ -288,10 +328,75 @@ async function consumeOwnedConsumable({ Account }, accountId, consumableKey) {
   };
 }
 
-async function consumeOwnedEgg({ Account }, accountId, eggKey) {
-  const account = await Account.findById(accountId);
+function consumeReservedHatchInfluences(
+  account,
+  influenceSlots,
+  { consumedAt = new Date() } = {}
+) {
+  const slots = Array.isArray(influenceSlots) ? influenceSlots : [];
+  const pendingQuantities = new Map();
+
+  slots.forEach((influence) => {
+    if (!influence?.itemKey || influence.consumedAt) return;
+    pendingQuantities.set(
+      influence.itemKey,
+      (pendingQuantities.get(influence.itemKey) || 0) + 1
+    );
+  });
+
+  const inventory = Array.isArray(account?.olings?.consumables)
+    ? account.olings.consumables
+    : [];
+  const inventoryByKey = new Map(
+    inventory.filter((item) => item?.key).map((item) => [item.key, item])
+  );
+
+  for (const [itemKey, quantity] of pendingQuantities) {
+    if (Number(inventoryByKey.get(itemKey)?.quantity || 0) < quantity) {
+      return null;
+    }
+  }
+
+  const inventoryChanges = [];
+  pendingQuantities.forEach((quantity, itemKey) => {
+    const item = inventoryByKey.get(itemKey);
+    const quantityBefore = Number(item.quantity || 0);
+    item.quantity = quantityBefore - quantity;
+    item.lastUpdatedAt = consumedAt;
+    inventoryChanges.push({
+      consumableKey: itemKey,
+      quantityBefore,
+      quantityAfter: item.quantity,
+      quantityConsumed: quantity
+    });
+  });
+  if (pendingQuantities.size) account.markModified?.('olings.consumables');
+
+  return {
+    influenceSlots: slots.map((influence) => ({
+      slotKey: influence.slotKey,
+      itemKey: influence.itemKey,
+      itemType: influence.itemType || 'consumable',
+      reservedAt: influence.reservedAt || null,
+      consumedAt: influence.consumedAt || consumedAt
+    })),
+    inventoryChanges
+  };
+}
+
+async function consumeOwnedEgg(
+  { Account },
+  accountId,
+  eggKey,
+  { session = null, initialize = true } = {}
+) {
+  let accountQuery = Account.findById(accountId);
+  if (session && typeof accountQuery?.session === 'function') {
+    accountQuery = accountQuery.session(session);
+  }
+  const account = await accountQuery;
   if (!account) return null;
-  await getOrCreateOlingState(null, account);
+  if (initialize) await getOrCreateOlingState(null, account);
 
   const updatedAccount = await Account.findOneAndUpdate(
     {
@@ -311,7 +416,7 @@ async function consumeOwnedEgg({ Account }, accountId, eggKey) {
         'olings.eggs.$.lastUpdatedAt': new Date()
       }
     },
-    { new: true, runValidators: false }
+    { new: true, runValidators: false, session }
   );
 
   if (!updatedAccount) return null;
@@ -333,5 +438,6 @@ module.exports = {
   getOrCreateOlingState,
   getAccountOlingState,
   consumeOwnedConsumable,
+  consumeReservedHatchInfluences,
   consumeOwnedEgg
 };

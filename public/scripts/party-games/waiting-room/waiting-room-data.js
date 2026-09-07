@@ -72,6 +72,18 @@ function waitForWaitingRoomRetry(delayMs) {
 }
 
 async function fetchWaitingRoomPartyData() {
+  if (window.PartyApiRequest?.requestPartyJson) {
+    const { data } = await window.PartyApiRequest.requestPartyJson(
+      `/api/waiting-room?partyCode=${encodeURIComponent(partyCode)}`,
+      { cache: 'no-store' },
+      {
+        retries: 0,
+        fallbackMessage: 'Failed to fetch waiting room party'
+      }
+    );
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  }
+
   const response = await fetch(
     `/api/waiting-room?partyCode=${encodeURIComponent(partyCode)}`,
     { cache: 'no-store' }
@@ -102,9 +114,9 @@ function isUsableWaitingRoomPartyData(partyData) {
 
   return Boolean(
     gamemode &&
-      partyData.state &&
-      Array.isArray(partyData.players) &&
-      gamemodeInfo
+    partyData.state &&
+    Array.isArray(partyData.players) &&
+    gamemodeInfo
   );
 }
 
@@ -114,9 +126,18 @@ async function getWaitingRoomPartyData({
   requireUsable = false
 } = {}) {
   let latestPartyData = null;
+  let lastError = null;
 
   for (let attempt = 0; attempt <= retries; attempt += 1) {
-    latestPartyData = await fetchWaitingRoomPartyData();
+    try {
+      latestPartyData = await fetchWaitingRoomPartyData();
+      lastError = null;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= retries) throw error;
+      await waitForWaitingRoomRetry(delayMs * Math.min(attempt + 1, 4));
+      continue;
+    }
 
     if (!requireUsable) {
       if (latestPartyData || attempt >= retries) {
@@ -142,6 +163,7 @@ async function getWaitingRoomPartyData({
     await waitForWaitingRoomRetry(delayMs);
   }
 
+  if (lastError) throw lastError;
   return latestPartyData;
 }
 

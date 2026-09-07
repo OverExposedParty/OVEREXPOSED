@@ -25,7 +25,9 @@ integrationTest(
         username: 'lifecycle-host',
         email: 'lifecycle-host@example.test',
         passwordHash: 'test-password-hash',
-        profile: { emailVerified: true, accountStatus: 'active' }
+        profile: { emailVerified: true, accountStatus: 'active' },
+        admin: { roles: ['owner'] },
+        access: { roles: ['beta_tester'] }
       });
 
       assert.ok(account._id);
@@ -53,6 +55,10 @@ integrationTest(
           },
           body: JSON.stringify(body)
         });
+      const get = (path, cookie) =>
+        fetch(`${baseUrl}${path}`, {
+          headers: cookie ? { cookie } : {}
+        });
 
       try {
         const partyId = 'ABC-123';
@@ -70,6 +76,7 @@ integrationTest(
             state: {
               isPlaying: false,
               playerTurn: 0,
+              playerTurnOrder: ['host-device'],
               hostComputerId: 'host-device'
             },
             deck: {},
@@ -88,7 +95,7 @@ integrationTest(
           },
           hostCookie
         );
-        assert.equal(createResponse.status, 200);
+        assert.equal(createResponse.status, 200, await createResponse.text());
 
         const guestJoin = await request(
           `/api/party-game-would-you-rather/join-user?partyCode=${partyId}`,
@@ -136,6 +143,17 @@ integrationTest(
         );
         assert.equal(disbandResponse.status, 200);
 
+        const panelResponse = await get(
+          '/api/oe-panel/party-rooms',
+          hostCookie
+        );
+        assert.equal(panelResponse.status, 200);
+        const panelPayload = await panelResponse.json();
+        assert.ok(panelPayload.data.stats.archivedRoomsLast24Hours >= 1);
+        assert.ok(panelPayload.data.stats.currentBuildArchivedRooms >= 1);
+        assert.equal(panelPayload.data.stats.roomErrorRateLast24Hours, 0);
+        assert.equal(panelPayload.data.stats.currentBuildRoomErrorRate, 0);
+
         const truthPartyId = 'TOD-123';
         const truthCreate = await request(
           '/api/party-game-truth-or-dare',
@@ -151,6 +169,7 @@ integrationTest(
             state: {
               isPlaying: false,
               playerTurn: 0,
+              playerTurnOrder: ['host-device'],
               hostComputerId: 'host-device'
             },
             deck: { questionType: 'truth' },
@@ -244,6 +263,44 @@ integrationTest(
         );
         assert.equal(claimHeist.status, 200);
 
+        const expectedErrorReport = await request(
+          `/api/party-game-truth-or-dare/error?partyCode=${truthPartyId}`,
+          {
+            partyId: truthPartyId,
+            actorId: 'truth-guest',
+            error: {
+              name: 'Error',
+              message: 'Only the host can perform this action.',
+              code: 'party_host_required',
+              status: 403
+            }
+          },
+          guestCookie
+        );
+        assert.equal(expectedErrorReport.status, 200);
+
+        const duplicateCrashReports = await Promise.all(
+          Array.from({ length: 20 }, () =>
+            request(
+              `/api/party-game-truth-or-dare/error?partyCode=${truthPartyId}`,
+              {
+                partyId: truthPartyId,
+                actorId: 'truth-guest',
+                error: {
+                  name: 'TypeError',
+                  message: 'Lifecycle render crashed',
+                  code: 'party_render_failed',
+                  status: 500
+                }
+              },
+              guestCookie
+            )
+          )
+        );
+        duplicateCrashReports.forEach((response) => {
+          assert.equal(response.status, 200);
+        });
+
         const truthParty = await models.partyGameTruthOrDareSchema
           .findOne({ partyId: truthPartyId })
           .lean();
@@ -253,6 +310,9 @@ integrationTest(
           truthParty.state.phaseData.claimedByPlayerId,
           'truth-guest'
         );
+        assert.equal(truthParty.errors.length, 1);
+        assert.equal(truthParty.errors[0].source, 'client');
+        assert.equal(truthParty.errors[0].message, 'Lifecycle render crashed');
       } finally {
         await new Promise((resolve) => server.close(resolve));
       }

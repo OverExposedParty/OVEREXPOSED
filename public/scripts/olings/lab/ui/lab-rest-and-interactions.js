@@ -10,6 +10,8 @@
       openExplorerGateway,
       OLING_REST_DURATION_MS,
       openMenu,
+      closeMenu,
+      resolveMenuConfig,
       createEmptyMessage,
       createInlineAction,
       getOlingViews,
@@ -18,9 +20,34 @@
       clearRestTimer,
       getIncubatorContext,
       openIncubatorMenu,
-      createShelfStorageTab,
-      openPlacedItemMenu
+      closeIncubatorPanel = () => {},
+      openShelfStoragePanel,
+      closeShelfStoragePanel = () => {},
+      closeGatewayPanel = () => {},
+      openFurnitureSlotsMenu,
+      closeFurnitureSlotsPanel = () => {},
+      setFurnitureSaleTarget = () => {}
     } = dependencies;
+    const playSound = (key) => {
+      if (!key || typeof window.playSoundEffect !== 'function') return;
+      Promise.resolve(window.playSoundEffect(key)).catch(() => {});
+    };
+    const panelTransitions = window.OlingLabPanelTransitions;
+    let furnitureInteractionRequestId = 0;
+
+    function selectFurnitureFootprint(placedId) {
+      if (!elements.room || state.editMode) return;
+      const selectedId = String(placedId || '');
+      elements.room.dataset.olingLabSelectedFurnitureId = selectedId;
+      elements.room
+        .querySelectorAll('.oling-lab-item[data-oling-lab-placed-id]')
+        .forEach((item) => {
+          item.classList.toggle(
+            'is-selected',
+            item.dataset.olingLabPlacedId === selectedId
+          );
+        });
+    }
 
     function replaceOlingFromPayload(oling) {
       const updatedId = String(oling?.id || oling?._id || '');
@@ -57,12 +84,45 @@
         const payload = await requestOlingSleepState(olingId, true, placedId);
         setStatus(payload.message);
         renderLab();
-        if (!elements.backdrop.hidden) openBedRestMenu(placedId);
+        if (state.restPanelOpen || !elements.backdrop?.hidden) {
+          openBedRestMenu(placedId);
+        }
+        playSound('uiSuccess');
+        return true;
       } catch (error) {
         getRoaming()?.cancelBedJourney?.(olingId);
         setStatus(error.message);
         renderLab();
-        if (!elements.backdrop.hidden) openBedRestMenu(placedId);
+        if (state.restPanelOpen || !elements.backdrop?.hidden) {
+          openBedRestMenu(placedId);
+        }
+        playSound('uiError');
+        return false;
+      }
+    }
+
+    async function wakeOlingFromCarry(olingId, placedId) {
+      const currentIndex = state.olings.findIndex(
+        (item) => String(item?.id || item?._id || '') === String(olingId)
+      );
+      const currentOling = state.olings[currentIndex];
+      if (!currentOling?.care?.isSleeping) return true;
+
+      const previousCare = { ...currentOling.care };
+      currentOling.care = {
+        ...currentOling.care,
+        isSleeping: false,
+        sleepBedSlotId: null
+      };
+      try {
+        const payload = await requestOlingSleepState(olingId, false, placedId);
+        setStatus(payload.message);
+        return true;
+      } catch (error) {
+        const latestOling = state.olings[currentIndex];
+        if (latestOling) latestOling.care = previousCare;
+        setStatus(error.message);
+        return false;
       }
     }
 
@@ -97,24 +157,148 @@
         state.activeAdventure = payload.active;
         setStatus(payload.message);
         renderLab();
-        if (!elements.backdrop.hidden) openExplorerGateway('Active Adventure');
+        if (state.gatewayPanelOpen || !elements.backdrop.hidden) {
+          openExplorerGateway('Active Adventure');
+        }
+        playSound('uiSuccess');
       } catch (error) {
         getRoaming()?.cancelAdventureDeparture?.(olingId);
         setStatus(error.message);
         renderLab();
+        playSound('uiError');
+      }
+    }
+
+    function setRestPanelCollapsed(collapsed) {
+      if (!state.restPanelOpen || !elements.restPanel) return;
+      const changed = state.restPanelCollapsed !== collapsed;
+      state.restPanelCollapsed = collapsed;
+      elements.restPanel.classList.toggle('is-collapsed', collapsed);
+      elements.restPanelToggle.textContent = collapsed ? 'Show' : 'Hide';
+      elements.restPanelToggle.setAttribute(
+        'aria-expanded',
+        String(!collapsed)
+      );
+      if (changed) playSound(collapsed ? 'sidePanelClose' : 'sidePanelOpen');
+    }
+
+    function closeRestPanel({ sound = true } = {}) {
+      if (!elements.restPanel) return;
+      const pendingClose = panelTransitions?.getPendingClose?.(
+        elements.restPanel
+      );
+      if (!state.restPanelOpen) {
+        return pendingClose || Promise.resolve(false);
+      }
+      const wasExpanded = Boolean(
+        state.restPanelOpen &&
+        !state.restPanelCollapsed &&
+        !elements.restPanel.hidden
+      );
+      clearRestTimer();
+      state.restPanelOpen = false;
+      state.restPanelCollapsed = false;
+      state.activeRestBedPlacedId = null;
+      elements.restPanelToggle?.setAttribute('aria-expanded', 'false');
+      const playCloseSound = () => {
+        if (sound && wasExpanded) playSound('sidePanelClose');
+      };
+      const cleanup = () => {
+        elements.restPanel.classList.remove('is-open', 'is-collapsed');
+        elements.restPanelContent?.replaceChildren();
+        elements.restPanelFooter?.replaceChildren();
+      };
+      if (panelTransitions) {
+        return panelTransitions.close(elements.restPanel, {
+          beforeExit: playCloseSound,
+          afterClose: cleanup
+        });
+      }
+      playCloseSound();
+      elements.restPanel.hidden = true;
+      cleanup();
+      return Promise.resolve(true);
+    }
+
+    function prepareRestSidePanel(placedId) {
+      const wasExpanded = Boolean(
+        state.restPanelOpen &&
+        !state.restPanelCollapsed &&
+        state.activeRestBedPlacedId === placedId
+      );
+      closeMenu?.();
+      getOlingViews()?.closeOlingPanel?.({ sound: false });
+      getOlingViews()?.closeStoragePanel?.({ sound: false });
+      closeShelfStoragePanel({ sound: false });
+      closeIncubatorPanel({ sound: false });
+      closeGatewayPanel({ sound: false });
+      state.restPanelOpen = true;
+      state.restPanelCollapsed = false;
+      state.activeRestBedPlacedId = placedId;
+      const theme = resolveMenuConfig?.({ theme: 'care-mood' }) || {};
+      for (const [property, value] of [
+        ['--wall-decoration-panel-primary', theme.primaryColour],
+        ['--wall-decoration-panel-secondary', theme.secondaryColour]
+      ]) {
+        if (value) elements.restPanel.style.setProperty(property, value);
+      }
+      if (elements.restPanelTitle) {
+        elements.restPanelTitle.textContent = 'Rest';
+      }
+      elements.restPanelToggle?.setAttribute('aria-expanded', 'true');
+      if (elements.restPanelToggle) {
+        elements.restPanelToggle.textContent = 'Hide';
+      }
+      return wasExpanded;
+    }
+
+    function finishRestSidePanelOpen(wasExpanded) {
+      const show = () => {
+        if (!state.restPanelOpen) return;
+        if (!wasExpanded) playSound('sidePanelOpen');
+      };
+      if (panelTransitions) {
+        void panelTransitions.open(elements.restPanel, { afterOpen: show });
+      } else if (typeof window.requestAnimationFrame === 'function') {
+        elements.restPanel.hidden = false;
+        window.requestAnimationFrame(() => {
+          elements.restPanel.classList.add('is-open');
+          show();
+        });
+      } else {
+        elements.restPanel.hidden = false;
+        elements.restPanel.classList.add('is-open');
+        show();
       }
     }
 
     function openBedRestMenu(placedId) {
+      clearRestTimer();
       const olings = state.olings || [];
       const placedBed = state.lab?.placedItems?.find(
         (placed) => String(placed?.placedId || '') === String(placedId || '')
       );
       const bed = getItem(placedBed?.itemId);
+      const usesSidePanel = Boolean(
+        elements.restPanel &&
+        elements.restPanelContent &&
+        elements.restPanelFooter
+      );
+      const wasExpanded = usesSidePanel
+        ? prepareRestSidePanel(placedId)
+        : false;
       const baseBedRestDurationMs =
         OLING_REST_DURATION_MS[String(bed?.rarity || 'common').toLowerCase()] ||
         OLING_REST_DURATION_MS.common;
       if (!olings.length) {
+        if (usesSidePanel) {
+          elements.restPanelContent.replaceChildren(
+            createEmptyMessage('You need an Oling before anyone can rest here.')
+          );
+          elements.restPanelFooter.replaceChildren();
+          finishRestSidePanelOpen(wasExpanded);
+          return;
+        }
         openMenu(
           'Oling Bed',
           [
@@ -139,41 +323,75 @@
       const isComingToBed = Boolean(
         getRoaming()?.isHeadingToBed?.(olingId, placedId)
       );
-      const bedRestDurationMs =
-        String(oling?.personalityKey || '').toLowerCase() === 'lazy'
-          ? baseBedRestDurationMs * 0.85
-          : baseBedRestDurationMs;
+      const bedRestDurationMs = baseBedRestDurationMs;
       const panel = document.createElement('section');
       panel.className = 'oling-lab-rest-panel';
 
       const stage = document.createElement('div');
       stage.className = 'oling-lab-rest-stage';
-      const previous = createInlineAction('Previous Oling', () => {
-        state.restOlingIndex = (index - 1 + olings.length) % olings.length;
-        openBedRestMenu(placedId);
-      });
+      const previous = createInlineAction(
+        'Previous Oling',
+        () => {
+          state.restOlingIndex = (index - 1 + olings.length) % olings.length;
+          openBedRestMenu(placedId);
+        },
+        { soundIntent: 'previous' }
+      );
       previous.classList.add('oling-lab-rest-arrow', 'is-previous');
       previous.disabled = olings.length < 2;
 
-      const next = createInlineAction('Next Oling', () => {
-        state.restOlingIndex = (index + 1) % olings.length;
-        openBedRestMenu(placedId);
-      });
+      const next = createInlineAction(
+        'Next Oling',
+        () => {
+          state.restOlingIndex = (index + 1) % olings.length;
+          openBedRestMenu(placedId);
+        },
+        { soundIntent: 'next' }
+      );
       next.classList.add('oling-lab-rest-arrow', 'is-next');
       next.disabled = olings.length < 2;
 
       const preview = getOlingViews().createPreview(oling);
       preview.classList.add('oling-lab-rest-oling-preview');
+      const previewWindow = document.createElement('div');
+      previewWindow.className = 'oling-lab-rest-preview-window';
+      previewWindow.append(previous, preview, next);
+
       const energyMeter = getOlingViews().createEnergyMeter(oling);
       energyMeter.classList.add('oling-lab-rest-energy');
       const name = Object.assign(document.createElement('strong'), {
         className: 'oling-lab-rest-oling-name',
         textContent: oling?.name || 'Oling'
       });
-      const status = Object.assign(document.createElement('p'), {
-        className: 'oling-lab-rest-status'
+      const nameCard = document.createElement('article');
+      nameCard.className = 'oling-lab-rest-metric oling-lab-rest-name-card';
+      nameCard.append(
+        Object.assign(document.createElement('h3'), {
+          textContent: 'Oling'
+        }),
+        name
+      );
+      const energyCard = document.createElement('article');
+      energyCard.className = 'oling-lab-rest-metric oling-lab-rest-energy-card';
+      energyCard.append(
+        Object.assign(document.createElement('h3'), {
+          textContent: 'Energy'
+        }),
+        energyMeter
+      );
+      const chargeTime = Object.assign(document.createElement('strong'), {
+        className: 'oling-lab-rest-charge-time'
       });
-      stage.append(energyMeter, previous, preview, next, name, status);
+      chargeTime.setAttribute('aria-live', 'polite');
+      const chargeCard = document.createElement('article');
+      chargeCard.className = 'oling-lab-rest-metric oling-lab-rest-charge-card';
+      chargeCard.append(
+        Object.assign(document.createElement('h3'), {
+          textContent: 'Fully Charged In'
+        }),
+        chargeTime
+      );
+      stage.append(previewWindow, nameCard, energyCard, chargeCard);
 
       const actionArea = document.createElement('footer');
       actionArea.className = 'oling-lab-rest-action-area';
@@ -197,6 +415,7 @@
             closeSelectedTarget();
             if (!getRoaming()?.sendToBed?.(olingId, placedId)) {
               setStatus('Could not find that Oling bed.');
+              playSound('uiError');
               return;
             }
             setStatus(`${oling?.name || 'Your Oling'} is coming to bed.`);
@@ -218,7 +437,15 @@
           } catch (error) {
             sleepButton.disabled = false;
             setStatus(error.message);
+            playSound('uiError');
           }
+        },
+        {
+          soundIntent: isComingToBed
+            ? 'close'
+            : isSleeping
+              ? 'disabled'
+              : 'enabled'
         }
       );
       sleepButton.classList.add('oling-lab-rest-toggle');
@@ -228,11 +455,17 @@
         : '';
       actionArea.appendChild(sleepButton);
       panel.appendChild(stage);
-      openMenu('Rest', [panel], {
-        theme: 'care-mood',
-        footer: actionArea,
-        selectedTarget: { type: 'furniture', id: placedId }
-      });
+      if (usesSidePanel) {
+        elements.restPanelContent.replaceChildren(panel);
+        elements.restPanelFooter.replaceChildren(sleepButton);
+        finishRestSidePanelOpen(wasExpanded);
+      } else {
+        openMenu('Rest', [panel], {
+          theme: 'care-mood',
+          footer: actionArea,
+          selectedTarget: { type: 'furniture', id: placedId }
+        });
+      }
 
       const syncRestStatus = () => {
         const care = oling?.care || {};
@@ -254,22 +487,8 @@
               : Number.isFinite(initialRemainingMs) && isSleeping
                 ? Math.max(0, initialRemainingMs)
                 : (durationMs * (maxEnergy - currentEnergy)) / maxEnergy;
-        const restCopy =
-          remainingMs > 0
-            ? `Full reset in ${formatDuration(remainingMs)}`
-            : 'Fully reset';
-        const currentJourney = getRoaming()?.isHeadingToBed?.(
-          olingId,
-          placedId
-        );
-        const stateCopy = isOnAdventure
-          ? 'Currently on an adventure'
-          : isSleeping
-            ? 'Resting peacefully'
-            : currentJourney
-              ? 'Coming to bed'
-              : 'Ready for a snooze';
-        status.textContent = `${stateCopy} · ${restCopy}`;
+        chargeTime.textContent =
+          remainingMs > 0 ? formatDuration(remainingMs) : 'Fully Charged';
 
         if (isSleeping) {
           const recoveredEnergy = Math.max(
@@ -298,12 +517,26 @@
       }
     }
 
-    function interactWithFurniture(placedId) {
+    elements.restPanelToggle?.addEventListener('click', () =>
+      setRestPanelCollapsed(!state.restPanelCollapsed)
+    );
+    elements.restPanelClose?.addEventListener('click', () => {
+      const placedId = state.activeRestBedPlacedId;
+      closeRestPanel();
+      elements.room
+        ?.querySelector(`[data-oling-lab-placed-id="${placedId}"]`)
+        ?.focus();
+    });
+
+    async function interactWithFurniture(placedId) {
+      const requestId = (furnitureInteractionRequestId += 1);
       const placed = state.lab.placedItems.find(
         (item) => item.placedId === placedId
       );
       const item = getItem(placed?.itemId);
       const incubatorContext = getIncubatorContext(placedId);
+
+      if (!placed || !item) return;
 
       const gatewayPlaced =
         item?.id === 'explorer_gateway' ||
@@ -311,43 +544,78 @@
           (slot) => slot.itemId === 'explorer_gateway'
         );
 
+      const olingViews = getOlingViews();
+      const exits = [
+        closeFurnitureSlotsPanel({ sound: false }),
+        closeRestPanel({ sound: false }),
+        closeGatewayPanel({ sound: false }),
+        closeIncubatorPanel({ sound: false }),
+        closeShelfStoragePanel({ sound: false }),
+        olingViews?.closeStoragePanel?.({ sound: false }),
+        olingViews?.closeOlingPanel?.({ sound: false, release: false })
+      ].filter((result) => typeof result?.then === 'function');
+      closeSelectedTarget();
+      if (exits.length) await Promise.allSettled(exits);
+      if (requestId !== furnitureInteractionRequestId) return;
+
       if (incubatorContext) {
+        selectFurnitureFootprint(placedId);
+        setFurnitureSaleTarget(
+          'incubator',
+          incubatorContext.slot?.placedId || incubatorContext.parentPlacedId
+        );
         openIncubatorMenu(incubatorContext);
         return;
       }
 
       if (gatewayPlaced) {
-        closeSelectedTarget();
-        openExplorerGateway();
+        selectFurnitureFootprint(placedId);
+        const gatewaySlot = (placed?.containerSlots || []).find(
+          (slot) => slot?.itemId === 'explorer_gateway'
+        );
+        setFurnitureSaleTarget(
+          'gateway',
+          gatewaySlot?.placedId || placed?.placedId
+        );
+        openExplorerGateway(state.explorerTabLabel || 'Overview', {
+          shouldOpen: () => requestId === furnitureInteractionRequestId
+        });
         return;
       }
 
       if (item?.type === 'bed' || item?.category === 'bed') {
-        closeSelectedTarget();
+        selectFurnitureFootprint(placedId);
+        setFurnitureSaleTarget('rest', placedId);
         openBedRestMenu(placedId);
+        return;
+      }
+
+      if (item?.podStorage) {
+        selectFurnitureFootprint(placedId);
+        setFurnitureSaleTarget('storage', placedId);
+        olingViews?.openStoredOlingsMenu?.(placedId);
         return;
       }
 
       if (
         (item?.inventorySlots || []).some((slot) => slot.slotType === 'storage')
       ) {
-        closeSelectedTarget();
-        openMenu(`${item.name} Storage`, createShelfStorageTab(placed, item), {
-          theme: 'inventory'
-        });
+        selectFurnitureFootprint(placedId);
+        setFurnitureSaleTarget('supply-storage', placedId);
+        openShelfStoragePanel(placedId);
         return;
       }
 
       if ((item?.containerSlots || []).length) {
-        closeSelectedTarget();
-        openPlacedItemMenu(placedId);
+        selectFurnitureFootprint(placedId);
+        openFurnitureSlotsMenu(placedId);
         return;
       }
 
-      closeSelectedTarget();
       setStatus(
         `${item?.name || 'That item'} has nothing to interact with yet.`
       );
+      playSound('uiError');
       renderLab();
     }
 
@@ -370,6 +638,13 @@
 
       if (item?.type === 'bed' || item?.category === 'bed') {
         return { label: 'Rest Oling', theme: 'care-mood' };
+      }
+
+      if (item?.podStorage) {
+        return {
+          label: 'Open Pod Rack',
+          theme: 'inventory'
+        };
       }
 
       if (
@@ -399,9 +674,11 @@
       replaceOlingFromPayload,
       requestOlingSleepState,
       completeOlingBedJourney,
+      wakeOlingFromCarry,
       getAdventureDoorPlacedId,
       beginOlingAdventure,
       openBedRestMenu,
+      closeRestPanel,
       interactWithFurniture,
       getFurnitureInteractionAction
     };

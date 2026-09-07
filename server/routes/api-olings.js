@@ -7,6 +7,9 @@ const { createOlingRouteSupport } = require('./api-olings/route-support');
 const { registerOlingStorageRoutes } = require('./api-olings/storage-routes');
 const { registerOlingLabRoutes } = require('./api-olings/lab-routes');
 const {
+  registerOlingLabVisitorRoutes
+} = require('./api-olings/lab-visitor-routes');
+const {
   registerOlingAdventuresRoutes
 } = require('./api-olings/adventures-routes');
 const { registerOlingCareRoutes } = require('./api-olings/care-routes');
@@ -27,36 +30,28 @@ const OLING_ADVENTURES = Object.freeze([
     name: 'Backyard Path',
     durationMs: 300000,
     energyCost: 10,
-    recommendedLevel: 1,
-    xp: 20,
-    rewards: ['Oling XP', 'Oling Cookie']
+    rewards: { accountXp: 20, opals: 2 }
   },
   {
     key: 'supply-run',
     name: 'Supply Run',
     durationMs: 900000,
     energyCost: 15,
-    recommendedLevel: 2,
-    xp: 45,
-    rewards: ['Oling XP', 'Oling Cookie']
+    rewards: { accountXp: 45, opals: 6 }
   },
   {
     key: 'cloud-trail',
     name: 'Cloud Trail',
     durationMs: 1800000,
     energyCost: 20,
-    recommendedLevel: 4,
-    xp: 80,
-    rewards: ['Oling XP', 'Rare supplies']
+    rewards: { accountXp: 80, opals: 14 }
   },
   {
     key: 'ancient-ruins',
     name: 'Ancient Ruins',
     durationMs: 3600000,
     energyCost: 30,
-    recommendedLevel: 7,
-    xp: 140,
-    rewards: ['Oling XP', 'Rare egg supplies']
+    rewards: { accountXp: 140, opals: 30 }
   }
 ]);
 
@@ -79,7 +74,7 @@ function registerOlingRoutes(context) {
   Object.assign(routeContext, createOlingRouteSupport(routeContext));
   const { requireOlingLabAccess } = routeContext;
 
-  app.use('/api/olings/storage/quick-sell', requireOlingLabAccess);
+  app.use('/api/olings/storage', requireOlingLabAccess);
   app.use('/api/olings/lab', requireOlingLabAccess);
   app.use('/api/olings/adventures', requireOlingLabAccess);
   app.use('/api/olings/mine', requireOlingLabAccess);
@@ -91,6 +86,7 @@ function registerOlingRoutes(context) {
 
   registerOlingStorageRoutes(routeContext);
   registerOlingLabRoutes(routeContext);
+  registerOlingLabVisitorRoutes(routeContext);
   registerOlingAdventuresRoutes(routeContext);
   registerOlingCareRoutes(routeContext);
   registerOlingAdminRoutes(routeContext);

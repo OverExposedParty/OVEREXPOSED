@@ -3,6 +3,471 @@
   aspect-ratio: 1 / 1;
 }
 
+.oling-lab-wallpaper-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.oling-lab-wall-style-panel {
+  --wall-decoration-panel-primary: #ffd0c2;
+  --wall-decoration-panel-secondary: #ff9f80;
+  --oling-lab-menu-primary-colour: var(--wall-decoration-panel-primary);
+  --oling-lab-menu-secondary-colour: var(--wall-decoration-panel-secondary);
+  --oling-lab-wallpaper-radius: 0.5rem;
+  width: min(32rem, calc(100vw - 5rem));
+}
+
+.oling-lab-wall-style-panel-header:has(.oling-lab-wallpaper-back) {
+  padding-left: 4.5rem;
+}
+
+.oling-lab-wall-style-panel-content {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-wall-style-panel-footer[hidden] {
+  display: none;
+}
+
+.oling-lab-wall-style-panel-footer .oling-lab-wallpaper-actions,
+.oling-lab-wall-style-panel-footer .oling-lab-menu-action {
+  width: 100%;
+}
+
+.oling-lab-wall-style-panel-footer .oling-lab-menu-action {
+  min-height: 0;
+  display: block;
+  padding: 0.75rem 1rem;
+  border: 0;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+}
+
+.oling-lab-wall-style-panel-footer .oling-lab-menu-action > span {
+  display: block;
+  color: inherit;
+}
+
+.oling-lab-wallpaper-gallery-card,
+.oling-lab-wallpaper-variant {
+  touch-action: none;
+}
+
+.oling-lab-wallpaper-gallery-card.is-drag-source,
+.oling-lab-wallpaper-variant.is-drag-source {
+  opacity: 0.35;
+}
+
+.oling-lab-wallpaper-drag-ghost {
+  position: fixed;
+  z-index: 2000;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+  pointer-events: none;
+  transition:
+    transform 120ms ease,
+    opacity 120ms ease;
+}
+
+.oling-lab-wallpaper-drag-ghost.is-over-lab {
+  transform: translate(-50%, -50%) scale(0.82);
+  opacity: 1;
+}
+
+.oling-lab-wallpaper-drag-ghost.is-over-panel {
+  transform: translate(-50%, -50%) scale(0.72);
+  opacity: 0.68;
+}
+
+.oling-lab-wallpaper-drop-preview {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  background: #fff;
+  pointer-events: none;
+}
+
+.oling-lab-wallpaper-drop-preview::after {
+  position: absolute;
+  inset: 0;
+  background-color: var(--oling-lab-wallpaper-colour);
+  background-image: var(--oling-lab-wallpaper-image);
+  background-repeat: var(--oling-lab-wallpaper-repeat);
+  background-position: var(--oling-lab-wallpaper-position);
+  background-size: var(--oling-lab-wallpaper-size);
+  content: '';
+  opacity: 0.65;
+}
+
+.oling-lab-menu:has(.oling-lab-wallpaper-browser) {
+  --oling-lab-wallpaper-radius: 0.5rem;
+  --oling-lab-top-tab-height: 0rem;
+
+  border-radius: 0.65rem;
+}
+
+.oling-lab-wallpaper-actions.are-actions-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.oling-lab-menu-header:has(.oling-lab-wallpaper-back),
+.oling-lab-wall-style-panel-header:has(.oling-lab-wallpaper-back) {
+  position: relative;
+}
+
+.oling-lab-menu:has(.oling-lab-wallpaper-browser) .oling-lab-menu-header {
+  border-radius: 0.65rem 0.65rem 0 0;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-menu-content:has(.oling-lab-wallpaper-browser) {
+  overflow-y: hidden;
+  padding: 0;
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-menu:has(.oling-lab-wallpaper-browser) .oling-lab-menu-footer {
+  border-radius: 0 0 0.65rem 0.65rem;
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-wallpaper-actions .oling-lab-menu-action {
+  border-radius: var(--oling-lab-wallpaper-radius);
+}
+
+.oling-lab-wallpaper-actions [data-oling-lab-wallpaper-apply]:disabled {
+  background: var(--disabledcolour);
+  color: var(--backgroundcolour);
+  opacity: 1;
+}
+
+.oling-lab-wallpaper-browser,
+.oling-lab-wallpaper-detail {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.oling-lab-wallpaper-gallery {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1rem;
+  overflow-y: auto;
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-wallpaper-gallery-card {
+  box-sizing: border-box;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: var(--oling-lab-wallpaper-radius);
+  background: rgb(255 255 255 / 10%);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.oling-lab-wallpaper-gallery-card > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: calc(var(--oling-lab-wallpaper-radius) * 0.65);
+  object-fit: cover;
+}
+
+.oling-lab-wallpaper-gallery-card > span {
+  min-width: 0;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-wallpaper-gallery-card.is-selected {
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-wallpaper-gallery-card:focus-visible,
+.oling-lab-panel-back:focus-visible {
+  outline: 3px solid #b22626;
+  outline-offset: 2px;
+}
+
+.oling-lab-wallpaper-lab-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 0;
+  background: #e8f1ed;
+  box-shadow: inset 0 0 0 2px rgb(22 31 36 / 18%);
+  pointer-events: none;
+}
+
+.oling-lab-wallpaper-room-snapshot.oling-lab-room {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  transform: none !important;
+  pointer-events: none;
+}
+
+.oling-lab-wallpaper-room-snapshot .oling-lab-item {
+  pointer-events: none;
+}
+
+.oling-lab-wallpaper-room-snapshot,
+.oling-lab-wallpaper-room-snapshot * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.oling-lab-wallpaper-detail {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0;
+  overflow: hidden;
+}
+
+.oling-lab-wallpaper-carousel {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 2rem);
+  min-width: 0;
+  margin: 1rem 1rem 0;
+  overflow: hidden;
+}
+
+.oling-lab-wallpaper-carousel-preview {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.oling-lab-wallpaper-carousel-card {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.oling-lab-wallpaper-carousel-card figcaption {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  z-index: 4;
+  max-width: calc(100% - 8rem);
+  margin: 0;
+  padding: 0.45rem 0.8rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+  font-size: 0.85rem;
+  font-weight: 900;
+  line-height: 1;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.oling-lab-wallpaper-variant-section {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  padding: 0.75rem 1rem;
+  overflow-y: auto;
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-wallpaper-variants {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.oling-lab-wallpaper-variant {
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.3rem;
+  padding: 0.35rem;
+  border: 0;
+  border-radius: var(--oling-lab-wallpaper-radius);
+  background: rgb(255 255 255 / 10%);
+  color: var(--oling-lab-menu-primary-colour);
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oling-lab-wallpaper-variant img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: calc(var(--oling-lab-wallpaper-radius) * 0.65);
+  object-fit: cover;
+  background: #e8f1ed;
+}
+
+.oling-lab-wallpaper-variant span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.oling-lab-wallpaper-variant.is-selected {
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-wallpaper-variant:focus-visible {
+  outline: 3px solid #b22626;
+  outline-offset: 2px;
+}
+
+.oling-lab-panel-back::before {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: auto;
+  content: '';
+  border-top: 0.85rem solid transparent;
+  border-bottom: 0.85rem solid transparent;
+}
+
+.oling-lab-wallpaper-back::before {
+  border-right: 1.15rem solid currentColor;
+}
+
+.oling-lab-storage-panel-back::before {
+  border-right: 1.15rem solid currentColor;
+}
+
+.oling-lab-panel-back {
+  position: absolute;
+  left: 1rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--backgroundcolour);
+  cursor: pointer;
+}
+
+.oling-lab-panel-back.is-close {
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-panel-back.is-close::before {
+  display: none;
+  border: 0;
+}
+
+.oling-lab-wallpaper-back {
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-wall-style-panel .oling-lab-wallpaper-back {
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--wall-decoration-panel-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-panel-back:hover {
+    color: var(--oling-lab-menu-secondary-colour);
+  }
+
+  .oling-lab-wallpaper-gallery-card:hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+  }
+
+  .oling-lab-wallpaper-variant:hover {
+    background: var(--oling-lab-menu-secondary-colour);
+    color: var(--backgroundcolour);
+  }
+}
+
+@media (max-width: 520px) {
+  .oling-lab-wallpaper-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .oling-lab-panel-back {
+    left: 0.65rem;
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .oling-lab-wall-style-panel {
+    height: min(78dvh, 42rem);
+  }
+
+  .oling-lab-wall-style-panel-header:has(.oling-lab-wallpaper-back) {
+    padding-left: 4rem;
+  }
+}
+
 .oling-lab-menu-action {
   position: relative;
   min-height: 9.5rem;
@@ -10,6 +475,7 @@
   grid-template-rows: 1fr auto;
   gap: 0.5rem;
   padding: 0.75rem;
+  border-radius: var(--oling-lab-element-radius);
   background: var(--oling-lab-menu-secondary-colour);
   color: var(--backgroundcolour);
   text-align: left;
@@ -65,6 +531,7 @@
   place-items: center;
   width: 100%;
   height: 6rem;
+  border-radius: calc(var(--oling-lab-element-radius) * 0.65);
   background: color-mix(
     in srgb,
     var(--oling-lab-menu-primary-colour),
@@ -90,6 +557,7 @@
   right: 0.45rem;
   padding: 0.35rem 0.45rem;
   content: attr(data-badge);
+  border-radius: calc(var(--oling-lab-element-radius) * 0.65);
   background: #b22626;
   color: #ffffff;
   font-size: 0.62rem;

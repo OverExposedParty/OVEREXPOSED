@@ -124,12 +124,19 @@
     }
 
     function openMenu(title, children, config = {}) {
+      if (state.menuCloseHandler) {
+        const handlePreviousClose = state.menuCloseHandler;
+        state.menuCloseHandler = null;
+        handlePreviousClose();
+      }
       clearHatchTimer();
       clearRestTimer();
       clearAdventureTimer();
       closeSelectedTarget();
       state.menuSelectedTarget = null;
       state.pinnedMenu = Boolean(config.pinned);
+      state.menuCloseHandler =
+        typeof config.onClose === 'function' ? config.onClose : null;
       if (config.selectedTarget?.type && config.selectedTarget?.id) {
         state.selectedTarget = {
           type: config.selectedTarget.type,
@@ -170,6 +177,11 @@
 
     function closeMenu(options = {}) {
       if (state.pinnedMenu && !options.force) return;
+      if (state.menuCloseHandler) {
+        const handleClose = state.menuCloseHandler;
+        state.menuCloseHandler = null;
+        handleClose();
+      }
       clearHatchTimer();
       clearRestTimer();
       clearAdventureTimer();

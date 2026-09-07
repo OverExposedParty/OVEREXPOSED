@@ -31,7 +31,6 @@ const olingEggSchema = new Schema(
       mythic: { type: Number, min: 0, default: 0.0001 }
     },
     setKeys: { type: [String], default: [] },
-    personalityPool: { type: [String], default: [] },
     assets: { type: Schema.Types.Mixed, default: () => ({}) },
     metadata: { type: Schema.Types.Mixed, default: () => ({}) }
   },

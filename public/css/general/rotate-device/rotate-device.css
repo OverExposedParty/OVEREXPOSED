@@ -1,35 +1,60 @@
-.landscape-message {
-    position: fixed;
-    left: 0;
-    top:0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    z-index: 1000;
-    
-    display: none;
-    color:var(--primarypagecolour);
-        background-image: url('/images/background-tile.png');
-    background-size: 384px 414px;
-    background-position: top left;
-    background-repeat: repeat;
-    background-color: var(--secondarybackgroundcolour);
+.rotate-device-message {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  overflow: hidden;
+  color: var(--primarypagecolour);
+  text-align: center;
+  background-color: var(--secondarybackgroundcolour);
+  background-image: url('/images/background-tile.png');
+  background-position: top left;
+  background-repeat: repeat;
+  background-size: 384px 414px;
+}
+
+html.is-orientation-blocked,
+html.is-orientation-blocked body {
+  overflow: hidden;
+}
+
+html.is-orientation-blocked .rotate-device-message:not([hidden]) {
+  display: flex;
+}
+
+.rotate-device-message__title {
+  font-size: clamp(24px, 7vh, 52px);
+  line-height: 1;
+}
+
+.rotate-device-message__copy {
+  margin-top: 12px;
+  font-size: 18px;
+  line-height: 1.25;
 }
 
 .rotate-icon {
-    margin-top: 10vh;
-    width: 30vh;
-    height: 30vh;
-    animation: rotate-and-disappear 3s infinite;
-    
-    background-image: var(--rotatedeviceicon);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+  width: min(30vh, 220px);
+  height: min(30vh, 220px);
+  margin-top: 8vh;
+  animation: rotate-to-portrait 3s infinite;
+  background-image: var(--rotatedeviceicon);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+html[data-required-orientation='landscape'] .rotate-icon {
+  animation-name: rotate-to-landscape;
 }
 
 .rotate-icon .cls-1 {
@@ -43,39 +68,59 @@
   stroke-miterlimit: 10;
 }
 
+@keyframes rotate-to-portrait {
+  0% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
 
+  25%,
+  95% {
+    transform: rotate(90deg);
+    opacity: 1;
+  }
 
+  97.5% {
+    transform: rotate(0deg);
+    opacity: 0;
+  }
 
-@keyframes rotate-and-disappear {
-    0% {
-        transform: rotate(0deg);
-        opacity: 1;
-    }
-
-    25% {
-        transform: rotate(90deg);
-        opacity: 1;
-    }
-
-    95% {
-        transform: rotate(90deg);
-        opacity: 0;
-    }
-
-    97.5% {
-        transform: rotate(0deg);
-        opacity: 0;
-    }
-
-    100% {
-        transform: rotate(0deg);
-        opacity: 1;
-    }
+  100% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
 }
 
+@keyframes rotate-to-landscape {
+  0% {
+    transform: rotate(90deg);
+    opacity: 1;
+  }
 
-@media (max-width: 900px) and (orientation: landscape) {
-    .landscape-message {
-        display: flex;
-    }
+  25%,
+  95% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+
+  97.5% {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(90deg);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotate-icon {
+    animation: none;
+    transform: rotate(90deg);
+  }
+
+  html[data-required-orientation='landscape'] .rotate-icon {
+    transform: rotate(0deg);
+  }
 }

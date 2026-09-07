@@ -30,14 +30,12 @@ function redirectOnlinePartyToLobby(party, options = {}) {
   loadingPage = true;
   const destination = getOnlinePartyLobbyDestination(party, options);
   const gamemode = party?.config?.gamemode || partyGameMode || 'overexposed';
-  const splashName = options.forceWaitingRoom
-    ? formatPackName(gamemode)
-    : `${formatPackName(gamemode)}-settings`;
+  const splashVariant = options.forceWaitingRoom ? 'game' : 'settings';
 
   if (typeof transitionSplashScreen === 'function') {
     transitionSplashScreen(
       destination,
-      `/images/splash-screens/${splashName}.png`
+      `/images/splash-screens/party-games/${formatPackName(gamemode)}/${splashVariant}.png`
     );
   } else {
     window.location.assign(destination);
@@ -69,7 +67,7 @@ function handleOnlinePartyGameReplayed(transition) {
   window.onlinePartyReplayInProgress = true;
   if (typeof loadingPage !== 'undefined') loadingPage = true;
 
-  const splash = `/images/splash-screens/${formatPackName(transition.gamemode)}.png`;
+  const splash = `/images/splash-screens/party-games/${formatPackName(transition.gamemode)}/game.png`;
   const currentUrl = `${window.location.pathname}${window.location.search}`;
   if (typeof transitionSplashScreen === 'function') {
     transitionSplashScreen(destination, splash);

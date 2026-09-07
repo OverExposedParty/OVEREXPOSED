@@ -30,6 +30,32 @@
       };
     }
 
+    function getFurnitureGridPlacement(item) {
+      if (item?.usesFullGridArtboard) {
+        return { x: 0, y: 0, width: 512, height: 512 };
+      }
+      const placement = item?.gridPlacement;
+      const width = Number(placement?.width);
+      const height = Number(placement?.height);
+      if (!(width > 0) || !(height > 0)) {
+        return { x: 0, y: 0, width: 512, height: 512 };
+      }
+      return {
+        x: Number(placement.x) || 0,
+        y: Number(placement.y) || 0,
+        width,
+        height
+      };
+    }
+
+    function mapPointThroughFurnitureGridPlacement(item, point) {
+      const placement = getFurnitureGridPlacement(item);
+      return {
+        x: placement.x + (Number(point?.x) / 512) * placement.width,
+        y: placement.y + (Number(point?.y) / 512) * placement.height
+      };
+    }
+
     function getBedTarget(
       placedId,
       sleepSlotId = null,
@@ -53,15 +79,19 @@
         bed,
         `${restSeed}:${placedId}:${sleepSlot.slotId}`
       );
-      const x = restPoint?.x ?? (Number(sleepSlot.x) || 256);
-      const y = restPoint?.y ?? (Number(sleepSlot.y) || 256);
+      const placementPoint = mapPointThroughFurnitureGridPlacement(bed, {
+        x: restPoint?.x ?? (Number(sleepSlot.x) || 256),
+        y: restPoint?.y ?? (Number(sleepSlot.y) || 256)
+      });
       return {
         x:
-          (Number(placedBed.col) + (x / 512) * Number(placedBed.width || 1)) *
+          (Number(placedBed.col) +
+            (placementPoint.x / 512) * Number(placedBed.width || 1)) *
             bounds.cell -
           bounds.size / 2,
         y:
-          (Number(placedBed.row) + (y / 512) * Number(placedBed.height || 1)) *
+          (Number(placedBed.row) +
+            (placementPoint.y / 512) * Number(placedBed.height || 1)) *
             bounds.cell -
           bounds.size / 2
       };
@@ -130,6 +160,189 @@
       );
     }
 
+    function isPointInBedRestArea(placedBed, bed, x, y, bounds) {
+      if (!placedBed || !bed || !bounds?.cell) return false;
+      const width = Math.max(1, Number(placedBed.width || 1));
+      const height = Math.max(1, Number(placedBed.height || 1));
+      const itemLocalX =
+        ((x / bounds.cell - Number(placedBed.col || 0)) / width) * 512;
+      const itemLocalY =
+        ((y / bounds.cell - Number(placedBed.row || 0)) / height) * 512;
+      const gridPlacement = getFurnitureGridPlacement(bed);
+      const localX =
+        ((itemLocalX - gridPlacement.x) / gridPlacement.width) * 512;
+      const localY =
+        ((itemLocalY - gridPlacement.y) / gridPlacement.height) * 512;
+      if (localX < 0 || localX >= 512 || localY < 0 || localY >= 512) {
+        return false;
+      }
+
+      const placement = bed.restPlacement;
+      if (!placement?.totalPixels || !Array.isArray(placement.runs)) {
+        return true;
+      }
+      const pixelX = Math.floor(localX);
+      const pixelY = Math.floor(localY);
+      return placement.runs.some(
+        (run) =>
+          Number(run.y) === pixelY &&
+          pixelX >= Number(run.start) &&
+          pixelX < Number(run.end)
+      );
+    }
+
+    function isPointOverBed(placedId, x, y, bounds = getRoomMetrics()) {
+      const placedBed = state.lab?.placedItems?.find(
+        (placed) => String(placed?.placedId || '') === String(placedId || '')
+      );
+      const bed = state.catalog?.get(placedBed?.itemId);
+      if (!placedBed || (bed?.type !== 'bed' && bed?.category !== 'bed')) {
+        return false;
+      }
+      return isPointInBedRestArea(placedBed, bed, x, y, bounds);
+    }
+
+    function getMatchingDragInteraction(item, draggableType, action = '') {
+      const normalizedType = String(draggableType || '');
+      const normalizedAction = String(action || '');
+      return (
+        Array.isArray(item?.dragInteractions) ? item.dragInteractions : []
+      ).find(
+        (interaction) =>
+          Array.isArray(interaction?.accepts) &&
+          interaction.accepts.some(
+            (acceptedType) => String(acceptedType) === normalizedType
+          ) &&
+          (!normalizedAction ||
+            String(interaction?.action || '') === normalizedAction)
+      );
+    }
+
+    function rectanglesOverlap(first, second) {
+      return Boolean(
+        first &&
+        second &&
+        first.left < second.right &&
+        first.right > second.left &&
+        first.top < second.bottom &&
+        first.bottom > second.top
+      );
+    }
+
+    function getPlacedItemGridPlacementBounds(placedItem, item, bounds) {
+      if (!placedItem || !bounds?.cell) return null;
+      const placement = getFurnitureGridPlacement(item);
+      const itemWidth = Math.max(1, Number(placedItem.width || 1));
+      const itemHeight = Math.max(1, Number(placedItem.height || 1));
+      const scaleX = (itemWidth * bounds.cell) / 512;
+      const scaleY = (itemHeight * bounds.cell) / 512;
+      const left =
+        Number(placedItem.col || 0) * bounds.cell + placement.x * scaleX;
+      const top =
+        Number(placedItem.row || 0) * bounds.cell + placement.y * scaleY;
+      return {
+        left,
+        top,
+        right: left + placement.width * scaleX,
+        bottom: top + placement.height * scaleY
+      };
+    }
+
+    function getFurnitureDragInteractionTarget(
+      { draggableType, draggableId, action = '', x, y, width, height },
+      bounds = getRoomMetrics()
+    ) {
+      const draggableBounds = {
+        left: Number(x),
+        top: Number(y),
+        right: Number(x) + Math.max(0, Number(width) || 0),
+        bottom: Number(y) + Math.max(0, Number(height) || 0)
+      };
+      if (
+        !Object.values(draggableBounds).every(Number.isFinite) ||
+        draggableBounds.right <= draggableBounds.left ||
+        draggableBounds.bottom <= draggableBounds.top
+      ) {
+        return null;
+      }
+
+      for (const placedItem of state.lab?.placedItems || []) {
+        const item = state.catalog?.get(placedItem?.itemId);
+        const interaction = getMatchingDragInteraction(
+          item,
+          draggableType,
+          action
+        );
+        if (
+          !interaction ||
+          interaction.collisionArea !== 'placement-grid' ||
+          !rectanglesOverlap(
+            draggableBounds,
+            getPlacedItemGridPlacementBounds(placedItem, item, bounds)
+          )
+        ) {
+          continue;
+        }
+
+        if (
+          interaction.action === 'rest' &&
+          interaction.snapTarget === 'rest-grid'
+        ) {
+          const sleepSlotId = getAvailableBedSlotId(
+            placedItem.placedId,
+            draggableId
+          );
+          if (!sleepSlotId) continue;
+          const target = getBedTarget(
+            placedItem.placedId,
+            sleepSlotId,
+            bounds,
+            draggableId
+          );
+          if (!target) continue;
+          return {
+            placedId: String(placedItem.placedId),
+            itemId: String(placedItem.itemId),
+            action: 'rest',
+            sleepSlotId: String(sleepSlotId),
+            target
+          };
+        }
+      }
+
+      return null;
+    }
+
+    function getBedDropTarget(x, y, olingId, bounds = getRoomMetrics()) {
+      const placedBeds = (state.lab?.placedItems || []).filter((placed) => {
+        const bed = state.catalog?.get(placed?.itemId);
+        return (
+          (bed?.type === 'bed' || bed?.category === 'bed') &&
+          !getMatchingDragInteraction(bed, 'oling', 'rest')
+        );
+      });
+
+      for (const placedBed of placedBeds) {
+        const bed = state.catalog?.get(placedBed.itemId);
+        if (!isPointInBedRestArea(placedBed, bed, x, y, bounds)) continue;
+        const sleepSlotId = getAvailableBedSlotId(placedBed.placedId, olingId);
+        if (!sleepSlotId) continue;
+        const target = getBedTarget(
+          placedBed.placedId,
+          sleepSlotId,
+          bounds,
+          olingId
+        );
+        if (!target) continue;
+        return {
+          placedId: String(placedBed.placedId),
+          sleepSlotId: String(sleepSlotId),
+          target
+        };
+      }
+      return null;
+    }
+
     function sendToBed(olingId, placedId) {
       const roamState = state.olingRoam.get(String(olingId));
       const sleepSlotId = getAvailableBedSlotId(placedId, olingId);
@@ -183,8 +396,7 @@
       const roamState = state.olingRoam.get(String(olingId));
       if (!roamState?.adventureJourney) return false;
       roamState.vx = roamState.adventureJourney.previousVx || minSpeed;
-      roamState.vy =
-        roamState.adventureJourney.previousVy || minSpeed * 0.5;
+      roamState.vy = roamState.adventureJourney.previousVy || minSpeed * 0.5;
       roamState.adventureJourney = null;
       return true;
     }
@@ -194,9 +406,7 @@
       if (!roamState) return false;
       roamState.adventurePending = false;
       const angle =
-        getSeededRatio(olingId, 'adventure-departure-cancelled') *
-        Math.PI *
-        2;
+        getSeededRatio(olingId, 'adventure-departure-cancelled') * Math.PI * 2;
       roamState.vx = Math.cos(angle) * minSpeed;
       roamState.vy = Math.sin(angle) * minSpeed * 0.72;
       return true;
@@ -226,8 +436,11 @@
       cancelAdventureDeparture,
       cancelAdventureJourney,
       cancelBedJourney,
+      getBedDropTarget,
       getBedTarget,
       getDoorTarget,
+      getFurnitureDragInteractionTarget,
+      isPointOverBed,
       isHeadingToAdventure,
       isHeadingToBed,
       returnFromAdventure,

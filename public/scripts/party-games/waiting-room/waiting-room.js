@@ -12,6 +12,17 @@ const gamemodeSettingsContainer = document.querySelector(
 );
 const readyButton = document.querySelector('.start-game-button');
 
+function setWaitingRoomReadyControlAvailable(isAvailable) {
+  if (!readyButton) return;
+
+  readyButton.dataset.waitingRoomInitializing = String(!isAvailable);
+  readyButton.disabled = !isAvailable;
+  readyButton.classList.toggle('disabled', !isAvailable);
+  readyButton.setAttribute('aria-disabled', String(!isAvailable));
+}
+
+setWaitingRoomReadyControlAvailable(false);
+
 const WAITING_ROOM_READY_SOUND = 'gamemodeSettingsReady';
 const WAITING_ROOM_UNREADY_SOUND = 'gamemodeSettingsUnready';
 
@@ -40,6 +51,7 @@ let partyGameMode;
 let minPlayerCount;
 let waitingRoomPartyCodeObserver = null;
 let waitingRoomDisbandMonitor = null;
+let waitingRoomInitializationPromise = null;
 const WAITING_ROOM_DISBAND_FALLBACK_INTERVAL_MS = 10000;
 
 const url = window.location.href;
@@ -87,6 +99,15 @@ function ShowWaitingRoomStartupError() {
 
   setActiveContainers();
   if (statusContainer) {
+    const content = statusContainer.querySelector('.content-container');
+    if (content && !content.querySelector('[data-waiting-room-retry]')) {
+      const retryButton = document.createElement('button');
+      retryButton.type = 'button';
+      retryButton.dataset.waitingRoomRetry = 'true';
+      retryButton.textContent = 'RETRY JOINING';
+      retryButton.addEventListener('click', () => initWaitingRoom());
+      content.appendChild(retryButton);
+    }
     showContainer(statusContainer);
   } else {
     ShowPartyDoesNotExistState();
@@ -140,9 +161,13 @@ async function checkPartyExists() {
 
     if (state.isPlaying === false) {
       const players = partyData.players || [];
+      const currentPlayerComputerId =
+        window.resolveOnlinePartyActorId?.(partyData, deviceId) || deviceId;
 
       const playerIndex = players.findIndex(
-        (p) => p.identity?.computerId === deviceId
+        (player) =>
+          String(player.identity?.computerId || player.computerId || '') ===
+          String(currentPlayerComputerId)
       );
       const playerCount = players.length;
       const resolvedUsername = await resolveOnlineUsername(players);
@@ -152,7 +177,7 @@ async function checkPartyExists() {
         if (playerIndex !== -1) {
           await UpdateUserPartyData({
             partyId: partyCode,
-            computerId: deviceId,
+            computerId: currentPlayerComputerId,
             newUsername: resolvedUsername,
             newUserIcon: resolvedUserIcon,
             newUserReady: false,
@@ -169,7 +194,7 @@ async function checkPartyExists() {
         if (playerIndex !== -1) {
           await UpdateUserPartyData({
             partyId: partyCode,
-            computerId: deviceId,
+            computerId: currentPlayerComputerId,
             newUsername: resolvedUsername,
             newUserIcon: resolvedUserIcon,
             newUserReady: false,
@@ -190,7 +215,14 @@ async function checkPartyExists() {
               () => null
             );
             const hasJoined = latestPartyData?.players?.some(
-              (player) => player.identity?.computerId === deviceId
+              (player) =>
+                String(player.identity?.computerId || player.computerId || '') ===
+                String(
+                  window.resolveOnlinePartyActorId?.(
+                    latestPartyData,
+                    deviceId
+                  ) || deviceId
+                )
             );
             if (!hasJoined) throw error;
             console.warn(
@@ -216,17 +248,23 @@ async function checkPartyExists() {
 
       await joinParty(partyCode);
       currentPartyData = await getWaitingRoomPartyData();
+      window.syncOnlinePartyIdentity?.(currentPartyData);
       if (currentPartyData && typeof UpdateUserIcons === 'function') {
         await UpdateUserIcons(currentPartyData);
       }
       promptWaitingRoomUserForCustomOeIcon();
       startWaitingRoomDisbandMonitor();
+      setWaitingRoomReadyControlAvailable(true);
     } else if (
       waitingRoomLateJoinBriefing.isActiveRoundLateJoinGamemode(partyGameMode)
     ) {
       const players = partyData.players || [];
+      const currentPlayerComputerId =
+        window.resolveOnlinePartyActorId?.(partyData, deviceId) || deviceId;
       const existingPlayer = players.find(
-        (player) => player.identity?.computerId === deviceId
+        (player) =>
+          String(player.identity?.computerId || player.computerId || '') ===
+          String(currentPlayerComputerId)
       );
 
       if (!existingPlayer && players.length >= maxPlayerCount) {
@@ -242,7 +280,7 @@ async function checkPartyExists() {
 
         await addUserToParty({
           partyId: partyCode,
-          newComputerId: deviceId,
+          newComputerId: currentPlayerComputerId,
           newUsername: resolvedUsername,
           newUserIcon: resolvedUserIcon,
           newUserSocketId: socket.id
@@ -253,7 +291,7 @@ async function checkPartyExists() {
         loadingPage = true;
         transitionSplashScreen(
           `/${formatPackName(partyGameMode)}/${partyCode}`,
-          `/images/splash-screens/${formatPackName(partyGameMode)}.png`
+          `/images/splash-screens/party-games/${formatPackName(partyGameMode)}/game.png`
         );
         return;
       }
@@ -279,31 +317,53 @@ async function checkPartyExists() {
 }
 
 async function initWaitingRoom() {
-  try {
-    if (window.OEReady?.waitFor) {
-      await window.OEReady.waitFor(['online-settings'], {
-        timeoutMs: 30000
-      });
-    } else {
-      await waitForScriptDataLoaded(
-        '/scripts/party-games/online/online-settings.js',
-        { timeout: 30000 }
-      );
+  if (waitingRoomInitializationPromise) return waitingRoomInitializationPromise;
+
+  setWaitingRoomReadyControlAvailable(false);
+  waitingRoomInitializationPromise = (async () => {
+    try {
+      document.getElementById('waiting-room-startup-error')?.remove();
+      if (window.OEReady?.waitFor) {
+        await window.OEReady.waitFor(
+          ['online-settings', 'gamemode-settings-template'],
+          { timeoutMs: 30000 }
+        );
+      } else {
+        await Promise.all([
+          waitForScriptDataLoaded(
+            '/scripts/party-games/online/online-settings.js',
+            { timeout: 30000 }
+          ),
+          waitForScriptDataLoaded(
+            '/scripts/html-templates/gamemode-settings/gamemode-settings-template.js',
+            { timeout: 30000 }
+          )
+        ]);
+      }
+      await waitForOnlineCore();
+      await checkPartyExists();
+    } catch (error) {
+      console.error('Failed to initialise waiting room:', error);
+      ShowWaitingRoomStartupError();
+      SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
+    } finally {
+      waitingRoomInitializationPromise = null;
     }
-    await waitForOnlineCore();
-    await checkPartyExists();
-  } catch (error) {
-    console.error('Failed to initialise waiting room:', error);
-    ShowWaitingRoomStartupError();
-    SetScriptLoaded('/scripts/party-games/waiting-room/waiting-room.js');
-  }
+  })();
+
+  return waitingRoomInitializationPromise;
 }
 
 initWaitingRoom();
+window.addEventListener('online', () => {
+  if (document.getElementById('waiting-room-startup-error')) {
+    initWaitingRoom();
+  }
+});
 
 readyButton.dataset.sound = 'none';
 readyButton.addEventListener('click', async () => {
-  if (!partyCode) return;
+  if (!partyCode || readyButton.disabled) return;
 
   const wasReady = readyButton.classList.contains('active');
   const newReady = !wasReady;

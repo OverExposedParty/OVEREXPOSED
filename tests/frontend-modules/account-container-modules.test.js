@@ -510,7 +510,7 @@ test('achievements render for regular signed-in accounts', async () => {
                 type: 'oling_consumable',
                 key: 'opal-dust',
                 name: 'Refined Opal Dust',
-                image: '/images/olings/consumables/refined-opal-dust.svg'
+                image: '/images/olings/lab/consumables/refined-opal-dust.svg'
               }
             ],
             achievements: [
@@ -667,7 +667,7 @@ test('achievements render for regular signed-in accounts', async () => {
   );
   assert.equal(
     details.querySelector('img.account-achievement-reward-icon.is-item').src,
-    'https://overexposed.app/images/olings/consumables/refined-opal-dust.svg'
+    'https://overexposed.app/images/olings/lab/consumables/refined-opal-dust.svg'
   );
   assert.equal(
     details.querySelector('.account-achievement-reward-list').children.length,

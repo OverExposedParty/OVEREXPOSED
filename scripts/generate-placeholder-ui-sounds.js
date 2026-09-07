@@ -48,7 +48,7 @@ const sounds = {
   'public/sounds/ui/buttons/navigation/scroll.wav': [
     { from: 380, to: 610, duration: 0.075, volume: 0.11 }
   ],
-  'public/sounds/olings/lab/move.wav': [
+  'public/sounds/ui/drag-and-drop/move.wav': [
     { from: 250, to: 330, duration: 0.075, volume: 0.16 },
     { duration: 0.018 },
     { from: 360, to: 300, duration: 0.065, volume: 0.13 }

@@ -27,6 +27,7 @@ const partyGameErrorSchema = new mongoose.Schema(
       default: null
     },
     runtimeBuild: { type: String, default: '' },
+    fingerprint: { type: String, default: '' },
     details: { type: mongoose.Schema.Types.Mixed, default: null }
   },
   { _id: false }

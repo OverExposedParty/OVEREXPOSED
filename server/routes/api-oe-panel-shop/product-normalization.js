@@ -93,9 +93,13 @@ function createOePanelShopProductNormalizers({ Product, parseBooleanLabel }) {
         .map((entry) => entry.trim())
         .filter(Boolean)
         .map((entry) => {
-          const [type, key, gamemode] = entry
-            .split(':')
-            .map((part) => part.trim());
+          const parts = entry.split(':').map((part) => part.trim());
+          const type = parts.shift();
+          const key =
+            type === 'oling_wallpaper_variant'
+              ? parts.splice(0, 2).join(':')
+              : parts.shift();
+          const gamemode = parts.join(':');
           return {
             type,
             key,
@@ -116,7 +120,11 @@ function createOePanelShopProductNormalizers({ Product, parseBooleanLabel }) {
       'badge',
       'oling_egg',
       'oling_consumable',
-      'oling_headwear'
+      'oling_pod',
+      'oling_headwear',
+      'oling_furniture',
+      'oling_wallpaper',
+      'oling_wallpaper_variant'
     ]);
     if (!Array.isArray(grants))
       return 'Product grants must be JSON or comma-separated type:key entries.';
@@ -125,7 +133,7 @@ function createOePanelShopProductNormalizers({ Product, parseBooleanLabel }) {
       (grant) => !validTypes.has(grant.type) || !grant.key
     );
     if (invalidGrant) {
-      return 'Product grants must use oe, pack, cosmetic, badge, oling_egg, oling_consumable, or oling_headwear.';
+      return 'Product grants must use oe, pack, cosmetic, badge, oling_egg, oling_consumable, oling_pod, oling_headwear, oling_furniture, oling_wallpaper, or oling_wallpaper_variant.';
     }
 
     return null;

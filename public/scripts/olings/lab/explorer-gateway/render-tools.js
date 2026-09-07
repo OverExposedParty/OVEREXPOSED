@@ -1,12 +1,7 @@
 (function () {
   function createOlingLabExplorerRenderTools(dependencies) {
-    const {
-      state,
-      createDetailRow,
-      createImage,
-      createInlineAction,
-      formatTitle
-    } = dependencies;
+    const { state, createDetailRow, createImage, createInlineAction } =
+      dependencies;
 
     function formatTime(ms) {
       const total = Math.max(0, Math.ceil(ms / 1000));
@@ -47,19 +42,6 @@
       return preview;
     }
 
-    function getPersonalityBonus(oling) {
-      if (oling.personalityKey === 'adventurous') {
-        return '+10% exploration rewards';
-      }
-      if (oling.personalityKey === 'lucky') {
-        return 'Higher rare-find chance';
-      }
-      if (oling.personalityKey === 'energetic') {
-        return 'Shorter adventure times';
-      }
-      return 'None yet';
-    }
-
     function createSelectionSection(olings, selectedId, onSelect) {
       return section(
         ...olings.map((oling) => {
@@ -68,19 +50,14 @@
           const maxEnergy = Math.floor(Number(oling.care?.maxEnergy ?? 100));
           const card = details([
             ['Oling', oling.name || 'Oling'],
-            ['Energy', `${energy}/${maxEnergy}`],
-            [
-              'Personality',
-              oling.personality?.name || formatTitle(oling.personalityKey)
-            ],
-            ['Level', String(oling.level || 1)],
-            ['Bonus', getPersonalityBonus(oling)]
+            ['Energy', `${energy}/${maxEnergy}`]
           ]);
 
           card.appendChild(
             createInlineAction(
               id === selectedId ? 'Selected' : 'Choose Oling',
-              () => onSelect(id)
+              () => onSelect(id),
+              { sound: id === selectedId ? false : 'uiSelect' }
             )
           );
           return card;
@@ -97,6 +74,5 @@
     };
   }
 
-  window.createOlingLabExplorerRenderTools =
-    createOlingLabExplorerRenderTools;
+  window.createOlingLabExplorerRenderTools = createOlingLabExplorerRenderTools;
 })();

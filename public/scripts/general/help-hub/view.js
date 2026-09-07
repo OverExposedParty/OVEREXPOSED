@@ -16,6 +16,7 @@
     let currentHelpHubConfig = null;
     let currentHelpHubSection = null;
     let currentHelpHubDetail = null;
+    let currentHelpHubSectionController = null;
 
     function getHelpHubTemplateKey() {
       return document.querySelector('[data-template]')?.dataset?.template || '';
@@ -54,6 +55,8 @@
         return HELP_HUB_CONFIGS.oeLibrary;
       if (template === 'oling-lab' || path.includes('/olings/lab'))
         return HELP_HUB_CONFIGS.olingLab;
+      if (template === 'olings-clash' || path.includes('/olings/clash'))
+        return HELP_HUB_CONFIGS.olingClash;
       if (template === 'battle-olings' || path.includes('/olings/battle'))
         return HELP_HUB_CONFIGS.battleOlings;
       if (template === 'shop-product' || path.includes('/shop/product'))
@@ -199,6 +202,8 @@
 
       currentHelpHubSection = section || currentHelpHubSection;
       currentHelpHubDetail = detail;
+      currentHelpHubSectionController = null;
+      helpHub.classList.remove('clash-symbols-open');
       helpHubTitle.textContent = detail.title || 'Help';
       helpHub.classList.add('section-open', 'detail-open');
       setHelpHubBackVisible(true);
@@ -230,6 +235,11 @@
 
       currentHelpHubSection = section;
       currentHelpHubDetail = null;
+      currentHelpHubSectionController = null;
+      helpHub.classList.toggle(
+        'clash-symbols-open',
+        section.type === 'oling-clash-symbols'
+      );
       helpHubTitle.textContent = section.title || 'Help';
       helpHub.classList.add('section-open');
       helpHub.classList.remove('detail-open');
@@ -242,7 +252,33 @@
 
       body.className = 'help-hub-section-body';
       body.textContent = section.body || '';
-      panel.appendChild(body);
+      if (section.body) panel.appendChild(body);
+
+      if (section.type === 'oling-clash-abilities') {
+        const library = document.createElement('div');
+        const status = document.createElement('p');
+        library.dataset.helpHubClashAbilities = '';
+        status.className = 'help-hub-section-body';
+        status.textContent = 'Loading abilities…';
+        library.append(status);
+        panel.appendChild(library);
+        helpHubGrid.replaceChildren(panel);
+        window.OlingClashAbilityDetails?.mountLibrary(library).catch(() => {
+          status.textContent = 'Clash abilities could not be loaded.';
+        });
+        return;
+      }
+
+      if (section.type === 'oling-clash-symbols') {
+        const glossary = document.createElement('div');
+        glossary.dataset.helpHubClashSymbols = '';
+        panel.appendChild(glossary);
+        helpHubGrid.replaceChildren(panel);
+        currentHelpHubSectionController =
+          window.OlingClashAbilityDetails?.mountSymbolGlossary(glossary) ||
+          null;
+        return;
+      }
 
       const guides = normaliseHelpHubSectionGuides(section);
 
@@ -276,7 +312,12 @@
       currentHelpHubConfig = config;
       currentHelpHubSection = null;
       currentHelpHubDetail = null;
-      helpHub.classList.remove('section-open', 'detail-open');
+      currentHelpHubSectionController = null;
+      helpHub.classList.remove(
+        'section-open',
+        'detail-open',
+        'clash-symbols-open'
+      );
       setHelpHubBackVisible(false);
       helpHubTitle.textContent = config.title || 'Page';
       helpHubGrid.replaceChildren(
@@ -287,6 +328,8 @@
     }
 
     function handleHelpHubBack() {
+      if (currentHelpHubSectionController?.goBack?.()) return;
+
       if (currentHelpHubDetail && currentHelpHubSection) {
         renderHelpHubSection(currentHelpHubSection);
         return;
@@ -295,11 +338,19 @@
       renderHelpHub();
     }
 
+    function handleAccountStateChanged() {
+      if (currentHelpHubSection || currentHelpHubDetail) return;
+      renderHelpHub();
+    }
+
     function initializeHelpHub() {
       if (helpHubBackButton) {
         helpHubBackButton.addEventListener('click', handleHelpHubBack);
       }
-      window.addEventListener('oe-account-state-changed', renderHelpHub);
+      window.addEventListener(
+        'oe-account-state-changed',
+        handleAccountStateChanged
+      );
 
       renderHelpHub();
     }

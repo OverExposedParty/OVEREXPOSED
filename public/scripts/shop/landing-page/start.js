@@ -11,9 +11,15 @@
 
     function collectOwnedKeys(
       value,
-      owned = { layers: new Set(), furniture: new Set() }
+      owned = {
+        layers: new Set(),
+        furniture: new Set(),
+        wallpapers: new Set(),
+        wallpaperVariants: new Set()
+      }
     ) {
       if (!value || typeof value !== 'object') return owned;
+      owned.wallpaperVariants ||= new Set();
 
       if (Array.isArray(value)) {
         value.forEach((item) => collectOwnedKeys(item, owned));
@@ -28,6 +34,14 @@
         owned.furniture.add(value.key);
       }
 
+      if (value.type === 'oling_wallpaper' && value.key) {
+        owned.wallpapers.add(value.key);
+      }
+
+      if (value.type === 'oling_wallpaper_variant' && value.key) {
+        owned.wallpaperVariants.add(value.key);
+      }
+
       Object.values(value).forEach((item) => collectOwnedKeys(item, owned));
       return owned;
     }
@@ -40,6 +54,12 @@
         }
         if (grant.type === 'oling_furniture') {
           return ownedKeys.furniture.has(grant.key);
+        }
+        if (grant.type === 'oling_wallpaper') {
+          return ownedKeys.wallpapers.has(grant.key);
+        }
+        if (grant.type === 'oling_wallpaper_variant') {
+          return ownedKeys.wallpaperVariants.has(grant.key);
         }
         return false;
       });

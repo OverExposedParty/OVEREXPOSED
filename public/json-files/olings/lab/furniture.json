@@ -1,0 +1,311 @@
+{
+  "furniture": [
+    {
+      "id": "standard_door",
+      "name": "Standard Door",
+      "type": "door",
+      "category": "door",
+      "rarity": "common",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "image": "/images/olings/lab/furniture/doors/standard-door/standard-door.svg",
+      "exitGridPlacement": "/images/olings/lab/furniture/doors/standard-door/exit-grid-placement.svg",
+      "locked": true,
+      "blocksWallDecorations": true,
+      "wallCollisionBounds": {
+        "x": 0.1875,
+        "y": 0.0625,
+        "width": 0.625,
+        "height": 0.9375
+      },
+      "containerSlots": [
+        {
+          "slotId": "door-module",
+          "label": "Door Module",
+          "accepts": ["door-module"]
+        }
+      ]
+    },
+    {
+      "id": "standard_table",
+      "name": "Standard Table",
+      "type": "table",
+      "category": "table",
+      "rarity": "common",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "image": "/images/olings/lab/furniture/tables/standard-table/standard-table.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureStandardTablePlaced"
+      },
+      "containerSlots": [
+        {
+          "slotId": "tabletop",
+          "label": "Tabletop",
+          "accepts": ["incubator"]
+        }
+      ]
+    },
+    {
+      "id": "incubeta",
+      "name": "Incubeta",
+      "type": "incubator",
+      "category": "incubator",
+      "rarity": "common",
+      "layer": "container",
+      "width": 1,
+      "height": 1,
+      "influenceSlotCount": 1,
+      "image": "/images/olings/lab/furniture/incubators/incubeta/incubeta.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureIncubetaPlaced"
+      },
+      "acceptedSlots": ["tabletop"],
+      "inventorySlots": [
+        {
+          "slotId": "egg",
+          "slotType": "egg",
+          "label": "Egg",
+          "x": 256,
+          "y": 272
+        }
+      ]
+    },
+    {
+      "id": "explorer_gateway",
+      "name": "Explorer Gateway",
+      "type": "door-module",
+      "category": "door-module",
+      "rarity": "uncommon",
+      "layer": "container",
+      "width": 1,
+      "height": 1,
+      "image": "/images/olings/lab/furniture/door-modules/explorer-gateway/explorer-gateway.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureExplorerGatewayPlaced"
+      },
+      "acceptedSlots": ["door-module"],
+      "blocksWallDecorations": true,
+      "wallCollisionBounds": {
+        "x": 0.1875,
+        "y": 0,
+        "width": 0.625,
+        "height": 0.1875
+      }
+    },
+    {
+      "id": "oling_bed",
+      "name": "Oling Bed",
+      "type": "bed",
+      "category": "bed",
+      "rarity": "uncommon",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "allowedRows": [1],
+      "image": "/images/olings/lab/furniture/beds/oling-bed/oling-bed.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureOlingBedPlaced"
+      },
+      "restGridPlacement": "/images/olings/lab/furniture/beds/oling-bed/rest-grid-placement.svg",
+      "sleepSlots": [{ "slotId": "sleep-1" }],
+      "dragInteractions": [
+        {
+          "accepts": ["oling"],
+          "action": "rest",
+          "collisionArea": "placement-grid",
+          "snapTarget": "rest-grid"
+        }
+      ]
+    },
+    {
+      "id": "supply_shelf",
+      "name": "Supply Shelf",
+      "type": "storage",
+      "category": "storage",
+      "rarity": "uncommon",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "allowedRows": [1],
+      "image": "/images/olings/lab/furniture/storage/supply-shelf/supply-shelf.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureSupplyShelfPlaced"
+      },
+      "usesFullGridArtboard": false,
+      "storageGridPlacement": "/images/olings/lab/furniture/storage/supply-shelf/storage-grid-placement.svg",
+      "inventorySlots": [
+        {
+          "slotId": "shelf-1",
+          "slotType": "storage",
+          "label": "Shelf slot 1",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-2",
+          "slotType": "storage",
+          "label": "Shelf slot 2",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-3",
+          "slotType": "storage",
+          "label": "Shelf slot 3",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-4",
+          "slotType": "storage",
+          "label": "Shelf slot 4",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-5",
+          "slotType": "storage",
+          "label": "Shelf slot 5",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-6",
+          "slotType": "storage",
+          "label": "Shelf slot 6",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-7",
+          "slotType": "storage",
+          "label": "Shelf slot 7",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-8",
+          "slotType": "storage",
+          "label": "Shelf slot 8",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-9",
+          "slotType": "storage",
+          "label": "Shelf slot 9",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-10",
+          "slotType": "storage",
+          "label": "Shelf slot 10",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-11",
+          "slotType": "storage",
+          "label": "Shelf slot 11",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-12",
+          "slotType": "storage",
+          "label": "Shelf slot 12",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-13",
+          "slotType": "storage",
+          "label": "Shelf slot 13",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-14",
+          "slotType": "storage",
+          "label": "Shelf slot 14",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-15",
+          "slotType": "storage",
+          "label": "Shelf slot 15",
+          "maxStack": 8
+        },
+        {
+          "slotId": "shelf-16",
+          "slotType": "storage",
+          "label": "Shelf slot 16",
+          "maxStack": 8
+        }
+      ]
+    },
+    {
+      "id": "pod_rack",
+      "name": "Pod Rack",
+      "type": "storage",
+      "category": "storage",
+      "rarity": "uncommon",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "allowedRows": [1],
+      "image": "/images/olings/lab/furniture/storage/pod-rack/pod-rack.svg",
+      "sounds": {
+        "placed": "olingLabFurniturePodRackPlaced"
+      },
+      "usesFullGridArtboard": false,
+      "storageGridPlacement": "/images/olings/lab/furniture/storage/pod-rack/storage-grid-placement.svg",
+      "podStorage": { "capacity": 6 },
+      "inventorySlots": [
+        {
+          "slotId": "pod-1",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 1",
+          "maxStack": 1
+        },
+        {
+          "slotId": "pod-2",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 2",
+          "maxStack": 1
+        },
+        {
+          "slotId": "pod-3",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 3",
+          "maxStack": 1
+        },
+        {
+          "slotId": "pod-4",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 4",
+          "maxStack": 1
+        },
+        {
+          "slotId": "pod-5",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 5",
+          "maxStack": 1
+        },
+        {
+          "slotId": "pod-6",
+          "slotType": "oling-pod-storage",
+          "label": "Pod slot 6",
+          "maxStack": 1
+        }
+      ]
+    },
+    {
+      "id": "basic_hanging_light",
+      "name": "Basic Hanging Light",
+      "type": "ceiling-light",
+      "category": "ceiling-light",
+      "rarity": "common",
+      "layer": "room",
+      "width": 1,
+      "height": 1,
+      "allowedRows": [0],
+      "image": "/images/olings/lab/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg",
+      "sounds": {
+        "placed": "olingLabFurnitureBasicHangingLightPlaced"
+      },
+      "usesFullGridArtboard": false
+    }
+  ]
+}

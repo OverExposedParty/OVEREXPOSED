@@ -106,6 +106,7 @@ test('party core modules preserve the shared browser API', () => {
     'handleOnlinePartyGameReplayed',
     'redirectOnlinePartyToLobby',
     'reportOnlineGameError',
+    'shouldReportOnlineGameError',
     'waitForOnlineCore',
     'resolveOnlineUsername',
     'PartyDisbanded',
@@ -128,6 +129,30 @@ test('party core modules preserve the shared browser API', () => {
     sandbox
   );
   assert.equal(sandbox.isAuthoritativePartyHost(), false);
+
+  assert.equal(
+    sandbox.shouldReportOnlineGameError({
+      code: 'party_host_required',
+      status: 403
+    }),
+    false
+  );
+  assert.equal(
+    sandbox.shouldReportOnlineGameError({ name: 'AbortError' }),
+    false
+  );
+  assert.equal(sandbox.shouldReportOnlineGameError({ status: 403 }), false);
+  assert.equal(
+    sandbox.shouldReportOnlineGameError({
+      code: 'party_host_required',
+      status: 500
+    }),
+    true
+  );
+  assert.equal(
+    sandbox.shouldReportOnlineGameError(new Error('Unexpected render crash')),
+    true
+  );
 });
 
 test('replay routing sends every client directly to the new game once', () => {
@@ -171,7 +196,7 @@ test('replay routing sends every client directly to the new game once', () => {
   assert.deepEqual(transitions, [
     {
       destination: '/most-likely-to/ABC-123',
-      splash: '/images/splash-screens/most-likely-to.png'
+      splash: '/images/splash-screens/party-games/most-likely-to/game.png'
     }
   ]);
   assert.equal(sandbox.loadingPage, true);

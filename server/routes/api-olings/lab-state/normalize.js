@@ -1,13 +1,21 @@
+const {
+  normalizeOlingLabVisibility
+} = require('../../../services/oling-lab-access');
+
 function createLabPayloadNormalizer(dependencies) {
   const {
     STARTER_LAB_COLUMNS,
     LAB_ROWS,
     OlingLabItems,
+    OlingLabWallpapers,
+    DEFAULT_OLING_LAB_WALLPAPER_KEY,
     LAB_MIN_COLUMNS,
     LAB_MAX_COLUMNS,
     clampInteger,
     getUnlockedLabCellKeys,
     getOwnedLabFurniture,
+    getOwnedLabWallpapers,
+    getOwnedLabWallpaperVariants = () => new Set(),
     getOwnedEggQuantities,
     getOwnedConsumableQuantities,
     ensureContainerSlots,
@@ -15,11 +23,94 @@ function createLabPayloadNormalizer(dependencies) {
     validateContainerSlotItems,
     validateItemInventorySlots,
     canUseRoomRow,
-    getItemCells
+    getItemCells,
+    normalizePlacedWallDecorations = () => ({ placedWallDecorations: [] })
   } = dependencies;
 
   function normalizeLabPayload(value, account, olingState) {
     const input = value && typeof value === 'object' ? value : {};
+    const explicitWallpaperKey =
+      input.appearance?.wallpaperKey ?? input.wallpaperKey;
+    const hasExplicitWallpaperKey = explicitWallpaperKey !== undefined;
+    const explicitWallpaperVariantKey =
+      input.appearance?.wallpaperVariantKey ?? input.wallpaperVariantKey;
+    const persistedWallpaperKey =
+      olingState?.lab?.appearance?.wallpaperKey ??
+      olingState?.lab?.wallpaperKey ??
+      account?.olings?.lab?.appearance?.wallpaperKey ??
+      account?.olings?.lab?.wallpaperKey ??
+      DEFAULT_OLING_LAB_WALLPAPER_KEY;
+    const requestedWallpaperKey = String(
+      explicitWallpaperKey ?? persistedWallpaperKey
+    )
+      .trim()
+      .toLowerCase();
+    const wallpaperExists = Object.hasOwn(
+      OlingLabWallpapers,
+      requestedWallpaperKey
+    );
+    if (explicitWallpaperKey !== undefined && !wallpaperExists) {
+      return {
+        error: {
+          status: 400,
+          code: 'oling_lab_wallpaper_invalid',
+          message: 'That wallpaper is not available.'
+        }
+      };
+    }
+    const wallpaperKey = wallpaperExists
+      ? requestedWallpaperKey
+      : DEFAULT_OLING_LAB_WALLPAPER_KEY;
+    const persistedWallpaperVariantKey =
+      olingState?.lab?.appearance?.wallpaperVariantKey ??
+      account?.olings?.lab?.appearance?.wallpaperVariantKey ??
+      null;
+    const requestedWallpaperVariantKey = String(
+      explicitWallpaperVariantKey !== undefined
+        ? explicitWallpaperVariantKey || ''
+        : hasExplicitWallpaperKey
+          ? ''
+          : persistedWallpaperVariantKey || ''
+    )
+      .trim()
+      .toLowerCase();
+    const wallpaperVariantExists = requestedWallpaperVariantKey
+      ? Object.hasOwn(
+          OlingLabWallpapers[wallpaperKey]?.variants || {},
+          requestedWallpaperVariantKey
+        )
+      : false;
+    if (requestedWallpaperVariantKey && !wallpaperVariantExists) {
+      return {
+        error: {
+          status: 400,
+          code: 'oling_lab_wallpaper_variant_invalid',
+          message: 'That wallpaper variant is not available.'
+        }
+      };
+    }
+    const wallpaperVariantKey = wallpaperVariantExists
+      ? requestedWallpaperVariantKey
+      : null;
+    const variantEntitlementKey = wallpaperVariantKey
+      ? `${wallpaperKey}:${wallpaperVariantKey}`
+      : null;
+    const ownsWallpaper = wallpaperVariantKey
+      ? getOwnedLabWallpaperVariants(account).has(variantEntitlementKey)
+      : getOwnedLabWallpapers(account).has(wallpaperKey);
+    if (!ownsWallpaper) {
+      return {
+        error: {
+          status: 403,
+          code: wallpaperVariantKey
+            ? 'oling_lab_wallpaper_variant_not_owned'
+            : 'oling_lab_wallpaper_not_owned',
+          message: wallpaperVariantKey
+            ? 'You do not own that wallpaper variant.'
+            : 'You do not own that wallpaper.'
+        }
+      };
+    }
     const requestedItems = Array.isArray(input.placedItems)
       ? input.placedItems
       : [];
@@ -193,13 +284,24 @@ function createLabPayloadNormalizer(dependencies) {
       placedItems.push(normalized);
     }
 
+    const wallDecorationsResult = normalizePlacedWallDecorations(
+      input.placedWallDecorations,
+      { account, olingState, columns, unlockedCellSet, placedItems }
+    );
+    if (wallDecorationsResult.error) return wallDecorationsResult;
+
     return {
       lab: {
+        visibility: normalizeOlingLabVisibility(
+          olingState?.lab?.visibility ?? account?.olings?.lab?.visibility
+        ),
         roomLevel: clampInteger(input.roomLevel, 1, 99, 1),
+        appearance: { wallpaperKey, wallpaperVariantKey },
         columns,
         rows: LAB_ROWS,
         unlockedCells,
         placedItems,
+        placedWallDecorations: wallDecorationsResult.placedWallDecorations,
         updatedAt: new Date()
       }
     };

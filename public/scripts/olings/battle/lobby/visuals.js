@@ -34,74 +34,19 @@
       }
 
       function formatKey(value, fallback = '-') {
-        const text = String(value || '')
-          .replaceAll('-', ' ')
-          .replaceAll('_', ' ')
-          .trim();
-        if (!text) return fallback;
-        return text.replace(/\b\w/g, (letter) => letter.toUpperCase());
+        return window.OlingSelector.formatKey(value, fallback);
       }
 
       function getTraitImage(trait) {
-        return (
-          trait?.assets?.image ||
-          trait?.assets?.icon ||
-          trait?.assets?.layer ||
-          trait?.metadata?.image ||
-          ''
-        );
+        return window.OlingSelector.getTraitImage(trait);
       }
 
       function getTraitHealth(trait) {
-        const health = Number(trait?.body?.health || trait?.metadata?.health);
-        return Number.isFinite(health) && health > 0 ? Math.round(health) : 100;
+        return window.OlingSelector.getTraitHealth(trait);
       }
 
       function normalizePlayerOling(oling) {
-        if (!oling) return null;
-
-        const traits = oling.traits || {};
-        const body = traits.body || {};
-        const eyes = traits.eyes || {};
-        const mouth = traits.mouth || {};
-        const flight = traits.flight || {};
-        const maxEnergy = Math.max(1, Number(oling.care?.maxEnergy) || 100);
-        const energy = Math.max(
-          0,
-          Math.min(maxEnergy, Number(oling.care?.energy ?? maxEnergy))
-        );
-
-        return {
-          id: String(oling.id || oling._id || ''),
-          name: oling.name || 'Oling',
-          energy: Math.round((energy / maxEnergy) * 100),
-          level: oling.level || 1,
-          maxHealth: getTraitHealth(body),
-          type: formatKey(oling.eggKey, 'Base'),
-          rarity: formatKey(
-            oling.matchingSet?.rarity || oling.buildRarities?.body,
-            'Base'
-          ),
-          personality:
-            oling.personality?.name || formatKey(oling.personalityKey, 'Ready'),
-          matchingSet: oling.matchingSet?.name || '-',
-          style: formatKey(oling.battleStats?.style, 'Balanced'),
-          trait: formatKey(oling.personality?.key || oling.personalityKey, '-'),
-          layers: {
-            flight: flight.name || formatKey(oling.build?.flight, '-'),
-            body: body.name || formatKey(oling.build?.body, '-'),
-            eyes: eyes.name || formatKey(oling.build?.eyes, '-'),
-            mouth: mouth.name || formatKey(oling.build?.mouth, '-')
-          },
-          flightType: flight.flightType || '',
-          flightMotion: flight.flightMotion || '',
-          flightSpeed: flight.flightSpeed || 1,
-          flight: getTraitImage(flight),
-          body: getTraitImage(body),
-          eyes: getTraitImage(eyes),
-          mouth: getTraitImage(mouth),
-          source: oling
-        };
+        return window.OlingSelector.normalizeOling(oling);
       }
 
       function parseOeIcon(oeIcon) {
@@ -162,27 +107,18 @@
       }
 
       function createOlingLayer(src, layerName) {
-        const image = document.createElement('img');
-        image.className = `oling-battle-layer is-${layerName}`;
-        image.src =
-          src ||
-          (layerName === 'flight'
-            ? '/images/olings/builds/flight/base/moss-wings.svg'
-            : `/images/olings/builds/${layerName}/base/moss-${layerName}.svg`);
-        image.alt = '';
-        return image;
+        return window.OlingSelector.createLayer(
+          src,
+          layerName,
+          'oling-battle-layer'
+        );
       }
 
       function renderOlingArt(container, oling) {
-        if (!container || !oling) return;
-
-        container.replaceChildren(
-          createOlingLayer(oling.flight, 'flight'),
-          createOlingLayer(oling.body, 'body'),
-          createOlingLayer(oling.eyes, 'eyes'),
-          createOlingLayer(oling.mouth, 'mouth')
-        );
-        configureBattleOlingFlight(container, oling);
+        window.OlingSelector.renderArt(container, oling, {
+          layerClass: 'oling-battle-layer',
+          configureFlight: configureBattleOlingFlight
+        });
       }
 
       function getOlingMarkerColour(oling) {
@@ -256,17 +192,7 @@
       }
 
       function updateEnergyMeter(oling) {
-        const energy = Math.max(0, Math.min(100, Number(oling?.energy) || 0));
-        energyMeter?.setAttribute('aria-valuenow', String(energy));
-        if (energyFill) {
-          energyFill.style.setProperty(
-            '--oling-lobby-energy-level',
-            `${energy}%`
-          );
-        }
-        if (energyValue) {
-          energyValue.textContent = String(energy);
-        }
+        window.OlingSelector.updateEnergy(energyMeter, oling);
       }
 
       function renderOlingPicker() {
@@ -288,42 +214,9 @@
           mode = lobbyDetailMode
         } = {}
       ) {
-        if (!panel || !oling) return;
-
-        if (!stats) return;
-
-        const detailRows = [
-          ['Name', oling.name || 'Oling', 'is-wide is-name'],
-          ['Type', oling.type || 'Base', 'is-third'],
-          ['Level', oling.level || '-', 'is-third'],
-          ['Max Health', oling.maxHealth || '-', 'is-third'],
-          ['Rarity', oling.rarity || 'Base', 'is-half'],
-          ['Personality', oling.personality || 'Ready', 'is-half'],
-          ['Body Layer', oling.layers?.body || '-', 'is-half is-layer'],
-          ['Eyes Layer', oling.layers?.eyes || '-', 'is-half is-layer'],
-          ['Mouth Layer', oling.layers?.mouth || '-', 'is-half is-layer'],
-          ['Flight Layer', oling.layers?.flight || '-', 'is-half is-layer'],
-          ['Trait', oling.trait || '-', 'is-half'],
-          ['Matching Set', oling.matchingSet || '-', 'is-half'],
-          ['Style', oling.style || 'Balanced', 'is-wide']
-        ];
-
-        stats.replaceChildren(
-          ...detailRows.map(([label, value, extraClass = '']) => {
-            const row = document.createElement('div');
-            if (extraClass) {
-              row.className = extraClass;
-            }
-            const term = document.createElement('dt');
-            term.textContent = label;
-            const definition = document.createElement('dd');
-            definition.textContent = String(value);
-            row.append(term, definition);
-            return row;
-          })
-        );
+        if (!panel || !oling || !stats) return;
+        window.OlingSelector.renderStats(stats, oling);
       }
-
 
       return {
         getSelectedOling,

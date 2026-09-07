@@ -16,9 +16,7 @@ test('achievement reward catalog resolves official item names and artwork', () =
           }
         },
         digitalEntitlement: {
-          grants: [
-            { type: 'oling_headwear', key: 'base-soft-ears', quantity: 1 }
-          ]
+          grants: [{ type: 'oling_headwear', key: 'soft-ears', quantity: 1 }]
         }
       },
       {
@@ -27,7 +25,7 @@ test('achievement reward catalog resolves official item names and artwork', () =
           {
             media: {
               mainImage: {
-                url: '/images/olings/consumables/refined-opal-dust.svg'
+                url: '/images/olings/lab/consumables/refined-opal-dust.svg'
               }
             },
             digitalEntitlement: {
@@ -48,7 +46,7 @@ test('achievement reward catalog resolves official item names and artwork', () =
       {
         key: 'opal-dust',
         name: 'Opal Dust',
-        assets: { image: '/images/olings/consumables/opal-dust.svg' }
+        assets: { image: '/images/olings/lab/consumables/opal-dust.svg' }
       }
     ],
     oeCustomisation: [
@@ -72,17 +70,17 @@ test('achievement reward catalog resolves official item names and artwork', () =
       type: 'oling_consumable',
       key: 'opal-dust',
       name: 'Refined Opal Dust',
-      image: '/images/olings/consumables/refined-opal-dust.svg'
+      image: '/images/olings/lab/consumables/refined-opal-dust.svg'
     },
     {
       type: 'oling_egg',
       key: 'base-egg',
       name: 'Base Egg',
-      image: '/images/olings/eggs/base/egg.svg'
+      image: '/images/olings/lab/eggs/base/egg.svg'
     },
     {
       type: 'oling_headwear',
-      key: 'base-soft-ears',
+      key: 'soft-ears',
       name: 'Soft Ears',
       image: '/images/olings/headwear/soft-ears.svg'
     }

@@ -114,8 +114,11 @@ const productGrantSchema = new mongoose.Schema(
         'badge',
         'oling_egg',
         'oling_consumable',
+        'oling_pod',
         'oling_headwear',
-        'oling_furniture'
+        'oling_furniture',
+        'oling_wallpaper',
+        'oling_wallpaper_variant'
       ],
       required: true
     },

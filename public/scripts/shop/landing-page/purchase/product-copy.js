@@ -70,13 +70,6 @@
           return 'Use it on an egg to improve the chance of rarer hatch results.';
         }
 
-        if (effectType === 'personality_chance') {
-          const personality = metadata.personalityKey
-            ? ` ${formatTitle(metadata.personalityKey)}`
-            : '';
-          return `Use it on an egg to nudge the hatch toward a${personality} personality.`;
-        }
-
         if (effectType === 'energy') {
           return 'Use it on an Oling to restore its energy.';
         }
@@ -88,8 +81,22 @@
         return 'Place it in an incubator to hatch a new Oling.';
       }
 
+      if (grant?.type === 'oling_pod') {
+        return grant?.metadata?.releaseOutcome === 'destroy'
+          ? 'Store one Oling outside the active Lab roster. This one-use pod breaks when the Oling is released.'
+          : 'Store one Oling outside the active Lab roster. The pod returns to inventory after release.';
+      }
+
       if (grant?.type === 'oling_furniture') {
         return 'Place it in your Olings Lab to decorate the room.';
+      }
+
+      if (grant?.type === 'oling_wallpaper') {
+        return 'Apply it from Room Style while customising your Olings Lab.';
+      }
+
+      if (grant?.type === 'oling_wallpaper_variant') {
+        return 'Apply this colour variant from Room Style while customising your Olings Lab.';
       }
 
       if (grant?.type === 'oe') {

@@ -1,19 +1,14 @@
 (function () {
-  function createOlingLabBuildTools({ state, helpers, previewTools = {}, buildTools = {} }) {
-    const {
-      closeMenu,
-      closeStagePanel,
-      applyRarityTheme,
-      createDetailRow,
-      createImage,
-      createInlineAction,
-      createPanelBackButton,
-      createStatsToggleButton,
-      createTabMenu,
-      formatTitle,
-      openStagePanel,
-      openMenu
-    } = helpers;
+  const BUILD_PART_DESCRIPTIONS = Object.freeze({
+    flight: 'Flight parts define how an Oling moves through the air.',
+    body: 'Body parts define an Oling’s central shape and structure.',
+    eyes: 'Eye parts define how an Oling sees and expresses itself.',
+    mouth: 'Mouth parts define an Oling’s smile and expressions.'
+  });
+
+  function createOlingLabBuildTools({ state, helpers, previewTools = {} }) {
+    const { applyRarityTheme, createImage, formatTitle } = helpers;
+    const { createPreview } = previewTools;
 
     const getTraitImage =
       typeof previewTools.getTraitImage === 'function'
@@ -25,40 +20,121 @@
             trait?.metadata?.image ||
             '';
 
-    function createTraitGrid(oling) {
-      const traits = document.createElement('div');
-      traits.className = 'oling-lab-set-preview-grid';
-      state.layers.forEach((layer) => {
-        const trait = oling?.traits?.[layer];
-        if (!trait) return;
-        const rarity = trait.rarity || oling?.buildRarities?.[layer] || layer;
-        const card = document.createElement('article');
-        card.className = 'oling-lab-set-preview';
-        card.dataset.olingBuildLayer = layer;
-        applyRarityTheme(card, rarity);
-        const image = getTraitImage(trait);
-        if (image) card.appendChild(createImage(image, trait.name || layer));
-        const meta = document.createElement('div');
-        meta.className = 'oling-lab-set-preview-meta';
-        meta.append(
-          Object.assign(document.createElement('strong'), {
-            textContent: trait.name || formatTitle(oling?.build?.[layer] || layer)
-          }),
-          Object.assign(document.createElement('span'), {
-            textContent: formatTitle(rarity)
-          })
-        );
-        card.appendChild(meta);
-        traits.appendChild(card);
-      });
-      return traits;
+    function getTraitSetName(trait) {
+      return formatTitle(
+        trait?.set?.name ||
+          trait?.setKey ||
+          trait?.theme ||
+          trait?.collection ||
+          'Unknown'
+      );
     }
 
-    function createEmptyReceiptMessage(message) {
-      return Object.assign(document.createElement('p'), {
-        className: 'oling-lab-menu-empty',
-        textContent: message
+    function describeTrait(layer, trait) {
+      const typeDescription =
+        BUILD_PART_DESCRIPTIONS[layer] ||
+        `${formatTitle(layer)} is one of this Oling’s build parts.`;
+      const setDescription = `This part comes from the ${getTraitSetName(trait)} set.`;
+      return [typeDescription, setDescription, trait?.flavor]
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    function createPartButton(layer, trait) {
+      const rarity = trait?.rarity || layer;
+      const button = document.createElement('button');
+      button.className =
+        'oling-lab-set-preview oling-lab-hatch-build-part-button';
+      button.dataset.olingBuildLayer = layer;
+      button.dataset.soundIntent = 'select';
+      button.type = 'button';
+      button.setAttribute('aria-pressed', 'false');
+      applyRarityTheme(button, rarity);
+
+      button.appendChild(
+        Object.assign(document.createElement('strong'), {
+          className: 'oling-lab-hatch-build-part-label',
+          textContent: formatTitle(layer)
+        })
+      );
+
+      const image = getTraitImage(trait);
+      if (image) button.appendChild(createImage(image, trait?.name || layer));
+
+      const meta = document.createElement('div');
+      meta.className = 'oling-lab-set-preview-meta';
+      meta.appendChild(
+        Object.assign(document.createElement('strong'), {
+          textContent: trait?.name || formatTitle(layer)
+        })
+      );
+      button.appendChild(meta);
+      return button;
+    }
+
+    function createBuildPreview(oling) {
+      const preview = document.createElement('div');
+      preview.className =
+        'oling-lab-hatch-build-preview oling-lab-egg-insertion-stage oling-lab-oling-info-stage';
+      const hero = document.createElement('div');
+      hero.className = 'oling-lab-oling-hero';
+      if (typeof createPreview === 'function') {
+        hero.appendChild(createPreview(oling));
+      }
+      preview.appendChild(hero);
+      return preview;
+    }
+
+    function createBuildPresentation(oling, options = {}) {
+      const section = document.createElement('section');
+      section.className = 'oling-lab-menu-section oling-lab-hatch-build';
+      const stage = document.createElement('section');
+      stage.className = 'oling-lab-hatch-build-stage';
+      const buttons = document.createElement('div');
+      buttons.className =
+        'oling-lab-set-preview-grid oling-lab-hatch-build-grid';
+      buttons.setAttribute('role', 'group');
+      buttons.setAttribute('aria-label', 'Oling build parts');
+      const details = document.createElement('section');
+      details.className = 'oling-lab-hatch-build-part-details';
+      details.setAttribute('aria-live', 'polite');
+
+      const parts = state.layers
+        .map((layer) => ({ layer, trait: oling?.traits?.[layer] }))
+        .filter(({ trait }) => Boolean(trait));
+
+      const selectPart = (selectedLayer) => {
+        [...buttons.children].forEach((button) => {
+          button.setAttribute(
+            'aria-pressed',
+            String(button.dataset.olingBuildLayer === selectedLayer)
+          );
+        });
+        const selected = parts.find(({ layer }) => layer === selectedLayer);
+        if (!selected) return;
+        options.onSelectPart?.(selectedLayer);
+        details.replaceChildren(
+          Object.assign(document.createElement('h3'), {
+            textContent: selected.trait.name || formatTitle(selected.layer)
+          }),
+          Object.assign(document.createElement('p'), {
+            textContent: describeTrait(selected.layer, selected.trait)
+          })
+        );
+      };
+
+      parts.forEach(({ layer, trait }) => {
+        const button = createPartButton(layer, trait);
+        button.addEventListener('click', () => selectPart(layer));
+        buttons.appendChild(button);
       });
+
+      stage.append(createBuildPreview(oling), buttons, details);
+      section.appendChild(stage);
+      const initialPart =
+        parts.find(({ layer }) => layer === options.selectedLayer) || parts[0];
+      if (initialPart) selectPart(initialPart.layer);
+      return [section];
     }
 
     function formatReceiptDate(value) {
@@ -77,95 +153,16 @@
       return `${Math.round(number)}%`;
     }
 
-    function createBuildPresentation(oling, options = {}) {
-      const receipt = options.receipt || null;
-      const section = document.createElement('section');
-      section.className = 'oling-lab-menu-section oling-lab-hatch-build';
-      const stage = document.createElement('section');
-      stage.className = 'oling-lab-egg-insertion-stage oling-lab-hatch-build-stage';
-      let viewingInfo = false;
-      const syncInfoButton = () => {
-        const label = viewingInfo ? 'Close build details' : 'View build details';
-        stage.querySelector('.oling-lab-stats-toggle')?.setAttribute('aria-label', label);
-      };
-      const closeInfo = () => {
-        viewingInfo = false;
-        syncInfoButton();
-        closeStagePanel(stage, panel, 'is-viewing-hatch-build-info');
-      };
-
-      const traits = createTraitGrid(oling);
-      traits.classList.add('oling-lab-hatch-build-grid');
-      Array.from(traits.children).forEach((traitCard) => {
-        const cell = document.createElement('div');
-        cell.className = 'oling-lab-hatch-build-cell';
-        traitCard.prepend(
-          Object.assign(document.createElement('strong'), {
-            className: 'oling-lab-hatch-build-part-label',
-            textContent: formatTitle(traitCard.dataset.olingBuildLayer || 'Part')
-          })
-        );
-        cell.appendChild(traitCard);
-        traits.appendChild(cell);
-      });
-      if (traits.children.length) stage.appendChild(traits);
-      stage.appendChild(
-        createStatsToggleButton('View build details', (event) => {
-          event.stopPropagation();
-          if (viewingInfo) {
-            closeInfo();
-            return;
-          }
-          viewingInfo = true;
-          syncInfoButton();
-          openStagePanel(stage, panel, 'is-viewing-hatch-build-info');
-        })
-      );
-
-      const panel = document.createElement('aside');
-      panel.className = 'oling-lab-side-panel oling-lab-hatch-build-panel';
-      panel.appendChild(createPanelBackButton('Back from build details', closeInfo));
-      panel.appendChild(
-        Object.assign(document.createElement('h3'), {
-          textContent: 'Build'
-        })
-      );
-      const details = document.createElement('div');
-      details.className = 'oling-lab-detail-list';
-      details.append(
-        createDetailRow('Set', oling?.matchingSet?.name || 'Mixed'),
-        createDetailRow('Egg', formatTitle(receipt?.eggKey || oling?.eggKey || 'Egg')),
-        createDetailRow('Rarity', formatTitle(oling?.rarity || receipt?.rarity || 'Mixed'), {
-          rarity: oling?.rarity || receipt?.rarity || 'mixed'
-        }),
-        createDetailRow('Collection', formatTitle(oling?.collection || 'Base'))
-      );
-      if (options.showEggOdds) {
-        Object.entries(receipt?.eggOddsSnapshot || {})
-          .filter(([, value]) => value !== undefined)
-          .forEach(([rarity, chance]) => {
-            details.appendChild(
-              createDetailRow(`${formatTitle(rarity)} Odds`, formatReceiptChance(chance), {
-                rarity
-              })
-            );
-          });
-      }
-      panel.appendChild(details);
-      syncInfoButton();
-      stage.appendChild(panel);
-      section.appendChild(stage);
-      return [section];
+    function createReceiptBuildTab(oling) {
+      return createBuildPresentation(oling);
     }
 
-    function createReceiptBuildTab(oling, receipt) {
-      return createBuildPresentation(oling, {
-        receipt,
-        showEggOdds: true
-      });
-    }
-
-    return { createBuildPresentation, createReceiptBuildTab, formatReceiptDate, formatReceiptChance };
+    return {
+      createBuildPresentation,
+      createReceiptBuildTab,
+      formatReceiptDate,
+      formatReceiptChance
+    };
   }
 
   window.createOlingLabBuildTools = createOlingLabBuildTools;

@@ -2,6 +2,7 @@
   function createOlingLabExplorerGateway(dependencies) {
     const {
       state,
+      elements = {},
       createDetailRow,
       getRoaming,
       setStatus,
@@ -12,8 +13,14 @@
       createInlineAction,
       formatTitle,
       openMenu,
+      closeMenu,
       createTabMenu,
-      clearAdventureTimer
+      clearAdventureTimer,
+      resolveMenuConfig,
+      getOlingViews = () => null,
+      closeRestPanel = () => {},
+      closeIncubatorPanel = () => {},
+      closeShelfStoragePanel = () => {}
     } = dependencies;
     const {
       createOlingPreview,
@@ -28,21 +35,174 @@
       createInlineAction,
       formatTitle
     });
+    const adventureApi = window.createOlingLabAdventureApi();
+    const panelTransitions = window.OlingLabPanelTransitions;
+    let gatewayPanelBackAction = null;
+    const playSound = (key) => {
+      if (!key || typeof window.playSoundEffect !== 'function') return;
+      Promise.resolve(window.playSoundEffect(key)).catch(() => {});
+    };
+
+    function getRewardLabels(rewards) {
+      if (Array.isArray(rewards)) return rewards;
+      const accountXp = Math.max(
+        0,
+        Math.floor(Number(rewards?.accountXp) || 0)
+      );
+      const opals = Math.max(0, Math.floor(Number(rewards?.opals) || 0));
+      return [
+        ...(accountXp ? [`${accountXp} Account XP`] : []),
+        ...(opals ? [`${opals} Opals`] : [])
+      ];
+    }
+
+    function setGatewayPanelHeaderAction(onBack = null, ariaLabel = '') {
+      gatewayPanelBackAction =
+        typeof onBack === 'function' ? onBack : null;
+      const control = elements.gatewayPanelClose;
+      if (!control) return;
+      const isBack = Boolean(gatewayPanelBackAction);
+      control.classList.toggle('is-close', !isBack);
+      control.textContent = isBack ? 'Back' : 'Close';
+      control.setAttribute(
+        'aria-label',
+        isBack ? ariaLabel || 'Back' : 'Close Explorer Gateway menu'
+      );
+    }
+
+    function setGatewayPanelCollapsed(collapsed) {
+      if (!state.gatewayPanelOpen || !elements.gatewayPanel) return;
+      const changed = state.gatewayPanelCollapsed !== collapsed;
+      state.gatewayPanelCollapsed = collapsed;
+      elements.gatewayPanel.classList.toggle('is-collapsed', collapsed);
+      elements.gatewayPanelToggle.textContent = collapsed ? 'Show' : 'Hide';
+      elements.gatewayPanelToggle.setAttribute(
+        'aria-expanded',
+        String(!collapsed)
+      );
+      if (changed) playSound(collapsed ? 'sidePanelClose' : 'sidePanelOpen');
+    }
+
+    function closeGatewayPanel({ sound = true } = {}) {
+      if (!elements.gatewayPanel) return;
+      const pendingClose = panelTransitions?.getPendingClose?.(
+        elements.gatewayPanel
+      );
+      if (!state.gatewayPanelOpen) {
+        return pendingClose || Promise.resolve(false);
+      }
+      const wasExpanded = Boolean(
+        state.gatewayPanelOpen &&
+        !state.gatewayPanelCollapsed &&
+        !elements.gatewayPanel.hidden
+      );
+      clearAdventureTimer();
+      state.gatewayPanelOpen = false;
+      state.gatewayPanelCollapsed = false;
+      setGatewayPanelHeaderAction();
+      elements.gatewayPanelToggle?.setAttribute('aria-expanded', 'false');
+      const playCloseSound = () => {
+        if (sound && wasExpanded) playSound('sidePanelClose');
+      };
+      const cleanup = () => {
+        elements.gatewayPanel.classList.remove('is-open', 'is-collapsed');
+        elements.gatewayPanelContent?.replaceChildren();
+        elements.gatewayPanelFooter?.replaceChildren();
+        if (elements.gatewayPanelFooter)
+          elements.gatewayPanelFooter.hidden = true;
+        if (elements.gatewayPanelTabs) {
+          elements.gatewayPanelTabs.hidden = true;
+          elements.gatewayPanelTabs.replaceChildren();
+        }
+      };
+      if (panelTransitions) {
+        return panelTransitions.close(elements.gatewayPanel, {
+          beforeExit: playCloseSound,
+          afterClose: cleanup
+        });
+      }
+      playCloseSound();
+      elements.gatewayPanel.hidden = true;
+      cleanup();
+      return Promise.resolve(true);
+    }
+
+    function prepareGatewayPanel() {
+      const wasExpanded = Boolean(
+        state.gatewayPanelOpen && !state.gatewayPanelCollapsed
+      );
+      closeMenu?.();
+      getOlingViews()?.closeOlingPanel?.({ sound: false });
+      getOlingViews()?.closeStoragePanel?.({ sound: false });
+      closeShelfStoragePanel({ sound: false });
+      closeIncubatorPanel({ sound: false });
+      closeRestPanel({ sound: false });
+      state.gatewayPanelOpen = true;
+      state.gatewayPanelCollapsed = false;
+      const theme = resolveMenuConfig?.({ theme: 'quests-adventures' }) || {};
+      for (const [property, value] of [
+        ['--wall-decoration-panel-primary', theme.primaryColour],
+        ['--wall-decoration-panel-secondary', theme.secondaryColour]
+      ]) {
+        if (value) elements.gatewayPanel.style.setProperty(property, value);
+      }
+      elements.gatewayPanelTitle.textContent = 'Explorer Gateway';
+      setGatewayPanelHeaderAction();
+      elements.gatewayPanelToggle.textContent = 'Hide';
+      elements.gatewayPanelToggle.setAttribute('aria-expanded', 'true');
+      return wasExpanded;
+    }
+
+    function finishGatewayPanelOpen(wasExpanded) {
+      const show = () => {
+        if (!state.gatewayPanelOpen) return;
+        if (!wasExpanded) playSound('sidePanelOpen');
+      };
+      if (panelTransitions) {
+        void panelTransitions.open(elements.gatewayPanel, {
+          afterOpen: show
+        });
+      } else if (typeof window.requestAnimationFrame === 'function') {
+        elements.gatewayPanel.hidden = false;
+        window.requestAnimationFrame(() => {
+          elements.gatewayPanel.classList.add('is-open');
+          show();
+        });
+      } else {
+        elements.gatewayPanel.hidden = false;
+        elements.gatewayPanel.classList.add('is-open');
+        show();
+      }
+    }
+
+    elements.gatewayPanelToggle?.addEventListener('click', () =>
+      setGatewayPanelCollapsed(!state.gatewayPanelCollapsed)
+    );
+    elements.gatewayPanelClose?.addEventListener('click', () => {
+      if (gatewayPanelBackAction) {
+        gatewayPanelBackAction();
+        return;
+      }
+      closeGatewayPanel();
+      elements.room
+        ?.querySelector('[data-oling-lab-item-id="explorer_gateway"]')
+        ?.focus();
+    });
 
     async function openExplorerGateway(
-      initialTab = state.explorerTabLabel || 'Overview'
+      initialTab = state.explorerTabLabel || 'Overview',
+      options = {}
     ) {
       try {
-        const response = await fetch('/api/olings/adventures', {
-          headers: { Accept: 'application/json' }
-        });
-        const payload = await response.json();
-        if (!response.ok || payload.success === false)
-          throw new Error(
-            payload.error?.message || 'Could not open the Explorer Gateway.'
-          );
-        const data = payload;
+        const data = await adventureApi.loadGateway();
+        if (options.shouldOpen && !options.shouldOpen()) return;
         const active = data.active;
+        const usesSidePanel = Boolean(
+          elements.gatewayPanel &&
+          elements.gatewayPanelTabs &&
+          elements.gatewayPanelContent &&
+          elements.gatewayPanelFooter
+        );
         state.activeAdventure = active;
         let selectedId = data.olings[0]?.id || data.olings[0]?._id || '';
         const refresh = () => openExplorerGateway();
@@ -63,10 +223,12 @@
               doorPlacedId,
               adventure
             )
-          )
+          ) {
+            playSound('uiError');
             return setStatus(
               'Place a door with an exit area before starting an adventure.'
             );
+          }
           closeSelectedTarget();
           setStatus(
             `${data.olings.find((oling) => String(oling.id || oling._id) === String(selectedId))?.name || 'Your Oling'} is heading to the door.`
@@ -74,14 +236,181 @@
           renderLab();
           refresh();
         };
+        const createEnergyCost = (value, label = 'Energy') => {
+          const amount = Math.max(0, Math.floor(Number(value) || 0));
+          const stat = document.createElement('div');
+          stat.className = 'oling-lab-explorer-detail-energy';
+          stat.setAttribute('aria-label', `${label}: ${amount}`);
+          const icon = createImage(
+            '/images/olings/lab/gui/icons/general/energy.svg',
+            ''
+          );
+          icon.className = 'oling-lab-explorer-detail-energy-icon';
+          icon.setAttribute('aria-hidden', 'true');
+          stat.append(
+            icon,
+            Object.assign(document.createElement('strong'), {
+              textContent: String(amount)
+            })
+          );
+          return stat;
+        };
+        const createDuration = (value) => {
+          const duration = document.createElement('div');
+          duration.className = 'oling-lab-explorer-detail-duration';
+          duration.append(
+            Object.assign(document.createElement('span'), {
+              textContent: 'Duration'
+            }),
+            Object.assign(document.createElement('strong'), {
+              textContent: formatTime(value)
+            })
+          );
+          return duration;
+        };
+        const createDetailPreview = (
+          oling,
+          name,
+          { onPrevious = null, onNext = null } = {}
+        ) => {
+          const previewWindow = document.createElement('div');
+          previewWindow.className =
+            'oling-lab-explorer-oling-slot oling-lab-explorer-detail-preview';
+          if (onPrevious) {
+            const previous = createInlineAction('Previous Oling', onPrevious, {
+              soundIntent: 'previous'
+            });
+            previous.classList.add(
+              'oling-lab-explorer-oling-arrow',
+              'is-previous'
+            );
+            previewWindow.appendChild(previous);
+          }
+          previewWindow.appendChild(
+            createOlingPreview(
+              oling,
+              'oling-lab-oling-preview oling-lab-explorer-oling-preview'
+            )
+          );
+          if (onNext) {
+            const next = createInlineAction('Next Oling', onNext, {
+              soundIntent: 'next'
+            });
+            next.classList.add('oling-lab-explorer-oling-arrow', 'is-next');
+            previewWindow.appendChild(next);
+          }
+          previewWindow.appendChild(
+            Object.assign(document.createElement('strong'), {
+              textContent: name || 'Oling'
+            })
+          );
+          return previewWindow;
+        };
+        const createRewardsPanel = (heading, rewards) => {
+          const panel = document.createElement('article');
+          panel.className =
+            'oling-lab-explorer-detail-card oling-lab-explorer-detail-rewards';
+          panel.appendChild(
+            Object.assign(document.createElement('h3'), {
+              textContent: heading
+            })
+          );
+          const list = document.createElement('div');
+          list.className = 'oling-lab-explorer-detail-reward-list';
+          getRewardLabels(rewards).forEach((reward) => {
+            list.appendChild(
+              Object.assign(document.createElement('span'), {
+                textContent: reward
+              })
+            );
+          });
+          panel.appendChild(list);
+          return panel;
+        };
+        const getAdventureAvailability = (oling, adventure) => {
+          const name = oling?.name || 'This Oling';
+          const olingId = oling?.id || oling?._id || '';
+          const requiredEnergy = Math.max(
+            0,
+            Math.floor(Number(adventure?.energyCost) || 0)
+          );
+          const currentEnergy = Math.max(
+            0,
+            Math.floor(Number(oling?.care?.energy ?? 100) || 0)
+          );
+          if (olingId && getRoaming()?.isHeadingToAdventure?.(olingId)) {
+            return {
+              key: 'preparing',
+              label: 'Heading to gateway',
+              message: `${name} is preparing to leave. You can cancel before departure.`,
+              canUseAction: true
+            };
+          }
+          if (!olingId) {
+            return {
+              key: 'unavailable',
+              label: 'Unavailable',
+              message: 'No Oling is available to send on this adventure.',
+              canUseAction: false
+            };
+          }
+          if (active) {
+            return {
+              key: 'unavailable',
+              label: 'Gateway occupied',
+              message: `${active.olingName || 'An Oling'} is already on an adventure.`,
+              canUseAction: false
+            };
+          }
+          if (oling.care?.isSleeping) {
+            return {
+              key: 'resting',
+              label: 'Resting',
+              message: `Wake ${name} before choosing them for an adventure.`,
+              canUseAction: false
+            };
+          }
+          if (currentEnergy < requiredEnergy) {
+            return {
+              key: 'low-energy',
+              label: 'Not enough energy',
+              message: `${name} has ${currentEnergy} Energy and needs ${requiredEnergy}.`,
+              canUseAction: false
+            };
+          }
+          return {
+            key: 'ready',
+            label: 'Ready',
+            message: `${name} can be chosen for this adventure.`,
+            canUseAction: true
+          };
+        };
+        const createOlingStatusPanel = (oling, adventure) => {
+          const availability = getAdventureAvailability(oling, adventure);
+          const panel = document.createElement('article');
+          panel.className = `oling-lab-explorer-oling-status is-${availability.key}`;
+          const heading = document.createElement('div');
+          heading.append(
+            Object.assign(document.createElement('span'), {
+              textContent: 'Oling status'
+            }),
+            Object.assign(document.createElement('strong'), {
+              textContent: availability.label
+            })
+          );
+          panel.appendChild(heading);
+          return panel;
+        };
         const overview = () => {
+          if (usesSidePanel) setGatewayPanelHeaderAction();
           const dashboard = document.createElement('section');
           dashboard.className = 'oling-lab-gateway-overview';
           const visual = document.createElement('div');
-          visual.className = 'oling-lab-gateway-overview-visual';
+          visual.className =
+            'oling-lab-gateway-overview-visual oling-lab-gateway-overview-preview';
           visual.append(
             createImage(
-              '/images/olings/furniture/door-modules/explorer-gateway/explorer-gateway.svg',
+              '/images/olings/lab/furniture/door-modules/explorer-gateway/explorer-gateway.svg',
               'Explorer Gateway'
             ),
             Object.assign(document.createElement('strong'), {
@@ -108,10 +437,7 @@
               ? `${active.olingName || 'Your Oling'} is exploring ${active.adventureName}.`
               : 'The Gateway is ready for an explorer.'
           });
-          const stage = document.createElement('div');
-          stage.className = 'oling-lab-gateway-overview-stage';
-          stage.append(visual, cards, copy);
-          dashboard.append(stage);
+          dashboard.append(visual, cards, copy);
           return section(dashboard);
         };
         const adventures = () => {
@@ -119,32 +445,14 @@
             (adventure) => adventure.key === state.explorerAdventureKey
           );
           if (selected) {
+            const goBack = () => {
+              state.explorerAdventureKey = null;
+              openExplorerGateway('Adventures');
+            };
+            if (usesSidePanel)
+              setGatewayPanelHeaderAction(goBack, 'Back to adventures');
             const view = document.createElement('section');
             view.className = 'oling-lab-explorer-adventure-detail';
-            const back = createInlineAction('Back', () => {
-              state.explorerAdventureKey = null;
-              openExplorerGateway();
-            });
-            back.classList.add('oling-lab-explorer-adventure-back');
-            const header = Object.assign(document.createElement('header'), {
-              className: 'oling-lab-explorer-adventure-header'
-            });
-            header.append(
-              Object.assign(document.createElement('h3'), {
-                textContent: selected.name
-              }),
-              back
-            );
-            const setup = document.createElement('div');
-            setup.className = 'oling-lab-explorer-adventure-setup';
-            setup.append(
-              Object.assign(document.createElement('div'), {
-                className: 'oling-lab-explorer-adventure-image',
-                textContent: selected.name
-              })
-            );
-            const slot = document.createElement('div');
-            slot.className = 'oling-lab-explorer-oling-slot';
             const olings = data.olings;
             const index = Math.max(
               0,
@@ -152,74 +460,58 @@
             );
             const chosen = olings[index];
             selectedId = chosen?.id || chosen?._id || '';
-            const previous = createInlineAction('Previous Oling', () => {
-              state.explorerOlingIndex =
-                (index - 1 + olings.length) % olings.length;
-              openExplorerGateway('Adventures');
-            });
-            previous.classList.add(
-              'oling-lab-explorer-oling-arrow',
-              'is-previous'
-            );
-            const next = createInlineAction('Next Oling', () => {
-              state.explorerOlingIndex = (index + 1) % olings.length;
-              openExplorerGateway('Adventures');
-            });
-            next.classList.add('oling-lab-explorer-oling-arrow', 'is-next');
-            const preview = createOlingPreview(
+            const previewWindow = createDetailPreview(
               chosen,
-              'oling-lab-oling-preview oling-lab-explorer-oling-preview'
+              chosen ? chosen.name || 'Oling' : 'No Olings',
+              {
+                onPrevious: olings.length
+                  ? () => {
+                      state.explorerOlingIndex =
+                        (index - 1 + olings.length) % olings.length;
+                      openExplorerGateway('Adventures');
+                    }
+                  : null,
+                onNext: olings.length
+                  ? () => {
+                      state.explorerOlingIndex =
+                        (index + 1) % olings.length;
+                      openExplorerGateway('Adventures');
+                    }
+                  : null
+              }
             );
-            slot.append(
-              previous,
-              preview,
-              next,
-              Object.assign(document.createElement('strong'), {
-                textContent: chosen ? chosen.name || 'Oling' : 'No Olings'
-              })
+            const panels = document.createElement('div');
+            panels.className = 'oling-lab-explorer-detail-panels';
+            const adventurePanel = document.createElement('article');
+            adventurePanel.className =
+              'oling-lab-explorer-detail-card oling-lab-explorer-detail-adventure';
+            adventurePanel.style.backgroundImage = `linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)), url('/images/olings/lab/gui/backgrounds/adventures/${encodeURIComponent(selected.key)}.jpg')`;
+            adventurePanel.append(
+              Object.assign(document.createElement('h3'), {
+                textContent: selected.name
+              }),
+              createEnergyCost(selected.energyCost),
+              createDuration(selected.durationMs)
             );
-            setup.append(slot);
-            const isEnergetic =
-              String(chosen?.personalityKey || '').toLowerCase() ===
-              'energetic';
-            const selectedEnergyCost = isEnergetic
-              ? Math.round(Number(selected.energyCost || 0) * 85) / 100
-              : Number(selected.energyCost || 0);
-            const requirements = document.createElement('div');
-            requirements.className =
-              'oling-lab-explorer-adventure-requirements';
-            requirements.append(
-              details([['Duration', formatTime(selected.durationMs)]]),
-              details([
-                [
-                  'Energy',
-                  isEnergetic
-                    ? `${selectedEnergyCost} (-15%)`
-                    : String(selectedEnergyCost)
-                ]
-              ]),
-              details([['Level', String(selected.recommendedLevel)]])
+            panels.append(
+              adventurePanel,
+              createRewardsPanel('Guaranteed rewards', selected.rewards)
             );
-            const rewards = Object.assign(document.createElement('div'), {
-              className: 'oling-lab-explorer-adventure-rewards'
-            });
-            rewards.appendChild(
-              Object.assign(document.createElement('strong'), {
-                textContent: 'Possible rewards'
-              })
+            if (!usesSidePanel) {
+              const back = createInlineAction('Back', goBack, {
+                soundIntent: 'previous'
+              });
+              back.classList.add('oling-lab-explorer-adventure-back');
+              view.appendChild(back);
+            }
+            view.append(
+              previewWindow,
+              createOlingStatusPanel(chosen, selected),
+              panels
             );
-            selected.possibleRewards.forEach((reward) => {
-              const item = document.createElement('div');
-              item.appendChild(
-                Object.assign(document.createElement('span'), {
-                  textContent: reward
-                })
-              );
-              rewards.appendChild(item);
-            });
-            view.append(header, setup, requirements, rewards);
             return section(view);
           }
+          if (usesSidePanel) setGatewayPanelHeaderAction();
           const grid = document.createElement('div');
           grid.className = 'oling-lab-explorer-adventure-grid';
           data.adventures.forEach((adventure) => {
@@ -228,7 +520,10 @@
               openExplorerGateway();
             });
             button.classList.add('oling-lab-explorer-adventure-tile');
-            button.dataset.badge = `Lvl ${adventure.recommendedLevel}`;
+            button.dataset.badge = `${Math.max(
+              0,
+              Math.floor(Number(adventure.rewards?.opals) || 0)
+            )} Opals`;
             button.appendChild(
               Object.assign(document.createElement('small'), {
                 textContent: formatTime(adventure.durationMs)
@@ -239,22 +534,24 @@
           return section(grid);
         };
         const returnOling = async () => {
-          const r = await fetch('/api/olings/adventures/return', {
-            method: 'POST',
-            headers: { Accept: 'application/json' }
-          });
-          const b = await r.json();
-          if (!r.ok || b.success === false)
-            return setStatus(
-              b.error?.message || 'Adventure still in progress.'
+          try {
+            const b = await adventureApi.returnOling(active?.runId);
+            state.activeAdventure = null;
+            getRoaming()?.returnFromAdventure?.(
+              b.olingId,
+              active?.doorPlacedId
             );
-          state.activeAdventure = null;
-          getRoaming()?.returnFromAdventure?.(b.olingId, active?.doorPlacedId);
-          setStatus(b.message);
-          renderLab();
-          refresh();
+            setStatus(b.message);
+            renderLab();
+            refresh();
+            playSound('economyReward');
+          } catch (error) {
+            setStatus(error.message || 'Adventure still in progress.');
+            playSound('uiError');
+          }
         };
         const activeTab = () => {
+          if (usesSidePanel) setGatewayPanelHeaderAction();
           if (!active)
             return section(
               Object.assign(document.createElement('p'), {
@@ -264,7 +561,7 @@
             );
           const scene = document.createElement('section');
           scene.className = 'oling-lab-active-adventure-scene';
-          scene.style.backgroundImage = `url('/images/olings/gui/backgrounds/adventures/${active.adventureKey}.jpg')`;
+          scene.style.backgroundImage = `url('/images/olings/lab/gui/backgrounds/adventures/${active.adventureKey}.jpg')`;
           const oling = data.olings.find(
             (item) => (item.id || item._id) === active.olingId
           );
@@ -282,87 +579,76 @@
           return section(scene);
         };
         const discoveries = () => {
-          if (!data.history.length)
+          if (!data.history.length) {
+            if (usesSidePanel) setGatewayPanelHeaderAction();
             return section(
               Object.assign(document.createElement('p'), {
                 className: 'oling-lab-menu-empty',
                 textContent: 'Your discoveries will appear here.'
               })
             );
+          }
           const entry = Number.isInteger(state.explorerDiscoveryIndex)
             ? data.history[state.explorerDiscoveryIndex]
             : null;
           if (entry) {
-            const detail = document.createElement('section');
-            detail.className = 'oling-lab-explorer-adventure-detail';
-            const back = createInlineAction('Back', () => {
+            const goBack = () => {
               state.explorerDiscoveryIndex = null;
               openExplorerGateway('Discoveries');
-            });
-            back.classList.add('oling-lab-explorer-adventure-back');
-            const header = Object.assign(document.createElement('header'), {
-              className: 'oling-lab-explorer-adventure-header'
-            });
-            header.append(
-              Object.assign(document.createElement('h3'), {
-                textContent: entry.adventureName || 'Discovery'
-              }),
-              back
-            );
-            const setup = document.createElement('div');
-            setup.className = 'oling-lab-explorer-adventure-setup';
-            setup.append(
-              Object.assign(document.createElement('div'), {
-                className: 'oling-lab-explorer-adventure-image',
-                textContent: entry.adventureName || 'Discovery'
-              })
-            );
+            };
+            if (usesSidePanel)
+              setGatewayPanelHeaderAction(goBack, 'Back to discoveries');
+            const detail = document.createElement('section');
+            detail.className =
+              'oling-lab-explorer-adventure-detail is-discovery';
             const oling = data.olings.find(
               (item) => (item.id || item._id) === entry.olingId
             );
-            const olingCard = document.createElement('div');
-            olingCard.className = 'oling-lab-explorer-oling-slot';
-            const preview = createOlingPreview(
+            const previewWindow = createDetailPreview(
               oling,
-              'oling-lab-oling-preview oling-lab-explorer-oling-preview'
+              entry.olingName || oling?.name || 'Oling'
             );
-            olingCard.append(
-              preview,
+            const panels = document.createElement('div');
+            panels.className = 'oling-lab-explorer-detail-panels';
+            const adventurePanel = document.createElement('article');
+            adventurePanel.className =
+              'oling-lab-explorer-detail-card oling-lab-explorer-detail-adventure is-discovery';
+            if (entry.adventureKey) {
+              adventurePanel.style.backgroundImage = `linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)), url('/images/olings/lab/gui/backgrounds/adventures/${encodeURIComponent(entry.adventureKey)}.jpg')`;
+            }
+            const completed = document.createElement('div');
+            completed.className = 'oling-lab-explorer-detail-completed';
+            completed.append(
+              Object.assign(document.createElement('span'), {
+                textContent: 'Completed'
+              }),
               Object.assign(document.createElement('strong'), {
-                textContent: entry.olingName || oling?.name || 'Oling'
+                textContent: new Date(entry.completedAt).toLocaleDateString()
               })
             );
-            setup.appendChild(olingCard);
-            const requirements = document.createElement('div');
-            requirements.className =
-              'oling-lab-explorer-adventure-requirements';
-            requirements.append(
-              details([
-                ['Completed', new Date(entry.completedAt).toLocaleDateString()]
-              ]),
-              details([['Duration', formatTime(entry.durationMs || 0)]]),
-              details([['Energy used', String(entry.energyCost || 0)]])
+            adventurePanel.append(
+              Object.assign(document.createElement('h3'), {
+                textContent: entry.adventureName || 'Discovery'
+              }),
+              completed,
+              createEnergyCost(entry.energyCost, 'Energy used'),
+              createDuration(entry.durationMs || 0)
             );
-            const rewards = Object.assign(document.createElement('div'), {
-              className: 'oling-lab-explorer-adventure-rewards'
-            });
-            rewards.appendChild(
-              Object.assign(document.createElement('strong'), {
-                textContent: 'Rewards found'
-              })
+            panels.append(
+              adventurePanel,
+              createRewardsPanel('Rewards found', entry.rewards)
             );
-            (entry.rewards || []).forEach((reward) => {
-              const item = document.createElement('div');
-              item.appendChild(
-                Object.assign(document.createElement('span'), {
-                  textContent: reward
-                })
-              );
-              rewards.appendChild(item);
-            });
-            detail.append(header, setup, requirements, rewards);
+            if (!usesSidePanel) {
+              const back = createInlineAction('Back', goBack, {
+                soundIntent: 'previous'
+              });
+              back.classList.add('oling-lab-explorer-adventure-back');
+              detail.appendChild(back);
+            }
+            detail.append(previewWindow, panels);
             return section(detail);
           }
+          if (usesSidePanel) setGatewayPanelHeaderAction();
           const list = document.createElement('div');
           list.className = 'oling-lab-discovery-list';
           data.history.forEach((item, index) => {
@@ -396,87 +682,114 @@
             : []),
           { label: 'Discoveries', content: discoveries }
         ];
-        openMenu(
-          'Explorer Gateway',
-          [
-            createTabMenu(tabs, {
-              initialLabel: initialTab,
-              onActivate: (tab) => {
-                state.explorerTabLabel = tab.label;
-              },
-              actionContent: (tab) => {
-                if (tab.label === 'Active Adventure') {
-                  const action = createInlineAction('', returnOling);
-                  const syncReturnAction = () => {
-                    const remainingMs = Math.max(
-                      0,
-                      new Date(active.completesAt).getTime() - Date.now()
-                    );
-                    action.disabled = remainingMs > 0;
-                    action.textContent =
-                      remainingMs > 0
-                        ? `Return in ${formatTime(remainingMs)}`
-                        : 'Return Oling';
-                    if (remainingMs <= 0) clearAdventureTimer();
-                  };
-                  syncReturnAction();
-                  window.setTimeout(() => {
-                    if (!action.isConnected) return;
-                    clearAdventureTimer();
-                    state.adventureTimerInterval = window.setInterval(
-                      syncReturnAction,
-                      1000
-                    );
-                  }, 0);
-                  return [action];
+        const wasExpanded = usesSidePanel ? prepareGatewayPanel() : false;
+        const createActionContent = (tab) => {
+          let actions = [];
+          if (tab.label === 'Active Adventure') {
+            const action = createInlineAction('', returnOling, {
+              sound: false
+            });
+            const syncReturnAction = () => {
+              const remainingMs = Math.max(
+                0,
+                new Date(active.completesAt).getTime() - Date.now()
+              );
+              action.disabled = remainingMs > 0;
+              action.textContent =
+                remainingMs > 0
+                  ? `Return in ${formatTime(remainingMs)}`
+                  : 'Return Oling';
+              if (remainingMs <= 0) clearAdventureTimer();
+            };
+            syncReturnAction();
+            window.setTimeout(() => {
+              if (!action.isConnected) return;
+              clearAdventureTimer();
+              state.adventureTimerInterval = window.setInterval(
+                syncReturnAction,
+                1000
+              );
+            }, 0);
+            actions = [action];
+          } else if (tab.label === 'Adventures' && state.explorerAdventureKey) {
+            const adventure = data.adventures.find(
+              (item) => item.key === state.explorerAdventureKey
+            );
+            if (adventure) {
+              const headingToDoor =
+                getRoaming()?.isHeadingToAdventure?.(selectedId);
+              const selectedOling = data.olings.find(
+                (oling) => String(oling.id || oling._id) === String(selectedId)
+              );
+              const availability = getAdventureAvailability(
+                selectedOling,
+                adventure
+              );
+              const action = createInlineAction(
+                headingToDoor ? 'Cancel adventure' : 'Start adventure',
+                () => start(adventure),
+                {
+                  disabled: !availability.canUseAction,
+                  soundIntent: headingToDoor ? 'close' : 'confirm'
                 }
-                if (tab.label === 'Adventures' && state.explorerAdventureKey) {
-                  const adventure = data.adventures.find(
-                    (item) => item.key === state.explorerAdventureKey
-                  );
-                  if (!adventure) return [];
-                  const headingToDoor =
-                    getRoaming()?.isHeadingToAdventure?.(selectedId);
-                  const selectedOling = data.olings.find(
-                    (oling) =>
-                      String(oling.id || oling._id) === String(selectedId)
-                  );
-                  const isResting = Boolean(selectedOling?.care?.isSleeping);
-                  const action = createInlineAction(
-                    headingToDoor ? 'Cancel adventure' : 'Start adventure',
-                    () => start(adventure),
-                    { disabled: Boolean(active) || !selectedId || isResting }
-                  );
-                  action.title = isResting
-                    ? 'Wake this Oling before starting an adventure.'
-                    : '';
-                  action.classList.add('oling-lab-explorer-adventure-start');
-                  return [action];
-                }
-                if (tab.label !== 'Overview') return [];
-                const label = active
-                  ? 'View active adventure'
-                  : 'Choose an adventure';
-                const action = createInlineAction(label, () =>
-                  openExplorerGateway(
-                    active ? 'Active Adventure' : 'Adventures'
-                  )
-                );
-                action.classList.add('oling-lab-gateway-overview-action');
-                action.dataset.label = label;
-                return [action];
-              }
-            })
-          ],
-          { theme: 'quests-adventures' }
-        );
+              );
+              action.title = availability.canUseAction
+                ? ''
+                : availability.message;
+              action.classList.add('oling-lab-explorer-adventure-start');
+              actions = [action];
+            }
+          } else if (tab.label === 'Overview') {
+            const label = active
+              ? 'View active adventure'
+              : 'Choose an adventure';
+            const action = createInlineAction(
+              label,
+              () =>
+                openExplorerGateway(active ? 'Active Adventure' : 'Adventures'),
+              { soundIntent: 'open' }
+            );
+            action.classList.add('oling-lab-gateway-overview-action');
+            action.dataset.label = label;
+            actions = [action];
+          }
+          if (usesSidePanel && elements.gatewayPanelFooter) {
+            elements.gatewayPanelFooter.hidden = actions.length === 0;
+          }
+          return actions;
+        };
+        const tabMenu = createTabMenu(tabs, {
+          initialLabel: initialTab,
+          onActivate: (tab) => {
+            state.explorerTabLabel = tab.label;
+          },
+          actionContent: createActionContent
+        });
+        if (usesSidePanel) {
+          const tabList = tabMenu.querySelector(':scope > .oling-lab-tab-list');
+          const actionArea = tabMenu.querySelector(
+            ':scope > .oling-lab-container-action-area'
+          );
+          tabMenu.classList.add('has-external-tabs');
+          elements.gatewayPanelTabs.replaceChildren(tabList);
+          elements.gatewayPanelTabs.hidden = false;
+          elements.gatewayPanelContent.replaceChildren(tabMenu);
+          elements.gatewayPanelFooter.replaceChildren(actionArea);
+          finishGatewayPanelOpen(wasExpanded);
+        } else {
+          openMenu('Explorer Gateway', [tabMenu], {
+            theme: 'quests-adventures'
+          });
+        }
       } catch (error) {
         setStatus(error.message);
+        playSound('uiError');
       }
     }
 
     return {
-      openExplorerGateway
+      openExplorerGateway,
+      closeGatewayPanel
     };
   }
 

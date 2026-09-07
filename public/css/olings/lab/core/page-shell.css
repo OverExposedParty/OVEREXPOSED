@@ -1,0 +1,188 @@
+@font-face {
+  font-family: 'LemonMilkLight';
+  src: url('/fonts/LemonMilk/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+:root {
+  --primarypagecolour: #bee7ff;
+  --secondarypagecolour: #7cbde8;
+  --oling-lab-available-height: calc(100dvh - var(--headerheight));
+  --oling-lab-cell: min(
+    512px,
+    42vw,
+    calc(var(--oling-lab-available-height) / 2)
+  );
+  --oling-lab-grid-line: rgb(22 31 36 / 18%);
+  --oling-lab-wallpaper-image: url('/images/olings/lab/wallpapers/brick/tile.svg');
+  --oling-lab-wallpaper-colour: #e8f1ed;
+  --oling-lab-wallpaper-repeat: repeat;
+  --oling-lab-wallpaper-position: left bottom;
+  --oling-lab-wallpaper-size: var(--oling-lab-cell) var(--oling-lab-cell);
+  --oling-energy-primary-colour: #ffe566;
+  --oling-energy-secondary-colour: #c7b34d;
+}
+
+body {
+  background: #eef7f4;
+}
+
+.oling-lab-page {
+  box-sizing: border-box;
+  height: 100dvh;
+  overflow: hidden;
+  padding: var(--headerheight) 0 0;
+  background: #eef7f4;
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-toolbar {
+  position: fixed;
+  top: calc(var(--headerheight) + 0.75rem);
+  left: 0.75rem;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.oling-lab-customise-tools {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.oling-lab-customise-tools[hidden] {
+  display: none;
+}
+
+.oling-lab-customise-tools[data-oling-lab-customise-transition='closed']
+  .oling-lab-customise-category {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(var(--oling-lab-customise-entry-x, 0px)) scale(0.85);
+}
+
+.oling-lab-menu h2,
+.oling-lab-menu p {
+  margin: 0;
+}
+
+.oling-lab-save-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.oling-lab-edit-toggle,
+.oling-lab-storage-toggle,
+.oling-lab-customise-category,
+.oling-lab-scroll,
+.oling-lab-menu-action,
+.oling-lab-plus,
+.oling-lab-cell-hit,
+.oling-lab-item-hit,
+.oling-lab-action-panel-button {
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.oling-lab-edit-toggle,
+.oling-lab-storage-toggle,
+.oling-lab-customise-category {
+  position: relative;
+  min-width: 6.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  background: var(--backgroundcolour);
+  color: #f7efe3;
+  font-weight: 900;
+  text-transform: uppercase;
+  opacity: 1;
+  margin-inline: 0;
+  margin-bottom: 0;
+  transform: scale(1);
+  transform-origin: top center;
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease,
+    margin-inline 200ms ease,
+    margin-bottom 200ms ease;
+}
+
+.oling-lab-customise-category {
+  border-radius: 0.5rem;
+  background: var(
+    --oling-lab-customise-secondary-colour,
+    var(--secondarybackgroundcolour)
+  );
+  color: var(--backgroundcolour);
+  white-space: nowrap;
+}
+
+.oling-lab-storage-toggle {
+  z-index: 2;
+  border-radius: 0.5rem;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-edit-toggle {
+  z-index: 2;
+  border-radius: 0.5rem;
+  background: var(--primarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-customise-category[data-oling-lab-customise-category='wall-decorations'] {
+  min-width: 10.5rem;
+}
+
+.oling-lab-customise-category[aria-pressed='true'] {
+  z-index: 1;
+  background: var(
+    --oling-lab-customise-primary-colour,
+    var(--secondarybackgroundcolour)
+  );
+  color: var(--backgroundcolour);
+  margin-inline: var(--oling-lab-button-growth-inline-space, 0px);
+  margin-bottom: var(--oling-lab-button-growth-block-space, 0px);
+  transform: scale(1.25);
+}
+
+.oling-lab-customise-category:focus-visible,
+.oling-lab-edit-toggle:focus-visible,
+.oling-lab-storage-toggle:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.oling-lab-edit-toggle[aria-pressed='true'] {
+  background: var(--secondarypagecolour);
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-storage-toggle:hover,
+  .oling-lab-customise-category:hover {
+    background: var(
+      --oling-lab-customise-primary-colour,
+      var(--secondarybackgroundcolour)
+    );
+    color: var(--backgroundcolour);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oling-lab-edit-toggle,
+  .oling-lab-storage-toggle,
+  .oling-lab-customise-category {
+    transition: none;
+  }
+}

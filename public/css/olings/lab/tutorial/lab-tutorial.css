@@ -1,0 +1,7 @@
+.oe-tutorial-root[data-oe-tutorial-id='olings-lab'] {
+  --oe-tutorial-primary-colour: var(--primarycolour, var(--primarypagecolour));
+  --oe-tutorial-page-primary-colour: var(--primarypagecolour);
+  --oe-tutorial-page-secondary-colour: var(--secondarypagecolour);
+  --oe-tutorial-background-colour: var(--backgroundcolour);
+  --oe-tutorial-assistant-background-image: url('/images/error-404/computer/screen/background.jpg');
+}

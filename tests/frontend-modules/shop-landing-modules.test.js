@@ -55,6 +55,16 @@ test('shop landing feature modules share cross-feature helpers', () => {
   assert.equal(typeof shop.createProductCard, 'function');
   assert.equal(typeof shop.openPreviewHatch, 'function');
   assert.equal(typeof shop.createPurchaseDialog, 'function');
+  const wallpaperProduct = {
+    digitalEntitlement: {
+      grants: [{ type: 'oling_wallpaper', key: 'aurora' }]
+    }
+  };
+  assert.equal(shop.isFurnitureProduct(wallpaperProduct), true);
+  assert.deepEqual(
+    [...shop.getFurnitureCardTags(wallpaperProduct)],
+    ['Wallpaper']
+  );
   const colours = shop.resolvePurchaseColours({
     digitalEntitlement: { grants: [{ type: 'oling_egg', key: 'base' }] }
   });
@@ -101,7 +111,8 @@ test('shop landing feature modules share cross-feature helpers', () => {
     'eyes',
     'mouth'
   ]);
-  assert.equal(preview.receipt.rolls.personality.personalityKey, 'curious');
+  assert.equal('personality' in preview.receipt.rolls, false);
+  assert.equal('personalityKey' in preview.oling, false);
 });
 
 test('shop landing modules load before the startup script', () => {

@@ -21,6 +21,14 @@ const waitingRoomDataPath = path.join(
   __dirname,
   '../../public/scripts/party-games/waiting-room/waiting-room-data.js'
 );
+const waitingRoomUiPath = path.join(
+  __dirname,
+  '../../public/scripts/party-games/waiting-room/waiting-room-ui.js'
+);
+const gamemodeSettingsTemplatePath = path.join(
+  __dirname,
+  '../../public/scripts/html-templates/gamemode-settings/gamemode-settings-template.js'
+);
 
 test('waiting room late-join module registers its factory', () => {
   const context = { window: {} };
@@ -87,8 +95,53 @@ test('waiting room waits for the completed online API bootstrap', () => {
   assert.ok(onlineSettingsConfig, 'online settings page entry');
   assert.doesNotMatch(onlineSettingsConfig[1], /addDataLoaded\s*:\s*true/);
   assert.match(entry, /OEReady\?\.waitFor/);
-  assert.match(entry, /\['online-settings'\]/);
+  assert.match(entry, /\['online-settings', 'gamemode-settings-template'\]/);
   assert.match(entry, /await waitForOnlineCore\(\)/);
+});
+
+test('waiting room keeps ready disabled until startup completes', () => {
+  const entry = fs.readFileSync(waitingRoomPath, 'utf8');
+
+  assert.match(entry, /setWaitingRoomReadyControlAvailable\(false\)/);
+  assert.match(entry, /setWaitingRoomReadyControlAvailable\(true\)/);
+  assert.match(entry, /readyButton\.disabled/);
+});
+
+test('waiting room retries transient startup failures without enabling controls', () => {
+  const entry = fs.readFileSync(waitingRoomPath, 'utf8');
+  const data = fs.readFileSync(waitingRoomDataPath, 'utf8');
+
+  assert.match(entry, /waitingRoomInitializationPromise/);
+  assert.match(entry, /RETRY JOINING/);
+  assert.match(entry, /window\.addEventListener\('online'/);
+  assert.match(entry, /setWaitingRoomReadyControlAvailable\(false\)/);
+  assert.match(data, /PartyApiRequest\?\.requestPartyJson/);
+  assert.match(data, /catch \(error\)/);
+});
+
+test('waiting room UI waits for validated settings containers', () => {
+  const ui = fs.readFileSync(waitingRoomUiPath, 'utf8');
+
+  assert.match(ui, /waitFor\(\['gamemode-settings-template'\]/);
+  assert.match(ui, /window\.packsContainer/);
+  assert.match(ui, /window\.rulesContainer/);
+  assert.match(
+    ui,
+    /if \(!resolvedPacksContainer \|\| !resolvedRulesContainer\)/
+  );
+});
+
+test('gamemode settings template validates loading and exposes retry UI', () => {
+  const template = fs.readFileSync(gamemodeSettingsTemplatePath, 'utf8');
+
+  assert.match(template, /if \(!response\.ok\)/);
+  assert.match(template, /Gamemode settings template missing:/);
+  assert.match(template, /Settings failed to load/);
+  assert.match(template, /window\.location\.reload\(\)/);
+  assert.match(
+    template,
+    /window\.gamemodeSettingsTemplateReady = gamemodeSettingsTemplateReady/
+  );
 });
 
 test('waiting room entry composes the late-join briefing module', () => {

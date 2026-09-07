@@ -18,13 +18,14 @@ let socket;
 function isAuthoritativePartyHost(partyData = currentPartyData) {
   const state = partyData?.state ?? partyData ?? {};
   const authoritativeHostId = state.hostComputerId ?? hostDeviceId;
-  const currentDeviceId =
-    typeof deviceId === 'undefined' ? null : deviceId;
+  const currentActorId =
+    window.resolveOnlinePartyActorId?.(partyData) ??
+    (typeof deviceId === 'undefined' ? null : deviceId);
 
   return Boolean(
     authoritativeHostId &&
-    currentDeviceId &&
-    String(authoritativeHostId) === String(currentDeviceId)
+    currentActorId &&
+    String(authoritativeHostId) === String(currentActorId)
   );
 }
 

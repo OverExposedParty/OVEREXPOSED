@@ -15,8 +15,8 @@
     "battle-arena": {
       "label": "Battle Arena",
       "description": "Friendly competition.",
-      "primaryColour": "#FFB5C8",
-      "secondaryColour": "#E684A1"
+      "primaryColour": "#6EA8FF",
+      "secondaryColour": "#4B73B5"
     },
     "oling-collection": {
       "label": "Oling Collection",
@@ -38,7 +38,7 @@
     },
     "oling-profile": {
       "label": "Oling Profile",
-      "description": "Personality.",
+      "description": "Oling details.",
       "primaryColour": "#FFD1E8",
       "secondaryColour": "#E39BC1"
     },
@@ -83,6 +83,24 @@
       "description": "Cosmetics, dressing, and styling.",
       "primaryColour": "#D6C8FF",
       "secondaryColour": "#9C84E8"
+    },
+    "wall-style": {
+      "label": "Wall Style",
+      "description": "Wall materials, colours, and finishes.",
+      "primaryColour": "#FF9F80",
+      "secondaryColour": "#FFD0C2"
+    },
+    "wall-decorations": {
+      "label": "Wall Decorations",
+      "description": "Posters, artwork, and decorative wall pieces.",
+      "primaryColour": "#9D8AFF",
+      "secondaryColour": "#C9BEFF"
+    },
+    "furniture": {
+      "label": "Furniture",
+      "description": "Furniture placement and room layout.",
+      "primaryColour": "#63C7C2",
+      "secondaryColour": "#B7EBE8"
     },
     "rarity-special": {
       "label": "Rarity / Special",

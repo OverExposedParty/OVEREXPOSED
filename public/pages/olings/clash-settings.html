@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Olings Clash | OVEREXPOSED</title>
+    <meta name="description" content="Play Olings Clash." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link
+      rel="preload"
+      href="/images/splash-screens/olings/clash/settings.png"
+      as="image"
+      fetchpriority="high"
+    />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link
+      rel="stylesheet"
+      href="/css/olings/shared/oling-flight-motion.css?v=2026-08-04-01"
+    />
+    <link rel="stylesheet" href="/css/olings/shared/oling-selector.css" />
+    <link rel="stylesheet" href="/css/party-games/mode-selection.css" />
+    <link rel="stylesheet" href="/build/olings/clash/clash.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/olings/clash/settings.png"
+        alt="Oling Clash loading screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/olings/clash/settings.png"
+        alt="Oling Clash loading screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main
+      class="olings-clash-page is-lobby"
+      data-template="olings-clash"
+      data-clash-page="settings"
+      aria-label="Olings Clash settings"
+    >
+      <div
+        class="olings-clash-mode-backdrop"
+        data-clash-mode-backdrop
+        hidden
+      ></div>
+      <section
+        class="mode-selection-container olings-clash-mode-selection"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="clash-mode-selection-title"
+        data-clash-mode-selection
+        hidden
+      >
+        <header class="mode-selection-header">
+          <h2
+            class="mode-selection-header-title"
+            id="clash-mode-selection-title"
+          >
+            CHOOSE HOW TO PLAY
+          </h2>
+        </header>
+        <div class="mode-selection-options">
+          <div class="mode-selection-option mode-selection-option--online">
+            <button
+              class="mode-selection-button mode-selection-button--online"
+              type="button"
+              data-clash-mode="online"
+              aria-label="Play online against another player"
+              aria-pressed="false"
+            >
+              <span class="mode-selection-artboard" aria-hidden="true">
+                <img
+                  class="mode-selection-svg mode-selection-svg--artwork"
+                  src="/images/party-games/mode-selection/online/artwork.svg"
+                  alt=""
+                />
+                <span class="olings-clash-mode-selection__label">
+                  <strong>PLAY ONLINE</strong>
+                  <small>Challenge another player</small>
+                </span>
+              </span>
+            </button>
+          </div>
+          <span class="mode-selection-separator" aria-hidden="true">OR</span>
+          <div class="mode-selection-option mode-selection-option--offline">
+            <button
+              class="mode-selection-button mode-selection-button--offline"
+              type="button"
+              data-clash-mode="ai"
+              aria-label="Play offline against an AI opponent"
+              aria-pressed="false"
+            >
+              <span class="mode-selection-artboard" aria-hidden="true">
+                <img
+                  class="mode-selection-svg mode-selection-svg--artwork"
+                  src="/images/party-games/mode-selection/offline/artwork.svg"
+                  alt=""
+                />
+                <span class="olings-clash-mode-selection__label">
+                  <strong>PLAY OFFLINE</strong>
+                  <small>Battle a computer opponent</small>
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="olings-clash-lobby"
+        aria-labelledby="clash-lobby-title"
+        aria-hidden="false"
+      >
+        <header class="olings-clash-lobby__heading">
+          <h1 id="clash-lobby-title">OLINGS CLASH</h1>
+        </header>
+
+        <div
+          class="olings-clash-lobby__tabs"
+          role="tablist"
+          aria-label="Clash lobby settings"
+        >
+          <button
+            type="button"
+            role="tab"
+            id="clash-team-tab"
+            aria-controls="clash-team-panel"
+            aria-selected="true"
+            data-clash-tab="team"
+          >
+            TEAM
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="clash-rules-tab"
+            aria-controls="clash-rules-panel"
+            aria-selected="false"
+            tabindex="-1"
+            data-clash-tab="rules"
+          >
+            RULES
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="clash-online-tab"
+            aria-controls="clash-online-panel"
+            aria-selected="false"
+            tabindex="-1"
+            data-clash-tab="online"
+          >
+            MATCHUP
+          </button>
+        </div>
+
+        <section
+          class="olings-clash-gate"
+          aria-live="polite"
+          data-clash-gate
+          hidden
+        >
+          <h2 data-clash-gate-title>LOADING CLASH</h2>
+          <p data-clash-gate-message></p>
+          <div class="olings-clash-gate__actions" data-clash-gate-actions>
+            <a href="/" data-clash-gate-primary>MAIN MENU</a>
+            <button type="button" data-clash-gate-secondary>
+              CREATE CLASH
+            </button>
+          </div>
+        </section>
+
+        <div class="olings-clash-lobby__content">
+          <section
+            class="olings-clash-tab-panel is-active"
+            id="clash-team-panel"
+            role="tabpanel"
+            aria-labelledby="clash-team-tab"
+            data-clash-tab-panel="team"
+          >
+            <section
+              class="olings-clash-team olings-clash-tab-panel__body"
+              aria-labelledby="clash-team-title"
+            >
+              <header class="olings-clash-panel-heading">
+                <div>
+                  <h2 id="clash-team-title">SELECT YOUR CLASH TEAM</h2>
+                  <p>Choose three Olings, then drag them into battle order.</p>
+                </div>
+              </header>
+              <div class="olings-clash-team__workspace">
+                <div class="olings-clash-team__slots">
+                  <div class="olings-clash-team-slot">
+                    <button type="button" aria-label="Select Oling 1">
+                      <span aria-hidden="true">+</span>
+                    </button>
+                    <strong data-clash-team-name>OLING 1</strong>
+                    <small data-clash-team-roles hidden></small>
+                  </div>
+                  <div class="olings-clash-team-slot">
+                    <button type="button" aria-label="Select Oling 2">
+                      <span aria-hidden="true">+</span>
+                    </button>
+                    <strong data-clash-team-name>OLING 2</strong>
+                    <small data-clash-team-roles hidden></small>
+                  </div>
+                  <div class="olings-clash-team-slot">
+                    <button type="button" aria-label="Select Oling 3">
+                      <span aria-hidden="true">+</span>
+                    </button>
+                    <strong data-clash-team-name>OLING 3</strong>
+                    <small data-clash-team-roles hidden></small>
+                  </div>
+                </div>
+                <div
+                  class="olings-clash-selector-picker oling-selector__picker"
+                  aria-label="Choose an Oling"
+                  data-clash-selector-picker
+                  hidden
+                >
+                  <strong
+                    class="olings-clash-selector-selected"
+                    data-clash-selector-selected
+                    hidden
+                    >SELECTED</strong
+                  >
+                  <button
+                    class="oling-selector__arrow is-previous"
+                    type="button"
+                    aria-label="Previous Oling"
+                    data-clash-selector-previous
+                  >
+                    <span>Previous</span>
+                  </button>
+                  <div
+                    class="oling-selector__preview"
+                    data-clash-selector-preview
+                    aria-live="polite"
+                  ></div>
+                  <button
+                    class="oling-selector__arrow is-next"
+                    type="button"
+                    aria-label="Next Oling"
+                    data-clash-selector-next
+                  >
+                    <span>Next</span>
+                  </button>
+                  <div
+                    class="olings-clash-selector-abilities olings-clash-actions__choices"
+                    aria-label="Selected Oling abilities"
+                    data-clash-selector-abilities
+                    hidden
+                  >
+                    <button
+                      class="olings-clash-action is-attack"
+                      type="button"
+                      data-clash-selector-ability="attack"
+                    >
+                      <img alt="" data-clash-move-image />
+                      <strong data-clash-move-name>ATTACK</strong>
+                    </button>
+                    <button
+                      class="olings-clash-action is-guard"
+                      type="button"
+                      data-clash-selector-ability="guard"
+                    >
+                      <img alt="" data-clash-move-image />
+                      <strong data-clash-move-name>GUARD</strong>
+                    </button>
+                    <button
+                      class="olings-clash-action is-skill"
+                      type="button"
+                      data-clash-selector-ability="skill"
+                    >
+                      <img alt="" data-clash-move-image />
+                      <strong data-clash-move-name>SKILL</strong>
+                    </button>
+                    <button
+                      class="olings-clash-action is-draw is-passive"
+                      type="button"
+                      data-clash-selector-ability="draw"
+                    >
+                      <img alt="" data-clash-move-image />
+                      <strong data-clash-move-name>DRAW</strong>
+                      <img
+                        class="olings-clash-action__state-icon"
+                        src="/images/olings/clash/ui/icons/passive.svg"
+                        alt=""
+                        title="Automatic Draw ability"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="olings-clash-tab-panel__badge-rail">
+              <strong class="olings-clash-team__count" data-clash-team-count
+                >0/3 SELECTED</strong
+              >
+            </div>
+          </section>
+
+          <section
+            class="olings-clash-tab-panel"
+            id="clash-rules-panel"
+            role="tabpanel"
+            aria-labelledby="clash-rules-tab"
+            data-clash-tab-panel="rules"
+            hidden
+          >
+            <div class="olings-clash-tab-panel__body">
+              <header class="olings-clash-panel-heading">
+                <div>
+                  <h2>CLASH RULES</h2>
+                  <p>The rules for this match are shown below.</p>
+                </div>
+              </header>
+              <dl class="olings-clash-rules-summary">
+                <div>
+                  <dt>TEAM SIZE</dt>
+                  <dd>3 OLINGS</dd>
+                </div>
+                <div>
+                  <dt>STARTING HEALTH</dt>
+                  <dd data-clash-rule-health>3 HEARTS</dd>
+                </div>
+                <div>
+                  <dt>DECISIVE DAMAGE</dt>
+                  <dd data-clash-rule-decisive>1 HEART</dd>
+                </div>
+                <div>
+                  <dt>DRAW DAMAGE</dt>
+                  <dd data-clash-rule-draw>½ HEART</dd>
+                </div>
+                <div>
+                  <dt>LAST STAND</dt>
+                  <dd data-clash-rule-last-stand>ENABLED</dd>
+                </div>
+                <div>
+                  <dt>TURN TIMER</dt>
+                  <dd>15 SECONDS</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="olings-clash-tab-panel__badge-rail">
+              <strong class="olings-clash-rules__badge" data-clash-ruleset-name
+                >STANDARD</strong
+              >
+            </div>
+          </section>
+
+          <section
+            class="olings-clash-tab-panel"
+            id="clash-online-panel"
+            role="tabpanel"
+            aria-labelledby="clash-online-tab"
+            data-clash-tab-panel="online"
+            hidden
+          >
+            <div class="olings-clash-tab-panel__body">
+              <section class="olings-clash-matchup" aria-label="Clash players">
+                <article
+                  class="olings-clash-player is-local"
+                  data-clash-player="local"
+                >
+                  <p class="olings-clash-player__meta">
+                    <strong>YOU</strong>
+                    <span data-clash-player-level>LEVEL --</span>
+                    <span
+                      class="olings-clash-player__ready"
+                      data-clash-player-ready
+                      hidden
+                    ></span>
+                  </p>
+                  <div
+                    class="olings-clash-player__oe"
+                    data-clash-player-oe
+                    aria-hidden="true"
+                  ></div>
+                  <p class="olings-clash-player__name" data-clash-player-name>
+                    PLAYER
+                  </p>
+                </article>
+
+                <span class="olings-clash-versus" aria-hidden="true">VS</span>
+
+                <article
+                  class="olings-clash-player is-opponent is-empty"
+                  data-clash-player="opponent"
+                >
+                  <p class="olings-clash-player__meta">
+                    <strong data-clash-player-type>OPPONENT</strong>
+                    <span data-clash-player-level hidden>LEVEL --</span>
+                    <span
+                      class="olings-clash-player__ready"
+                      data-clash-player-ready
+                      hidden
+                    ></span>
+                  </p>
+                  <div
+                    class="olings-clash-player__oe"
+                    data-clash-player-oe
+                    aria-hidden="true"
+                    hidden
+                  ></div>
+                  <button
+                    class="olings-clash-opponent-slot"
+                    type="button"
+                    aria-label="Add AI opponent"
+                    title="Add AI opponent"
+                    data-clash-opponent-slot
+                  >
+                    <span aria-hidden="true">+</span>
+                  </button>
+                  <p class="olings-clash-player__name" data-clash-player-name>
+                    WAITING FOR PLAYER
+                  </p>
+                  <small
+                    class="olings-clash-ai-level"
+                    data-clash-ai-level
+                    hidden
+                    >NORMAL AI</small
+                  >
+                </article>
+              </section>
+            </div>
+            <div
+              class="olings-clash-tab-panel__badge-rail olings-clash-online__rail"
+            >
+              <div class="olings-clash-share-row" data-clash-share-controls>
+                <label class="sr-only" for="olings-clash-room-code"
+                  >Room code</label
+                >
+                <input
+                  id="olings-clash-room-code"
+                  type="text"
+                  value="XXX-XXX"
+                  readonly
+                  data-clash-room-code
+                />
+                <button
+                  type="button"
+                  aria-label="Copy room link"
+                  data-clash-copy-link
+                >
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 206.78 262.84"
+                  >
+                    <rect
+                      x="49.78"
+                      y="55.84"
+                      width="150"
+                      height="200"
+                      rx="12.37"
+                      ry="12.37"
+                    />
+                    <path
+                      d="M49.78,68.24v126.15c0,6.79-5.47,12.32-12.26,12.4l-18.15.21c-6.83,0-12.37-5.54-12.37-12.37V19.4c0-6.85,5.55-12.4,12.4-12.4h125.2c6.85,0,12.4,5.55,12.4,12.4v24.06c0,6.85-5.55,12.4-12.41,12.4l-82.41-.03c-6.85,0-12.41,5.55-12.41,12.4Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  aria-label="Show room QR code"
+                  data-clash-qr-code
+                >
+                  QR
+                </button>
+              </div>
+              <div
+                class="olings-clash-ai-controls"
+                data-clash-ai-controls
+                hidden
+              >
+                <label for="olings-clash-ai-difficulty">AI DIFFICULTY</label>
+                <select
+                  id="olings-clash-ai-difficulty"
+                  data-clash-ai-difficulty
+                >
+                  <option value="0.2">EASY</option>
+                  <option value="0.45">NORMAL</option>
+                  <option value="0.75">HARD</option>
+                </select>
+              </div>
+              <strong class="olings-clash-online__count" data-clash-player-count
+                >1/2 PLAYERS</strong
+              >
+            </div>
+          </section>
+        </div>
+
+        <footer class="olings-clash-lobby__controls">
+          <button
+            class="olings-clash-cancel"
+            type="button"
+            data-clash-selector-cancel
+            hidden
+          >
+            CANCEL
+          </button>
+          <button
+            class="olings-clash-ready"
+            type="button"
+            data-clash-ready
+            disabled
+          >
+            READY UP
+          </button>
+        </footer>
+      </section>
+
+      <section
+        class="olings-clash-qr-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="olings-clash-qr-title"
+        aria-hidden="true"
+        data-clash-qr-dialog
+        tabindex="-1"
+        hidden
+      >
+        <div class="olings-clash-qr-dialog__container">
+          <header class="olings-clash-qr-dialog__header">
+            <h2 id="olings-clash-qr-title">SCAN TO JOIN</h2>
+          </header>
+          <div class="olings-clash-qr-dialog__code">
+            <img alt="" data-clash-qr-image />
+            <p data-clash-qr-url></p>
+          </div>
+          <footer class="olings-clash-qr-dialog__footer">
+            <p>SCAN TO JOIN CLASH</p>
+            <p data-clash-qr-player-count>(1/2)</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'down';
+
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#5D9EF5'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#3869B8'
+    );
+
+    window.pageScripts = {
+      '/build/olings/clash/clash-lobby.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_CLASH',
+        zIndex: 3
+      }
+    };
+    window.pageLoadStageLabels = {
+      '/scripts/html-templates/core-template/core-template.js':
+        'Loading page shell',
+      '/build/olings/clash/clash-lobby.js': 'Preparing teams and rules',
+      default: 'Preparing Clash settings',
+      ready: 'Clash settings ready'
+    };
+    document.querySelector('#splash-screen-container p').textContent =
+      'Loading page shell';
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

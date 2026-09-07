@@ -119,7 +119,7 @@ async function resumeHostedOnlinePartyFromUrl() {
     loadingPage = true;
     transitionSplashScreen(
       `/${formatPackName(gamemode)}/${partyCode}`,
-      `/images/splash-screens/${formatPackName(gamemode)}.png`
+      `/images/splash-screens/party-games/${formatPackName(gamemode)}/game.png`
     );
     return false;
   }

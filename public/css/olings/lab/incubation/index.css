@@ -2,5 +2,6 @@
 @import url('./hero-and-used.css');
 @import url('./dashboard-status.css');
 @import url('./egg-insertion-and-picker.css');
-@import url('./detail-panels.css');
+@import url('./detail-panels.css?v=2026-09-06-04');
 @import url('./detail-rows-and-previews.css');
+@import url('./side-panel.css?v=2026-09-06-03');

@@ -64,23 +64,6 @@
       return olingEggsPromise;
     }
 
-    function loadOlingPersonalities() {
-      if (!olingPersonalitiesPromise) {
-        olingPersonalitiesPromise = fetch(OLING_PERSONALITIES_ENDPOINT, {
-          headers: { Accept: 'application/json' }
-        })
-          .then((response) => {
-            if (!response.ok) throw new Error('Could not load personalities.');
-            return response.json();
-          })
-          .then((payload) =>
-            Array.isArray(payload?.personalities) ? payload.personalities : []
-          );
-      }
-
-      return olingPersonalitiesPromise;
-    }
-
     function loadRarityPalette() {
       if (!rarityPalettePromise) {
         rarityPalettePromise = fetch(RARITY_PALETTE_ENDPOINT, {
@@ -197,7 +180,6 @@
       getSetsForRarity,
       isOpalDigitalProduct,
       loadOlingEggs,
-      loadOlingPersonalities,
       loadRarityPalette,
       pickRandom,
       rollWeightedKey

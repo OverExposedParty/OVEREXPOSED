@@ -1,0 +1,613 @@
+.is-clash-ability-dialog-open {
+  overflow: hidden;
+}
+
+.oling-clash-ability-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(8 10 10 / 76%);
+  box-sizing: border-box;
+}
+
+.oling-clash-ability-dialog-shell {
+  width: min(960px, 100%);
+  min-height: min(560px, calc(100dvh - 32px));
+  max-height: calc(100dvh - 32px);
+  display: grid;
+  grid-template-columns:
+    clamp(52px, 7vw, 84px) minmax(0, 1fr)
+    clamp(52px, 7vw, 84px);
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 22px 60px rgb(0 0 0 / 42%);
+}
+
+.oling-clash-ability-dialog {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: clamp(20px, 4vw, 34px);
+  border: 0;
+  background: var(--backgroundcolour, #202020);
+  color: var(--primarypagecolour, #4bc7c1);
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.oling-clash-ability-dialog__header {
+  min-width: 0;
+  text-align: center;
+}
+
+.oling-clash-ability-dialog__heading {
+  min-width: 0;
+}
+
+.oling-clash-ability-dialog__heading h2,
+.oling-clash-ability-dialog__meta,
+.oling-clash-ability-dialog__description {
+  margin: 0;
+}
+
+.oling-clash-ability-dialog__heading h2 {
+  color: var(--textcolour, #f4f4f4);
+  font-size: clamp(1.6rem, 5vw, 2.5rem);
+  font-weight: 950;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-clash-ability-dialog__meta {
+  margin-top: 8px;
+  font-size: clamp(0.74rem, 2vw, 0.95rem);
+  font-weight: 950;
+}
+
+.oling-clash-ability-dialog__artwork {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(12px, 3vw, 24px);
+}
+
+.oling-clash-ability-dialog__artwork-frame {
+  min-width: 0;
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 2vw, 20px);
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.oling-clash-ability-dialog__art {
+  width: 100%;
+  height: 100%;
+  max-height: 260px;
+  object-fit: contain;
+}
+
+.oling-clash-ability-dialog__art[hidden] {
+  display: none;
+}
+
+.oling-clash-ability-dialog__detail {
+  width: 100%;
+  min-height: 230px;
+  display: grid;
+  grid-template-rows: auto minmax(5.2em, 1fr);
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  color: var(--textcolour, #f4f4f4);
+  box-sizing: border-box;
+}
+
+.oling-clash-ability-dialog__detail-header {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  grid-template-rows: auto 46px;
+  align-items: center;
+  row-gap: 8px;
+}
+
+.oling-clash-ability-dialog__detail-title {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  color: var(--primarypagecolour, #4bc7c1);
+  font-size: clamp(0.86rem, 2vw, 1.05rem);
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-clash-ability-dialog__detail-art {
+  grid-column: 2;
+  grid-row: 2;
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  justify-self: center;
+}
+
+.oling-clash-ability-dialog__detail-art[hidden] {
+  visibility: hidden;
+}
+
+.oling-clash-ability-dialog__description {
+  height: 5.2em;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-size: clamp(0.9rem, 2.3vw, 1.08rem);
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.oling-clash-ability-dialog__description-copy {
+  width: 100%;
+}
+
+.oling-clash-ability-dialog__detail-back {
+  grid-column: 1;
+  grid-row: 1;
+  width: 46px;
+  height: 1em;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primarypagecolour, #4bc7c1);
+  font: inherit;
+  font-size: clamp(0.86rem, 2vw, 1.05rem);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.oling-clash-ability-dialog__detail-back::before {
+  width: 0;
+  height: 0;
+  border-block: 0.5em solid transparent;
+  border-right: 0.78em solid currentColor;
+  content: '';
+}
+
+.oling-clash-ability-dialog__detail-back[hidden] {
+  display: grid;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.oling-clash-ability-dialog__fraction {
+  display: inline-flex;
+  align-items: baseline;
+  margin-inline: 1px 2px;
+  white-space: nowrap;
+}
+
+.oling-clash-ability-dialog__fraction sup,
+.oling-clash-ability-dialog__fraction sub {
+  font-size: 0.72em;
+  line-height: 0;
+}
+
+.oling-clash-ability-dialog__fraction sup {
+  transform: translateY(-0.28em);
+}
+
+.oling-clash-ability-dialog__fraction sub {
+  transform: translateY(0.12em);
+}
+
+.oling-clash-ability-dialog__inline-icon-button {
+  width: 1.55em;
+  height: 1.55em;
+  display: inline-grid;
+  place-items: center;
+  margin-inline: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  vertical-align: -0.42em;
+  cursor: help;
+}
+
+.oling-clash-ability-dialog__inline-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: transform 160ms ease;
+}
+
+.oling-clash-ability-dialog__rail {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: var(--backgroundcolour, #202020);
+  cursor: pointer;
+  scale: 1;
+  transform: none;
+  transition: none;
+}
+
+.oling-clash-ability-dialog__rail:active,
+.oling-clash-ability-dialog__rail.is-pressed,
+.oling-clash-ability-dialog__rail.is-press-releasing,
+.oling-clash-ability-dialog__rail.is-press-settling {
+  scale: 1;
+  transform: none;
+  transition: none;
+}
+
+.oling-clash-ability-dialog__rail span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.oling-clash-ability-dialog__rail::before {
+  width: 0;
+  height: 0;
+  border-top: clamp(13.5px, 2.25vw, 21px) solid transparent;
+  border-bottom: clamp(13.5px, 2.25vw, 21px) solid transparent;
+  color: var(--primarypagecolour, #4bc7c1);
+  content: '';
+  transition: color 160ms ease;
+}
+
+.oling-clash-ability-dialog__rail.is-previous::before {
+  border-right: clamp(18.75px, 3vw, 30px) solid currentColor;
+}
+
+.oling-clash-ability-dialog__rail.is-next::before {
+  border-left: clamp(18.75px, 3vw, 30px) solid currentColor;
+}
+
+.oling-clash-ability-library__filters button {
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 2px solid var(--primarypagecolour, #4bc7c1);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--primarypagecolour, #4bc7c1);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.oling-clash-ability-dialog__position {
+  min-width: 4ch;
+  font-size: clamp(0.92rem, 2.4vw, 1.15rem);
+  text-align: center;
+}
+
+.oling-clash-ability-dialog button:focus-visible,
+.oling-clash-ability-library button:focus-visible,
+.oling-clash-symbol-library button:focus-visible {
+  outline: 3px solid var(--secondarypagecolour, #328985);
+  outline-offset: 2px;
+}
+
+.oling-clash-ability-library {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.oling-clash-ability-library__filters {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  box-sizing: border-box;
+}
+
+.oling-clash-ability-library__filters button {
+  min-height: 34px;
+  padding: 6px 9px;
+  font-size: 0.66rem;
+}
+
+.oling-clash-ability-library__filters button[aria-pressed='true'] {
+  background: var(--primarypagecolour, #4bc7c1);
+  color: var(--backgroundcolour, #202020);
+}
+
+.oling-clash-ability-library__grid {
+  max-height: min(430px, 48dvh);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 2px;
+  overflow: auto;
+}
+
+.oling-clash-ability-library__card {
+  min-width: 0;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  color: var(--primarypagecolour, #4bc7c1);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.oling-clash-ability-library__icon {
+  width: min(72%, 82px);
+  max-height: 82px;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.oling-clash-ability-library__copy {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+}
+
+.oling-clash-ability-library__copy strong {
+  color: var(--textcolour, #f4f4f4);
+  font-size: 0.85rem;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-clash-ability-library__copy small {
+  font-size: 0.64rem;
+  font-weight: 900;
+}
+
+.oling-clash-symbol-library {
+  width: 100%;
+  max-height: min(640px, calc(100dvh - 125px));
+  display: grid;
+  gap: 8px;
+  padding: 2px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.oling-clash-icon-library__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.oling-clash-icon-library__card {
+  min-width: 0;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  color: var(--primarypagecolour, #4bc7c1);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.oling-clash-icon-library__visual {
+  width: min(86%, 92px);
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.oling-clash-icon-library__icon {
+  width: min(46%, 44px);
+  max-height: 58px;
+  object-fit: contain;
+}
+
+.oling-clash-icon-library__icon:only-child {
+  width: min(74%, 68px);
+}
+
+.oling-clash-icon-library__card > strong {
+  font-size: 0.72rem;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.oling-clash-symbol-library__detail {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.oling-clash-symbol-library__detail-visual {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 20px 18px 14px;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  box-sizing: border-box;
+}
+
+.oling-clash-symbol-library__detail-artwork {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.oling-clash-symbol-library__detail-artwork .oling-clash-icon-library__icon {
+  width: min(32%, 110px);
+  max-height: 100%;
+}
+
+.oling-clash-symbol-library__detail-artwork
+  .oling-clash-icon-library__icon:only-child {
+  width: min(48%, 150px);
+}
+
+.oling-clash-symbol-library__detail-label {
+  color: var(--primarypagecolour, #4bc7c1);
+  font-size: 0.86rem;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-clash-symbol-library__detail p {
+  width: 100%;
+  margin: 0;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--secondarybackgroundcolour, #292929);
+  color: var(--textcolour, #f4f4f4);
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-clash-ability-dialog__rail:hover {
+    background: var(--backgroundcolour, #202020);
+    transform: none;
+  }
+
+  .oling-clash-ability-dialog__rail:hover::before {
+    color: var(--secondarypagecolour, #328985);
+  }
+
+  .oling-clash-ability-library__filters button:hover {
+    background: var(--secondarypagecolour, #328985);
+    color: var(--backgroundcolour, #202020);
+  }
+
+  .oling-clash-ability-dialog__detail-back:hover {
+    color: var(--secondarypagecolour, #328985);
+  }
+
+  .oling-clash-ability-library__card:hover {
+    background: color-mix(
+      in srgb,
+      var(--primarypagecolour, #4bc7c1) 24%,
+      var(--secondarybackgroundcolour, #292929)
+    );
+  }
+
+  .oling-clash-icon-library__card:hover {
+    background: color-mix(
+      in srgb,
+      var(--primarypagecolour, #4bc7c1) 24%,
+      var(--secondarybackgroundcolour, #292929)
+    );
+  }
+
+  .oling-clash-ability-dialog__inline-icon-button:hover
+    .oling-clash-ability-dialog__inline-icon {
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 520px) {
+  .oling-clash-ability-dialog-backdrop {
+    padding: 8px;
+  }
+
+  .oling-clash-ability-dialog-shell {
+    min-height: min(520px, calc(100dvh - 16px));
+    max-height: calc(100dvh - 16px);
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    border-radius: 10px;
+  }
+
+  .oling-clash-ability-dialog {
+    gap: 14px;
+    padding: 18px 14px;
+  }
+
+  .oling-clash-ability-dialog__artwork {
+    gap: 8px;
+  }
+
+  .oling-clash-ability-dialog__artwork-frame {
+    min-height: 120px;
+    padding: 8px;
+  }
+
+  .oling-clash-ability-dialog__detail {
+    min-height: 215px;
+    padding: 12px;
+  }
+
+  .oling-clash-ability-dialog__detail-header {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+  }
+
+  .oling-clash-ability-dialog__detail-back,
+  .oling-clash-ability-dialog__detail-art {
+    width: 40px;
+  }
+
+  .oling-clash-ability-dialog__detail-art {
+    height: 40px;
+  }
+}

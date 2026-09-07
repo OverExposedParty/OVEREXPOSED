@@ -164,7 +164,18 @@ async function SetScriptLoaded(script) {
 
   const splashScreenStatus = splashScreenContainer?.querySelector('p');
   if (window.allowTransition && splashScreenStatus) {
-    splashScreenStatus.textContent = `(${loaded}/${total})`;
+    const stageLabels = window.pageLoadStageLabels || {};
+    const nextScript = trackedScripts.find((src) => {
+      const element = findScriptElByBaseSrc(src);
+      return element?.dataset.loaded !== 'true';
+    });
+    const stageLabel =
+      loaded === total
+        ? stageLabels.ready
+        : stageLabels[nextScript] || stageLabels.default;
+    splashScreenStatus.textContent = stageLabel
+      ? `${stageLabel} (${loaded}/${total})`
+      : `(${loaded}/${total})`;
   }
 
   reportOEDebug('debug', 'loader.scripts', 'Script progress updated.', {

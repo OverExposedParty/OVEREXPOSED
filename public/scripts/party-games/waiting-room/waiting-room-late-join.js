@@ -346,7 +346,7 @@
       loadingPage = true;
       transitionSplashScreen(
         `/${formatPackName(partyGameMode)}/${partyCode}`,
-        `/images/splash-screens/${formatPackName(partyGameMode)}.png`
+        `/images/splash-screens/party-games/${formatPackName(partyGameMode)}/game.png`
       );
     });
 

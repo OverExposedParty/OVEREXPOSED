@@ -8,6 +8,7 @@ const { registerAccountAuthRoutes } = require('./api-account-auth');
 const { registerOverexposurePostRoutes } = require('./api-overexposure-posts');
 const { registerOlingRoutes } = require('./api-olings');
 const { registerOlingBattleRoutes } = require('./api-oling-battles');
+const { registerOlingClashRoutes } = require('./api-oling-clashes');
 const { registerEmailTrackingRoutes } = require('./api-email-tracking');
 const {
   registerMarketingUnsubscribeRoutes
@@ -31,6 +32,7 @@ function registerApiRoutes({ app, models, runtime, partyOwnerLeases }) {
   registerAccountAuthRoutes(routeContext);
   registerOlingRoutes(routeContext);
   registerOlingBattleRoutes(routeContext);
+  registerOlingClashRoutes(routeContext);
   registerOverexposurePostRoutes(routeContext);
   registerPartyGameRoutes({ app, models, runtime });
   registerPartyChatRoutes({ app, models, runtime });

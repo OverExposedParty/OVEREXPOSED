@@ -141,7 +141,7 @@ async function main() {
       rarity: 'common',
       opalPrice: 120,
       image:
-        '/images/olings/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg',
+        '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg',
       sku: 'OLING-FURNITURE-BASIC-HANGING-LIGHT',
       sortOrder: 20,
       searchKeywords: [
@@ -162,7 +162,7 @@ async function main() {
       rarity: 'uncommon',
       opalPrice: 220,
       image:
-        '/images/olings/furniture/door-modules/explorer-gateway/explorer-gateway.svg',
+        '/images/olings/lab/furniture/door-modules/explorer-gateway/explorer-gateway.svg',
       sku: 'OLING-FURNITURE-EXPLORER-GATEWAY',
       sortOrder: 30,
       searchKeywords: [
@@ -182,7 +182,7 @@ async function main() {
       type: 'bed',
       rarity: 'uncommon',
       opalPrice: 150,
-      image: '/images/olings/furniture/beds/oling-bed/oling-bed.svg',
+      image: '/images/olings/lab/furniture/beds/oling-bed/oling-bed.svg',
       sku: 'OLING-FURNITURE-OLING-BED',
       sortOrder: 40,
       searchKeywords: [
@@ -202,7 +202,8 @@ async function main() {
       type: 'storage',
       rarity: 'uncommon',
       opalPrice: 180,
-      image: '/images/olings/furniture/storage/supply-shelf/supply-shelf.svg',
+      image:
+        '/images/olings/lab/furniture/storage/supply-shelf/supply-shelf.svg',
       sku: 'OLING-FURNITURE-SUPPLY-SHELF',
       sortOrder: 50,
       searchKeywords: [

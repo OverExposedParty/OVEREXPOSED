@@ -53,6 +53,7 @@ function serializeBattleMatch(match) {
 
   return {
     id: String(plain._id || plain.id || ''),
+    gameId: plain.gameId || null,
     matchCode: plain.matchCode,
     status: plain.status,
     config: {

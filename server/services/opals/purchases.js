@@ -54,7 +54,10 @@ async function spendOpalsForProduct({
       ...grant,
       metadata: {
         ...grant.metadata,
-        opalPrice: entitlement.opalPrice
+        opalPrice: entitlement.opalPrice,
+        opalUnitPrice: Math.floor(
+          entitlement.opalPrice / Math.max(1, Number(grant.quantity) || 1)
+        )
       }
     }));
   const eggGrants = grants.filter((grant) => grant.type === 'oling_egg');
@@ -64,8 +67,10 @@ async function spendOpalsForProduct({
   const furnitureGrants = grants.filter(
     (grant) => grant.type === 'oling_furniture'
   );
+  const podGrants = grants.filter((grant) => grant.type === 'oling_pod');
   const unlockGrants = grants.filter(
-    (grant) => !['oling_egg', 'oling_consumable'].includes(grant.type)
+    (grant) =>
+      !['oling_egg', 'oling_consumable', 'oling_pod'].includes(grant.type)
   );
 
   if (!grants.length) {
@@ -183,6 +188,7 @@ async function spendOpalsForProduct({
     eggGrants,
     consumableGrants,
     furnitureGrants,
+    podGrants,
     now
   });
   if (inventoryGrant?.account) {
@@ -254,8 +260,12 @@ async function grantShopItemsToAccount({
   const furnitureGrants = normalizedGrants.filter(
     (grant) => grant.type === 'oling_furniture'
   );
+  const podGrants = normalizedGrants.filter(
+    (grant) => grant.type === 'oling_pod'
+  );
   const unlockGrants = normalizedGrants.filter(
-    (grant) => !['oling_egg', 'oling_consumable'].includes(grant.type)
+    (grant) =>
+      !['oling_egg', 'oling_consumable', 'oling_pod'].includes(grant.type)
   );
   const existingUnlocks = Array.isArray(
     account.gameData?.inGamePurchasesAndUnlocks
@@ -298,6 +308,7 @@ async function grantShopItemsToAccount({
     eggGrants,
     consumableGrants,
     furnitureGrants,
+    podGrants,
     now
   });
 

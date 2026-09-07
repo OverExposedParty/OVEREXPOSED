@@ -31,6 +31,7 @@
         await LoadScript('/scripts/party-games/online/party-core/sync.js');
         await LoadScript('/scripts/party-games/online/party-core.js');
 
+        await LoadScript('/scripts/party-games/online/party-api/request.js');
         await LoadScript('/scripts/party-games/online/party-api/party-data.js');
         await LoadScript('/scripts/party-games/online/party-api/actions.js');
         await LoadScript('/scripts/party-games/online/party-api/players.js');

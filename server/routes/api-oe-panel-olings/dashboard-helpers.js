@@ -77,9 +77,6 @@ function createOePanelOlingDashboardHelpers(context, payloadHelpers) {
         rarityOddsJson: formatOePanelJson(egg.rarityOdds),
         poolsJson: formatOePanelJson(getOePanelSetDerivedPools(egg)),
         setsJson: JSON.stringify(egg.sets || [], null, 2),
-        personalityPool: Array.isArray(egg.personalityPool)
-          ? egg.personalityPool.join(', ')
-          : '',
         assetsJson: formatOePanelJson(egg.assets),
         metadataJson: formatOePanelJson(egg.metadata),
         createdAt: formatOePanelDateTime(egg.createdAt),
@@ -129,12 +126,9 @@ function createOePanelOlingDashboardHelpers(context, payloadHelpers) {
       return [...serializedAssignedSets, ...serializedUnassignedSets];
     }
 
-    function getOePanelOlingWarnings({ eggs, traits, personalities }) {
+    function getOePanelOlingWarnings({ eggs, traits }) {
       const warnings = [];
       const traitsByKey = new Map(traits.map((trait) => [trait.key, trait]));
-      const personalityKeys = new Set(
-        personalities.map((personality) => personality.key)
-      );
 
       eggs.forEach((egg) => {
         const setRarities = getOePanelSetRarities(egg);
@@ -244,19 +238,6 @@ function createOePanelOlingDashboardHelpers(context, payloadHelpers) {
               });
             }
           });
-        });
-
-        (egg.personalityPool || []).forEach((personalityKey) => {
-          if (!personalityKeys.has(personalityKey)) {
-            warnings.push({
-              severity: 'warning',
-              area: 'Personality Pool',
-              item: egg.key,
-              issue: `Missing personality "${personalityKey}".`,
-              detail: 'This personality cannot be selected during hatching.',
-              fix: 'Create the personality or remove it from the pool.'
-            });
-          }
         });
       });
 

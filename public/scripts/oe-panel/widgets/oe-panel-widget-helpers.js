@@ -16,8 +16,8 @@
 
     function normaliseGalleryImagePath(imagePath) {
       return String(imagePath || '').replace(
-        '/images/olings/furniture/ceiling-lights/basic-hanging-light.svg',
-        '/images/olings/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg'
+        '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light.svg',
+        '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg'
       );
     }
 

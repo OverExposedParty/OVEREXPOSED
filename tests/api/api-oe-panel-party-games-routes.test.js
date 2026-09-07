@@ -4,6 +4,10 @@ const test = require('node:test');
 const {
   registerOePanelPartyGameRoutes
 } = require('../../server/routes/api-oe-panel-party-games');
+const {
+  calculateRoomErrorRate,
+  createRoomMonitoringStats
+} = require('../../server/routes/api-oe-panel-party-games/party-room-routes');
 
 test('OE panel party game routes preserve their endpoint contract and order', () => {
   const registeredRoutes = [];
@@ -34,4 +38,36 @@ test('OE panel party game routes preserve their endpoint contract and order', ()
     ['delete', '/api/oe-panel/game-roles/:roleKey'],
     ['post', '/api/oe-panel/game-roles/export']
   ]);
+});
+
+test('OE panel room monitoring separates recent and current-build error rates', () => {
+  assert.equal(calculateRoomErrorRate(12, 2), 17);
+  assert.equal(calculateRoomErrorRate(0, 4), 0);
+
+  assert.deepEqual(
+    createRoomMonitoringStats(
+      {
+        last24HoursRooms: 12,
+        last24HoursRoomsWithErrors: 2,
+        currentBuildRooms: 8,
+        currentBuildRoomsWithErrors: 1
+      },
+      'build-batch-4'
+    ),
+    {
+      archivedRoomsLast24Hours: 12,
+      roomsWithErrorsLast24Hours: 2,
+      roomErrorRateLast24Hours: 17,
+      currentRuntimeBuild: 'build-batch-4',
+      currentBuildArchivedRooms: 8,
+      currentBuildRoomsWithErrors: 1,
+      currentBuildRoomErrorRate: 13
+    }
+  );
+
+  assert.equal(
+    createRoomMonitoringStats({}, 'build-without-rooms')
+      .currentBuildRoomErrorRate,
+    null
+  );
 });

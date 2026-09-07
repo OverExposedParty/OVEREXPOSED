@@ -1,4 +1,10 @@
-const { STARTER_FURNITURE_KEYS, OlingLabItems } = require('../lab-catalog');
+const {
+  STARTER_FURNITURE_KEYS,
+  STARTER_WALLPAPER_KEYS,
+  OlingLabItems,
+  OlingLabWallpapers,
+  parseOlingLabWallpaperVariantEntitlementKey
+} = require('../lab-catalog');
 const { normalizeInfluenceSlots } = require('../lab-incubation');
 const { clampInteger } = require('./defaults');
 
@@ -23,6 +29,43 @@ function getOwnedLabFurniture(account, olingState = null) {
   return owned;
 }
 
+function getOwnedLabWallpapers(account) {
+  const owned = new Set(STARTER_WALLPAPER_KEYS);
+  const unlocks = Array.isArray(account?.gameData?.inGamePurchasesAndUnlocks)
+    ? account.gameData.inGamePurchasesAndUnlocks
+    : [];
+
+  unlocks.forEach((unlock) => {
+    const wallpaperKey = String(unlock?.key || '')
+      .trim()
+      .toLowerCase();
+    if (
+      unlock?.type === 'oling_wallpaper' &&
+      wallpaperKey &&
+      Object.hasOwn(OlingLabWallpapers, wallpaperKey)
+    ) {
+      owned.add(wallpaperKey);
+    }
+  });
+
+  return owned;
+}
+
+function getOwnedLabWallpaperVariants(account) {
+  const owned = new Set();
+  const unlocks = Array.isArray(account?.gameData?.inGamePurchasesAndUnlocks)
+    ? account.gameData.inGamePurchasesAndUnlocks
+    : [];
+
+  unlocks.forEach((unlock) => {
+    if (unlock?.type !== 'oling_wallpaper_variant') return;
+    const variant = parseOlingLabWallpaperVariantEntitlementKey(unlock.key);
+    if (variant) owned.add(variant.key);
+  });
+
+  return owned;
+}
+
 function ensureAccountOlingDocument(account, olingState = null) {
   const current =
     account?.olings && !Array.isArray(account.olings) ? account.olings : {};
@@ -35,12 +78,17 @@ function ensureAccountOlingDocument(account, olingState = null) {
     furniture: Array.isArray(current.furniture)
       ? current.furniture
       : inventory.furniture || [],
+    pods: Array.isArray(current.pods) ? current.pods : inventory.pods || [],
+    wallDecorations: Array.isArray(current.wallDecorations)
+      ? current.wallDecorations
+      : inventory.wallDecorations || [],
     olings: Array.isArray(current.olings)
       ? current.olings
       : inventory.pets || [],
     hatchHistory: Array.isArray(current.hatchHistory)
       ? current.hatchHistory
       : inventory.hatchHistory || [],
+    adventures: current.adventures || { active: null, history: [] },
     lab:
       current.lab && Array.isArray(current.lab.placedItems)
         ? current.lab
@@ -104,7 +152,10 @@ function ensureItemInventorySlots(itemId, existingInventorySlots) {
         slot.slotType === 'storage'
           ? null
           : existing?.readyNotificationDeliveredAt || null,
-      influenceSlots: normalizeInfluenceSlots(existing?.influenceSlots)
+      influenceSlots: normalizeInfluenceSlots(
+        existing?.influenceSlots,
+        definition
+      )
     };
   });
 }
@@ -161,6 +212,16 @@ function getReservedLabItemQuantity(lab, itemType, itemKey) {
       if (slot?.itemType === itemType && slot?.itemKey === itemKey) {
         quantity += Number(slot.quantity || 1);
       }
+      if (itemType !== 'consumable') return;
+      (slot?.influenceSlots || []).forEach((influence) => {
+        if (
+          influence?.itemKey === itemKey &&
+          (!influence?.itemType || influence.itemType === 'consumable') &&
+          !influence?.consumedAt
+        ) {
+          quantity += 1;
+        }
+      });
     });
   (lab?.placedItems || []).forEach((placedItem) => {
     countSlots(placedItem.inventorySlots);
@@ -173,6 +234,8 @@ function getReservedLabItemQuantity(lab, itemType, itemKey) {
 
 module.exports = {
   getOwnedLabFurniture,
+  getOwnedLabWallpapers,
+  getOwnedLabWallpaperVariants,
   ensureAccountOlingDocument,
   ensureContainerSlots,
   ensureItemInventorySlots,

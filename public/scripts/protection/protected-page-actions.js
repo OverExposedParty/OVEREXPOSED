@@ -1,5 +1,5 @@
 (function () {
-  const HOMEPAGE_SPLASH_SCREEN = '/images/splash-screens/overexposed.png';
+  const HOMEPAGE_SPLASH_SCREEN = '/images/splash-screens/core/overexposed.png';
   let navigationStarted = false;
 
   function shouldUseNativeNavigation(event, link) {

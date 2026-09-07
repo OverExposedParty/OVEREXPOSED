@@ -1,3 +1,62 @@
+const { createHash, randomUUID } = require('node:crypto');
+
+const {
+  grantAccountRewards,
+  normalizeAccountRewards
+} = require('../../services/account-rewards');
+const {
+  createActiveOlingFilter,
+  createStoredOlingError,
+  isOlingActive
+} = require('../../services/olings/residency');
+
+function getAdventureRunId(active) {
+  const storedRunId = String(active?.runId || '').trim();
+  if (storedRunId) return storedRunId;
+
+  const legacyIdentity = [
+    active?.adventureKey,
+    active?.olingId,
+    active?.startedAt,
+    active?.completesAt
+  ]
+    .map((value) => String(value || ''))
+    .join(':');
+  return `legacy-${createHash('sha256')
+    .update(legacyIdentity)
+    .digest('hex')
+    .slice(0, 24)}`;
+}
+
+function serializeActiveAdventure(active) {
+  if (!active) return null;
+  return {
+    ...(active?.toObject ? active.toObject() : active),
+    runId: getAdventureRunId(active)
+  };
+}
+
+function findAdventureCompletion(account, runId) {
+  if (!runId) return null;
+  return (account?.olings?.adventures?.history || []).find(
+    (completion) => getAdventureRunId(completion) === runId
+  );
+}
+
+function sendCompletedAdventure(
+  res,
+  completion,
+  { alreadyClaimed = false } = {}
+) {
+  return res.apiSuccess({
+    message: `${completion.olingName || 'Your Oling'} returned from ${completion.adventureName}.`,
+    completion,
+    rewards: normalizeAccountRewards(completion.rewards),
+    olingId: String(completion.olingId || ''),
+    alreadyClaimed
+  });
+}
+
 function registerOlingAdventuresRoutes(context) {
   const {
     app,
@@ -10,9 +69,7 @@ function registerOlingAdventuresRoutes(context) {
     OLING_ADVENTURES,
     serializePlayerOling,
     OlingLabItems,
-    getOlingAdventureEnergyCost,
-    spendOlingEnergy,
-    awardOlingXp
+    spendOlingEnergy
   } = context;
 
   app.get('/api/olings/adventures', async (req, res) => {
@@ -25,10 +82,9 @@ function registerOlingAdventuresRoutes(context) {
           message: 'Sign in to use the Explorer Gateway.'
         });
       await getOrCreateOlingState(OlingState, account);
-      const olings = await PlayerOling.find({ ownerId: account._id }).sort({
-        favorite: -1,
-        hatchedAt: -1
-      });
+      const olings = await PlayerOling.find(
+        createActiveOlingFilter(account._id)
+      ).sort({ favorite: -1, hatchedAt: -1 });
       const definitions = await getOlingDefinitions(models, olings);
       const adventures = account.olings?.adventures || {
         active: null,
@@ -36,14 +92,13 @@ function registerOlingAdventuresRoutes(context) {
       };
       res.apiSuccess({
         gatewayLevel: 1,
-        active: adventures.active || null,
+        active: serializeActiveAdventure(adventures.active),
         history: Array.isArray(adventures.history)
           ? adventures.history.slice(0, 30)
           : [],
-        adventures: OLING_ADVENTURES.map(({ xp, ...adventure }) => ({
+        adventures: OLING_ADVENTURES.map((adventure) => ({
           ...adventure,
-          possibleRewards: adventure.rewards,
-          xp
+          rewards: normalizeAccountRewards(adventure.rewards)
         })),
         olings: olings.map((oling) => serializePlayerOling(oling, definitions))
       });
@@ -92,6 +147,14 @@ function registerOlingAdventuresRoutes(context) {
           code: 'player_oling_not_found',
           message: 'That Oling could not be found.'
         });
+      if (!isOlingActive(oling)) {
+        const error = createStoredOlingError('starting an adventure');
+        return res.apiError({
+          status: error.status,
+          code: error.code,
+          message: error.message
+        });
+      }
       if (oling.care?.isSleeping) {
         return res.apiError({
           status: 409,
@@ -116,16 +179,7 @@ function registerOlingAdventuresRoutes(context) {
           message: 'Choose a placed door with an exit area.'
         });
       }
-      if (oling.level < adventure.recommendedLevel)
-        return res.apiError({
-          status: 409,
-          code: 'oling_adventure_level_low',
-          message: `This adventure recommends level ${adventure.recommendedLevel}.`
-        });
-      const energyCost = getOlingAdventureEnergyCost(
-        adventure.energyCost,
-        oling.personalityKey
-      );
+      const energyCost = adventure.energyCost;
       const spent = await spendOlingEnergy({
         PlayerOling,
         accountId: account._id,
@@ -135,6 +189,7 @@ function registerOlingAdventuresRoutes(context) {
       if (spent.error) return res.apiError(spent.error);
       const startedAt = new Date();
       const active = {
+        runId: randomUUID(),
         adventureKey: adventure.key,
         adventureName: adventure.name,
         olingId: String(oling._id),
@@ -143,7 +198,8 @@ function registerOlingAdventuresRoutes(context) {
         startedAt,
         completesAt: new Date(startedAt.getTime() + adventure.durationMs),
         durationMs: adventure.durationMs,
-        energyCost
+        energyCost,
+        rewards: normalizeAccountRewards(adventure.rewards)
       };
       account.set('olings.adventures.active', active);
       account.markModified('olings');
@@ -165,19 +221,35 @@ function registerOlingAdventuresRoutes(context) {
   app.post('/api/olings/adventures/return', async (req, res) => {
     try {
       const account = await getCurrentAccount(req);
-      const active = account?.olings?.adventures?.active;
       if (!account)
         return res.apiError({
           status: 401,
           code: 'account_required',
           message: 'Sign in to return an Oling.'
         });
-      if (!active)
+      const requestedRunId = String(req.body?.runId || '').trim();
+      const active = account.olings?.adventures?.active;
+      if (!active) {
+        const completed = findAdventureCompletion(account, requestedRunId);
+        if (completed) {
+          return sendCompletedAdventure(res, completed, {
+            alreadyClaimed: true
+          });
+        }
         return res.apiError({
           status: 409,
           code: 'oling_adventure_missing',
           message: 'No Oling is currently away.'
         });
+      }
+      const runId = getAdventureRunId(active);
+      if (requestedRunId && requestedRunId !== runId) {
+        return res.apiError({
+          status: 409,
+          code: 'oling_adventure_run_mismatch',
+          message: 'That adventure is no longer the active adventure.'
+        });
+      }
       if (new Date(active.completesAt).getTime() > Date.now())
         return res.apiError({
           status: 409,
@@ -187,43 +259,51 @@ function registerOlingAdventuresRoutes(context) {
       const adventure = OLING_ADVENTURES.find(
         (item) => item.key === active.adventureKey
       );
-      if (!adventure)
+      const rewards = normalizeAccountRewards(
+        active.rewards || adventure?.rewards
+      );
+      if (!adventure && rewards.accountXp === 0 && rewards.opals === 0)
         return res.apiError({
           status: 400,
           code: 'oling_adventure_invalid',
           message: 'This adventure is no longer available.'
         });
-      const oling = await awardOlingXp({
-        PlayerOling,
-        accountId: account._id,
-        olingId: active.olingId,
-        amount: adventure.xp
+      const completedAt = new Date();
+      const sourceId = `oling-adventure:${runId}`;
+      const rewardResult = grantAccountRewards({
+        account,
+        rewards,
+        sourceId,
+        reason: `Completed Oling adventure: ${active.adventureName}`,
+        metadata: {
+          rewardType: 'oling_adventure',
+          adventureRunId: runId,
+          adventureKey: active.adventureKey,
+          olingId: String(active.olingId || '')
+        },
+        now: completedAt
       });
-      const rewardItem = Math.random() < 0.45 ? 'oling-cookie' : null;
-      if (rewardItem) {
-        const list = account.olings.consumables || [];
-        const owned = list.find((item) => item.key === rewardItem);
-        if (owned) owned.quantity = Number(owned.quantity || 0) + 1;
-        else list.push({ key: rewardItem, quantity: 1, rarity: 'common' });
-        account.set('olings.consumables', list);
-      }
       const completion = {
-        ...active,
-        completedAt: new Date(),
-        rewards: [`${adventure.xp} XP`, ...(rewardItem ? ['Oling Cookie'] : [])]
+        ...serializeActiveAdventure(active),
+        runId,
+        completedAt,
+        rewards: rewardResult.rewards,
+        rewardSourceId: sourceId
       };
       account.set('olings.adventures.active', null);
-      account.olings.adventures.history = [
-        completion,
-        ...(account.olings.adventures.history || [])
-      ].slice(0, 30);
+      account.set(
+        'olings.adventures.history',
+        [
+          completion,
+          ...(account.olings?.adventures?.history || []).filter(
+            (entry) => getAdventureRunId(entry) !== runId
+          )
+        ].slice(0, 30)
+      );
       account.markModified('olings');
       await account.save({ validateBeforeSave: false });
-      res.apiSuccess({
-        message: `${active.olingName} returned from ${adventure.name}.`,
-        completion,
-        rewardItem,
-        olingId: String(oling?._id || active.olingId)
+      return sendCompletedAdventure(res, completion, {
+        alreadyClaimed: rewardResult.duplicate
       });
     } catch (err) {
       console.error(`[REQ ${req.id}] Failed to return Oling adventure:`, err);
@@ -236,4 +316,8 @@ function registerOlingAdventuresRoutes(context) {
   });
 }
 
-module.exports = { registerOlingAdventuresRoutes };
+module.exports = {
+  getAdventureRunId,
+  registerOlingAdventuresRoutes,
+  serializeActiveAdventure
+};

@@ -1,5 +1,5 @@
 (function () {
-  const DEFAULT_SPLASH_SCREEN = '/images/splash-screens/overexposed.png';
+  const DEFAULT_SPLASH_SCREEN = '/images/splash-screens/core/overexposed.png';
   const PARTY_GAME_KEYS = new Set([
     'imposter',
     'mafia',
@@ -38,7 +38,7 @@
     if (!PARTY_GAME_KEYS.has(gameKey)) return DEFAULT_SPLASH_SCREEN;
 
     const isSettingsPage = segments[1] === 'settings';
-    return `/images/splash-screens/${gameKey}${isSettingsPage ? '-settings' : ''}.png`;
+    return `/images/splash-screens/party-games/${gameKey}/${isSettingsPage ? 'settings' : 'game'}.png`;
   }
 
   function navigateFromPopupFeed(path, options = {}) {

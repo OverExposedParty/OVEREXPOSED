@@ -339,6 +339,7 @@ function createPartyExitRoutes(context) {
             ) {
               return {
                 status: 403,
+                code: 'party_host_required',
                 error: 'Only the host can remove another player from the party'
               };
             }
@@ -451,12 +452,12 @@ function createPartyExitRoutes(context) {
             waitingRoomModel,
             details: {
               status: result.status,
-              code: 'party_remove_user_failed'
+              code: result.code || 'party_remove_user_failed'
             }
           });
           return res.apiError({
             status: result.status,
-            code: 'party_remove_user_failed',
+            code: result.code || 'party_remove_user_failed',
             message: result.error
           });
         }

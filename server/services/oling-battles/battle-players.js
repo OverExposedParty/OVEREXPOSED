@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const { getOlingDefinitions, serializeOlingTrait } = require('../olings');
+const {
+  createStoredOlingError,
+  isOlingActive
+} = require('../olings/residency');
 const { AI_OLING_PRESETS, DEFAULT_AI_DIFFICULTY } = require('./constants');
 
 function getAccountDisplayName(account) {
@@ -62,8 +66,6 @@ async function createAiBattlePlayer(
     olingSnapshot: {
       id: String(olingId),
       name: preset.name,
-      level: preset.level,
-      personalityKey: preset.personalityKey,
       build: preset.build,
       equipment: {},
       traits
@@ -87,6 +89,9 @@ async function snapshotBattleOling(models, account, olingId) {
     error.status = 404;
     error.code = 'player_oling_not_found';
     throw error;
+  }
+  if (!isOlingActive(oling)) {
+    throw createStoredOlingError('selecting it for a battle');
   }
 
   const definitions = await getOlingDefinitions(models, [oling]);
@@ -112,8 +117,6 @@ async function snapshotBattleOling(models, account, olingId) {
       olingSnapshot: {
         id: String(oling._id),
         name: oling.name || null,
-        level: oling.level || 1,
-        personalityKey: oling.personalityKey || '',
         build: oling.build || {},
         equipment: oling.equipment || {},
         traits: Object.fromEntries(

@@ -46,13 +46,85 @@ function registerPublicGeneralRoutes(context) {
         const matchIds = Array.isArray(gameData.matchHistory)
           ? gameData.matchHistory.slice(-50)
           : [];
-        const archivedMatches = matchIds.length
-          ? await archivedRoomSchema
-              .find({ _id: { $in: matchIds } })
-              .sort({ archivedAt: -1 })
-              .limit(50)
-              .lean()
-          : [];
+        const [
+          archivedPartyMatches,
+          archivedOlingBattles,
+          archivedOlingClashes
+        ] = matchIds.length
+          ? await Promise.all([
+              archivedRoomSchema
+                .find({ _id: { $in: matchIds } })
+                .sort({ archivedAt: -1 })
+                .limit(50)
+                .lean(),
+              context.OlingBattleArchive?.find
+                ? context.OlingBattleArchive.find({ _id: { $in: matchIds } })
+                    .sort({ archivedAt: -1 })
+                    .limit(50)
+                    .lean()
+                : [],
+              context.OlingClashArchive?.find
+                ? context.OlingClashArchive.find({ _id: { $in: matchIds } })
+                    .sort({ archivedAt: -1 })
+                    .limit(50)
+                    .lean()
+                : []
+            ])
+          : [[], [], []];
+        const archivedMatches = [
+          ...archivedPartyMatches.map((match) => ({
+            id: String(match._id),
+            partyId: match.partyId,
+            gameId: match.gameId,
+            gamemode: match.gamemode,
+            archivedAt: match.archivedAt,
+            startedAt:
+              match.session?.startedAt || match.session?.createdAt || null,
+            selectedPacks: match.config?.selectedPacks || [],
+            playerCount: Array.isArray(match.players) ? match.players.length : 0
+          })),
+          ...archivedOlingBattles.map((match) => ({
+            id: String(match._id),
+            partyId: null,
+            gameId: match.gameId,
+            matchCode: match.matchCode,
+            gamemode: 'oling-battle',
+            archivedAt: match.archivedAt,
+            startedAt: match.startedAt || null,
+            selectedPacks: [],
+            playerCount: Array.isArray(match.players)
+              ? match.players.length
+              : 0,
+            winnerAccountId: match.winnerAccountId
+              ? String(match.winnerAccountId)
+              : null,
+            endReason: match.endReason || null
+          })),
+          ...archivedOlingClashes.map((match) => ({
+            id: String(match._id),
+            partyId: null,
+            gameId: match.gameId,
+            matchCode: match.matchCode,
+            gamemode: 'oling-clash',
+            archivedAt: match.archivedAt,
+            startedAt: match.startedAt || null,
+            selectedPacks: [],
+            playerCount: Array.isArray(match.players)
+              ? match.players.length
+              : 0,
+            winnerAccountId: match.winnerAccountId
+              ? String(match.winnerAccountId)
+              : null,
+            endReason: match.endReason || null,
+            roundsPlayed: Number(match.roundsPlayed || 0)
+          }))
+        ]
+          .sort(
+            (left, right) =>
+              new Date(right.archivedAt || 0).getTime() -
+              new Date(left.archivedAt || 0).getTime()
+          )
+          .slice(0, 50);
 
         return res.apiSuccess({
           data: {
@@ -68,18 +140,7 @@ function registerPublicGeneralRoutes(context) {
             achievements: Array.isArray(gameData.achievements)
               ? gameData.achievements
               : [],
-            matches: archivedMatches.map((match) => ({
-              id: String(match._id),
-              partyId: match.partyId,
-              gamemode: match.gamemode,
-              archivedAt: match.archivedAt,
-              startedAt:
-                match.session?.startedAt || match.session?.createdAt || null,
-              selectedPacks: match.config?.selectedPacks || [],
-              playerCount: Array.isArray(match.players)
-                ? match.players.length
-                : 0
-            }))
+            matches: archivedMatches
           }
         });
       } catch (err) {

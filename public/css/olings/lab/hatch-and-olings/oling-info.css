@@ -1,5 +1,78 @@
 .oling-lab-oling-info {
+  height: 100%;
   min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.oling-lab-inspect-panel {
+  --wall-decoration-panel-primary: #ffd0e8;
+  --wall-decoration-panel-secondary: #eba4c8;
+  --oling-lab-menu-primary-colour: var(--wall-decoration-panel-primary);
+  --oling-lab-menu-secondary-colour: var(--wall-decoration-panel-secondary);
+  --oling-lab-element-radius: 0.5rem;
+  --oling-lab-inspect-tab-height: 2.15rem;
+  top: calc(
+    var(--headerheight, 4rem) + 4.5rem + var(--oling-lab-inspect-tab-height)
+  );
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(32rem, calc(100vw - 5rem));
+}
+
+.oling-lab-inspect-panel-tabs {
+  position: absolute;
+  top: calc(-1 * var(--oling-lab-inspect-tab-height));
+  left: var(--oling-lab-menu-radius, 0.65rem);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  width: calc(100% - var(--oling-lab-menu-radius, 0.65rem));
+  height: var(--oling-lab-inspect-tab-height);
+  min-width: 0;
+  overflow: visible;
+}
+
+.oling-lab-inspect-panel-tabs[hidden] {
+  display: none;
+}
+
+.oling-lab-inspect-panel-tabs .oling-lab-tab-list {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-inspect-panel-header {
+  padding-left: 4.5rem;
+}
+
+.oling-lab-inspect-panel-header h2 {
+  overflow-wrap: anywhere;
+}
+
+.oling-lab-inspect-panel .oling-lab-inspect-panel-back {
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--wall-decoration-panel-primary);
+}
+
+.oling-lab-inspect-panel-back::before {
+  border-right: 1.15rem solid currentColor;
+}
+
+.oling-lab-inspect-panel-content {
+  min-height: 0;
+  min-width: 0;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.oling-lab-inspect-panel .oling-lab-egg-insertion-stage {
+  min-height: 18rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-inspect-panel .oling-lab-inspect-panel-back:hover {
+    color: var(--wall-decoration-panel-secondary);
+  }
 }
 
 .oling-lab-oling-hero {
@@ -46,10 +119,41 @@
 }
 
 .oling-lab-oling-name-editor strong,
-.oling-lab-oling-name-editor input { display: block; width: 100%; box-sizing: border-box; min-width: 0; color: var(--oling-lab-menu-secondary-colour); font: inherit; font-size: 1.25rem; font-weight: 900; text-align: center; text-transform: uppercase; }
-.oling-lab-oling-name-editor input { border: 0; padding: 0.3rem; background: rgb(255 255 255 / 16%); }
-.oling-lab-oling-name-editor button { position: absolute; top: 50%; right: 0; min-width: 1.75rem; min-height: 1.75rem; border: 0; padding: 0.25rem; transform: translateY(-50%); background: var(--oling-lab-menu-secondary-colour); color: var(--backgroundcolour); font: inherit; font-weight: 900; cursor: pointer; }
-.oling-lab-oling-name-editor button.is-cancel { right: 2rem; }
+.oling-lab-oling-name-editor input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  color: var(--oling-lab-menu-secondary-colour);
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+.oling-lab-oling-name-editor input {
+  border: 0;
+  padding: 0.3rem;
+  background: rgb(255 255 255 / 16%);
+}
+.oling-lab-oling-name-editor button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  border: 0;
+  padding: 0.25rem;
+  transform: translateY(-50%);
+  background: var(--oling-lab-menu-secondary-colour);
+  color: var(--backgroundcolour);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.oling-lab-oling-name-editor button.is-cancel {
+  right: 2rem;
+}
 
 .oling-lab-oling-energy {
   --oling-energy-colour: var(--oling-energy-primary-colour);
@@ -84,7 +188,11 @@
   overflow: hidden;
   border: 2px solid var(--oling-energy-secondary-colour);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--oling-energy-secondary-colour) 38%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--oling-energy-secondary-colour) 38%,
+    transparent
+  );
 }
 
 .oling-lab-oling-energy-fill {
@@ -95,7 +203,6 @@
   height: var(--oling-energy-level);
   border-radius: inherit;
   background: var(--oling-energy-colour);
-  box-shadow: 0 0 0.45rem color-mix(in srgb, var(--oling-energy-colour) 70%, transparent);
   transition: height 180ms ease;
 }
 
@@ -105,25 +212,121 @@
   white-space: nowrap;
 }
 
-.oling-lab-oling-info-panel {
-  width: min(52%, 15rem);
-  min-width: min(52%, 15rem);
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-.oling-lab-oling-info-panel .oling-lab-detail-list {
+.oling-lab-oling-overview-summary {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
   min-height: 0;
-  overflow-y: auto;
+}
+
+.oling-lab-oling-overview-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  min-height: 0;
+}
+
+.oling-lab-oling-overview-metric {
+  display: grid;
+  align-content: center;
   gap: 0.35rem;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  overflow: hidden;
+  background: rgb(255 255 255 / 7%);
+  color: var(--oling-lab-menu-primary-colour);
 }
 
-.oling-lab-oling-info-panel .oling-lab-detail-row {
-  min-height: 2rem;
-  padding: 0.38rem 0.45rem;
-  background: var(--oling-lab-menu-secondary-colour);
+.oling-lab-oling-overview-metric h3,
+.oling-lab-oling-overview-metric > strong {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
 }
 
-.oling-lab-egg-insertion-stage.is-viewing-oling-info .oling-lab-stats-toggle {
-  opacity: 0;
-  pointer-events: none;
+.oling-lab-oling-overview-metric h3 {
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.oling-lab-oling-overview-metric > strong {
+  font-size: 0.85rem;
+  line-height: 1.1;
+}
+
+.oling-lab-oling-rarity-segments {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.oling-lab-oling-rarity-segment {
+  width: 1.15rem;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 0.28rem;
+  padding: 0;
+  background: var(
+    --oling-rarity-primary-colour,
+    var(--oling-lab-menu-primary-colour)
+  );
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.oling-lab-oling-rarity-segment:focus-visible {
+  outline: 2px solid var(--oling-rarity-secondary-colour, #ffffff);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-oling-rarity-segment:hover {
+    background: var(
+      --oling-rarity-secondary-colour,
+      var(--oling-lab-menu-secondary-colour)
+    );
+  }
+}
+
+.oling-lab-oling-overview-energy {
+  align-items: center;
+  align-content: stretch;
+}
+
+.oling-lab-oling-energy.is-overview-energy {
+  position: static;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  width: auto;
+  min-width: 0;
+  height: 100%;
+  color: var(--oling-lab-menu-primary-colour);
+  text-align: left;
+}
+
+.oling-lab-oling-energy.is-overview-energy .oling-lab-oling-energy-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.oling-lab-oling-energy.is-overview-energy .oling-lab-oling-energy-track {
+  width: 100%;
+  height: 0.7rem;
+  min-height: 0;
+}
+
+.oling-lab-oling-energy.is-overview-energy .oling-lab-oling-energy-fill {
+  top: 0;
+  right: auto;
+  width: var(--oling-energy-level);
+  height: auto;
 }

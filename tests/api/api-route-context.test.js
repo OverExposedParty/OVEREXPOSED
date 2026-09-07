@@ -12,7 +12,7 @@ test('API route context preserves its public helper contract', () => {
     runtime: {}
   });
 
-  assert.equal(Object.keys(context).length, 233);
+  assert.equal(Object.keys(context).length, 234);
   assert.equal(Object.hasOwn(context, 'getEmailVerifiedRedirect'), false);
   assert.equal(Object.hasOwn(context, 'AnalyticsEvent'), true);
   assert.equal(Object.hasOwn(context, 'EmailAudience'), true);
@@ -20,6 +20,7 @@ test('API route context preserves its public helper contract', () => {
   assert.equal(Object.hasOwn(context, 'EmailSuppression'), true);
   assert.equal(Object.hasOwn(context, 'EmailTemplate'), true);
   assert.equal(Object.hasOwn(context, 'EmailDelivery'), true);
+  assert.equal(Object.hasOwn(context, 'OlingClashArchive'), true);
   assert.equal(Object.hasOwn(context, 'emailConnection'), true);
   [
     'createGamePackUpdatePayload',

@@ -6,15 +6,15 @@ const { Product, shopConnection } = require('../server/models');
 
 const HEADWEAR_PRODUCTS = [
   {
-    key: 'base-soft-ears',
+    key: 'soft-ears',
     name: 'Soft Ears',
     slug: 'oling-headwear-soft-ears',
     sku: 'OLING-HEADWEAR-SOFT-EARS',
     opalPrice: 180,
-    description: 'A gentle Oling headwear cosmetic with a small XP bonus.'
+    description: 'A gentle Oling headwear cosmetic with soft rounded ears.'
   },
   {
-    key: 'base-tiny-horns',
+    key: 'tiny-horns',
     name: 'Tiny Horns',
     slug: 'oling-headwear-tiny-horns',
     sku: 'OLING-HEADWEAR-TINY-HORNS',

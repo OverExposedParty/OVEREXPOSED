@@ -10,14 +10,17 @@
       applyActionPanelTheme,
       getTargetKey,
       closeSelectedTarget,
-      openFurnitureEditor,
       interactWithFurniture,
       getFurnitureInteractionAction,
       storeRoomItem,
+      cycleLabVisibility,
+      getLabVisibility,
+      getLabVisibilityLabel,
+      isLabPrivacyUpdating,
       renderLab
     } = dependencies;
 
-function getRequiredService(getService, label) {
+    function getRequiredService(getService, label) {
       const service = getService();
       if (!service) throw new Error(`${label} is not ready.`);
       return service;
@@ -43,6 +46,8 @@ function getRequiredService(getService, label) {
       button.className = `oling-lab-action-panel-button ${modifier}`;
       button.type = 'button';
       button.disabled = Boolean(options.disabled);
+      if (options.sound === false) button.dataset.sound = 'none';
+      else button.dataset.soundIntent = options.soundIntent || 'select';
       button.setAttribute('aria-label', label);
       button.textContent = options.text || label;
       if (options.theme || options.themeKey) {
@@ -69,6 +74,30 @@ function getRequiredService(getService, label) {
       return button;
     }
 
+    function createLabAccessButton() {
+      const getLabel = (visibility = getLabVisibility?.()) =>
+        `Lab Access: ${getLabVisibilityLabel?.(visibility) || 'Private'}`;
+      const button = createActionButton(
+        getLabel(),
+        'is-access',
+        async () => {
+          if (isLabPrivacyUpdating?.()) return;
+          button.disabled = true;
+          try {
+            const visibility = await cycleLabVisibility();
+            const label = getLabel(visibility);
+            button.textContent = label;
+            button.setAttribute('aria-label', label);
+          } finally {
+            button.disabled = false;
+          }
+        },
+        { text: getLabel() }
+      );
+      button.dataset.sound = 'none';
+      return button;
+    }
+
     function createFurnitureActionPanel(placed, item) {
       const panel = document.createElement('div');
       panel.className = 'oling-lab-action-panel';
@@ -87,36 +116,41 @@ function getRequiredService(getService, label) {
         panel.classList.add('is-confirming-sell');
         panel.append(
           createActionButton('Cancel sell', 'is-cancel', cancelSellFurniture, {
-            text: 'Cancel'
+            text: 'Cancel',
+            soundIntent: 'close'
           }),
           createActionButton(
             `Confirm sell ${item.name}`,
             'is-confirm',
             () => storeRoomItem(placed.placedId),
-            { text: 'Confirm' }
+            { text: 'Confirm', soundIntent: 'confirm' }
           )
         );
         return panel;
       }
 
       const interactionAction = getFurnitureInteractionAction(placed, item);
+      const canManageLabAccess =
+        (item.type === 'door' || item.id === 'standard_door') &&
+        !state.visitorMode &&
+        !state.tutorialMode &&
+        typeof cycleLabVisibility === 'function';
       panel.append(
-        createActionButton('Edit furniture', 'is-edit', () =>
-          openFurnitureEditor(placed.placedId)
-        ),
         createActionButton(
           placed.locked ? 'This furniture cannot be sold' : 'Sell furniture',
           'is-sell',
           () => requestSellFurniture(placed.placedId),
-          { disabled: placed.locked }
+          { disabled: placed.locked, soundIntent: 'warning' }
         ),
+        ...(canManageLabAccess ? [createLabAccessButton()] : []),
         createActionButton(
           interactionAction.label,
           'is-interact',
           () => interactWithFurniture(placed.placedId),
           {
             disabled: interactionAction.disabled,
-            theme: interactionAction.theme
+            theme: interactionAction.theme,
+            sound: false
           }
         )
       );
@@ -148,7 +182,7 @@ function getRequiredService(getService, label) {
           'is-interact',
           () =>
             getRequiredService(getOlingViews, 'Oling views').openOlingMenu(id),
-          { text: 'Inspect' }
+          { text: 'Inspect', sound: false }
         ),
         createActionButton(
           'Let Oling roam',
@@ -158,7 +192,8 @@ function getRequiredService(getService, label) {
             renderLab();
           },
           {
-            text: 'Roam'
+            text: 'Roam',
+            soundIntent: 'close'
           }
         )
       );
@@ -179,12 +214,7 @@ function getRequiredService(getService, label) {
       }
 
       if (state.selectedTarget.type === 'oling') {
-        const oling = state.olings.find(
-          (item) =>
-            getRequiredService(getRoaming, 'Oling roaming').getOlingId(item) ===
-            state.selectedTarget.id
-        );
-        return oling ? createOlingActionPanel(oling) : null;
+        return null;
       }
 
       if (state.selectedTarget.type !== 'furniture') return null;
@@ -216,7 +246,11 @@ function getRequiredService(getService, label) {
       );
     }
 
-    return { createActionPanel, updateSelectedOlingPanel };
+    return {
+      createActionPanel,
+      createLabAccessButton,
+      updateSelectedOlingPanel
+    };
   }
 
   window.createOlingLabFurnitureActionPanels =

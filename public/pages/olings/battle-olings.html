@@ -16,6 +16,7 @@
       rel="stylesheet"
       href="/css/olings/shared/oling-flight-motion.css?v=2026-08-04-01"
     />
+    <link rel="stylesheet" href="/css/olings/shared/oling-selector.css" />
     <link
       rel="stylesheet"
       href="/css/olings/battle/battle-olings.css?v=2026-08-04-01"
@@ -90,19 +91,19 @@ __BATTLE_OLINGS_NO_OLING__
 
     document.documentElement.style.setProperty(
       '--primaryPageColour',
-      '#FFB5C8'
+      '#6EA8FF'
     );
     document.documentElement.style.setProperty(
       '--secondaryPageColour',
-      '#E87398'
+      '#4B73B5'
     );
     document.documentElement.style.setProperty(
       '--primarypagecolour',
-      '#FFB5C8'
+      '#6EA8FF'
     );
     document.documentElement.style.setProperty(
       '--secondarypagecolour',
-      '#E87398'
+      '#4B73B5'
     );
 
     window.pageScripts = {
@@ -112,6 +113,11 @@ __BATTLE_OLINGS_NO_OLING__
       '/scripts/olings/shared/oling-flight-motion.js': {
         cacheBustKey: 'OLING_FLIGHT_MOTION',
         zIndex: 0
+      },
+      '/scripts/olings/shared/oling-selector.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_SELECTOR',
+        zIndex: 0.5
       },
       '/scripts/general/online/session-status-prompts.js': {
         zIndex: 0

@@ -105,5 +105,6 @@ test('Oling battle match serialization exposes AI player metadata', () => {
 
 test('Oling battle models are registered with the app model registry', () => {
   assert.equal(models.OlingBattleMatch.modelName, 'OlingBattleMatch');
-  assert.equal(models.OlingBattleEvent.modelName, 'OlingBattleEvent');
+  assert.equal(models.OlingBattleArchive.modelName, 'OlingBattleArchive');
+  assert.equal(models.OlingBattleArchive.db, models.olingsConnection);
 });

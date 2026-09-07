@@ -571,6 +571,53 @@ test('Emails hydrator forces a fresh template request', async () => {
   assert.deepEqual(nextConfig[2].series[0].values, [8]);
 });
 
+test('Party Games hydrator shows recent and current-build room error rates', async () => {
+  const context = { window: {} };
+  const fileName =
+    'section-hydrator/oe-panel-section-hydrator-insights/party-games.js';
+  vm.runInNewContext(
+    fs.readFileSync(path.join(oePanelDirectory, fileName), 'utf8'),
+    context,
+    { filename: fileName }
+  );
+  const hydrator = context.window.createOePanelPartyGamesInsightsHydrator({
+    panelData: {
+      async fetchPartyRoomsData() {
+        return {
+          stats: {
+            archivedRoomsLast24Hours: 25,
+            roomErrorRateLast24Hours: 4,
+            currentRuntimeBuild: 'build-batch-4',
+            currentBuildArchivedRooms: 10,
+            currentBuildRoomErrorRate: 0,
+            archivedRoomsLast30Days: 200,
+            roomErrorRate: 18,
+            outcomeCoverage: 95
+          }
+        };
+      },
+      async fetchDashboardActivityData() {
+        return {};
+      }
+    }
+  });
+  const nextConfig = [
+    {
+      id: 'party-games-grid-2',
+      stats: [{ label: 'Room Error Rate', value: '-' }]
+    }
+  ];
+
+  assert.equal(await hydrator.hydrateSection('Party Games', nextConfig), true);
+  const errorRate = nextConfig[0].stats[0];
+  assert.equal(errorRate.value, '4%');
+  assert.equal(errorRate.detail, '25 archived rooms, last 24h');
+  assert.equal(errorRate.expanded.rows[0].value, '4%');
+  assert.equal(errorRate.expanded.rows[2].value, '0%');
+  assert.equal(errorRate.expanded.rows[4].value, 'build-batch-4');
+  assert.equal(errorRate.expanded.rows[5].value, '18%');
+});
+
 test('Analytics hydrator populates the status action queue and count', async () => {
   const context = { window: {} };
   const fileName =

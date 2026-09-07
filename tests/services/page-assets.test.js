@@ -14,9 +14,13 @@ const {
   renderWaitingRoomPage
 } = require('../../server/services/page-assets');
 const {
-  getSplashScreenImageUrl
+  getSplashScreenImageUrl,
+  isCacheableClashPage
 } = require('../../server/services/page-assets/asset-response');
-const { getProtectedPageSplashScreen } = require('../../server/routes/pages');
+const {
+  getProtectedPageSplashScreen,
+  registerPageRoutes
+} = require('../../server/routes/pages');
 const {
   renderBattleOlingsPage
 } = require('../../server/services/page-assets-battle-olings');
@@ -33,6 +37,23 @@ test('getCookieValue returns the requested cookie value', () => {
   );
   assert.equal(getCookieValue(cookieHeader, 'session'), 'abc=123');
   assert.equal(getCookieValue(cookieHeader, 'missing'), null);
+});
+
+test('production HTML caching is scoped to Olings Clash page shells', () => {
+  assert.equal(
+    isCacheableClashPage('G:\\site\\public\\pages\\olings\\clash.html'),
+    true
+  );
+  assert.equal(
+    isCacheableClashPage(
+      'G:\\site\\public\\pages\\olings\\clash-settings.html'
+    ),
+    true
+  );
+  assert.equal(
+    isCacheableClashPage('G:\\site\\public\\pages\\homepages\\homepage.html'),
+    false
+  );
 });
 
 test('getVersionedPublicAssetUrl appends the cache-bust query to local public assets', () => {
@@ -95,7 +116,7 @@ test('injectCriticalSplashStyles adds first-paint splash CSS for splash pages', 
       </head>
       <body>
         <div class="splash-screen-container" id="splash-screen-container">
-          <img src="/images/splash-screens/overexposed.png" alt="Splash Screen">
+          <img src="/images/splash-screens/core/overexposed.png" alt="Splash Screen">
         </div>
       </body>
     </html>
@@ -105,7 +126,7 @@ test('injectCriticalSplashStyles adds first-paint splash CSS for splash pages', 
 
   assert.match(
     output,
-    /<head>\s*<link rel="preload" href="\/images\/splash-screens\/overexposed\.png" as="image" fetchpriority="high">\s*<style id="critical-splash-style">/
+    /<head>\s*<link rel="preload" href="\/images\/splash-screens\/core\/overexposed\.png" as="image" fetchpriority="high">\s*<style id="critical-splash-style">/
   );
   assert.match(output, /<style id="critical-splash-style">/);
   assert.match(
@@ -155,7 +176,7 @@ test('renderWaitingRoomPage escapes unsafe meta content', () => {
     ogImage: 'https://overexposed.app/images/example.jpg',
     primaryColour: '#9B56D3',
     secondaryColour: '#6D3C95',
-    splashScreen: '/images/splash-screens/mafia.png',
+    splashScreen: '/images/splash-screens/party-games/mafia/game.png',
     url: 'https://overexposed.app/ABC-123'
   });
 
@@ -164,7 +185,11 @@ test('renderWaitingRoomPage escapes unsafe meta content', () => {
     /Party &quot;Ready&quot;&lt;script&gt;alert\(1\)&lt;\/script&gt;/
   );
   assert.doesNotMatch(html, /<script>alert\(1\)<\/script>/);
-  assert.equal(html.match(/\/images\/splash-screens\/mafia\.png/g)?.length, 3);
+  assert.equal(
+    html.match(/\/images\/splash-screens\/party-games\/mafia\/game\.png/g)
+      ?.length,
+    3
+  );
   assert.doesNotMatch(html, /__WAITING_ROOM_SPLASH_SCREEN__/);
   assert.match(html, /--primarypagecolour', '#9B56D3'/);
   assert.match(html, /--secondarypagecolour', '#6D3C95'/);
@@ -249,7 +274,8 @@ test('renderProtectedPage uses copy specific to each access state', () => {
 });
 
 test('protected page content is revealed beneath a downward splash transition', () => {
-  const splashScreen = '/images/splash-screens/imposter-settings.png';
+  const splashScreen =
+    '/images/splash-screens/party-games/imposter/settings.png';
   const html = renderProtectedPage(
     {
       reason: 'account_required',
@@ -293,14 +319,340 @@ test('protected pages use the destination splash with the homepage as fallback',
         '../../public/pages/party-games/imposter/imposter-settings-page.html'
       )
     ),
-    '/images/splash-screens/imposter-settings.png'
+    '/images/splash-screens/party-games/imposter/settings.png'
   );
   assert.equal(
     getProtectedPageSplashScreen(
       path.join(__dirname, '../../public/pages/olings/lab.html')
     ),
-    '/images/splash-screens/overexposed.png'
+    '/images/splash-screens/core/overexposed.png'
   );
+});
+
+test('Olings Clash registers protected and state-aware page shells', async () => {
+  const routes = [];
+  let clashStatus = 'waiting';
+  const app = {
+    get(route, handler) {
+      routes.push({ handler, route });
+    },
+    use() {}
+  };
+
+  registerPageRoutes({
+    app,
+    accountModel: {
+      findOne() {
+        return {
+          select() {
+            return Promise.resolve({
+              profile: { emailVerified: true, accountStatus: 'active' },
+              admin: { roles: [], disabled: false },
+              access: {
+                roles: ['beta_tester'],
+                features: [],
+                disabled: false
+              }
+            });
+          }
+        };
+      }
+    },
+    debugLog() {},
+    olingClashMatchModel: {
+      findOne() {
+        return {
+          select() {
+            return this;
+          },
+          lean() {
+            return Promise.resolve({ status: clashStatus });
+          }
+        };
+      }
+    },
+    waitingRoomModel: {}
+  });
+
+  const clashRoute = routes.find(({ route }) => route === '/olings/clash');
+  const clashSettingsRoute = routes.find(
+    ({ route }) => route === '/olings/clash/settings'
+  );
+  const codedClashRoute = routes.find(
+    ({ route }) =>
+      route === '/olings/clash/:matchCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})'
+  );
+  const clashHtmlPath = path.join(
+    __dirname,
+    '../../public/pages/olings/clash.html'
+  );
+  const clashHtml = require('node:fs').readFileSync(clashHtmlPath, 'utf8');
+  const clashSettingsHtml = require('node:fs').readFileSync(
+    path.join(__dirname, '../../public/pages/olings/clash-settings.html'),
+    'utf8'
+  );
+  assert.equal(
+    clashHtml.match(/\/images\/splash-screens\/olings\/clash\/game\.png/g)
+      ?.length,
+    3
+  );
+  assert.equal(
+    clashSettingsHtml.match(
+      /\/images\/splash-screens\/olings\/clash\/settings\.png/g
+    )?.length,
+    3
+  );
+  assert.match(clashHtml, /window\.allowTransition\s*=\s*true/);
+  assert.match(clashSettingsHtml, /window\.allowTransition\s*=\s*true/);
+  assert.match(
+    clashHtml,
+    /window\.splashScreenExitDirection\s*=\s*['"]down['"]/
+  );
+  assert.match(
+    clashSettingsHtml,
+    /window\.splashScreenExitDirection\s*=\s*['"]down['"]/
+  );
+
+  function requestClash(route, cookie = '') {
+    return new Promise((resolve, reject) => {
+      let statusCode = 200;
+      const response = {
+        append() {},
+        headersSent: false,
+        locals: {},
+        send(body) {
+          resolve({ body, statusCode });
+          return this;
+        },
+        setHeader() {},
+        status(value) {
+          statusCode = value;
+          return this;
+        },
+        type() {
+          return this;
+        }
+      };
+      try {
+        route.handler(
+          {
+            headers: { cookie },
+            id: 'anonymous-clash-test',
+            originalUrl: route.route,
+            params: { matchCode: 'ABC-123' },
+            path: route.route,
+            query: {}
+          },
+          response
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  assert.equal(typeof clashRoute?.handler, 'function');
+  assert.equal(typeof clashSettingsRoute?.handler, 'function');
+  assert.equal(typeof codedClashRoute?.handler, 'function');
+  const [
+    publicClash,
+    publicSettings,
+    publicCodedClash,
+    betaClash,
+    betaSettings,
+    betaCodedClash
+  ] = await Promise.all([
+    requestClash(clashRoute),
+    requestClash(clashSettingsRoute),
+    requestClash(codedClashRoute),
+    requestClash(clashRoute, 'oe_session=beta-session'),
+    requestClash(clashSettingsRoute, 'oe_session=beta-session'),
+    requestClash(codedClashRoute, 'oe_session=beta-session')
+  ]);
+  assert.equal(publicClash.statusCode, 403);
+  assert.equal(publicSettings.statusCode, 403);
+  assert.equal(publicCodedClash.statusCode, 403);
+  assert.equal(betaClash.statusCode, 200);
+  assert.equal(betaSettings.statusCode, 200);
+  assert.equal(betaCodedClash.statusCode, 200);
+  clashStatus = 'active';
+  const betaActiveClash = await requestClash(
+    codedClashRoute,
+    'oe_session=beta-session'
+  );
+  assert.match(betaClash.body, /<title>Olings Clash \| OVEREXPOSED<\/title>/);
+  assert.match(
+    betaCodedClash.body,
+    /<title>Olings Clash \| OVEREXPOSED<\/title>/
+  );
+  assert.match(betaSettings.body, /data-clash-page="settings"/);
+  assert.match(betaCodedClash.body, /class="olings-clash-lobby"/);
+  assert.match(betaActiveClash.body, /data-clash-game/);
+  assert.match(clashHtml, /<title>Olings Clash \| OVEREXPOSED<\/title>/);
+  assert.match(
+    clashHtml,
+    /<html lang="en" data-required-orientation="landscape">/
+  );
+  assert.doesNotMatch(clashSettingsHtml, /data-required-orientation=/);
+  assert.match(clashHtml, /id="header-placeholder"/);
+  assert.match(
+    clashHtml,
+    /<main\s+class="olings-clash-page is-game"\s+data-template="olings-clash"\s+data-orientation-guard-target\s+aria-label="Olings Clash"/
+  );
+  assert.match(
+    clashHtml,
+    /class="olings-clash-game"[\s\S]*?data-clash-game[\s\S]*?aria-hidden="false"/
+  );
+  assert.equal((clashHtml.match(/data-clash-roster-slot=/g) || []).length, 6);
+  assert.equal((clashHtml.match(/data-clash-effects/g) || []).length, 6);
+  assert.equal((clashHtml.match(/data-heart-units="6"/g) || []).length, 6);
+  assert.equal((clashHtml.match(/data-overgrowth-units="0"/g) || []).length, 6);
+  assert.equal((clashHtml.match(/data-shield-count="0"/g) || []).length, 6);
+  assert.doesNotMatch(clashHtml, /data-effect-key=/);
+  assert.equal((clashHtml.match(/data-clash-tag-button/g) || []).length, 2);
+  assert.equal((clashHtml.match(/data-clash-tag-indicator/g) || []).length, 2);
+  assert.equal((clashHtml.match(/data-clash-tag-resource=/g) || []).length, 2);
+  assert.equal(
+    (clashHtml.match(/data-clash-tag-charge-pips/g) || []).length,
+    2
+  );
+  assert.doesNotMatch(clashHtml, /data-clash-tag-charge-count/);
+  assert.equal(
+    (clashHtml.match(/data-clash-tag-resource-divider/g) || []).length,
+    2
+  );
+  assert.equal(
+    (clashHtml.match(/data-clash-tag-recharge-pips/g) || []).length,
+    2
+  );
+  const localRosterStart = clashHtml.indexOf('data-clash-roster="local"');
+  const localLastSlot = clashHtml.indexOf(
+    'data-clash-roster-slot="bench-2"',
+    localRosterStart
+  );
+  const localTagResource = clashHtml.indexOf(
+    'data-clash-tag-resource="local"',
+    localRosterStart
+  );
+  const opponentRosterStart = clashHtml.indexOf('data-clash-roster="opponent"');
+  const opponentLastSlot = clashHtml.indexOf(
+    'data-clash-roster-slot="bench-2"',
+    opponentRosterStart
+  );
+  const opponentTagResource = clashHtml.indexOf(
+    'data-clash-tag-resource="opponent"',
+    opponentRosterStart
+  );
+  assert.ok(localTagResource > localLastSlot);
+  assert.ok(opponentTagResource > opponentLastSlot);
+  assert.match(clashHtml, /data-clash-picker/);
+  assert.match(clashHtml, /data-clash-picker-options/);
+  assert.match(clashHtml, /data-clash-picker-confirm/);
+  assert.match(clashHtml, /data-clash-inspector/);
+  assert.doesNotMatch(clashHtml, /data-clash-inspector-avatar/);
+  assert.match(clashHtml, /data-clash-inspector-position/);
+  assert.match(clashHtml, /data-clash-inspector-content/);
+  assert.doesNotMatch(clashHtml, /data-clash-inspector-close/);
+  assert.equal((clashHtml.match(/data-clash-fighter=/g) || []).length, 2);
+  assert.match(clashHtml, /data-clash-actions/);
+  assert.match(clashHtml, /data-clash-action-confirm/);
+  assert.equal((clashHtml.match(/data-clash-action=/g) || []).length, 4);
+  assert.match(clashHtml, /data-clash-action="attack"/);
+  assert.match(clashHtml, /data-clash-action="guard"/);
+  assert.match(clashHtml, /data-clash-action="skill"/);
+  assert.match(clashHtml, /data-clash-action="draw"/);
+  assert.match(clashHtml, /data-clash-passive/);
+  assert.match(
+    clashHtml,
+    /data-clash-action="draw"[\s\S]*?data-clash-move-name>CANOPY</
+  );
+  assert.match(clashHtml, /data-clash-round-display/);
+  assert.match(clashHtml, /data-clash-last-outcome/);
+  assert.match(clashHtml, /data-clash-round>1</);
+  assert.match(clashHtml, /data-clash-decision-area/);
+  assert.match(clashHtml, /data-display-mode="decision"/);
+  assert.match(clashHtml, /data-clash-result-detail/);
+  assert.match(
+    clashSettingsHtml,
+    /class="olings-clash-lobby"[\s\S]*?aria-hidden="false"/
+  );
+  assert.doesNotMatch(clashSettingsHtml, /ROOM:/);
+  assert.equal(
+    (clashSettingsHtml.match(/class="olings-clash-team-slot"/g) || []).length,
+    3
+  );
+  assert.match(clashSettingsHtml, />SELECT YOUR CLASH TEAM<\/h2>/);
+  assert.match(clashSettingsHtml, />\s*READY UP\s*<\/button>/);
+  assert.match(clashSettingsHtml, /data-clash-player="local"/);
+  assert.match(clashSettingsHtml, /data-clash-opponent-slot/);
+  assert.match(clashSettingsHtml, /\/scripts\/olings\/clash\/oe-layers\.js/);
+  assert.match(clashSettingsHtml, /\/scripts\/olings\/clash\/clash-lobby\.js/);
+  assert.doesNotMatch(clashSettingsHtml, /data-clash-game/);
+  assert.doesNotMatch(clashHtml, /\/scripts\/olings\/clash\/clash-lobby\.js/);
+  assert.match(clashHtml, /\/scripts\/olings\/clash\/oe-layers\.js/);
+  assert.match(clashHtml, /\/css\/olings\/shared\/oling-flight-motion\.css/);
+  const flightMotionIndex = clashHtml.indexOf(
+    "'/scripts/olings/shared/oling-flight-motion.js'"
+  );
+  const stateIndex = clashHtml.indexOf("'/scripts/olings/clash/game/state.js'");
+  const resolutionIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/resolution.js'"
+  );
+  const opponentIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/demo-opponent.js'"
+  );
+  const healthRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/health.js'"
+  );
+  const damageRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/damage-feedback.js'"
+  );
+  const combatRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/combat-motion.js'"
+  );
+  const tagRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/tag-motion.js'"
+  );
+  const phaseRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/phase.js'"
+  );
+  const matchRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/match.js'"
+  );
+  const pickerRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/picker.js'"
+  );
+  const inspectorRendererIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/game/renderers/inspector.js'"
+  );
+  const timerIndex = clashHtml.indexOf("'/scripts/olings/clash/game/timer.js'");
+  const flowIndex = clashHtml.indexOf("'/scripts/olings/clash/game/flow.js'");
+  const gameBootstrapIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/clash-game.js'"
+  );
+  const lobbyBootstrapIndex = clashHtml.indexOf(
+    "'/scripts/olings/clash/clash-lobby.js'"
+  );
+  assert.ok(flightMotionIndex >= 0);
+  assert.ok(stateIndex > flightMotionIndex);
+  assert.ok(resolutionIndex > stateIndex);
+  assert.ok(opponentIndex > resolutionIndex);
+  assert.ok(healthRendererIndex > opponentIndex);
+  assert.ok(damageRendererIndex > healthRendererIndex);
+  assert.ok(combatRendererIndex > damageRendererIndex);
+  assert.ok(tagRendererIndex > combatRendererIndex);
+  assert.ok(phaseRendererIndex > tagRendererIndex);
+  assert.ok(matchRendererIndex > phaseRendererIndex);
+  assert.ok(pickerRendererIndex > matchRendererIndex);
+  assert.ok(inspectorRendererIndex > pickerRendererIndex);
+  assert.ok(timerIndex > inspectorRendererIndex);
+  assert.ok(flowIndex > timerIndex);
+  assert.ok(gameBootstrapIndex > flowIndex);
+  assert.equal(lobbyBootstrapIndex, -1);
+  assert.ok(
+    clashSettingsHtml.indexOf("'/scripts/olings/clash/clash-lobby.js'") >= 0
+  );
+  assert.match(clashHtml, /core-template\/core-template\.js/);
 });
 
 test('renderBattleOlingsPage expands local page fragments', () => {

@@ -1,0 +1,116 @@
+{
+  "statuses": [
+    {
+      "key": "burn",
+      "revision": 1,
+      "name": "Burn",
+      "description": "After this Oling's next decisive Clash, take 1/2 Normal Damage.",
+      "polarity": "negative",
+      "handler": "damage_after_decisive_clash",
+      "parameters": {
+        "damageUnits": 1,
+        "damageType": "normal",
+        "damageSource": "burn",
+        "trigger": "next-decisive-clash",
+        "mustExistAtClashStart": true,
+        "stacking": "refresh",
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "burn-primed",
+      "revision": 1,
+      "name": "Burn Primed",
+      "description": "The next matching Attack victory consumes this Status and applies Burn.",
+      "polarity": "positive",
+      "handler": "apply_status_on_matching_action_win",
+      "parameters": {
+        "consumedOn": "matching-action-win",
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "blocked",
+      "revision": 1,
+      "name": "Blocked",
+      "description": "Prevents Effects in one specified category during its active round.",
+      "polarity": "negative",
+      "handler": "block_effect_category",
+      "parameters": {
+        "durationType": "round",
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "suppressed",
+      "revision": 1,
+      "name": "Suppressed",
+      "description": "Prevent this Part's next valid effect activation, then remove Suppressed.",
+      "polarity": "negative",
+      "handler": "prevent_next_valid_activation",
+      "parameters": {
+        "consumedOn": "next-valid-activation",
+        "preventsAction": false,
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "marked",
+      "revision": 1,
+      "name": "Marked",
+      "description": "Records an Action, Part, Oling, or event for a later condition.",
+      "polarity": "variable",
+      "handler": "record_reference",
+      "parameters": {
+        "removedOnResolution": true,
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "junk",
+      "revision": 1,
+      "name": "Junk",
+      "description": "Replace the next valid Part activation with Junk, then remove this Status.",
+      "polarity": "negative",
+      "handler": "replace_next_valid_activation_with_junk",
+      "parameters": {
+        "consumedOn": "next-valid-activation",
+        "preventsAction": false,
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "warded",
+      "revision": 1,
+      "name": "Warded",
+      "description": "Prevent one specified effect, then remove Warded.",
+      "polarity": "positive",
+      "handler": "prevent_matching_effect",
+      "parameters": {
+        "consumedOnPrevention": true,
+        "persistsWhenBenched": true
+      },
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    }
+  ]
+}

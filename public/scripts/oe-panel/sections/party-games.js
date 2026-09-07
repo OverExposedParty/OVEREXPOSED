@@ -424,7 +424,7 @@ window.OE_PANEL_SECTIONS['Party Games'] = [
       {
         label: 'Room Error Rate',
         value: '-',
-        detail: 'active + archived',
+        detail: 'archived rooms, last 24h',
         expandedType: 'table'
       }
     ]

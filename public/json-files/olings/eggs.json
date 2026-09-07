@@ -16,10 +16,10 @@
           "name": "Moss",
           "rarity": "common",
           "traits": {
-            "body": "base-moss-body",
-            "eyes": "base-moss-eyes",
-            "mouth": "base-moss-mouth",
-            "flight": "base-moss-wings"
+            "body": "moss-body",
+            "eyes": "moss-eyes",
+            "mouth": "moss-mouth",
+            "flight": "moss-wings"
           },
           "metadata": {
             "layers": {
@@ -35,10 +35,10 @@
           "name": "Vampire",
           "rarity": "common",
           "traits": {
-            "body": "base-vampire-body",
-            "eyes": "base-vampire-eyes",
-            "mouth": "base-vampire-mouth",
-            "flight": "base-vampire-wings"
+            "body": "vampire-body",
+            "eyes": "vampire-eyes",
+            "mouth": "vampire-mouth",
+            "flight": "vampire-wings"
           },
           "metadata": {
             "layers": {
@@ -54,10 +54,10 @@
           "name": "Stone",
           "rarity": "uncommon",
           "traits": {
-            "body": "base-stone-body",
-            "eyes": "base-stone-eyes",
-            "mouth": "base-stone-mouth",
-            "flight": "base-stone-wings"
+            "body": "stone-body",
+            "eyes": "stone-eyes",
+            "mouth": "stone-mouth",
+            "flight": "stone-wings"
           },
           "metadata": {
             "layers": {
@@ -73,10 +73,10 @@
           "name": "Bone",
           "rarity": "uncommon",
           "traits": {
-            "body": "base-bone-body",
-            "eyes": "base-bone-eyes",
-            "mouth": "base-bone-mouth",
-            "flight": "base-bone-wings"
+            "body": "bone-body",
+            "eyes": "bone-eyes",
+            "mouth": "bone-mouth",
+            "flight": "bone-wings"
           },
           "metadata": {
             "layers": {
@@ -92,10 +92,10 @@
           "name": "Magma",
           "rarity": "rare",
           "traits": {
-            "body": "base-magma-body",
-            "eyes": "base-magma-eyes",
-            "mouth": "base-magma-mouth",
-            "flight": "base-magma-wings"
+            "body": "magma-body",
+            "eyes": "magma-eyes",
+            "mouth": "magma-mouth",
+            "flight": "magma-wings"
           },
           "metadata": {
             "layers": {
@@ -111,10 +111,10 @@
           "name": "Trash",
           "rarity": "epic",
           "traits": {
-            "body": "base-trash-body",
-            "eyes": "base-trash-eyes",
-            "mouth": "base-trash-mouth",
-            "flight": "base-trash-balloons"
+            "body": "trash-body",
+            "eyes": "trash-eyes",
+            "mouth": "trash-mouth",
+            "flight": "trash-balloons"
           },
           "metadata": {
             "layers": {
@@ -127,7 +127,8 @@
         }
       ],
       "metadata": {
-        "hatchPool": "base-olings"
+        "hatchPool": "base-olings",
+        "hatchMinutes": 30
       }
     }
   ]

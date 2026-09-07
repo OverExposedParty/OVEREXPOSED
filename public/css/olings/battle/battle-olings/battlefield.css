@@ -8,7 +8,7 @@
 .oling-battle-container__screen:focus-visible,
 .oling-battle-screen:focus-visible,
 .oling-battle-arena:focus-visible {
-  outline: 0.8cqw solid var(--secondaryPageColour, #e87398);
+  outline: 0.8cqw solid var(--secondaryPageColour, #4b73b5);
   outline-offset: -0.8cqw;
 }
 
@@ -91,7 +91,7 @@
 .oling-battle-fighter h2 {
   max-width: 100%;
   margin: 0;
-  color: var(--secondaryPageColour, #e87398);
+  color: var(--secondaryPageColour, #4b73b5);
   font-size: 2.944cqw;
   font-weight: 950;
   line-height: 0.9;

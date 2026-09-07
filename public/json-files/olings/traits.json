@@ -1,7 +1,7 @@
 {
   "traits": [
     {
-      "key": "base-round-body",
+      "key": "round-body",
       "name": "Round Body",
       "collection": "base",
       "theme": "round-origin",
@@ -16,7 +16,7 @@
       "flavor": "A dependable little shape."
     },
     {
-      "key": "base-sprout-body",
+      "key": "sprout-body",
       "name": "Sprout Body",
       "collection": "base",
       "theme": "sprout-origin",
@@ -31,7 +31,7 @@
       "flavor": "Small, quick, and eager."
     },
     {
-      "key": "base-moss-body",
+      "key": "moss-body",
       "name": "Moss Body",
       "collection": "base",
       "theme": "moss",
@@ -49,7 +49,7 @@
       "flavor": "Soft, steady, and hard to shake."
     },
     {
-      "key": "base-dot-eyes",
+      "key": "dot-eyes",
       "name": "Dot Eyes",
       "collection": "base",
       "theme": "round-origin",
@@ -62,7 +62,7 @@
       "flavor": "Simple eyes that rarely overthink things."
     },
     {
-      "key": "base-bright-eyes",
+      "key": "bright-eyes",
       "name": "Bright Eyes",
       "collection": "base",
       "theme": "sprout-origin",
@@ -75,7 +75,7 @@
       "flavor": "Always watching for an opening."
     },
     {
-      "key": "base-moss-eyes",
+      "key": "moss-eyes",
       "name": "Moss Eyes",
       "collection": "base",
       "theme": "moss",
@@ -91,7 +91,7 @@
       "flavor": "Calm eyes with excellent hiding instincts."
     },
     {
-      "key": "base-bite-mouth",
+      "key": "bite-mouth",
       "name": "Bite Mouth",
       "collection": "base",
       "theme": "round-origin",
@@ -109,7 +109,7 @@
       "flavor": "Fast, direct, and a little rude."
     },
     {
-      "key": "base-spit-mouth",
+      "key": "spit-mouth",
       "name": "Spit Mouth",
       "collection": "base",
       "theme": "sprout-origin",
@@ -127,7 +127,7 @@
       "flavor": "Takes its time, then absolutely commits."
     },
     {
-      "key": "base-moss-mouth",
+      "key": "moss-mouth",
       "name": "Moss Mouth",
       "collection": "base",
       "theme": "moss",
@@ -148,7 +148,7 @@
       "flavor": "A quiet little chomp from the undergrowth."
     },
     {
-      "key": "base-soft-ears",
+      "key": "soft-ears",
       "name": "Soft Ears",
       "collection": "base",
       "theme": "round-origin",
@@ -161,7 +161,7 @@
       "flavor": "Perks up whenever something interesting happens."
     },
     {
-      "key": "base-tiny-horns",
+      "key": "tiny-horns",
       "name": "Tiny Horns",
       "collection": "base",
       "theme": "sprout-origin",
@@ -174,7 +174,7 @@
       "flavor": "Not intimidating yet, but trying very hard."
     },
     {
-      "key": "base-soft-wings",
+      "key": "soft-wings",
       "name": "Soft Wings",
       "collection": "base",
       "theme": "round-origin",
@@ -190,7 +190,7 @@
       "flavor": "Gentle wings that keep it just out of reach."
     },
     {
-      "key": "base-sprout-wings",
+      "key": "sprout-wings",
       "name": "Sprout Wings",
       "collection": "base",
       "theme": "sprout-origin",
@@ -206,7 +206,7 @@
       "flavor": "Fluttery little wings that are mostly enthusiasm."
     },
     {
-      "key": "base-moss-wings",
+      "key": "moss-wings",
       "name": "Moss Wings",
       "collection": "base",
       "theme": "moss",
@@ -225,7 +225,7 @@
       "flavor": "Leafy little wings built for quiet drifting."
     },
     {
-      "key": "base-vampire-body",
+      "key": "vampire-body",
       "name": "Vampire Body",
       "collection": "base",
       "theme": "vampire",
@@ -243,7 +243,7 @@
       "flavor": "A dramatic little shape with midnight posture."
     },
     {
-      "key": "base-vampire-eyes",
+      "key": "vampire-eyes",
       "name": "Vampire Eyes",
       "collection": "base",
       "theme": "vampire",
@@ -259,7 +259,7 @@
       "flavor": "Sharp eyes that enjoy the suspense."
     },
     {
-      "key": "base-vampire-mouth",
+      "key": "vampire-mouth",
       "name": "Vampire Mouth",
       "collection": "base",
       "theme": "vampire",
@@ -280,7 +280,7 @@
       "flavor": "Small fangs, big theatre."
     },
     {
-      "key": "base-vampire-wings",
+      "key": "vampire-wings",
       "name": "Vampire Wings",
       "collection": "base",
       "theme": "vampire",
@@ -299,7 +299,7 @@
       "flavor": "Fluttery wings with excellent entrance timing."
     },
     {
-      "key": "base-stone-body",
+      "key": "stone-body",
       "name": "Stone Body",
       "collection": "base",
       "theme": "stone",
@@ -317,7 +317,7 @@
       "flavor": "Heavy, patient, and absolutely not rushing."
     },
     {
-      "key": "base-stone-eyes",
+      "key": "stone-eyes",
       "name": "Stone Eyes",
       "collection": "base",
       "theme": "stone",
@@ -333,7 +333,7 @@
       "flavor": "Unblinking eyes with ancient patience."
     },
     {
-      "key": "base-stone-mouth",
+      "key": "stone-mouth",
       "name": "Stone Mouth",
       "collection": "base",
       "theme": "stone",
@@ -354,7 +354,7 @@
       "flavor": "A gravelly little warning."
     },
     {
-      "key": "base-stone-wings",
+      "key": "stone-wings",
       "name": "Stone Wings",
       "collection": "base",
       "theme": "stone",
@@ -373,7 +373,7 @@
       "flavor": "Wings that fly mostly through determination."
     },
     {
-      "key": "base-bone-body",
+      "key": "bone-body",
       "name": "Bone Body",
       "collection": "base",
       "theme": "bone",
@@ -391,7 +391,7 @@
       "flavor": "Light, sturdy, and full of old secrets."
     },
     {
-      "key": "base-bone-eyes",
+      "key": "bone-eyes",
       "name": "Bone Eyes",
       "collection": "base",
       "theme": "bone",
@@ -407,7 +407,7 @@
       "flavor": "Hollow little eyes that never miss a rattle."
     },
     {
-      "key": "base-bone-mouth",
+      "key": "bone-mouth",
       "name": "Bone Mouth",
       "collection": "base",
       "theme": "bone",
@@ -428,7 +428,7 @@
       "flavor": "A dry little clack with purpose."
     },
     {
-      "key": "base-bone-wings",
+      "key": "bone-wings",
       "name": "Bone Wings",
       "collection": "base",
       "theme": "bone",
@@ -447,7 +447,7 @@
       "flavor": "Ribbed wings with a surprisingly graceful glide."
     },
     {
-      "key": "base-magma-body",
+      "key": "magma-body",
       "name": "Magma Body",
       "collection": "base",
       "theme": "magma",
@@ -465,7 +465,7 @@
       "flavor": "A hot little core wrapped in molten confidence."
     },
     {
-      "key": "base-magma-eyes",
+      "key": "magma-eyes",
       "name": "Magma Eyes",
       "collection": "base",
       "theme": "magma",
@@ -481,7 +481,7 @@
       "flavor": "Glowing eyes with volcanic focus."
     },
     {
-      "key": "base-magma-mouth",
+      "key": "magma-mouth",
       "name": "Magma Mouth",
       "collection": "base",
       "theme": "magma",
@@ -502,7 +502,7 @@
       "flavor": "A tiny eruption with excellent timing."
     },
     {
-      "key": "base-magma-wings",
+      "key": "magma-wings",
       "name": "Magma Wings",
       "collection": "base",
       "theme": "magma",
@@ -521,7 +521,7 @@
       "flavor": "Heat-shimmer wings that move before the smoke clears."
     },
     {
-      "key": "base-trash-body",
+      "key": "trash-body",
       "name": "Trash Body",
       "collection": "base",
       "theme": "trash",
@@ -539,7 +539,7 @@
       "flavor": "Chaotic, resilient, and somehow thriving."
     },
     {
-      "key": "base-trash-eyes",
+      "key": "trash-eyes",
       "name": "Trash Eyes",
       "collection": "base",
       "theme": "trash",
@@ -556,7 +556,7 @@
       "flavor": "Eyes that see treasure where everyone else sees trouble."
     },
     {
-      "key": "base-trash-mouth",
+      "key": "trash-mouth",
       "name": "Trash Mouth",
       "collection": "base",
       "theme": "trash",
@@ -577,7 +577,7 @@
       "flavor": "A messy bite with suspiciously good results."
     },
     {
-      "key": "base-trash-balloons",
+      "key": "trash-balloons",
       "name": "Trash Balloons",
       "collection": "base",
       "theme": "trash",
@@ -596,7 +596,7 @@
       "flavor": "A questionable flight plan that keeps working."
     },
     {
-      "key": "base-lava-body",
+      "key": "lava-body",
       "name": "Lava Body",
       "collection": "base",
       "theme": "lava",
@@ -614,7 +614,7 @@
       "flavor": "A warm little core with a rocky shell."
     },
     {
-      "key": "base-lava-eyes",
+      "key": "lava-eyes",
       "name": "Lava Eyes",
       "collection": "base",
       "theme": "lava",
@@ -630,7 +630,7 @@
       "flavor": "Glowing eyes with a very short fuse."
     },
     {
-      "key": "base-lava-mouth",
+      "key": "lava-mouth",
       "name": "Lava Mouth",
       "collection": "base",
       "theme": "lava",

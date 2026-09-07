@@ -14,7 +14,9 @@ const UNIQUE_UNLOCK_REWARD_TYPES = new Set([
   'pack',
   'oe',
   'oling_headwear',
-  'oling_furniture'
+  'oling_furniture',
+  'oling_wallpaper',
+  'oling_wallpaper_variant'
 ]);
 const OLING_INVENTORY_REWARD_LISTS = {
   oling_egg: 'eggs',

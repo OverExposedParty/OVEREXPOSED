@@ -54,7 +54,7 @@
     const flightLayer =
       options.flightLayer ||
       root.querySelector(
-        '[data-oling-layer="flight"], .oling-lab-oling-layer.is-flight, .oling-battle-layer.is-flight'
+        '[data-oling-layer="flight"], .oling-lab-oling-layer.is-flight, .oling-battle-layer.is-flight, .oling-selector__layer.is-flight'
       );
     if (!flightLayer) return null;
 

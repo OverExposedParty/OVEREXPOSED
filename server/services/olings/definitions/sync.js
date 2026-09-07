@@ -8,18 +8,85 @@ const {
 const { readAllOlingConsumablesFromJson, readJsonList } = require('./catalog');
 const { serializeOlingConsumableForJson } = require('./serializers');
 
+async function importVersionedRecords({
+  model,
+  records,
+  destination,
+  currentScope,
+  unsetFields = []
+}) {
+  if (!model) return;
+
+  for (const record of records) {
+    const key = normalizeKey(record.key);
+    const revision = Number(record.revision);
+    const scopeValue = normalizeKey(record[currentScope] || key);
+    if (!key || !Number.isInteger(revision) || revision < 1 || !scopeValue) {
+      continue;
+    }
+
+    const payload = {
+      ...record,
+      key,
+      revision,
+      ...(currentScope === 'traitKey'
+        ? { traitKey: normalizeKey(record.traitKey) }
+        : {}),
+      status: record.status || 'published',
+      ...(Object.hasOwn(record, 'enabled')
+        ? { enabled: record.enabled !== false }
+        : {})
+    };
+
+    if (payload.isCurrent) {
+      await model.updateMany(
+        {
+          [currentScope]: scopeValue,
+          revision: { $ne: revision },
+          isCurrent: true
+        },
+        { $set: { isCurrent: false } }
+      );
+    }
+
+    const update = { $set: payload };
+    if (unsetFields.length > 0) {
+      update.$unset = Object.fromEntries(
+        unsetFields.map((fieldName) => [fieldName, ''])
+      );
+    }
+
+    const importedRecord = await model.findOneAndUpdate(
+      { [currentScope]: scopeValue, revision },
+      update,
+      {
+        new: true,
+        runValidators: true,
+        upsert: true,
+        ...(unsetFields.length > 0 ? { strict: false } : {})
+      }
+    );
+    destination.push(importedRecord);
+  }
+}
+
 async function importOlingDefinitionsFromJson({
   OlingTrait,
   OlingEgg,
   OlingBuildSet,
-  OlingPersonality,
-  OlingConsumable
+  OlingConsumable,
+  OlingClashAbility,
+  OlingClashRuleset,
+  OlingClashStatus
 }) {
-  const [traits, eggs, personalities] = await Promise.all([
-    readJsonList('traits.json', 'traits'),
-    readJsonList('eggs.json', 'eggs'),
-    readJsonList('personalities.json', 'personalities')
-  ]);
+  const [traits, eggs, clashAbilities, clashRulesets, clashStatuses] =
+    await Promise.all([
+      readJsonList('traits.json', 'traits'),
+      readJsonList('eggs.json', 'eggs'),
+      readJsonList('clash-abilities.json', 'abilities'),
+      readJsonList('clash-rulesets.json', 'rulesets'),
+      readJsonList('clash-statuses.json', 'statuses')
+    ]);
   const consumables = OlingConsumable
     ? await readAllOlingConsumablesFromJson()
     : [];
@@ -27,8 +94,10 @@ async function importOlingDefinitionsFromJson({
     traits: [],
     buildSets: [],
     eggs: [],
-    personalities: [],
-    consumables: []
+    consumables: [],
+    clashAbilities: [],
+    clashRulesets: [],
+    clashStatuses: []
   };
 
   for (const trait of traits) {
@@ -40,17 +109,6 @@ async function importOlingDefinitionsFromJson({
       { new: true, runValidators: true, upsert: true }
     );
     imported.traits.push(importedTrait);
-  }
-
-  for (const personality of personalities) {
-    const key = normalizeKey(personality.key);
-    if (!key) continue;
-    const importedPersonality = await OlingPersonality.findOneAndUpdate(
-      { key },
-      { $set: { ...personality, key } },
-      { new: true, runValidators: true, upsert: true }
-    );
-    imported.personalities.push(importedPersonality);
   }
 
   if (OlingConsumable) {
@@ -72,6 +130,26 @@ async function importOlingDefinitionsFromJson({
       imported.consumables.push(importedConsumable);
     }
   }
+
+  await importVersionedRecords({
+    model: OlingClashAbility,
+    records: clashAbilities,
+    destination: imported.clashAbilities,
+    currentScope: 'traitKey',
+    unsetFields: ['handler', 'parameters']
+  });
+  await importVersionedRecords({
+    model: OlingClashRuleset,
+    records: clashRulesets,
+    destination: imported.clashRulesets,
+    currentScope: 'key'
+  });
+  await importVersionedRecords({
+    model: OlingClashStatus,
+    records: clashStatuses,
+    destination: imported.clashStatuses,
+    currentScope: 'key'
+  });
 
   for (const egg of eggs) {
     const key = normalizeKey(egg.key);
@@ -144,5 +222,6 @@ async function exportOlingConsumablesToJson(OlingConsumable) {
 
 module.exports = {
   exportOlingConsumablesToJson,
-  importOlingDefinitionsFromJson
+  importOlingDefinitionsFromJson,
+  importVersionedRecords
 };

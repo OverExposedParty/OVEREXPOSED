@@ -16,9 +16,10 @@
     }
 
     function getDisplayedLabColumns() {
-      const expansionCellColumns = Array.isArray(state.expansion?.cells)
-        ? state.expansion.cells.reduce(
-            (maximum, cell) => Math.max(maximum, Number(cell?.col) + 1 || 0),
+      const expansionColumns = Array.isArray(state.expansion?.columns)
+        ? state.expansion.columns.reduce(
+            (maximum, column) =>
+              Math.max(maximum, Number(column?.col) + 1 || 0),
             0
           )
         : 0;
@@ -26,7 +27,7 @@
         Number(state.lab?.columns) || 1,
         Number(state.expansion?.maximumColumns) || 0,
         Number(state.expansion?.visibleColumns) || 0,
-        expansionCellColumns
+        expansionColumns
       );
     }
 

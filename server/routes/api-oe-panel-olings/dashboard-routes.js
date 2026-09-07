@@ -3,7 +3,6 @@ function registerOePanelOlingDashboardRoutes(context, helpers) {
   const {
     OlingEgg,
     OlingTrait,
-    OlingPersonality,
     OlingBuildSet,
     OlingHatchReceipt,
     PlayerOling
@@ -32,23 +31,21 @@ function registerOePanelOlingDashboardRoutes(context, helpers) {
         const account = await requireOePanelAccount(req, res);
         if (!account) return;
 
-        const [
-          rawEggs,
-          traits,
-          personalities,
-          buildSets,
-          hatchReceipts,
-          playerOlings
-        ] = await Promise.all([
-          OlingEgg.find({}).sort({ collection: 1, key: 1 }).lean(),
-          OlingTrait.find({}).sort({ collection: 1, layer: 1, key: 1 }).lean(),
-          OlingPersonality.find({}).sort({ key: 1 }).lean(),
-          OlingBuildSet.find({})
-            .sort({ collection: 1, rarity: 1, key: 1 })
-            .lean(),
-          OlingHatchReceipt.find({}).sort({ createdAt: -1 }).limit(100).lean(),
-          PlayerOling.find({}).sort({ hatchedAt: -1 }).limit(100).lean()
-        ]);
+        const [rawEggs, traits, buildSets, hatchReceipts, playerOlings] =
+          await Promise.all([
+            OlingEgg.find({}).sort({ collection: 1, key: 1 }).lean(),
+            OlingTrait.find({})
+              .sort({ collection: 1, layer: 1, key: 1 })
+              .lean(),
+            OlingBuildSet.find({})
+              .sort({ collection: 1, rarity: 1, key: 1 })
+              .lean(),
+            OlingHatchReceipt.find({})
+              .sort({ createdAt: -1 })
+              .limit(100)
+              .lean(),
+            PlayerOling.find({}).sort({ hatchedAt: -1 }).limit(100).lean()
+          ]);
         const eggs = attachOePanelBuildSetsToEggs(rawEggs, buildSets);
         const hatchCountsRaw = await OlingHatchReceipt.aggregate([
           { $group: { _id: '$eggKey', count: { $sum: 1 } } }
@@ -70,8 +67,7 @@ function registerOePanelOlingDashboardRoutes(context, helpers) {
           ...createOlingSyncWarnings(contentSync),
           ...getOePanelOlingWarnings({
             eggs,
-            traits,
-            personalities
+            traits
           })
         ];
         const traitsByKey = new Map(traits.map((trait) => [trait.key, trait]));
@@ -130,13 +126,11 @@ function registerOePanelOlingDashboardRoutes(context, helpers) {
                   String(oling.ownerId),
                 ownerId: String(oling.ownerId),
                 eggKey: oling.eggKey,
-                personalityKey: oling.personalityKey,
                 matchingSet,
                 rarities: OE_PANEL_OLING_LAYERS.map(
                   (layer) => oling.buildRarities?.[layer] || '-'
                 ).join(', '),
                 buildJson: formatOePanelJson(oling.build),
-                battleStatsJson: formatOePanelJson(oling.battleStats),
                 hatchedAt: formatOePanelDateTime(oling.hatchedAt)
               };
             }),

@@ -1,3 +1,95 @@
+.oling-lab-gateway-panel {
+  --wall-decoration-panel-primary: #b4f0c4;
+  --wall-decoration-panel-secondary: #78d69a;
+  --oling-lab-menu-primary-colour: var(--wall-decoration-panel-primary);
+  --oling-lab-menu-secondary-colour: var(--wall-decoration-panel-secondary);
+  --oling-lab-element-radius: 0.5rem;
+  --oling-lab-gateway-tab-height: 2.15rem;
+  top: calc(
+    var(--headerheight, 4rem) + 4.5rem + var(--oling-lab-gateway-tab-height)
+  );
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(32rem, calc(100vw - 5rem));
+  background: var(--backgroundcolour);
+}
+
+.oling-lab-gateway-panel-tabs {
+  position: absolute;
+  top: calc(-1 * var(--oling-lab-gateway-tab-height));
+  left: var(--oling-lab-menu-radius, 0.65rem);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  width: calc(100% - var(--oling-lab-menu-radius, 0.65rem));
+  height: var(--oling-lab-gateway-tab-height);
+  min-width: 0;
+  overflow: visible;
+}
+
+.oling-lab-gateway-panel-tabs[hidden],
+.oling-lab-gateway-panel-footer[hidden] {
+  display: none;
+}
+
+.oling-lab-gateway-panel-tabs .oling-lab-tab-list {
+  width: 100%;
+  height: 100%;
+}
+
+.oling-lab-gateway-panel-header {
+  padding-left: 4.5rem;
+}
+
+.oling-lab-gateway-panel .oling-lab-gateway-panel-close {
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--backgroundcolour);
+}
+
+.oling-lab-gateway-panel-content {
+  min-width: 0;
+  min-height: 0;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.oling-lab-gateway-panel-content > .oling-lab-tab-menu,
+.oling-lab-gateway-panel-content .oling-lab-tab-panel,
+.oling-lab-gateway-panel-content .oling-lab-menu-section {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.oling-lab-gateway-panel-content .oling-lab-tab-panel {
+  padding: 0;
+}
+
+.oling-lab-gateway-panel-footer .oling-lab-container-action-area {
+  width: 100%;
+  min-width: 0;
+}
+
+.oling-lab-gateway-panel-footer .oling-lab-menu-action {
+  width: 100%;
+  min-height: 2.75rem;
+  grid-template-rows: 1fr;
+  place-items: center;
+  justify-content: center;
+  padding: 0.55rem;
+  border-radius: var(--oling-lab-element-radius);
+}
+
+.oling-lab-gateway-panel-footer .oling-lab-menu-action span {
+  font-size: 0.82rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-gateway-panel .oling-lab-gateway-panel-close:hover {
+    color: var(--backgroundcolour);
+  }
+}
+
 .oling-lab-discovery-list {
   display: grid;
   grid-auto-rows: 3.75rem;
@@ -22,32 +114,24 @@
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 0.65rem;
   text-align: center;
 }
 
-.oling-lab-gateway-overview-stage {
-  box-sizing: border-box;
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  aspect-ratio: 4 / 3;
-  justify-self: center;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto auto;
-  gap: 0.65rem;
-  padding: 0.75rem;
-  background: var(--oling-lab-menu-secondary-colour);
-}
-
-.oling-lab-gateway-overview-visual {
+.oling-lab-gateway-overview-preview {
   position: relative;
-  min-height: 8rem;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
-  background: rgb(0 0 0 / 16%);
   overflow: hidden;
+  background:
+    linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)),
+    url('/images/olings/lab/gui/egg-background.jpg') center / cover no-repeat,
+    rgb(22 31 36 / 82%);
 }
 
 .oling-lab-gateway-overview-visual img {
@@ -61,34 +145,45 @@
   top: 0.5rem;
   right: 0.5rem;
   padding: 0.35rem 0.45rem;
-  background: var(--backgroundcolour);
-  color: var(--oling-lab-menu-primary-colour);
+  background: var(--oling-lab-menu-primary-colour);
+  color: var(--backgroundcolour);
   font-size: 0.65rem;
   text-transform: uppercase;
 }
 
 .oling-lab-gateway-overview-visual strong.is-active {
-  color: var(--warningcolour);
+  background: var(--warningcolour);
+  color: var(--backgroundcolour);
 }
 
 .oling-lab-gateway-overview-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.4rem;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  min-height: 0;
+}
+
+.oling-lab-gateway-overview-cards .oling-lab-detail-list,
+.oling-lab-gateway-overview-cards .oling-lab-detail-row {
+  height: 100%;
+  min-height: 0;
 }
 
 .oling-lab-gateway-overview-cards .oling-lab-detail-row {
   min-height: 0;
   display: grid;
-  justify-items: center;
+  align-content: center;
+  justify-items: start;
   gap: 0.2rem;
-  padding: 0.4rem;
-  background: rgb(0 0 0 / 16%);
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  background: rgb(255 255 255 / 7%);
+  color: var(--oling-lab-menu-primary-colour);
 }
 
 .oling-lab-gateway-overview-cards .oling-lab-detail-row :is(span, strong) {
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .oling-lab-gateway-overview p {

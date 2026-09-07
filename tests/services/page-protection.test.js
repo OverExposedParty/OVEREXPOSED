@@ -70,6 +70,7 @@ test('canAccessFeature allows beta testers to use beta features', () => {
   });
 
   assert.equal(canAccessFeature(account, 'olings.lab'), true);
+  assert.equal(canAccessFeature(account, 'olings.clash'), true);
   assert.equal(canAccessFeature(account, 'overexposure'), true);
   assert.equal(canAccessFeature(account, 'shop'), true);
   assert.equal(canAccessFeature(account, 'party-games.prompt-heist'), true);
@@ -79,6 +80,7 @@ test('canAccessFeature allows beta testers to use beta features', () => {
 
 test('canAccessFeature blocks regular accounts from feature-gated shop', () => {
   assert.equal(canAccessFeature(createAccount(), 'shop'), false);
+  assert.equal(canAccessFeature(createAccount(), 'olings.clash'), false);
 });
 
 test('Mafia feature access remains owner-only', () => {

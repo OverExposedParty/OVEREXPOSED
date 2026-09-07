@@ -1,4 +1,5 @@
 const {
+  OLING_LAB_ACTIVE_LIMIT,
   OLING_LAYERS,
   OLING_MAX_ENERGY,
   normalizeKey,
@@ -11,6 +12,7 @@ const {
   getOlingRestRemainingMs
 } = require('../energy');
 const { getSetDerivedOlingPools } = require('./build-sets');
+const { getProminentClashRoles } = require('../clash-roles');
 
 function serializeOlingTrait(trait) {
   const plain = toPlainObject(trait);
@@ -52,22 +54,7 @@ function serializeOlingEgg(egg) {
     setKeys: plain.setKeys || [],
     sets: plain.sets || [],
     pools: getSetDerivedOlingPools(plain),
-    personalityPool: plain.personalityPool || [],
     assets: plain.assets || {},
-    metadata: plain.metadata || {}
-  };
-}
-
-function serializeOlingPersonality(personality) {
-  const plain = toPlainObject(personality);
-  if (!plain) return null;
-
-  return {
-    key: plain.key,
-    name: plain.name,
-    flavor: plain.flavor || '',
-    effects: plain.effects || [],
-    moments: plain.moments || [],
     metadata: plain.metadata || {}
   };
 }
@@ -140,12 +127,42 @@ function getMatchingOlingSet(oling, traitsByKey, egg) {
   );
 }
 
+function serializeOlingResidency(residency) {
+  const state = residency?.state === 'stored' ? 'stored' : 'active';
+  const labSlot = Number(residency?.labSlot);
+  const pod = residency?.pod;
+
+  return {
+    state,
+    labSlot:
+      Number.isInteger(labSlot) &&
+      labSlot > 0 &&
+      labSlot <= OLING_LAB_ACTIVE_LIMIT
+        ? labSlot
+        : null,
+    pod:
+      state === 'stored' && pod?.key
+        ? {
+            key: normalizeKey(pod.key),
+            definitionRevision:
+              Number.isInteger(Number(pod.definitionRevision)) &&
+              Number(pod.definitionRevision) > 0
+                ? Number(pod.definitionRevision)
+                : null,
+            releaseOutcome: normalizeKey(pod.releaseOutcome) || null,
+            storedAt: pod.storedAt || null,
+            containerPlacedId:
+              String(pod.containerPlacedId || '').trim() || null
+          }
+        : null
+  };
+}
+
 function serializePlayerOling(oling, definitions = {}) {
   const plain = toPlainObject(oling);
   if (!plain) return null;
 
   const traitsByKey = definitions.traitsByKey || new Map();
-  const personalitiesByKey = definitions.personalitiesByKey || new Map();
   const eggsByKey = definitions.eggsByKey || new Map();
   const matchingSet = getMatchingOlingSet(
     plain,
@@ -166,10 +183,6 @@ function serializePlayerOling(oling, definitions = {}) {
     eggKey: plain.eggKey,
     collection: plain.collection,
     name: plain.name || null,
-    personalityKey: plain.personalityKey,
-    personality:
-      serializeOlingPersonality(personalitiesByKey.get(plain.personalityKey)) ||
-      null,
     build: plain.build || {},
     buildRarities: plain.buildRarities || {},
     equipment: {
@@ -189,8 +202,10 @@ function serializePlayerOling(oling, definitions = {}) {
         serializeOlingTrait(traitsByKey.get(plain.build?.[layer])) || null
       ])
     ),
-    level: plain.level || 1,
-    xp: plain.xp || 0,
+    clashRoles: getProminentClashRoles(
+      plain.build,
+      definitions.clashAbilitiesByTraitKey
+    ),
     care: {
       energy,
       maxEnergy: OLING_MAX_ENERGY,
@@ -212,9 +227,9 @@ function serializePlayerOling(oling, definitions = {}) {
           ? new Date(Date.now() + restRemainingMs).toISOString()
           : null
     },
+    residency: serializeOlingResidency(plain.residency),
     favorite: Boolean(plain.favorite),
     displayOnProfile: Boolean(plain.displayOnProfile),
-    battleStats: plain.battleStats || {},
     hatchedAt: plain.hatchedAt,
     createdAt: plain.createdAt,
     updatedAt: plain.updatedAt
@@ -231,7 +246,9 @@ function serializeHatchReceipt(receipt) {
     eggKey: plain.eggKey,
     olingId: plain.olingId ? String(plain.olingId) : null,
     rolls: plain.rolls || {},
+    influences: Array.isArray(plain.influences) ? plain.influences : [],
     eggOddsSnapshot: plain.eggOddsSnapshot || {},
+    baseEggOddsSnapshot: plain.metadata?.baseEggOddsSnapshot || {},
     inventoryChange: plain.inventoryChange || {},
     createdAt: plain.createdAt
   };
@@ -243,7 +260,7 @@ module.exports = {
   serializeOlingConsumable,
   serializeOlingConsumableForJson,
   serializeOlingEgg,
-  serializeOlingPersonality,
+  serializeOlingResidency,
   serializeOlingTrait,
   serializePlayerOling
 };

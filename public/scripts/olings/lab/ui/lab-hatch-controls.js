@@ -12,25 +12,36 @@
       state,
       createInlineAction,
       hatchEggFromIncubator,
-      removeEggFromIncubator
+      removeEggFromIncubator,
+      startHatchingStagedEgg
     } = dependencies;
 
-    function updateIncubatorCountdown(context, root = elements.menuContent) {
+    function updateIncubatorCountdown(
+      context,
+      root = state.incubatorPanelOpen
+        ? elements.incubatorPanelContent
+        : elements.menuContent
+    ) {
       if (!context || !root) return;
       const liveContext =
         getIncubatorContext(context.parentPlacedId) || context;
       const eggSlot = getIncubatorEggSlot(liveContext);
       const egg = eggSlot?.itemKey ? getEgg(eggSlot.itemKey) : null;
+      const isStarted = Boolean(egg && eggSlot?.placedAt);
       const hatchProgress = getHatchProgress(liveContext, eggSlot, egg);
       const statusText = egg
-        ? hatchProgress.isReady
-          ? 'Ready'
-          : 'Incubating'
+        ? !isStarted
+          ? 'Ready to Start'
+          : hatchProgress.isReady
+            ? 'Ready'
+            : 'Incubating'
         : 'Waiting';
       const timeText = egg
-        ? hatchProgress.isReady
-          ? 'Ready'
-          : formatDuration(hatchProgress.remainingMs)
+        ? !isStarted
+          ? 'Not started'
+          : hatchProgress.isReady
+            ? 'Ready'
+            : formatDuration(hatchProgress.remainingMs)
         : '-';
 
       root
@@ -40,8 +51,11 @@
           const remainingMs = readyAt
             ? Math.max(0, readyAt - Date.now())
             : hatchProgress.remainingMs;
-          element.textContent =
-            remainingMs <= 0 ? 'Ready to hatch' : formatDuration(remainingMs);
+          element.textContent = !isStarted
+            ? 'Ready to start'
+            : remainingMs <= 0
+              ? 'Ready to hatch'
+              : formatDuration(remainingMs);
         });
       root.querySelectorAll('[data-oling-hatch-status]').forEach((element) => {
         element.textContent = statusText;
@@ -52,26 +66,47 @@
           ? Math.max(0, readyAt - Date.now())
           : hatchProgress.remainingMs;
         element.textContent =
-          egg && remainingMs <= 0
-            ? 'Ready'
-            : readyAt
-              ? formatDuration(remainingMs)
-              : timeText;
+          egg && !isStarted
+            ? 'Not started'
+            : egg && remainingMs <= 0
+              ? 'Ready'
+              : readyAt
+                ? formatDuration(remainingMs)
+                : timeText;
       });
+      root
+        .querySelectorAll('[data-oling-incubator-progress]')
+        .forEach((element) => {
+          const readyAt = Number(element.dataset.olingHatchReadyAt || 0);
+          const durationMs = Math.max(
+            1,
+            Number(element.dataset.olingHatchDuration || 1)
+          );
+          const remainingMs = readyAt
+            ? Math.max(0, readyAt - Date.now())
+            : hatchProgress.remainingMs;
+          const elapsedRatio = isStarted ? 1 - remainingMs / durationMs : 0;
+          element.style.setProperty(
+            '--oling-incubator-progress',
+            `${Math.max(0, Math.min(1, elapsedRatio)) * 100}%`
+          );
+        });
 
       root
         .querySelectorAll('.oling-lab-hatch-details-panel')
         .forEach((panel) => {
           panel.classList.toggle(
             'is-ready',
-            Boolean(egg && hatchProgress.isReady)
+            Boolean(isStarted && hatchProgress.isReady)
           );
           const note = panel.querySelector('[data-oling-hatch-note]');
           if (note) {
             note.textContent = egg
-              ? hatchProgress.isReady
-                ? 'This egg is ready to hatch.'
-                : 'Hatch unlocks when the timer reaches zero.'
+              ? !isStarted
+                ? 'Press Start Hatching when you are ready.'
+                : hatchProgress.isReady
+                  ? 'This egg is ready to hatch.'
+                  : 'Hatch unlocks when the timer reaches zero.'
               : 'Choose an egg from your inventory.';
           }
 
@@ -89,6 +124,14 @@
           syncIncubatorHatchActions(actions, liveContext, egg, hatchProgress);
         });
 
+      elements.incubatorPanelFooter
+        ?.querySelectorAll('[data-oling-hatch-actions]')
+        .forEach((actions) => {
+          syncIncubatorHatchActions(actions, liveContext, egg, hatchProgress, {
+            fallback: 'incubating'
+          });
+        });
+
       if (!egg) clearHatchTimer();
     }
 
@@ -98,11 +141,12 @@
       if (!eggSlot?.itemKey) return;
 
       updateIncubatorCountdown(context);
+      if (!eggSlot.placedAt) return;
       state.hatchTimerInterval = window.setInterval(() => {
         const nextContext = getIncubatorContext(context.parentPlacedId);
         const liveContext = nextContext || context;
         const liveEggSlot = getIncubatorEggSlot(liveContext);
-        if (!liveEggSlot?.itemKey) {
+        if (!liveEggSlot?.itemKey || !liveEggSlot.placedAt) {
           clearHatchTimer();
           return;
         }
@@ -112,11 +156,12 @@
 
     function createHatchEggAction(context) {
       return createInlineAction(
-        'Hatch Egg',
+        'Hatch Oling',
         () => hatchEggFromIncubator(context),
         {
           className: 'is-hatch-action',
-          disabled: state.hatching
+          disabled: state.hatching,
+          soundIntent: 'confirm'
         }
       );
     }
@@ -129,9 +174,11 @@
       options = {}
     ) {
       if (!actions) return;
-      const isReady = Boolean(egg && hatchProgress.isReady);
+      const eggSlot = getIncubatorEggSlot(context);
+      const isStarted = Boolean(egg && eggSlot?.placedAt);
+      const isReady = Boolean(isStarted && hatchProgress.isReady);
       const signature = [
-        isReady ? 'ready' : 'waiting',
+        isReady ? 'ready' : isStarted ? 'incubating' : 'inserted',
         options.fallback || 'none',
         egg?.key || '',
         state.hatching ? 'hatching' : ''
@@ -142,6 +189,14 @@
 
       if (isReady) {
         actions.appendChild(createHatchEggAction(context));
+      } else if (egg && !isStarted) {
+        actions.appendChild(
+          createInlineAction(
+            'Start Hatching',
+            () => startHatchingStagedEgg(context),
+            { className: 'is-hatch-action', soundIntent: 'confirm' }
+          )
+        );
       } else if (options.fallback === 'remove') {
         actions.appendChild(
           createInlineAction(
@@ -149,156 +204,23 @@
             () => removeEggFromIncubator(context),
             {
               className: 'is-remove-action',
-              disabled: !egg
+              disabled: !egg,
+              soundIntent: 'deselect'
             }
           )
+        );
+      } else if (options.fallback === 'incubating' && egg) {
+        actions.appendChild(
+          createInlineAction('Incubating…', () => {}, {
+            disabled: true,
+            sound: false
+          })
         );
       }
     }
 
-    function getSampleHatchReceiptPreview() {
-      const hatchedAt = new Date().toISOString();
-      const oling = {
-        id: 'preview-hatch-receipt-oling',
-        name: 'Receipt Preview',
-        eggKey: 'base',
-        rarity: 'rare',
-        collection: 'base',
-        personalityKey: 'curious',
-        personality: {
-          key: 'curious',
-          name: 'Curious'
-        },
-        matchingSet: {
-          key: 'moss',
-          name: 'Moss Set'
-        },
-        build: {
-          flight: 'moss-wings',
-          body: 'moss-body',
-          eyes: 'moss-eyes',
-          mouth: 'moss-mouth'
-        },
-        buildRarities: {
-          flight: 'rare',
-          body: 'uncommon',
-          eyes: 'rare',
-          mouth: 'common'
-        },
-        traits: {
-          flight: {
-            key: 'moss-wings',
-            name: 'Moss Wings',
-            rarity: 'rare',
-            flightType: 'wings',
-            flightMotion: 'flutter',
-            flightSpeed: 1,
-            assets: {
-              image: '/images/olings/builds/flight/base/moss-wings.svg'
-            }
-          },
-          body: {
-            key: 'moss-body',
-            name: 'Moss Body',
-            rarity: 'uncommon',
-            assets: {
-              image: '/images/olings/builds/body/base/moss-body.svg'
-            }
-          },
-          eyes: {
-            key: 'moss-eyes',
-            name: 'Moss Eyes',
-            rarity: 'rare',
-            assets: {
-              image: '/images/olings/builds/eyes/base/moss-eyes.svg'
-            }
-          },
-          mouth: {
-            key: 'moss-mouth',
-            name: 'Moss Mouth',
-            rarity: 'common',
-            assets: {
-              image: '/images/olings/builds/mouth/base/moss-mouth.svg'
-            }
-          }
-        }
-      };
-      const receipt = {
-        id: 'preview-hatch-receipt',
-        eggKey: 'base',
-        hatchedAt,
-        createdAt: hatchedAt,
-        source: 'Incubeta',
-        matchingSet: 'Moss Set',
-        rarity: 'Rare',
-        influences: [
-          {
-            slotKey: 'hatch',
-            itemKey: 'oling-blanket',
-            itemName: 'Oling Blanket',
-            itemRarity: 'uncommon',
-            effect: { type: 'hatch_speed', amount: 25 },
-            image: '/images/olings/consumables/hatching/speed/oling-blanket.svg'
-          },
-          {
-            slotKey: 'rarity',
-            itemKey: 'lucky-clover',
-            itemName: 'Lucky Clover',
-            itemRarity: 'epic',
-            effect: { type: 'rarity_chance', amount: 20 },
-            image: '/images/olings/consumables/hatching/rarity/lucky-clover.svg'
-          },
-          {
-            slotKey: 'personality',
-            itemKey: 'magnifying-glass',
-            itemName: 'Magnifying Glass',
-            itemRarity: 'common',
-            personalityKey: 'curious',
-            chance: 0.35,
-            image:
-              '/images/olings/consumables/hatching/personality/curious/magnifying-glass/magnifying-glass.svg'
-          }
-        ],
-        rolls: {
-          flight: {
-            rarityRolled: 'rare',
-            traitKey: 'moss-wings'
-          },
-          body: {
-            rarityRolled: 'uncommon',
-            traitKey: 'moss-body'
-          },
-          eyes: {
-            rarityRolled: 'rare',
-            traitKey: 'moss-eyes'
-          },
-          mouth: {
-            rarityRolled: 'common',
-            traitKey: 'moss-mouth'
-          },
-          personality: {
-            personalityKey: 'curious',
-            influence: {
-              itemKey: 'magnifying-glass',
-              personalityKey: 'curious',
-              chance: 0.35
-            }
-          }
-        },
-        eggOddsSnapshot: {
-          common: 0.56,
-          uncommon: 0.28,
-          rare: 0.13,
-          legendary: 0.03
-        },
-        inventoryChange: {
-          eggKey: 'base',
-          quantityBefore: 4,
-          quantityAfter: 3
-        }
-      };
-      return { oling, receipt };
-    }
+    const getSampleHatchReceiptPreview = () =>
+      window.getOlingLabSampleHatchReceiptPreview();
 
     return {
       updateIncubatorCountdown,

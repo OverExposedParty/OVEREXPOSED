@@ -356,6 +356,6 @@ test('choose Oling mode enables save and fills the detail pane while waiting for
     'enemy Oling view must hide picker arrows while sharing the picker shell'
   );
   assert.match(descriptionPanel.textContent, /Sprout/);
-  assert.match(descriptionPanel.textContent, /Level/);
+  assert.doesNotMatch(descriptionPanel.textContent, /Level/);
   assert.match(descriptionPanel.textContent, /Moss Body/);
 });

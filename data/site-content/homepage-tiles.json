@@ -467,8 +467,8 @@
       "description": "Choose an Oling and take it into a head-to-head battle against another player. Time your attacks, reduce your opponent’s health and put your Oling’s unique attributes to the test.",
       "link": "/olings/battle",
       "colours": {
-        "primary": "#FFB5C8",
-        "secondary": "#E684A1"
+        "primary": "#6EA8FF",
+        "secondary": "#4B73B5"
       },
       "splashScreen": "/images/splash-screens/overexposed.png",
       "images": {

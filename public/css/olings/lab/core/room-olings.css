@@ -1,0 +1,242 @@
+.oling-lab-roamer {
+  --furniture-footprint-colour: var(--oling-footprint-primary-colour, #ffd1e8);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  display: block;
+  width: var(--oling-size, 7rem);
+  height: var(--oling-size, 7rem);
+  padding: 0;
+  transform: translate3d(var(--oling-x, 0), var(--oling-y, 0), 0);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.oling-lab-roamer.is-selected {
+  z-index: 17;
+}
+
+.oling-lab-roamer.is-carried {
+  z-index: 20;
+  cursor: grabbing;
+}
+
+.oling-lab-roamer.is-pod-hover-target {
+  z-index: 19;
+}
+
+.oling-lab-pod-capture-layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.oling-lab-roamer.has-pod-capture-layers > .oling-lab-oling-preview.is-roaming {
+  z-index: 1;
+}
+
+.oling-lab-pod-capture-layer.is-back {
+  z-index: 0;
+}
+
+.oling-lab-pod-capture-layer.is-front {
+  z-index: 2;
+}
+
+.oling-lab-pod-capture-layer.is-base {
+  z-index: 3;
+}
+
+/* Keep an Oling visible above the bed or doorway it is currently using. */
+.oling-lab-roamer.is-attached-to-selected-furniture {
+  z-index: 16;
+}
+
+.oling-lab-roamer::before {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  content: '';
+  box-sizing: border-box;
+  background-color: color-mix(
+    in srgb,
+    var(--furniture-footprint-colour) 20%,
+    transparent
+  );
+  background-image:
+    linear-gradient(
+      to right,
+      var(--furniture-footprint-colour)
+        var(--oling-lab-furniture-grid-border-width),
+      transparent var(--oling-lab-furniture-grid-border-width)
+    ),
+    linear-gradient(
+      to bottom,
+      var(--furniture-footprint-colour)
+        var(--oling-lab-furniture-grid-border-width),
+      transparent var(--oling-lab-furniture-grid-border-width)
+    );
+  background-size: var(--oling-lab-cell) var(--oling-lab-cell);
+  box-shadow: inset 0 0 0 var(--oling-lab-furniture-grid-border-width)
+    var(--furniture-footprint-colour);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    background-color 120ms ease;
+}
+
+.oling-lab-page:not(.is-editing) .oling-lab-roamer::after {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  content: '';
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 var(--oling-lab-furniture-grid-border-width)
+    var(--furniture-footprint-colour);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.oling-lab-page:not(.is-editing) .oling-lab-roamer.is-selected::before,
+.oling-lab-page:not(.is-editing) .oling-lab-roamer.is-selected::after,
+.oling-lab-page:not(.is-editing)
+  .oling-lab-roamer.is-selected
+  > .oling-lab-oling-footprint-label {
+  opacity: 1;
+}
+
+.oling-lab-page:not(.is-editing) .oling-lab-roamer:focus-visible {
+  --furniture-footprint-colour: var(
+    --oling-footprint-secondary-colour,
+    #e39bc1
+  );
+}
+
+.oling-lab-page:not(.is-editing) .oling-lab-roamer:focus-visible::before,
+.oling-lab-page:not(.is-editing) .oling-lab-roamer:focus-visible::after,
+.oling-lab-page:not(.is-editing)
+  .oling-lab-roamer:focus-visible
+  > .oling-lab-oling-footprint-label {
+  opacity: 1;
+}
+
+.oling-lab-page.is-editing .oling-lab-roamer::before,
+.oling-lab-page.is-editing .oling-lab-oling-footprint-label,
+.oling-lab-roamer.is-carried::before,
+.oling-lab-roamer.is-carried::after,
+.oling-lab-roamer.is-carried > .oling-lab-oling-footprint-label {
+  display: none;
+}
+
+.oling-lab-roamer:focus-visible {
+  outline: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-lab-page:not(.is-editing) .oling-lab-roamer:hover {
+    --furniture-footprint-colour: var(
+      --oling-footprint-secondary-colour,
+      #e39bc1
+    );
+  }
+
+  .oling-lab-page:not(.is-editing) .oling-lab-roamer:hover::before,
+  .oling-lab-page:not(.is-editing) .oling-lab-roamer:hover::after,
+  .oling-lab-page:not(.is-editing)
+    .oling-lab-roamer:hover
+    > .oling-lab-oling-footprint-label {
+    opacity: 1;
+  }
+}
+
+.oling-lab-oling-preview.is-roaming {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.oling-lab-oling-preview.is-roaming .oling-lab-oling-layer {
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+}
+
+.oling-lab-roamer:not(.is-selected):not(.is-sleeping)
+  .oling-lab-oling-preview.is-roaming {
+  animation: oling-lab-float var(--oling-lab-float-duration, 2.8s) ease-in-out
+    infinite alternate;
+}
+
+.oling-lab-roamer.is-pod-hover-target:not(.is-carried)
+  .oling-lab-oling-preview.is-roaming {
+  animation: oling-lab-pod-capture-hover 1.6s ease-in-out infinite alternate;
+}
+
+.oling-lab-roamer:not(.is-selected).is-sleeping
+  .oling-lab-oling-preview.is-roaming {
+  animation: oling-lab-sleep-breathe 3.6s ease-in-out infinite alternate;
+}
+
+.oling-lab-roamer.is-carried .oling-lab-oling-preview.is-roaming {
+  transform: none;
+  animation: none;
+}
+
+@keyframes oling-lab-float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3%);
+  }
+
+  100% {
+    transform: translateY(4%);
+  }
+}
+
+@keyframes oling-lab-pod-capture-hover {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-1.25%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oling-lab-roamer.is-pod-hover-target:not(.is-carried)
+    .oling-lab-oling-preview.is-roaming {
+    animation-duration: 2.6s;
+  }
+}
+
+@keyframes oling-lab-sleep-breathe {
+  from {
+    transform: translateY(-0.4%);
+  }
+
+  to {
+    transform: translateY(0.6%);
+  }
+}

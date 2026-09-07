@@ -473,7 +473,7 @@ function bindGamemodeSettingsActions() {
         trackGamemodeStarted();
         transitionSplashScreen(
           removeSettingsExtensionFromCurrentURL(),
-          `/images/splash-screens/${startGameButton.id}.png`
+          `/images/splash-screens/party-games/${startGameButton.id}/game.png`
         );
       }
     }
@@ -504,7 +504,7 @@ function bindGamemodeSettingsActions() {
       trackGamemodeStarted();
       transitionSplashScreen(
         removeSettingsExtensionFromCurrentURL(),
-        `/images/splash-screens/${startGameButton.id}.png`
+        `/images/splash-screens/party-games/${startGameButton.id}/game.png`
       );
     }
   });
@@ -563,7 +563,7 @@ async function startOnlineGame({ bypassPlayerRestrictions = false } = {}) {
     playInteractionSound('confirm');
     transitionSplashScreen(
       removeSettingsExtensionFromCurrentURL() + '/' + partyCode,
-      `/images/splash-screens/${startGameButton.id}.png`
+      `/images/splash-screens/party-games/${startGameButton.id}/game.png`
     );
   } catch (error) {
     loadingPage = false;

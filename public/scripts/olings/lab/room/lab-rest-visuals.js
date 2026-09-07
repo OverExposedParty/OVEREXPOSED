@@ -11,14 +11,15 @@
       burstDelayMs: clampNumber(config.burstDelayMs, 3200, 120, 10000),
       burstStepDelayMs: clampNumber(config.burstStepDelayMs, 700, 0, 2000),
       closedEyesPath:
-        config.closedEyesPath || '/images/olings/states/rest/closed-eyes.svg',
+        config.closedEyesPath ||
+          '/images/olings/lab/states/rest/closed-eyes.svg',
       debugAnchor: Boolean(config.debugAnchor),
       driftDistancePx: clampNumber(config.driftDistancePx, 32, -300, 300),
       lifetimeMs: clampNumber(config.lifetimeMs, 1500, 300, 10000),
       maxActiveZs: Math.round(clampNumber(config.maxActiveZs, 3, 1, 30)),
       originPath:
         config.originPath ||
-        '/images/olings/interaction-points/rest-z-origin.svg',
+        '/images/olings/lab/interaction-points/rest-z-origin.svg',
       riseDistancePx: clampNumber(config.riseDistancePx, 46, 1, 300),
       swayMaxPx: clampNumber(config.swayMaxPx, 5, 0, 20),
       swayMinPx: clampNumber(config.swayMinPx, 3, 0, 20)

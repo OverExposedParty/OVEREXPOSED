@@ -1,0 +1,55 @@
+.oling-lab-wall-decoration-panel
+  :is(
+    .oling-lab-gateway-overview-preview,
+    .oling-lab-explorer-detail-preview,
+    .oling-lab-rest-preview-window,
+    .oling-lab-oling-preview,
+    .oling-lab-incubator-preview-frame,
+    .oling-lab-egg-insertion-stage,
+    .oling-lab-hatch-reveal-stage,
+    .oling-lab-item-slot-row,
+    .oling-lab-wallpaper-lab-preview,
+    .oling-lab-wallpaper-carousel-preview,
+    .oling-lab-wallpaper-carousel-card
+  ) {
+  overflow: hidden;
+  border-radius: var(--oling-lab-element-radius, 0.5rem);
+}
+
+.oling-lab-wall-decoration-panel
+  :is(
+    .oling-lab-side-panel,
+    .oling-lab-active-adventure-scene,
+    .oling-lab-detail-row,
+    .oling-lab-detail-pair-item,
+    .oling-lab-explorer-detail-card,
+    .oling-lab-explorer-oling-status,
+    .oling-lab-explorer-adventure-tile,
+    .oling-lab-discovery-row,
+    .oling-lab-rest-metric,
+    .oling-lab-oling-overview-metric,
+    .oling-lab-incubator-card,
+    .oling-lab-incubator-egg-card,
+    .oling-lab-incubator-egg-description,
+    .oling-lab-incubator-influence-card,
+    .oling-lab-incubator-influence-summary,
+    .oling-lab-item-influence-slot,
+    .oling-lab-item-influence-inventory-panel,
+    .oling-lab-item-influence-inventory-card,
+    .oling-lab-item-influence-description,
+    .oling-lab-hatch-influence-card,
+    .oling-lab-hatch-build-part-details,
+    .oling-lab-set-preview,
+    .oling-lab-incubator-copy,
+    .oling-lab-storage-panel-card,
+    .oling-lab-stored-oling-card,
+    .oling-lab-supply-storage-description,
+    .oling-lab-supply-storage-item,
+    .oling-lab-supply-storage-unit,
+    .oling-lab-furniture-card,
+    .oling-lab-wall-decoration-card,
+    .oling-lab-furniture-slot-hero,
+    .oling-lab-wallpaper-gallery-card
+  ) {
+  border-radius: var(--oling-lab-element-radius, 0.5rem);
+}

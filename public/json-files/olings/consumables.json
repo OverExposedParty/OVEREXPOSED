@@ -1,3 +1,124 @@
 {
-  "consumables": []
+  "consumables": [
+    {
+      "key": "oling-cookie",
+      "name": "Oling Cookie",
+      "description": "A pack of cookies that helps a tired Oling recover up to 25 Energy.",
+      "category": "care",
+      "subcategory": "energy",
+      "target": "oling",
+      "effect": {
+        "type": "energy",
+        "restoreToEnergy": 25
+      },
+      "enabled": true,
+      "status": "published",
+      "stackable": true,
+      "maxStack": 99,
+      "cooldownSeconds": 0,
+      "assets": {
+        "icon": "/images/olings/lab/consumables/mood/happiness/oling-cookie.svg",
+        "image": "/images/olings/lab/consumables/mood/happiness/oling-cookie.svg"
+      },
+      "metadata": {
+        "rarity": "common"
+      }
+    },
+    {
+      "key": "o-juice",
+      "name": "O-Juice",
+      "description": "A fizzy energy drink that restores an Oling up to 75 Energy.",
+      "category": "care",
+      "subcategory": "energy",
+      "target": "oling",
+      "effect": {
+        "type": "energy",
+        "restoreToEnergy": 75
+      },
+      "enabled": true,
+      "status": "published",
+      "stackable": true,
+      "maxStack": 99,
+      "cooldownSeconds": 0,
+      "assets": {
+        "icon": "/images/olings/lab/consumables/energy/o-juice.svg",
+        "image": "/images/olings/lab/consumables/energy/o-juice.svg"
+      },
+      "metadata": {
+        "rarity": "rare"
+      }
+    },
+    {
+      "key": "oling-blanket",
+      "name": "Oling Blanket",
+      "description": "A cosy blanket that helps an Oling egg hatch 25% faster.",
+      "category": "hatching",
+      "subcategory": "speed",
+      "target": "egg",
+      "effect": {
+        "type": "hatch_speed",
+        "amount": 25
+      },
+      "enabled": true,
+      "status": "published",
+      "stackable": true,
+      "maxStack": 99,
+      "cooldownSeconds": 0,
+      "assets": {
+        "icon": "/images/olings/lab/consumables/hatching/speed/oling-blanket.svg",
+        "image": "/images/olings/lab/consumables/hatching/speed/oling-blanket.svg"
+      },
+      "metadata": {
+        "rarity": "common"
+      }
+    },
+    {
+      "key": "opal-dust",
+      "name": "Opal Dust",
+      "description": "A shimmering dust that adds 10 percentage points to an egg's non-common rarity chance.",
+      "category": "hatching",
+      "subcategory": "rarity",
+      "target": "egg",
+      "effect": {
+        "type": "rarity_chance",
+        "amount": 10
+      },
+      "enabled": true,
+      "status": "published",
+      "stackable": true,
+      "maxStack": 99,
+      "cooldownSeconds": 0,
+      "assets": {
+        "icon": "/images/olings/lab/consumables/hatching/rarity/opal-dust.svg",
+        "image": "/images/olings/lab/consumables/hatching/rarity/opal-dust.svg"
+      },
+      "metadata": {
+        "rarity": "rare"
+      }
+    },
+    {
+      "key": "lucky-clover",
+      "name": "Lucky Clover",
+      "description": "A lucky charm that adds 20 percentage points to an egg's non-common rarity chance.",
+      "category": "hatching",
+      "subcategory": "rarity",
+      "target": "egg",
+      "effect": {
+        "type": "rarity_chance",
+        "amount": 20
+      },
+      "enabled": true,
+      "status": "published",
+      "stackable": true,
+      "maxStack": 99,
+      "cooldownSeconds": 0,
+      "assets": {
+        "icon": "/images/olings/lab/consumables/hatching/rarity/lucky-clover.svg",
+        "image": "/images/olings/lab/consumables/hatching/rarity/lucky-clover.svg"
+      },
+      "metadata": {
+        "rarity": "epic"
+      }
+    }
+  ]
 }

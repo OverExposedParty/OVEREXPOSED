@@ -58,6 +58,7 @@ async function initializeGamemodeSettingsWhenReady() {
         await gameSettingsButtonsReady;
         await setGamemodeContainer();
         gamemodeSettingsInitialized = true;
+        window.setGamemodeSettingsStartInitializationState?.(false);
     })();
 
     try {

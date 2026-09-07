@@ -157,7 +157,12 @@ test('return-to-lobby rejects non-host players', () => {
         payload: {},
         hasDeck: true
       }),
-    /Only the host/
+    (error) => {
+      assert.match(error.message, /Only the host/);
+      assert.equal(error.status, 403);
+      assert.equal(error.code, 'party_host_required');
+      return true;
+    }
   );
 });
 

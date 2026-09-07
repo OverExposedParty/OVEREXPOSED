@@ -132,6 +132,9 @@
   }
 
   function isCurrentDevicePartyHost(partyData) {
+    if (typeof window.isCurrentOnlinePartyHost === 'function') {
+      return window.isCurrentOnlinePartyHost(partyData);
+    }
     const hostId = partyData?.state?.hostComputerId;
     return Boolean(
       hostId &&
@@ -320,7 +323,10 @@
   function renderPartyGameSwitchOptions(
     partyData,
     availableGamemodes,
-    { mode = 'online', currentGamemode = partyData?.config?.gamemode || '' } = {}
+    {
+      mode = 'online',
+      currentGamemode = partyData?.config?.gamemode || ''
+    } = {}
   ) {
     const dialog = ensurePartyGameSwitchDialog();
     const optionsContainer = dialog.querySelector('.party-game-switch-options');
@@ -462,7 +468,10 @@
     const gamemode = String(currentGamemode || '')
       .trim()
       .toLowerCase();
-    if (!getPartyGameSwitchOption(gamemode) || isForceOnlineGamemode(gamemode)) {
+    if (
+      !getPartyGameSwitchOption(gamemode) ||
+      isForceOnlineGamemode(gamemode)
+    ) {
       return false;
     }
 
@@ -483,8 +492,14 @@
   async function switchOnlinePartyGame(targetGamemode) {
     const partyData = await getLatestPartyForSwitcher();
     if (!partyData?.partyId) throw new Error('Party data is unavailable.');
+    if (!isCurrentDevicePartyHost(partyData)) {
+      throw (
+        window.createOnlinePartyHostRequiredError?.('change the party game') ||
+        new Error('Only the host can change the party game.')
+      );
+    }
 
-    const response = await fetch('/api/party-lobbies/switch-game', {
+    const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -492,10 +507,23 @@
         targetGamemode,
         expectedGameId: partyData.session?.gameId || null
       })
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      throw new Error(getPartySwitchErrorMessage(payload, response));
+    };
+    let payload;
+    if (window.PartyApiRequest?.requestPartyJson) {
+      ({ data: payload } = await window.PartyApiRequest.requestPartyJson(
+        '/api/party-lobbies/switch-game',
+        requestOptions,
+        { fallbackMessage: 'Failed to switch games' }
+      ));
+    } else {
+      const response = await fetch(
+        '/api/party-lobbies/switch-game',
+        requestOptions
+      );
+      payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(getPartySwitchErrorMessage(payload, response));
+      }
     }
 
     return payload?.data || payload;
@@ -524,10 +552,10 @@
       typeof deviceId !== 'undefined' &&
       String(transition.hostComputerId) === String(deviceId);
     if (!getPartyGameSwitchOption(gamemode)) {
-      return '/images/splash-screens/overexposed.png';
+      return '/images/splash-screens/core/overexposed.png';
     }
 
-    return `/images/splash-screens/${gamemode}${isHost ? '-settings' : ''}.png`;
+    return `/images/splash-screens/party-games/${gamemode}/${isHost ? 'settings' : 'game'}.png`;
   }
 
   function getOfflinePartyGameSwitchDestination(gamemode) {
@@ -548,7 +576,7 @@
     if (!destination) return false;
 
     const normalizedGamemode = String(gamemode).trim().toLowerCase();
-    const splash = `/images/splash-screens/${normalizedGamemode}-settings.png`;
+    const splash = `/images/splash-screens/party-games/${normalizedGamemode}/settings.png`;
     if (typeof loadingPage !== 'undefined') loadingPage = true;
     closePartyGameSwitcher({ force: true });
     preloadPartySwitchSplashScreen(splash);
@@ -629,7 +657,7 @@
       .toLowerCase();
     const canSwitchOffline = Boolean(
       getPartyGameSwitchOption(normalizedGamemode) &&
-        !isForceOnlineGamemode(normalizedGamemode)
+      !isForceOnlineGamemode(normalizedGamemode)
     );
 
     activeSwitchContext = canSwitchOffline

@@ -52,6 +52,20 @@ const battleDemoOlingsScript = fs.readFileSync(
   ),
   'utf8'
 );
+const olingSelectorScript = fs.readFileSync(
+  path.join(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'public',
+    'scripts',
+    'olings',
+    'shared',
+    'oling-selector.js'
+  ),
+  'utf8'
+);
 const battleLobbyScript = fs.readFileSync(
   path.join(
     __dirname,
@@ -130,6 +144,7 @@ function createBattleDom(body, options = {}) {
 }
 
 function loadBattleScripts(window) {
+  window.eval(olingSelectorScript);
   window.eval(battleDemoOlingsScript);
   battleLobbyModuleScripts.forEach((script) => window.eval(script));
   window.eval(battleLobbyScript);
@@ -141,9 +156,7 @@ function getSproutOling() {
   return {
     id: 'oling-1',
     name: 'Sprout',
-    level: 3,
     eggKey: 'base-egg',
-    personalityKey: 'friendly',
     care: { energy: 80, maxEnergy: 100 },
     build: {
       flight: 'moss-wings',

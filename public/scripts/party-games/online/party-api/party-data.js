@@ -1,5 +1,27 @@
 (() => {
   const ONLINE_PARTY_ID_PATTERN = /^[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/;
+  const requestPartyJson =
+    window.PartyApiRequest?.requestPartyJson ||
+    (async (url, options, { fallbackMessage = '' } = {}) => {
+      const response = await fetch(url, options);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const serverError =
+          data?.error && typeof data.error === 'object' ? data.error : {};
+        const error = new Error(
+          (typeof data?.error === 'string' && data.error) ||
+            serverError.message ||
+            data?.message ||
+            fallbackMessage ||
+            `Party request failed with status ${response.status}`
+        );
+        error.status = response.status;
+        error.code = serverError.code || 'party_request_failed';
+        error.details = serverError.details;
+        throw error;
+      }
+      return { response, data };
+    });
 
   function normaliseOnlinePartyId(value = partyCode) {
     const candidate =
@@ -28,19 +50,16 @@
   async function getExistingPartyData(partyId, partyType = sessionPartyType) {
     try {
       const normalisedPartyId = requireOnlinePartyId(partyId);
-      const res = await fetch(
+      const { data } = await requestPartyJson(
         `/api/${partyType}?partyCode=${encodeURIComponent(normalisedPartyId)}`,
-        { cache: 'no-store' }
+        { cache: 'no-store' },
+        {
+          retries: 2,
+          retryDelayMs: 200,
+          fallbackMessage: 'Failed to fetch party data'
+        }
       );
-      if (!res.ok) {
-        const payload = await res.json().catch(() => ({}));
-        const message =
-          payload.error?.message ||
-          payload.message ||
-          `Failed to fetch party data with status ${res.status}`;
-        throw new Error(message);
-      }
-      return await res.json();
+      return data;
     } catch (err) {
       console.error('Failed to fetch existing party data:', err);
       throw err;

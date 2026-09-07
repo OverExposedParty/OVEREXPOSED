@@ -11,7 +11,7 @@
       placeRoomItem
     } = dependencies;
 
-function openSlotMenu(row, col) {
+    function openSlotMenu(row, col) {
       const grid = document.createElement('div');
       grid.className = 'oling-lab-menu-grid oling-lab-place-items-grid';
       const availableItems = getRoomItemsForSlot(row, col);
@@ -49,7 +49,7 @@ function openSlotMenu(row, col) {
           ? [grid]
           : [createEmptyMessage('No owned items fit here.')],
         {
-          theme: 'olings-lab'
+          theme: 'furniture'
         }
       );
     }

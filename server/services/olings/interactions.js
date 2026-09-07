@@ -6,7 +6,6 @@ const {
   getOlingDefinitions,
   getRollableOlingRarityOdds,
   listOlingConsumables,
-  listOlingPersonalities,
   pickRandom,
   rollWeightedKey,
   serializeHatchReceipt,
@@ -19,14 +18,51 @@ const {
   getOlingEnergy
 } = require('./energy');
 const {
+  applyRarityChanceToOdds,
+  createHatchInfluenceSnapshots
+} = require('./hatch-influences');
+const {
+  getEggHatchDurationMs
+} = require('../../routes/api-olings/lab-incubation-readiness');
+const {
   consumeOwnedConsumable,
+  consumeReservedHatchInfluences,
   consumeOwnedEgg,
   getAccountOlingState,
   getOrCreateOlingState
 } = require('./account-state');
+const {
+  createStoredOlingError,
+  findAvailableLabSlot,
+  isOlingActive
+} = require('./residency');
+const { OlingStorageError, runStorageTransaction } = require('./storage');
+
+function getTransactionCompatibleModel(model, transactionConnection) {
+  if (!model?.db || model.db === transactionConnection) return model;
+
+  const databaseName = String(model.db.name || '').trim();
+  if (!databaseName || typeof transactionConnection?.useDb !== 'function') {
+    throw new TypeError(
+      `${model.modelName || 'MongoDB model'} cannot join this transaction.`
+    );
+  }
+
+  const transactionDatabase = transactionConnection.useDb(databaseName, {
+    useCache: true
+  });
+  const existingModel = transactionDatabase.models?.[model.modelName];
+  if (existingModel) return existingModel;
+
+  return transactionDatabase.model(
+    model.modelName,
+    model.schema,
+    model.collection.name
+  );
+}
 
 function canApplyOlingConsumableEffect(consumable) {
-  return ['energy', 'xp'].includes(normalizeKey(consumable?.effect?.type));
+  return normalizeKey(consumable?.effect?.type) === 'energy';
 }
 
 function findHatchEggSlot(lab, hatchContext = {}, eggKey = '') {
@@ -72,69 +108,6 @@ function clearHatchEggSlot(lab, hatchContext = {}, eggKey = '') {
   return true;
 }
 
-function getPersonalityKeyFromInfluence(consumable) {
-  const effect = consumable?.effect || {};
-  if (normalizeKey(effect.type) !== 'personality_chance') return null;
-  return (
-    normalizeKey(effect.personalityKey) ||
-    normalizeKey(consumable?.metadata?.personalityKey)
-  );
-}
-
-function pickInfluencedPersonality(
-  personalities,
-  hatchInfluences,
-  consumables
-) {
-  const personalityByKey = new Map(
-    personalities.map((personality) => [personality.key, personality])
-  );
-  const consumableByKey = new Map(
-    consumables.map((consumable) => [consumable.key, consumable])
-  );
-  const influence = (Array.isArray(hatchInfluences) ? hatchInfluences : [])
-    .map((item) => {
-      if (!item?.consumedAt) return null;
-      const consumable = consumableByKey.get(normalizeKey(item.itemKey));
-      const personalityKey = getPersonalityKeyFromInfluence(consumable);
-      if (!personalityKey || !personalityByKey.has(personalityKey)) return null;
-      return {
-        itemKey: consumable.key,
-        personalityKey,
-        chance: Math.max(
-          0,
-          Math.min(1, Number(consumable.effect?.amount || 0) / 100)
-        )
-      };
-    })
-    .filter(Boolean)[0];
-
-  if (!influence) {
-    return {
-      personality: pickRandom(personalities),
-      influence: null
-    };
-  }
-
-  if (Math.random() <= influence.chance) {
-    return {
-      personality: personalityByKey.get(influence.personalityKey),
-      influence: {
-        ...influence,
-        applied: true
-      }
-    };
-  }
-
-  return {
-    personality: pickRandom(personalities),
-    influence: {
-      ...influence,
-      applied: false
-    }
-  };
-}
-
 async function useOlingConsumable({
   models,
   accountId,
@@ -146,9 +119,8 @@ async function useOlingConsumable({
     OlingState,
     OlingEgg,
     OlingBuildSet,
-    OlingTrait,
-    OlingPersonality,
     OlingConsumable,
+    OlingTrait,
     PlayerOling
   } = models;
   const normalizedConsumableKey = normalizeKey(consumableKey);
@@ -201,6 +173,17 @@ async function useOlingConsumable({
     };
   }
 
+  if (!isOlingActive(oling)) {
+    const error = createStoredOlingError('giving it a consumable');
+    return {
+      error: {
+        status: error.status,
+        code: error.code,
+        message: error.message
+      }
+    };
+  }
+
   if (
     normalizeKey(consumable.effect?.type) === 'energy' &&
     getEnergyRestoreThreshold(consumable) &&
@@ -235,7 +218,7 @@ async function useOlingConsumable({
   await oling.save();
 
   const definitions = await getOlingDefinitions(
-    { OlingTrait, OlingEgg, OlingBuildSet, OlingPersonality },
+    { OlingTrait, OlingEgg, OlingBuildSet },
     [oling]
   );
 
@@ -256,13 +239,7 @@ async function useOlingConsumable({
   };
 }
 
-async function rollOlingBuild({
-  OlingTrait,
-  OlingPersonality,
-  egg,
-  hatchInfluences = [],
-  consumables = []
-}) {
+async function rollOlingBuild({ OlingTrait, egg }) {
   const build = {};
   const buildRarities = {};
   const rolls = {};
@@ -308,42 +285,9 @@ async function rollOlingBuild({
     };
   }
 
-  const personalityQuery = {
-    enabled: true,
-    status: 'published'
-  };
-  const dbPersonalities = await OlingPersonality.find(personalityQuery).lean();
-  const personalities = dbPersonalities.length
-    ? dbPersonalities
-    : await listOlingPersonalities();
-  const personalityRoll = pickInfluencedPersonality(
-    personalities,
-    hatchInfluences,
-    consumables
-  );
-  const personality = personalityRoll.personality;
-
-  if (!personality) {
-    return {
-      error: {
-        status: 500,
-        code: 'oling_personality_pool_invalid',
-        message: `Egg "${egg.key}" has no available Oling personalities.`
-      }
-    };
-  }
-
-  rolls.personality = {
-    personalityKey: personality.key
-  };
-  if (personalityRoll.influence) {
-    rolls.personality.influence = personalityRoll.influence;
-  }
-
   return {
     build,
     buildRarities,
-    personalityKey: personality.key,
     rolls
   };
 }
@@ -360,9 +304,8 @@ async function hatchOling({
     OlingState,
     OlingEgg,
     OlingBuildSet,
-    OlingTrait,
-    OlingPersonality,
     OlingConsumable,
+    OlingTrait,
     PlayerOling,
     OlingHatchReceipt
   } = models;
@@ -399,81 +342,192 @@ async function hatchOling({
       }
     };
   }
-  await getOrCreateOlingState(OlingState, account);
-  const hatchEggSlot = findHatchEggSlot(
-    account.olings?.lab,
+  const olingState = await getOrCreateOlingState(OlingState, account);
+  const hatchSlot = findHatchEggSlot(
+    account.olings?.lab || olingState?.lab,
     hatchContext,
     normalizedEggKey
   );
-  const hatchInfluences = Array.isArray(hatchEggSlot?.influenceSlots)
-    ? hatchEggSlot.influenceSlots
-    : [];
-  const consumables = await listOlingConsumables({ OlingConsumable });
-
-  const rolledBuild = await rollOlingBuild({
-    OlingTrait,
-    OlingPersonality,
-    egg: eggWithBuildSets,
-    hatchInfluences,
-    consumables
-  });
-  if (rolledBuild.error) return rolledBuild;
-
-  const consumedEgg = await consumeOwnedEgg(
-    { Account, OlingState },
-    accountId,
-    normalizedEggKey
-  );
-  if (!consumedEgg) {
+  if (!hatchSlot) {
     return {
       error: {
         status: 409,
-        code: 'oling_egg_not_owned',
-        message: 'You do not have that Oling egg to hatch.'
+        code: 'oling_hatch_slot_changed',
+        message: 'That egg is no longer in this incubator.'
       }
     };
   }
-  if (
-    clearHatchEggSlot(
-      consumedEgg.account.olings?.lab,
-      hatchContext,
-      normalizedEggKey
-    )
-  ) {
-    consumedEgg.account.markModified('olings.lab');
-    await consumedEgg.account.save({ validateBeforeSave: false });
-    consumedEgg.olingState = getAccountOlingState(consumedEgg.account);
+  if (!hatchSlot.placedAt) {
+    return {
+      error: {
+        status: 409,
+        code: 'oling_hatch_not_started',
+        message: 'Start hatching this egg before trying to hatch it.'
+      }
+    };
+  }
+  const influenceSlots = Array.isArray(hatchSlot?.influenceSlots)
+    ? hatchSlot.influenceSlots
+    : [];
+  const consumables = influenceSlots.length
+    ? await listOlingConsumables({ OlingConsumable })
+    : [];
+  const startedAtMs = new Date(hatchSlot.placedAt).getTime();
+  const readyAtMs =
+    startedAtMs +
+    getEggHatchDurationMs(eggWithBuildSets, influenceSlots, consumables);
+  if (!Number.isFinite(startedAtMs) || readyAtMs > Date.now()) {
+    return {
+      error: {
+        status: 409,
+        code: 'oling_hatch_not_ready',
+        message: 'That egg is still hatching.'
+      }
+    };
+  }
+  const baseEggOdds = getRollableOlingRarityOdds(eggWithBuildSets);
+  const adjustedEggOdds = applyRarityChanceToOdds(
+    baseEggOdds,
+    influenceSlots,
+    consumables
+  );
+  const rolledBuild = await rollOlingBuild({
+    OlingTrait,
+    egg: { ...eggWithBuildSets, rarityOdds: adjustedEggOdds }
+  });
+  if (rolledBuild.error) return rolledBuild;
+
+  const TransactionOlingHatchReceipt = getTransactionCompatibleModel(
+    OlingHatchReceipt,
+    PlayerOling?.db
+  );
+
+  let hatchResult;
+  try {
+    hatchResult = await runStorageTransaction(models, async (session) => {
+      const labSlot = await findAvailableLabSlot({
+        PlayerOling,
+        accountId,
+        session
+      });
+      if (!labSlot) {
+        return {
+          error: {
+            status: 409,
+            code: 'oling_lab_roster_full',
+            message:
+              'Your Oling lab already has 6 active Olings. Store one before hatching another.'
+          }
+        };
+      }
+
+      const consumedEgg = await consumeOwnedEgg(
+        { Account, OlingState },
+        accountId,
+        normalizedEggKey,
+        { session, initialize: false }
+      );
+      if (!consumedEgg) {
+        return {
+          error: {
+            status: 409,
+            code: 'oling_egg_not_owned',
+            message: 'You do not have that Oling egg to hatch.'
+          }
+        };
+      }
+      const influenceConsumption = consumeReservedHatchInfluences(
+        consumedEgg.account,
+        influenceSlots
+      );
+      if (!influenceConsumption) {
+        throw new OlingStorageError(
+          409,
+          'oling_hatch_influence_not_owned',
+          'A reserved hatch influence is no longer available.'
+        );
+      }
+
+      if (
+        !clearHatchEggSlot(
+          consumedEgg.account.olings?.lab,
+          hatchContext,
+          normalizedEggKey
+        )
+      ) {
+        throw new OlingStorageError(
+          409,
+          'oling_hatch_slot_changed',
+          'That egg is no longer in this incubator.'
+        );
+      }
+      consumedEgg.account.markModified('olings.lab');
+      await consumedEgg.account.save({
+        session,
+        validateBeforeSave: false
+      });
+      consumedEgg.olingState = getAccountOlingState(consumedEgg.account);
+
+      const [oling] = await PlayerOling.create(
+        [
+          {
+            ownerId: accountId,
+            eggKey: eggWithBuildSets.key,
+            collection: eggWithBuildSets.collection,
+            build: rolledBuild.build,
+            buildRarities: rolledBuild.buildRarities,
+            residency: { state: 'active', labSlot, pod: null },
+            hatchedAt: new Date()
+          }
+        ],
+        { session }
+      );
+
+      const influences = createHatchInfluenceSnapshots(
+        influenceConsumption.influenceSlots,
+        consumables
+      );
+      const [receipt] = await TransactionOlingHatchReceipt.create(
+        [
+          {
+            ownerId: accountId,
+            eggKey: eggWithBuildSets.key,
+            olingId: oling._id,
+            rolls: rolledBuild.rolls,
+            influences,
+            eggOddsSnapshot: adjustedEggOdds,
+            inventoryChange: {
+              eggKey: eggWithBuildSets.key,
+              quantityBefore: consumedEgg.quantityBefore,
+              quantityAfter: consumedEgg.quantityAfter
+            },
+            request: {
+              ip: request.ip || null,
+              userAgent: request.userAgent || null
+            },
+            metadata: {
+              baseEggOddsSnapshot: baseEggOdds,
+              influenceInventoryChanges: influenceConsumption.inventoryChanges
+            }
+          }
+        ],
+        { session }
+      );
+
+      return { consumedEgg, oling, receipt };
+    });
+  } catch (error) {
+    if (error instanceof OlingStorageError) {
+      return { error: error.toApiError() };
+    }
+    throw error;
   }
 
-  const oling = await PlayerOling.create({
-    ownerId: accountId,
-    eggKey: eggWithBuildSets.key,
-    collection: eggWithBuildSets.collection,
-    personalityKey: rolledBuild.personalityKey,
-    build: rolledBuild.build,
-    buildRarities: rolledBuild.buildRarities,
-    hatchedAt: new Date()
-  });
-
-  const receipt = await OlingHatchReceipt.create({
-    ownerId: accountId,
-    eggKey: eggWithBuildSets.key,
-    olingId: oling._id,
-    rolls: rolledBuild.rolls,
-    eggOddsSnapshot: getRollableOlingRarityOdds(eggWithBuildSets),
-    inventoryChange: {
-      eggKey: eggWithBuildSets.key,
-      quantityBefore: consumedEgg.quantityBefore,
-      quantityAfter: consumedEgg.quantityAfter
-    },
-    request: {
-      ip: request.ip || null,
-      userAgent: request.userAgent || null
-    }
-  });
+  if (hatchResult.error) return hatchResult;
+  const { consumedEgg, oling, receipt } = hatchResult;
 
   const definitions = await getOlingDefinitions(
-    { OlingTrait, OlingEgg, OlingBuildSet, OlingPersonality },
+    { OlingTrait, OlingEgg, OlingBuildSet },
     [oling]
   );
 
@@ -491,5 +545,6 @@ async function hatchOling({
 
 module.exports = {
   hatchOling,
-  useOlingConsumable
+  useOlingConsumable,
+  __test: { getTransactionCompatibleModel }
 };

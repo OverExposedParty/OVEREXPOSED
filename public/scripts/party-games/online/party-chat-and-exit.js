@@ -5,9 +5,28 @@
 let lobbyExitCleanupQueued = false;
 let lobbyVisibilityUnreadyQueued = false;
 let exitDisconnectQueued = false;
+let onlinePartyExitHandlersBound = false;
+
+if (!Object.prototype.hasOwnProperty.call(window, 'currentPartyData')) {
+  window.currentPartyData = null;
+}
+
+function getCurrentPartyDataSnapshot() {
+  return window.currentPartyData ?? null;
+}
+
+function getCurrentPartyActorId() {
+  return (
+    window.resolveOnlinePartyActorId?.(
+      getCurrentPartyDataSnapshot(),
+      typeof deviceId === 'undefined' ? null : deviceId
+    ) ?? (typeof deviceId === 'undefined' ? null : deviceId)
+  );
+}
 
 function getCurrentPartyStateSnapshot() {
-  return currentPartyData?.state ?? currentPartyData ?? {};
+  const partyData = getCurrentPartyDataSnapshot();
+  return partyData?.state ?? partyData ?? {};
 }
 
 function isCurrentPartyLobby() {
@@ -22,12 +41,16 @@ function isOnlineGamemodeSettingsPage() {
 }
 
 function getCurrentPartyPlayer() {
-  const players = Array.isArray(currentPartyData?.players)
-    ? currentPartyData.players
+  const partyData = getCurrentPartyDataSnapshot();
+  const actorId = getCurrentPartyActorId();
+  const players = Array.isArray(partyData?.players)
+    ? partyData.players
     : [];
 
   return players.find(
-    (player) => String(player?.identity?.computerId) === String(deviceId)
+    (player) =>
+      String(player?.identity?.computerId || player?.computerId || '') ===
+      String(actorId || '')
   );
 }
 
@@ -50,11 +73,13 @@ function setLocalReadyButtonState(isReady) {
 
 function sendLobbyRemoveBeacon() {
   if (!partyCode || !sessionPartyType || !navigator.sendBeacon) return false;
+  const actorComputerId = getCurrentPartyActorId();
+  if (!actorComputerId) return false;
 
   const payload = {
     partyId: partyCode,
-    computerIdToRemove: deviceId,
-    actorComputerId: deviceId,
+    computerIdToRemove: actorComputerId,
+    actorComputerId,
     actorSocketId: typeof socket?.id === 'string' ? socket.id : null
   };
   const blob = new Blob([JSON.stringify(payload)], {
@@ -80,10 +105,12 @@ function disconnectUserOnExit() {
   if (isCurrentPartyLobby()) return;
   if (exitDisconnectQueued) return;
   exitDisconnectQueued = true;
+  const actorComputerId = getCurrentPartyActorId();
+  if (!actorComputerId) return;
 
   const sessionPayload = {
     partyId: partyCode,
-    computerId: deviceId,
+    computerId: actorComputerId,
     socketId: typeof socket?.id === 'string' ? socket.id : null
   };
 
@@ -109,12 +136,12 @@ async function unreadyLobbyUserOnHidden() {
   try {
     await UpdateUserPartyData({
       partyId: partyCode,
-      computerId: deviceId,
+      computerId: getCurrentPartyActorId(),
       newUserReady: false,
       newUserConfirmation: false
     });
 
-    if (currentPartyData) {
+    if (getCurrentPartyDataSnapshot()) {
       const player = getCurrentPartyPlayer();
       if (player) {
         player.state ||= {};
@@ -143,15 +170,30 @@ function handleOnlinePartyPageHide() {
   disconnectUserOnExit();
 }
 
-// Use pagehide and beforeunload for the best browser coverage.
-document.addEventListener('visibilitychange', unreadyLobbyUserOnHidden);
-window.addEventListener('pagehide', handleOnlinePartyPageHide);
-window.addEventListener('beforeunload', handleOnlinePartyPageHide);
+function bindOnlinePartyExitHandlers() {
+  if (onlinePartyExitHandlersBound) return;
+  onlinePartyExitHandlersBound = true;
+
+  // Use pagehide and beforeunload for the best browser coverage.
+  document.addEventListener('visibilitychange', unreadyLobbyUserOnHidden);
+  window.addEventListener('pagehide', handleOnlinePartyPageHide);
+  window.addEventListener('beforeunload', handleOnlinePartyPageHide);
+}
+
+if (window.Ready?.when) {
+  window.Ready.when('online-core', { timeout: 10000 })
+    .catch(() => null)
+    .then(bindOnlinePartyExitHandlers);
+} else {
+  bindOnlinePartyExitHandlers();
+}
 
 function RemoveUserFromParty(computerIdToRemove, { exitIntent = null } = {}) {
   let payload = {};
   if (partyCode && computerIdToRemove && loadingPage == false) {
-    if (computerIdToRemove !== deviceId && typeof canCurrentUserKickPlayers === 'function' && !canCurrentUserKickPlayers()) {
+    const actorComputerId = getCurrentPartyActorId();
+    if (!actorComputerId) return;
+    if (String(computerIdToRemove) !== String(actorComputerId) && typeof canCurrentUserKickPlayers === 'function' && !canCurrentUserKickPlayers()) {
       console.warn("Only the host can remove players from the party.");
       return;
     }
@@ -159,7 +201,7 @@ function RemoveUserFromParty(computerIdToRemove, { exitIntent = null } = {}) {
     payload = {
       partyId: partyCode,
       computerIdToRemove,
-      actorComputerId: deviceId,
+      actorComputerId,
       actorSocketId: typeof socket?.id === 'string' ? socket.id : null,
       ...(exitIntent && { exitIntent })
     };

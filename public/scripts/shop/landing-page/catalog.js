@@ -26,6 +26,7 @@
     function isConsumableProduct(product) {
       return (
         hasGrantType(product, 'oling_consumable') ||
+        hasGrantType(product, 'oling_pod') ||
         product?.merchandising?.catalog?.sub === 'consumables' ||
         getProductTags(product).includes('consumable')
       );
@@ -34,6 +35,8 @@
     function isFurnitureProduct(product) {
       return (
         hasGrantType(product, 'oling_furniture') ||
+        hasGrantType(product, 'oling_wallpaper') ||
+        hasGrantType(product, 'oling_wallpaper_variant') ||
         product?.merchandising?.catalog?.sub === 'furniture' ||
         getProductTags(product).includes('furniture')
       );
@@ -75,14 +78,15 @@
     function getConsumableFilterTags(product) {
       const tags = [];
       const grants = getProductGrants(product).filter(
-        (grant) => grant.type === 'oling_consumable'
+        (grant) =>
+          grant.type === 'oling_consumable' || grant.type === 'oling_pod'
       );
 
       grants.forEach((grant) => {
         addProductTag(tags, grant.metadata?.consumableCategory);
         addProductTag(tags, grant.metadata?.consumableSubcategory);
         addProductTag(tags, grant.metadata?.consumableType);
-        addProductTag(tags, grant.metadata?.personalityKey);
+        addProductTag(tags, grant.metadata?.podType);
       });
 
       return tags.filter((tag) => tag !== 'All');
@@ -91,10 +95,19 @@
     function getFurnitureFilterTags(product) {
       const tags = [];
       const grants = getProductGrants(product).filter(
-        (grant) => grant.type === 'oling_furniture'
+        (grant) =>
+          grant.type === 'oling_furniture' ||
+          grant.type === 'oling_wallpaper' ||
+          grant.type === 'oling_wallpaper_variant'
       );
 
       grants.forEach((grant) => {
+        if (
+          grant.type === 'oling_wallpaper' ||
+          grant.type === 'oling_wallpaper_variant'
+        ) {
+          addProductTag(tags, 'Wallpaper');
+        }
         addProductTag(tags, grant.metadata?.furnitureCategory);
         addProductTag(tags, grant.metadata?.furnitureType);
         addProductTag(tags, grant.metadata?.rarity);
@@ -125,7 +138,8 @@
       const sectionCategory = options.category || '';
       const tags = [];
       const grants = getProductGrants(product).filter(
-        (grant) => grant.type === 'oling_consumable'
+        (grant) =>
+          grant.type === 'oling_consumable' || grant.type === 'oling_pod'
       );
       const primaryGrant = grants[0] || null;
 
@@ -135,7 +149,7 @@
       addProductTag(tags, primaryGrant?.metadata?.consumableCategory);
       addProductTag(tags, primaryGrant?.metadata?.consumableSubcategory);
       addProductTag(tags, primaryGrant?.metadata?.consumableType);
-      addProductTag(tags, primaryGrant?.metadata?.personalityKey);
+      addProductTag(tags, primaryGrant?.metadata?.podType);
 
       return tags
         .filter((tag) => tag !== 'All')
@@ -146,11 +160,19 @@
       const sectionCategory = options.category || '';
       const tags = [];
       const grants = getProductGrants(product).filter(
-        (grant) => grant.type === 'oling_furniture'
+        (grant) =>
+          grant.type === 'oling_furniture' ||
+          grant.type === 'oling_wallpaper' ||
+          grant.type === 'oling_wallpaper_variant'
       );
       const primaryGrant = grants[0] || null;
 
-      if (sectionCategory !== 'furniture') {
+      if (
+        primaryGrant?.type === 'oling_wallpaper' ||
+        primaryGrant?.type === 'oling_wallpaper_variant'
+      ) {
+        addProductTag(tags, 'Wallpaper');
+      } else if (sectionCategory !== 'furniture') {
         addProductTag(tags, 'Furniture');
       }
       addProductTag(tags, primaryGrant?.metadata?.furnitureCategory);

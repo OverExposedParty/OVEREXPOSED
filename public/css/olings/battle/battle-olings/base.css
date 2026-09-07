@@ -6,6 +6,8 @@
 }
 
 .battle-olings-page {
+  --oling-selector-primary-colour: #6ea8ff;
+  --oling-selector-secondary-colour: #4b73b5;
   min-height: var(--oling-battle-available-height, calc(100dvh - 84px));
   margin-top: var(--oling-battle-header-height, var(--headerheight));
   display: flex;
@@ -18,10 +20,10 @@
 .oling-battle-container,
 .oling-battle-shell {
   position: relative;
-  --oling-battle-primary-colour: #ffb5c8;
-  --oling-battle-secondary-colour: #e87398;
-  --primary-colour: #ffb5c8;
-  --secondary-colour: #e87398;
+  --oling-battle-primary-colour: #6ea8ff;
+  --oling-battle-secondary-colour: #4b73b5;
+  --primary-colour: #6ea8ff;
+  --secondary-colour: #4b73b5;
   --battle-time-multiplier: 1;
   width: min(
     calc(var(--oling-battle-available-height, 100dvh) * 0.75 * 9 / 16),
@@ -34,7 +36,7 @@
   display: flex;
   flex-direction: column;
   border-radius: calc(16px * var(--oling-battle-zoom-compensation, 1));
-  background: var(--primaryPageColour, #ffb5c8);
+  background: var(--primaryPageColour, #6ea8ff);
 }
 
 .oling-battle-container[hidden],
@@ -49,7 +51,7 @@
   justify-items: center;
   gap: 14px;
   padding: clamp(26px, 6vw, 42px);
-  border: 4px solid var(--primaryPageColour, #ffb5c8);
+  border: 4px solid var(--primaryPageColour, #6ea8ff);
   border-radius: 16px;
   background: var(--backgroundcolour);
   color: var(--fontcolour);
@@ -68,7 +70,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--primaryPageColour, #ffb5c8);
+  background: var(--primaryPageColour, #6ea8ff);
   color: #24141c;
   font-size: 2.6rem;
   font-weight: 950;
@@ -77,7 +79,7 @@
 
 .oling-battle-no-oling h1 {
   margin: 2px 0 0;
-  color: var(--primaryPageColour, #ffb5c8);
+  color: var(--primaryPageColour, #6ea8ff);
   font-size: clamp(1.55rem, 6vw, 2rem);
   font-weight: 950;
   letter-spacing: 0;
@@ -86,7 +88,7 @@
 .oling-battle-no-oling p {
   max-width: 34ch;
   margin: 0;
-  color: var(--secondaryPageColour, #e87398);
+  color: var(--secondaryPageColour, #4b73b5);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.5;
@@ -106,10 +108,10 @@
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  border: 3px solid var(--primaryPageColour, #ffb5c8);
+  border: 3px solid var(--primaryPageColour, #6ea8ff);
   border-radius: 9px;
   box-sizing: border-box;
-  color: var(--primaryPageColour, #ffb5c8);
+  color: var(--primaryPageColour, #6ea8ff);
   font-size: 0.95rem;
   font-weight: 950;
   line-height: 1.15;
@@ -121,7 +123,7 @@
 }
 
 .oling-battle-no-oling-primary {
-  background: var(--primaryPageColour, #ffb5c8);
+  background: var(--primaryPageColour, #6ea8ff);
   color: #24141c;
 }
 
@@ -131,8 +133,8 @@
 
 .oling-battle-no-oling-primary:focus-visible,
 .oling-battle-no-oling-secondary:focus-visible {
-  background: var(--secondaryPageColour, #e87398);
-  border-color: var(--secondaryPageColour, #e87398);
+  background: var(--secondaryPageColour, #4b73b5);
+  border-color: var(--secondaryPageColour, #4b73b5);
   color: var(--backgroundcolour);
   outline: none;
   transform: translateY(-1px);
@@ -141,8 +143,8 @@
 @media (hover: hover) and (pointer: fine) {
   .oling-battle-no-oling-primary:hover,
   .oling-battle-no-oling-secondary:hover {
-    background: var(--secondaryPageColour, #e87398);
-    border-color: var(--secondaryPageColour, #e87398);
+    background: var(--secondaryPageColour, #4b73b5);
+    border-color: var(--secondaryPageColour, #4b73b5);
     color: var(--backgroundcolour);
     outline: none;
     transform: translateY(-1px);
@@ -161,7 +163,7 @@
   display: grid;
   place-items: center;
   border-radius: 0 0 3.2cqw 3.2cqw;
-  background: var(--primaryPageColour, #ffb5c8);
+  background: var(--primaryPageColour, #6ea8ff);
   color: #24141c;
   font-size: 4.96cqw;
   font-weight: 950;

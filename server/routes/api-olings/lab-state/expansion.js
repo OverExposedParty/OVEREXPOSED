@@ -12,6 +12,10 @@ function getLabCellKey(row, col) {
   return `${row}:${col}`;
 }
 
+function getLabColumnCellKeys(col) {
+  return Array.from({ length: LAB_ROWS }, (_, row) => getLabCellKey(row, col));
+}
+
 function getUnlockedLabCellKeys(lab) {
   const explicitCells = Array.isArray(lab?.unlockedCells)
     ? lab.unlockedCells
@@ -25,6 +29,7 @@ function getUnlockedLabCellKeys(lab) {
   }
 
   if (explicitCells) {
+    const explicitlyUnlockedColumns = new Set();
     explicitCells.forEach((value) => {
       const match = /^(\d+):(\d+)$/.exec(String(value || ''));
       if (!match) return;
@@ -33,7 +38,10 @@ function getUnlockedLabCellKeys(lab) {
       if (row < 0 || row >= LAB_ROWS || col < 0 || col >= LAB_MAX_COLUMNS) {
         return;
       }
-      unlocked.add(getLabCellKey(row, col));
+      explicitlyUnlockedColumns.add(col);
+    });
+    explicitlyUnlockedColumns.forEach((col) => {
+      getLabColumnCellKeys(col).forEach((key) => unlocked.add(key));
     });
   } else {
     const legacyColumns = clampInteger(
@@ -62,7 +70,7 @@ function getLabExpansionDetails(lab, account = null) {
     0,
     Math.floor(Number(account?.gameData?.opals?.balance) || 0)
   );
-  const cells = [];
+  const columns = [];
   let frontierColumn = null;
 
   for (
@@ -70,9 +78,9 @@ function getLabExpansionDetails(lab, account = null) {
     col < LAB_PURCHASE_MAX_COLUMNS;
     col += 1
   ) {
-    const columnIsComplete = Array.from({ length: LAB_ROWS }, (_, row) =>
-      unlockedCells.has(getLabCellKey(row, col))
-    ).every(Boolean);
+    const columnIsComplete = getLabColumnCellKeys(col).every((key) =>
+      unlockedCells.has(key)
+    );
     if (!columnIsComplete) {
       frontierColumn = col;
       break;
@@ -84,19 +92,16 @@ function getLabExpansionDetails(lab, account = null) {
     col < LAB_PURCHASE_MAX_COLUMNS;
     col += 1
   ) {
+    const cellKeys = getLabColumnCellKeys(col);
     const price = LAB_COLUMN_PRICES[col + 1] || null;
-    for (let row = 0; row < LAB_ROWS; row += 1) {
-      const key = getLabCellKey(row, col);
-      cells.push({
-        key,
-        row,
-        col,
-        price,
-        unlocked: unlockedCells.has(key),
-        eligible: col === frontierColumn,
-        canAfford: Boolean(price && balance >= price)
-      });
-    }
+    columns.push({
+      col,
+      cellKeys,
+      price,
+      unlocked: cellKeys.every((key) => unlockedCells.has(key)),
+      eligible: col === frontierColumn,
+      canAfford: Boolean(price && balance >= price)
+    });
   }
 
   return {
@@ -107,7 +112,7 @@ function getLabExpansionDetails(lab, account = null) {
       Number(lab?.columns) || STARTER_LAB_COLUMNS,
       frontierColumn === null ? STARTER_LAB_COLUMNS : frontierColumn + 1
     ),
-    cells
+    columns
   };
 }
 
@@ -123,6 +128,7 @@ function getItemCells(item) {
 
 module.exports = {
   getLabCellKey,
+  getLabColumnCellKeys,
   getUnlockedLabCellKeys,
   getLabExpansionDetails,
   getItemCells

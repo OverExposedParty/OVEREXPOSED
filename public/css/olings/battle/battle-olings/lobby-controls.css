@@ -29,7 +29,7 @@
   border: 0;
   border-radius: 2cqw;
   background: var(--backgroundcolour);
-  color: var(--primaryPageColour, #ffb5c8);
+  color: var(--primaryPageColour, #6ea8ff);
   box-sizing: border-box;
   font: inherit;
 }
@@ -133,7 +133,7 @@
 .oling-battle-lobby-ready {
   width: 100%;
   min-height: 10.4cqw;
-  color: var(--primaryPageColour, #ffb5c8);
+  color: var(--primaryPageColour, #6ea8ff);
   background: var(--backgroundcolour);
   font-size: 3.6cqw;
   font-weight: 950;
@@ -142,14 +142,14 @@
 
 .oling-battle-lobby-icon-button:focus-visible,
 .oling-battle-lobby-icon-button.is-active {
-  background: var(--secondaryPageColour, #e87398);
+  background: var(--secondaryPageColour, #4b73b5);
   color: var(--backgroundcolour);
   outline: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .oling-battle-lobby-icon-button:hover {
-    background: var(--secondaryPageColour, #e87398);
+    background: var(--secondaryPageColour, #4b73b5);
     color: var(--backgroundcolour);
     outline: none;
   }
@@ -157,15 +157,28 @@
 
 .oling-battle-lobby-ready:focus-visible,
 .oling-battle-lobby-ready.is-ready {
-  background: var(--secondaryPageColour, #e87398);
+  background: var(--secondaryPageColour, #4b73b5);
   color: var(--backgroundcolour);
   outline: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .oling-battle-lobby-ready:hover {
-    background: var(--secondaryPageColour, #e87398);
+    background: var(--secondaryPageColour, #4b73b5);
     color: var(--backgroundcolour);
     outline: none;
+  }
+}
+
+.oling-battle-lobby-actions.is-choosing-oling .oling-battle-lobby-ready {
+  background: var(--primarypagecolour, var(--primaryPageColour, #6ea8ff));
+  color: var(--backgroundcolour);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oling-battle-lobby-actions.is-choosing-oling
+    .oling-battle-lobby-ready:hover {
+    background: var(--secondarypagecolour, var(--secondaryPageColour, #4b73b5));
+    color: var(--backgroundcolour);
   }
 }

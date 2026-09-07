@@ -54,3 +54,62 @@ test('party fetch routes do not return rooms beyond the inactivity window', asyn
   assert.equal(responseBody.length, 1);
   assert.equal(responseBody[0].partyId, 'NEW-123');
 });
+
+test('client error routes preserve status for server-side classification', async () => {
+  let handler = null;
+  let entryDetails = null;
+  let appendedEntry = null;
+  const routes = createPartyUtilityRoutes({
+    app: {
+      post(_route, routeHandler) {
+        handler = routeHandler;
+      }
+    },
+    assertPartyId() {},
+    async appendPartyError({ entry }) {
+      appendedEntry = entry;
+    },
+    createPartyErrorEntry({ details }) {
+      entryDetails = details;
+      return details;
+    }
+  });
+  routes.createPartyErrorHandler({
+    route: '/api/party/error',
+    mainModel: {
+      findOne() {
+        return { lean: async () => ({ partyId: 'NEW-123' }) };
+      }
+    },
+    logLabel: 'Party'
+  });
+
+  let responseBody = null;
+  await handler(
+    {
+      body: {
+        partyId: 'NEW-123',
+        error: {
+          name: 'Error',
+          message: 'Host check crashed',
+          code: 'party_host_required',
+          status: 500
+        }
+      },
+      query: {},
+      id: 'request-two'
+    },
+    {
+      apiSuccess(value) {
+        responseBody = value;
+      },
+      apiError(error) {
+        assert.fail(error.message);
+      }
+    }
+  );
+
+  assert.equal(entryDetails.status, 500);
+  assert.equal(appendedEntry.status, 500);
+  assert.equal(responseBody.message, 'Party error recorded');
+});

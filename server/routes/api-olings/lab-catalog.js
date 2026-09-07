@@ -1,3 +1,7 @@
+const furnitureCatalog = require('../../../public/json-files/olings/lab/furniture.json');
+const wallpaperCatalog = require('../../../public/json-files/olings/lab/wallpapers.json');
+const wallDecorationCatalog = require('../../../public/json-files/olings/lab/wall-decorations.json');
+
 const LAB_ROWS = 2;
 
 const LAB_MIN_COLUMNS = 3;
@@ -18,138 +22,97 @@ const LAB_COLUMN_PRICES = Object.freeze({
   10: 1050
 });
 
-const OlingLabItems = {
-  standard_door: {
-    id: 'standard_door',
-    name: 'Standard Door',
-    type: 'door',
-    category: 'door',
-    rarity: 'common',
-    layer: 'room',
-    width: 1,
-    height: 1,
-    image: '/images/olings/furniture/doors/standard-door/standard-door.svg',
-    exitGridPlacement:
-      '/images/olings/furniture/doors/standard-door/exit-grid-placement.svg',
-    locked: true,
-    containerSlots: [
-      {
-        slotId: 'door-module',
-        label: 'Door Module',
-        accepts: ['door-module']
-      }
-    ]
-  },
-  standard_table: {
-    id: 'standard_table',
-    name: 'Standard Table',
-    type: 'table',
-    category: 'table',
-    rarity: 'common',
-    layer: 'room',
-    width: 1,
-    height: 1,
-    image: '/images/olings/furniture/tables/standard-table/standard-table.svg',
-    containerSlots: [
-      {
-        slotId: 'tabletop',
-        label: 'Tabletop',
-        accepts: ['incubator']
-      }
-    ]
-  },
-  incubeta: {
-    id: 'incubeta',
-    name: 'Incubeta',
-    type: 'incubator',
-    category: 'incubator',
-    rarity: 'common',
-    layer: 'container',
-    width: 1,
-    height: 1,
-    image: '/images/olings/furniture/incubators/incubeta/incubeta.svg',
-    acceptedSlots: ['tabletop'],
-    inventorySlots: [
-      {
-        slotId: 'egg',
-        slotType: 'egg',
-        label: 'Egg',
-        x: 256,
-        y: 272
-      }
-    ]
-  },
-  explorer_gateway: {
-    id: 'explorer_gateway',
-    name: 'Explorer Gateway',
-    type: 'door-module',
-    category: 'door-module',
-    rarity: 'uncommon',
-    layer: 'container',
-    width: 1,
-    height: 1,
-    image:
-      '/images/olings/furniture/door-modules/explorer-gateway/explorer-gateway.svg',
-    acceptedSlots: ['door-module']
-  },
-  oling_bed: {
-    id: 'oling_bed',
-    name: 'Oling Bed',
-    type: 'bed',
-    category: 'bed',
-    rarity: 'uncommon',
-    layer: 'room',
-    width: 1,
-    height: 1,
-    allowedRows: [1],
-    image: '/images/olings/furniture/beds/oling-bed/oling-bed.svg',
-    // This filled SVG defines the area where an Oling may rest. Its shape—not
-    // its bounding box—is used by the lab client when choosing a position.
-    restGridPlacement:
-      '/images/olings/furniture/beds/oling-bed/rest-grid-placement.svg',
-    // Future beds can expose multiple entries here for their individual sleep
-    // spaces. The placement inside each space comes from restGridPlacement.
-    sleepSlots: [{ slotId: 'sleep-1' }]
-  },
-  supply_shelf: {
-    id: 'supply_shelf',
-    name: 'Supply Shelf',
-    type: 'storage',
-    category: 'storage',
-    rarity: 'uncommon',
-    layer: 'room',
-    width: 1,
-    height: 1,
-    allowedRows: [1],
-    image: '/images/olings/furniture/storage/supply-shelf/supply-shelf.svg',
-    // The SVG is sized to its placement rectangle, not to the full lab cell.
-    usesFullGridArtboard: false,
-    storageGridPlacement:
-      '/images/olings/furniture/storage/supply-shelf/storage-grid-placement.svg',
-    inventorySlots: Array.from({ length: 16 }, (_, index) => ({
-      slotId: `shelf-${index + 1}`,
-      slotType: 'storage',
-      label: `Shelf slot ${index + 1}`,
-      maxStack: 8
-    }))
-  },
-  basic_hanging_light: {
-    id: 'basic_hanging_light',
-    name: 'Basic Hanging Light',
-    type: 'ceiling-light',
-    category: 'ceiling-light',
-    rarity: 'common',
-    layer: 'room',
-    width: 1,
-    height: 1,
-    allowedRows: [0],
-    image:
-      '/images/olings/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg',
-    usesFullGridArtboard: false
-  }
-};
+const DEFAULT_OLING_LAB_WALLPAPER_KEY = 'brick';
 
-const STARTER_FURNITURE_KEYS = ['standard_table', 'incubeta'];
+const OLING_LAB_WALLPAPER_VARIANT_SEPARATOR = ':';
+
+function deepFreeze(value) {
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) {
+    return value;
+  }
+
+  Object.values(value).forEach(deepFreeze);
+  return Object.freeze(value);
+}
+
+function createCatalogMap(entries, identityField, catalogName) {
+  if (!Array.isArray(entries)) {
+    throw new TypeError(`${catalogName} catalogue must be an array.`);
+  }
+
+  const seen = new Set();
+  const pairs = entries.map((entry) => {
+    const key = String(entry?.[identityField] || '').trim();
+    if (!key) {
+      throw new TypeError(
+        `${catalogName} catalogue entries require ${identityField}.`
+      );
+    }
+    if (seen.has(key)) {
+      throw new TypeError(
+        `${catalogName} catalogue contains duplicate "${key}".`
+      );
+    }
+
+    seen.add(key);
+    return [key, entry];
+  });
+
+  return deepFreeze(Object.fromEntries(pairs));
+}
+
+const OlingLabWallpapers = createCatalogMap(
+  wallpaperCatalog.wallpapers,
+  'key',
+  'Oling Lab wallpaper'
+);
+
+const STARTER_WALLPAPER_KEYS = Object.freeze([DEFAULT_OLING_LAB_WALLPAPER_KEY]);
+
+function getOlingLabWallpaperVariant(wallpaperKey, variantKey) {
+  const wallpaper = Object.hasOwn(OlingLabWallpapers, wallpaperKey)
+    ? OlingLabWallpapers[wallpaperKey]
+    : null;
+  if (!wallpaper || !variantKey) return null;
+  return Object.hasOwn(wallpaper.variants || {}, variantKey)
+    ? wallpaper.variants[variantKey]
+    : null;
+}
+
+function getOlingLabWallpaperVariantEntitlementKey(wallpaperKey, variantKey) {
+  return `${wallpaperKey}${OLING_LAB_WALLPAPER_VARIANT_SEPARATOR}${variantKey}`;
+}
+
+function parseOlingLabWallpaperVariantEntitlementKey(value) {
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase();
+  const separatorIndex = normalized.indexOf(
+    OLING_LAB_WALLPAPER_VARIANT_SEPARATOR
+  );
+  if (separatorIndex <= 0 || separatorIndex === normalized.length - 1) {
+    return null;
+  }
+  const wallpaperKey = normalized.slice(0, separatorIndex);
+  const variantKey = normalized.slice(separatorIndex + 1);
+  return getOlingLabWallpaperVariant(wallpaperKey, variantKey)
+    ? { wallpaperKey, variantKey, key: normalized }
+    : null;
+}
+
+const OlingLabItems = createCatalogMap(
+  furnitureCatalog.furniture,
+  'id',
+  'Oling Lab furniture'
+);
+
+const OlingLabWallDecorations = createCatalogMap(
+  wallDecorationCatalog.wallDecorations,
+  'id',
+  'Oling Lab wall decoration'
+);
+
+const STARTER_FURNITURE_KEYS = Object.freeze(['standard_table', 'incubeta']);
 
 module.exports = {
   LAB_ROWS,
@@ -158,6 +121,14 @@ module.exports = {
   STARTER_LAB_COLUMNS,
   LAB_PURCHASE_MAX_COLUMNS,
   LAB_COLUMN_PRICES,
+  DEFAULT_OLING_LAB_WALLPAPER_KEY,
+  OLING_LAB_WALLPAPER_VARIANT_SEPARATOR,
+  OlingLabWallpapers,
+  STARTER_WALLPAPER_KEYS,
+  getOlingLabWallpaperVariant,
+  getOlingLabWallpaperVariantEntitlementKey,
+  parseOlingLabWallpaperVariantEntitlementKey,
   OlingLabItems,
+  OlingLabWallDecorations,
   STARTER_FURNITURE_KEYS
 };

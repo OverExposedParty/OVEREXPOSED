@@ -102,6 +102,51 @@ cssFilesGamemodeSettings.forEach(href => {
 
 let gamemodeSettingsTemplateLoadedReported = false;
 
+function setGamemodeSettingsStartInitializationState(isInitializing) {
+  const button = document.querySelector('.start-game-button');
+  if (!button) return;
+
+  if (isInitializing) {
+    button.dataset.settingsInitializing = 'true';
+    button.disabled = true;
+    button.classList.add('disabled');
+    button.setAttribute('aria-disabled', 'true');
+    return;
+  }
+
+  delete button.dataset.settingsInitializing;
+  if (button.dataset.waitingRoomInitializing !== 'true') {
+    button.disabled = false;
+  }
+}
+
+function showGamemodeSettingsTemplateError() {
+  if (!placeholderGamemodeSettings) return;
+
+  const status = document.createElement('section');
+  status.className = 'gamemode-settings-template-error';
+  status.setAttribute('role', 'alert');
+
+  const title = document.createElement('h2');
+  title.textContent = 'Settings failed to load';
+
+  const description = document.createElement('p');
+  description.textContent = 'Check your connection, then reload these settings.';
+
+  const retryButton = document.createElement('button');
+  retryButton.type = 'button';
+  retryButton.className = 'button';
+  retryButton.textContent = 'RELOAD SETTINGS';
+  retryButton.addEventListener('click', () => window.location.reload());
+
+  status.append(title, description, retryButton);
+  placeholderGamemodeSettings.replaceChildren(status);
+}
+
+window.setGamemodeSettingsStartInitializationState =
+  setGamemodeSettingsStartInitializationState;
+setGamemodeSettingsStartInitializationState(true);
+
 function reportGamemodeSettingsTemplateLoaded() {
   if (gamemodeSettingsTemplateLoadedReported) return;
   gamemodeSettingsTemplateLoadedReported = true;
@@ -110,8 +155,18 @@ function reportGamemodeSettingsTemplateLoaded() {
 }
 
 const gamemodeSettingsTemplateReady = fetch('/html-templates/gamemode-settings.html')
-  .then(response => response.text())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load gamemode settings template: ${response.status}`
+      );
+    }
+    return response.text();
+  })
   .then(data => {
+    if (!placeholderGamemodeSettings) {
+      throw new Error('Gamemode settings placeholder is unavailable.');
+    }
     return new Promise(resolve => {
       placeholderGamemodeSettings.insertAdjacentHTML('beforeend', data);
       requestAnimationFrame(() => {
@@ -135,9 +190,26 @@ const gamemodeSettingsTemplateReady = fetch('/html-templates/gamemode-settings.h
         }
       }
     }
-    packsContainer = document.querySelector('.packs-container');
-    rulesContainer = document.querySelector('.rules-settings-container');
-    onlineSettingsContainer = document.querySelector('.online-game-settings-container');
+    packsContainer = placeholderGamemodeSettings.querySelector('.packs-container');
+    rulesContainer = placeholderGamemodeSettings.querySelector('.rules-settings-container');
+    onlineSettingsContainer = placeholderGamemodeSettings.querySelector(
+      '.online-game-settings-container'
+    );
+
+    const missingContainers = [
+      !packsContainer && 'packsContainer',
+      !rulesContainer && 'rulesContainer',
+      !onlineSettingsContainer && 'onlineSettingsContainer'
+    ].filter(Boolean);
+    if (missingContainers.length > 0) {
+      throw new Error(
+        `Gamemode settings template missing: ${missingContainers.join(', ')}`
+      );
+    }
+
+    window.packsContainer = packsContainer;
+    window.rulesContainer = rulesContainer;
+    window.onlineSettingsContainer = onlineSettingsContainer;
 
     userCount = document.querySelector('.user-count');
 
@@ -172,9 +244,12 @@ const gamemodeSettingsTemplateReady = fetch('/html-templates/gamemode-settings.h
     reportGamemodeSettingsTemplateLoaded();
   }).catch(error => {
     console.error('Error loading gamemode settings template:', error);
+    showGamemodeSettingsTemplateError();
     reportGamemodeSettingsTemplateLoaded();
     throw error;
   });
+
+window.gamemodeSettingsTemplateReady = gamemodeSettingsTemplateReady;
 
 if (window.OEReady) {
   window.OEReady.register('gamemode-settings-template', gamemodeSettingsTemplateReady);

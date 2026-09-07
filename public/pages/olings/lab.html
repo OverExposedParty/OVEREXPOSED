@@ -20,7 +20,7 @@
       rel="stylesheet"
       href="/css/olings/shared/oling-flight-motion.css?v=2026-08-04-01"
     />
-    <link rel="stylesheet" href="/css/olings/lab/lab.css?v=2026-08-04-01" />
+    <link rel="stylesheet" href="/css/olings/lab/lab.css?v=2026-09-06-13" />
 
     <link
       id="favicon-ico"
@@ -59,17 +59,62 @@
 
     <main class="oling-lab-page" data-template="oling-lab">
       <section class="oling-lab-toolbar" aria-label="Olings Lab controls">
+        <p
+          class="oling-lab-viewing-label"
+          id="oling-lab-viewing-label"
+          hidden
+        ></p>
         <p id="oling-lab-save-status" class="oling-lab-save-status">
           Loading lab...
         </p>
         <button
-          class="oling-lab-edit-toggle"
+          class="oling-lab-edit-toggle sound-toggle"
           id="oling-lab-edit-toggle"
           type="button"
+          data-sound="none"
           aria-pressed="false"
         >
-          Edit
+          Customise
         </button>
+        <div
+          class="oling-lab-customise-tools"
+          id="oling-lab-customise-tools"
+          role="toolbar"
+          aria-label="Customisation categories"
+          hidden
+        >
+          <button
+            class="oling-lab-customise-category sound-option"
+            id="oling-lab-furniture-toggle"
+            type="button"
+            data-sound="none"
+            data-oling-lab-customise-category="furniture"
+            aria-pressed="false"
+            title="Choose a highlighted space in the room to place furniture"
+          >
+            Furniture
+          </button>
+          <button
+            class="oling-lab-customise-category sound-option"
+            id="oling-lab-wall-decorations-toggle"
+            type="button"
+            data-sound="none"
+            data-oling-lab-customise-category="wall-decorations"
+            aria-pressed="false"
+          >
+            Wall Decorations
+          </button>
+          <button
+            class="oling-lab-customise-category sound-option"
+            id="oling-lab-wall-style-toggle"
+            type="button"
+            data-sound="none"
+            data-oling-lab-customise-category="wall-style"
+            aria-pressed="false"
+          >
+            Wall Style
+          </button>
+        </div>
       </section>
 
       <section class="oling-lab-stage" aria-label="Olings Lab room">
@@ -97,6 +142,458 @@
           ›
         </button>
       </section>
+
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-wall-style-panel"
+        id="oling-lab-wall-style-panel"
+        aria-labelledby="oling-lab-wall-style-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle oling-lab-wall-style-panel-toggle"
+          id="oling-lab-wall-style-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-wall-style-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-wall-style-panel-header"
+          id="oling-lab-wall-style-panel-header"
+        >
+          <p>Customise</p>
+          <h2 id="oling-lab-wall-style-panel-title">Wall Style</h2>
+        </header>
+        <div
+          class="oling-lab-wall-style-panel-content"
+          id="oling-lab-wall-style-panel-content"
+        ></div>
+        <footer
+          class="oling-lab-wall-decoration-panel-footer oling-lab-wall-style-panel-footer"
+          id="oling-lab-wall-style-panel-footer"
+        ></footer>
+      </aside>
+
+      <aside
+        class="oling-lab-wall-decoration-panel"
+        id="oling-lab-wall-decoration-panel"
+        aria-labelledby="oling-lab-wall-decoration-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-wall-decoration-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-wall-decoration-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header class="oling-lab-wall-decoration-panel-header">
+          <p>Customise</p>
+          <h2 id="oling-lab-wall-decoration-panel-title">Wall Decorations</h2>
+        </header>
+        <div
+          class="oling-lab-wall-decoration-inventory"
+          id="oling-lab-wall-decoration-inventory"
+        ></div>
+        <footer class="oling-lab-wall-decoration-panel-footer">
+          <button
+            class="oling-lab-wall-decoration-store-all"
+            id="oling-lab-wall-decoration-store-all"
+            type="button"
+            data-sound-intent="confirm"
+          >
+            Store All
+          </button>
+        </footer>
+      </aside>
+
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-furniture-panel"
+        id="oling-lab-furniture-panel"
+        aria-labelledby="oling-lab-furniture-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle oling-lab-furniture-panel-toggle"
+          id="oling-lab-furniture-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-furniture-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-furniture-panel-header"
+        >
+          <p>Customise</p>
+          <h2 id="oling-lab-furniture-panel-title">Furniture</h2>
+        </header>
+        <div
+          class="oling-lab-wall-decoration-inventory oling-lab-furniture-inventory"
+          id="oling-lab-furniture-inventory"
+        ></div>
+      </aside>
+
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-furniture-detail-panel"
+        id="oling-lab-furniture-detail-panel"
+        aria-labelledby="oling-lab-furniture-detail-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-furniture-detail-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-furniture-detail-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header class="oling-lab-wall-decoration-panel-header">
+          <button
+            class="oling-lab-panel-back is-close"
+            id="oling-lab-furniture-detail-panel-close"
+            type="button"
+            aria-label="Close furniture menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Furniture</p>
+          <h2 id="oling-lab-furniture-detail-panel-title">Furniture</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="furniture"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-furniture-detail-panel-content"
+          id="oling-lab-furniture-detail-panel-content"
+        ></div>
+      </aside>
+
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-storage-panel"
+        id="oling-lab-storage-panel"
+        aria-labelledby="oling-lab-storage-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle oling-lab-storage-panel-toggle"
+          id="oling-lab-storage-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-storage-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-storage-panel-header"
+        >
+          <button
+            class="oling-lab-panel-back oling-lab-storage-panel-back is-close"
+            id="oling-lab-storage-panel-back"
+            type="button"
+            aria-label="Close Pod Rack menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Collection</p>
+          <h2 id="oling-lab-storage-panel-title">Oling Storage</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="storage"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-storage-panel-content"
+          id="oling-lab-storage-panel-content"
+        ></div>
+      </aside>
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-supply-storage-panel"
+        id="oling-lab-supply-storage-panel"
+        aria-labelledby="oling-lab-supply-storage-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-supply-storage-panel-toggle"
+          type="button"
+          aria-expanded="true"
+          aria-controls="oling-lab-supply-storage-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header class="oling-lab-wall-decoration-panel-header">
+          <button
+            class="oling-lab-panel-back oling-lab-supply-storage-panel-back is-close"
+            id="oling-lab-supply-storage-panel-back"
+            type="button"
+            aria-label="Close Supply Shelf menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Storage</p>
+          <h2 id="oling-lab-supply-storage-panel-title">Supply Shelf</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="supply-storage"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-supply-storage-panel-content"
+          id="oling-lab-supply-storage-panel-content"
+        ></div>
+        <footer
+          class="oling-lab-wall-decoration-panel-footer oling-lab-supply-storage-panel-footer"
+        >
+          <button
+            class="oling-lab-supply-storage-quick-sell"
+            id="oling-lab-supply-storage-quick-sell"
+            type="button"
+            data-sound-intent="warning"
+            disabled
+          >
+            <span class="oling-lab-supply-storage-quick-sell-label"
+              >Quick Sell</span
+            >
+            <span class="oling-lab-supply-storage-quick-sell-value">
+              <img
+                src="/images/icons/currency/opal.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <strong>0</strong>
+            </span>
+          </button>
+        </footer>
+      </aside>
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-gateway-panel"
+        id="oling-lab-gateway-panel"
+        aria-labelledby="oling-lab-gateway-panel-title"
+        hidden
+      >
+        <div
+          class="oling-lab-gateway-panel-tabs"
+          id="oling-lab-gateway-panel-tabs"
+          hidden
+        ></div>
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-gateway-panel-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="oling-lab-gateway-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-gateway-panel-header"
+        >
+          <button
+            class="oling-lab-panel-back oling-lab-gateway-panel-close is-close"
+            id="oling-lab-gateway-panel-close"
+            type="button"
+            aria-label="Close Explorer Gateway menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Exploration</p>
+          <h2 id="oling-lab-gateway-panel-title">Explorer Gateway</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="gateway"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-gateway-panel-content"
+          id="oling-lab-gateway-panel-content"
+        ></div>
+        <footer
+          class="oling-lab-wall-decoration-panel-footer oling-lab-gateway-panel-footer"
+          id="oling-lab-gateway-panel-footer"
+          hidden
+        ></footer>
+      </aside>
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-rest-side-panel"
+        id="oling-lab-rest-panel"
+        aria-labelledby="oling-lab-rest-panel-title"
+        hidden
+      >
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-rest-panel-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="oling-lab-rest-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-rest-panel-header"
+        >
+          <button
+            class="oling-lab-panel-back oling-lab-rest-panel-close is-close"
+            id="oling-lab-rest-panel-close"
+            type="button"
+            aria-label="Close Rest menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Care</p>
+          <h2 id="oling-lab-rest-panel-title">Rest</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="rest"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-rest-panel-content"
+          id="oling-lab-rest-panel-content"
+        ></div>
+        <footer
+          class="oling-lab-wall-decoration-panel-footer oling-lab-rest-action-area"
+          id="oling-lab-rest-panel-footer"
+        ></footer>
+      </aside>
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-incubator-panel"
+        id="oling-lab-incubator-panel"
+        aria-labelledby="oling-lab-incubator-panel-title"
+        hidden
+      >
+        <div
+          class="oling-lab-incubator-panel-tabs"
+          id="oling-lab-incubator-panel-tabs"
+          hidden
+        ></div>
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-incubator-panel-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="oling-lab-incubator-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-incubator-panel-header"
+        >
+          <button
+            class="oling-lab-panel-back oling-lab-incubator-panel-back is-close"
+            id="oling-lab-incubator-panel-back"
+            type="button"
+            aria-label="Close incubator menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Incubator</p>
+          <h2 id="oling-lab-incubator-panel-title">Incubator</h2>
+          <button
+            class="oling-lab-furniture-sell"
+            type="button"
+            data-oling-lab-furniture-sell="incubator"
+            data-sound="none"
+            hidden
+          >
+            Sell
+          </button>
+        </header>
+        <div
+          class="oling-lab-incubator-panel-content"
+          id="oling-lab-incubator-panel-content"
+        ></div>
+        <footer
+          class="oling-lab-wall-decoration-panel-footer oling-lab-incubator-panel-footer"
+          id="oling-lab-incubator-panel-footer"
+        ></footer>
+      </aside>
+      <aside
+        class="oling-lab-wall-decoration-panel oling-lab-inspect-panel"
+        id="oling-lab-inspect-panel"
+        aria-labelledby="oling-lab-inspect-panel-title"
+        hidden
+      >
+        <div
+          class="oling-lab-inspect-panel-tabs"
+          id="oling-lab-inspect-panel-tabs"
+          hidden
+        ></div>
+        <button
+          class="oling-lab-wall-decoration-panel-toggle"
+          id="oling-lab-inspect-panel-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="oling-lab-inspect-panel"
+          data-sound="none"
+        >
+          Hide
+        </button>
+        <header
+          class="oling-lab-wall-decoration-panel-header oling-lab-inspect-panel-header"
+        >
+          <button
+            class="oling-lab-panel-back oling-lab-inspect-panel-back is-close"
+            id="oling-lab-inspect-panel-back"
+            type="button"
+            aria-label="Close Oling menu"
+            data-sound="none"
+          >
+            Close
+          </button>
+          <p>Oling</p>
+          <h2 id="oling-lab-inspect-panel-title">Oling</h2>
+        </header>
+        <div
+          class="oling-lab-inspect-panel-content"
+          id="oling-lab-inspect-panel-content"
+        ></div>
+      </aside>
     </main>
 
     <div class="oling-lab-menu-backdrop" id="oling-lab-menu-backdrop" hidden>
@@ -127,15 +624,6 @@
     window.allowTransition = true;
     window.splashScreenExitDirection = 'up';
 
-    document.documentElement.style.setProperty(
-      '--primarypagecolour',
-      '#BEE7FF'
-    );
-    document.documentElement.style.setProperty(
-      '--secondarypagecolour',
-      '#7CBDE8'
-    );
-
     window.pageScripts = {
       '/scripts/olings/shared/oling-flight-motion.js': {
         cacheBustKey: 'OLING_FLIGHT_MOTION',
@@ -148,6 +636,10 @@
       '/scripts/olings/lab/olings/build.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1.2
+      },
+      '/scripts/olings/lab/olings/storage.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.25
       },
       '/scripts/olings/lab/olings/inspect.js': {
         cacheBustKey: 'OLING_LAB',
@@ -181,6 +673,22 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/data/catalog-selectors.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.96
+      },
+      '/scripts/olings/lab/data/inventory-selectors.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.97
+      },
+      '/scripts/olings/lab/data/hatch-selectors.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.98
+      },
+      '/scripts/olings/lab/ui/rarity-theme.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
+      },
       '/scripts/olings/lab/data/lab-data.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
@@ -209,6 +717,26 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/purchases/account-state.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.96
+      },
+      '/scripts/olings/lab/purchases/purchase-dialog-ui.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.97
+      },
+      '/scripts/olings/lab/purchases/quick-sell.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.98
+      },
+      '/scripts/olings/lab/purchases/furniture-sale.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.985
+      },
+      '/scripts/olings/lab/purchases/lab-expansion.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
+      },
       '/scripts/olings/lab/data/lab-purchases.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
@@ -229,6 +757,26 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/furniture-placement/furniture-panel.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/ui/ui-elements.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.97
+      },
+      '/scripts/olings/lab/ui/panel-transitions.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.965
+      },
+      '/scripts/olings/lab/ui/formatters.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.98
+      },
+      '/scripts/olings/lab/ui/tab-menu.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
+      },
       '/scripts/olings/lab/ui/lab-ui.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
@@ -238,10 +786,6 @@
         zIndex: 1
       },
       '/scripts/olings/lab/furniture-menus/placement-menu.js': {
-        cacheBustKey: 'OLING_LAB',
-        zIndex: 1
-      },
-      '/scripts/olings/lab/furniture-menus/furniture-tabs.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
@@ -261,6 +805,10 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/tutorial/sample-hatch-receipt.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
+      },
       '/scripts/olings/lab/ui/lab-hatch-controls.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
@@ -269,9 +817,17 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/ui/lab-privacy-settings.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
       '/scripts/olings/lab/explorer-gateway/render-tools.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
+      },
+      '/scripts/olings/lab/explorer-gateway/adventure-api.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
       },
       '/scripts/olings/lab/explorer-gateway/lab-explorer-gateway.js': {
         cacheBustKey: 'OLING_LAB',
@@ -281,13 +837,73 @@
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/ui/lab-wallpapers.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/wall-decorations/wall-decorations.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1
+      },
+      '/scripts/olings/lab/data/lab-api.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.98
+      },
+      '/scripts/olings/lab/data/lab-state-hydrator.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 0.99
+      },
       '/scripts/olings/lab/data/lab-data-flow.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 1
       },
+      '/scripts/olings/lab/core/lab-config.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.91
+      },
+      '/scripts/olings/lab/core/lab-state.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.92
+      },
+      '/scripts/olings/lab/core/lab-presentation.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.925
+      },
+      '/scripts/olings/lab/core/lab-elements.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.93
+      },
+      '/scripts/olings/lab/core/lab-selection.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.94
+      },
+      '/scripts/olings/lab/core/lab-events.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 1.95
+      },
       '/scripts/olings/lab/core/lab-runtime.js': {
         cacheBustKey: 'OLING_LAB',
         zIndex: 2
+      },
+      '/scripts/general/tutorial/tutorial-storage.js': {
+        cacheBustKey: 'TUTORIAL',
+        zIndex: 2.1
+      },
+      '/scripts/general/tutorial/tutorial-target.js': {
+        cacheBustKey: 'TUTORIAL',
+        zIndex: 2.2
+      },
+      '/scripts/general/tutorial/tutorial.js': {
+        cacheBustKey: 'TUTORIAL',
+        zIndex: 2.3
+      },
+      '/scripts/olings/lab/tutorial/lab-tutorial-preview.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 2.4
+      },
+      '/scripts/olings/lab/tutorial/lab-tutorial.js': {
+        cacheBustKey: 'OLING_LAB',
+        zIndex: 2.5
       },
       '/scripts/olings/lab/core/lab-startup.js': {
         cacheBustKey: 'OLING_LAB',
@@ -301,7 +917,7 @@
     };
   </script>
   <script
-    src="/scripts/html-templates/core-template/core-template.js?v=2026-08-04-01"
+    src="/scripts/html-templates/core-template/core-template.js?v=2026-08-29-06"
     data-loaded="false"
   ></script>
 </html>

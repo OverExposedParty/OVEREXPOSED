@@ -111,7 +111,7 @@
         const colour =
           getComputedStyle(document.documentElement)
             .getPropertyValue('--primarypagecolour')
-            .trim() || '#FFB5C8';
+            .trim() || '#6EA8FF';
         if (qrPanelImage) {
           qrPanelImage.alt = `Join Oling battle ${code}`;
           qrPanelImage.src =

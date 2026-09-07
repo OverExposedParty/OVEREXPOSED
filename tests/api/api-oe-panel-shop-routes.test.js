@@ -7,6 +7,48 @@ const {
 const {
   createApiRouteContext
 } = require('../../server/routes/api-route-context');
+const {
+  createOePanelShopProductNormalizers
+} = require('../../server/routes/api-oe-panel-shop/product-normalization');
+
+test('shop grant shorthand preserves wallpaper variant entitlement keys', () => {
+  const normalizers = createOePanelShopProductNormalizers({
+    Product: { STATUSES: [], VISIBILITIES: [], TYPES: [] },
+    parseBooleanLabel: () => null
+  });
+
+  assert.deepEqual(
+    normalizers.parseProductGrantsInput('oling_wallpaper_variant:brick:blue'),
+    [
+      {
+        type: 'oling_wallpaper_variant',
+        key: 'brick:blue',
+        gamemode: null,
+        quantity: 1,
+        metadata: {}
+      }
+    ]
+  );
+});
+
+test('shop products accept repeatable Oling Pod grants', () => {
+  const normalizers = createOePanelShopProductNormalizers({
+    Product: { STATUSES: [], VISIBILITIES: [], TYPES: [] },
+    parseBooleanLabel: () => null
+  });
+  const grants = normalizers.parseProductGrantsInput('oling_pod:oling_pod');
+
+  assert.equal(normalizers.validateProductGrants(grants), null);
+  assert.deepEqual(grants, [
+    {
+      type: 'oling_pod',
+      key: 'oling_pod',
+      gamemode: null,
+      quantity: 1,
+      metadata: {}
+    }
+  ]);
+});
 
 test('OE panel shop routes preserve their endpoint contract and order', () => {
   const registeredRoutes = [];

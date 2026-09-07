@@ -1,13 +1,16 @@
 // party-socket.js
 
 // Join / leave / kick via socket
-async function joinParty(code) {
-  debugLog(`Joining party: ${code}`);
+function joinPartyOnce(code, { timeoutMs = 5000 } = {}) {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       socket.off('joined-party', handleJoinedParty);
-      reject(new Error(`Timed out joining party: ${code}`));
-    }, 5000);
+      const error = new Error(`Timed out joining party: ${code}`);
+      error.code = 'party_socket_join_timeout';
+      error.status = 0;
+      error.isTransient = true;
+      reject(error);
+    }, timeoutMs);
 
     function handleJoinedParty(data) {
       clearTimeout(timeoutId);
@@ -20,25 +23,71 @@ async function joinParty(code) {
   });
 }
 
+async function joinParty(code, { retries = 2, retryDelayMs = 300 } = {}) {
+  debugLog(`Joining party: ${code}`);
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      if (socket.disconnected && typeof socket.connect === 'function') {
+        socket.connect();
+      }
+      const result = await joinPartyOnce(code);
+      window.onlinePartyMembershipEstablished = true;
+      window.onlinePartyJoinedCode = code;
+      window.PartyApiRequest?.setOnlinePartyConnectionState?.('connected', {
+        transport: 'socket'
+      });
+      return result;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= retries) break;
+      window.PartyApiRequest?.setOnlinePartyConnectionState?.('reconnecting', {
+        transport: 'socket',
+        attempt: attempt + 1
+      });
+      if (window.PartyApiRequest?.delayPartyRequest) {
+        await window.PartyApiRequest.delayPartyRequest(
+          retryDelayMs * 2 ** attempt
+        );
+      } else {
+        await new Promise((resolve) =>
+          setTimeout(resolve, retryDelayMs * 2 ** attempt)
+        );
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 async function leaveParty(code) {
   await UpdateUserPartyData({
     partyId: code,
-    computerId: deviceId,
+    computerId:
+      window.resolveOnlinePartyActorId?.(currentPartyData, deviceId) ||
+      deviceId,
     newUserSocketId: null
   });
 
   debugLog(`Leaving party: ${code}`);
+  window.onlinePartyMembershipEstablished = false;
+  window.onlinePartyJoinedCode = null;
   socket.emit('leave-party', code);
 }
 
 async function kickUser(code) {
   await UpdateUserPartyData({
     partyId: code,
-    computerId: deviceId,
+    computerId:
+      window.resolveOnlinePartyActorId?.(currentPartyData, deviceId) ||
+      deviceId,
     newUserSocketId: null
   });
 
   debugLog(`Kicking self from party: ${code}`);
+  window.onlinePartyMembershipEstablished = false;
+  window.onlinePartyJoinedCode = null;
   socket.emit('kick-user', code);
 }
 
@@ -51,7 +100,10 @@ let liveAccountNotificationFlushTimer = null;
 
 function isCurrentPartyDevice({ computerId, socketId } = {}) {
   if (computerId && typeof deviceId !== 'undefined') {
-    return String(computerId) === String(deviceId);
+    const actorComputerId =
+      window.resolveOnlinePartyActorId?.(currentPartyData, deviceId) ||
+      deviceId;
+    return String(computerId) === String(actorComputerId);
   }
 
   return Boolean(
@@ -148,8 +200,37 @@ socket.on('joined-party', (data) => {
   debugLog(data.message);
 });
 
+socket.on('disconnect', () => {
+  if (!window.onlinePartyMembershipEstablished) return;
+  window.PartyApiRequest?.setOnlinePartyConnectionState?.('reconnecting', {
+    transport: 'socket'
+  });
+});
+
+socket.on('connect', () => {
+  const code = window.onlinePartyJoinedCode;
+  if (!window.onlinePartyMembershipEstablished || !code) return;
+
+  joinParty(code, { retries: 1 })
+    .then(() => {
+      const actorComputerId =
+        window.resolveOnlinePartyActorId?.(currentPartyData, deviceId) ||
+        deviceId;
+      return UpdateUserPartyData({
+        partyId: code,
+        computerId: actorComputerId,
+        newUserSocketId: socket.id
+      });
+    })
+    .catch((error) => {
+      console.warn('Failed to restore party connection:', error);
+    });
+});
+
 socket.on('left-party', (code) => {
   debugLog(`✅ You left party: ${code}`);
+  window.onlinePartyMembershipEstablished = false;
+  window.onlinePartyJoinedCode = null;
   if (typeof togglePartyQrCode === 'function') {
     togglePartyQrCode(false);
   }
@@ -199,6 +280,8 @@ socket.on('kicked-from-party', (payload) => {
   const code =
     payload && typeof payload === 'object' ? payload.partyCode : payload;
   debugLog(`🥾 You were kicked from party: ${code}`);
+  window.onlinePartyMembershipEstablished = false;
+  window.onlinePartyJoinedCode = null;
   queueLivePartyNotification(
     payload && typeof payload === 'object' ? payload.notification : null
   );
@@ -219,16 +302,13 @@ socket.on('user-left', ({ socketId, computerId, notification }) => {
   }
 });
 
-socket.on(
-  'user-kicked',
-  ({ socketId, computerId, notification } = {}) => {
-    debugLog(`🥾 User kicked: ${socketId}`);
-    if (!isCurrentPartyDevice({ computerId, socketId })) {
-      queueLivePartyNotification(notification);
-    }
-    window.setTimeout(() => window.checkPartyNotifications?.(), 250);
+socket.on('user-kicked', ({ socketId, computerId, notification } = {}) => {
+  debugLog(`🥾 User kicked: ${socketId}`);
+  if (!isCurrentPartyDevice({ computerId, socketId })) {
+    queueLivePartyNotification(notification);
   }
-);
+  window.setTimeout(() => window.checkPartyNotifications?.(), 250);
+});
 
 socket.on('user-disconnected', ({ socketId, computerId, notification }) => {
   debugLog(`❌ User disconnected: ${socketId}`);
@@ -300,10 +380,7 @@ socket.on(
       const isOnGameplayRoute =
         typeof isCurrentOnlineGamemodePartyRoute === 'function' &&
         isCurrentOnlineGamemodePartyRoute(emittedPartyCode);
-      if (
-        source === 'waiting-room' &&
-        (isPlaying || isOnGameplayRoute)
-      ) {
+      if (source === 'waiting-room' && (isPlaying || isOnGameplayRoute)) {
         return;
       }
 
@@ -474,7 +551,7 @@ socket.on(
             const gm = config.gamemode;
             transitionSplashScreen(
               `${baseUrl}/${formatPackName(gm)}/${codeToUse}`,
-              `/images/splash-screens/${formatPackName(gm)}.png`
+              `/images/splash-screens/party-games/${formatPackName(gm)}/game.png`
             );
             return;
           }

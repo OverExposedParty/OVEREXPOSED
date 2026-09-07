@@ -23,6 +23,11 @@ const {
 } = require('../services/page-assets-battle-olings');
 const { sendLoginPage } = require('../services/page-assets-login');
 const { canAccessProtectedPage } = require('../services/page-protection');
+const { getCurrentAccount } = require('../services/page-protection');
+const {
+  findOlingLabAccountByUsername,
+  getOlingLabAccess
+} = require('../services/oling-lab-access');
 
 const HOMEPAGE_PATH = path.join(
   PUBLIC_DIRECTORY,
@@ -32,7 +37,13 @@ const HOMEPAGE_PATH = path.join(
 );
 const HOMEPAGE_SPLASH_SCREEN =
   getSplashScreenImageUrl(fs.readFileSync(HOMEPAGE_PATH, 'utf8')) ||
-  '/images/splash-screens/overexposed.png';
+  '/images/splash-screens/core/overexposed.png';
+const OLING_LAB_PAGE_PATH = path.join(
+  PUBLIC_DIRECTORY,
+  'pages',
+  'olings',
+  'lab.html'
+);
 
 function getProtectedPageSplashScreen(filePath) {
   try {
@@ -50,12 +61,20 @@ function registerPageRoutes({
   accountModel,
   debugLog,
   hostedPartyModels = [],
+  olingClashMatchModel,
   waitingRoomModel
 }) {
   const sendPage = (route, relativePath, protection = null) => {
-    const filePath = path.join(PUBLIC_DIRECTORY, relativePath);
+    const staticFilePath =
+      typeof relativePath === 'string'
+        ? path.join(PUBLIC_DIRECTORY, relativePath)
+        : null;
     const protectedPageOptions = protection
-      ? { splashScreen: getProtectedPageSplashScreen(filePath) }
+      ? {
+          splashScreen: staticFilePath
+            ? getProtectedPageSplashScreen(staticFilePath)
+            : HOMEPAGE_SPLASH_SCREEN
+        }
       : {};
 
     app.get(route, async (req, res) => {
@@ -86,6 +105,26 @@ function registerPageRoutes({
       if (!access.allowed) {
         sendProtectedPage(req, res, access, 403, protectedPageOptions);
         return;
+      }
+
+      let filePath = staticFilePath;
+      if (!filePath) {
+        try {
+          const resolvedPath = await relativePath(req, res);
+          filePath = path.join(PUBLIC_DIRECTORY, resolvedPath);
+        } catch (error) {
+          console.error(
+            `[REQ ${req.id || 'unknown'}] Page resolution failed:`,
+            error
+          );
+          sendVersionedHtmlFile(
+            req,
+            res,
+            path.join(ROOT_DIRECTORY, 'public', 'pages', '404.html'),
+            404
+          );
+          return;
+        }
       }
 
       debugLog(`Attempting to serve file from: ${filePath}`);
@@ -278,6 +317,94 @@ function registerPageRoutes({
     '/olings/lab',
     path.join('pages', 'olings', 'lab.html'),
     featureProtected('olings.lab')
+  );
+  sendPage(
+    '/olings/lab/tutorial',
+    path.join('pages', 'olings', 'lab.html'),
+    featureProtected('olings.lab')
+  );
+  app.get(
+    '/olings/lab/:username([a-zA-Z0-9_.-]{3,30})',
+    async (req, res) => {
+      try {
+        const [targetAccount, viewerAccount] = await Promise.all([
+          findOlingLabAccountByUsername(accountModel, req.params.username),
+          getCurrentAccount(req, accountModel)
+        ]);
+        if (!targetAccount) {
+          sendVersionedHtmlFile(
+            req,
+            res,
+            path.join(PUBLIC_DIRECTORY, 'pages', '404.html'),
+            404
+          );
+          return;
+        }
+
+        const access = getOlingLabAccess(targetAccount, viewerAccount);
+        if (!access.allowed) {
+          sendProtectedPage(req, res, access, 403, {
+            splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
+          });
+          return;
+        }
+
+        sendVersionedHtmlFile(req, res, OLING_LAB_PAGE_PATH);
+      } catch (error) {
+        console.error(
+          `[REQ ${req.id || 'unknown'}] Oling Lab visitor access check failed:`,
+          error
+        );
+        sendProtectedPage(
+          req,
+          res,
+          { reason: 'protected' },
+          403,
+          {
+            splashScreen: getProtectedPageSplashScreen(OLING_LAB_PAGE_PATH)
+          }
+        );
+      }
+    }
+  );
+  sendPage(
+    '/olings/clash',
+    path.join('pages', 'olings', 'clash.html'),
+    featureProtected('olings.clash')
+  );
+  sendPage(
+    '/olings/clash/settings',
+    path.join('pages', 'olings', 'clash-settings.html'),
+    featureProtected('olings.clash')
+  );
+  sendPage(
+    '/olings/clash/tutorial',
+    path.join('pages', 'olings', 'clash.html'),
+    featureProtected('olings.clash')
+  );
+  sendPage(
+    '/olings/clash/:matchCode([a-zA-Z0-9]{3}-[a-zA-Z0-9]{3})',
+    async (req, res) => {
+      res.setHeader('Cache-Control', 'private, no-store');
+      if (!olingClashMatchModel?.findOne) {
+        return path.join('pages', 'olings', 'clash-settings.html');
+      }
+
+      let query = olingClashMatchModel.findOne({
+        matchCode: String(req.params.matchCode || '').toUpperCase()
+      });
+      if (typeof query?.select === 'function') query = query.select('status');
+      if (typeof query?.lean === 'function') query = query.lean();
+      const match = await query;
+      return path.join(
+        'pages',
+        'olings',
+        ['active', 'completed'].includes(match?.status)
+          ? 'clash.html'
+          : 'clash-settings.html'
+      );
+    },
+    featureProtected('olings.clash')
   );
   const sendBattleOlingsPageRoute = (route) => {
     const protectedPageOptions = { splashScreen: HOMEPAGE_SPLASH_SCREEN };

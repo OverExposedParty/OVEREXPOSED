@@ -7,8 +7,39 @@
     closeSelectedTarget,
     renderLab,
     saveLab,
+    setStatus = () => {},
     gridState
   }) {
+    function playPlacedSound(item) {
+      if (typeof window.playSoundEffect !== 'function') return;
+      const soundKey = item?.sounds?.placed || 'uiDragPlace';
+      Promise.resolve(window.playSoundEffect(soundKey)).catch(() => {});
+    }
+
+    function inventorySlotsContainItems(inventorySlots) {
+      return (inventorySlots || []).some(
+        (slot) =>
+          Boolean(slot?.itemKey) ||
+          Number(slot?.quantity || 0) > 0 ||
+          (slot?.influenceSlots || []).some((influence) =>
+            Boolean(influence?.itemKey)
+          )
+      );
+    }
+
+    function storageFurnitureContainsItems(placed) {
+      if (inventorySlotsContainItems(placed?.inventorySlots)) return true;
+      const definition = getItem(placed?.itemId);
+      const displaysAccountInventory = (definition?.inventorySlots || []).some(
+        (slot) => slot?.slotType === 'storage'
+      );
+      if (!displaysAccountInventory) return false;
+      return [
+        ...(state.ownedEggs || []),
+        ...(state.ownedConsumables || [])
+      ].some((item) => Number(item?.quantity || 0) > 0);
+    }
+
     function placeRoomItem(itemId, row, col, options = {}) {
       const item = getItem(itemId);
       if (!gridState.canPlaceRoomItem(item, row, col)) return;
@@ -42,12 +73,18 @@
         })),
         placedAt: new Date().toISOString()
       });
+      window.dispatchEvent(
+        new CustomEvent('oling-lab:tutorial-furniture-placed', {
+          detail: { itemId, row, col }
+        })
+      );
       closeSelectedTarget();
       closeMenu();
       renderLab();
       saveLab({
         preserveLocalLab: Boolean(options.preserveLocalLabOnSave)
       });
+      playPlacedSound(item);
     }
 
     function moveRoomItem(placedId, row, col) {
@@ -63,6 +100,29 @@
       closeMenu();
       renderLab();
       saveLab();
+      playPlacedSound(item);
+    }
+
+    function swapRoomItems(firstPlacedId, secondPlacedId) {
+      const firstPlaced = state.lab.placedItems.find(
+        (item) => item.placedId === firstPlacedId
+      );
+      const secondPlaced = state.lab.placedItems.find(
+        (item) => item.placedId === secondPlacedId
+      );
+      const swap = gridState.getRoomItemSwap(firstPlaced, secondPlaced);
+      if (!swap) return false;
+
+      firstPlaced.row = swap.first.row;
+      firstPlaced.col = swap.first.col;
+      secondPlaced.row = swap.second.row;
+      secondPlaced.col = swap.second.col;
+      closeSelectedTarget();
+      closeMenu();
+      renderLab();
+      saveLab();
+      playPlacedSound(getItem(firstPlaced.itemId));
+      return true;
     }
 
     function placeContainerItem(parentPlacedId, slotId, itemId, options = {}) {
@@ -95,6 +155,7 @@
       saveLab({
         preserveLocalLab: Boolean(options.preserveLocalLabOnSave)
       });
+      playPlacedSound(item);
     }
 
     function storeRoomItem(placedId) {
@@ -102,6 +163,28 @@
         (placed) => placed.placedId === placedId
       );
       if (!item || item.locked) return;
+      const hasStoredOlings = (state.olings || []).some(
+        (oling) =>
+          oling?.residency?.state === 'stored' &&
+          String(oling?.residency?.pod?.containerPlacedId || '') ===
+            String(placedId)
+      );
+      if (hasStoredOlings) {
+        setStatus(
+          'Move or release every Oling in this Pod Rack before storing it.'
+        );
+        return false;
+      }
+      if (storageFurnitureContainsItems(item)) {
+        setStatus(
+          `Remove every item from ${getItem(item.itemId)?.name || 'this storage'} before storing it.`
+        );
+        return false;
+      }
+      if ((item.containerSlots || []).some((slot) => Boolean(slot?.itemId))) {
+        setStatus('Remove every attached item before storing this furniture.');
+        return false;
+      }
 
       state.owned.add(item.itemId);
       state.lab.placedItems = state.lab.placedItems.filter(
@@ -111,6 +194,7 @@
       closeMenu();
       renderLab();
       saveLab();
+      return true;
     }
 
     function storeContainerItem(parentPlacedId, slotId) {
@@ -120,7 +204,14 @@
       const slot = parent?.containerSlots?.find(
         (item) => item.slotId === slotId
       );
-      if (!slot) return;
+      if (!slot) return false;
+
+      if (inventorySlotsContainItems(slot.inventorySlots)) {
+        setStatus(
+          `Remove every item from ${getItem(slot.itemId)?.name || 'this item'} before storing it.`
+        );
+        return false;
+      }
 
       if (slot.itemId) state.owned.add(slot.itemId);
       slot.itemId = null;
@@ -132,17 +223,18 @@
       closeMenu();
       renderLab();
       saveLab();
+      return true;
     }
 
     return {
       placeRoomItem,
       moveRoomItem,
+      swapRoomItems,
       placeContainerItem,
       storeRoomItem,
       storeContainerItem
     };
   }
 
-  window.createOlingLabFurnitureMutations =
-    createOlingLabFurnitureMutations;
+  window.createOlingLabFurnitureMutations = createOlingLabFurnitureMutations;
 })();

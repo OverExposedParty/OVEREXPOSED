@@ -6,7 +6,9 @@ const ITEM_REWARD_TYPES = new Set([
   'oling_egg',
   'oling_consumable',
   'oling_headwear',
-  'oling_furniture'
+  'oling_furniture',
+  'oling_wallpaper',
+  'oling_wallpaper_variant'
 ]);
 
 function normalizeCatalogValue(value) {
@@ -108,7 +110,9 @@ function addOlingEggEntries(catalog, eggs) {
         egg?.assets?.image,
         egg?.assets?.icon,
         egg?.metadata?.image,
-        egg?.collection ? `/images/olings/eggs/${egg.collection}/egg.svg` : ''
+        egg?.collection
+          ? `/images/olings/lab/eggs/${egg.collection}/egg.svg`
+          : ''
       )
     });
   });

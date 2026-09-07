@@ -195,13 +195,13 @@
           )
         );
 
-        if (trackPosition >= 42.5 && trackPosition < 57.5) {
+        if (trackPosition >= 45 && trackPosition < 55) {
           return 'critical';
         }
 
         if (
-          (trackPosition >= 32.5 && trackPosition < 42.5) ||
-          (trackPosition >= 57.5 && trackPosition < 67.5)
+          (trackPosition >= 20 && trackPosition < 45) ||
+          (trackPosition >= 55 && trackPosition < 80)
         ) {
           return 'strike';
         }

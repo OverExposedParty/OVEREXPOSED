@@ -59,7 +59,11 @@
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 58%, rgb(255 248 234 / 82%) 0 42%, transparent 43%),
+    radial-gradient(
+      circle at 50% 58%,
+      rgb(255 248 234 / 82%) 0 42%,
+      transparent 43%
+    ),
     var(--oling-lab-menu-secondary-colour);
   overflow: hidden;
 }
@@ -106,9 +110,24 @@
   display: grid;
   place-items: center;
   border: 2px dashed currentColor;
+  border-radius: var(--oling-lab-element-radius);
   padding: 1rem;
   font-size: 0.9rem;
   font-weight: 800;
   text-align: center;
   opacity: 0.72;
+}
+
+:is(
+    .oling-lab-menu-content,
+    .oling-lab-tab-panel,
+    .oling-lab-explorer-panel,
+    .oling-lab-content-stage
+  )
+  > .oling-lab-menu-empty {
+  box-sizing: border-box;
+  width: 90%;
+  height: 90%;
+  min-height: 0;
+  place-self: center;
 }

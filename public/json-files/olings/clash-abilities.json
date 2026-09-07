@@ -1,0 +1,681 @@
+{
+  "abilities": [
+    {
+      "key": "moss-mend",
+      "revision": 1,
+      "traitKey": "moss-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Mend",
+      "imagePath": "/images/olings/clash/abilities/moss/mend.svg",
+      "description": "Heal the most damaged benched Oling by 1/2 Heart.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "heal",
+          "handler": "heal_most_damaged_benched",
+          "target": {
+            "side": "ally",
+            "location": "bench",
+            "selector": "most-damaged"
+          },
+          "parameters": { "amountUnits": 1 }
+        }
+      ],
+      "roleTags": ["support"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "moss-cleanse",
+      "revision": 1,
+      "traitKey": "moss-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Cleanse",
+      "imagePath": "/images/olings/clash/abilities/moss/cleanse.svg",
+      "description": "Remove one Negative Status from a chosen teammate, including itself.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "cleanse",
+          "handler": "cleanse_status",
+          "target": { "side": "ally", "location": "any", "selector": "chosen" },
+          "parameters": { "count": 1, "polarity": "negative" }
+        }
+      ],
+      "roleTags": ["support"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "moss-wild-growth",
+      "revision": 1,
+      "traitKey": "moss-wings",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Wild Growth",
+      "imagePath": "/images/olings/clash/abilities/moss/wild-growth.svg",
+      "description": "Gain 1/2 Overgrowth. If this Oling successfully Tags, grant it to the incoming Oling instead.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "grant-overgrowth",
+          "handler": "grant_overgrowth_to_self_or_tag_recipient",
+          "target": { "side": "ally", "selector": "self-or-tag-recipient" },
+          "parameters": { "amountUnits": 1 }
+        }
+      ],
+      "roleTags": ["support"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "moss-canopy",
+      "revision": 2,
+      "traitKey": "moss-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Canopy",
+      "imagePath": "/images/olings/clash/abilities/moss/canopy.svg",
+      "description": "Every second survived Draw, grant the most damaged living allied Oling 1 Shield.",
+      "cadence": {
+        "every": 2,
+        "mode": "cumulative",
+        "retainWhileBenched": true,
+        "consumeWhenPrevented": true
+      },
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "grant-shield",
+          "handler": "grant_shield_to_most_damaged_ally",
+          "target": {
+            "side": "ally",
+            "location": "any",
+            "selector": "most-damaged"
+          },
+          "parameters": { "shieldCount": 1 }
+        }
+      ],
+      "roleTags": ["support"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "bone-fracture",
+      "revision": 1,
+      "traitKey": "bone-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Fracture",
+      "imagePath": "/images/olings/clash/abilities/bone/fracture.svg",
+      "description": "Suppress the opponent's Body until its next valid activation.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "suppress",
+          "handler": "suppress_part",
+          "target": {
+            "side": "opponent",
+            "location": "active",
+            "part": "body"
+          },
+          "parameters": {
+            "statusKey": "suppressed",
+            "durationType": "activation"
+          }
+        }
+      ],
+      "roleTags": ["disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "bone-splinter",
+      "revision": 1,
+      "traitKey": "bone-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Splinter",
+      "imagePath": "/images/olings/clash/abilities/bone/splinter.svg",
+      "description": "Suppress one random opponent Part until they win with another Action.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "suppress",
+          "handler": "suppress_random_part_until_different_action_win",
+          "target": {
+            "side": "opponent",
+            "location": "active",
+            "part": "random"
+          },
+          "parameters": {
+            "statusKey": "suppressed",
+            "durationType": "activation"
+          }
+        }
+      ],
+      "roleTags": ["disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "bone-wither",
+      "revision": 1,
+      "traitKey": "bone-wings",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Wither",
+      "imagePath": "/images/olings/clash/abilities/bone/wither.svg",
+      "description": "Block the opponent from applying Positive Statuses next round.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "block",
+          "handler": "block_effect_category",
+          "target": { "side": "opponent", "scope": "player" },
+          "parameters": {
+            "statusKey": "blocked",
+            "category": "positive-status",
+            "durationType": "round",
+            "duration": 1
+          }
+        }
+      ],
+      "roleTags": ["disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "bone-read",
+      "revision": 1,
+      "traitKey": "bone-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Read",
+      "imagePath": "/images/olings/clash/abilities/bone/read.svg",
+      "description": "Mark the opponent's Action. If they repeat it next turn, Suppress one random Part for the following turn.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "mark",
+          "handler": "mark_repeated_action_for_suppression",
+          "target": { "side": "opponent", "scope": "action" },
+          "parameters": {
+            "statusKey": "marked",
+            "suppressionStatusKey": "suppressed",
+            "durationType": "round",
+            "duration": 1,
+            "suppressedPart": "random"
+          }
+        }
+      ],
+      "roleTags": ["disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "magma-eruption",
+      "revision": 1,
+      "traitKey": "magma-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Eruption",
+      "imagePath": "/images/olings/clash/abilities/magma/eruption.svg",
+      "description": "If your previous decisive victory was also Attack, deal 1/2 bonus damage.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "damage",
+          "handler": "damage_after_repeated_decisive_action",
+          "target": { "side": "opponent", "location": "active" },
+          "parameters": {
+            "amountUnits": 1,
+            "damageType": "normal",
+            "damageSource": "bonus",
+            "action": "attack"
+          }
+        }
+      ],
+      "roleTags": ["striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "magma-retaliate",
+      "revision": 1,
+      "traitKey": "magma-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Retaliate",
+      "imagePath": "/images/olings/clash/abilities/magma/retaliate.svg",
+      "description": "Prepare your next successful Attack to apply Burn.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "mark",
+          "handler": "prime_status_on_next_action_win",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "primeStatusKey": "burn-primed",
+            "statusKey": "burn",
+            "action": "attack",
+            "durationType": "activation"
+          }
+        }
+      ],
+      "roleTags": ["striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "magma-scorch",
+      "revision": 1,
+      "traitKey": "magma-wings",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Scorch",
+      "imagePath": "/images/olings/clash/abilities/magma/scorch.svg",
+      "description": "Suppress the opponent's Mouth until its next valid activation.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "suppress",
+          "handler": "suppress_part",
+          "target": {
+            "side": "opponent",
+            "location": "active",
+            "part": "mouth"
+          },
+          "parameters": {
+            "statusKey": "suppressed",
+            "durationType": "activation"
+          }
+        }
+      ],
+      "roleTags": ["striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "magma-ignite",
+      "revision": 1,
+      "traitKey": "magma-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Ignite",
+      "imagePath": "/images/olings/clash/abilities/magma/ignite.svg",
+      "description": "Prepare your next decisive Attack victory to apply Burn.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "mark",
+          "handler": "prime_status_on_next_decisive_action_win",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "statusKey": "burn",
+            "action": "attack",
+            "durationType": "clash"
+          }
+        }
+      ],
+      "roleTags": ["striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "stone-crush",
+      "revision": 1,
+      "traitKey": "stone-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Crush",
+      "imagePath": "/images/olings/clash/abilities/stone/crush.svg",
+      "description": "Every second Attack victory with this Mouth deals 1/2 bonus damage.",
+      "cadence": {
+        "every": 2,
+        "mode": "cumulative",
+        "retainWhileBenched": true,
+        "consumeWhenPrevented": true
+      },
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "damage",
+          "handler": "damage_every_nth_activation",
+          "target": { "side": "opponent", "location": "active" },
+          "parameters": {
+            "amountUnits": 1,
+            "damageType": "normal",
+            "damageSource": "bonus",
+            "activationCount": 2
+          }
+        }
+      ],
+      "roleTags": ["guardian", "striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "stone-fortify",
+      "revision": 1,
+      "traitKey": "stone-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Fortify",
+      "imagePath": "/images/olings/clash/abilities/stone/fortify.svg",
+      "description": "Ward this Oling against the next effect that would deal bonus damage.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "ward",
+          "handler": "ward_effect_category",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "statusKey": "warded",
+            "category": "bonus-damage",
+            "durationType": "until-consumed"
+          }
+        }
+      ],
+      "roleTags": ["guardian", "striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "stone-reinforce",
+      "revision": 1,
+      "traitKey": "stone-wings",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Reinforce",
+      "imagePath": "/images/olings/clash/abilities/stone/reinforce.svg",
+      "description": "Choose one allied Part and Ward it against being disabled once.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "ward",
+          "handler": "ward_chosen_part",
+          "target": { "side": "ally", "location": "self", "part": "chosen" },
+          "parameters": {
+            "statusKey": "warded",
+            "category": "part-disable",
+            "durationType": "until-consumed"
+          }
+        }
+      ],
+      "roleTags": ["guardian", "striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "stone-harden",
+      "revision": 2,
+      "traitKey": "stone-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Harden",
+      "imagePath": "/images/olings/clash/abilities/stone/harden.svg",
+      "description": "Every second survived Draw, gain 1 Shield.",
+      "cadence": {
+        "every": 2,
+        "mode": "cumulative",
+        "retainWhileBenched": true,
+        "consumeWhenPrevented": true
+      },
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "grant-shield",
+          "handler": "grant_shield",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": { "shieldCount": 1 }
+        }
+      ],
+      "roleTags": ["guardian", "striker"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "trash-scavenge",
+      "revision": 1,
+      "traitKey": "trash-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Scavenge",
+      "imagePath": "/images/olings/clash/abilities/trash/scavenge.svg",
+      "description": "Mark the opponent's last-used Part. If it activates again next turn, Steal its Positive effect.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "mark",
+          "handler": "mark_part_for_positive_effect_steal",
+          "target": {
+            "side": "opponent",
+            "location": "active",
+            "part": "last-used"
+          },
+          "parameters": {
+            "statusKey": "marked",
+            "suppressionStatusKey": "suppressed",
+            "durationType": "round",
+            "duration": 1
+          }
+        }
+      ],
+      "roleTags": ["trickster", "disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "trash-return-to-sender",
+      "revision": 1,
+      "traitKey": "trash-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Return to Sender",
+      "imagePath": "/images/olings/clash/abilities/trash/return-to-sender.svg",
+      "description": "Reflect the opponent's Mouth effect back under the standard Redirect rules.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "reflect",
+          "handler": "reflect_opponent_mouth_effect",
+          "target": { "side": "opponent", "scope": "mouth-effect" },
+          "parameters": { "maximumRedirects": 1 }
+        }
+      ],
+      "roleTags": ["trickster", "disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "trash-junkyard",
+      "revision": 1,
+      "traitKey": "trash-balloons",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Junkyard",
+      "imagePath": "/images/olings/clash/abilities/trash/junkyard.svg",
+      "description": "Block the opponent's next valid Part activation and consume Junk instead.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "block",
+          "handler": "replace_next_activation_with_junk",
+          "target": { "side": "opponent", "scope": "next-part-activation" },
+          "parameters": {
+            "statusKey": "junk",
+            "category": "part-activation",
+            "durationType": "activation"
+          }
+        }
+      ],
+      "roleTags": ["trickster", "disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "trash-salvage",
+      "revision": 1,
+      "traitKey": "trash-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Salvage",
+      "imagePath": "/images/olings/clash/abilities/trash/salvage.svg",
+      "description": "Restore the most recently removed eligible temporary Positive Status.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "restore",
+          "handler": "restore_most_recent_positive_status",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "selector": "most-recent",
+            "eligibility": "temporary-positive-status"
+          }
+        }
+      ],
+      "roleTags": ["trickster", "disruptor"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "vampire-bloodsuck",
+      "revision": 1,
+      "traitKey": "vampire-mouth",
+      "layer": "mouth",
+      "trigger": "attack_win",
+      "name": "Bloodsuck",
+      "imagePath": "/images/olings/clash/abilities/vampire/bloodsuck.svg",
+      "description": "Every second Attack victory, Heal this Oling by 1/2 Heart.",
+      "cadence": {
+        "every": 2,
+        "mode": "cumulative",
+        "retainWhileBenched": true,
+        "consumeWhenPrevented": true
+      },
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "heal",
+          "handler": "heal_every_nth_activation",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": { "amountUnits": 1, "activationCount": 2 }
+        }
+      ],
+      "roleTags": ["leech", "guardian"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "vampire-blood-bank",
+      "revision": 1,
+      "traitKey": "vampire-body",
+      "layer": "body",
+      "trigger": "guard_win",
+      "name": "Blood Bank",
+      "imagePath": "/images/olings/clash/abilities/vampire/blood-bank.svg",
+      "description": "Store 1/2 Blood Heart. At 1 Blood Heart, convert it into 1 permanent Heart.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "store-resource",
+          "handler": "store_and_convert_resource",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "resource": "blood",
+            "amountUnits": 1,
+            "conversionThresholdUnits": 2,
+            "convertedHeartUnits": 2
+          }
+        }
+      ],
+      "roleTags": ["leech", "guardian"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "vampire-transfusion",
+      "revision": 1,
+      "traitKey": "vampire-wings",
+      "layer": "flight",
+      "trigger": "skill_win",
+      "name": "Transfusion",
+      "imagePath": "/images/olings/clash/abilities/vampire/transfusion.svg",
+      "description": "Transfer 1/2 Heart between Vampire and a chosen benched teammate.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "transfer",
+          "handler": "transfer_hearts_between_self_and_bench",
+          "target": {
+            "side": "ally",
+            "location": "self-and-bench",
+            "selector": "chosen"
+          },
+          "parameters": {
+            "resource": "hearts",
+            "amountUnits": 1,
+            "direction": "chosen"
+          }
+        }
+      ],
+      "roleTags": ["leech", "guardian"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    },
+    {
+      "key": "vampire-reclaim",
+      "revision": 1,
+      "traitKey": "vampire-eyes",
+      "layer": "eyes",
+      "trigger": "draw_survived",
+      "name": "Reclaim",
+      "imagePath": "/images/olings/clash/abilities/vampire/reclaim.svg",
+      "description": "Store the Heart lost from this Draw as Blood. Recover it after the next decisive victory; lose it after the next decisive loss.",
+      "effects": [
+        {
+          "order": 0,
+          "mechanic": "store-resource",
+          "handler": "reclaim_draw_damage_as_blood",
+          "target": { "side": "ally", "location": "self" },
+          "parameters": {
+            "resource": "blood",
+            "maximumUnits": 1,
+            "recoveryTrigger": "next-decisive-win",
+            "lossTrigger": "next-decisive-loss"
+          }
+        }
+      ],
+      "roleTags": ["leech", "guardian"],
+      "isCurrent": true,
+      "enabled": true,
+      "status": "published"
+    }
+  ]
+}

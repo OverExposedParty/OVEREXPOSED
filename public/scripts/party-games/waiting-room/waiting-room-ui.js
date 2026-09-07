@@ -50,18 +50,24 @@ function setDisbandedFavicons() {
 }
 
 async function SetGamemodeContainer() {
-  await UpdateGamemodeContainer();
+  const settingsUpdated = await UpdateGamemodeContainer();
+  if (!settingsUpdated) {
+    throw new Error('Waiting-room settings containers are unavailable.');
+  }
   onlineSettingsTab.classList.remove('disabled');
-  rulesContainer.querySelectorAll('button').forEach((button) => {
+  const resolvedRulesContainer = window.rulesContainer;
+  resolvedRulesContainer.querySelectorAll('button').forEach((button) => {
     if (hasRestriction(button.dataset.settingsRestriction, 'offline')) {
       button.classList.add('inactive');
     }
   });
-  rulesContainer.querySelectorAll('.increment-container').forEach((button) => {
-    if (hasRestriction(button.dataset.settingsRestriction, 'offline')) {
-      button.classList.add('inactive');
-    }
-  });
+  resolvedRulesContainer
+    .querySelectorAll('.increment-container')
+    .forEach((button) => {
+      if (hasRestriction(button.dataset.settingsRestriction, 'offline')) {
+        button.classList.add('inactive');
+      }
+    });
   inputPartyCode = inputPartyCode || document.getElementById('party-code');
   if (inputPartyCode) {
     inputPartyCode.value = partyCode;
@@ -87,10 +93,26 @@ function CreateGameSettingsButtonsScript() {
 
 async function UpdateGamemodeContainer() {
   if (!partyCode) {
-    return;
+    return false;
   }
+  if (window.OEReady?.waitFor) {
+    await window.OEReady.waitFor(['gamemode-settings-template'], {
+      timeoutMs: 30000
+    });
+  } else if (window.gamemodeSettingsTemplateReady) {
+    await window.gamemodeSettingsTemplateReady;
+  }
+
+  const templateRoot = document.getElementById('gamemode-settings-placeholder');
+  const resolvedPacksContainer =
+    window.packsContainer || templateRoot?.querySelector('.packs-container');
+  const resolvedRulesContainer =
+    window.rulesContainer ||
+    templateRoot?.querySelector('.rules-settings-container');
+  if (!resolvedPacksContainer || !resolvedRulesContainer) return false;
+
   currentPartyData = await getWaitingRoomPartyData();
-  if (!currentPartyData) return;
+  if (!currentPartyData) return false;
 
   const config = currentPartyData.config;
 
@@ -107,7 +129,7 @@ async function UpdateGamemodeContainer() {
       : {};
   const gameRules = config.gameRules || {};
 
-  packsContainer.querySelectorAll('button').forEach((button) => {
+  resolvedPacksContainer.querySelectorAll('button').forEach((button) => {
     const key = button.dataset.key;
     const inPacks = selectedPacks.includes(key);
 
@@ -119,7 +141,7 @@ async function UpdateGamemodeContainer() {
     SetButtonStyle(button, false);
   });
 
-  packsContainer
+  resolvedPacksContainer
     .querySelectorAll('.increment-container[data-content-type="role"]')
     .forEach((container) => {
       const key = container.dataset.key;
@@ -134,26 +156,30 @@ async function UpdateGamemodeContainer() {
       }
     });
 
-  rulesContainer.querySelectorAll('.increment-container').forEach((button) => {
-    const key = button.dataset.key;
-    const value = gameRules[key];
+  resolvedRulesContainer
+    .querySelectorAll('.increment-container')
+    .forEach((button) => {
+      const key = button.dataset.key;
+      const value = gameRules[key];
 
-    if (typeof value === 'number') {
-      button.dataset.count = value;
-      const display = button.querySelector('.count-display');
-      if (display) {
-        display.textContent = value;
+      if (typeof value === 'number') {
+        button.dataset.count = value;
+        const display = button.querySelector('.count-display');
+        if (display) {
+          display.textContent = value;
+        }
       }
-    }
-  });
+    });
 
-  rulesContainer.querySelectorAll('button').forEach((button) => {
+  resolvedRulesContainer.querySelectorAll('button').forEach((button) => {
     const key = button.dataset.key;
     const raw = gameRules[key];
     const isActive = raw === true || raw === 'true';
     button.classList.toggle('active', isActive);
     SetButtonStyle(button, false);
   });
+
+  return true;
 }
 
 function PartyDisbanded() {

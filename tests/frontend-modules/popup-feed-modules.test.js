@@ -97,15 +97,15 @@ test('popup feed navigation chooses destination-specific splash artwork', () => 
       window.getPopupFeedSplashScreen(
         '/truth-or-dare/settings?partyCode=ABC-123'
       ),
-      '/images/splash-screens/truth-or-dare-settings.png'
+      '/images/splash-screens/party-games/truth-or-dare/settings.png'
     );
     assert.equal(
       window.getPopupFeedSplashScreen('/truth-or-dare/ABC-123'),
-      '/images/splash-screens/truth-or-dare.png'
+      '/images/splash-screens/party-games/truth-or-dare/game.png'
     );
     assert.equal(
       window.getPopupFeedSplashScreen('/olings/lab'),
-      '/images/splash-screens/overexposed.png'
+      '/images/splash-screens/core/overexposed.png'
     );
     assert.equal(window.navigateFromPopupFeed('https://example.com'), false);
 
@@ -116,7 +116,7 @@ test('popup feed navigation chooses destination-specific splash artwork', () => 
     assert.deepEqual(transitions, [
       [
         '/truth-or-dare/settings?partyCode=ABC-123',
-        '/images/splash-screens/truth-or-dare-settings.png'
+        '/images/splash-screens/party-games/truth-or-dare/settings.png'
       ]
     ]);
   } finally {
@@ -833,8 +833,8 @@ test('session invites and Olings notifications navigate through the splash helpe
     incubator.click();
 
     assert.deepEqual(transitions, [
-      ['/truth-or-dare/ABC-123', '/images/splash-screens/truth-or-dare.png'],
-      ['/olings/lab', '/images/splash-screens/overexposed.png']
+      ['/truth-or-dare/ABC-123', '/images/splash-screens/party-games/truth-or-dare/game.png'],
+      ['/olings/lab', '/images/splash-screens/core/overexposed.png']
     ]);
   } finally {
     dom.window.close();
@@ -1620,7 +1620,7 @@ test('active-lobby return links use the host-specific direct settings path', asy
     assert.deepEqual(transitions, [
       [
         '/truth-or-dare/settings?partyCode=ABC-123',
-        '/images/splash-screens/truth-or-dare-settings.png'
+        '/images/splash-screens/party-games/truth-or-dare/settings.png'
       ]
     ]);
   } finally {
@@ -1631,7 +1631,7 @@ test('active-lobby return links use the host-specific direct settings path', asy
 test('host lobby leave keeps clean game settings as the auth return path', async () => {
   const dom = new JSDOM('<!doctype html><body></body>', {
     runScripts: 'dangerously',
-    url: 'https://overexposed.app/sign-in?returnTo=%2Ftruth-or-dare%2Fsettings%3FpartyCode%3DABC-123&splashScreen=%2Fimages%2Fsplash-screens%2Ftruth-or-dare-settings.png'
+    url: 'https://overexposed.app/sign-in?returnTo=%2Ftruth-or-dare%2Fsettings%3FpartyCode%3DABC-123&splashScreen=%2Fimages%2Fsplash-screens%2Fparty-games%2Ftruth-or-dare%2Fsettings.png'
   });
   const { window } = dom;
   let popupRow = null;
@@ -1727,7 +1727,7 @@ test('host lobby leave keeps clean game settings as the auth return path', async
 test('participant lobby leave removes its auth return path', async () => {
   const dom = new JSDOM('<!doctype html><body></body>', {
     runScripts: 'dangerously',
-    url: 'https://overexposed.app/sign-in?returnTo=%2FABC-123&splashScreen=%2Fimages%2Fsplash-screens%2Ftruth-or-dare-settings.png'
+    url: 'https://overexposed.app/sign-in?returnTo=%2FABC-123&splashScreen=%2Fimages%2Fsplash-screens%2Fparty-games%2Ftruth-or-dare%2Fsettings.png'
   });
   const { window } = dom;
   let popupRow = null;
@@ -1795,7 +1795,7 @@ test('participant lobby leave removes its auth return path', async () => {
     assert.equal(searchParams.get('returnTo'), null);
     assert.equal(
       searchParams.get('splashScreen'),
-      '/images/splash-screens/truth-or-dare-settings.png'
+      '/images/splash-screens/party-games/truth-or-dare/settings.png'
     );
   } finally {
     dom.window.close();

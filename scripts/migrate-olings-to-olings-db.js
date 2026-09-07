@@ -8,7 +8,6 @@ const OLING_COLLECTIONS = [
   'oling-build-sets',
   'oling-eggs',
   'oling-hatch-receipts',
-  'oling-personalities',
   'oling-traits'
 ];
 

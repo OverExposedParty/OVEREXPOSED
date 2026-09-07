@@ -61,17 +61,17 @@ function getPartyMetaImagePath(gamemode, stateKey) {
 
 function getWaitingRoomSplashScreen(gamemode) {
   if (!PARTY_GAME_MODELS_BY_GAMEMODE[gamemode]) {
-    return '/images/splash-screens/overexposed.png';
+    return '/images/splash-screens/core/overexposed.png';
   }
 
-  const splashScreen = `/images/splash-screens/${gamemode}.png`;
+  const splashScreen = `/images/splash-screens/party-games/${gamemode}/game.png`;
   const absolutePath = path.join(
     PUBLIC_DIRECTORY,
     splashScreen.replace(/^\//, '')
   );
   return fs.existsSync(absolutePath)
     ? splashScreen
-    : '/images/splash-screens/overexposed.png';
+    : '/images/splash-screens/core/overexposed.png';
 }
 
 async function getPartySessionByGamemode(gamemode, partyCode) {
@@ -224,7 +224,7 @@ function renderWaitingRoomPage(meta) {
     __META_TWITTER_IMAGE__: meta.ogImage,
     __META_CANONICAL_URL__: meta.url,
     __WAITING_ROOM_SPLASH_SCREEN__:
-      meta.splashScreen || '/images/splash-screens/overexposed.png',
+      meta.splashScreen || '/images/splash-screens/core/overexposed.png',
     __WAITING_ROOM_PRIMARY_COLOUR__: meta.primaryColour || '#999999',
     __WAITING_ROOM_SECONDARY_COLOUR__: meta.secondaryColour || '#666666'
   };

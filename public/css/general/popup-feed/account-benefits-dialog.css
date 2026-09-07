@@ -39,7 +39,7 @@
   aspect-ratio: 1 / 1;
   align-items: center;
   background: var(--secondarybackgroundcolour)
-    url('/images/olings/gui/general-background.jpg') center / cover no-repeat;
+    url('/images/olings/lab/gui/general-background.jpg') center / cover no-repeat;
   display: flex;
   justify-content: center;
   margin: 0 -18px 10px;

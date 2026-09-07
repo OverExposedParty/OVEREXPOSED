@@ -74,6 +74,75 @@ function getPartyPlayerAccountId(player) {
   return player?.identity?.accountId ?? player?.accountId ?? null;
 }
 
+function getStoredOnlineAccountId() {
+  const storedAccount = getStoredOnlineAccount();
+  return (
+    storedAccount?.id || storedAccount?._id || storedAccount?.accountId || null
+  );
+}
+
+function resolveOnlinePartyActorId(
+  party = typeof currentPartyData === 'undefined' ? null : currentPartyData,
+  preferredComputerId = typeof deviceId === 'undefined' ? null : deviceId
+) {
+  const players = Array.isArray(party?.players) ? party.players : [];
+  const preferredPlayer = players.find(
+    (player) =>
+      preferredComputerId &&
+      String(getPartyPlayerComputerId(player)) === String(preferredComputerId)
+  );
+  if (preferredPlayer) return getPartyPlayerComputerId(preferredPlayer);
+
+  const accountId = getStoredOnlineAccountId();
+  const accountPlayer = players.find(
+    (player) =>
+      accountId &&
+      String(getPartyPlayerAccountId(player) || '') === String(accountId)
+  );
+  if (accountPlayer) return getPartyPlayerComputerId(accountPlayer);
+
+  return players.length > 0 ? null : preferredComputerId;
+}
+
+function isCurrentOnlinePartyHost(
+  party = typeof currentPartyData === 'undefined' ? null : currentPartyData
+) {
+  const hostComputerId = party?.state?.hostComputerId ?? null;
+  const actorId = resolveOnlinePartyActorId(party);
+  return Boolean(
+    hostComputerId && actorId && String(hostComputerId) === String(actorId)
+  );
+}
+
+function createOnlinePartyHostRequiredError(action = 'perform this action') {
+  const error = new Error(`Only the host can ${action}.`);
+  error.status = 403;
+  error.code = 'party_host_required';
+  return error;
+}
+
+function requireCurrentOnlinePartyHost(party, action) {
+  if (isCurrentOnlinePartyHost(party)) {
+    return resolveOnlinePartyActorId(party);
+  }
+  throw createOnlinePartyHostRequiredError(action);
+}
+
+function syncOnlinePartyIdentity(party) {
+  if (!party || typeof party !== 'object') return null;
+  const actorId = resolveOnlinePartyActorId(party);
+  const hostComputerId = party.state?.hostComputerId ?? null;
+  if (
+    actorId &&
+    hostComputerId &&
+    String(actorId) === String(hostComputerId) &&
+    typeof hostDeviceId !== 'undefined'
+  ) {
+    hostDeviceId = hostComputerId;
+  }
+  return actorId;
+}
+
 function getPartyHostPlayer(party) {
   const hostComputerId = party?.state?.hostComputerId;
   if (!hostComputerId || !Array.isArray(party?.players)) return null;
@@ -107,7 +176,9 @@ async function getCurrentOnlineAccountId() {
     });
     const payload = await response.json().catch(() => ({}));
     const freshAccount = payload?.account || null;
-    return freshAccount?.id || freshAccount?._id || freshAccount?.accountId || null;
+    return (
+      freshAccount?.id || freshAccount?._id || freshAccount?.accountId || null
+    );
   } catch {
     return null;
   }
@@ -186,6 +257,12 @@ window.resolveOnlineUsername = resolveOnlineUsername;
 window.getStoredUserIconString = getStoredUserIconString;
 window.getPartyPlayerComputerId = getPartyPlayerComputerId;
 window.getPartyPlayerAccountId = getPartyPlayerAccountId;
+window.getStoredOnlineAccountId = getStoredOnlineAccountId;
+window.resolveOnlinePartyActorId = resolveOnlinePartyActorId;
+window.isCurrentOnlinePartyHost = isCurrentOnlinePartyHost;
+window.createOnlinePartyHostRequiredError = createOnlinePartyHostRequiredError;
+window.requireCurrentOnlinePartyHost = requireCurrentOnlinePartyHost;
+window.syncOnlinePartyIdentity = syncOnlinePartyIdentity;
 window.getPartyHostPlayer = getPartyHostPlayer;
 window.getPartyOriginalHostAccountId = getPartyOriginalHostAccountId;
 window.getCurrentOnlineAccountId = getCurrentOnlineAccountId;

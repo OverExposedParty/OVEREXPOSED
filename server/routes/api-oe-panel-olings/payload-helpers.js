@@ -250,12 +250,6 @@ function createOePanelOlingPayloadHelpers(context) {
       )
         ? parseOePanelJsonInput(body.metadataJson, {})
         : existing?.metadata || {};
-      const personalityPool = Object.prototype.hasOwnProperty.call(
-        body,
-        'personalityPool'
-      )
-        ? normalizeOePanelList(body.personalityPool)
-        : existing?.personalityPool || [];
 
       if (!key) return { error: 'Egg key is required.' };
       if (!name) return { error: 'Egg name is required.' };
@@ -290,7 +284,6 @@ function createOePanelOlingPayloadHelpers(context) {
           enabled,
           rarityOdds,
           setKeys,
-          personalityPool,
           assets,
           metadata
         },

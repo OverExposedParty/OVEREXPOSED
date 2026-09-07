@@ -298,13 +298,13 @@ test('switch destinations send the host to settings and guests to the lobby', ()
   );
   assert.equal(
     window.getPartySwitchSplashScreen(transition),
-    '/images/splash-screens/mafia-settings.png'
+    '/images/splash-screens/party-games/mafia/settings.png'
   );
   context.deviceId = 'guest-1';
   assert.equal(window.getPartySwitchDestination(transition), '/ABC-123');
   assert.equal(
     window.getPartySwitchSplashScreen(transition),
-    '/images/splash-screens/mafia.png'
+    '/images/splash-screens/party-games/mafia/game.png'
   );
 });
 
@@ -327,7 +327,7 @@ test('switched guests transition into the new lobby with its game splash', () =>
   assert.deepEqual(transitions, [
     {
       destination: '/ABC-123',
-      splashScreen: '/images/splash-screens/mafia.png'
+      splashScreen: '/images/splash-screens/party-games/mafia/game.png'
     }
   ]);
 });
@@ -391,7 +391,7 @@ test('offline game changes navigate to settings without calling the online switc
   assert.deepEqual(transitions, [
     {
       destination: '/paranoia/settings?playMode=offline',
-      splashScreen: '/images/splash-screens/paranoia-settings.png'
+      splashScreen: '/images/splash-screens/party-games/paranoia/settings.png'
     }
   ]);
   assert.deepEqual(

@@ -1,0 +1,21 @@
+{
+  "pods": [
+    {
+      "key": "oling_pod",
+      "revision": 1,
+      "name": "Disposable Oling Pod",
+      "description": "Stores one Oling and breaks when that Oling is released.",
+      "rarity": "common",
+      "lifecycle": { "onRelease": "destroy", "uses": 1 },
+      "assets": {
+        "empty": "/images/olings/lab/items/oling-pods/disposable/artwork.svg",
+        "occupied": null,
+        "layers": {
+          "back": "/images/olings/lab/items/oling-pods/disposable/layers/back.svg",
+          "front": "/images/olings/lab/items/oling-pods/disposable/layers/front.svg",
+          "base": "/images/olings/lab/items/oling-pods/disposable/layers/base.svg"
+        }
+      }
+    }
+  ]
+}

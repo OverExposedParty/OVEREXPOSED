@@ -145,14 +145,14 @@ test('protected-page actions transition through the homepage splash', () => {
   assert.deepEqual(signIn.transitions, [
     {
       destination: signIn.loginUrl,
-      splashScreen: '/images/splash-screens/overexposed.png'
+      splashScreen: '/images/splash-screens/core/overexposed.png'
     }
   ]);
   assert.equal(signIn.disabledActions.length, 2);
   assert.deepEqual(mainMenu.transitions, [
     {
       destination: '/',
-      splashScreen: '/images/splash-screens/overexposed.png'
+      splashScreen: '/images/splash-screens/core/overexposed.png'
     }
   ]);
   assert.equal(mainMenu.disabledActions.length, 2);

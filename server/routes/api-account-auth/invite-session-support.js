@@ -43,8 +43,8 @@ function createInviteSessionSupport(context) {
       return {
         ...session,
         modeName: 'Battle Olings',
-        primaryColour: '#FFB5C8',
-        secondaryColour: '#E87398'
+        primaryColour: '#6EA8FF',
+        secondaryColour: '#4B73B5'
       };
     }
     const mode = [...partyInviteModes.values()].find(

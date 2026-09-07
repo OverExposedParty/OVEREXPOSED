@@ -1,0 +1,57 @@
+{
+  "wallpapers": [
+    {
+      "key": "brick",
+      "name": "Brick",
+      "image": "/images/olings/lab/wallpapers/brick/tile.svg",
+      "preview": "/images/olings/lab/wallpapers/brick/tile.svg",
+      "variants": {},
+      "render": {
+        "mode": "tile",
+        "widthCells": 1,
+        "heightCells": 1,
+        "position": "left bottom",
+        "backgroundColour": "#e8f1ed"
+      }
+    },
+    {
+      "key": "concrete",
+      "name": "Concrete",
+      "image": "/images/olings/lab/wallpapers/concrete/tile.svg",
+      "preview": "/images/olings/lab/wallpapers/concrete/tile.svg",
+      "variants": {},
+      "render": {
+        "mode": "tile",
+        "widthCells": 1,
+        "heightCells": 1,
+        "position": "left bottom",
+        "backgroundColour": "#aeb5b7"
+      }
+    },
+    {
+      "key": "prototype",
+      "name": "Prototype",
+      "image": "/images/olings/lab/wallpapers/prototype/tile.svg",
+      "preview": "/images/olings/lab/wallpapers/prototype/tile.svg",
+      "variants": {
+        "orange": {
+          "name": "Orange",
+          "swatchColour": "#F28C38",
+          "colours": { "primary": "#F28C38" }
+        },
+        "red": {
+          "name": "Red",
+          "swatchColour": "#E65353",
+          "colours": { "primary": "#E65353" }
+        }
+      },
+      "render": {
+        "mode": "tile",
+        "widthCells": 1,
+        "heightCells": 1,
+        "position": "left bottom",
+        "backgroundColour": "#f7fafc"
+      }
+    }
+  ]
+}

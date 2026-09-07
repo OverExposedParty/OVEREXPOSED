@@ -1,0 +1,452 @@
+.oe-tutorial-root {
+  --oe-tutorial-primary-colour: var(--primarycolour, var(--primarypagecolour));
+  --oe-tutorial-page-primary-colour: var(--primarypagecolour);
+  --oe-tutorial-page-secondary-colour: var(--secondarypagecolour);
+  --oe-tutorial-background-colour: var(--backgroundcolour);
+  --oe-tutorial-text-colour: #ffffff;
+  --oe-tutorial-assistant-background-colour: #202020;
+  --oe-tutorial-assistant-background-image: url('/images/error-404/computer/screen/background.jpg');
+  position: fixed;
+  inset: 0;
+  z-index: 2147483602;
+  pointer-events: none;
+}
+
+.oe-tutorial-backdrop {
+  --oe-tutorial-backdrop-blur: 7px;
+  --oe-tutorial-backdrop-colour: rgb(8 10 10 / 46%);
+  position: fixed;
+  inset: 0;
+  z-index: 2147483600;
+  background: var(--oe-tutorial-backdrop-colour);
+  -webkit-backdrop-filter: blur(var(--oe-tutorial-backdrop-blur));
+  backdrop-filter: blur(var(--oe-tutorial-backdrop-blur));
+  pointer-events: none;
+}
+
+.oe-tutorial-backdrop.is-contained {
+  position: absolute;
+}
+
+.oe-tutorial-backdrop[hidden] {
+  display: none;
+}
+
+.is-oe-tutorial-elevated {
+  z-index: 2147483601 !important;
+}
+
+body.has-oe-tutorial .header {
+  z-index: 2147483603;
+}
+
+.oe-tutorial-root.is-modal {
+  pointer-events: auto;
+}
+
+.oe-tutorial-root.is-collapsed {
+  pointer-events: none;
+}
+
+.oe-tutorial-root:not(.is-active) .oe-tutorial-dialogue,
+.oe-tutorial-root:not(.is-active) .oe-tutorial-target,
+.oe-tutorial-root:not(.is-active) .oe-tutorial-annotation {
+  display: none;
+}
+
+.oe-tutorial-preview {
+  position: fixed;
+  top: calc(var(--headerheight) + 0.75rem);
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem 0.6rem 1rem;
+  background: var(--oe-tutorial-background-colour);
+  color: var(--oe-tutorial-text-colour);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.oe-tutorial-preview[hidden] {
+  display: none;
+}
+
+.oe-tutorial-preview a {
+  padding: 0.42rem 0.65rem;
+  background: var(--oe-tutorial-page-primary-colour);
+  color: var(--oe-tutorial-background-colour);
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.oe-tutorial-target {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oe-tutorial-target.is-visible {
+  opacity: 1;
+}
+
+.oe-tutorial-target ellipse {
+  fill: none;
+  stroke: var(--oe-tutorial-page-primary-colour);
+  stroke-linecap: round;
+  stroke-width: 5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  animation: oe-tutorial-draw 500ms ease-out forwards;
+}
+
+.oe-tutorial-target ellipse + ellipse {
+  stroke: var(--oe-tutorial-page-secondary-colour);
+  stroke-width: 2;
+  animation-delay: 90ms;
+}
+
+.oe-tutorial-annotation {
+  position: fixed;
+  display: block;
+  background: var(
+    --oe-tutorial-annotation-colour,
+    var(--oe-tutorial-page-primary-colour)
+  );
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask-image: var(--oe-tutorial-annotation-image);
+  mask-image: var(--oe-tutorial-annotation-image);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  transform-origin: center;
+}
+
+.oe-tutorial-target.has-annotation ellipse {
+  display: none;
+}
+
+.oe-tutorial-annotation.is-visible {
+  animation: oe-tutorial-annotation-in 420ms ease-out forwards;
+}
+
+@keyframes oe-tutorial-annotation-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.oe-tutorial-dialogue {
+  --oe-tutorial-edge-margin: clamp(0.75rem, 2vw, 1.5rem);
+  position: fixed;
+  z-index: 3;
+  right: var(--oe-tutorial-edge-margin);
+  bottom: var(--oe-tutorial-edge-margin);
+  left: var(--oe-tutorial-edge-margin);
+  display: flex;
+  height: clamp(8rem, 11vw, 10rem);
+  color: var(--oe-tutorial-text-colour);
+  pointer-events: auto;
+  transition: transform 280ms ease-in-out;
+}
+
+.oe-tutorial-root.is-collapsed .oe-tutorial-dialogue {
+  transform: translateY(calc(100% + var(--oe-tutorial-edge-margin)));
+}
+
+.oe-tutorial-root[data-dialogue-placement='top'] .oe-tutorial-dialogue {
+  top: calc(var(--headerheight, 0px) + var(--oe-tutorial-edge-margin));
+  bottom: auto;
+}
+
+.oe-tutorial-root[data-dialogue-placement='top'].is-collapsed
+  .oe-tutorial-dialogue {
+  transform: translateY(calc(-100% - var(--oe-tutorial-edge-margin)));
+}
+
+.oe-tutorial-root[data-dialogue-placement='top'] .oe-tutorial-notch {
+  top: auto;
+  bottom: -2.25rem;
+  border-radius: 0 0 0.65rem 0.65rem;
+}
+
+.oe-tutorial-notch {
+  position: absolute;
+  top: -2.25rem;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  width: 7.5rem;
+  height: 2.25rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 0.65rem 0.65rem 0 0;
+  background: var(--oe-tutorial-background-colour);
+  color: var(--oe-tutorial-page-primary-colour);
+  font: inherit;
+  cursor: pointer;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.oe-tutorial-notch span {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oe-tutorial-assistant {
+  display: grid;
+  flex: 0 0 auto;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  grid-template-rows: auto minmax(0, 1fr);
+  justify-items: center;
+  overflow: hidden;
+  padding: clamp(0.55rem, 1vw, 0.8rem);
+  background-color: var(--oe-tutorial-assistant-background-colour);
+  background-image: var(--oe-tutorial-assistant-background-image);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.oe-tutorial-assistant p {
+  z-index: 1;
+  margin: 0;
+  color: var(--oe-tutorial-text-colour);
+  font-size: clamp(0.58rem, 0.8vw, 0.72rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oe-tutorial-assistant img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.oe-tutorial-message {
+  position: relative;
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.8rem, 2vw, 2rem);
+  padding: clamp(0.9rem, 1.7vw, 1.5rem);
+  background: var(--oe-tutorial-background-colour);
+}
+
+.oe-tutorial-skip,
+.oe-tutorial-next {
+  border: 0;
+  background: var(--oe-tutorial-page-primary-colour);
+  color: var(--oe-tutorial-background-colour);
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oe-tutorial-skip {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--oe-tutorial-text-colour);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.oe-tutorial-copy-block {
+  min-width: 0;
+}
+
+.oe-tutorial-eyebrow,
+.oe-tutorial-copy-block h1,
+.oe-tutorial-copy-block p {
+  margin: 0;
+}
+
+.oe-tutorial-eyebrow {
+  margin-bottom: 0.32rem;
+  color: var(--oe-tutorial-primary-colour);
+  font-size: clamp(0.6rem, 0.85vw, 0.74rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.oe-tutorial-copy-block h1 {
+  color: var(--oe-tutorial-page-primary-colour);
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  line-height: 1.05;
+}
+
+.oe-tutorial-copy-block > p:last-child {
+  max-width: 54rem;
+  margin-top: 0.4rem;
+  color: var(--oe-tutorial-text-colour);
+  font-family: 'LemonMilkLight', sans-serif;
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  line-height: 1.4;
+}
+
+.oe-tutorial-controls {
+  display: grid;
+  min-width: clamp(8rem, 11vw, 10rem);
+  justify-items: stretch;
+  gap: 0.55rem;
+}
+
+.oe-tutorial-progress {
+  color: var(--oe-tutorial-text-colour);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: right;
+}
+
+.oe-tutorial-next {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.8rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .oe-tutorial-preview a:hover,
+  .oe-tutorial-notch:hover,
+  .oe-tutorial-next:hover {
+    background: var(--oe-tutorial-page-secondary-colour);
+    color: var(--oe-tutorial-background-colour);
+  }
+
+  .oe-tutorial-skip:hover {
+    background: transparent;
+    color: var(--oe-tutorial-page-secondary-colour);
+  }
+}
+
+.oe-tutorial-next:focus-visible,
+.oe-tutorial-skip:focus-visible,
+.oe-tutorial-notch:focus-visible,
+.oe-tutorial-preview a:focus-visible {
+  outline: 4px solid var(--oe-tutorial-page-secondary-colour);
+  outline-offset: -4px;
+}
+
+@keyframes oe-tutorial-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .oe-tutorial-preview {
+    top: calc(var(--headerheight) + 0.5rem);
+    width: calc(100% - 1rem);
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
+
+  .oe-tutorial-dialogue {
+    --oe-tutorial-edge-margin: 0.5rem;
+    right: 0.5rem;
+    bottom: var(--oe-tutorial-edge-margin);
+    left: 0.5rem;
+    height: clamp(10rem, 36vw, 11rem);
+  }
+
+  .oe-tutorial-assistant {
+    width: clamp(5.25rem, 24vw, 7rem);
+    aspect-ratio: auto;
+    padding: 0.65rem 0.45rem;
+  }
+
+  .oe-tutorial-assistant p {
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+  }
+
+  .oe-tutorial-message {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 0.75rem;
+    padding: 2.3rem 0.8rem 0.7rem;
+  }
+
+  .oe-tutorial-copy-block h1 {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+
+  .oe-tutorial-copy-block > p:last-child {
+    margin-top: 0.4rem;
+    font-size: clamp(0.66rem, 3vw, 0.78rem);
+    line-height: 1.35;
+  }
+
+  .oe-tutorial-eyebrow {
+    font-size: 0.58rem;
+  }
+
+  .oe-tutorial-controls {
+    grid-template-columns: 1fr auto;
+    min-width: 0;
+    align-items: center;
+  }
+
+  .oe-tutorial-progress {
+    text-align: left;
+  }
+
+  .oe-tutorial-next {
+    min-height: 2.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oe-tutorial-dialogue,
+  .oe-tutorial-target ellipse,
+  .oe-tutorial-annotation {
+    transition: none;
+  }
+
+  .oe-tutorial-target ellipse,
+  .oe-tutorial-annotation {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}

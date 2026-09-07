@@ -50,105 +50,69 @@
 
 .oling-lab-explorer-adventure-detail {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   max-height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto clamp(7rem, 34.7vw, 13.625rem) auto minmax(0, 1fr);
-  gap: 0.75rem;
-  padding: 0.75rem;
-  box-sizing: border-box;
-  background: var(--oling-lab-menu-secondary-colour);
-}
-
-.oling-lab-explorer-adventure-header {
-  position: relative;
-  width: 100%;
-  display: grid;
-  min-height: 2rem;
-  place-items: center;
+  grid-template-rows: auto auto;
+  align-content: start;
+  gap: 0.65rem;
+  padding: 0;
+  overflow-y: auto;
+  background: transparent;
 }
 
 .oling-lab-explorer-adventure-detail h3 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: clamp(0.8rem, 2.9vw, 1.05rem);
+  line-height: 1.05;
   text-align: center;
   text-transform: uppercase;
 }
 
 .oling-lab-explorer-adventure-back {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 1.6rem;
-  min-height: 1.6rem !important;
-  padding: 0 !important;
-  transform: translateY(-50%);
-  background: transparent !important;
-}
-
-.oling-lab-explorer-adventure-back span {
-  display: none;
-}
-
-.oling-lab-explorer-adventure-back::before {
-  width: 0;
-  height: 0;
-  content: '';
-  border-top: 0.55rem solid transparent;
-  border-bottom: 0.55rem solid transparent;
-  border-right: 0.8rem solid var(--oling-lab-menu-primary-colour);
-}
-
-.oling-lab-explorer-adventure-setup {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
-}
-
-.oling-lab-explorer-adventure-image,
-.oling-lab-explorer-oling-slot {
-  min-height: 7rem;
-  display: grid;
-  place-items: center;
-  background: rgb(0 0 0 / 16%);
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.oling-lab-explorer-oling-slot {
-  background:
-    linear-gradient(rgb(22 31 36 / 32%), rgb(22 31 36 / 32%)),
-    url('/images/olings/gui/general-background.jpg') center / cover no-repeat;
-}
-
-.oling-lab-explorer-oling-slot {
-  position: relative;
-  grid-template-columns: 2rem minmax(0, 1fr) 2rem;
-  grid-template-rows: minmax(0, 1fr) auto;
-  padding: 0.4rem;
-}
-
-.oling-lab-explorer-oling-preview {
-  grid-column: 2;
   grid-row: 1;
-  width: 100%;
-  height: 100%;
-  background: transparent;
+  justify-self: start;
 }
 
-.oling-lab-explorer-oling-slot > strong {
-  grid-column: 1 / -1;
-  grid-row: 2;
+.oling-lab-explorer-detail-preview {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  display: block;
+  overflow: hidden;
+  padding: 0.55rem;
+  background:
+    linear-gradient(rgb(22 31 36 / 42%), rgb(22 31 36 / 42%)),
+    url('/images/olings/lab/gui/egg-background.jpg') center / cover no-repeat,
+    rgb(22 31 36 / 82%);
   text-align: center;
   text-transform: uppercase;
 }
 
-.oling-lab-explorer-oling-arrow {
+.oling-lab-explorer-detail-preview .oling-lab-explorer-oling-preview {
+  top: 0.55rem;
+  bottom: 2.25rem;
+  max-width: calc(100% - 7rem);
+}
+
+.oling-lab-explorer-detail-preview > strong {
+  right: 3.5rem;
+  bottom: 1.15rem;
+  left: 3.5rem;
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: clamp(0.95rem, 3.4vw, 1.3rem);
+  line-height: 1;
+}
+
+.oling-lab-explorer-detail-preview .oling-lab-explorer-oling-arrow {
   z-index: 2;
-  width: 1.7rem;
-  min-height: 2.2rem !important;
+  width: 2.5rem;
+  min-height: 3rem !important;
   padding: 0 !important;
   background: transparent !important;
 }
@@ -165,72 +129,168 @@
   border-bottom: 0.45rem solid transparent;
 }
 
-.oling-lab-explorer-oling-arrow.is-previous {
-  grid-column: 1;
-  grid-row: 1;
-}
-
 .oling-lab-explorer-oling-arrow.is-previous::before {
   border-right: 0.65rem solid var(--oling-lab-menu-primary-colour);
-}
-
-.oling-lab-explorer-oling-arrow.is-next {
-  grid-column: 3;
-  grid-row: 1;
 }
 
 .oling-lab-explorer-oling-arrow.is-next::before {
   border-left: 0.65rem solid var(--oling-lab-menu-primary-colour);
 }
 
-.oling-lab-explorer-adventure-requirements {
+.oling-lab-explorer-detail-panels {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.4rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
 }
 
-.oling-lab-explorer-adventure-requirements .oling-lab-detail-row {
-  min-height: 0;
+.oling-lab-explorer-oling-status {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0.7rem 0.85rem;
+  background: rgb(255 255 255 / 7%);
+  color: var(--oling-lab-menu-primary-colour);
+  text-align: center;
+}
+
+.oling-lab-explorer-oling-status > div {
+  min-width: 0;
   display: grid;
   justify-items: center;
-  gap: 0.2rem;
-  padding: 0.35rem;
-  background: rgb(0 0 0 / 16%);
+  gap: 0.15rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.oling-lab-explorer-oling-status span {
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.oling-lab-explorer-oling-status strong {
+  font-size: 0.82rem;
+  line-height: 1;
+}
+
+.oling-lab-explorer-oling-status:is(
+    .is-resting,
+    .is-low-energy,
+    .is-unavailable
+  )
+  strong {
+  color: var(--warningcolour);
+}
+
+.oling-lab-explorer-detail-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.65rem;
+  background-color: rgb(255 255 255 / 7%);
+  color: var(--oling-lab-menu-primary-colour);
   text-align: center;
 }
 
-.oling-lab-explorer-adventure-requirements .oling-lab-detail-row strong {
-  text-align: center;
+.oling-lab-explorer-detail-adventure {
+  display: grid;
+  place-items: center;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.oling-lab-explorer-adventure-rewards {
+.oling-lab-explorer-detail-adventure h3 {
+  max-width: calc(100% - 1rem);
+  color: var(--oling-lab-menu-primary-colour);
+  text-shadow: 0 0.1rem 0.25rem rgb(0 0 0 / 65%);
+}
+
+.oling-lab-explorer-detail-energy {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--oling-energy-primary-colour);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.oling-lab-explorer-detail-energy-icon {
+  width: 1.25rem;
+  height: 1.65rem;
+  object-fit: contain;
+}
+
+.oling-lab-explorer-detail-duration,
+.oling-lab-explorer-detail-completed {
+  display: grid;
+  gap: 0.1rem;
+  font-size: 0.66rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oling-lab-explorer-detail-duration {
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0.6rem;
+  left: 0.65rem;
+  justify-items: center;
+  color: var(--oling-lab-menu-primary-colour);
+  text-shadow: 0 0.1rem 0.25rem rgb(0 0 0 / 65%);
+}
+
+.oling-lab-explorer-detail-completed {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.65rem;
+  justify-items: start;
+  color: var(--oling-lab-menu-primary-colour);
+  text-align: left;
+  text-shadow: 0 0.1rem 0.25rem rgb(0 0 0 / 65%);
+}
+
+.oling-lab-explorer-detail-duration strong,
+.oling-lab-explorer-detail-completed strong {
+  font-size: 0.76rem;
+}
+
+.oling-lab-explorer-detail-rewards {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  text-align: left;
+}
+
+.oling-lab-explorer-detail-rewards h3 {
+  text-align: left;
+}
+
+.oling-lab-explorer-detail-reward-list {
+  min-height: 0;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: rgb(0 0 0 / 16%);
+  gap: 0.4rem;
 }
 
-.oling-lab-explorer-adventure-rewards > strong {
-  width: 100%;
-  text-transform: uppercase;
-}
-
-.oling-lab-explorer-adventure-rewards > div {
-  display: grid;
-  align-items: center;
-  padding: 0.4rem 0.55rem;
+.oling-lab-explorer-detail-reward-list span {
+  padding: 0.4rem 0.5rem;
   background: var(--backgroundcolour);
   color: var(--oling-lab-menu-primary-colour);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 900;
+  line-height: 1;
   text-transform: uppercase;
-}
-
-.oling-lab-explorer-adventure-rewards > div span {
-  color: inherit;
 }
 
 .oling-lab-explorer-adventure-start {

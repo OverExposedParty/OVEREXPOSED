@@ -1,0 +1,60 @@
+.oling-lab-oling-hero .oling-lab-oling-name-editor {
+  right: 3.4rem;
+  left: 3.4rem;
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 1.75rem;
+  transform: none;
+}
+
+.oling-lab-oling-hero .oling-lab-oling-name-editor strong {
+  position: absolute;
+  left: 50%;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  line-height: 1.75rem;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor button {
+  position: absolute;
+  top: 0;
+  right: auto;
+  left: calc(50% + var(--oling-name-control-offset, 2rem));
+  width: 1.75rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  min-height: 1.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transform: none;
+  background: transparent;
+  color: var(--oling-lab-menu-primary-colour);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor button.is-cancel {
+  left: calc(50% + var(--oling-name-control-offset, 2rem));
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor button.is-save {
+  left: calc(50% + var(--oling-name-control-offset, 2rem) + 2rem);
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) {
+  height: 2.25rem;
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) input {
+  display: block;
+  width: 16rem;
+  height: 2.25rem;
+  margin-inline: auto;
+}
+.oling-lab-oling-hero .oling-lab-oling-name-editor:has(input) button {
+  top: 0;
+  width: 2.25rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  min-height: 2.25rem;
+}

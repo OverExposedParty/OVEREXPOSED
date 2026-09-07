@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="en" data-required-orientation="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Olings Clash | OVEREXPOSED</title>
+    <meta name="description" content="Play Olings Clash." />
+    <meta name="author" content="OVEREXPOSED" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link
+      rel="preload"
+      href="/images/splash-screens/olings/clash/game.png"
+      as="image"
+      fetchpriority="high"
+    />
+
+    <link rel="stylesheet" href="/css/general/header/header.css" />
+    <link
+      rel="stylesheet"
+      href="/css/olings/shared/oling-flight-motion.css?v=2026-08-04-01"
+    />
+    <link rel="stylesheet" href="/build/olings/clash/clash.css" />
+
+    <link
+      id="favicon-ico"
+      rel="icon"
+      type="image/x-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon.ico"
+    />
+    <link
+      id="favicon-16"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-16x16.png"
+    />
+    <link
+      id="favicon-32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/favicon-32x32.png"
+    />
+    <link
+      id="favicon-apple"
+      rel="apple-touch-icon"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/apple-touch-icon.png"
+    />
+    <link
+      id="favicon-manifest"
+      rel="manifest"
+      href="/images/meta/favicons/party-games/truth-or-dare/lobby/site.webmanifest"
+    />
+  </head>
+
+  <body>
+    <div
+      class="splash-screen-container-static"
+      id="splash-screen-container-static"
+    >
+      <img
+        src="/images/splash-screens/olings/clash/game.png"
+        alt="Oling Clash loading screen"
+        loading="eager"
+      />
+    </div>
+    <div class="splash-screen-container" id="splash-screen-container">
+      <img
+        src="/images/splash-screens/olings/clash/game.png"
+        alt="Oling Clash loading screen"
+        loading="eager"
+      />
+      <p></p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main
+      class="olings-clash-page is-game"
+      data-template="olings-clash"
+      data-orientation-guard-target
+      aria-label="Olings Clash"
+    >
+      <section
+        class="olings-clash-game"
+        data-clash-game
+        data-clash-background="the-clashroom"
+        aria-label="Oling Clash game"
+        aria-hidden="false"
+      >
+        <div class="olings-clash-game__surface">
+          <div class="olings-clash-scene" aria-hidden="true">
+            <img
+              class="olings-clash-scene-layer is-far-background"
+              data-clash-scene-layer="farBackground"
+              src="/images/olings/clash/backgrounds/the-clashroom/far-background.svg"
+              alt=""
+            />
+            <img
+              class="olings-clash-scene-layer is-background"
+              data-clash-scene-layer="background"
+              src="/images/olings/clash/backgrounds/the-clashroom/background.svg"
+              alt=""
+            />
+            <img
+              class="olings-clash-scene-layer is-stage"
+              data-clash-scene-layer="stage"
+              src="/images/olings/clash/backgrounds/the-clashroom/stage.svg"
+              alt=""
+            />
+            <img
+              class="olings-clash-scene-layer is-foreground"
+              data-clash-scene-layer="foreground"
+              src="/images/olings/clash/backgrounds/the-clashroom/foreground.svg"
+              alt=""
+            />
+          </div>
+
+          <section
+            class="olings-clash-roster is-local"
+            aria-label="Your Clash team"
+            data-clash-roster="local"
+          >
+            <article
+              class="olings-clash-roster-slot is-active"
+              data-clash-roster-slot="active"
+              data-move-attack="MEND"
+              data-move-draw="CANOPY"
+              data-move-guard="CLEANSE"
+              data-move-skill="WILD GROWTH"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/moss-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/moss-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/moss-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/moss-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>MOSSY</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div class="olings-clash-status-row">
+                  <div
+                    class="olings-clash-effects"
+                    role="list"
+                    aria-label="Mossy active effects"
+                    data-clash-effects
+                  ></div>
+                  <button
+                    class="olings-clash-tag"
+                    type="button"
+                    aria-label="Tag Mossy into battle"
+                    title="Tag Mossy"
+                    data-clash-tag-button
+                    data-team-slot="0"
+                    disabled
+                  >
+                    <svg
+                      class="olings-clash-tag__icon"
+                      viewBox="0 0 256 256"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <use
+                        class="olings-clash-tag__secondary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-secondary"
+                      ></use>
+                      <use
+                        class="olings-clash-tag__primary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-primary"
+                      ></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="olings-clash-roster-slot"
+              data-clash-roster-slot="bench-1"
+              data-move-attack="CRUSH"
+              data-move-draw="HARDEN"
+              data-move-guard="FORTIFY"
+              data-move-skill="REINFORCE"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/stone-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/stone-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/stone-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/stone-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>PEBBLE</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div class="olings-clash-status-row">
+                  <div
+                    class="olings-clash-effects"
+                    role="list"
+                    aria-label="Pebble active effects"
+                    data-clash-effects
+                  ></div>
+                  <button
+                    class="olings-clash-tag"
+                    type="button"
+                    aria-label="Tag Pebble into battle"
+                    title="Tag Pebble"
+                    data-clash-tag-button
+                    data-team-slot="1"
+                    disabled
+                  >
+                    <svg
+                      class="olings-clash-tag__icon"
+                      viewBox="0 0 256 256"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <use
+                        class="olings-clash-tag__secondary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-secondary"
+                      ></use>
+                      <use
+                        class="olings-clash-tag__primary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-primary"
+                      ></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="olings-clash-roster-slot"
+              data-clash-roster-slot="bench-2"
+              data-move-attack="ERUPTION"
+              data-move-draw="IGNITE"
+              data-move-guard="RETALIATE"
+              data-move-skill="SCORCH"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/magma-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/magma-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/magma-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/magma-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>EMBER</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div class="olings-clash-status-row">
+                  <div
+                    class="olings-clash-effects"
+                    role="list"
+                    aria-label="Ember active effects"
+                    data-clash-effects
+                  ></div>
+                  <button
+                    class="olings-clash-tag"
+                    type="button"
+                    aria-label="Tag Ember into battle"
+                    title="Tag Ember"
+                    data-clash-tag-button
+                    data-team-slot="2"
+                    disabled
+                  >
+                    <svg
+                      class="olings-clash-tag__icon"
+                      viewBox="0 0 256 256"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <use
+                        class="olings-clash-tag__secondary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-secondary"
+                      ></use>
+                      <use
+                        class="olings-clash-tag__primary"
+                        href="/images/olings/clash/ui/actions/tag.svg#tag-primary"
+                      ></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+            <div
+              class="olings-clash-tag-resource is-local"
+              data-clash-tag-resource="local"
+              aria-label="Your Tag charges"
+              hidden
+            >
+              <span class="olings-clash-tag-resource__section">
+                <span class="olings-clash-tag-resource__label">TAG</span>
+                <span
+                  class="olings-clash-tag-resource__pips"
+                  data-clash-tag-charge-pips
+                  aria-hidden="true"
+                ></span>
+              </span>
+              <span
+                class="olings-clash-tag-resource__divider"
+                data-clash-tag-resource-divider
+                aria-hidden="true"
+              ></span>
+              <span class="olings-clash-tag-resource__section">
+                <small class="olings-clash-tag-resource__recharge-label"
+                  >DECISIVE</small
+                >
+                <span
+                  class="olings-clash-tag-resource__recharge-pips"
+                  data-clash-tag-recharge-pips
+                  aria-hidden="true"
+                ></span>
+              </span>
+            </div>
+          </section>
+
+          <section
+            class="olings-clash-round-display"
+            aria-label="Current Clash round and previous abilities"
+            data-clash-round-display
+          >
+            <button
+              class="olings-clash-round-ability is-local"
+              type="button"
+              data-clash-last-ability="local"
+              hidden
+            >
+              <small class="olings-clash-round-ability__label">
+                YOUR MOVE
+              </small>
+              <img
+                src=""
+                alt=""
+                draggable="false"
+                data-clash-last-ability-image
+              />
+              <span>
+                <strong data-clash-last-ability-name></strong>
+                <small data-clash-last-ability-action></small>
+              </span>
+            </button>
+            <div class="olings-clash-round-display__centre">
+              <div class="olings-clash-round-display__outcome">
+                <small>LAST ROUND</small>
+                <strong data-clash-last-outcome>NO RESULT</strong>
+              </div>
+              <div class="olings-clash-round-display__notch">
+                <small>ROUND</small>
+                <strong data-clash-round>1</strong>
+              </div>
+            </div>
+            <button
+              class="olings-clash-round-ability is-opponent"
+              type="button"
+              data-clash-last-ability="opponent"
+              hidden
+            >
+              <small class="olings-clash-round-ability__label">
+                THEIR MOVE
+              </small>
+              <img
+                src=""
+                alt=""
+                draggable="false"
+                data-clash-last-ability-image
+              />
+              <span>
+                <strong data-clash-last-ability-name></strong>
+                <small data-clash-last-ability-action></small>
+              </span>
+            </button>
+          </section>
+
+          <div class="olings-clash-decision-stack">
+            <section
+              class="olings-clash-decision-area"
+              data-clash-decision-area
+              data-clash-phase
+              data-display-mode="decision"
+              data-phase="choose-action"
+              data-phase-duration-ms="15000"
+              aria-label="Turn phase: CHOOSE ACTION"
+            >
+              <strong data-clash-decision-label data-clash-phase-label
+                >CHOOSE ACTION</strong
+              >
+              <img
+                class="olings-clash-lock-in"
+                src="/images/olings/clash/ui/icons/padlock.svg"
+                alt=""
+                draggable="false"
+                aria-hidden="true"
+                data-clash-lock-in-icon
+                hidden
+              />
+              <div
+                class="olings-clash-timer"
+                role="timer"
+                aria-label="15 seconds remaining"
+                data-clash-timer
+              >
+                <strong data-clash-timer-value>15</strong>
+              </div>
+              <small data-clash-result-detail hidden></small>
+              <div
+                class="olings-clash-ability-reveal"
+                data-clash-ability-reveal
+                aria-label="Revealed Clash abilities"
+                aria-live="polite"
+                hidden
+              >
+                <article
+                  class="olings-clash-ability-reveal__ability is-local"
+                  data-clash-revealed-ability="local"
+                >
+                  <div class="olings-clash-ability-reveal__tile">
+                    <img data-clash-revealed-ability-image alt="" />
+                    <strong data-clash-revealed-ability-name></strong>
+                  </div>
+                  <small data-clash-revealed-action></small>
+                  <div
+                    class="olings-clash-ability-reveal__effects"
+                    data-clash-revealed-effects
+                    aria-label="Effects received"
+                  ></div>
+                </article>
+                <strong
+                  class="olings-clash-ability-reveal__versus"
+                  data-clash-reveal-versus
+                  >VS</strong
+                >
+                <article
+                  class="olings-clash-ability-reveal__ability is-opponent"
+                  data-clash-revealed-ability="opponent"
+                >
+                  <div class="olings-clash-ability-reveal__tile">
+                    <img data-clash-revealed-ability-image alt="" />
+                    <strong data-clash-revealed-ability-name></strong>
+                  </div>
+                  <small data-clash-revealed-action></small>
+                  <div
+                    class="olings-clash-ability-reveal__effects"
+                    data-clash-revealed-effects
+                    aria-label="Effects received"
+                  ></div>
+                </article>
+              </div>
+            </section>
+            <aside
+              class="olings-clash-opponent-ability-explanation"
+              data-clash-opponent-ability-explanation
+              aria-live="polite"
+              hidden
+            >
+              <div class="olings-clash-action-summary__content">
+                <img
+                  class="olings-clash-action-summary__ability-icon"
+                  data-clash-opponent-ability-explanation-image
+                  alt=""
+                  draggable="false"
+                />
+                <p
+                  class="olings-clash-action-summary__copy olings-clash-opponent-ability-explanation__copy"
+                >
+                  <small>OPPONENT ABILITY APPLIED</small>
+                  <strong data-clash-opponent-ability-explanation-name></strong>
+                  <strong
+                    class="olings-clash-opponent-ability-explanation__cadence"
+                    data-clash-opponent-ability-explanation-cadence
+                    hidden
+                  ></strong>
+                  <span aria-hidden="true"> — </span>
+                  <span
+                    data-clash-opponent-ability-explanation-description
+                  ></span>
+                </p>
+              </div>
+            </aside>
+          </div>
+
+          <section
+            class="olings-clash-roster is-opponent"
+            aria-label="Opponent Clash team"
+            data-clash-roster="opponent"
+          >
+            <article
+              class="olings-clash-roster-slot is-active"
+              data-clash-roster-slot="active"
+              data-move-attack="BLOODSUCK"
+              data-move-draw="RECLAIM"
+              data-move-guard="BLOOD BANK"
+              data-move-skill="TRANSFUSION"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/vampire-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/vampire-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/vampire-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/vampire-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>FANG</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div
+                  class="olings-clash-effects"
+                  role="list"
+                  aria-label="Fang active effects"
+                  data-clash-effects
+                ></div>
+              </div>
+            </article>
+
+            <article
+              class="olings-clash-roster-slot"
+              data-clash-roster-slot="bench-1"
+              data-move-attack="SCAVENGE"
+              data-move-draw="SALVAGE"
+              data-move-guard="RETURN TO SENDER"
+              data-move-skill="JUNKYARD"
+              data-flight-type="balloons"
+              data-flight-motion="sway"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/balloons.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/trash-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/trash-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/trash-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>SCRAP</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div class="olings-clash-status-row">
+                  <span
+                    class="olings-clash-tag is-opponent"
+                    role="img"
+                    aria-label="Opponent Tag indicator"
+                    data-clash-tag-indicator
+                    data-team-slot="1"
+                    ><img
+                      class="olings-clash-tag__icon"
+                      src="/images/olings/clash/ui/actions/tag.svg"
+                      alt=""
+                      draggable="false"
+                      aria-hidden="true"
+                  /></span>
+                  <div
+                    class="olings-clash-effects"
+                    role="list"
+                    aria-label="Scrap active effects"
+                    data-clash-effects
+                  ></div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="olings-clash-roster-slot"
+              data-clash-roster-slot="bench-2"
+              data-move-attack="FRACTURE"
+              data-move-draw="READ"
+              data-move-guard="SPLINTER"
+              data-move-skill="WITHER"
+              data-flight-type="wings"
+              data-flight-motion="flutter"
+              data-flight-speed="1"
+            >
+              <div class="olings-clash-roster-slot__icon" aria-hidden="true">
+                <div class="olings-clash-oling-art">
+                  <img
+                    class="olings-clash-oling-layer is-flight"
+                    src="/images/olings/builds/flight/base/bone-wings.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-body"
+                    src="/images/olings/builds/body/base/bone-body.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-eyes"
+                    src="/images/olings/builds/eyes/base/bone-eyes.svg"
+                    alt=""
+                  />
+                  <img
+                    class="olings-clash-oling-layer is-mouth"
+                    src="/images/olings/builds/mouth/base/bone-mouth.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="olings-clash-roster-slot__status">
+                <strong>MARROW</strong>
+                <div
+                  class="olings-clash-health"
+                  role="img"
+                  data-clash-health
+                  data-max-heart-units="6"
+                  data-heart-units="6"
+                  data-overgrowth-units="0"
+                  data-shield-count="0"
+                ></div>
+                <div class="olings-clash-status-row">
+                  <span
+                    class="olings-clash-tag is-opponent"
+                    role="img"
+                    aria-label="Opponent Tag indicator"
+                    data-clash-tag-indicator
+                    data-team-slot="2"
+                    ><img
+                      class="olings-clash-tag__icon"
+                      src="/images/olings/clash/ui/actions/tag.svg"
+                      alt=""
+                      draggable="false"
+                      aria-hidden="true"
+                  /></span>
+                  <div
+                    class="olings-clash-effects"
+                    role="list"
+                    aria-label="Marrow active effects"
+                    data-clash-effects
+                  ></div>
+                </div>
+              </div>
+            </article>
+            <div
+              class="olings-clash-tag-resource is-opponent"
+              data-clash-tag-resource="opponent"
+              aria-label="Opponent Tag charges"
+              hidden
+            >
+              <span class="olings-clash-tag-resource__section">
+                <span class="olings-clash-tag-resource__label">TAG</span>
+                <span
+                  class="olings-clash-tag-resource__pips"
+                  data-clash-tag-charge-pips
+                  aria-hidden="true"
+                ></span>
+              </span>
+              <span
+                class="olings-clash-tag-resource__divider"
+                data-clash-tag-resource-divider
+                aria-hidden="true"
+              ></span>
+              <span class="olings-clash-tag-resource__section">
+                <small class="olings-clash-tag-resource__recharge-label"
+                  >DECISIVE</small
+                >
+                <span
+                  class="olings-clash-tag-resource__recharge-pips"
+                  data-clash-tag-recharge-pips
+                  aria-hidden="true"
+                ></span>
+              </span>
+            </div>
+          </section>
+
+          <section class="olings-clash-arena" aria-label="Active Olings">
+            <article
+              class="olings-clash-fighter is-local"
+              data-clash-fighter="local"
+            >
+              <div class="olings-clash-fighter__art" aria-hidden="true">
+                <div class="olings-clash-fighter__motion">
+                  <div class="olings-clash-oling-art">
+                    <img
+                      class="olings-clash-oling-layer is-flight"
+                      src="/images/olings/builds/flight/base/moss-wings.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-body"
+                      src="/images/olings/builds/body/base/moss-body.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-eyes"
+                      src="/images/olings/builds/eyes/base/moss-eyes.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-mouth"
+                      src="/images/olings/builds/mouth/base/moss-mouth.svg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="olings-clash-fighter is-opponent"
+              data-clash-fighter="opponent"
+            >
+              <div
+                class="olings-clash-fighter__art"
+                role="button"
+                tabindex="-1"
+                aria-disabled="true"
+                aria-label="Select an ability before targeting the opponent"
+                data-clash-action-confirm-target
+              >
+                <div class="olings-clash-fighter__motion">
+                  <div class="olings-clash-oling-art">
+                    <img
+                      class="olings-clash-oling-layer is-flight"
+                      src="/images/olings/builds/flight/base/vampire-wings.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-body"
+                      src="/images/olings/builds/body/base/vampire-body.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-eyes"
+                      src="/images/olings/builds/eyes/base/vampire-eyes.svg"
+                      alt=""
+                    />
+                    <img
+                      class="olings-clash-oling-layer is-mouth"
+                      src="/images/olings/builds/mouth/base/vampire-mouth.svg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section
+            class="olings-clash-actions"
+            aria-label="Clash actions"
+            data-clash-actions
+          >
+            <div
+              class="olings-clash-action-summary"
+              data-clash-action-summary
+              aria-live="polite"
+              aria-hidden="true"
+            ></div>
+            <div class="olings-clash-actions__choices">
+              <button
+                class="olings-clash-action is-attack"
+                type="button"
+                aria-label="Attack: Mend"
+                data-clash-action="attack"
+              >
+                <img
+                  src="/images/olings/clash/abilities/moss/mend.svg"
+                  alt=""
+                  data-clash-move-image
+                />
+                <strong data-clash-move-name>MEND</strong>
+              </button>
+              <button
+                class="olings-clash-action is-guard"
+                type="button"
+                aria-label="Guard: Cleanse"
+                data-clash-action="guard"
+              >
+                <img
+                  src="/images/olings/clash/abilities/moss/cleanse.svg"
+                  alt=""
+                  data-clash-move-image
+                />
+                <strong data-clash-move-name>CLEANSE</strong>
+              </button>
+              <button
+                class="olings-clash-action is-skill"
+                type="button"
+                aria-label="Skill: Wild Growth"
+                data-clash-action="skill"
+              >
+                <img
+                  src="/images/olings/clash/abilities/moss/wild-growth.svg"
+                  alt=""
+                  data-clash-move-image
+                />
+                <strong data-clash-move-name>WILD GROWTH</strong>
+              </button>
+              <button
+                class="olings-clash-action is-draw is-passive"
+                type="button"
+                aria-label="Draw passive: Canopy"
+                data-clash-action="draw"
+                data-clash-passive
+              >
+                <img
+                  src="/images/olings/clash/abilities/moss/canopy.svg"
+                  alt=""
+                  data-clash-move-image
+                />
+                <strong data-clash-move-name>CANOPY</strong>
+              </button>
+            </div>
+            <button
+              class="olings-clash-action-confirm"
+              type="button"
+              data-clash-action-confirm
+              disabled
+            >
+              CONFIRM
+            </button>
+          </section>
+
+          <section
+            class="olings-clash-picker"
+            data-clash-picker
+            role="dialog"
+            aria-modal="true"
+            aria-hidden="true"
+            hidden
+          >
+            <header class="olings-clash-picker__header">
+              <h2 data-clash-picker-title>CHOOSE AN OLING</h2>
+            </header>
+            <p
+              class="olings-clash-picker__description"
+              data-clash-picker-description
+              hidden
+            ></p>
+            <div
+              class="olings-clash-picker__options"
+              data-clash-picker-options
+            ></div>
+            <div
+              class="olings-clash-picker__choices"
+              data-clash-picker-choices
+              role="radiogroup"
+              aria-label="Effect option"
+              hidden
+            ></div>
+            <button
+              class="olings-clash-picker__confirm"
+              type="button"
+              data-clash-picker-confirm
+              disabled
+            >
+              CONFIRM
+            </button>
+          </section>
+
+          <div
+            class="olings-clash-inspector-backdrop"
+            data-clash-inspector
+            aria-hidden="true"
+            hidden
+          >
+            <section
+              class="olings-clash-inspector"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="olings-clash-inspector-title"
+              tabindex="-1"
+            >
+              <header class="olings-clash-inspector-header">
+                <div class="olings-clash-inspector-header__identity">
+                  <small data-clash-inspector-position></small>
+                </div>
+              </header>
+              <div
+                class="olings-clash-inspector-content"
+                data-clash-inspector-content
+              ></div>
+            </section>
+          </div>
+
+          <section
+            class="olings-clash-end-game"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="olings-clash-end-result"
+            aria-live="polite"
+            data-clash-end-game
+            hidden
+          >
+            <div class="olings-clash-end-game__card">
+              <header class="olings-clash-end-game__result">
+                <strong id="olings-clash-end-result" data-clash-end-result
+                  >CLASH COMPLETE</strong
+                >
+                <small data-clash-end-detail></small>
+              </header>
+              <div class="olings-clash-end-game__matchup">
+                <article
+                  class="olings-clash-end-game__player is-local"
+                  data-clash-end-player="local"
+                >
+                  <div
+                    class="olings-clash-end-game__oe"
+                    data-clash-end-player-oe
+                    aria-hidden="true"
+                  ></div>
+                  <span data-clash-end-player-name>YOU</span>
+                </article>
+                <strong class="olings-clash-end-game__versus">VS</strong>
+                <article
+                  class="olings-clash-end-game__player is-opponent"
+                  data-clash-end-player="opponent"
+                >
+                  <div
+                    class="olings-clash-end-game__oe"
+                    data-clash-end-player-oe
+                    aria-hidden="true"
+                  ></div>
+                  <span data-clash-end-player-name>OPPONENT</span>
+                </article>
+              </div>
+            </div>
+
+            <section
+              class="olings-clash-match-controls"
+              aria-label="Completed match controls"
+              data-clash-match-controls
+              hidden
+            >
+              <button type="button" data-clash-rematch>REMATCH</button>
+              <button type="button" data-clash-back-lobby>BACK TO LOBBY</button>
+              <a href="/">MAIN MENU</a>
+            </section>
+          </section>
+        </div>
+      </section>
+
+      <section
+        class="olings-clash-forfeit-dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="olings-clash-forfeit-title"
+        aria-describedby="olings-clash-forfeit-copy"
+        data-clash-forfeit-dialog
+        hidden
+      >
+        <div class="olings-clash-forfeit-dialog__card">
+          <p
+            class="olings-clash-forfeit-dialog__eyebrow"
+            data-clash-forfeit-eyebrow
+          >
+            MATCH OPTIONS
+          </p>
+          <h2 id="olings-clash-forfeit-title" data-clash-forfeit-title>
+            FORFEIT THIS CLASH?
+          </h2>
+          <p id="olings-clash-forfeit-copy" data-clash-forfeit-copy>
+            This will end the match immediately and count as a loss.
+          </p>
+          <p
+            class="olings-clash-forfeit-dialog__status"
+            role="status"
+            data-clash-forfeit-status
+            hidden
+          ></p>
+          <div class="olings-clash-forfeit-dialog__actions">
+            <button type="button" data-clash-forfeit-cancel>
+              KEEP PLAYING
+            </button>
+            <button
+              class="is-destructive"
+              type="button"
+              data-clash-forfeit-confirm
+            >
+              FORFEIT CLASH
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script>
+    window.allowTransition = true;
+    window.splashScreenExitDirection = 'down';
+
+    document.documentElement.style.setProperty(
+      '--primarypagecolour',
+      '#5D9EF5'
+    );
+    document.documentElement.style.setProperty(
+      '--secondarypagecolour',
+      '#3869B8'
+    );
+
+    const clashPath = window.location.pathname;
+    const isClashTutorial = /^\/olings\/clash\/tutorial\/?$/i.test(clashPath);
+    const isClashRoom = /^\/olings\/clash\/[a-z0-9]{3}-[a-z0-9]{3}\/?$/i.test(
+      clashPath
+    );
+    const offlineMatchCode = window.sessionStorage.getItem(
+      'olings-clash-offline-match'
+    );
+    const isServerMatch =
+      isClashRoom || (!isClashTutorial && Boolean(offlineMatchCode));
+    document
+      .querySelector('[data-clash-game]')
+      ?.toggleAttribute('data-clash-online', isServerMatch);
+
+    // Production Clash ships as one ordered, minified core bundle. Debug tools
+    // stay available when developing locally without entering production builds.
+    window.pageScripts = {
+      '/build/olings/clash/clash-core.js': {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_CLASH',
+        zIndex: 19
+      }
+    };
+    if (
+      /^(?:localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname)
+    ) {
+      window.pageScripts['/scripts/olings/clash/game/debug.js'] = {
+        cacheBustKey: 'OLING_CLASH_DEBUG',
+        zIndex: 18
+      };
+    }
+
+    if (isServerMatch) {
+      window.pageScripts['https://cdn.socket.io/4.8.1/socket.io.min.js'] = {
+        external: true,
+        zIndex: 0
+      };
+      window.pageScripts['/build/olings/clash/clash-online.js'] = {
+        addDataLoaded: true,
+        cacheBustKey: 'OLING_CLASH',
+        zIndex: 20
+      };
+    }
+
+    if (isClashTutorial) {
+      [
+        '/css/general/tutorial/tutorial.css',
+        '/css/olings/clash/tutorial/clash-tutorial.css'
+      ].forEach((href) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
+      });
+      Object.assign(window.pageScripts, {
+        '/build/olings/clash/clash-tutorial.js': {
+          cacheBustKey: 'OLING_CLASH',
+          zIndex: 23
+        }
+      });
+    }
+    window.pageLoadStageLabels = {
+      '/scripts/html-templates/core-template/core-template.js':
+        'Loading page shell',
+      '/build/olings/clash/clash-core.js': 'Preparing battle engine',
+      '/build/olings/clash/clash-online.js': 'Connecting to match',
+      '/build/olings/clash/clash-tutorial.js': 'Preparing guided lesson',
+      default: 'Preparing Clash',
+      ready: 'Clash ready'
+    };
+    document.querySelector('#splash-screen-container p').textContent =
+      'Loading page shell';
+  </script>
+  <script
+    src="/scripts/html-templates/core-template/core-template.js"
+    data-loaded="false"
+  ></script>
+</html>

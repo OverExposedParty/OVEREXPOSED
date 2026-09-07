@@ -1,4 +1,8 @@
-const { LAB_ROWS, STARTER_LAB_COLUMNS } = require('../lab-catalog');
+const {
+  LAB_ROWS,
+  STARTER_LAB_COLUMNS,
+  DEFAULT_OLING_LAB_WALLPAPER_KEY
+} = require('../lab-catalog');
 
 function clampInteger(value, min, max, fallback) {
   const number = Number(value);
@@ -9,6 +13,10 @@ function clampInteger(value, min, max, fallback) {
 function createDefaultOlingLab() {
   return {
     roomLevel: 1,
+    appearance: {
+      wallpaperKey: DEFAULT_OLING_LAB_WALLPAPER_KEY,
+      wallpaperVariantKey: null
+    },
     columns: STARTER_LAB_COLUMNS,
     rows: LAB_ROWS,
     unlockedCells: Array.from(
@@ -58,7 +66,8 @@ function createDefaultOlingLab() {
           }
         ]
       }
-    ]
+    ],
+    placedWallDecorations: []
   };
 }
 

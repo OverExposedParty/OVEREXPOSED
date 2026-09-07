@@ -2,6 +2,7 @@ const cssFilesHeader = [
   '/css/general/settings/settings.css',
   '/css/general/settings/account-achievements.css',
   '/css/general/help-hub/help-hub.css',
+  '/css/olings/shared/clash-ability-details.css',
   '/css/general/tool-tip/tool-tip.css',
   '/css/general/warning-message/warning-message-style.css',
   '/css/general/report-container/report-container.css',
@@ -40,6 +41,7 @@ const coreScripts = {
   '/scripts/general/help-hub/topic-copy.js': { zIndex: 1 },
   '/scripts/general/help-hub/data.js': { zIndex: 1.09 },
   '/scripts/general/help-hub/content.js': { zIndex: 1.091 },
+  '/scripts/olings/clash/ability-details.js': { zIndex: 1.0915 },
   '/scripts/general/help-hub/view.js': { zIndex: 1.092 },
   '/scripts/general/help-hub/help-hub.js': { zIndex: 1.093 },
   '/scripts/general/overlay-and-toggle/overlay-and-toggle.js': {

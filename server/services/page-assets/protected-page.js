@@ -19,9 +19,28 @@ const PROTECTED_PAGE_TEMPLATE = fs.readFileSync(
   'utf8'
 );
 const DEFAULT_PROTECTED_PAGE_SPLASH_SCREEN =
-  '/images/splash-screens/overexposed.png';
+  '/images/splash-screens/core/overexposed.png';
 
 function getProtectedPageCopy(access = {}) {
+  if (access.reason === 'oling_lab_private') {
+    return {
+      title: 'Private Oling Lab',
+      message: 'This Oling Lab is private. Only its owner can view it.',
+      showSignIn: Boolean(access.showSignIn)
+    };
+  }
+
+  if (access.reason === 'oling_lab_friends_only') {
+    const owner = access.targetUsername
+      ? `${access.targetUsername}'s`
+      : 'This';
+    return {
+      title: 'Friends-Only Oling Lab',
+      message: `${owner} Oling Lab is only available to friends.`,
+      showSignIn: Boolean(access.showSignIn)
+    };
+  }
+
   if (
     access.reason === 'locked_until' ||
     access.reason === 'window_not_started'

@@ -1,4 +1,26 @@
 const { getRuntimeBuild } = require('../../services/game-mode-releases');
+const crypto = require('node:crypto');
+
+const PARTY_ERROR_DEDUPLICATION_WINDOW_MS = 30_000;
+const EXPECTED_PARTY_ERROR_CODES = new Set([
+  'account_required',
+  'guest_session_required',
+  'party_host_required',
+  'party_network_unavailable',
+  'party_not_found',
+  'party_or_player_not_found',
+  'party_owner_active_party_exists',
+  'party_player_account_locked',
+  'party_player_forbidden',
+  'party_player_not_found',
+  'party_replay_stale_session',
+  'party_socket_join_timeout',
+  'party_switch_conflict',
+  'party_switch_game_active',
+  'party_switch_same_gamemode',
+  'party_switch_stale_session',
+  'party_update_conflict'
+]);
 
 function createPartyErrorTools(deps) {
   const {
@@ -15,6 +37,43 @@ function createPartyErrorTools(deps) {
     if (value === undefined || value === null) return '';
     const text = String(value);
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  }
+
+  function isExpectedPartyError(error = {}) {
+    const status = Number.isInteger(error.status) ? error.status : null;
+    if (status !== null && status >= 500) return false;
+    if (status === 401 || status === 403) return true;
+
+    return (
+      error.name === 'AbortError' || EXPECTED_PARTY_ERROR_CODES.has(error.code)
+    );
+  }
+
+  function shouldRecordPartyError({ err, source = 'server', details = {} }) {
+    return !isExpectedPartyError({
+      source,
+      name: details.name ?? err?.name,
+      code: details.code ?? err?.code,
+      status: Number.isInteger(details.status) ? details.status : err?.status
+    });
+  }
+
+  function createPartyErrorFingerprint(entry) {
+    const identity = [
+      entry?.source,
+      entry?.name,
+      entry?.code,
+      entry?.status,
+      entry?.route,
+      entry?.method,
+      entry?.action,
+      entry?.actorId,
+      entry?.message
+    ]
+      .map((value) => (value === undefined || value === null ? '' : value))
+      .join('\u001f');
+
+    return crypto.createHash('sha256').update(identity).digest('hex');
   }
 
   function getPartyIdFromRequest(req) {
@@ -71,7 +130,7 @@ function createPartyErrorTools(deps) {
       ? savedGameModeRelease.toObject()
       : savedGameModeRelease || null;
 
-    return {
+    const entry = {
       occurredAt: new Date(),
       source,
       message: truncateErrorText(
@@ -117,6 +176,9 @@ function createPartyErrorTools(deps) {
       runtimeBuild: getPartyRuntimeBuild(),
       details: details.details ?? null
     };
+
+    entry.fingerprint = createPartyErrorFingerprint(entry);
+    return entry;
   }
 
   async function appendPartyError({
@@ -127,19 +189,42 @@ function createPartyErrorTools(deps) {
   }) {
     if (!partyId || !entry || !mainModel) return;
 
+    if (isExpectedPartyError(entry)) return;
+
+    const occurredAt = new Date(entry.occurredAt);
+    const duplicateSince = new Date(
+      (Number.isNaN(occurredAt.getTime()) ? Date.now() : occurredAt.getTime()) -
+        PARTY_ERROR_DEDUPLICATION_WINDOW_MS
+    );
+    const fingerprint = entry.fingerprint || createPartyErrorFingerprint(entry);
+    const savedEntry = { ...entry, fingerprint };
+
     const update = {
       $push: {
         errors: {
-          $each: [entry],
+          $each: [savedEntry],
           $slice: -PARTY_ERROR_LOG_LIMIT
         }
       }
     };
 
     await Promise.allSettled(
-      [mainModel, waitingRoomModel]
-        .filter(Boolean)
-        .map((model) => model.updateOne({ partyId }, update))
+      [mainModel, waitingRoomModel].filter(Boolean).map((model) =>
+        model.updateOne(
+          {
+            partyId,
+            errors: {
+              $not: {
+                $elemMatch: {
+                  fingerprint,
+                  occurredAt: { $gte: duplicateSince }
+                }
+              }
+            }
+          },
+          update
+        )
+      )
     );
   }
 
@@ -153,6 +238,7 @@ function createPartyErrorTools(deps) {
   }) {
     const partyId = details.partyId ?? getPartyIdFromRequest(req);
     if (!partyId || !mainModel) return;
+    if (!shouldRecordPartyError({ err, source, details })) return;
 
     try {
       const party = await mainModel.findOne({ partyId }).lean();
@@ -170,12 +256,17 @@ function createPartyErrorTools(deps) {
   }
 
   return {
+    createPartyErrorFingerprint,
     createPartyErrorEntry,
     appendPartyError,
+    isExpectedPartyError,
+    shouldRecordPartyError,
     recordPartyRouteError
   };
 }
 
 module.exports = {
+  EXPECTED_PARTY_ERROR_CODES,
+  PARTY_ERROR_DEDUPLICATION_WINDOW_MS,
   createPartyErrorTools
 };

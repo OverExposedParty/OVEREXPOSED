@@ -19,6 +19,9 @@ const {
 } = require('./constants');
 const { debugLog, isProduction } = require('./logger');
 
+const LEGACY_OLING_LAB_ASSET_PATH =
+  /^\/images\/olings\/(furniture|consumables|eggs|gui|interaction-points|states)(\/.*)$/;
+
 function configureMiddleware(app) {
   app.use(attachRequestContext);
   app.use(expressJsonSafe());
@@ -96,7 +99,20 @@ function configureMiddleware(app) {
     next();
   });
 
+  app.use(redirectLegacyOlingLabAssetPath);
   app.use(expressStaticSafe());
+}
+
+function redirectLegacyOlingLabAssetPath(req, res, next) {
+  const match = req.path.match(LEGACY_OLING_LAB_ASSET_PATH);
+  if (!match) {
+    next();
+    return;
+  }
+
+  const queryIndex = req.originalUrl.indexOf('?');
+  const query = queryIndex >= 0 ? req.originalUrl.slice(queryIndex) : '';
+  res.redirect(308, `/images/olings/lab/${match[1]}${match[2]}${query}`);
 }
 
 function expressJsonSafe() {

@@ -11,8 +11,11 @@ const onlineDirectory = path.join(
 const onlineSettingsPath = path.join(onlineDirectory, 'online-settings.js');
 const facadePath = path.join(onlineDirectory, 'party-api.js');
 const partyDataPath = path.join(onlineDirectory, 'party-api/party-data.js');
+const partyRequestPath = path.join(onlineDirectory, 'party-api/request.js');
+const partyIdentityPath = path.join(onlineDirectory, 'party-core/identity.js');
 const partySyncPath = path.join(onlineDirectory, 'party-core/sync.js');
 const supportScripts = [
+  'party-api/request.js',
   'party-api/party-data.js',
   'party-api/actions.js',
   'party-api/players.js',
@@ -74,6 +77,7 @@ test('party API facade preserves the shared browser helpers', () => {
 
   [
     'GetCurrentPartyData',
+    'requestPartyJson',
     'UpdateUserPartyData',
     'addUserToParty',
     'performOnlinePartyAction',
@@ -84,6 +88,192 @@ test('party API facade preserves the shared browser helpers', () => {
   ].forEach((functionName) => {
     assert.equal(typeof sandbox[functionName], 'function', functionName);
   });
+});
+
+test('party GET requests retry transient network failures with connection state updates', async () => {
+  const connectionStates = [];
+  let attempts = 0;
+  const context = {
+    clearTimeout,
+    CustomEvent: class CustomEvent {
+      constructor(type, options = {}) {
+        this.type = type;
+        this.detail = options.detail;
+      }
+    },
+    document: { body: { classList: { toggle() {} } } },
+    fetch: async () => {
+      attempts += 1;
+      if (attempts === 1) throw new TypeError('Failed to fetch');
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ partyId: 'ABC-123' })
+      };
+    },
+    navigator: { onLine: true },
+    setTimeout,
+    window: null
+  };
+  context.window = context;
+  context.addEventListener = () => {};
+  context.removeEventListener = () => {};
+  context.dispatchEvent = (event) => connectionStates.push(event.detail.state);
+  const sandbox = vm.createContext(context);
+  vm.runInContext(fs.readFileSync(partyRequestPath, 'utf8'), sandbox, {
+    filename: 'party-api/request.js'
+  });
+
+  const result = await sandbox.PartyApiRequest.requestPartyJson(
+    '/api/party-game-test?partyCode=ABC-123',
+    {},
+    { retries: 1, retryDelayMs: 0 }
+  );
+
+  assert.equal(attempts, 2);
+  assert.equal(result.data.partyId, 'ABC-123');
+  assert.deepEqual(connectionStates, ['reconnecting', 'connected']);
+});
+
+test('party mutations are not automatically retried after an ambiguous network failure', async () => {
+  let attempts = 0;
+  const context = {
+    clearTimeout,
+    document: { body: { classList: { toggle() {} } } },
+    fetch: async () => {
+      attempts += 1;
+      throw new TypeError('Connection closed after sending');
+    },
+    navigator: { onLine: true },
+    setTimeout,
+    window: null
+  };
+  context.window = context;
+  const sandbox = vm.createContext(context);
+  vm.runInContext(fs.readFileSync(partyRequestPath, 'utf8'), sandbox, {
+    filename: 'party-api/request.js'
+  });
+
+  await assert.rejects(
+    sandbox.PartyApiRequest.requestPartyJson(
+      '/api/party-game-test/action',
+      { method: 'POST' },
+      { retries: 3 }
+    ),
+    (error) => {
+      assert.equal(error.code, 'party_network_unavailable');
+      assert.equal(error.isTransient, true);
+      return true;
+    }
+  );
+  assert.equal(attempts, 1);
+});
+
+test('signed-in account identity resolves its existing host player after a device-id change', () => {
+  const party = {
+    state: { hostComputerId: 'old-host-device' },
+    players: [
+      {
+        identity: {
+          computerId: 'old-host-device',
+          accountId: 'account-one'
+        }
+      }
+    ]
+  };
+  const storage = new Map([
+    ['device-id', 'new-host-device'],
+    ['oe-account', JSON.stringify({ id: 'account-one' })]
+  ]);
+  const context = {
+    currentPartyData: party,
+    debugLog() {},
+    document: {
+      createElement: () => ({
+        getContext: () => ({
+          fillRect() {},
+          fillText() {},
+          set fillStyle(_value) {},
+          set font(_value) {},
+          set textBaseline(_value) {}
+        }),
+        toDataURL: () => 'canvas'
+      })
+    },
+    fetch: async () => ({ json: async () => ({}) }),
+    hostDeviceId: '',
+    localStorage: {
+      getItem: (key) => storage.get(key) || null,
+      setItem: (key, value) => storage.set(key, value)
+    },
+    navigator: {
+      deviceMemory: 8,
+      hardwareConcurrency: 8,
+      language: 'en-GB',
+      platform: 'test',
+      userAgent: 'test'
+    },
+    screen: { colorDepth: 24, height: 1080, width: 1920 },
+    window: null
+  };
+  context.window = context;
+  const sandbox = vm.createContext(context);
+  vm.runInContext(fs.readFileSync(partyIdentityPath, 'utf8'), sandbox, {
+    filename: 'party-core/identity.js'
+  });
+
+  assert.equal(sandbox.resolveOnlinePartyActorId(party), 'old-host-device');
+  assert.equal(sandbox.isCurrentOnlinePartyHost(party), true);
+  assert.equal(sandbox.syncOnlinePartyIdentity(party), 'old-host-device');
+  assert.equal(sandbox.hostDeviceId, 'old-host-device');
+});
+
+test('host-only party actions are stopped before a guest request is sent', async () => {
+  let requestCount = 0;
+  const context = {
+    console: { error() {}, log() {}, warn() {} },
+    currentPartyData: {
+      partyId: 'ABC-123',
+      state: { hostComputerId: 'host-device' },
+      players: [
+        { identity: { computerId: 'host-device' } },
+        { identity: { computerId: 'guest-device' } }
+      ]
+    },
+    deviceId: 'guest-device',
+    fetch: async () => {
+      requestCount += 1;
+      return { ok: true, json: async () => ({}) };
+    },
+    isPlaying: false,
+    partyCode: 'ABC-123',
+    sessionPartyType: 'party-game-truth-or-dare',
+    socket: { id: 'guest-socket' },
+    window: null,
+    PartyApiPartyData: {
+      getExistingPartyData: async () => [],
+      requireOnlinePartyId(value) {
+        return value;
+      }
+    }
+  };
+  context.window = context;
+  const sandbox = vm.createContext(context);
+  vm.runInContext(
+    fs.readFileSync(path.join(onlineDirectory, 'party-api/actions.js'), 'utf8'),
+    sandbox,
+    { filename: 'party-api/actions.js' }
+  );
+
+  await assert.rejects(
+    sandbox.PartyApiActions.performOnlinePartyAction({ action: 'start-game' }),
+    (error) => {
+      assert.equal(error.status, 403);
+      assert.equal(error.code, 'party_host_required');
+      return true;
+    }
+  );
+  assert.equal(requestCount, 0);
 });
 
 test('replay action sends the finished game id and adopts the new session', async () => {

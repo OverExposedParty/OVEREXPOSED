@@ -33,7 +33,11 @@
   function getCurrentPartyPlayer() {
     const party =
       typeof currentPartyData !== 'undefined' ? currentPartyData : null;
-    const computerId = typeof deviceId !== 'undefined' ? deviceId : null;
+    const computerId =
+      window.resolveOnlinePartyActorId?.(
+        party,
+        typeof deviceId !== 'undefined' ? deviceId : null
+      ) ?? (typeof deviceId !== 'undefined' ? deviceId : null);
     if (!party || !computerId || !Array.isArray(party.players)) return null;
 
     return (
@@ -70,6 +74,9 @@
     onlinePartyAccountLinkInFlight = (async () => {
       try {
         const normalisedPartyId = requireOnlinePartyId(partyId);
+        const resolvedComputerId =
+          window.resolveOnlinePartyActorId?.(currentPartyData, computerId) ||
+          computerId;
         const identityKey = syncAccountLinkIdentity({
           accountId,
           partyId: normalisedPartyId
@@ -80,7 +87,10 @@
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ partyId: normalisedPartyId, computerId })
+            body: JSON.stringify({
+              partyId: normalisedPartyId,
+              computerId: resolvedComputerId
+            })
           }
         );
         const data = await res.json().catch(() => ({}));
@@ -110,7 +120,7 @@
                       lastShownAccountLinkConflictKey = '';
                       const linked = await linkCurrentPartyPlayerToAccount({
                         partyId: normalisedPartyId,
-                        computerId,
+                        computerId: resolvedComputerId,
                         partyType,
                         accountId,
                         silent: false,
@@ -195,6 +205,9 @@
     onlinePartyGuestContinuationInFlight = (async () => {
       try {
         const normalisedPartyId = requireOnlinePartyId(partyId);
+        const resolvedComputerId =
+          window.resolveOnlinePartyActorId?.(currentPartyData, computerId) ||
+          computerId;
         const players =
           typeof currentPartyData !== 'undefined' &&
           Array.isArray(currentPartyData?.players)
@@ -216,7 +229,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               partyId: normalisedPartyId,
-              computerId,
+              computerId: resolvedComputerId,
               newUsername: username,
               newUserIcon: userIcon
             })
@@ -233,10 +246,7 @@
 
         if (data.updated) currentPartyData = data.updated;
         if (typeof onlineUsername !== 'undefined') onlineUsername = username;
-        if (
-          data.updated &&
-          typeof window.UpdateUserIcons === 'function'
-        ) {
+        if (data.updated && typeof window.UpdateUserIcons === 'function') {
           await window.UpdateUserIcons(data.updated);
         }
         return data;

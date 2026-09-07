@@ -1,0 +1,106 @@
+.oling-lab-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.oling-lab-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #e8f1ed;
+  cursor: grab;
+  touch-action: none;
+}
+
+.oling-lab-viewport.is-panning {
+  cursor: grabbing;
+}
+
+.oling-lab-room {
+  --oling-lab-customise-stroke-width: max(
+    4px,
+    calc(var(--oling-lab-cell) * 0.0078125)
+  );
+  --oling-lab-furniture-grid-border-width: max(
+    3px,
+    calc(var(--oling-lab-cell) * 0.0078125)
+  );
+  --oling-lab-empty-grid-border-colour: #d9dee1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--lab-columns), var(--oling-lab-cell));
+  grid-template-rows: repeat(2, var(--oling-lab-cell));
+  width: calc(var(--lab-columns) * var(--oling-lab-cell));
+  min-width: 100%;
+  height: max(100%, calc(2 * var(--oling-lab-cell)));
+  background-color: var(--oling-lab-wallpaper-colour);
+  background-image: var(--oling-lab-wallpaper-image);
+  background-repeat: var(--oling-lab-wallpaper-repeat);
+  background-position: var(--oling-lab-wallpaper-position);
+  background-size: var(--oling-lab-wallpaper-size);
+  isolation: isolate;
+  align-content: end;
+  transform-origin: 0 0;
+}
+
+.oling-lab-cell {
+  position: relative;
+}
+
+.is-customising-furniture .oling-lab-cell::after {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  box-sizing: border-box;
+  border: var(--oling-lab-furniture-grid-border-width) solid
+    var(--oling-lab-empty-grid-border-colour);
+  content: '';
+  pointer-events: none;
+}
+
+.is-customising-furniture .oling-lab-cell.is-furniture-occupied::after,
+.is-customising-furniture .oling-lab-cell.is-furniture-drag-target::after {
+  border-color: var(--furniture-primary-colour, #b7ebe8);
+}
+
+.oling-lab-cell.is-locked {
+  background: repeating-linear-gradient(
+    135deg,
+    rgb(22 31 36 / 10%) 0 12px,
+    rgb(22 31 36 / 4%) 12px 24px
+  );
+}
+
+.oling-lab-cell-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.oling-lab-plus {
+  position: absolute;
+  inset: 28%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  border: var(--oling-lab-customise-stroke-width) dashed rgb(22 31 36 / 34%);
+  background: rgb(255 255 255 / 38%);
+  color: rgb(22 31 36 / 54%);
+  font-size: clamp(2rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.is-customising-furniture .oling-lab-plus {
+  border-width: var(--oling-lab-furniture-grid-border-width);
+}
+
+.oling-lab-cell-hit:focus-visible {
+  outline: 4px solid #b22626;
+  outline-offset: -4px;
+}

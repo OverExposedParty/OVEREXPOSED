@@ -103,6 +103,6 @@ function addSettingsExtensionToCurrentURL() {
 
   previousPage = {
     link: addSettingsExtensionToCurrentURL(),
-    splashScreen: `/images/splash-screens/${gamemode}-settings.png`
+    splashScreen: `/images/splash-screens/party-games/${gamemode}/settings.png`
   };
 })();

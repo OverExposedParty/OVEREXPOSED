@@ -6,6 +6,7 @@ const CONTENT_ACCESS_LEVELS = Object.freeze({
 });
 
 const FEATURE_ACCESS_LEVELS = Object.freeze({
+  'olings.clash': CONTENT_ACCESS_LEVELS.BETA,
   'olings.lab': CONTENT_ACCESS_LEVELS.BETA,
   overexposure: CONTENT_ACCESS_LEVELS.BETA,
   'party-games.prompt-heist': CONTENT_ACCESS_LEVELS.BETA,

@@ -1,6 +1,6 @@
 let previousPage = {
   link: '/',
-  splashScreen: '/images/splash-screens/overexposed.png'
+  splashScreen: '/images/splash-screens/core/overexposed.png'
 };
 let isTransitioningSplash = false;
 
@@ -21,7 +21,9 @@ function playSplashScreenExitSound(direction) {
   if (typeof playSoundEffect !== 'function') return;
 
   const soundKey = direction === 'up' ? 'splashScreenUp' : 'splashScreenDown';
-  Promise.resolve(playSoundEffect(soundKey, { ignoreInteraction: true })).catch(() => {});
+  Promise.resolve(playSoundEffect(soundKey, { ignoreInteraction: true })).catch(
+    () => {}
+  );
 }
 
 // Page Load Transition
@@ -36,25 +38,28 @@ if (backButton) {
 
 if (logoContainer) {
   logoContainer.addEventListener('click', function () {
-    transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+    transitionSplashScreen('/', '/images/splash-screens/core/overexposed.png');
   });
 }
 
 if (partyGamesLink) {
   partyGamesLink.addEventListener('click', function () {
-    transitionSplashScreen('/', '/images/splash-screens/overexposed.png');
+    transitionSplashScreen('/', '/images/splash-screens/core/overexposed.png');
   });
 }
 if (olingLabLink) {
   olingLabLink.addEventListener('click', function () {
-    transitionSplashScreen('/olings/lab', '/images/splash-screens/overexposed.png');
+    transitionSplashScreen(
+      '/olings/lab',
+      '/images/splash-screens/core/overexposed.png'
+    );
   });
 }
 if (shopLink) {
   shopLink.addEventListener('click', function () {
     transitionSplashScreen(
       '/shop',
-      '/images/splash-screens/product-shop/coming-soon.jpg'
+      '/images/splash-screens/shop/coming-soon.jpg'
     );
   });
 }
@@ -62,7 +67,7 @@ if (overexposureLink) {
   overexposureLink.addEventListener('click', function () {
     transitionSplashScreen(
       '/overexposure',
-      '/images/splash-screens/overexposure.png'
+      '/images/splash-screens/features/overexposure.png'
     );
   });
 }
@@ -70,7 +75,7 @@ if (termsAndPrivacyLink) {
   termsAndPrivacyLink.addEventListener('click', function () {
     transitionSplashScreen(
       '/terms-and-privacy',
-      '/images/splash-screens/terms-and-privacy.png'
+      '/images/splash-screens/informational/terms-and-privacy.png'
     );
   });
 }
@@ -78,7 +83,7 @@ if (frequentlyAskedQuestionsLink) {
   frequentlyAskedQuestionsLink.addEventListener('click', function () {
     transitionSplashScreen(
       '/faqs',
-      '/images/splash-screens/frequently-asked-questions.png'
+      '/images/splash-screens/informational/faq.png'
     );
   });
 }
@@ -87,7 +92,7 @@ if (oesCustomisationLink) {
   oesCustomisationLink.addEventListener('click', function () {
     transitionSplashScreen(
       '/oe-library',
-      '/images/splash-screens/oes-customisation.png'
+      '/images/splash-screens/features/customisation.png'
     );
   });
 }
@@ -105,19 +110,19 @@ function initSplashScreen() {
   }
 
   setTimeout(() => {
-    splashScreenContainer.classList.add('center');
+    splashScreenContainer?.classList.add('center');
   }, 50);
 
   setTimeout(() => {
-    splashScreenContainer.classList.remove('center');
+    splashScreenContainer?.classList.remove('center');
     staticSplashScreenContainer?.remove();
     const exitDirection = getSplashScreenExitDirection();
-    splashScreenContainer.classList.add(exitDirection);
+    splashScreenContainer?.classList.add(exitDirection);
     playSplashScreenExitSound(exitDirection);
   }, 300);
 
   setTimeout(() => {
-    splashScreenContainer.remove();
+    splashScreenContainer?.remove();
     heading?.remove();
     releaseSplashScreenViewport();
   }, 1000);

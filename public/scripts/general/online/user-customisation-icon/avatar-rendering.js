@@ -21,6 +21,44 @@ async function waitForUserCustomisationLookup() {
   await window.Ready?.when?.('user-customisation-icon', { timeout: 10000 });
 }
 
+function getResolvedUserCustomisation(userCustomisationString) {
+  const parsed = parseCustomisationString(
+    userCustomisationString || USER_ICON_DEFAULT_STRING
+  );
+  return {
+    colour: getFilePathByCustomisationId(parsed.colour, 'colour'),
+    headSlot: getFilePathByCustomisationId(parsed.head, 'headSlot'),
+    eyesSlot: getFilePathByCustomisationId(parsed.eyes, 'eyesSlot'),
+    mouthSlot: getFilePathByCustomisationId(parsed.mouth, 'mouthSlot')
+  };
+}
+
+function hydrateUserIconWhenReady(userIcon, userCustomisationString) {
+  const applyResolvedCustomisation = () => {
+    if (!userIcon.isConnected) return;
+    const imageStack = CreateImageStack(
+      getResolvedUserCustomisation(userCustomisationString)
+    );
+    userIcon.querySelector('.image-stack')?.replaceWith(imageStack);
+  };
+
+  Promise.resolve(waitForUserCustomisationLookup())
+    .then(applyResolvedCustomisation)
+    .catch((error) => {
+      console.warn(
+        'User customisation lookup unavailable; using fallback icon.',
+        error
+      );
+      if (!window.Ready?.isReady?.('user-customisation-icon')) {
+        document.addEventListener(
+          'ready:user-customisation-icon',
+          applyResolvedCustomisation,
+          { once: true }
+        );
+      }
+    });
+}
+
 async function createUserIconPartyGames({
   container,
   userId,
@@ -36,16 +74,9 @@ async function createUserIconPartyGames({
   }
 
   container.appendChild(userIcon);
-  await waitForUserCustomisationLookup();
-
-  const parsed = parseCustomisationString(userCustomisationString);
-  const userCustomisation = {
-    colour: getFilePathByCustomisationId(parsed.colour, 'colour'),
-    headSlot: getFilePathByCustomisationId(parsed.head, 'headSlot'),
-    eyesSlot: getFilePathByCustomisationId(parsed.eyes, 'eyesSlot'),
-    mouthSlot: getFilePathByCustomisationId(parsed.mouth, 'mouthSlot')
-  };
-  userIcon.appendChild(CreateImageStack(userCustomisation));
+  userIcon.appendChild(CreateImageStack(blankUserCustomisation));
+  hydrateUserIconWhenReady(userIcon, userCustomisationString);
+  return userIcon;
 }
 
 function getPartyHostComputerId(partyData = currentPartyData) {
@@ -53,6 +84,12 @@ function getPartyHostComputerId(partyData = currentPartyData) {
 }
 
 function canCurrentUserKickPlayers(partyData = currentPartyData) {
+  if (
+    partyData?.state?.hostComputerId &&
+    typeof window.isCurrentOnlinePartyHost === 'function'
+  ) {
+    return window.isCurrentOnlinePartyHost(partyData);
+  }
   const partyHostId = getPartyHostComputerId(partyData);
   return Boolean(
     hostedParty || (partyHostId && String(partyHostId) === String(deviceId))

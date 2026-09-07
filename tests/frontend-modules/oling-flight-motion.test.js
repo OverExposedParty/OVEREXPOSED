@@ -100,7 +100,7 @@ test('flight configuration survives schema and API serialization', () => {
   assert.ok(OlingTrait.schema.path('flightSpeed'));
 
   const serialized = serializeOlingTrait({
-    key: 'base-trash-balloons',
+    key: 'trash-balloons',
     name: 'Trash Balloons',
     collection: 'base',
     theme: 'trash',

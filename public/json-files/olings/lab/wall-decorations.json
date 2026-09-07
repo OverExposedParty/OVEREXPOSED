@@ -1,0 +1,17 @@
+{
+  "wallDecorations": [
+    {
+      "id": "oling_clash_beta_poster",
+      "name": "Oling Clash Beta Poster",
+      "type": "poster",
+      "category": "wall-decoration",
+      "rarity": "common",
+      "layer": "wall",
+      "width": 0.3333333333333333,
+      "height": 0.5,
+      "image": "/images/olings/lab/wall-decorations/posters/oling-clash-beta/artwork.svg",
+      "collisionMask": "/images/olings/lab/wall-decorations/posters/oling-clash-beta/artwork.svg",
+      "collisionBounds": { "x": 0, "y": 0, "width": 1, "height": 1 }
+    }
+  ]
+}

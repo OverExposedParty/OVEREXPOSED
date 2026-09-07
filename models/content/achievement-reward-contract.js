@@ -8,7 +8,9 @@ const ACHIEVEMENT_REWARD_TYPES = Object.freeze([
   'oling_egg',
   'oling_consumable',
   'oling_headwear',
-  'oling_furniture'
+  'oling_furniture',
+  'oling_wallpaper',
+  'oling_wallpaper_variant'
 ]);
 
 const AMOUNT_REWARD_TYPES = new Set(['opals', 'xp']);

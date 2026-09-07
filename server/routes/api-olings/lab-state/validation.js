@@ -69,7 +69,10 @@ function validateItemInventorySlots(itemId, normalizedSlots, context) {
     }
     slot.quantity = quantity;
     slot.itemType = isEgg ? 'egg' : 'consumable';
-    slot.placedAt = slot.placedAt || new Date();
+    slot.placedAt =
+      slotDefinition?.slotType === 'egg'
+        ? slot.placedAt || null
+        : slot.placedAt || new Date();
     usedQuantities.set(slot.itemKey, nextUsed);
   }
   return null;

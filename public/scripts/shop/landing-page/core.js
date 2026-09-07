@@ -6,8 +6,6 @@
 
     const OLING_EGGS_ENDPOINT = '/api/olings/eggs';
 
-    const OLING_PERSONALITIES_ENDPOINT = '/api/olings/personalities';
-
     const RARITY_PALETTE_ENDPOINT = '/json-files/olings/rarities.json';
 
     const shopProductsCache = new Map();
@@ -26,8 +24,6 @@
     let isPageColourTrackingInitialized = false;
 
     let olingEggsPromise = null;
-
-    let olingPersonalitiesPromise = null;
 
     let rarityPalettePromise = null;
 
@@ -86,8 +82,8 @@
 
     function getVersionedAssetUrl(assetUrl) {
       const normalizedAssetUrl = String(assetUrl || '').replace(
-        '/images/olings/furniture/ceiling-lights/basic-hanging-light.svg',
-        '/images/olings/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg'
+        '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light.svg',
+        '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg'
       );
       if (typeof window.versionAssetUrl === 'function') {
         return window.versionAssetUrl(normalizedAssetUrl);
@@ -318,7 +314,6 @@
     Object.assign(shop, {
       SHOP_PRODUCTS_ENDPOINT,
       OLING_EGGS_ENDPOINT,
-      OLING_PERSONALITIES_ENDPOINT,
       RARITY_PALETTE_ENDPOINT,
       shopProductsCache,
       DEFAULT_PAGE_COLOURS,
@@ -327,7 +322,6 @@
       scheduledPageColourUpdate,
       isPageColourTrackingInitialized,
       olingEggsPromise,
-      olingPersonalitiesPromise,
       rarityPalettePromise,
       rarityPalette,
       shopHatchViews,

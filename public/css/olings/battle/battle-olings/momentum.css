@@ -9,7 +9,7 @@
   display: grid;
   place-items: center;
   border-radius: 0;
-  background: var(--primaryPageColour, #ffb5c8);
+  background: var(--primaryPageColour, #6ea8ff);
 }
 
 .battle-momentum-bar {
@@ -117,17 +117,16 @@
   border-radius: inherit;
 }
 
-.momentum-track .disruption-zone,
-.momentum-track .critical-zone {
-  flex: 13;
+.momentum-track .disruption-zone {
+  flex: 20;
 }
 
 .momentum-track .strike-zone {
-  flex: 4;
+  flex: 25;
 }
 
 .momentum-track .critical-zone {
-  flex: 6;
+  flex: 10;
 }
 
 .momentum-track .disruption-zone {

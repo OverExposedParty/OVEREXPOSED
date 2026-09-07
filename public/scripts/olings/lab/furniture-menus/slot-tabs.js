@@ -21,7 +21,7 @@
       storeContainerItem
     } = dependencies;
 
-function createFurnitureSlotInventoryPanel(placed, slotDefinition) {
+    function createFurnitureSlotInventoryPanel(placed, slotDefinition) {
       const panel = document.createElement('aside');
       panel.className = 'oling-lab-side-panel oling-lab-furniture-slot-panel';
       panel.appendChild(
@@ -40,6 +40,7 @@ function createFurnitureSlotInventoryPanel(placed, slotDefinition) {
         }
         grid.appendChild(
           createItemButton(child, {
+            sound: false,
             onClick: () =>
               placeContainerItem(
                 placed.placedId,
@@ -89,7 +90,11 @@ function createFurnitureSlotInventoryPanel(placed, slotDefinition) {
         createInlineAction(
           child ? `Store ${child.name}` : 'Store',
           () => storeContainerItem(placed.placedId, slotDefinition.slotId),
-          { className: 'is-remove-action', disabled: !child }
+          {
+            className: 'is-remove-action',
+            disabled: !child,
+            soundIntent: 'deselect'
+          }
         )
       );
       panel.appendChild(actions);
@@ -108,6 +113,7 @@ function createFurnitureSlotInventoryPanel(placed, slotDefinition) {
       slotButton.className = 'oling-lab-furniture-slot-hero';
       slotButton.classList.toggle('has-item', Boolean(child));
       slotButton.type = 'button';
+      slotButton.dataset.soundIntent = child ? '' : 'open';
       slotButton.setAttribute(
         'aria-label',
         child

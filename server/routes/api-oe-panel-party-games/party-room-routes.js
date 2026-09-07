@@ -57,6 +57,41 @@ function formatVersionErrorRates(breakdown) {
     .join(', ');
 }
 
+function calculateRoomErrorRate(rooms, roomsWithErrors) {
+  const roomCount = Number(rooms || 0);
+  if (roomCount <= 0) return 0;
+  return Math.round((Number(roomsWithErrors || 0) / roomCount) * 100);
+}
+
+function createRoomMonitoringStats(row = {}, currentRuntimeBuild) {
+  const archivedRoomsLast24Hours = Number(row.last24HoursRooms || 0);
+  const roomsWithErrorsLast24Hours = Number(
+    row.last24HoursRoomsWithErrors || 0
+  );
+  const currentBuildArchivedRooms = Number(row.currentBuildRooms || 0);
+  const currentBuildRoomsWithErrors = Number(
+    row.currentBuildRoomsWithErrors || 0
+  );
+
+  return {
+    archivedRoomsLast24Hours,
+    roomsWithErrorsLast24Hours,
+    roomErrorRateLast24Hours: calculateRoomErrorRate(
+      archivedRoomsLast24Hours,
+      roomsWithErrorsLast24Hours
+    ),
+    currentRuntimeBuild,
+    currentBuildArchivedRooms,
+    currentBuildRoomsWithErrors,
+    currentBuildRoomErrorRate: currentBuildArchivedRooms
+      ? calculateRoomErrorRate(
+          currentBuildArchivedRooms,
+          currentBuildRoomsWithErrors
+        )
+      : null
+  };
+}
+
 function contentAppliesToGamemode(content, gamemode) {
   if (content.gameType === gamemode) return true;
   return (
@@ -115,46 +150,52 @@ function registerOePanelPartyRoomRoutes(context) {
           row: serializeArchivedRoom(room)
         }));
         const archivedRooms = archivedRoomRecords.map(({ row }) => row);
+        const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const last30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        const gamemodeAggregationRows = await archivedRoomSchema.aggregate([
-          { $match: { archivedAt: { $gte: last30Days } } },
-          {
-            $group: {
-              _id: { $ifNull: ['$gamemode', 'unknown'] },
-              rooms: { $sum: 1 },
-              averagePlayers: {
-                $avg: { $size: { $ifNull: ['$players', []] } }
-              },
-              roomsWithErrors: {
-                $sum: {
-                  $cond: [
-                    { $gt: [{ $size: { $ifNull: ['$errors', []] } }, 0] },
-                    1,
-                    0
-                  ]
-                }
-              },
-              outcomeRecorded: {
-                $sum: {
-                  $cond: [
-                    {
-                      $ne: [
-                        { $ifNull: ['$state.outcome', '$state.result'] },
-                        null
-                      ]
-                    },
-                    1,
-                    0
-                  ]
-                }
-              },
-              latestArchivedAt: { $max: '$archivedAt' }
-            }
-          },
-          { $sort: { rooms: -1, _id: 1 } }
-        ]);
-        const archivedReleaseAggregationRows =
-          await archivedRoomSchema.aggregate([
+        const currentRuntimeBuild = getRuntimeBuild();
+        const [
+          gamemodeAggregationRows,
+          archivedReleaseAggregationRows,
+          monitoringAggregationRows
+        ] = await Promise.all([
+          archivedRoomSchema.aggregate([
+            { $match: { archivedAt: { $gte: last30Days } } },
+            {
+              $group: {
+                _id: { $ifNull: ['$gamemode', 'unknown'] },
+                rooms: { $sum: 1 },
+                averagePlayers: {
+                  $avg: { $size: { $ifNull: ['$players', []] } }
+                },
+                roomsWithErrors: {
+                  $sum: {
+                    $cond: [
+                      { $gt: [{ $size: { $ifNull: ['$errors', []] } }, 0] },
+                      1,
+                      0
+                    ]
+                  }
+                },
+                outcomeRecorded: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $ne: [
+                          { $ifNull: ['$state.outcome', '$state.result'] },
+                          null
+                        ]
+                      },
+                      1,
+                      0
+                    ]
+                  }
+                },
+                latestArchivedAt: { $max: '$archivedAt' }
+              }
+            },
+            { $sort: { rooms: -1, _id: 1 } }
+          ]),
+          archivedRoomSchema.aggregate([
             { $match: { archivedAt: { $gte: last30Days } } },
             {
               $group: {
@@ -176,7 +217,86 @@ function registerOePanelPartyRoomRoutes(context) {
                 }
               }
             }
-          ]);
+          ]),
+          archivedRoomSchema.aggregate([
+            { $match: { archivedAt: { $gte: last30Days } } },
+            {
+              $group: {
+                _id: null,
+                last24HoursRooms: {
+                  $sum: {
+                    $cond: [{ $gte: ['$archivedAt', last24Hours] }, 1, 0]
+                  }
+                },
+                last24HoursRoomsWithErrors: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $and: [
+                          { $gte: ['$archivedAt', last24Hours] },
+                          {
+                            $gt: [{ $size: { $ifNull: ['$errors', []] } }, 0]
+                          }
+                        ]
+                      },
+                      1,
+                      0
+                    ]
+                  }
+                },
+                currentBuildRooms: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $eq: [
+                          {
+                            $ifNull: [
+                              '$session.gameModeRelease.runtimeBuild',
+                              'Legacy'
+                            ]
+                          },
+                          currentRuntimeBuild
+                        ]
+                      },
+                      1,
+                      0
+                    ]
+                  }
+                },
+                currentBuildRoomsWithErrors: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $and: [
+                          {
+                            $eq: [
+                              {
+                                $ifNull: [
+                                  '$session.gameModeRelease.runtimeBuild',
+                                  'Legacy'
+                                ]
+                              },
+                              currentRuntimeBuild
+                            ]
+                          },
+                          {
+                            $gt: [{ $size: { $ifNull: ['$errors', []] } }, 0]
+                          }
+                        ]
+                      },
+                      1,
+                      0
+                    ]
+                  }
+                }
+              }
+            }
+          ])
+        ]);
+        const monitoringStats = createRoomMonitoringStats(
+          monitoringAggregationRows[0],
+          currentRuntimeBuild
+        );
         const archivedRoomsLast30Days = gamemodeAggregationRows.reduce(
           (total, row) => total + Number(row.rooms || 0),
           0
@@ -392,6 +512,7 @@ function registerOePanelPartyRoomRoutes(context) {
             ],
             roomIssues,
             stats: {
+              ...monitoringStats,
               activeRoomCount: activeRooms.length,
               archivedRoomCount: archivedRooms.length,
               archivedRoomsLast30Days,
@@ -537,7 +658,9 @@ function registerOePanelPartyRoomRoutes(context) {
 }
 
 module.exports = {
+  calculateRoomErrorRate,
   countRoomVersions,
+  createRoomMonitoringStats,
   createArchivedVersionBreakdown,
   formatReleaseVersion,
   formatVersionCounts,

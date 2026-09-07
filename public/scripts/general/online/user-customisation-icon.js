@@ -21,9 +21,12 @@ document.addEventListener('keydown', (event) => {
   try {
     await loadActivePacks('/api/oe-library');
     await loadPublishedOeDisplayIndex('/api/oe-image-display-index');
-    SetScriptLoaded('/scripts/general/online/user-customisation-icon.js');
-    Ready.set('user-customisation-icon', true);
   } catch (err) {
     console.error('❌ Error loading user-customisation-icon scripts:', err);
+  } finally {
+    window.Ready?.set?.('user-customisation-icon', true);
+    if (typeof SetScriptLoaded === 'function') {
+      SetScriptLoaded('/scripts/general/online/user-customisation-icon.js');
+    }
   }
 })();

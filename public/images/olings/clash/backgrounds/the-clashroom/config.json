@@ -1,0 +1,37 @@
+{
+  "id": "the-clashroom",
+  "layers": {
+    "farBackground": "far-background.svg",
+    "background": "background.svg",
+    "stage": "stage.svg",
+    "foreground": "foreground.svg"
+  },
+  "hud": {
+    "primary": "#b39ad6",
+    "secondary": "#7355a6",
+    "surface": "#211b27",
+    "panel": "#3a2f43",
+    "panelDeep": "#271f2d",
+    "text": "#f8f8f9",
+    "textSoft": "#f1d5b6",
+    "textMuted": "#b6a8bc",
+    "textOnPrimary": "#211b27",
+    "textOnSecondary": "#f8f8f9",
+    "border": "#7355a6",
+    "focus": "#d9ac81",
+    "lockedOverlay": "rgb(33 27 39 / 62%)",
+    "modalOverlay": "rgb(33 27 39 / 72%)",
+    "shadow": "rgb(74 54 90 / 36%)"
+  },
+  "signals": {
+    "tag": {
+      "primary": "#f2c94c",
+      "secondary": "#c29b50"
+    },
+    "activation": {
+      "filled": "#9dd8f2",
+      "empty": "#5e879b",
+      "primed": "#ddf6ff"
+    }
+  }
+}

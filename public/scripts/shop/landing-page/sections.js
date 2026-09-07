@@ -273,7 +273,6 @@
           grant.metadata?.consumableSubcategory,
           grant.metadata?.furnitureType,
           grant.metadata?.furnitureCategory,
-          grant.metadata?.personalityKey,
           grant.metadata?.effectType
         ])
       ]

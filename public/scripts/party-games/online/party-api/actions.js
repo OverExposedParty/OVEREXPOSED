@@ -1,4 +1,68 @@
 (() => {
+  const HOST_ONLY_PARTY_ACTIONS = new Set([
+    'start-game',
+    'end-game',
+    'return-to-lobby',
+    'replay-game'
+  ]);
+
+  function getOnlinePartyActionActorId(party, requestedActorId) {
+    return (
+      window.resolveOnlinePartyActorId?.(party, requestedActorId) ??
+      requestedActorId ??
+      (typeof deviceId === 'string' ? deviceId : null)
+    );
+  }
+
+  function assertOnlinePartyActionAllowed(action, party, actorId) {
+    if (!HOST_ONLY_PARTY_ACTIONS.has(action) || !party?.state?.hostComputerId) {
+      return;
+    }
+
+    if (typeof window.requireCurrentOnlinePartyHost === 'function') {
+      window.requireCurrentOnlinePartyHost(party, action.replaceAll('-', ' '));
+      return;
+    }
+
+    if (String(party.state.hostComputerId) !== String(actorId || '')) {
+      const error = new Error('Only the host can perform this action.');
+      error.status = 403;
+      error.code = 'party_host_required';
+      throw error;
+    }
+  }
+
+  async function refreshPartyAfterAccessDenied(partyId, partyType, error) {
+    try {
+      const existing = await window.PartyApiPartyData.getExistingPartyData(
+        partyId,
+        partyType
+      );
+      const latestParty = Array.isArray(existing) ? existing[0] : null;
+      if (latestParty) {
+        currentPartyData = latestParty;
+        window.syncOnlinePartyIdentity?.(latestParty);
+      }
+    } catch (refreshError) {
+      console.warn(
+        'Failed to refresh party identity after access denial:',
+        refreshError
+      );
+    }
+
+    if (typeof window.CustomEvent === 'function') {
+      window.dispatchEvent?.(
+        new CustomEvent('oe-party-access-denied', {
+          detail: {
+            partyId,
+            action: error?.action || null,
+            code: error?.code || 'party_access_denied'
+          }
+        })
+      );
+    }
+  }
+
   function normaliseOnlinePartyActionPayload(payload = {}) {
     const nextPayload = { ...payload };
     const partyData = nextPayload.partyData;
@@ -13,9 +77,13 @@
       if (partyData.deck && nextPayload.deckPatch === undefined) {
         nextPayload.deckPatch = partyData.deck;
       }
-      if (Array.isArray(partyData.players) && nextPayload.playerUpdates === undefined) {
+      if (
+        Array.isArray(partyData.players) &&
+        nextPayload.playerUpdates === undefined
+      ) {
         nextPayload.playerUpdates = partyData.players.map((player) => ({
-          computerId: player?.identity?.computerId ?? player?.computerId ?? null,
+          computerId:
+            player?.identity?.computerId ?? player?.computerId ?? null,
           identity: player?.identity,
           connection: player?.connection,
           state: player?.state,
@@ -52,42 +120,76 @@
     partyType = sessionPartyType,
     partyId = partyCode,
     action,
-    actorId = typeof deviceId === 'string' ? deviceId : null,
+    actorId = null,
     payload = {},
     syncInstructions = true
   } = {}) {
-    const normalisedPartyId = window.PartyApiPartyData.requireOnlinePartyId(partyId);
+    const normalisedPartyId =
+      window.PartyApiPartyData.requireOnlinePartyId(partyId);
     if (!action) throw new Error('action is required for party actions');
+    const party =
+      typeof currentPartyData === 'undefined' ? null : currentPartyData;
+    const resolvedActorId = getOnlinePartyActionActorId(party, actorId);
+    assertOnlinePartyActionAllowed(action, party, resolvedActorId);
 
-    const res = await fetch(
-      `/api/${partyType}/action?partyCode=${encodeURIComponent(normalisedPartyId)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          partyId: normalisedPartyId,
-          action,
-          actorId,
-          payload: normaliseOnlinePartyActionPayload({
-            ...payload,
-            timezoneOffsetMinutes: new Date().getTimezoneOffset(),
-            socketId: typeof socket?.id === 'string' ? socket.id : payload.socketId
-          })
+    const requestUrl = `/api/${partyType}/action?partyCode=${encodeURIComponent(normalisedPartyId)}`;
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        partyId: normalisedPartyId,
+        action,
+        actorId: resolvedActorId,
+        payload: normaliseOnlinePartyActionPayload({
+          ...payload,
+          timezoneOffsetMinutes: new Date().getTimezoneOffset(),
+          socketId:
+            typeof socket?.id === 'string' ? socket.id : payload.socketId
         })
-      }
-    );
-    const data = await res.json().catch(() => ({}));
+      })
+    };
+    let data;
 
-    if (!res.ok) {
-      const errorMessage =
-        typeof data.error === 'string'
-          ? data.error
-          : data.error?.message || data.message || `Failed to perform party action: ${action}`;
-      throw new Error(errorMessage);
+    try {
+      if (window.PartyApiRequest?.requestPartyJson) {
+        ({ data } = await window.PartyApiRequest.requestPartyJson(
+          requestUrl,
+          requestOptions,
+          { fallbackMessage: `Failed to perform party action: ${action}` }
+        ));
+      } else {
+        const response = await fetch(requestUrl, requestOptions);
+        data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const serverError =
+            data.error && typeof data.error === 'object' ? data.error : {};
+          const error = new Error(
+            (typeof data.error === 'string' && data.error) ||
+              serverError.message ||
+              data.message ||
+              `Failed to perform party action: ${action}`
+          );
+          error.status = response.status;
+          error.code = serverError.code || 'party_action_failed';
+          error.details = serverError.details;
+          throw error;
+        }
+      }
+    } catch (error) {
+      error.action = action;
+      if (error.status === 403) {
+        await refreshPartyAfterAccessDenied(
+          normalisedPartyId,
+          partyType,
+          error
+        );
+      }
+      throw error;
     }
 
     if (data.updated) {
       currentPartyData = data.updated;
+      window.syncOnlinePartyIdentity?.(data.updated);
       if (syncInstructions) await syncOnlinePartyInstructionsAfterAction();
     }
 

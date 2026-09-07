@@ -43,7 +43,7 @@ function createOePanelShopProductPresentation({
   }
 
   const BASIC_HANGING_LIGHT_IMAGE =
-    '/images/olings/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg';
+    '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light/basic-hanging-light.svg';
 
   function isBasicHangingLightProduct(product) {
     const identity = product?.identity || {};
@@ -62,7 +62,7 @@ function createOePanelShopProductPresentation({
 
   function normalizeShopPreviewImagePath(image) {
     return String(image || '').replace(
-      '/images/olings/furniture/ceiling-lights/basic-hanging-light.svg',
+      '/images/olings/lab/furniture/ceiling-lights/basic-hanging-light.svg',
       BASIC_HANGING_LIGHT_IMAGE
     );
   }

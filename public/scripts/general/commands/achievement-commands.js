@@ -62,7 +62,7 @@
   function getEggImage(egg) {
     if (egg?.assets?.image) return egg.assets.image;
     const setName = egg?.collection || egg?.key;
-    return setName ? `/images/olings/eggs/${setName}/egg.svg` : '';
+    return setName ? `/images/olings/lab/eggs/${setName}/egg.svg` : '';
   }
 
   function getAchievementPreviewRewards(achievement) {

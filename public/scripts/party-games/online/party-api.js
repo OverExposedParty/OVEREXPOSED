@@ -1,21 +1,24 @@
 (() => {
+  const request = window.PartyApiRequest;
   const partyData = window.PartyApiPartyData;
   const actions = window.PartyApiActions;
   const players = window.PartyApiPlayers;
   const accountLink = window.PartyApiAccountLink;
 
-  if (!partyData || !actions || !players || !accountLink) {
+  if (!request || !partyData || !actions || !players || !accountLink) {
     throw new Error('Party API support modules must load before party-api.js');
   }
 
   Object.assign(window, {
+    requestPartyJson: request.requestPartyJson,
     normaliseOnlinePartyId: partyData.normaliseOnlinePartyId,
     requireOnlinePartyId: partyData.requireOnlinePartyId,
     getExistingPartyData: partyData.getExistingPartyData,
     GetCurrentPartyData: partyData.GetCurrentPartyData,
     reserveUniquePartyCode: partyData.reserveUniquePartyCode,
     getPartyChatLog: partyData.getPartyChatLog,
-    normaliseOnlinePartyActionPayload: actions.normaliseOnlinePartyActionPayload,
+    normaliseOnlinePartyActionPayload:
+      actions.normaliseOnlinePartyActionPayload,
     syncOnlinePartyInstructionsAfterAction:
       actions.syncOnlinePartyInstructionsAfterAction,
     performOnlinePartyAction: actions.performOnlinePartyAction,
