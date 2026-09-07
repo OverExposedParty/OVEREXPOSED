@@ -509,7 +509,7 @@ test('Olings Clash registers protected and state-aware page shells', async () =>
   assert.equal((clashHtml.match(/data-overgrowth-units="0"/g) || []).length, 6);
   assert.equal((clashHtml.match(/data-shield-count="0"/g) || []).length, 6);
   assert.doesNotMatch(clashHtml, /data-effect-key=/);
-  assert.equal((clashHtml.match(/data-clash-tag-button/g) || []).length, 2);
+  assert.equal((clashHtml.match(/data-clash-tag-button/g) || []).length, 3);
   assert.equal((clashHtml.match(/data-clash-tag-indicator/g) || []).length, 2);
   assert.equal((clashHtml.match(/data-clash-tag-resource=/g) || []).length, 2);
   assert.equal(
@@ -585,73 +585,20 @@ test('Olings Clash registers protected and state-aware page shells', async () =>
   assert.match(clashSettingsHtml, />\s*READY UP\s*<\/button>/);
   assert.match(clashSettingsHtml, /data-clash-player="local"/);
   assert.match(clashSettingsHtml, /data-clash-opponent-slot/);
-  assert.match(clashSettingsHtml, /\/scripts\/olings\/clash\/oe-layers\.js/);
-  assert.match(clashSettingsHtml, /\/scripts\/olings\/clash\/clash-lobby\.js/);
+  assert.match(clashSettingsHtml, /\/build\/olings\/clash\/clash-lobby\.js/);
+  assert.doesNotMatch(
+    clashSettingsHtml,
+    /\/scripts\/olings\/clash\/oe-layers\.js/
+  );
+  assert.doesNotMatch(
+    clashSettingsHtml,
+    /\/scripts\/olings\/clash\/clash-lobby\.js/
+  );
   assert.doesNotMatch(clashSettingsHtml, /data-clash-game/);
   assert.doesNotMatch(clashHtml, /\/scripts\/olings\/clash\/clash-lobby\.js/);
-  assert.match(clashHtml, /\/scripts\/olings\/clash\/oe-layers\.js/);
+  assert.doesNotMatch(clashHtml, /\/scripts\/olings\/clash\/oe-layers\.js/);
+  assert.match(clashHtml, /\/build\/olings\/clash\/clash-core\.js/);
   assert.match(clashHtml, /\/css\/olings\/shared\/oling-flight-motion\.css/);
-  const flightMotionIndex = clashHtml.indexOf(
-    "'/scripts/olings/shared/oling-flight-motion.js'"
-  );
-  const stateIndex = clashHtml.indexOf("'/scripts/olings/clash/game/state.js'");
-  const resolutionIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/resolution.js'"
-  );
-  const opponentIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/demo-opponent.js'"
-  );
-  const healthRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/health.js'"
-  );
-  const damageRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/damage-feedback.js'"
-  );
-  const combatRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/combat-motion.js'"
-  );
-  const tagRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/tag-motion.js'"
-  );
-  const phaseRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/phase.js'"
-  );
-  const matchRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/match.js'"
-  );
-  const pickerRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/picker.js'"
-  );
-  const inspectorRendererIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/game/renderers/inspector.js'"
-  );
-  const timerIndex = clashHtml.indexOf("'/scripts/olings/clash/game/timer.js'");
-  const flowIndex = clashHtml.indexOf("'/scripts/olings/clash/game/flow.js'");
-  const gameBootstrapIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/clash-game.js'"
-  );
-  const lobbyBootstrapIndex = clashHtml.indexOf(
-    "'/scripts/olings/clash/clash-lobby.js'"
-  );
-  assert.ok(flightMotionIndex >= 0);
-  assert.ok(stateIndex > flightMotionIndex);
-  assert.ok(resolutionIndex > stateIndex);
-  assert.ok(opponentIndex > resolutionIndex);
-  assert.ok(healthRendererIndex > opponentIndex);
-  assert.ok(damageRendererIndex > healthRendererIndex);
-  assert.ok(combatRendererIndex > damageRendererIndex);
-  assert.ok(tagRendererIndex > combatRendererIndex);
-  assert.ok(phaseRendererIndex > tagRendererIndex);
-  assert.ok(matchRendererIndex > phaseRendererIndex);
-  assert.ok(pickerRendererIndex > matchRendererIndex);
-  assert.ok(inspectorRendererIndex > pickerRendererIndex);
-  assert.ok(timerIndex > inspectorRendererIndex);
-  assert.ok(flowIndex > timerIndex);
-  assert.ok(gameBootstrapIndex > flowIndex);
-  assert.equal(lobbyBootstrapIndex, -1);
-  assert.ok(
-    clashSettingsHtml.indexOf("'/scripts/olings/clash/clash-lobby.js'") >= 0
-  );
   assert.match(clashHtml, /core-template\/core-template\.js/);
 });
 

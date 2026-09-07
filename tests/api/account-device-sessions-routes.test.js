@@ -27,7 +27,7 @@ function createRouteFixture() {
           },
           createdAt: new Date('2026-07-30T12:00:00.000Z'),
           lastUsedAt: new Date('2026-07-31T12:00:00.000Z'),
-          expiresAt: new Date('2026-08-30T12:00:00.000Z')
+          expiresAt: new Date('2099-08-30T12:00:00.000Z')
         },
         {
           sessionId: 'another-session-id1',
@@ -35,7 +35,7 @@ function createRouteFixture() {
           device: { browser: 'Safari 18', os: 'iOS 18', deviceType: 'Mobile' },
           createdAt: new Date('2026-07-29T12:00:00.000Z'),
           lastUsedAt: new Date('2026-07-31T11:00:00.000Z'),
-          expiresAt: new Date('2026-08-29T12:00:00.000Z')
+          expiresAt: new Date('2099-08-29T12:00:00.000Z')
         }
       ]
     }

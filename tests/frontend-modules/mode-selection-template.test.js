@@ -42,6 +42,17 @@ const svgSources = new Map(
     })
   )
 );
+
+async function waitForCondition(window, predicate, timeoutMilliseconds = 1000) {
+  const deadline = Date.now() + timeoutMilliseconds;
+  while (!predicate()) {
+    if (Date.now() >= deadline) {
+      throw new Error('Timed out waiting for mode-selection state change');
+    }
+    await new Promise((resolve) => window.setTimeout(resolve, 10));
+  }
+}
+
 svgSources.set(
   '/images/party-games/mode-selection/party-active.svg',
   fs.readFileSync(
@@ -324,9 +335,15 @@ test('mode selection ignores backdrop dismissal and closes from either button', 
         value: '--mode-selection-online-progress'
       });
       progress.dispatchEvent(transitionEnd);
-      await new Promise((resolve) => dom.window.setTimeout(resolve, 430));
+      await waitForCondition(
+        dom.window,
+        () => !container.classList.contains('is-visible')
+      );
     } else {
-      await new Promise((resolve) => dom.window.setTimeout(resolve, 240));
+      await waitForCondition(
+        dom.window,
+        () => !container.classList.contains('is-visible')
+      );
     }
     assert.equal(
       dom.window.permanantElementClassArray.includes(container),
